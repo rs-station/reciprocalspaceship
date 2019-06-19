@@ -256,6 +256,21 @@ class crystal(pd.DataFrame):
         self.set_index(['H', 'K', 'L'], inplace=True)
         return self
 
+    def remove_centrics(self):
+        """
+        Return a copy of self without Miller indices of centric reflections.
+
+        Returns
+        -------
+        crystal : crystal
+            Copy of self without centric reflections
+        """
+        hkl = np.vstack(self.index)
+        centric = np.zeros(len(hkl), dtype=bool)
+        for key,op in symop.symops[self.spacegroup].items():
+            centric = np.all(np.isclose(op(hkl.T), -hkl.T), 0) | centric
+        return self[~centric]
+
     def hkl_to_reciprocal_asu(self, hkl):
         hkl = np.array(hkl)
         labels = None
