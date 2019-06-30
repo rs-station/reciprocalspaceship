@@ -254,6 +254,19 @@ class crystal(pd.DataFrame):
 
         self['D'] = dhkl(F['H'], F['K'], F['L'], *self.cell)
         self.set_index(['H', 'K', 'L'], inplace=True)
+        self._label_centrics()
+        return self
+
+    def _label_centrics(self):
+        """
+        Add 'CENTRIC' key to self. Label centric reflections as True.
+        """
+        self['CENTRIC'] = False
+        hkl = np.vstack(self.index)
+        centric = np.zeros(len(hkl), dtype=bool)
+        for key,op in symop.symops[self.spacegroup].items():
+            centric = np.all(np.isclose(op(hkl.T), -hkl.T), 0) | centric
+        self['CENTRIC'] = centric
         return self
 
     def remove_centrics(self):
