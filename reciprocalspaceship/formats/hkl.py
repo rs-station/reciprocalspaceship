@@ -30,9 +30,9 @@ def read(self, hklfile, a=None, b=None, c=None, alpha=None, beta=None,
     """
     # Read data from HKL file
     if hklfile.endswith(".hkl"):
-        usecols = [0, 1, 2, 3, 4]
+        usecols = [0, 1, 2, 3, 4, 5, 6]
         F = pd.read_csv(hklfile, header=None, delim_whitespace=True,
-                        names=["H", "K", "L", "F", "SigF"],
+                        names=["H", "K", "L", "F+", "SigF+", "F-", "SigF-"],
                         usecols=usecols)
     for k,v in F.items():
         self[k] = v
