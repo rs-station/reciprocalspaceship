@@ -1,1 +1,1 @@
-from crystal import Crystal
+from .crystal import Crystal
