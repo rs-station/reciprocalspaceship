@@ -1,5 +1,5 @@
 import pandas as pd
-from formats import hkl
+from .formats import hkl
 
 class CrystalSeries(pd.Series):
     """
