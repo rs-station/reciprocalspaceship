@@ -34,6 +34,13 @@ def read(self, hklfile, a=None, b=None, c=None, alpha=None, beta=None,
         F = pd.read_csv(hklfile, header=None, delim_whitespace=True,
                         names=["H", "K", "L", "F+", "SigF+", "F-", "SigF-"],
                         usecols=usecols)
+    elif hklfile.endswith("*.ii"):
+        usecols = range(10)
+        F = pd.read_csv(hklfile, header=None, delim_whitespace=True,
+                        names=["H", "K", "L", "Multiplicity", "X", "Y",
+                               "Resolution", "Wavelength", "I", "SigI"],
+                        usecols=usecols)
+
     for k,v in F.items():
         self[k] = v
     self.set_index(["H", "K", "L"], inplace=True)
