@@ -1,4 +1,4 @@
-from .formats import hkl
+from .formats import hkl, mtz
 import pandas as pd
 
 class CrystalSeries(pd.Series):
@@ -35,6 +35,17 @@ class Crystal(pd.DataFrame):
     @property
     def _constructor_sliced(self):
         return CrystalSeries
+
+    def read_mtz(self, mtzfile):
+        """
+        Populate the crystal object with data from an MTZ reflection file.
+
+        Parameters
+        ----------
+        mtzfile : str or file
+            name of an mtz file or a file object
+        """
+        return mtz.read(self, mtzfile)
 
     def read_hkl(self, hklfile, a=None, b=None, c=None, alpha=None,
                  beta=None, gamma=None, sg=None):
