@@ -5,7 +5,10 @@ class CrystalSeries(pd.Series):
     Representation of a sliced Crystal
     """
 
+    _metadata = ["mtztype"]
+    
     def __init__(self, *args, **kwargs):
+        self.mtztype = kwargs.pop('mtztype', None)
         super().__init__(*args, **kwargs)
         return
     
@@ -23,18 +26,18 @@ class Crystal(pd.DataFrame):
 
     Attributes
     ----------
-    spacegroup : int
-        Number corresponding to the crystal space group
-    cell : np.ndarray
+    spacegroup : gemmi.SpaceGroup
+        Crystallographic space group containing symmetry operations
+    cell : gemmi.UnitCell
         Unit cell constants of crystal (a, b, c, alpha, beta, gamma)
     """
 
-    _metadata = ['spacegroup', 'cell']
+    _metadata = ['spacegroup', 'cell', 'mtztype']
 
     def __init__(self, *args, **kwargs):
+        self.spacegroup = kwargs.pop('spacegroup', None)
+        self.cell = kwargs.pop('cell', None)
         super().__init__(*args, **kwargs)
-        self.spacegroup = None
-        self.cell = None
         return
     
     @property
@@ -44,3 +47,4 @@ class Crystal(pd.DataFrame):
     @property
     def _constructor_sliced(self):
         return CrystalSeries
+    
