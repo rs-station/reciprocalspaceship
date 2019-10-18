@@ -14,18 +14,11 @@ def read(mtzfile):
     """
     mtzgemmi = gemmi.read_mtz_file(mtzfile)
 
-    # # Copy data
-    # all_data = np.array(mtzgemmi, copy=False)
-    # F = pd.DataFrame(data=all_data, columns=mtzgemmi.column_labels())
-
     crystal = Crystal()
     
     for c in mtzgemmi.columns:
         crystal[c.label] = c.array
-        crystal[c.label].mtztype = c.type
-        print(crystal[c.label].mtztype)
     crystal.set_index(["H", "K", "L"], inplace=True)
-    print(crystal[c.label].mtztype)
     
     # Set Crystal attributes
     crystal.cell = mtzgemmi.cell
