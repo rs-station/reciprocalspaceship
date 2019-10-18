@@ -1,7 +1,8 @@
 import pandas as pd
 import gemmi
+from reciprocalspaceship import Crystal
 
-def read(self, hklfile, a=None, b=None, c=None, alpha=None, beta=None,
+def read(hklfile, a=None, b=None, c=None, alpha=None, beta=None,
          gamma=None, sg=None):
     """
     Initialize attributes and populate the crystal object with data from
@@ -41,14 +42,16 @@ def read(self, hklfile, a=None, b=None, c=None, alpha=None, beta=None,
                                "Resolution", "Wavelength", "I", "SigI"],
                         usecols=usecols)
 
+    crystal = Crystal()
+
     for k,v in F.items():
-        self[k] = v
-    self.set_index(["H", "K", "L"], inplace=True)
+        crystal[k] = v
+    crystal.set_index(["H", "K", "L"], inplace=True)
 
     # Set Crystal attributes
     if (a and b and c and alpha and beta and gamma):
-        self.cell = gemmi.UnitCell(a, b, c, alpha, beta, gamma)
+        crystal.cell = gemmi.UnitCell(a, b, c, alpha, beta, gamma)
     if sg:
-        self.spacegroup = gemmi.SpaceGroup(sg)
+        crystal.spacegroup = gemmi.SpaceGroup(sg)
         
-    return self
+    return crystal

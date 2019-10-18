@@ -1,17 +1,22 @@
-from .formats import hkl, mtz
 import pandas as pd
 
 class CrystalSeries(pd.Series):
     """
     Representation of a sliced Crystal
     """
-    spacegroup = None
-    cell = None
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        return
+    
     @property
     def _constructor(self):
         return CrystalSeries
 
+    @property
+    def _constructor_expanddim(self):
+        return Crystal
+    
 class Crystal(pd.DataFrame):
     """
     Representation of a crystal
@@ -25,9 +30,13 @@ class Crystal(pd.DataFrame):
     """
 
     _metadata = ['spacegroup', 'cell']
-    spacegroup = None
-    cell = None
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.spacegroup = None
+        self.cell = None
+        return
+    
     @property
     def _constructor(self):
         return Crystal
@@ -35,43 +44,3 @@ class Crystal(pd.DataFrame):
     @property
     def _constructor_sliced(self):
         return CrystalSeries
-
-    def read_mtz(self, mtzfile):
-        """
-        Populate the crystal object with data from an MTZ reflection file.
-
-        Parameters
-        ----------
-        mtzfile : str or file
-            name of an mtz file or a file object
-        """
-        return mtz.read(self, mtzfile)
-
-    def read_hkl(self, hklfile, a=None, b=None, c=None, alpha=None,
-                 beta=None, gamma=None, sg=None):
-        """
-        Initialize attributes and populate the crystal object with data 
-        from a HKL file of reflections. This is the output format used 
-        by Precognition when processing Laue diffraction data.
-
-        Parameters
-        ----------
-        hklfile : str or file
-            name of an hkl file or a file object
-        a : float
-            edge length, a, of the unit cell
-        b : float
-            edge length, b, of the unit cell
-        c : float
-            edge length, c, of the unit cell
-        alpha : float
-            interaxial angle, alpha, of the unit cell
-        beta : float
-            interaxial angle, beta, of the unit cell
-        gamma : float
-            interaxial angle, gamma, of the unit cell
-        sg : str or int
-            If int, this should specify the space group number. If str, 
-            this should be a space group symbol
-        """
-        return hkl.read(self, hklfile, a, b, c, alpha, beta, gamma, sg)
