@@ -4,13 +4,6 @@ class CrystalSeries(pd.Series):
     """
     Representation of a sliced Crystal
     """
-
-    _metadata = ["mtztype"]
-    
-    def __init__(self, *args, **kwargs):
-        self.mtztype = kwargs.pop('mtztype', None)
-        super().__init__(*args, **kwargs)
-        return
     
     @property
     def _constructor(self):
@@ -32,7 +25,7 @@ class Crystal(pd.DataFrame):
         Unit cell constants of crystal (a, b, c, alpha, beta, gamma)
     """
 
-    _metadata = ['spacegroup', 'cell', 'mtztype']
+    _metadata = ['spacegroup', 'cell']
 
     def __init__(self, *args, **kwargs):
         self.spacegroup = kwargs.pop('spacegroup', None)
