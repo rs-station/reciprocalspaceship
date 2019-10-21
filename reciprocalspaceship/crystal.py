@@ -23,13 +23,18 @@ class Crystal(pd.DataFrame):
         Crystallographic space group containing symmetry operations
     cell : gemmi.UnitCell
         Unit cell constants of crystal (a, b, c, alpha, beta, gamma)
+    cache_index_dtypes : Dictionary
+        Dictionary of dtypes for columns in Crystal.index. Populated upon
+        calls to Crystal.set_index() and depopulated by calls to 
+        Crystal.reset_index()
     """
 
-    _metadata = ['spacegroup', 'cell']
+    _metadata = ['spacegroup', 'cell', 'cache_index_dtypes']
 
     def __init__(self, *args, **kwargs):
         self.spacegroup = kwargs.pop('spacegroup', None)
         self.cell = kwargs.pop('cell', None)
+        self.cache_index_dtypes = kwargs.pop('cache_index_dtypes', {})
         super().__init__(*args, **kwargs)
         return
     
@@ -40,4 +45,36 @@ class Crystal(pd.DataFrame):
     @property
     def _constructor_sliced(self):
         return CrystalSeries
-    
+
+    def set_index(self, keys, **kwargs):
+        
+        # Copy dtypes of keys to cache
+        for key in keys:
+            self.cache_index_dtypes[key] = self[key].dtype.name
+
+        return super().set_index(keys, **kwargs)
+
+    def reset_index(self, **kwargs):
+
+        if kwargs.get("inplace", False):
+            super().reset_index(**kwargs)
+
+            # Cast all values to cached dtypes
+            if not kwargs.get("drop", False):
+                for key in self.cache_index_dtypes.keys():
+                    dtype = self.cache_index_dtypes[key]
+                    self[key] = self[key].astype(dtype)
+                self.cache_index_dtypes = {}
+            return
+        
+        else:
+            newdf = super().reset_index(**kwargs)
+
+            # Cast all values to cached dtypes
+            if not kwargs.get("drop", False):
+                for key in newdf.cache_index_dtypes.keys():
+                    dtype = newdf.cache_index_dtypes[key]
+                    newdf[key] = newdf[key].astype(dtype)
+                newdf.cache_index_dtypes = {}
+            return newdf
+
