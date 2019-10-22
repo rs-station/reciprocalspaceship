@@ -12,7 +12,8 @@ class HKLIndexDtype(ExtensionDtype):
     type = np.int32
     kind = 'i'
     na_value = np.nan
-
+    mtztype = "H"
+    
     @property
     def _is_numeric(self):
         return True
