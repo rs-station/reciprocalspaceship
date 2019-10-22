@@ -45,3 +45,48 @@ class PhaseArray(NumpyExtensionArray):
 
 PhaseArray._add_arithmetic_ops()
 PhaseArray._add_comparison_ops()
+
+@register_extension_dtype
+class HendricksonLattmanDtype(ExtensionDtype):
+    """
+    Dtype for representing phase probability coefficients 
+    (Hendrickson-Lattman)
+    """
+    
+    name = 'HendricksonLattman'
+    type = np.float32
+    kind = 'f'
+    na_value = np.nan
+    mtztype = "A"
+    
+    @property
+    def _is_numeric(self):
+        return True
+    
+    @classmethod
+    def construct_from_string(cls, string):
+        if string == cls.name:
+            return cls()
+        else:
+            raise TypeError("Cannot construct a '{}' from "
+                            "'{}'".format(cls, string))
+
+    @classmethod
+    def construct_array_type(cls):
+        return HendricksonLattmanArray
+
+class HendricksonLattmanArray(NumpyExtensionArray):
+    """ExtensionArray for supporting HendricksonLattmanDtype"""
+    
+    _dtype = HendricksonLattmanDtype()
+    
+    def __init__(self, values, copy=True, dtype=None):
+
+        self.data = np.array(values, dtype='float32', copy=copy)
+        if isinstance(dtype, str):
+            HendricksonLattmanDtype.construct_array_type(dtype)
+        elif dtype:
+            assert isinstance(dtype, HendricksonLattmanDtype)
+
+HendricksonLattmanArray._add_arithmetic_ops()
+HendricksonLattmanArray._add_comparison_ops()

@@ -15,6 +15,7 @@ from .dtypes import (
     StandardDeviationIFriedelDtype,       # M
     PhaseDtype,                           # P
     WeightDtype,                          # W
+    HendricksonLattmanDtype,              # A
     MTZIntDtype,                          # I
     MTZRealDtype                          # R
 )

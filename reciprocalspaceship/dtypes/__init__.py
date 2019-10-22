@@ -15,5 +15,5 @@ from .stddev import (
     StandardDeviationSFFriedelDtype,
     StandardDeviationIFriedelDtype
 )
-from .phase import PhaseDtype
+from .phase import PhaseDtype, HendricksonLattmanDtype
 from .weight import WeightDtype
