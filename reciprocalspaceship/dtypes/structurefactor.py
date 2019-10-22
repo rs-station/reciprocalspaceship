@@ -8,7 +8,7 @@ from .base import NumpyExtensionArray
 class StructureFactorAmplitudeDtype(ExtensionDtype):
     """Dtype for structure factor amplitude  data"""
     
-    name = 'StructureFactorAmplitude'
+    name = 'SFAmplitude'
     type = np.float32
     kind = 'f'
     na_value = np.nan
@@ -45,3 +45,48 @@ class StructureFactorAmplitudeArray(NumpyExtensionArray):
 
 StructureFactorAmplitudeArray._add_arithmetic_ops()
 StructureFactorAmplitudeArray._add_comparison_ops()
+
+@register_extension_dtype
+class StructureFactorAmplitudeFriedelDtype(ExtensionDtype):
+    """
+    Dtype for structure factor amplitude data from Friedel pairs -- 
+    F(+) or F(-)
+    """
+    
+    name = 'SFAmplitudeFriedel'
+    type = np.float32
+    kind = 'f'
+    na_value = np.nan
+    mtztype = "F"
+    
+    @property
+    def _is_numeric(self):
+        return True
+    
+    @classmethod
+    def construct_from_string(cls, string):
+        if string == cls.name:
+            return cls()
+        else:
+            raise TypeError("Cannot construct a '{}' from "
+                            "'{}'".format(cls, string))
+
+    @classmethod
+    def construct_array_type(cls):
+        return StructureFactorAmplitudeFriedelArray
+
+class StructureFactorAmplitudeFriedelArray(NumpyExtensionArray):
+    """ExtensionArray for supporting StructureFactorAmplitudeFriedelDtype"""
+    
+    _dtype = StructureFactorAmplitudeFriedelDtype()
+    
+    def __init__(self, values, copy=True, dtype=None):
+
+        self.data = np.array(values, dtype='float32', copy=copy)
+        if isinstance(dtype, str):
+            StructureFactorAmplitudeFriedelDtype.construct_array_type(dtype)
+        elif dtype:
+            assert isinstance(dtype, StructureFactorAmplitudeFriedelDtype)
+
+StructureFactorAmplitudeFriedelArray._add_arithmetic_ops()
+StructureFactorAmplitudeFriedelArray._add_comparison_ops()
