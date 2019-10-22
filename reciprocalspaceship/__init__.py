@@ -13,6 +13,7 @@ from .dtypes import (
     StandardDeviationSFFriedelDtype,      # L
     IntensityFriedelDtype,                # K
     StandardDeviationIFriedelDtype,       # M
+    PhaseDtype,                           # P
     MTZIntDtype,                          # I
     MTZRealDtype                          # R
 )
