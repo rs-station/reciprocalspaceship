@@ -1,6 +1,7 @@
 import pandas as pd
 import gemmi
 from reciprocalspaceship import Crystal
+from reciprocalspaceship.dtypes.mapping import mtzcode2dtype
 
 def read(hklfile, a=None, b=None, c=None, alpha=None, beta=None,
          gamma=None, sg=None):
@@ -35,17 +36,19 @@ def read(hklfile, a=None, b=None, c=None, alpha=None, beta=None,
         F = pd.read_csv(hklfile, header=None, delim_whitespace=True,
                         names=["H", "K", "L", "F+", "SigF+", "F-", "SigF-"],
                         usecols=usecols)
+        mtztypes = ["H", "H", "H", "G", "L", "G", "L"]
     elif hklfile.endswith("*.ii"):
         usecols = range(10)
         F = pd.read_csv(hklfile, header=None, delim_whitespace=True,
                         names=["H", "K", "L", "Multiplicity", "X", "Y",
                                "Resolution", "Wavelength", "I", "SigI"],
                         usecols=usecols)
-
+        mtztypes = ["H", "H", "H", "I", "R", "R", "R", "R", "J", "Q"]
+        
     crystal = Crystal()
-
-    for k,v in F.items():
+    for (k,v), mtztype in zip(F.items(), mtztypes):
         crystal[k] = v
+        crystal[k] = crystal[k].astype(mtzcode2dtype[mtztype])
     crystal.set_index(["H", "K", "L"], inplace=True)
 
     # Set Crystal attributes
