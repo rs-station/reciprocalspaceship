@@ -9,6 +9,7 @@ from .dtypes import (
     StructureFactorAmplitudeDtype, # F
     AnomalousDifferenceDtype,      # D
     StandardDeviationDtype,        # Q
+    StructureFactorAmplitudeFriedelDtype # G
     MTZIntDtype,                   # I
     MTZRealDtype                   # R
 )
