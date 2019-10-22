@@ -2,6 +2,7 @@ import numpy as np
 import pandas as pd
 import gemmi
 from reciprocalspaceship import Crystal
+from reciprocalspaceship.dtypes.mapping import mtzcode2dtype
 
 def read(mtzfile):
     """
@@ -17,7 +18,7 @@ def read(mtzfile):
     crystal = Crystal()
     
     for c in mtzgemmi.columns:
-        crystal[c.label] = c.array
+        crystal[c.label] = c.array.astype(mtzcode2dtype[c.type])
     crystal.set_index(["H", "K", "L"], inplace=True)
     
     # Set Crystal attributes
