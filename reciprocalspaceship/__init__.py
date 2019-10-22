@@ -17,6 +17,7 @@ from .dtypes import (
     WeightDtype,                          # W
     HendricksonLattmanDtype,              # A
     BatchDtype,                           # B
+    M_IsymDtype,                          # Y
     MTZIntDtype,                          # I
     MTZRealDtype                          # R
 )
