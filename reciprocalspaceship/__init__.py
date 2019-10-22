@@ -7,6 +7,7 @@ from .dtypes import (
     HKLIndexDtype,                 # H
     IntensityDtype,                # J
     StructureFactorAmplitudeDtype, # F
+    AnomalousDifferenceDtype,      # D
     MTZIntDtype,                   # I
     MTZRealDtype                   # R
 )
