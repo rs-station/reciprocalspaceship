@@ -34,9 +34,6 @@ class MTZIntArray(NumpyExtensionArray):
     """ExtensionArray for supporting MtzIntDtype"""
     
     _dtype = MTZIntDtype()
-    _itemsize = 8
-    ndim = 1
-    can_hold_na = True
     
     def __init__(self, values, copy=True, dtype=None):
 

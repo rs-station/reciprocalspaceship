@@ -34,9 +34,6 @@ class HKLIndexArray(NumpyExtensionArray):
     """ExtensionArray for supporting HKLIndexDtype"""
     
     _dtype = HKLIndexDtype()
-    _itemsize = 8
-    ndim = 1
-    can_hold_na = True
     
     def __init__(self, values, copy=True, dtype=None):
 

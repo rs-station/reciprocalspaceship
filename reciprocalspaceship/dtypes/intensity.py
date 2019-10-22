@@ -34,9 +34,6 @@ class IntensityArray(NumpyExtensionArray):
     """ExtensionArray for supporting IntensityDtype"""
     
     _dtype = IntensityDtype()
-    _itemsize = 8
-    ndim = 1
-    can_hold_na = True
     
     def __init__(self, values, copy=True, dtype=None):
 

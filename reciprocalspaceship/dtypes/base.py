@@ -11,7 +11,10 @@ class NumpyExtensionArray(ExtensionArray, ExtensionScalarOpsMixin):
     Base ExtensionArray for defining a custom Pandas.ExtensionDtype that
     uses a numpy array on the backend for storing the array data.
     """
-
+    _itemsize = 8
+    ndim = 1
+    can_hold_na = True
+    
     @property
     def dtype(self):
         return self._dtype
