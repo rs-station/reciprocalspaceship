@@ -57,7 +57,7 @@ class StructureFactorAmplitudeFriedelDtype(ExtensionDtype):
     type = np.float32
     kind = 'f'
     na_value = np.nan
-    mtztype = "F"
+    mtztype = "G"
     
     @property
     def _is_numeric(self):
