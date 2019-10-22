@@ -8,6 +8,7 @@ from .dtypes import (
     IntensityDtype,                # J
     StructureFactorAmplitudeDtype, # F
     AnomalousDifferenceDtype,      # D
+    StandardDeviationDtype,        # Q
     MTZIntDtype,                   # I
     MTZRealDtype                   # R
 )
