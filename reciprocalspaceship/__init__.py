@@ -16,6 +16,7 @@ from .dtypes import (
     PhaseDtype,                           # P
     WeightDtype,                          # W
     HendricksonLattmanDtype,              # A
+    BatchDtype,                           # B
     MTZIntDtype,                          # I
     MTZRealDtype                          # R
 )

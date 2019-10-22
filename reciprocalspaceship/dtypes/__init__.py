@@ -17,3 +17,4 @@ from .stddev import (
 )
 from .phase import PhaseDtype, HendricksonLattmanDtype
 from .weight import WeightDtype
+from .batch import BatchDtype
