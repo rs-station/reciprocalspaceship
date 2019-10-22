@@ -16,3 +16,4 @@ from .stddev import (
     StandardDeviationIFriedelDtype
 )
 from .phase import PhaseDtype
+from .weight import WeightDtype

@@ -14,6 +14,7 @@ from .dtypes import (
     IntensityFriedelDtype,                # K
     StandardDeviationIFriedelDtype,       # M
     PhaseDtype,                           # P
+    WeightDtype,                          # W
     MTZIntDtype,                          # I
     MTZRealDtype                          # R
 )
