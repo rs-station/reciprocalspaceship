@@ -12,5 +12,6 @@ from .structurefactor import (
 from .anomalousdifference import AnomalousDifferenceDtype
 from .stddev import (
     StandardDeviationDtype,
-    StandardDeviationSFFriedelDtype
+    StandardDeviationSFFriedelDtype,
+    StandardDeviationIFriedelDtype
 )

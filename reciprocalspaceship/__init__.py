@@ -12,6 +12,7 @@ from .dtypes import (
     StructureFactorAmplitudeFriedelDtype, # G
     StandardDeviationSFFriedelDtype,      # L
     IntensityFriedelDtype,                # K
+    StandardDeviationIFriedelDtype,       # M
     MTZIntDtype,                          # I
     MTZRealDtype                          # R
 )
