@@ -1,0 +1,19 @@
+mtzcode2dtype = {
+    "H" : "HKL",
+    "J" : "Intensity",
+    "F" : "SFAmplitude",
+    "D" : "AnomalousDifference",
+    "Q" : "Stddev",
+    "G" : "SFAmplitudeFriedel",
+    "L" : "StddevSFFriedel",
+    "K" : "IntensityFriedel",
+    "M" : "StddevIFriedel",
+    "E" : "F_over_eps",
+    "P" : "Phase",
+    "W" : "Weight",
+    "A" : "HendricksonLattman",
+    "B" : "Batch",
+    "Y" : "M_Isym",
+    "I" : "MTZInt",
+    "R" : "MTZReal"
+}
