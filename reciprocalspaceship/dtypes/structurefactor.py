@@ -90,3 +90,45 @@ class StructureFactorAmplitudeFriedelArray(NumpyExtensionArray):
 
 StructureFactorAmplitudeFriedelArray._add_arithmetic_ops()
 StructureFactorAmplitudeFriedelArray._add_comparison_ops()
+
+@register_extension_dtype
+class ScaledStructureFactorAmplitudeDtype(ExtensionDtype):
+    """Dtype for structure factor amplitude  data"""
+    
+    name = 'F_over_eps'
+    type = np.float32
+    kind = 'f'
+    na_value = np.nan
+    mtztype = "E"
+    
+    @property
+    def _is_numeric(self):
+        return True
+    
+    @classmethod
+    def construct_from_string(cls, string):
+        if string == cls.name:
+            return cls()
+        else:
+            raise TypeError("Cannot construct a '{}' from "
+                            "'{}'".format(cls, string))
+
+    @classmethod
+    def construct_array_type(cls):
+        return ScaledStructureFactorAmplitudeArray
+
+class ScaledStructureFactorAmplitudeArray(NumpyExtensionArray):
+    """ExtensionArray for supporting ScaledStructureFactorAmplitudeDtype"""
+    
+    _dtype = ScaledStructureFactorAmplitudeDtype()
+    
+    def __init__(self, values, copy=True, dtype=None):
+
+        self.data = np.array(values, dtype='float32', copy=copy)
+        if isinstance(dtype, str):
+            ScaledStructureFactorAmplitudeDtype.construct_array_type(dtype)
+        elif dtype:
+            assert isinstance(dtype, ScaledStructureFactorAmplitudeDtype)
+
+ScaledStructureFactorAmplitudeArray._add_arithmetic_ops()
+ScaledStructureFactorAmplitudeArray._add_comparison_ops()

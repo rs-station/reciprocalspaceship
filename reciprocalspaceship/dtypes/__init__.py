@@ -7,7 +7,8 @@ from .intensity import (
 )
 from .structurefactor import (
     StructureFactorAmplitudeDtype,
-    StructureFactorAmplitudeFriedelDtype
+    StructureFactorAmplitudeFriedelDtype,
+    ScaledStructureFactorAmplitudeDtype
 )
 from .anomalousdifference import AnomalousDifferenceDtype
 from .stddev import (

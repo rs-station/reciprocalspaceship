@@ -13,6 +13,7 @@ from .dtypes import (
     StandardDeviationSFFriedelDtype,      # L
     IntensityFriedelDtype,                # K
     StandardDeviationIFriedelDtype,       # M
+    ScaledStructureFactorAmplitudeDtype,  # E
     PhaseDtype,                           # P
     WeightDtype,                          # W
     HendricksonLattmanDtype,              # A
