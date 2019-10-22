@@ -10,6 +10,7 @@ from .dtypes import (
     AnomalousDifferenceDtype,             # D
     StandardDeviationDtype,               # Q
     StructureFactorAmplitudeFriedelDtype, # G
+    StandardDeviationSFFriedelDtype,      # L
     IntensityFriedelDtype,                # K
     MTZIntDtype,                          # I
     MTZRealDtype                          # R

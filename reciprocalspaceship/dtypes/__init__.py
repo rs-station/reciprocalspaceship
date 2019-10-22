@@ -10,4 +10,7 @@ from .structurefactor import (
     StructureFactorAmplitudeFriedelDtype
 )
 from .anomalousdifference import AnomalousDifferenceDtype
-from .stddev import StandardDeviationDtype
+from .stddev import (
+    StandardDeviationDtype,
+    StandardDeviationSFFriedelDtype
+)
