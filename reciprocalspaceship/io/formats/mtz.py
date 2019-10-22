@@ -18,7 +18,8 @@ def read(mtzfile):
     crystal = Crystal()
     
     for c in mtzgemmi.columns:
-        crystal[c.label] = c.array.astype(mtzcode2dtype[c.type])
+        crystal[c.label] = c.array
+        crystal[c.label] = crystal[c.label].astype(mtzcode2dtype[c.type])
     crystal.set_index(["H", "K", "L"], inplace=True)
     
     # Set Crystal attributes
