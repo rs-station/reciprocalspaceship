@@ -27,3 +27,22 @@ def read(mtzfile):
     crystal.spacegroup = mtzgemmi.spacegroup
 
     return crystal
+
+def write(crystal, mtzfile, columns=None):
+    """
+    Write an MTZ reflection file from the reflection data in a Crystal.
+
+    Parameters
+    ----------
+    mtzfile : str or file
+        name of an mtz file or a file object
+    columns : sequence, optional
+        columns to write
+    """
+    # Check that cell and spacegroup are defined
+    if not crystal.cell:
+        raise AttributeError(f"{crystal.__class__.name} has no unit cell information")
+    if not crystal.spacegroup:
+        raise AttributeError(f"{crystal.__class__.name} has no space group information")
+
+    return
