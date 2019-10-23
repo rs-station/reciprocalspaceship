@@ -41,8 +41,8 @@ def write(crystal, mtzfile, columns=None):
     """
     # Check that cell and spacegroup are defined
     if not crystal.cell:
-        raise AttributeError(f"{crystal.__class__.name} has no unit cell information")
+        raise AttributeError(f"Instance of type {crystal.__class__.__name__} has no unit cell information")
     if not crystal.spacegroup:
-        raise AttributeError(f"{crystal.__class__.name} has no space group information")
+        raise AttributeError(f"Instance of type {crystal.__class__.__name__} has no space group information")
 
     return
