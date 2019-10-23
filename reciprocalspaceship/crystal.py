@@ -1,5 +1,4 @@
 import pandas as pd
-from reciprocalspaceship import io
 
 class CrystalSeries(pd.Series):
     """
@@ -90,4 +89,5 @@ class Crystal(pd.DataFrame):
         columns : sequence, optional
             columns to write
         """
+        from reciprocalspaceship import io
         return io.write_mtz(self, mtzfile, columns)
