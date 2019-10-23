@@ -1,4 +1,5 @@
 import pandas as pd
+from reciprocalspaceship import io
 
 class CrystalSeries(pd.Series):
     """
@@ -55,7 +56,7 @@ class Crystal(pd.DataFrame):
         return super().set_index(keys, **kwargs)
 
     def reset_index(self, **kwargs):
-
+        
         if kwargs.get("inplace", False):
             super().reset_index(**kwargs)
 
@@ -78,3 +79,15 @@ class Crystal(pd.DataFrame):
                 newdf.cache_index_dtypes = {}
             return newdf
 
+    def write_mtz(self, mtzfile, columns):
+        """
+        Write an MTZ reflection file from the reflection data in a Crystal.
+
+        Parameters
+        ----------
+        mtzfile : str or file
+            name of an mtz file or a file object
+        columns : sequence, optional
+            columns to write
+        """
+        return io.write_mtz(self, mtzfile, columns)
