@@ -28,7 +28,7 @@ def read(mtzfile):
 
     return crystal
 
-def write(crystal, mtzfile, columns=None):
+def write(crystal, mtzfile):
     """
     Write an MTZ reflection file from the reflection data in a Crystal.
 
@@ -36,8 +36,6 @@ def write(crystal, mtzfile, columns=None):
     ----------
     mtzfile : str or file
         name of an mtz file or a file object
-    columns : sequence, optional
-        columns to write
     """
     # Check that cell and spacegroup are defined
     if not crystal.cell:
@@ -45,4 +43,19 @@ def write(crystal, mtzfile, columns=None):
     if not crystal.spacegroup:
         raise AttributeError(f"Instance of type {crystal.__class__.__name__} has no space group information")
 
+    # Build up a Gemmi MTZ object
+    mtz = gemmi.Mtz()
+    mtz.cell = crystal.cell
+    mtz.spacegroup = crystal.spacegroup
+    
+    mtz.add_dataset("reciprocalspaceship")
+    temp = crystal.reset_index()
+    for c in temp.columns:
+        cseries = temp[c]
+        mtzcol = mtz.add_column(label=c, type=cseries.dtype.mtztype)
+    mtz.set_data(temp.to_numpy(dtype="float32"))
+
+    # Write MTZ
+    mtz.write_to_file(mtzfile)
+    
     return
