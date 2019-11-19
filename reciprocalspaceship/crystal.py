@@ -95,13 +95,18 @@ class Crystal(pd.DataFrame):
 
     def _label_centrics(self):
         """
-        Add 'CENTRIC' key to self. Label centric reflections as True.
+        Label centric reflections in Crystal object. A new column of
+        booleans, "CENTRIC", is added to the object.
         """
         self['CENTRIC'] = False
         hkl = np.vstack(self.index)
         for op in self.spacegroup.operations():
+
+            # TODO: This for loop could be removed if op.apply_to_hkl()
+            #       were vectorized
             newhkl = hkl.copy()
             for i, h in enumerate(hkl):
                 newhkl[i] = op.apply_to_hkl(h)
+                
             self['CENTRIC'] = np.all(np.isclose(newhkl, -hkl), 1) | self['CENTRIC']
         return self
