@@ -44,6 +44,12 @@ def read(hklfile, a=None, b=None, c=None, alpha=None, beta=None,
                                "Resolution", "Wavelength", "I", "SigI"],
                         usecols=usecols)
         mtztypes = ["H", "H", "H", "I", "R", "R", "R", "R", "J", "Q"]
+
+    # Check if any anomalous data is actually included
+    if len(F["F-"].unique()) == 1:
+        F = F[["H", "K", "L", "F+", "SigF+"]]
+        F.rename(columns={"F+":"F", "SigF+":"SigF"}, inplace=True)
+        mtztypes = ["H", "H", "H", "F", "Q"]
         
     crystal = Crystal()
     for (k,v), mtztype in zip(F.items(), mtztypes):
