@@ -99,9 +99,17 @@ class Crystal(pd.DataFrame):
 
         Returns
         -------
-        list of column labels
+        keys : list of strings
+            list of column labels
         """
-        return [ k for k in self if self[k].dtype.mtztype == "P" ]
+        keys = []
+        for k in self:
+            try:
+                if self[k].dtype.mtztype == "P":
+                    keys.append(k)
+            except:
+                continue
+        return keys
     
     def _label_centrics(self):
         """
@@ -127,7 +135,7 @@ class Crystal(pd.DataFrame):
         Fminus = self.copy().reset_index()
         Fminus[['H', 'K', 'L']] = -1*Fminus[['H', 'K', 'L']]
         for k in self.get_phase_keys():
-            Fminus.loc[~Fminus.CENTRIC,k] = -Fminus.loc[~Fminus.CENTRIC, 'PHASE']
+            Fminus.loc[~Fminus.CENTRIC, k] = -Fminus.loc[~Fminus.CENTRIC, k]
         Fminus = Fminus.set_index(['H', 'K', 'L'])
         F = Fplus.append(Fminus.loc[Fminus.index.difference(Fplus.index)])
         return self
