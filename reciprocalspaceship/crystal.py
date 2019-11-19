@@ -126,14 +126,8 @@ class Crystal(pd.DataFrame):
         Fplus = self.copy()
         Fminus = self.copy().reset_index()
         Fminus[['H', 'K', 'L']] = -1*Fminus[['H', 'K', 'L']]
-        for k in Fminus:
-            if 
-                Fminus.loc[~Fminus.CENTRIC,k] = -Fminus.loc[~Fminus.CENTRIC, 'PHASE']
+        for k self.get_phase_keys():
+            Fminus.loc[~Fminus.CENTRIC,k] = -Fminus.loc[~Fminus.CENTRIC, 'PHASE']
         Fminus = Fminus.set_index(['H', 'K', 'L'])
-#TODO: decide whether these labels are worth keeping around
-        Fminus['Friedel'] = True
-        Fplus['Friedel'] = False
         F = Fplus.append(Fminus.loc[Fminus.index.difference(Fplus.index)])
-        self._coerce_dtypes()
-        self.__init__(F)
         return self
