@@ -99,7 +99,7 @@ class Crystal(pd.DataFrame):
         """
         self['CENTRIC'] = False
         hkl = np.vstack(self.index)
-        for op in self.spacegroup.operations:
+        for op in self.spacegroup.operations():
             newhkl = hkl.copy()
             for i, h in enumerate(hkl):
                 newhkl[i] = op.apply_to_hkl(h)
