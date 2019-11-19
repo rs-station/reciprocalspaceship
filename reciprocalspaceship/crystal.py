@@ -126,7 +126,7 @@ class Crystal(pd.DataFrame):
         Fplus = self.copy()
         Fminus = self.copy().reset_index()
         Fminus[['H', 'K', 'L']] = -1*Fminus[['H', 'K', 'L']]
-        for k self.get_phase_keys():
+        for k in self.get_phase_keys():
             Fminus.loc[~Fminus.CENTRIC,k] = -Fminus.loc[~Fminus.CENTRIC, 'PHASE']
         Fminus = Fminus.set_index(['H', 'K', 'L'])
         F = Fplus.append(Fminus.loc[Fminus.index.difference(Fplus.index)])
