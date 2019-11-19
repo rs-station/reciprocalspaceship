@@ -129,7 +129,11 @@ class Crystal(pd.DataFrame):
             self['CENTRIC'] = np.all(np.isclose(newhkl, -hkl), 1) | self['CENTRIC']
         return self
 
-    def unmerge_anomalous(self):
+    def unmerge_anomalous(self, inplace=False):
+        """
+        Unmerge Friedel pairs. In the near future, this should probably
+        be rolled into a bigger unmerge() function
+        """
         self._label_centrics()
         Fplus = self.copy()
         Fminus = self.copy().reset_index()
@@ -137,5 +141,11 @@ class Crystal(pd.DataFrame):
         for k in self.get_phase_keys():
             Fminus.loc[~Fminus.CENTRIC, k] = -Fminus.loc[~Fminus.CENTRIC, k]
         Fminus = Fminus.set_index(['H', 'K', 'L'])
+
         F = Fplus.append(Fminus.loc[Fminus.index.difference(Fplus.index)])
-        return self
+        
+        if inplace:
+            self._data = F._data
+            return self
+        else:
+            return F.__finalize__(self)
