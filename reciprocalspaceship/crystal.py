@@ -91,3 +91,16 @@ class Crystal(pd.DataFrame):
         """
         from reciprocalspaceship import io
         return io.write_mtz(self, mtzfile)
+
+    def _label_centrics(self):
+        """
+        Add 'CENTRIC' key to self. Label centric reflections as True.
+        """
+        self['CENTRIC'] = False
+        hkl = np.vstack(self.index)
+        for op in self.spacegroup.operations:
+            newhkl = hkl.copy()
+            for i, h in enumerate(hkl):
+                newhkl[i] = op.apply_to_hkl(h)
+            self['CENTRIC'] = np.all(np.isclose(newhkl, -hkl), 1) | self['CENTRIC']
+        return self
