@@ -101,7 +101,7 @@ class Crystal(pd.DataFrame):
         -------
         list of column labels
         """
-        return [ k for k in self if ref[k].dtype.mtztype == "P" ]
+        return [ k for k in self if self[k].dtype.mtztype == "P" ]
     
     def _label_centrics(self):
         """
