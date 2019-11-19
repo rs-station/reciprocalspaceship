@@ -93,6 +93,16 @@ class Crystal(pd.DataFrame):
         from reciprocalspaceship import io
         return io.write_mtz(self, mtzfile)
 
+    def get_phase_keys(self):
+        """
+        Return column labels associated with phase data
+
+        Returns
+        -------
+        list of column labels
+        """
+        return [ k for k in self if ref[k].dtype.mtztype == "P" ]
+    
     def _label_centrics(self):
         """
         Label centric reflections in Crystal object. A new column of
@@ -109,4 +119,21 @@ class Crystal(pd.DataFrame):
                 newhkl[i] = op.apply_to_hkl(h)
                 
             self['CENTRIC'] = np.all(np.isclose(newhkl, -hkl), 1) | self['CENTRIC']
+        return self
+
+    def unmerge_anomalous(self):
+        self._label_centrics()
+        Fplus = self.copy()
+        Fminus = self.copy().reset_index()
+        Fminus[['H', 'K', 'L']] = -1*Fminus[['H', 'K', 'L']]
+        for k in Fminus:
+            if 
+                Fminus.loc[~Fminus.CENTRIC,k] = -Fminus.loc[~Fminus.CENTRIC, 'PHASE']
+        Fminus = Fminus.set_index(['H', 'K', 'L'])
+#TODO: decide whether these labels are worth keeping around
+        Fminus['Friedel'] = True
+        Fplus['Friedel'] = False
+        F = Fplus.append(Fminus.loc[Fminus.index.difference(Fplus.index)])
+        self._coerce_dtypes()
+        self.__init__(F)
         return self
