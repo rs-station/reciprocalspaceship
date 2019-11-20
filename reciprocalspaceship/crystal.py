@@ -110,6 +110,21 @@ class Crystal(pd.DataFrame):
             except:
                 continue
         return keys
+
+    def apply_symop(self, symop, inplace=False):
+        """
+        Apply symmetry operation to all reflections in Crystal object. 
+
+        Parameters
+        ----------
+        symop : gemmi.Op
+            Gemmi symmetry operation
+        inplace : bool
+            Whether to return a new DataFrame or make the change in place
+        """
+        hkl = np.vstack(self.index)
+        return
+        
     
     def _label_centrics(self):
         """
@@ -149,3 +164,4 @@ class Crystal(pd.DataFrame):
             return self
         else:
             return F.__finalize__(self)
+        
