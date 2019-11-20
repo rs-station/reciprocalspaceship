@@ -1,5 +1,6 @@
 import operator
 import numpy as np
+from pandas.core import nanops
 from pandas.api.extensions import (
     ExtensionArray,
     ExtensionScalarOpsMixin,
@@ -112,5 +113,13 @@ class NumpyExtensionArray(ExtensionArray, ExtensionScalarOpsMixin):
         data = self.data.take(np.sort(indices))
         return self._from_ndarray(data)
 
+    def __iter__(self):
+        return iter(self.data)
 
-    
+    def _reduce(self, name, skipna=True, **kwargs):
+        data = self.data
+
+        op = getattr(nanops, 'nan' + name)
+        result = op(data, axis=0, skipna=skipna)
+
+        return result
