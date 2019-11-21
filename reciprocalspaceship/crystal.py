@@ -135,6 +135,7 @@ class Crystal(pd.DataFrame):
         for i, h in enumerate(hkl):
             newhkl[i] = symop.apply_to_hkl(h)
             phase_shifts = symop.phase_shift(*h)
+        phase_shifts = np.rad2deg(phase_shifts)
             
         if inplace:
             self.reset_index(inplace=True)
