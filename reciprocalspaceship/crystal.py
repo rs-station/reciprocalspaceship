@@ -1,6 +1,7 @@
 import pandas as pd
 import numpy as np
 import gemmi
+from .utils import canonicalize_phases
 
 class CrystalSeries(pd.Series):
     """
@@ -192,3 +193,49 @@ class Crystal(pd.DataFrame):
         else:
             return F.__finalize__(self)
         
+    def hkl_to_asu(self, inplace=False):
+        """
+        Map all HKL indices to the reciprocal space asymmetric unit; return a copy
+        This is provisional. Doesn't quite work yet. 
+        """
+        H = np.vstack(self.index.values).astype(int)
+        reflid = np.arange(len(self))
+
+        new_hkl = None
+        for op in self.spacegroup.operations():
+            #TODO: replace apply_along_axis which is slower than a for loop
+            #TODO: refactor this to use apply_symop later
+            h = np.apply_along_axis(op.apply_to_hkl, 1, H)
+            phase_shift = np.apply_along_axis(lambda x: op.phase_shift(*x), 1, H)
+            phase_shift = np.rad2deg(phase_shift)
+            new_hkl = pd.concat((new_hkl, pd.DataFrame({
+                'H'  : h[:,0], 
+                'K'  : h[:,1], 
+                'L'  : h[:,2], 
+                'PHASE_SHIFT': phase_shift, 
+                'ID' : reflid, 
+                'FRIEDEL' : False,
+            })))
+
+        fminus = new_hkl.copy()
+        fminus.loc[:, ['H', 'K', 'L']] = -fminus.loc[:, ['H', 'K', 'L']]
+        fminus['FRIEDEL'] = True
+        new_hkl = pd.concat((new_hkl, fminus))
+        #new_hkl = new_hkl.sort_values(['H', 'K', 'L']).groupby('ID').last()
+#Sign sort
+        new_hkl[['sH', 'sK', 'sL']] = np.sign(new_hkl.loc[:,['H', 'K', 'L']])
+        new_hkl = new_hkl.sort_values(['sH', 'sK', 'sL']).groupby('ID').last()
+
+        if inplace:
+            new_crystal = self
+        else:
+            new_crystal = self.copy()
+
+        new_crystal.reset_index(inplace=True)
+        new_crystal.loc[:, ['H', 'K', 'L']] = new_hkl.loc[:, ['H', 'K', 'L']]
+        for k in new_crystal.get_phase_keys():
+            new_crystal[k] = canonicalize_phases((1. - 2.*new_hkl['FRIEDEL'])*(new_crystal[k] + new_hkl['PHASE_SHIFT']))
+        new_crystal.set_index(['H', 'K', 'L'], inplace=True)
+        return new_crystal
+
+
