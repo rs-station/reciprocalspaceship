@@ -15,6 +15,7 @@ class NumpyExtensionArray(ExtensionArray, ExtensionScalarOpsMixin):
     _itemsize = 8
     ndim = 1
     can_hold_na = True
+    __array_priority__ = 1000
     
     @property
     def dtype(self):
@@ -34,7 +35,7 @@ class NumpyExtensionArray(ExtensionArray, ExtensionScalarOpsMixin):
 
     @property
     def shape(self):
-        return (len(self.data),)
+        return self.data.shape
 
     @property
     def na_value(self):
@@ -123,3 +124,9 @@ class NumpyExtensionArray(ExtensionArray, ExtensionScalarOpsMixin):
         result = op(data, axis=0, skipna=skipna)
 
         return result
+
+    def _coerce_to_ndarray(self):
+        return self.data.astype(object)
+
+    def __array__(self, dtype=None):
+        return self._coerce_to_ndarray()
