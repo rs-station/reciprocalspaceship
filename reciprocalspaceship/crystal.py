@@ -134,7 +134,7 @@ class Crystal(pd.DataFrame):
         # TODO: This for loop can be removed if gemmi.Op.apply_to_hkl() were vectorized
         for i, h in enumerate(hkl):
             newhkl[i] = symop.apply_to_hkl(h)
-            phase_shifts = symop.phase_shifts(*h)
+            phase_shifts = symop.phase_shift(*h)
             
         if inplace:
             self.reset_index(inplace=True)
