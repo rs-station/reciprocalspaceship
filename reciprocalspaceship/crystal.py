@@ -1,5 +1,6 @@
 import pandas as pd
 import numpy as np
+import gemmi
 
 class CrystalSeries(pd.Series):
     """
@@ -122,10 +123,35 @@ class Crystal(pd.DataFrame):
         inplace : bool
             Whether to return a new DataFrame or make the change in place
         """
-        hkl = np.vstack(self.index)
-        return
+        if not isinstance(symop, gemmi.Op):
+            raise ValueError(f"Provided symop is not of type gemmi.Op")
         
-    
+        # Apply symop to generate new HKL indices and phase shifts
+        hkl = np.vstack(self.index)
+        newhkl = hkl.copy()
+        phase_shifts  = np.zeros(len(hkl))
+
+        # TODO: This for loop can be removed if gemmi.Op.apply_to_hkl() were vectorized
+        for i, h in enumerate(hkl):
+            newhkl[i] = symop.apply_to_hkl(h)
+            phase_shifts = symop.phase_shifts(*h)
+            
+        if inplace:
+            self.reset_index(inplace=True)
+            self[['H', 'K', 'L']] = newhkl
+            self.set_index(['H', 'K', 'L'], inplace=True)
+            F = self
+        else:
+            F = self.copy().reset_index()
+            F[['H', 'K', 'L']] = newhkl
+            F.set_index(['H', 'K', 'L'], inplace=True)
+
+        # Shift phases according to symop
+        for key in F.get_phase_keys():
+            F[key] += phase_shifts
+            
+        return F.__finalize__(self)
+  
     def _label_centrics(self):
         """
         Label centric reflections in Crystal object. A new column of
