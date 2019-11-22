@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='reciprocalspaceship',
-    version='0.2.3',
+    version='0.2.4',
     author='Kevin M. Dalton; Jack B. Greisman',
     author_email='kmdalton@g.harvard.edu; greisman@g.harvard.edu',
     packages=find_packages(),
