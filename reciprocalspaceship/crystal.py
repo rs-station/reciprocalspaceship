@@ -83,7 +83,7 @@ class Crystal(pd.DataFrame):
                 newdf.cache_index_dtypes = {}
             return newdf
 
-    def write_mtz(self, mtzfile):
+    def write_mtz(self, *args, **kwargs):
         """
         Write an MTZ reflection file from the reflection data in a Crystal.
 
@@ -91,9 +91,12 @@ class Crystal(pd.DataFrame):
         ----------
         mtzfile : str or file
             name of an mtz file or a file object
+        skip_problem_mtztypes : bool
+            Whether to skip columns in Crystal that do not have specified
+            mtz datatypes
         """
         from reciprocalspaceship import io
-        return io.write_mtz(self, mtzfile)
+        return io.write_mtz(self, *args, **kwargs)
 
     def get_phase_keys(self):
         """

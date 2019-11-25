@@ -28,7 +28,7 @@ def read(mtzfile):
 
     return crystal
 
-def write(crystal, mtzfile):
+def write(crystal, mtzfile, skip_problem_mtztypes=False):
     """
     Write an MTZ reflection file from the reflection data in a Crystal.
 
@@ -36,6 +36,9 @@ def write(crystal, mtzfile):
     ----------
     mtzfile : str or file
         name of an mtz file or a file object
+    skip_problem_mtztypes : bool
+        Whether to skip columns in Crystal that do not have specified
+        mtz datatypes
     """
     # Check that cell and spacegroup are defined
     if not crystal.cell:
@@ -50,10 +53,21 @@ def write(crystal, mtzfile):
     
     mtz.add_dataset("reciprocalspaceship")
     temp = crystal.reset_index()
+    columns = []
     for c in temp.columns:
-        cseries = temp[c]
-        mtzcol = mtz.add_column(label=c, type=cseries.dtype.mtztype)
-    mtz.set_data(temp.to_numpy(dtype="float32"))
+        try:
+            cseries = temp[c]
+            mtztype = cseries.dtype.mtztype
+            mtzcol = mtz.add_column(label=c, type=mtztype)
+            columns.append(c)
+        except AttributeError:
+            if skip_problem_mtztypes:
+                continue
+            else:
+                raise AttributeError(f"'numpy.dtype' object has no attribute 'mtztype'\n\n"
+                                     f"To skip columns without explicit mtztypes, set skip_problem_mtztypes=True")
+            
+    mtz.set_data(temp[columns].to_numpy(dtype="float32"))
 
     # Write MTZ
     mtz.write_to_file(mtzfile)
