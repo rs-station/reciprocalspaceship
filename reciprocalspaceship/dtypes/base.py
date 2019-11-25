@@ -125,8 +125,11 @@ class NumpyExtensionArray(ExtensionArray, ExtensionScalarOpsMixin):
 
         return result
 
-    def _coerce_to_ndarray(self):
-        return self.data.astype(object)
+    def _coerce_to_ndarray(self, dtype=None):
+        if dtype:
+            return self.data.astype(dtype)
+        else:
+            return self.data.astype(self.dtype.type)
 
     def __array__(self, dtype=None):
         return self._coerce_to_ndarray()
