@@ -27,7 +27,7 @@ def plot_reciprocal_space_coverage(crystal, **kw):
 
     plt.sca(ax[0,1])
     plt.plot(l, k, 'ko', alpha=0.1)
-    plt.xlim(-hlim, hlim)
-    plt.ylim(-llim, llim)
+    plt.xlim(-llim, llim)
+    plt.ylim(-klim, klim)
     plt.xlabel("L")
     plt.show()
