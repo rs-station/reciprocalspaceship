@@ -176,6 +176,18 @@ class Crystal(pd.DataFrame):
             self['CENTRIC'] = np.all(np.isclose(newhkl, -hkl), 1) | self['CENTRIC']
         return self
 
+    def _compute_dHKL(self):
+        """
+        Compute the real space lattice plane spacing, d, associated with
+        the HKL indices in the object
+        """
+        hkls = self.reset_index()[['H', 'K', 'L']].values
+        dhkls = np.zeros(len(hkls))
+        for i, hkl in enumerate(hkls):
+            dhkls[i] = self.cell.calculate_d(*hkl)
+        self['dHKL'] = dhkls
+        return self
+
     def unmerge_anomalous(self, inplace=False):
         """
         Unmerge Friedel pairs. In the near future, this should probably
