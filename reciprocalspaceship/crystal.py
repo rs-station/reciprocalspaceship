@@ -98,6 +98,22 @@ class Crystal(pd.DataFrame):
         from reciprocalspaceship import io
         return io.write_mtz(self, *args, **kwargs)
 
+    def write_hkl(self, *args, **kwargs):
+        """
+        Write contents of Crystal object to an HKL file
+
+        Parameters
+        ----------
+        outfile : str or file
+            name of an hkl file or file-like object
+        sf_key : str
+            key for structure factor in DataFrame
+        err_key : str
+            key for structure factor error in DataFrame
+        """
+        from reciprocalspaceship import io
+        return io.write_hkl(self, *args, **kwargs)
+
     def get_phase_keys(self):
         """
         Return column labels associated with phase data
