@@ -32,11 +32,26 @@ def read(hklfile, a=None, b=None, c=None, alpha=None, beta=None,
     """
     # Read data from HKL file
     if hklfile.endswith(".hkl"):
-        usecols = [0, 1, 2, 3, 4, 5, 6]
-        F = pd.read_csv(hklfile, header=None, delim_whitespace=True,
-                        names=["H", "K", "L", "F+", "SigF+", "F-", "SigF-"],
-                        usecols=usecols)
-        mtztypes = ["H", "H", "H", "G", "L", "G", "L"]
+        try:
+            usecols = [0, 1, 2, 3, 4, 5, 6]
+            F = pd.read_csv(hklfile, header=None, delim_whitespace=True,
+                            names=["H", "K", "L", "F+", "SigF+", "F-", "SigF-"],
+                            usecols=usecols)
+            mtztypes = ["H", "H", "H", "G", "L", "G", "L"]
+
+            # Check if any anomalous data is actually included
+            if len(F["F-"].unique()) == 1:
+                F = F[["H", "K", "L", "F+", "SigF+"]]
+                F.rename(columns={"F+":"F", "SigF+":"SigF"}, inplace=True)
+                mtztypes = ["H", "H", "H", "F", "Q"]
+
+        except:
+            usecols = [0, 1, 2, 3, 4]
+            F = pd.read_csv(hklfile, header=None, delim_whitespace=True,
+                            names=["H", "K", "L", "F", "SigF"],
+                            usecols=usecols)
+            mtztypes = ["H", "H", "H", "F", "Q"]
+            
     elif hklfile.endswith("*.ii"):
         usecols = range(10)
         F = pd.read_csv(hklfile, header=None, delim_whitespace=True,
@@ -44,12 +59,6 @@ def read(hklfile, a=None, b=None, c=None, alpha=None, beta=None,
                                "Resolution", "Wavelength", "I", "SigI"],
                         usecols=usecols)
         mtztypes = ["H", "H", "H", "I", "R", "R", "R", "R", "J", "Q"]
-
-    # Check if any anomalous data is actually included
-    if len(F["F-"].unique()) == 1:
-        F = F[["H", "K", "L", "F+", "SigF+"]]
-        F.rename(columns={"F+":"F", "SigF+":"SigF"}, inplace=True)
-        mtztypes = ["H", "H", "H", "F", "Q"]
         
     crystal = Crystal()
     for (k,v), mtztype in zip(F.items(), mtztypes):
