@@ -82,8 +82,8 @@ def localscale(crystal1, crystal2, sf_key1, err_key1, sf_key2, err_key2,
     scaled = rs.read_hkl("scaled_derivative.hkl")
 
     hkls = scaled.index    
-    if inplace:           # THIS SEEMS TO BE BROKEN!
-        crystal2 = crystal2.loc[crystal2.index.intersection(hkls)]
+    if inplace:
+        crystal2.drop(crystal2.index.difference(hkls), inplace=True)
         crystal2[sf_key2] = scaled["F"]
         crystal2[err_key2] = scaled["SigF"]
         F = crystal2
