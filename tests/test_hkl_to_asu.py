@@ -5,19 +5,24 @@ from os.path import dirname
 import re
 import reciprocalspaceship as rs
 
+try:
+    from tqdm import tqdm
+except:
+    tqdm = iter
+
 
 class TestSymmetryOps(unittest.TestCase):
     def test_hkl_to_asu(self):
         datadir = dirname(__file__) + '/data/'
         files = [datadir + i for i in listdir(datadir) if re.match(r'.*(?<!_p1).mtz$', i)] 
-        for inFN in files:
+        for inFN in tqdm(files):
             x = rs.read_mtz(inFN)
             y = rs.read_mtz(inFN[:-4] + '_p1.mtz')
             y.spacegroup = x.spacegroup
             yasu = y.hkl_to_asu() #if not x.spacegroup.is_reference_setting(): #    from IPython import embed
             #    embed()
             #print(f"{inFN}")
-            print(f"{x.spacegroup}")
+            #print(f"{x.spacegroup}")
             #print(f"{x.spacegroup.basisop}")
             #print(f"Reference setting = {x.spacegroup.is_reference_setting()}")
             #print(f"\t|merged - mapped| = {len(x.index.difference(yasu.index))}")
