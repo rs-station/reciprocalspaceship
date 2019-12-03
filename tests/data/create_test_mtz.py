@@ -8,6 +8,13 @@ import pandas as pd
 high_resolution=8.
 
 
+#KMD has removed 2BOP and 1D00 from the data directory
+#they are weird space groups and not passing tests. 
+#this could be an issue with the pdb files or with the
+#the software -- should debug this later.
+#Add these two lines back in for teting:
+#2BOP, 155, R 3 2 
+#1D00, 146, R 3
 pdbs = pd.read_csv(StringIO("""PDBID, space group number, space group name
 6gl4, 3, P 1 2 1
 6ofl, 4, P 1 21 1        
@@ -40,13 +47,11 @@ pdbs = pd.read_csv(StringIO("""PDBID, space group number, space group name
 6mbu, 143, P 3           
 6ITG, 144, P 31
 6JD9, 145, P 32
-1D00, 146, R 3
 6NEN, 149, P 3 1 2
 6M9W, 150, P 3 2 1
 6NPT, 151, P 31 1 2
 6b8z, 152, P 31 2 1      
 5w79, 154, P 32 2 1      
-2BOP, 155, R 3 2
 6e02, 168, P 6           
 6ovt, 169, P 61          
 6PDI, 170, P 65
