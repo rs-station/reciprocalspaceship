@@ -5,3 +5,4 @@ from .structurefactors import (to_structurefactor,
                                compute_internal_differences)
 from .weights import compute_doeke_weights
 from .localscale import localscale
+from .symop import apply_to_hkl, phase_shift
