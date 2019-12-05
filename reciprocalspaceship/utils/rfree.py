@@ -29,7 +29,6 @@ def add_rfree(crystal, fraction=0.05, bins=20, inplace=False):
     if not dHKL_present:
         crystal = crystal._compute_dHKL()
 
-    bins = 20
     bin_edges = np.percentile(crystal['dHKL'], np.linspace(100, 0, bins+1))
     bin_edges = np.vstack([bin_edges[:-1], bin_edges[1:]]).T
 
