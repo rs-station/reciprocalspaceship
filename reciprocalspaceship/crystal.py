@@ -2,7 +2,7 @@ import pandas as pd
 import numpy as np
 import gemmi
 from .utils import canonicalize_phases
-from .utils.asu import in_asu
+from .utils.asu import in_asu,hkl_to_asu
 
 class CrystalSeries(pd.Series):
     """
@@ -225,7 +225,7 @@ class Crystal(pd.DataFrame):
             return self
         else:
             return F.__finalize__(self)
-        
+
     def hkl_to_asu(self, inplace=False):
         """
         Map all HKL indices to the reciprocal space asymmetric unit; return a copy
@@ -235,35 +235,15 @@ class Crystal(pd.DataFrame):
             new_crystal = self
         else:
             new_crystal = self.copy()
-        new_crystal.reset_index(inplace = True)
 
-        for op in new_crystal.spacegroup.operations():
-            H = np.vstack(new_crystal[['H', 'K' ,'L']].values).astype(int)
-            h = np.zeros(H.shape, dtype=H.dtype)
-            for i,Hi in enumerate(H):
-                h[i] = op.apply_to_hkl(Hi)
-            idx = in_asu(h, new_crystal.spacegroup)
-            new_crystal.loc[idx, ['H', 'K', 'L']] = h[idx]
-            phase_shift = np.zeros(idx.sum())
-            for i,Hi in enumerate(H[idx]):
-                phase_shift[i] = op.phase_shift(*Hi)
-            phase_shift = np.rad2deg(phase_shift)
-            for k in new_crystal.get_phase_keys():
-                new_crystal.loc[idx, k] = phase_shift + new_crystal.loc[idx, k] 
-
-            h = np.zeros(H.shape, dtype=H.dtype)
-            for i,Hi in enumerate(-H):
-                h[i] = op.apply_to_hkl(Hi)
-            idx = in_asu(h, new_crystal.spacegroup)
-            new_crystal.loc[idx, ['H', 'K', 'L']] = h[idx]
-            phase_shift = np.zeros(idx.sum())
-            for i,Hi in enumerate(-H[idx]):
-                phase_shift[i] = op.phase_shift(*Hi)
-            phase_shift = np.rad2deg(phase_shift)
-            for k in new_crystal.get_phase_keys():
-                new_crystal.loc[idx, k] = phase_shift - new_crystal.loc[idx, k] 
-        new_crystal.set_index(['H', 'K', 'L'], inplace=True)
+        H = np.vstack(new_crystal.index)
+        H, phi_coeff, phi_shift = hkl_to_asu(H, new_crystal.spacegroup, return_phase_shifts=True)
+        new_crystal.reset_index(inplace=True)
+        new_crystal.loc[:, ['H', 'K', 'L']] = H
+        for k in new_crystal.get_phase_keys():
+            new_crystal[k] = phi_coeff * (new_crystal[k] + phi_shift)
         new_crystal._canonicalize_phases(inplace=True)
+        new_crystal.set_index(['H', 'K', 'L'], inplace=True)
         return new_crystal
 
     def _canonicalize_phases(self, inplace=False):
