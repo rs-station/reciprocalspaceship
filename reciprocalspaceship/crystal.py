@@ -1,7 +1,7 @@
 import pandas as pd
 import numpy as np
 import gemmi
-from .utils import canonicalize_phases
+from .utils import canonicalize_phases, apply_to_hkl, phase_shift
 from .utils.asu import in_asu,hkl_to_asu
 
 class CrystalSeries(pd.Series):
@@ -149,23 +149,20 @@ class Crystal(pd.DataFrame):
         
         # Apply symop to generate new HKL indices and phase shifts
         hkl = np.vstack(self.index)
-        newhkl = hkl.copy()
         phase_shifts  = np.zeros(len(hkl))
 
         # TODO: This for loop can be removed if gemmi.Op.apply_to_hkl() were vectorized
-        for i, h in enumerate(hkl):
-            newhkl[i] = symop.apply_to_hkl(h)
-            phase_shifts[i] = symop.phase_shift(*h)
-        phase_shifts = np.rad2deg(phase_shifts)
+        hkl = apply_to_hkl(hkl, symop)
+        phase_shifts = np.rad2deg(phase_shift(hkl, symop))
             
         if inplace:
             self.reset_index(inplace=True)
-            self[['H', 'K', 'L']] = newhkl
+            self[['H', 'K', 'L']] = hkl
             self.set_index(['H', 'K', 'L'], inplace=True)
             F = self
         else:
             F = self.copy().reset_index()
-            F[['H', 'K', 'L']] = newhkl
+            F[['H', 'K', 'L']] = hkl
             F.set_index(['H', 'K', 'L'], inplace=True)
 
         # Shift phases according to symop
@@ -184,13 +181,9 @@ class Crystal(pd.DataFrame):
         hkl = np.vstack(self.index)
         for op in self.spacegroup.operations():
 
-            # TODO: This for loop could be removed if op.apply_to_hkl()
-            #       were vectorized
-            newhkl = hkl.copy()
-            for i, h in enumerate(hkl):
-                newhkl[i] = op.apply_to_hkl(h)
-                
+            newhkl = apply_to_hkl(hkl.copy(), op)
             self['CENTRIC'] = np.all(np.isclose(newhkl, -hkl), 1) | self['CENTRIC']
+
         return self
 
     def _compute_dHKL(self):
