@@ -6,3 +6,4 @@ from .structurefactors import (to_structurefactor,
 from .weights import compute_doeke_weights
 from .localscale import localscale
 from .symop import apply_to_hkl, phase_shift
+from .rfree import add_rfree, copy_rfree
