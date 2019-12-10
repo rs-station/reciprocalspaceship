@@ -20,3 +20,11 @@ API Reference
    :maxdepth: 1
 
    reflectiontables
+
+For Developers
+--------------
+
+.. toctree::
+   :maxdepth: 1
+
+   documentation
