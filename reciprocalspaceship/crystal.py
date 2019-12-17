@@ -151,7 +151,6 @@ class Crystal(pd.DataFrame):
         hkl = np.vstack(self.index)
         phase_shifts  = np.zeros(len(hkl))
 
-        # TODO: This for loop can be removed if gemmi.Op.apply_to_hkl() were vectorized
         hkl = apply_to_hkl(hkl, symop)
         phase_shifts = np.rad2deg(phase_shift(hkl, symop))
             
@@ -172,19 +171,29 @@ class Crystal(pd.DataFrame):
             
         return F.__finalize__(self)
   
-    def _label_centrics(self):
+    def label_centrics(self, inplace=False):
         """
         Label centric reflections in Crystal object. A new column of
         booleans, "CENTRIC", is added to the object.
+
+        Parameters
+        ----------
+        inplace : bool
+            Whether to add the column in place or to return a copy
         """
-        self['CENTRIC'] = False
-        hkl = np.vstack(self.index)
-        for op in self.spacegroup.operations():
+        if inplace:
+            new_crystal = self
+        else:
+            new_crystal = self.copy()
+
+        new_crystal['CENTRIC'] = False
+        hkl = np.vstack(new_crystal.index)
+        for op in new_crystal.spacegroup.operations():
 
             newhkl = apply_to_hkl(hkl.copy(), op)
-            self['CENTRIC'] = np.all(np.isclose(newhkl, -hkl), 1) | self['CENTRIC']
+            new_crystal['CENTRIC'] = np.all(np.isclose(newhkl, -hkl), 1) | new_crystal['CENTRIC']
 
-        return self
+        return new_crystal
 
     def _compute_dHKL(self):
         """
@@ -203,7 +212,7 @@ class Crystal(pd.DataFrame):
         Unmerge Friedel pairs. In the near future, this should probably
         be rolled into a bigger unmerge() function
         """
-        self._label_centrics()
+        self.label_centrics(inplace=True)
         Fplus = self.copy()
         Fminus = self.copy().reset_index()
         Fminus[['H', 'K', 'L']] = -1*Fminus[['H', 'K', 'L']]
