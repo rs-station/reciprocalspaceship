@@ -185,6 +185,11 @@ def solve_localscale(nativeDRG, derivativeDRG, scaledDRG, crystfile):
     nderf 1
     nders 2
     outfile {scaledDRG}
+    
+    tossbad          ! Lines DOEKE USED
+    ratmin 0.5       ! Lines DOEKE USED
+    ratio_out 10     ! Lines DOEKE USED
+
     localscale 
     end
     EOF
