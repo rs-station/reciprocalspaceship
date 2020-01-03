@@ -3,6 +3,7 @@ import numpy as np
 import gemmi
 from .utils import canonicalize_phases, apply_to_hkl, phase_shift
 from .utils.asu import in_asu,hkl_to_asu
+from .dtypes.mapping import mtzcode2dtype
 
 class CrystalSeries(pd.Series):
     """
@@ -182,30 +183,40 @@ class Crystal(pd.DataFrame):
             Whether to add the column in place or to return a copy
         """
         if inplace:
-            new_crystal = self
+            crystal = self
         else:
-            new_crystal = self.copy()
+            crystal = self.copy()
 
-        new_crystal['CENTRIC'] = False
-        hkl = np.vstack(new_crystal.index)
-        for op in new_crystal.spacegroup.operations():
+        crystal['CENTRIC'] = False
+        hkl = np.vstack(crystal.index)
+        for op in crystal.spacegroup.operations():
 
             newhkl = apply_to_hkl(hkl.copy(), op)
-            new_crystal['CENTRIC'] = np.all(np.isclose(newhkl, -hkl), 1) | new_crystal['CENTRIC']
+            crystal['CENTRIC'] = np.all(np.isclose(newhkl, -hkl), 1) | crystal['CENTRIC']
 
-        return new_crystal
+        return crystal
 
-    def _compute_dHKL(self):
+    def compute_dHKL(self, inplace=False):
         """
         Compute the real space lattice plane spacing, d, associated with
-        the HKL indices in the object
+        the HKL indices in the object.
+
+        Parameters
+        ----------
+        inplace : bool
+            Whether to add the column in place or return a copy
         """
-        hkls = self.reset_index()[['H', 'K', 'L']].values
+        if inplace:
+            crystal = self
+        else:
+            crystal = self.copy()
+            
+        hkls = crystal.reset_index()[['H', 'K', 'L']].values
         dhkls = np.zeros(len(hkls))
         for i, hkl in enumerate(hkls):
-            dhkls[i] = self.cell.calculate_d(*hkl)
-        self['dHKL'] = dhkls
-        return self
+            dhkls[i] = crystal.cell.calculate_d(*hkl)
+        crystal['dHKL'] = dhkls
+        return crystal
 
     def unmerge_anomalous(self, inplace=False):
         """
