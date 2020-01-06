@@ -6,6 +6,7 @@ from pandas.api.extensions import (
     ExtensionScalarOpsMixin,
     take
 )
+from pandas.core.tools.numeric import to_numeric
 
 class NumpyExtensionArray(ExtensionArray, ExtensionScalarOpsMixin):
     """
@@ -25,6 +26,11 @@ class NumpyExtensionArray(ExtensionArray, ExtensionScalarOpsMixin):
     def _from_sequence(cls, scalars, dtype=None, copy=False):
         return cls(scalars, dtype=dtype)
 
+    @classmethod
+    def _from_sequence_of_strings(cls, strings, dtype=None, copy=False):
+        scalars = to_numeric(strings, errors="raise")
+        return cls._from_sequence(scalars, dtype, copy)
+    
     @classmethod
     def _from_factorized(cls, values, original):
         return cls(values)
@@ -49,7 +55,7 @@ class NumpyExtensionArray(ExtensionArray, ExtensionScalarOpsMixin):
         if isinstance(result, tuple):
             return self._box_scalar(result)
         elif result.ndim == 0:
-            return self._box_scalar(result.item())
+            return result
         else:
             return type(self)(result)
 
@@ -82,8 +88,6 @@ class NumpyExtensionArray(ExtensionArray, ExtensionScalarOpsMixin):
         return np.isnan(self.data)
 
     def take(self, indexer, allow_fill=False, fill_value=None):
-        if fill_value is None:
-            fill_value = 0
         took = take(self.data, indexer, allow_fill=allow_fill,
                     fill_value=fill_value)
         return type(self)(took)
