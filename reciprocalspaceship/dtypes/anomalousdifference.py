@@ -32,16 +32,8 @@ class AnomalousDifferenceDtype(ExtensionDtype):
 
 class AnomalousDifferenceArray(NumpyExtensionArray):
     """ExtensionArray for supporting AnomalousDifferenceDtype"""
-    
     _dtype = AnomalousDifferenceDtype()
-    
-    def __init__(self, values, copy=True, dtype=None):
-
-        self.data = np.array(values, dtype='float32', copy=copy)
-        if isinstance(dtype, str):
-            AnomalousDifferenceDtype.construct_array_type(dtype)
-        elif dtype:
-            assert isinstance(dtype, AnomalousDifferenceDtype)
+    pass
 
 AnomalousDifferenceArray._add_arithmetic_ops()
 AnomalousDifferenceArray._add_comparison_ops()
