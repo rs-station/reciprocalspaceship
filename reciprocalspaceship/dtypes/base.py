@@ -129,6 +129,50 @@ class NumpyExtensionArray(ExtensionArray, ExtensionScalarOpsMixin):
 
         return result
 
+    def value_counts(self, dropna=True):
+        """
+        Returns a Series containing counts of each category.
+        Every category will have an entry, even those with a count of 0.
+
+        Parameters
+        ----------
+        dropna : bool, default True
+            Don't include counts of NaN.
+
+        Returns
+        -------
+        counts : CrystalSeries
+        """
+        from pandas import Index
+        import reciprocalspaceship as rs
+
+        # compute counts on the data with no nans
+        mask = np.isnan(self.data)
+        data = self.data[~mask]
+        value_counts = Index(data).value_counts()
+        array = value_counts.values
+
+        # TODO(extension)
+        # if we have allow Index to hold an ExtensionArray
+        # this is easier
+        index = value_counts.index.astype(object)
+
+        # if we want nans, count the mask
+        if not dropna:
+
+            # TODO(extension)
+            # appending to an Index *always* infers
+            # w/o passing the dtype
+            array = np.append(array, [mask.sum()])
+            index = Index(
+                np.concatenate(
+                    [index.values, np.array([self.dtype.na_value], dtype=object)]
+                ),
+                dtype=object,
+            )
+
+        return rs.CrystalSeries(array, index=index)
+
     def _coerce_to_ndarray(self, dtype=None):
         if dtype:
             return self.data.astype(dtype)
