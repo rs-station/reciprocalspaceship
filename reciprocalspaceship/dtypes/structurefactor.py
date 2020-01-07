@@ -69,16 +69,8 @@ class StructureFactorAmplitudeFriedelDtype(ExtensionDtype):
 
 class StructureFactorAmplitudeFriedelArray(NumpyExtensionArray):
     """ExtensionArray for supporting StructureFactorAmplitudeFriedelDtype"""
-    
     _dtype = StructureFactorAmplitudeFriedelDtype()
-    
-    def __init__(self, values, copy=True, dtype=None):
-
-        self.data = np.array(values, dtype='float32', copy=copy)
-        if isinstance(dtype, str):
-            StructureFactorAmplitudeFriedelDtype.construct_array_type(dtype)
-        elif dtype:
-            assert isinstance(dtype, StructureFactorAmplitudeFriedelDtype)
+    pass
 
 StructureFactorAmplitudeFriedelArray._add_arithmetic_ops()
 StructureFactorAmplitudeFriedelArray._add_comparison_ops()
