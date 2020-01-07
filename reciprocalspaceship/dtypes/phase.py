@@ -1,35 +1,18 @@
 import numpy as np
-from pandas.api.extensions import ExtensionDtype
 from pandas.core.dtypes.dtypes import register_extension_dtype
 
-from .base import NumpyExtensionArray
+from .base import NumpyExtensionArray, NumpyFloat32ExtensionDtype
 
 @register_extension_dtype
-class PhaseDtype(ExtensionDtype):
-    """Dtype for representing phase angles in degrees data"""
-    
+class PhaseDtype(NumpyFloat32ExtensionDtype):
+    """Dtype for representing phase data in reflection tables"""
     name = 'Phase'
-    type = np.float32
-    kind = 'f'
-    na_value = np.nan
     mtztype = "P"
     
-    @property
-    def _is_numeric(self):
-        return True
-    
-    @classmethod
-    def construct_from_string(cls, string):
-        if string == cls.name:
-            return cls()
-        else:
-            raise TypeError("Cannot construct a '{}' from "
-                            "'{}'".format(cls, string))
-
     @classmethod
     def construct_array_type(cls):
         return PhaseArray
-
+    
 class PhaseArray(NumpyExtensionArray):
     """ExtensionArray for supporting PhaseDtype"""
     _dtype = PhaseDtype()
