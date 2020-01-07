@@ -1,31 +1,12 @@
-import numpy as np
-from pandas.api.extensions import ExtensionDtype
 from pandas.core.dtypes.dtypes import register_extension_dtype
-
-from .base import NumpyExtensionArray
+from .base import NumpyExtensionArray, NumpyFloat32ExtensionDtype
 
 @register_extension_dtype
-class AnomalousDifferenceDtype(ExtensionDtype):
-    """Dtype for anomalous difference data"""
-    
+class AnomalousDifferenceDtype(NumpyFloat32ExtensionDtype):
+    """Dtype for anomalous difference data in reflection tables"""
     name = 'AnomalousDifference'
-    type = np.float32
-    kind = 'f'
-    na_value = np.nan
     mtztype = "D"
     
-    @property
-    def _is_numeric(self):
-        return True
-    
-    @classmethod
-    def construct_from_string(cls, string):
-        if string == cls.name:
-            return cls()
-        else:
-            raise TypeError("Cannot construct a '{}' from "
-                            "'{}'".format(cls, string))
-
     @classmethod
     def construct_array_type(cls):
         return AnomalousDifferenceArray

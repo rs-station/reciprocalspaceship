@@ -1,30 +1,11 @@
-import numpy as np
-from pandas.api.extensions import ExtensionDtype
 from pandas.core.dtypes.dtypes import register_extension_dtype
-
-from .base import NumpyExtensionArray
+from .base import NumpyExtensionArray, NumpyFloat32ExtensionDtype
 
 @register_extension_dtype
-class StructureFactorAmplitudeDtype(ExtensionDtype):
+class StructureFactorAmplitudeDtype(NumpyFloat32ExtensionDtype):
     """Dtype for structure factor amplitude  data"""
-    
     name = 'SFAmplitude'
-    type = np.float32
-    kind = 'f'
-    na_value = np.nan
     mtztype = "F"
-    
-    @property
-    def _is_numeric(self):
-        return True
-    
-    @classmethod
-    def construct_from_string(cls, string):
-        if string == cls.name:
-            return cls()
-        else:
-            raise TypeError("Cannot construct a '{}' from "
-                            "'{}'".format(cls, string))
 
     @classmethod
     def construct_array_type(cls):
@@ -39,29 +20,13 @@ StructureFactorAmplitudeArray._add_arithmetic_ops()
 StructureFactorAmplitudeArray._add_comparison_ops()
 
 @register_extension_dtype
-class StructureFactorAmplitudeFriedelDtype(ExtensionDtype):
+class StructureFactorAmplitudeFriedelDtype(NumpyFloat32ExtensionDtype):
     """
     Dtype for structure factor amplitude data from Friedel pairs -- 
     F(+) or F(-)
     """
-    
     name = 'SFAmplitudeFriedel'
-    type = np.float32
-    kind = 'f'
-    na_value = np.nan
     mtztype = "G"
-    
-    @property
-    def _is_numeric(self):
-        return True
-    
-    @classmethod
-    def construct_from_string(cls, string):
-        if string == cls.name:
-            return cls()
-        else:
-            raise TypeError("Cannot construct a '{}' from "
-                            "'{}'".format(cls, string))
 
     @classmethod
     def construct_array_type(cls):
@@ -76,26 +41,10 @@ StructureFactorAmplitudeFriedelArray._add_arithmetic_ops()
 StructureFactorAmplitudeFriedelArray._add_comparison_ops()
 
 @register_extension_dtype
-class ScaledStructureFactorAmplitudeDtype(ExtensionDtype):
+class ScaledStructureFactorAmplitudeDtype(NumpyFloat32ExtensionDtype):
     """Dtype for structure factor amplitude  data"""
-    
     name = 'F_over_eps'
-    type = np.float32
-    kind = 'f'
-    na_value = np.nan
     mtztype = "E"
-    
-    @property
-    def _is_numeric(self):
-        return True
-    
-    @classmethod
-    def construct_from_string(cls, string):
-        if string == cls.name:
-            return cls()
-        else:
-            raise TypeError("Cannot construct a '{}' from "
-                            "'{}'".format(cls, string))
 
     @classmethod
     def construct_array_type(cls):

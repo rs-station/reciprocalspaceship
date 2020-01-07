@@ -1,31 +1,12 @@
-import numpy as np
-from pandas.api.extensions import ExtensionDtype
 from pandas.core.dtypes.dtypes import register_extension_dtype
-
-from .base import NumpyExtensionArray
+from .base import NumpyExtensionArray, NumpyFloat32ExtensionDtype
 
 @register_extension_dtype
-class StandardDeviationDtype(ExtensionDtype):
+class StandardDeviationDtype(NumpyFloat32ExtensionDtype):
     """Dtype for standard deviation of observables: J, F, D or other"""
-    
     name = 'Stddev'
-    type = np.float32
-    kind = 'f'
-    na_value = np.nan
     mtztype = "Q"
     
-    @property
-    def _is_numeric(self):
-        return True
-    
-    @classmethod
-    def construct_from_string(cls, string):
-        if string == cls.name:
-            return cls()
-        else:
-            raise TypeError("Cannot construct a '{}' from "
-                            "'{}'".format(cls, string))
-
     @classmethod
     def construct_array_type(cls):
         return StandardDeviationArray
@@ -39,26 +20,10 @@ StandardDeviationArray._add_arithmetic_ops()
 StandardDeviationArray._add_comparison_ops()
 
 @register_extension_dtype
-class StandardDeviationSFFriedelDtype(ExtensionDtype):
+class StandardDeviationSFFriedelDtype(NumpyFloat32ExtensionDtype):
     """Dtype for standard deviation of F(+) or F(-)"""
-    
     name = 'StddevSFFriedel'
-    type = np.float32
-    kind = 'f'
-    na_value = np.nan
     mtztype = "L"
-    
-    @property
-    def _is_numeric(self):
-        return True
-    
-    @classmethod
-    def construct_from_string(cls, string):
-        if string == cls.name:
-            return cls()
-        else:
-            raise TypeError("Cannot construct a '{}' from "
-                            "'{}'".format(cls, string))
 
     @classmethod
     def construct_array_type(cls):
@@ -73,26 +38,10 @@ StandardDeviationSFFriedelArray._add_arithmetic_ops()
 StandardDeviationSFFriedelArray._add_comparison_ops()
 
 @register_extension_dtype
-class StandardDeviationIFriedelDtype(ExtensionDtype):
+class StandardDeviationIFriedelDtype(NumpyFloat32ExtensionDtype):
     """Dtype for standard deviation of I(+) or I(-)"""
-    
     name = 'StddevIFriedel'
-    type = np.float32
-    kind = 'f'
-    na_value = np.nan
     mtztype = "M"
-    
-    @property
-    def _is_numeric(self):
-        return True
-    
-    @classmethod
-    def construct_from_string(cls, string):
-        if string == cls.name:
-            return cls()
-        else:
-            raise TypeError("Cannot construct a '{}' from "
-                            "'{}'".format(cls, string))
 
     @classmethod
     def construct_array_type(cls):
