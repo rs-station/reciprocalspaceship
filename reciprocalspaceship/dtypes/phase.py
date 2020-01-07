@@ -1,5 +1,4 @@
 from pandas.core.dtypes.dtypes import register_extension_dtype
-
 from .base import NumpyExtensionArray, NumpyFloat32ExtensionDtype
 
 @register_extension_dtype
