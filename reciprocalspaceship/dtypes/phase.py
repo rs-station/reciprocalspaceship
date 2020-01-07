@@ -1,5 +1,4 @@
 from pandas.core.dtypes.dtypes import register_extension_dtype
-
 from .base import NumpyExtensionArray, NumpyFloat32ExtensionDtype
 
 @register_extension_dtype
@@ -21,7 +20,7 @@ PhaseArray._add_arithmetic_ops()
 PhaseArray._add_comparison_ops()
 
 @register_extension_dtype
-class HendricksonLattmanDtype(ExtensionDtype):
+class HendricksonLattmanDtype(NumpyFloat32ExtensionDtype):
     """
     Dtype for representing phase probability coefficients 
     (Hendrickson-Lattman) in reflection tables
