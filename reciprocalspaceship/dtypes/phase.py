@@ -1,4 +1,3 @@
-import numpy as np
 from pandas.core.dtypes.dtypes import register_extension_dtype
 
 from .base import NumpyExtensionArray, NumpyFloat32ExtensionDtype
@@ -25,26 +24,10 @@ PhaseArray._add_comparison_ops()
 class HendricksonLattmanDtype(ExtensionDtype):
     """
     Dtype for representing phase probability coefficients 
-    (Hendrickson-Lattman)
+    (Hendrickson-Lattman) in reflection tables
     """
-    
     name = 'HendricksonLattman'
-    type = np.float32
-    kind = 'f'
-    na_value = np.nan
     mtztype = "A"
-    
-    @property
-    def _is_numeric(self):
-        return True
-    
-    @classmethod
-    def construct_from_string(cls, string):
-        if string == cls.name:
-            return cls()
-        else:
-            raise TypeError("Cannot construct a '{}' from "
-                            "'{}'".format(cls, string))
 
     @classmethod
     def construct_array_type(cls):
