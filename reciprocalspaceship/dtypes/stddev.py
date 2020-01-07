@@ -66,16 +66,8 @@ class StandardDeviationSFFriedelDtype(ExtensionDtype):
 
 class StandardDeviationSFFriedelArray(NumpyExtensionArray):
     """ExtensionArray for supporting StandardDeviationSFFriedelDtype"""
-    
     _dtype = StandardDeviationSFFriedelDtype()
-    
-    def __init__(self, values, copy=True, dtype=None):
-
-        self.data = np.array(values, dtype='float32', copy=copy)
-        if isinstance(dtype, str):
-            StandardDeviationSFFriedelDtype.construct_array_type(dtype)
-        elif dtype:
-            assert isinstance(dtype, StandardDeviationSFFriedelDtype)
+    pass
 
 StandardDeviationSFFriedelArray._add_arithmetic_ops()
 StandardDeviationSFFriedelArray._add_comparison_ops()
