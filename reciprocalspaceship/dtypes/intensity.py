@@ -65,17 +65,9 @@ class IntensityFriedelDtype(ExtensionDtype):
         return IntensityFriedelArray
 
 class IntensityFriedelArray(NumpyExtensionArray):
-    """ExtensionArray for supporting IntensityFriedelDtype"""
-    
+    """ExtensionArray for supporting IntensityFriedelDtype"""    
     _dtype = IntensityFriedelDtype()
-    
-    def __init__(self, values, copy=True, dtype=None):
-
-        self.data = np.array(values, dtype='float32', copy=copy)
-        if isinstance(dtype, str):
-            IntensityFriedelDtype.construct_array_type(dtype)
-        elif dtype:
-            assert isinstance(dtype, IntensityFriedelDtype)
+    pass
 
 IntensityFriedelArray._add_arithmetic_ops()
 IntensityFriedelArray._add_comparison_ops()
