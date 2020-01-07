@@ -17,6 +17,13 @@ class NumpyExtensionArray(ExtensionArray, ExtensionScalarOpsMixin):
     ndim = 1
     can_hold_na = True
     __array_priority__ = 1000
+
+    def __init__(self, values, copy=True, dtype=None):
+        self.data = np.array(values, dtype=self._dtype.type, copy=copy)
+        if isinstance(dtype, str):
+            type(self._dtype).construct_array_type(dtype)
+        elif dtype:
+            assert isinstance(dtype, type(self._dtype))
     
     @property
     def dtype(self):
