@@ -32,16 +32,8 @@ class WeightDtype(ExtensionDtype):
 
 class WeightArray(NumpyExtensionArray):
     """ExtensionArray for supporting WeightDtype"""
-    
     _dtype = WeightDtype()
-    
-    def __init__(self, values, copy=True, dtype=None):
-
-        self.data = np.array(values, dtype='float32', copy=copy)
-        if isinstance(dtype, str):
-            WeightDtype.construct_array_type(dtype)
-        elif dtype:
-            assert isinstance(dtype, WeightDtype)
+    pass
 
 WeightArray._add_arithmetic_ops()
 WeightArray._add_comparison_ops()
