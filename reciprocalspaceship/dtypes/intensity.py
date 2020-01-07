@@ -31,17 +31,9 @@ class IntensityDtype(ExtensionDtype):
         return IntensityArray
 
 class IntensityArray(NumpyExtensionArray):
-    """ExtensionArray for supporting IntensityDtype"""
-    
+    """ExtensionArray for supporting IntensityDtype"""    
     _dtype = IntensityDtype()
-    
-    def __init__(self, values, copy=True, dtype=None):
-
-        self.data = np.array(values, dtype='float32', copy=copy)
-        if isinstance(dtype, str):
-            IntensityDtype.construct_array_type(dtype)
-        elif dtype:
-            assert isinstance(dtype, IntensityDtype)
+    pass
 
 IntensityArray._add_arithmetic_ops()
 IntensityArray._add_comparison_ops()
