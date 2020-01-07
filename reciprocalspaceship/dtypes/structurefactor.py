@@ -32,16 +32,8 @@ class StructureFactorAmplitudeDtype(ExtensionDtype):
 
 class StructureFactorAmplitudeArray(NumpyExtensionArray):
     """ExtensionArray for supporting StructureFactorAmplitudeDtype"""
-    
     _dtype = StructureFactorAmplitudeDtype()
-    
-    def __init__(self, values, copy=True, dtype=None):
-
-        self.data = np.array(values, dtype='float32', copy=copy)
-        if isinstance(dtype, str):
-            StructureFactorAmplitudeDtype.construct_array_type(dtype)
-        elif dtype:
-            assert isinstance(dtype, StructureFactorAmplitudeDtype)
+    pass
 
 StructureFactorAmplitudeArray._add_arithmetic_ops()
 StructureFactorAmplitudeArray._add_comparison_ops()
