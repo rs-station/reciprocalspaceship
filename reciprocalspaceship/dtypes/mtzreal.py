@@ -32,16 +32,8 @@ class MTZRealDtype(ExtensionDtype):
 
 class MTZRealArray(NumpyExtensionArray):
     """ExtensionArray for supporting MtzRealDtype"""
-    
     _dtype = MTZRealDtype()
-    
-    def __init__(self, values, copy=True, dtype=None):
-
-        self.data = np.array(values, dtype='float32', copy=copy)
-        if isinstance(dtype, str):
-            MTZRealDtype.construct_array_type(dtype)
-        elif dtype:
-            assert isinstance(dtype, MTZRealDtype)
+    pass
 
 MTZRealArray._add_arithmetic_ops()
 MTZRealArray._add_comparison_ops()
