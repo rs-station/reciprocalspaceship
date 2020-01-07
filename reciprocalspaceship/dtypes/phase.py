@@ -32,16 +32,8 @@ class PhaseDtype(ExtensionDtype):
 
 class PhaseArray(NumpyExtensionArray):
     """ExtensionArray for supporting PhaseDtype"""
-    
     _dtype = PhaseDtype()
-    
-    def __init__(self, values, copy=True, dtype=None):
-
-        self.data = np.array(values, dtype='float32', copy=copy)
-        if isinstance(dtype, str):
-            PhaseDtype.construct_array_type(dtype)
-        elif dtype:
-            assert isinstance(dtype, PhaseDtype)
+    pass
 
 PhaseArray._add_arithmetic_ops()
 PhaseArray._add_comparison_ops()
@@ -77,16 +69,8 @@ class HendricksonLattmanDtype(ExtensionDtype):
 
 class HendricksonLattmanArray(NumpyExtensionArray):
     """ExtensionArray for supporting HendricksonLattmanDtype"""
-    
     _dtype = HendricksonLattmanDtype()
-    
-    def __init__(self, values, copy=True, dtype=None):
-
-        self.data = np.array(values, dtype='float32', copy=copy)
-        if isinstance(dtype, str):
-            HendricksonLattmanDtype.construct_array_type(dtype)
-        elif dtype:
-            assert isinstance(dtype, HendricksonLattmanDtype)
+    pass
 
 HendricksonLattmanArray._add_arithmetic_ops()
 HendricksonLattmanArray._add_comparison_ops()
