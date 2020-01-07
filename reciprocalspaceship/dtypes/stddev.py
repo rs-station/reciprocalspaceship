@@ -100,16 +100,8 @@ class StandardDeviationIFriedelDtype(ExtensionDtype):
 
 class StandardDeviationIFriedelArray(NumpyExtensionArray):
     """ExtensionArray for supporting StandardDeviationIFriedelDtype"""
-    
     _dtype = StandardDeviationIFriedelDtype()
-    
-    def __init__(self, values, copy=True, dtype=None):
-
-        self.data = np.array(values, dtype='float32', copy=copy)
-        if isinstance(dtype, str):
-            StandardDeviationIFriedelDtype.construct_array_type(dtype)
-        elif dtype:
-            assert isinstance(dtype, StandardDeviationIFriedelDtype)
+    pass
 
 StandardDeviationIFriedelArray._add_arithmetic_ops()
 StandardDeviationIFriedelArray._add_comparison_ops()
