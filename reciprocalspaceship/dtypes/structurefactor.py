@@ -103,16 +103,8 @@ class ScaledStructureFactorAmplitudeDtype(ExtensionDtype):
 
 class ScaledStructureFactorAmplitudeArray(NumpyExtensionArray):
     """ExtensionArray for supporting ScaledStructureFactorAmplitudeDtype"""
-    
     _dtype = ScaledStructureFactorAmplitudeDtype()
-    
-    def __init__(self, values, copy=True, dtype=None):
-
-        self.data = np.array(values, dtype='float32', copy=copy)
-        if isinstance(dtype, str):
-            ScaledStructureFactorAmplitudeDtype.construct_array_type(dtype)
-        elif dtype:
-            assert isinstance(dtype, ScaledStructureFactorAmplitudeDtype)
+    pass
 
 ScaledStructureFactorAmplitudeArray._add_arithmetic_ops()
 ScaledStructureFactorAmplitudeArray._add_comparison_ops()
