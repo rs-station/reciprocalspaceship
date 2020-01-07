@@ -2,11 +2,33 @@ import operator
 import numpy as np
 from pandas.core import nanops
 from pandas.api.extensions import (
+    ExtensionDtype,
     ExtensionArray,
     ExtensionScalarOpsMixin,
     take
 )
 from pandas.core.tools.numeric import to_numeric
+
+class NumpyFloat32ExtensionDtype(ExtensionDtype):
+    """
+    Base ExtensionDtype for defining a custom Pandas Dtype that uses
+    np.float32 for storing numeric data.
+    """
+    type = np.float32
+    kind = 'f'
+    na_value = np.nan
+
+    @property
+    def _is_numeric(self):
+        return True
+    
+    @classmethod
+    def construct_from_string(cls, string):
+        if string == cls.name:
+            return cls()
+        else:
+            raise TypeError("Cannot construct a '{}' from "
+                            "'{}'".format(cls, string))
 
 class NumpyExtensionArray(ExtensionArray, ExtensionScalarOpsMixin):
     """
