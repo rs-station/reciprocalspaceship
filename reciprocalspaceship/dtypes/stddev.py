@@ -31,17 +31,9 @@ class StandardDeviationDtype(ExtensionDtype):
         return StandardDeviationArray
 
 class StandardDeviationArray(NumpyExtensionArray):
-    """ExtensionArray for supporting StandardDeviationDtype"""
-    
+    """ExtensionArray for supporting StandardDeviationDtype"""    
     _dtype = StandardDeviationDtype()
-    
-    def __init__(self, values, copy=True, dtype=None):
-
-        self.data = np.array(values, dtype='float32', copy=copy)
-        if isinstance(dtype, str):
-            StandardDeviationDtype.construct_array_type(dtype)
-        elif dtype:
-            assert isinstance(dtype, StandardDeviationDtype)
+    pass
 
 StandardDeviationArray._add_arithmetic_ops()
 StandardDeviationArray._add_comparison_ops()
