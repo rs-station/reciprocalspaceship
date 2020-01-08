@@ -21,10 +21,10 @@ Features of this library include:
 
 
 .. toctree::
-   :maxdepth: 1
+   :maxdepth: 2
 
-   installation	      
-   examples
+   installation
+   examples/examples
    
 API Reference
 -------------

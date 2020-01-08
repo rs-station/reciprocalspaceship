@@ -35,8 +35,8 @@ extensions = [
     'sphinx.ext.autosummary',
     'sphinx.ext.mathjax',
     'sphinx.ext.napoleon',
-    # 'numpydoc',
     'sphinx_rtd_theme',
+    'nbsphinx'
 ]
 
 napoleon_google_docstring = False
@@ -74,7 +74,7 @@ master_doc = 'index'
 # List of patterns, relative to source directory, that match files and
 # directories to ignore when looking for source files.
 # This pattern also affects html_static_path and html_extra_path.
-exclude_patterns = ['_build', '_templates', 'Thumbs.db', '.DS_Store']
+exclude_patterns = ['_build', '_templates', 'Thumbs.db', '.DS_Store', '**.ipynb_checkpoints']
 
 def setup(app):
     # app.add_stylesheet("basic.css")
