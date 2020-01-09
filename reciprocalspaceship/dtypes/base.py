@@ -130,7 +130,7 @@ class NumpyExtensionArray(ExtensionArray, ExtensionScalarOpsMixin):
             if copy:
                 self = self.copy()
             return self
-        return super().astype(dtype, copy)
+        return super().astype(dtype=dtype, copy=copy)
     
     @classmethod
     def _concat_same_type(cls, to_concat):
