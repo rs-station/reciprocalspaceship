@@ -20,5 +20,5 @@ some use cases.
 .. toctree::
    :maxdepth: 1
 
-   isomorphousreplacement.ipynb
+   gettingstarted.ipynb
    anomalousdifference.ipynb
