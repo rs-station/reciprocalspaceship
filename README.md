@@ -13,5 +13,14 @@ Someday, we will have this hosted, but not today...
 ```
 git clone https://github.com/Hekstra-Lab/reciprocalspaceship.git
 cd reciprocalspaceship
+```
+
+Now, open `docs/_build/html/index.html` in the browser of your choice.
+
+```
+# Mac
 open docs/_build/html/index.html
+
+# Linux
+xdg-open docs/_build/html/index.html
 ```
