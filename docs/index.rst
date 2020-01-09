@@ -19,6 +19,8 @@ Features of this library include:
 - Support for reading and writing MTZ format reflection data.
   
 
+User Guide
+----------
 
 .. toctree::
    :maxdepth: 2
