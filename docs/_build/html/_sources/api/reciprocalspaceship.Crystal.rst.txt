@@ -1,0 +1,30 @@
+Crystal
+===========================
+
+.. currentmodule:: reciprocalspaceship
+
+.. autoclass:: Crystal
+
+   
+	       
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+       ~Crystal.__init__
+       ~Crystal.apply_symop
+       ~Crystal.compute_dHKL
+       ~Crystal.get_phase_keys
+       ~Crystal.hkl_to_asu
+       ~Crystal.label_centrics
+       ~Crystal.reset_index
+       ~Crystal.set_index
+       ~Crystal.unmerge_anomalous
+       ~Crystal.write_hkl
+       ~Crystal.write_mtz
+   
+   

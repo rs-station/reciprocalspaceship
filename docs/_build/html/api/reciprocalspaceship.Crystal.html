@@ -1,0 +1,670 @@
+
+
+<!DOCTYPE html>
+<html lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Crystal &mdash; reciprocalspaceship 0.2.7 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script type="text/javascript" src="../_static/language_data.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="CrystalSeries" href="reciprocalspaceship.CrystalSeries.html" />
+    <link rel="prev" title="Working with Reflection Files" href="../reflectiontables.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home" alt="Documentation Home"> reciprocalspaceship
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../examples/examples.html">Examples</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../reflectiontables.html">Working with Reflection Files</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="../reflectiontables.html#reflection-files">Reflection Files</a><ul class="current">
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Crystal</a></li>
+<li class="toctree-l3"><a class="reference internal" href="reciprocalspaceship.CrystalSeries.html">CrystalSeries</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../documentation.html">Building Documentation</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">reciprocalspaceship</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../reflectiontables.html">Working with Reflection Files</a> &raquo;</li>
+        
+      <li>Crystal</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/api/reciprocalspaceship.Crystal.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  
+<style>
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast.container,
+.nboutput.nblast.container {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast.container + .nbinput.container {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<div class="section" id="crystal">
+<h1>Crystal<a class="headerlink" href="#crystal" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="reciprocalspaceship.Crystal">
+<em class="property">class </em><code class="sig-prename descclassname">reciprocalspaceship.</code><code class="sig-name descname">Crystal</code><span class="sig-paren">(</span><em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#reciprocalspaceship.Crystal" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">pandas.core.frame.DataFrame</span></code></p>
+<p>Representation of a crystal</p>
+<dl class="attribute">
+<dt id="reciprocalspaceship.Crystal.spacegroup">
+<code class="sig-name descname">spacegroup</code><a class="headerlink" href="#reciprocalspaceship.Crystal.spacegroup" title="Permalink to this definition">¶</a></dt>
+<dd><p>Crystallographic space group containing symmetry operations</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>gemmi.SpaceGroup</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="reciprocalspaceship.Crystal.cell">
+<code class="sig-name descname">cell</code><a class="headerlink" href="#reciprocalspaceship.Crystal.cell" title="Permalink to this definition">¶</a></dt>
+<dd><p>Unit cell constants of crystal (a, b, c, alpha, beta, gamma)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>gemmi.UnitCell</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="reciprocalspaceship.Crystal.cache_index_dtypes">
+<code class="sig-name descname">cache_index_dtypes</code><a class="headerlink" href="#reciprocalspaceship.Crystal.cache_index_dtypes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Dictionary of dtypes for columns in Crystal.index. Populated upon
+calls to Crystal.set_index() and depopulated by calls to
+Crystal.reset_index()</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>Dictionary</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="reciprocalspaceship.Crystal.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#reciprocalspaceship.Crystal.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize self.  See help(type(self)) for accurate signature.</p>
+</dd></dl>
+
+<p class="rubric">Methods</p>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#reciprocalspaceship.Crystal.__init__" title="reciprocalspaceship.Crystal.__init__"><code class="xref py py-obj docutils literal notranslate"><span class="pre">__init__</span></code></a>(*args, **kwargs)</p></td>
+<td><p>Initialize self.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#reciprocalspaceship.Crystal.apply_symop" title="reciprocalspaceship.Crystal.apply_symop"><code class="xref py py-obj docutils literal notranslate"><span class="pre">apply_symop</span></code></a>(symop[, inplace])</p></td>
+<td><p>Apply symmetry operation to all reflections in Crystal object.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#reciprocalspaceship.Crystal.compute_dHKL" title="reciprocalspaceship.Crystal.compute_dHKL"><code class="xref py py-obj docutils literal notranslate"><span class="pre">compute_dHKL</span></code></a>([inplace])</p></td>
+<td><p>Compute the real space lattice plane spacing, d, associated with the HKL indices in the object.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#reciprocalspaceship.Crystal.get_phase_keys" title="reciprocalspaceship.Crystal.get_phase_keys"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_phase_keys</span></code></a>()</p></td>
+<td><p>Return column labels associated with phase data</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#reciprocalspaceship.Crystal.hkl_to_asu" title="reciprocalspaceship.Crystal.hkl_to_asu"><code class="xref py py-obj docutils literal notranslate"><span class="pre">hkl_to_asu</span></code></a>([inplace])</p></td>
+<td><p>Map all HKL indices to the reciprocal space asymmetric unit; return a copy This is provisional.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#reciprocalspaceship.Crystal.label_centrics" title="reciprocalspaceship.Crystal.label_centrics"><code class="xref py py-obj docutils literal notranslate"><span class="pre">label_centrics</span></code></a>([inplace])</p></td>
+<td><p>Label centric reflections in Crystal object.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#reciprocalspaceship.Crystal.reset_index" title="reciprocalspaceship.Crystal.reset_index"><code class="xref py py-obj docutils literal notranslate"><span class="pre">reset_index</span></code></a>(**kwargs)</p></td>
+<td><p>Reset the index, or a level of it.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#reciprocalspaceship.Crystal.set_index" title="reciprocalspaceship.Crystal.set_index"><code class="xref py py-obj docutils literal notranslate"><span class="pre">set_index</span></code></a>(keys, **kwargs)</p></td>
+<td><p>Set the DataFrame index using existing columns.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#reciprocalspaceship.Crystal.unmerge_anomalous" title="reciprocalspaceship.Crystal.unmerge_anomalous"><code class="xref py py-obj docutils literal notranslate"><span class="pre">unmerge_anomalous</span></code></a>([inplace])</p></td>
+<td><p>Unmerge Friedel pairs.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#reciprocalspaceship.Crystal.write_hkl" title="reciprocalspaceship.Crystal.write_hkl"><code class="xref py py-obj docutils literal notranslate"><span class="pre">write_hkl</span></code></a>(*args, **kwargs)</p></td>
+<td><p>Write contents of Crystal object to an HKL file</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#reciprocalspaceship.Crystal.write_mtz" title="reciprocalspaceship.Crystal.write_mtz"><code class="xref py py-obj docutils literal notranslate"><span class="pre">write_mtz</span></code></a>(*args, **kwargs)</p></td>
+<td><p>Write an MTZ reflection file from the reflection data in a Crystal.</p></td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="reciprocalspaceship.Crystal.apply_symop">
+<code class="sig-name descname">apply_symop</code><span class="sig-paren">(</span><em class="sig-param">symop</em>, <em class="sig-param">inplace=False</em><span class="sig-paren">)</span><a class="headerlink" href="#reciprocalspaceship.Crystal.apply_symop" title="Permalink to this definition">¶</a></dt>
+<dd><p>Apply symmetry operation to all reflections in Crystal object.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>symop</strong> (<em>gemmi.Op</em>) – Gemmi symmetry operation</p></li>
+<li><p><strong>inplace</strong> (<em>bool</em>) – Whether to return a new DataFrame or make the change in place</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="reciprocalspaceship.Crystal.compute_dHKL">
+<code class="sig-name descname">compute_dHKL</code><span class="sig-paren">(</span><em class="sig-param">inplace=False</em><span class="sig-paren">)</span><a class="headerlink" href="#reciprocalspaceship.Crystal.compute_dHKL" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute the real space lattice plane spacing, d, associated with
+the HKL indices in the object.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>inplace</strong> (<em>bool</em>) – Whether to add the column in place or return a copy</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="reciprocalspaceship.Crystal.get_phase_keys">
+<code class="sig-name descname">get_phase_keys</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#reciprocalspaceship.Crystal.get_phase_keys" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return column labels associated with phase data</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><strong>keys</strong> (<em>list of strings</em>) – list of column labels</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="reciprocalspaceship.Crystal.hkl_to_asu">
+<code class="sig-name descname">hkl_to_asu</code><span class="sig-paren">(</span><em class="sig-param">inplace=False</em><span class="sig-paren">)</span><a class="headerlink" href="#reciprocalspaceship.Crystal.hkl_to_asu" title="Permalink to this definition">¶</a></dt>
+<dd><p>Map all HKL indices to the reciprocal space asymmetric unit; return a copy
+This is provisional. Doesn’t quite work yet.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="reciprocalspaceship.Crystal.label_centrics">
+<code class="sig-name descname">label_centrics</code><span class="sig-paren">(</span><em class="sig-param">inplace=False</em><span class="sig-paren">)</span><a class="headerlink" href="#reciprocalspaceship.Crystal.label_centrics" title="Permalink to this definition">¶</a></dt>
+<dd><p>Label centric reflections in Crystal object. A new column of
+booleans, “CENTRIC”, is added to the object.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>inplace</strong> (<em>bool</em>) – Whether to add the column in place or to return a copy</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="reciprocalspaceship.Crystal.reset_index">
+<code class="sig-name descname">reset_index</code><span class="sig-paren">(</span><em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#reciprocalspaceship.Crystal.reset_index" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reset the index, or a level of it.</p>
+<p>Reset the index of the DataFrame, and use the default one instead.
+If the DataFrame has a MultiIndex, this method can remove one or more
+levels.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>level</strong> (<em>int, str, tuple, or list, default None</em>) – Only remove the given levels from the index. Removes all levels by
+default.</p></li>
+<li><p><strong>drop</strong> (<em>bool, default False</em>) – Do not try to insert index into dataframe columns. This resets
+the index to the default integer index.</p></li>
+<li><p><strong>inplace</strong> (<em>bool, default False</em>) – Modify the DataFrame in place (do not create a new object).</p></li>
+<li><p><strong>col_level</strong> (<em>int or str, default 0</em>) – If the columns have multiple levels, determines which level the
+labels are inserted into. By default it is inserted into the first
+level.</p></li>
+<li><p><strong>col_fill</strong> (<em>object, default ‘’</em>) – If the columns have multiple levels, determines how the other
+levels are named. If None then the index name is repeated.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><em>DataFrame</em> – DataFrame with the new index.</p>
+</dd>
+</dl>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<dl class="simple">
+<dt><code class="xref py py-meth docutils literal notranslate"><span class="pre">DataFrame.set_index()</span></code></dt><dd><p>Opposite of reset_index.</p>
+</dd>
+<dt><code class="xref py py-meth docutils literal notranslate"><span class="pre">DataFrame.reindex()</span></code></dt><dd><p>Change to new indices or expand indices.</p>
+</dd>
+<dt><code class="xref py py-meth docutils literal notranslate"><span class="pre">DataFrame.reindex_like()</span></code></dt><dd><p>Change to same indices as other DataFrame.</p>
+</dd>
+</dl>
+</div>
+<p class="rubric">Examples</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">([(</span><span class="s1">&#39;bird&#39;</span><span class="p">,</span> <span class="mf">389.0</span><span class="p">),</span>
+<span class="gp">... </span>                   <span class="p">(</span><span class="s1">&#39;bird&#39;</span><span class="p">,</span> <span class="mf">24.0</span><span class="p">),</span>
+<span class="gp">... </span>                   <span class="p">(</span><span class="s1">&#39;mammal&#39;</span><span class="p">,</span> <span class="mf">80.5</span><span class="p">),</span>
+<span class="gp">... </span>                   <span class="p">(</span><span class="s1">&#39;mammal&#39;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">)],</span>
+<span class="gp">... </span>                  <span class="n">index</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;falcon&#39;</span><span class="p">,</span> <span class="s1">&#39;parrot&#39;</span><span class="p">,</span> <span class="s1">&#39;lion&#39;</span><span class="p">,</span> <span class="s1">&#39;monkey&#39;</span><span class="p">],</span>
+<span class="gp">... </span>                  <span class="n">columns</span><span class="o">=</span><span class="p">(</span><span class="s1">&#39;class&#39;</span><span class="p">,</span> <span class="s1">&#39;max_speed&#39;</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">df</span>
+<span class="go">         class  max_speed</span>
+<span class="go">falcon    bird      389.0</span>
+<span class="go">parrot    bird       24.0</span>
+<span class="go">lion    mammal       80.5</span>
+<span class="go">monkey  mammal        NaN</span>
+</pre></div>
+</div>
+<p>When we reset the index, the old index is added as a column, and a
+new sequential index is used:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">df</span><span class="o">.</span><span class="n">reset_index</span><span class="p">()</span>
+<span class="go">    index   class  max_speed</span>
+<span class="go">0  falcon    bird      389.0</span>
+<span class="go">1  parrot    bird       24.0</span>
+<span class="go">2    lion  mammal       80.5</span>
+<span class="go">3  monkey  mammal        NaN</span>
+</pre></div>
+</div>
+<p>We can use the <cite>drop</cite> parameter to avoid the old index being added as
+a column:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">df</span><span class="o">.</span><span class="n">reset_index</span><span class="p">(</span><span class="n">drop</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="go">    class  max_speed</span>
+<span class="go">0    bird      389.0</span>
+<span class="go">1    bird       24.0</span>
+<span class="go">2  mammal       80.5</span>
+<span class="go">3  mammal        NaN</span>
+</pre></div>
+</div>
+<p>You can also use <cite>reset_index</cite> with <cite>MultiIndex</cite>.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">index</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">MultiIndex</span><span class="o">.</span><span class="n">from_tuples</span><span class="p">([(</span><span class="s1">&#39;bird&#39;</span><span class="p">,</span> <span class="s1">&#39;falcon&#39;</span><span class="p">),</span>
+<span class="gp">... </span>                                   <span class="p">(</span><span class="s1">&#39;bird&#39;</span><span class="p">,</span> <span class="s1">&#39;parrot&#39;</span><span class="p">),</span>
+<span class="gp">... </span>                                   <span class="p">(</span><span class="s1">&#39;mammal&#39;</span><span class="p">,</span> <span class="s1">&#39;lion&#39;</span><span class="p">),</span>
+<span class="gp">... </span>                                   <span class="p">(</span><span class="s1">&#39;mammal&#39;</span><span class="p">,</span> <span class="s1">&#39;monkey&#39;</span><span class="p">)],</span>
+<span class="gp">... </span>                                  <span class="n">names</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;class&#39;</span><span class="p">,</span> <span class="s1">&#39;name&#39;</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">columns</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">MultiIndex</span><span class="o">.</span><span class="n">from_tuples</span><span class="p">([(</span><span class="s1">&#39;speed&#39;</span><span class="p">,</span> <span class="s1">&#39;max&#39;</span><span class="p">),</span>
+<span class="gp">... </span>                                     <span class="p">(</span><span class="s1">&#39;species&#39;</span><span class="p">,</span> <span class="s1">&#39;type&#39;</span><span class="p">)])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">([(</span><span class="mf">389.0</span><span class="p">,</span> <span class="s1">&#39;fly&#39;</span><span class="p">),</span>
+<span class="gp">... </span>                   <span class="p">(</span> <span class="mf">24.0</span><span class="p">,</span> <span class="s1">&#39;fly&#39;</span><span class="p">),</span>
+<span class="gp">... </span>                   <span class="p">(</span> <span class="mf">80.5</span><span class="p">,</span> <span class="s1">&#39;run&#39;</span><span class="p">),</span>
+<span class="gp">... </span>                   <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span> <span class="s1">&#39;jump&#39;</span><span class="p">)],</span>
+<span class="gp">... </span>                  <span class="n">index</span><span class="o">=</span><span class="n">index</span><span class="p">,</span>
+<span class="gp">... </span>                  <span class="n">columns</span><span class="o">=</span><span class="n">columns</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">df</span>
+<span class="go">               speed species</span>
+<span class="go">                 max    type</span>
+<span class="go">class  name</span>
+<span class="go">bird   falcon  389.0     fly</span>
+<span class="go">       parrot   24.0     fly</span>
+<span class="go">mammal lion     80.5     run</span>
+<span class="go">       monkey    NaN    jump</span>
+</pre></div>
+</div>
+<p>If the index has multiple levels, we can reset a subset of them:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">df</span><span class="o">.</span><span class="n">reset_index</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="s1">&#39;class&#39;</span><span class="p">)</span>
+<span class="go">         class  speed species</span>
+<span class="go">                  max    type</span>
+<span class="go">name</span>
+<span class="go">falcon    bird  389.0     fly</span>
+<span class="go">parrot    bird   24.0     fly</span>
+<span class="go">lion    mammal   80.5     run</span>
+<span class="go">monkey  mammal    NaN    jump</span>
+</pre></div>
+</div>
+<p>If we are not dropping the index, by default, it is placed in the top
+level. We can place it in another level:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">df</span><span class="o">.</span><span class="n">reset_index</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="s1">&#39;class&#39;</span><span class="p">,</span> <span class="n">col_level</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="go">                speed species</span>
+<span class="go">         class    max    type</span>
+<span class="go">name</span>
+<span class="go">falcon    bird  389.0     fly</span>
+<span class="go">parrot    bird   24.0     fly</span>
+<span class="go">lion    mammal   80.5     run</span>
+<span class="go">monkey  mammal    NaN    jump</span>
+</pre></div>
+</div>
+<p>When the index is inserted under another level, we can specify under
+which one with the parameter <cite>col_fill</cite>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">df</span><span class="o">.</span><span class="n">reset_index</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="s1">&#39;class&#39;</span><span class="p">,</span> <span class="n">col_level</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">col_fill</span><span class="o">=</span><span class="s1">&#39;species&#39;</span><span class="p">)</span>
+<span class="go">              species  speed species</span>
+<span class="go">                class    max    type</span>
+<span class="go">name</span>
+<span class="go">falcon           bird  389.0     fly</span>
+<span class="go">parrot           bird   24.0     fly</span>
+<span class="go">lion           mammal   80.5     run</span>
+<span class="go">monkey         mammal    NaN    jump</span>
+</pre></div>
+</div>
+<p>If we specify a nonexistent level for <cite>col_fill</cite>, it is created:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">df</span><span class="o">.</span><span class="n">reset_index</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="s1">&#39;class&#39;</span><span class="p">,</span> <span class="n">col_level</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">col_fill</span><span class="o">=</span><span class="s1">&#39;genus&#39;</span><span class="p">)</span>
+<span class="go">                genus  speed species</span>
+<span class="go">                class    max    type</span>
+<span class="go">name</span>
+<span class="go">falcon           bird  389.0     fly</span>
+<span class="go">parrot           bird   24.0     fly</span>
+<span class="go">lion           mammal   80.5     run</span>
+<span class="go">monkey         mammal    NaN    jump</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="reciprocalspaceship.Crystal.set_index">
+<code class="sig-name descname">set_index</code><span class="sig-paren">(</span><em class="sig-param">keys</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#reciprocalspaceship.Crystal.set_index" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the DataFrame index using existing columns.</p>
+<p>Set the DataFrame index (row labels) using one or more existing
+columns or arrays (of the correct length). The index can replace the
+existing index or expand on it.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>keys</strong> (<em>label or array-like or list of labels/arrays</em>) – This parameter can be either a single column key, a single array of
+the same length as the calling DataFrame, or a list containing an
+arbitrary combination of column keys and arrays. Here, “array”
+encompasses <code class="xref py py-class docutils literal notranslate"><span class="pre">Series</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">Index</span></code>, <code class="docutils literal notranslate"><span class="pre">np.ndarray</span></code>, and
+instances of <code class="xref py py-class docutils literal notranslate"><span class="pre">Iterator</span></code>.</p></li>
+<li><p><strong>drop</strong> (<em>bool, default True</em>) – Delete columns to be used as the new index.</p></li>
+<li><p><strong>append</strong> (<em>bool, default False</em>) – Whether to append columns to existing index.</p></li>
+<li><p><strong>inplace</strong> (<em>bool, default False</em>) – Modify the DataFrame in place (do not create a new object).</p></li>
+<li><p><strong>verify_integrity</strong> (<em>bool, default False</em>) – Check the new index for duplicates. Otherwise defer the check until
+necessary. Setting to False will improve the performance of this
+method.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><em>DataFrame</em> – Changed row labels.</p>
+</dd>
+</dl>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<dl class="simple">
+<dt><code class="xref py py-meth docutils literal notranslate"><span class="pre">DataFrame.reset_index()</span></code></dt><dd><p>Opposite of set_index.</p>
+</dd>
+<dt><code class="xref py py-meth docutils literal notranslate"><span class="pre">DataFrame.reindex()</span></code></dt><dd><p>Change to new indices or expand indices.</p>
+</dd>
+<dt><code class="xref py py-meth docutils literal notranslate"><span class="pre">DataFrame.reindex_like()</span></code></dt><dd><p>Change to same indices as other DataFrame.</p>
+</dd>
+</dl>
+</div>
+<p class="rubric">Examples</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s1">&#39;month&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">10</span><span class="p">],</span>
+<span class="gp">... </span>                   <span class="s1">&#39;year&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">2012</span><span class="p">,</span> <span class="mi">2014</span><span class="p">,</span> <span class="mi">2013</span><span class="p">,</span> <span class="mi">2014</span><span class="p">],</span>
+<span class="gp">... </span>                   <span class="s1">&#39;sale&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">55</span><span class="p">,</span> <span class="mi">40</span><span class="p">,</span> <span class="mi">84</span><span class="p">,</span> <span class="mi">31</span><span class="p">]})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">df</span>
+<span class="go">   month  year  sale</span>
+<span class="go">0      1  2012    55</span>
+<span class="go">1      4  2014    40</span>
+<span class="go">2      7  2013    84</span>
+<span class="go">3     10  2014    31</span>
+</pre></div>
+</div>
+<p>Set the index to become the ‘month’ column:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">df</span><span class="o">.</span><span class="n">set_index</span><span class="p">(</span><span class="s1">&#39;month&#39;</span><span class="p">)</span>
+<span class="go">       year  sale</span>
+<span class="go">month</span>
+<span class="go">1      2012    55</span>
+<span class="go">4      2014    40</span>
+<span class="go">7      2013    84</span>
+<span class="go">10     2014    31</span>
+</pre></div>
+</div>
+<p>Create a MultiIndex using columns ‘year’ and ‘month’:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">df</span><span class="o">.</span><span class="n">set_index</span><span class="p">([</span><span class="s1">&#39;year&#39;</span><span class="p">,</span> <span class="s1">&#39;month&#39;</span><span class="p">])</span>
+<span class="go">            sale</span>
+<span class="go">year  month</span>
+<span class="go">2012  1     55</span>
+<span class="go">2014  4     40</span>
+<span class="go">2013  7     84</span>
+<span class="go">2014  10    31</span>
+</pre></div>
+</div>
+<p>Create a MultiIndex using an Index and a column:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">df</span><span class="o">.</span><span class="n">set_index</span><span class="p">([</span><span class="n">pd</span><span class="o">.</span><span class="n">Index</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">]),</span> <span class="s1">&#39;year&#39;</span><span class="p">])</span>
+<span class="go">         month  sale</span>
+<span class="go">   year</span>
+<span class="go">1  2012  1      55</span>
+<span class="go">2  2014  4      40</span>
+<span class="go">3  2013  7      84</span>
+<span class="go">4  2014  10     31</span>
+</pre></div>
+</div>
+<p>Create a MultiIndex using two Series:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">s</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">df</span><span class="o">.</span><span class="n">set_index</span><span class="p">([</span><span class="n">s</span><span class="p">,</span> <span class="n">s</span><span class="o">**</span><span class="mi">2</span><span class="p">])</span>
+<span class="go">      month  year  sale</span>
+<span class="go">1 1       1  2012    55</span>
+<span class="go">2 4       4  2014    40</span>
+<span class="go">3 9       7  2013    84</span>
+<span class="go">4 16     10  2014    31</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="reciprocalspaceship.Crystal.unmerge_anomalous">
+<code class="sig-name descname">unmerge_anomalous</code><span class="sig-paren">(</span><em class="sig-param">inplace=False</em><span class="sig-paren">)</span><a class="headerlink" href="#reciprocalspaceship.Crystal.unmerge_anomalous" title="Permalink to this definition">¶</a></dt>
+<dd><p>Unmerge Friedel pairs. In the near future, this should probably
+be rolled into a bigger unmerge() function</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="reciprocalspaceship.Crystal.write_hkl">
+<code class="sig-name descname">write_hkl</code><span class="sig-paren">(</span><em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#reciprocalspaceship.Crystal.write_hkl" title="Permalink to this definition">¶</a></dt>
+<dd><p>Write contents of Crystal object to an HKL file</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>outfile</strong> (<em>str or file</em>) – name of an hkl file or file-like object</p></li>
+<li><p><strong>sf_key</strong> (<em>str</em>) – key for structure factor in DataFrame</p></li>
+<li><p><strong>err_key</strong> (<em>str</em>) – key for structure factor error in DataFrame</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="reciprocalspaceship.Crystal.write_mtz">
+<code class="sig-name descname">write_mtz</code><span class="sig-paren">(</span><em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#reciprocalspaceship.Crystal.write_mtz" title="Permalink to this definition">¶</a></dt>
+<dd><p>Write an MTZ reflection file from the reflection data in a Crystal.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>mtzfile</strong> (<em>str or file</em>) – name of an mtz file or a file object</p></li>
+<li><p><strong>skip_problem_mtztypes</strong> (<em>bool</em>) – Whether to skip columns in Crystal that do not have specified
+mtz datatypes</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="reciprocalspaceship.CrystalSeries.html" class="btn btn-neutral float-right" title="CrystalSeries" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="../reflectiontables.html" class="btn btn-neutral float-left" title="Working with Reflection Files" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2019, Kevin M. Dalton, Jack B. Greisman
+
+    </p>
+  </div>
+    
+    
+      Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

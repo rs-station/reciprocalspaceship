@@ -1,0 +1,19 @@
+CrystalSeries
+=================================
+
+.. currentmodule:: reciprocalspaceship
+
+.. autoclass:: CrystalSeries
+
+   
+	       
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+   
+   

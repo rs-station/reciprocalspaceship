@@ -1,0 +1,1129 @@
+
+
+<!DOCTYPE html>
+<html lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Making an Anomalous Difference Map &mdash; reciprocalspaceship 0.2.7 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script type="text/javascript" src="../_static/language_data.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Working with Reflection Files" href="../reflectiontables.html" />
+    <link rel="prev" title="Getting Started" href="gettingstarted.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home" alt="Documentation Home"> reciprocalspaceship
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="examples.html">Examples</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="gettingstarted.html">Getting Started</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Making an Anomalous Difference Map</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#Computing-differences">Computing differences</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Obtaining-Phases-by-Isomorphous-Replacement">Obtaining Phases by Isomorphous Replacement</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../reflectiontables.html">Working with Reflection Files</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../documentation.html">Building Documentation</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">reciprocalspaceship</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="examples.html">Examples</a> &raquo;</li>
+        
+      <li>Making an Anomalous Difference Map</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/examples/anomalousdifference.ipynb.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  
+<style>
+/* CSS for nbsphinx extension */
+
+/* remove conflicting styling from Sphinx themes */
+div.nbinput.container,
+div.nbinput.container div.prompt,
+div.nbinput.container div.input_area,
+div.nbinput.container div[class*=highlight],
+div.nbinput.container div[class*=highlight] pre,
+div.nboutput.container,
+div.nboutput.container div.prompt,
+div.nboutput.container div.output_area,
+div.nboutput.container div[class*=highlight],
+div.nboutput.container div[class*=highlight] pre {
+    background: none;
+    border: none;
+    padding: 0 0;
+    margin: 0;
+    box-shadow: none;
+}
+
+/* avoid gaps between output lines */
+div.nboutput.container div[class*=highlight] pre {
+    line-height: normal;
+}
+
+/* input/output containers */
+div.nbinput.container,
+div.nboutput.container {
+    display: -webkit-flex;
+    display: flex;
+    align-items: flex-start;
+    margin: 0;
+    width: 100%;
+}
+@media (max-width: 540px) {
+    div.nbinput.container,
+    div.nboutput.container {
+        flex-direction: column;
+    }
+}
+
+/* input container */
+div.nbinput.container {
+    padding-top: 5px;
+}
+
+/* last container */
+div.nblast.container {
+    padding-bottom: 5px;
+}
+
+/* input prompt */
+div.nbinput.container div.prompt pre {
+    color: #307FC1;
+}
+
+/* output prompt */
+div.nboutput.container div.prompt pre {
+    color: #BF5B3D;
+}
+
+/* all prompts */
+div.nbinput.container div.prompt,
+div.nboutput.container div.prompt {
+    min-width: 5ex;
+    padding-top: 0.4em;
+    padding-right: 0.4em;
+    text-align: right;
+    flex: 0;
+}
+@media (max-width: 540px) {
+    div.nbinput.container div.prompt,
+    div.nboutput.container div.prompt {
+        text-align: left;
+        padding: 0.4em;
+    }
+    div.nboutput.container div.prompt.empty {
+        padding: 0;
+    }
+}
+
+/* disable scrollbars on prompts */
+div.nbinput.container div.prompt pre,
+div.nboutput.container div.prompt pre {
+    overflow: hidden;
+}
+
+/* input/output area */
+div.nbinput.container div.input_area,
+div.nboutput.container div.output_area {
+    padding: 0.4em;
+    -webkit-flex: 1;
+    flex: 1;
+    overflow: auto;
+}
+@media (max-width: 540px) {
+    div.nbinput.container div.input_area,
+    div.nboutput.container div.output_area {
+        width: 100%;
+    }
+}
+
+/* input area */
+div.nbinput.container div.input_area {
+    border: 1px solid #e0e0e0;
+    border-radius: 2px;
+    background: #f5f5f5;
+}
+
+/* override MathJax center alignment in output cells */
+div.nboutput.container div[class*=MathJax] {
+    text-align: left !important;
+}
+
+/* override sphinx.ext.imgmath center alignment in output cells */
+div.nboutput.container div.math p {
+    text-align: left;
+}
+
+/* standard error */
+div.nboutput.container div.output_area.stderr {
+    background: #fdd;
+}
+
+/* ANSI colors */
+.ansi-black-fg { color: #3E424D; }
+.ansi-black-bg { background-color: #3E424D; }
+.ansi-black-intense-fg { color: #282C36; }
+.ansi-black-intense-bg { background-color: #282C36; }
+.ansi-red-fg { color: #E75C58; }
+.ansi-red-bg { background-color: #E75C58; }
+.ansi-red-intense-fg { color: #B22B31; }
+.ansi-red-intense-bg { background-color: #B22B31; }
+.ansi-green-fg { color: #00A250; }
+.ansi-green-bg { background-color: #00A250; }
+.ansi-green-intense-fg { color: #007427; }
+.ansi-green-intense-bg { background-color: #007427; }
+.ansi-yellow-fg { color: #DDB62B; }
+.ansi-yellow-bg { background-color: #DDB62B; }
+.ansi-yellow-intense-fg { color: #B27D12; }
+.ansi-yellow-intense-bg { background-color: #B27D12; }
+.ansi-blue-fg { color: #208FFB; }
+.ansi-blue-bg { background-color: #208FFB; }
+.ansi-blue-intense-fg { color: #0065CA; }
+.ansi-blue-intense-bg { background-color: #0065CA; }
+.ansi-magenta-fg { color: #D160C4; }
+.ansi-magenta-bg { background-color: #D160C4; }
+.ansi-magenta-intense-fg { color: #A03196; }
+.ansi-magenta-intense-bg { background-color: #A03196; }
+.ansi-cyan-fg { color: #60C6C8; }
+.ansi-cyan-bg { background-color: #60C6C8; }
+.ansi-cyan-intense-fg { color: #258F8F; }
+.ansi-cyan-intense-bg { background-color: #258F8F; }
+.ansi-white-fg { color: #C5C1B4; }
+.ansi-white-bg { background-color: #C5C1B4; }
+.ansi-white-intense-fg { color: #A1A6B2; }
+.ansi-white-intense-bg { background-color: #A1A6B2; }
+
+.ansi-default-inverse-fg { color: #FFFFFF; }
+.ansi-default-inverse-bg { background-color: #000000; }
+
+.ansi-bold { font-weight: bold; }
+.ansi-underline { text-decoration: underline; }
+
+/* Some additional styling taken form the Jupyter notebook CSS */
+div.rendered_html table {
+  border: none;
+  border-collapse: collapse;
+  border-spacing: 0;
+  color: black;
+  font-size: 12px;
+  table-layout: fixed;
+}
+div.rendered_html thead {
+  border-bottom: 1px solid black;
+  vertical-align: bottom;
+}
+div.rendered_html tr,
+div.rendered_html th,
+div.rendered_html td {
+  text-align: right;
+  vertical-align: middle;
+  padding: 0.5em 0.5em;
+  line-height: normal;
+  white-space: normal;
+  max-width: none;
+  border: none;
+}
+div.rendered_html th {
+  font-weight: bold;
+}
+div.rendered_html tbody tr:nth-child(odd) {
+  background: #f5f5f5;
+}
+div.rendered_html tbody tr:hover {
+  background: rgba(66, 165, 245, 0.2);
+}
+
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast.container,
+.nboutput.nblast.container {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast.container + .nbinput.container {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<div class="section" id="Making-an-Anomalous-Difference-Map">
+<h1>Making an Anomalous Difference Map<a class="headerlink" href="#Making-an-Anomalous-Difference-Map" title="Permalink to this headline">¶</a></h1>
+<p>In <a class="reference internal" href="gettingstarted.html"><span class="doc">Getting Started</span></a> we loaded a room-temperature dataset that was collected at ~6550 eV of tetragonal HEWL. Let’s now use that data to generate an anomalous difference map based on the native anomalous signal from sulfur atoms.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[149]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">reciprocalspaceship</span> <span class="k">as</span> <span class="nn">rs</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[150]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">refltable</span> <span class="o">=</span> <span class="n">rs</span><span class="o">.</span><span class="n">read_mtz</span><span class="p">(</span><span class="s2">&quot;data/HEWL_SSAD_24IDC.mtz&quot;</span><span class="p">)</span>
+<span class="n">refltable</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[150]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th></th>
+      <th></th>
+      <th>FreeR_flag</th>
+      <th>IMEAN</th>
+      <th>SIGIMEAN</th>
+      <th>I(+)</th>
+      <th>SIGI(+)</th>
+      <th>I(-)</th>
+      <th>SIGI(-)</th>
+      <th>N(+)</th>
+      <th>N(-)</th>
+    </tr>
+    <tr>
+      <th>H</th>
+      <th>K</th>
+      <th>L</th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th rowspan="5" valign="top">0</th>
+      <th rowspan="5" valign="top">0</th>
+      <th>4</th>
+      <td>14</td>
+      <td>671.0396</td>
+      <td>22.205784</td>
+      <td>671.0396</td>
+      <td>22.205784</td>
+      <td>671.0396</td>
+      <td>22.205784</td>
+      <td>16</td>
+      <td>16</td>
+    </tr>
+    <tr>
+      <th>8</th>
+      <td>4</td>
+      <td>3273.7385</td>
+      <td>107.59589</td>
+      <td>3273.7385</td>
+      <td>107.59589</td>
+      <td>3273.7385</td>
+      <td>107.59589</td>
+      <td>16</td>
+      <td>16</td>
+    </tr>
+    <tr>
+      <th>12</th>
+      <td>6</td>
+      <td>1367.5679</td>
+      <td>43.352566</td>
+      <td>1367.5679</td>
+      <td>43.352566</td>
+      <td>1367.5679</td>
+      <td>43.352566</td>
+      <td>16</td>
+      <td>16</td>
+    </tr>
+    <tr>
+      <th>16</th>
+      <td>19</td>
+      <td>4158.55</td>
+      <td>198.88382</td>
+      <td>4158.55</td>
+      <td>198.88382</td>
+      <td>4158.55</td>
+      <td>198.88382</td>
+      <td>8</td>
+      <td>8</td>
+    </tr>
+    <tr>
+      <th>20</th>
+      <td>8</td>
+      <td>2.4992087</td>
+      <td>5.7103205</td>
+      <td>2.4992087</td>
+      <td>5.7103205</td>
+      <td>2.4992087</td>
+      <td>5.7103205</td>
+      <td>1</td>
+      <td>1</td>
+    </tr>
+  </tbody>
+</table>
+</div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[151]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;Number of reflections: {len(refltable)}&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Number of reflections: 12563
+</pre></div></div>
+</div>
+<hr class="docutils" />
+<div class="section" id="Computing-differences">
+<h2>Computing differences<a class="headerlink" href="#Computing-differences" title="Permalink to this headline">¶</a></h2>
+<p>In order to compute a difference map, let’s first compute the differences in intensity between Friedel pairs. We will do this in the following steps:</p>
+<ol class="arabic simple">
+<li><p>Filter out any reflections without observation of both Friedel pairs, or negative intensities</p></li>
+<li><p>Filter out any centric reflections (Unnecessary)</p></li>
+<li><p>Convert the observed intensities into structure factor amplitudes</p></li>
+<li><p>Compute difference in magnitude between Friedel pairs (<span class="math notranslate nohighlight">\(F_{HKL}^+ - F_{HKL}^-\)</span>)</p></li>
+</ol>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[152]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="c1"># 1. Filter out reflections without both Friedel pairs</span>
+<span class="n">refltable</span> <span class="o">=</span> <span class="n">refltable</span><span class="o">.</span><span class="n">loc</span><span class="p">[(</span><span class="n">refltable</span><span class="p">[</span><span class="s2">&quot;N(+)&quot;</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span> <span class="o">&amp;</span>
+                          <span class="p">(</span><span class="n">refltable</span><span class="p">[</span><span class="s2">&quot;N(-)&quot;</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span> <span class="o">&amp;</span>
+                          <span class="p">(</span><span class="n">refltable</span><span class="p">[</span><span class="s2">&quot;I(+)&quot;</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span> <span class="o">&amp;</span>
+                          <span class="p">(</span><span class="n">refltable</span><span class="p">[</span><span class="s2">&quot;I(-)&quot;</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)]</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[153]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;Number of reflections: {len(refltable)}&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Number of reflections: 12333
+</pre></div></div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[154]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="c1"># 2. Filter out centric reflections (Unnecessary)</span>
+<span class="n">refltable</span> <span class="o">=</span> <span class="n">refltable</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="o">~</span><span class="n">refltable</span><span class="o">.</span><span class="n">label_centrics</span><span class="p">()[</span><span class="s2">&quot;CENTRIC&quot;</span><span class="p">]]</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[155]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;Number of reflections: {len(refltable)}&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Number of reflections: 10328
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[156]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">refltable</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[156]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th></th>
+      <th></th>
+      <th>FreeR_flag</th>
+      <th>IMEAN</th>
+      <th>SIGIMEAN</th>
+      <th>I(+)</th>
+      <th>SIGI(+)</th>
+      <th>I(-)</th>
+      <th>SIGI(-)</th>
+      <th>N(+)</th>
+      <th>N(-)</th>
+    </tr>
+    <tr>
+      <th>H</th>
+      <th>K</th>
+      <th>L</th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th rowspan="5" valign="top">2</th>
+      <th rowspan="5" valign="top">1</th>
+      <th>1</th>
+      <td>0</td>
+      <td>199.67992</td>
+      <td>2.1387444</td>
+      <td>208.31882</td>
+      <td>3.0264542</td>
+      <td>191.06168</td>
+      <td>3.0228317</td>
+      <td>64</td>
+      <td>64</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>13</td>
+      <td>881.6192</td>
+      <td>9.878236</td>
+      <td>845.6465</td>
+      <td>13.966452</td>
+      <td>917.6278</td>
+      <td>13.973421</td>
+      <td>64</td>
+      <td>64</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>4</td>
+      <td>423.35788</td>
+      <td>4.799563</td>
+      <td>419.0855</td>
+      <td>6.7865486</td>
+      <td>427.63293</td>
+      <td>6.7886667</td>
+      <td>64</td>
+      <td>64</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>15</td>
+      <td>722.5178</td>
+      <td>8.301497</td>
+      <td>685.8678</td>
+      <td>11.732637</td>
+      <td>759.2611</td>
+      <td>11.747558</td>
+      <td>64</td>
+      <td>64</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>15</td>
+      <td>1415.0105</td>
+      <td>20.677141</td>
+      <td>1405.6847</td>
+      <td>29.239077</td>
+      <td>1424.34</td>
+      <td>29.24471</td>
+      <td>40</td>
+      <td>40</td>
+    </tr>
+  </tbody>
+</table>
+</div></div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[157]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="c1"># 3. Convert intensities to structure factor amplitudes</span>
+<span class="n">refltable</span><span class="p">[</span><span class="s2">&quot;F(+)&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">rs</span><span class="o">.</span><span class="n">CrystalSeries</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">refltable</span><span class="p">[</span><span class="s2">&quot;I(+)&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()),</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;SFAmplitudeFriedel&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">values</span>
+<span class="n">refltable</span><span class="p">[</span><span class="s2">&quot;F(-)&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">rs</span><span class="o">.</span><span class="n">CrystalSeries</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">refltable</span><span class="p">[</span><span class="s2">&quot;I(-)&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()),</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;SFAmplitudeFriedel&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">values</span>
+<span class="n">refltable</span><span class="p">[</span><span class="s2">&quot;SIGF(+)&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">rs</span><span class="o">.</span><span class="n">CrystalSeries</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">refltable</span><span class="p">[</span><span class="s2">&quot;SIGI(+)&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()),</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;StddevSFFriedel&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">values</span>
+<span class="n">refltable</span><span class="p">[</span><span class="s2">&quot;SIGF(-)&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">rs</span><span class="o">.</span><span class="n">CrystalSeries</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">refltable</span><span class="p">[</span><span class="s2">&quot;SIGI(-)&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()),</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;StddevSFFriedel&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">values</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[332]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="c1"># 4. Compute differences</span>
+<span class="n">dF</span>    <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">refltable</span><span class="p">[</span><span class="s2">&quot;F(+)&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span> <span class="o">-</span> <span class="n">refltable</span><span class="p">[</span><span class="s2">&quot;F(-)&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">())</span>
+<span class="n">sigDF</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">refltable</span><span class="p">[</span><span class="s2">&quot;SIGF(+)&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="n">refltable</span><span class="p">[</span><span class="s2">&quot;SIGF(-)&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">refltable</span><span class="p">[</span><span class="s2">&quot;dF&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">rs</span><span class="o">.</span><span class="n">CrystalSeries</span><span class="p">(</span><span class="n">dF</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;dF&quot;</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;SFAmplitude&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">values</span>
+<span class="n">refltable</span><span class="p">[</span><span class="s2">&quot;SigDF&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">rs</span><span class="o">.</span><span class="n">CrystalSeries</span><span class="p">(</span><span class="n">sigDF</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;SigDF&quot;</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;Stddev&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">values</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[333]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="c1"># Drop extraneous columns</span>
+<span class="n">refltable</span> <span class="o">=</span> <span class="n">refltable</span><span class="p">[[</span><span class="s2">&quot;F(+)&quot;</span><span class="p">,</span> <span class="s2">&quot;SIGF(+)&quot;</span><span class="p">,</span> <span class="s2">&quot;F(-)&quot;</span><span class="p">,</span> <span class="s2">&quot;SIGF(-)&quot;</span><span class="p">,</span> <span class="s2">&quot;dF&quot;</span><span class="p">,</span> <span class="s2">&quot;SigDF&quot;</span><span class="p">]]</span>
+<span class="n">refltable</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[333]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th></th>
+      <th></th>
+      <th>F(+)</th>
+      <th>SIGF(+)</th>
+      <th>F(-)</th>
+      <th>SIGF(-)</th>
+      <th>dF</th>
+      <th>SigDF</th>
+    </tr>
+    <tr>
+      <th>H</th>
+      <th>K</th>
+      <th>L</th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th rowspan="5" valign="top">2</th>
+      <th rowspan="5" valign="top">1</th>
+      <th>1</th>
+      <td>14.433254</td>
+      <td>1.7396708</td>
+      <td>13.822506</td>
+      <td>1.7386292</td>
+      <td>0.6107483</td>
+      <td>2.4595296</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>29.080002</td>
+      <td>3.7371716</td>
+      <td>30.292372</td>
+      <td>3.7381039</td>
+      <td>1.2123699</td>
+      <td>5.285818</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>20.471579</td>
+      <td>2.6051004</td>
+      <td>20.679287</td>
+      <td>2.605507</td>
+      <td>0.20770836</td>
+      <td>3.6844559</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>26.189077</td>
+      <td>3.4252937</td>
+      <td>27.554693</td>
+      <td>3.427471</td>
+      <td>1.3656158</td>
+      <td>4.8456364</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>37.492462</td>
+      <td>5.407317</td>
+      <td>37.74043</td>
+      <td>5.407838</td>
+      <td>0.24796677</td>
+      <td>7.6474695</td>
+    </tr>
+  </tbody>
+</table>
+</div></div>
+</div>
+<p>Let’s plot the signal-to-noise of the observed anomalous difference signal</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[334]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="o">%</span><span class="k">matplotlib</span> inline
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[335]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">9</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">refltable</span><span class="o">.</span><span class="n">dF</span><span class="o">.</span><span class="n">values</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">refltable</span><span class="o">.</span><span class="n">dF</span><span class="o">.</span><span class="n">values</span><span class="p">)</span><span class="o">/</span><span class="n">refltable</span><span class="o">.</span><span class="n">SigDF</span><span class="o">.</span><span class="n">values</span><span class="p">,</span> <span class="s2">&quot;k.&quot;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.3</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlim</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">refltable</span><span class="o">.</span><span class="n">dF</span><span class="o">.</span><span class="n">abs</span><span class="p">()</span><span class="o">.</span><span class="n">max</span><span class="p">())</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;$F_</span><span class="si">{hkl}</span><span class="s2">^{+} - F_</span><span class="si">{hkl}</span><span class="s2">^{-}$&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;$\frac{|F_</span><span class="si">{hkl}</span><span class="s2">^{+} - F_</span><span class="si">{hkl}</span><span class="s2">^{-}|}{\sigma_</span><span class="si">{dF}</span><span class="s2">}$&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/examples_anomalousdifference_15_0.png" src="../_images/examples_anomalousdifference_15_0.png" />
+</div>
+</div>
+</div>
+<hr class="docutils" />
+<div class="section" id="Obtaining-Phases-by-Isomorphous-Replacement">
+<h2>Obtaining Phases by Isomorphous Replacement<a class="headerlink" href="#Obtaining-Phases-by-Isomorphous-Replacement" title="Permalink to this headline">¶</a></h2>
+<p>In order to turn these anomalous differences into a map, we need to get phases. We will do that by isomorphous replacement with a published structure, <a class="reference external" href="https://www.rcsb.org/structure/1vat">1VAT</a>. Phases were generated from the PDB model using <a class="reference external" href="https://www.phenix-online.org/documentation/reference/fmodel.html">fmodel</a>.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[336]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">ref</span> <span class="o">=</span> <span class="n">rs</span><span class="o">.</span><span class="n">read_mtz</span><span class="p">(</span><span class="s2">&quot;data/1VAT_fmodel.mtz&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[337]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">ref</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[337]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th></th>
+      <th></th>
+      <th>FMODEL</th>
+      <th>PHIFMODEL</th>
+    </tr>
+    <tr>
+      <th>H</th>
+      <th>K</th>
+      <th>L</th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th rowspan="5" valign="top">0</th>
+      <th rowspan="5" valign="top">0</th>
+      <th>4</th>
+      <td>954.69275</td>
+      <td>180.0</td>
+    </tr>
+    <tr>
+      <th>8</th>
+      <td>1030.4215</td>
+      <td>-7.802343e-16</td>
+    </tr>
+    <tr>
+      <th>12</th>
+      <td>754.23175</td>
+      <td>4.4153507e-15</td>
+    </tr>
+    <tr>
+      <th>16</th>
+      <td>533.2781</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>20</th>
+      <td>5.3535447</td>
+      <td>0.0</td>
+    </tr>
+  </tbody>
+</table>
+</div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[338]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">ref</span><span class="o">.</span><span class="n">dtypes</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[338]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+FMODEL       SFAmplitude
+PHIFMODEL          Phase
+dtype: object
+</pre></div></div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[345]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="c1"># Find common HKL indices</span>
+<span class="n">hkls</span> <span class="o">=</span> <span class="n">refltable</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">intersection</span><span class="p">(</span><span class="n">ref</span><span class="o">.</span><span class="n">index</span><span class="p">)</span>
+<span class="n">hkls</span> <span class="o">=</span> <span class="n">hkls</span><span class="o">.</span><span class="n">sort_values</span><span class="p">()</span>
+<span class="n">refltable</span> <span class="o">=</span> <span class="n">refltable</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">hkls</span><span class="p">]</span>
+<span class="n">ref</span> <span class="o">=</span> <span class="n">ref</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">hkls</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[341]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;Number of reflections: {len(refltable)}, {len(refltable)}&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Number of reflections: 10328, 10328
+</pre></div></div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[342]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="c1"># This is hacky... but it accounts for the phase shifts in anomalous difference map</span>
+<span class="n">refltable</span><span class="p">[</span><span class="s2">&quot;Phi&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">ref</span><span class="p">[</span><span class="s2">&quot;PHIFMODEL&quot;</span><span class="p">]</span>
+<span class="n">refltable</span><span class="p">[</span><span class="s2">&quot;Phi&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">refltable</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="s2">&quot;Phi&quot;</span><span class="p">]</span> <span class="k">if</span> <span class="n">x</span><span class="p">[</span><span class="s2">&quot;F(+)&quot;</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">x</span><span class="p">[</span><span class="s2">&quot;F(-)&quot;</span><span class="p">]</span> <span class="k">else</span> <span class="mi">180</span><span class="o">+</span><span class="n">x</span><span class="p">[</span><span class="s2">&quot;Phi&quot;</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s2">&quot;Phase&quot;</span><span class="p">)</span>
+<span class="n">refltable</span><span class="p">[</span><span class="s2">&quot;Phi&quot;</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">90</span>
+<span class="n">refltable</span><span class="p">[</span><span class="s2">&quot;Phi&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">rs</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">canonicalize_phases</span><span class="p">(</span><span class="n">refltable</span><span class="p">[</span><span class="s2">&quot;Phi&quot;</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[344]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">refltable</span><span class="o">.</span><span class="n">write_mtz</span><span class="p">(</span><span class="s2">&quot;data/anomdiff.mtz&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<p>Looking at the map on the <code class="docutils literal notranslate"><span class="pre">1VAT</span></code> structure, we can see difference density on all of the sulfurs in HEWL. Here is an image of this density contoured at +5<span class="math notranslate nohighlight">\(\sigma\)</span>:</p>
+<p><img alt="Anomalous Map" src="../_images/anomalousmap.png" /></p>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../reflectiontables.html" class="btn btn-neutral float-right" title="Working with Reflection Files" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="gettingstarted.html" class="btn btn-neutral float-left" title="Getting Started" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2019, Kevin M. Dalton, Jack B. Greisman
+
+    </p>
+  </div>
+    
+    
+      Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
