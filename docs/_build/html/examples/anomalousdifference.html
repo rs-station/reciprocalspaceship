@@ -396,7 +396,7 @@ div.rendered_html tbody tr:hover {
 <h1>Making an Anomalous Difference Map<a class="headerlink" href="#Making-an-Anomalous-Difference-Map" title="Permalink to this headline">¶</a></h1>
 <p>In <a class="reference internal" href="gettingstarted.html"><span class="doc">Getting Started</span></a> we loaded a room-temperature dataset that was collected at ~6550 eV of tetragonal HEWL. Let’s now use that data to generate an anomalous difference map based on the native anomalous signal from sulfur atoms.</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[149]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -406,7 +406,7 @@ div.rendered_html tbody tr:hover {
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[150]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -416,7 +416,7 @@ div.rendered_html tbody tr:hover {
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[150]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
 </pre></div>
 </div>
 <div class="output_area rendered_html docutils container">
@@ -533,7 +533,7 @@ div.rendered_html tbody tr:hover {
 </div></div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[151]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -552,7 +552,7 @@ Number of reflections: 12563
 <hr class="docutils" />
 <div class="section" id="Computing-differences">
 <h2>Computing differences<a class="headerlink" href="#Computing-differences" title="Permalink to this headline">¶</a></h2>
-<p>In order to compute a difference map, let’s first compute the differences in intensity between Friedel pairs. We will do this in the following steps:</p>
+<p>In order to compute a difference map, let’s first compute the differences in structure factor amplitude between Friedel pairs. We will do this in the following steps:</p>
 <ol class="arabic simple">
 <li><p>Filter out any reflections without observation of both Friedel pairs, or negative intensities</p></li>
 <li><p>Filter out any centric reflections (Unnecessary)</p></li>
@@ -560,7 +560,7 @@ Number of reflections: 12563
 <li><p>Compute difference in magnitude between Friedel pairs (<span class="math notranslate nohighlight">\(F_{HKL}^+ - F_{HKL}^-\)</span>)</p></li>
 </ol>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[152]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -573,7 +573,7 @@ Number of reflections: 12563
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[153]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -590,7 +590,7 @@ Number of reflections: 12333
 </pre></div></div>
 </div>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[154]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -600,7 +600,7 @@ Number of reflections: 12333
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[155]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -617,7 +617,7 @@ Number of reflections: 10328
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[156]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -626,7 +626,7 @@ Number of reflections: 10328
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[156]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
 </pre></div>
 </div>
 <div class="output_area rendered_html docutils container">
@@ -743,7 +743,7 @@ Number of reflections: 10328
 </div></div>
 </div>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[157]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -756,12 +756,12 @@ Number of reflections: 10328
 </div>
 </div>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[332]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
 <span></span><span class="c1"># 4. Compute differences</span>
-<span class="n">dF</span>    <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">refltable</span><span class="p">[</span><span class="s2">&quot;F(+)&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span> <span class="o">-</span> <span class="n">refltable</span><span class="p">[</span><span class="s2">&quot;F(-)&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">())</span>
+<span class="n">dF</span>    <span class="o">=</span> <span class="n">refltable</span><span class="p">[</span><span class="s2">&quot;F(+)&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span> <span class="o">-</span> <span class="n">refltable</span><span class="p">[</span><span class="s2">&quot;F(-)&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span>
 <span class="n">sigDF</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">refltable</span><span class="p">[</span><span class="s2">&quot;SIGF(+)&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="n">refltable</span><span class="p">[</span><span class="s2">&quot;SIGF(-)&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
 <span class="n">refltable</span><span class="p">[</span><span class="s2">&quot;dF&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">rs</span><span class="o">.</span><span class="n">CrystalSeries</span><span class="p">(</span><span class="n">dF</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;dF&quot;</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;SFAmplitude&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">values</span>
 <span class="n">refltable</span><span class="p">[</span><span class="s2">&quot;SigDF&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">rs</span><span class="o">.</span><span class="n">CrystalSeries</span><span class="p">(</span><span class="n">sigDF</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;SigDF&quot;</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;Stddev&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">values</span>
@@ -769,7 +769,7 @@ Number of reflections: 10328
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[333]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -780,7 +780,7 @@ Number of reflections: 10328
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[333]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
 </pre></div>
 </div>
 <div class="output_area rendered_html docutils container">
@@ -841,7 +841,7 @@ Number of reflections: 10328
       <td>3.7371716</td>
       <td>30.292372</td>
       <td>3.7381039</td>
-      <td>1.2123699</td>
+      <td>-1.2123699</td>
       <td>5.285818</td>
     </tr>
     <tr>
@@ -850,7 +850,7 @@ Number of reflections: 10328
       <td>2.6051004</td>
       <td>20.679287</td>
       <td>2.605507</td>
-      <td>0.20770836</td>
+      <td>-0.20770836</td>
       <td>3.6844559</td>
     </tr>
     <tr>
@@ -859,7 +859,7 @@ Number of reflections: 10328
       <td>3.4252937</td>
       <td>27.554693</td>
       <td>3.427471</td>
-      <td>1.3656158</td>
+      <td>-1.3656158</td>
       <td>4.8456364</td>
     </tr>
     <tr>
@@ -868,7 +868,7 @@ Number of reflections: 10328
       <td>5.407317</td>
       <td>37.74043</td>
       <td>5.407838</td>
-      <td>0.24796677</td>
+      <td>-0.24796677</td>
       <td>7.6474695</td>
     </tr>
   </tbody>
@@ -877,7 +877,7 @@ Number of reflections: 10328
 </div>
 <p>Let’s plot the signal-to-noise of the observed anomalous difference signal</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[334]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -887,13 +887,13 @@ Number of reflections: 10328
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[335]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
 <span></span><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">9</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">refltable</span><span class="o">.</span><span class="n">dF</span><span class="o">.</span><span class="n">values</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">refltable</span><span class="o">.</span><span class="n">dF</span><span class="o">.</span><span class="n">values</span><span class="p">)</span><span class="o">/</span><span class="n">refltable</span><span class="o">.</span><span class="n">SigDF</span><span class="o">.</span><span class="n">values</span><span class="p">,</span> <span class="s2">&quot;k.&quot;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.3</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">xlim</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">refltable</span><span class="o">.</span><span class="n">dF</span><span class="o">.</span><span class="n">abs</span><span class="p">()</span><span class="o">.</span><span class="n">max</span><span class="p">())</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlim</span><span class="p">(</span><span class="o">-</span><span class="n">refltable</span><span class="o">.</span><span class="n">dF</span><span class="o">.</span><span class="n">abs</span><span class="p">()</span><span class="o">.</span><span class="n">max</span><span class="p">(),</span> <span class="n">refltable</span><span class="o">.</span><span class="n">dF</span><span class="o">.</span><span class="n">abs</span><span class="p">()</span><span class="o">.</span><span class="n">max</span><span class="p">())</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;$F_</span><span class="si">{hkl}</span><span class="s2">^{+} - F_</span><span class="si">{hkl}</span><span class="s2">^{-}$&quot;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;$\frac{|F_</span><span class="si">{hkl}</span><span class="s2">^{+} - F_</span><span class="si">{hkl}</span><span class="s2">^{-}|}{\sigma_</span><span class="si">{dF}</span><span class="s2">}$&quot;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
@@ -911,9 +911,10 @@ Number of reflections: 10328
 <hr class="docutils" />
 <div class="section" id="Obtaining-Phases-by-Isomorphous-Replacement">
 <h2>Obtaining Phases by Isomorphous Replacement<a class="headerlink" href="#Obtaining-Phases-by-Isomorphous-Replacement" title="Permalink to this headline">¶</a></h2>
-<p>In order to turn these anomalous differences into a map, we need to get phases. We will do that by isomorphous replacement with a published structure, <a class="reference external" href="https://www.rcsb.org/structure/1vat">1VAT</a>. Phases were generated from the PDB model using <a class="reference external" href="https://www.phenix-online.org/documentation/reference/fmodel.html">fmodel</a>.</p>
+<p>In order to turn these anomalous differences into a map, we need to get phases. We will do that by isomorphous replacement with a published structure, <a class="reference external" href="https://www.rcsb.org/structure/1vat">1VAT</a>. Phases were generated from the PDB model using <a class="reference external" href="https://www.phenix-online.org/documentation/reference/fmodel.html">fmodel</a>, and then we will compute the necessary phase shifts in order to go from the conventional structure factor phases to phases associated with the anomalous scattering
+contributions.</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[336]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -922,7 +923,7 @@ Number of reflections: 10328
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[337]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -931,7 +932,7 @@ Number of reflections: 10328
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[337]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
 </pre></div>
 </div>
 <div class="output_area rendered_html docutils container">
@@ -999,7 +1000,7 @@ Number of reflections: 10328
 </div></div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[338]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -1008,7 +1009,7 @@ Number of reflections: 10328
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[338]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
@@ -1019,7 +1020,7 @@ dtype: object
 </pre></div></div>
 </div>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[345]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -1032,7 +1033,7 @@ dtype: object
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[341]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -1049,20 +1050,23 @@ Number of reflections: 10328, 10328
 </pre></div></div>
 </div>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[342]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[19]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="c1"># This is hacky... but it accounts for the phase shifts in anomalous difference map</span>
-<span class="n">refltable</span><span class="p">[</span><span class="s2">&quot;Phi&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">ref</span><span class="p">[</span><span class="s2">&quot;PHIFMODEL&quot;</span><span class="p">]</span>
-<span class="n">refltable</span><span class="p">[</span><span class="s2">&quot;Phi&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">refltable</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="s2">&quot;Phi&quot;</span><span class="p">]</span> <span class="k">if</span> <span class="n">x</span><span class="p">[</span><span class="s2">&quot;F(+)&quot;</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">x</span><span class="p">[</span><span class="s2">&quot;F(-)&quot;</span><span class="p">]</span> <span class="k">else</span> <span class="mi">180</span><span class="o">+</span><span class="n">x</span><span class="p">[</span><span class="s2">&quot;Phi&quot;</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s2">&quot;Phase&quot;</span><span class="p">)</span>
-<span class="n">refltable</span><span class="p">[</span><span class="s2">&quot;Phi&quot;</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">90</span>
-<span class="n">refltable</span><span class="p">[</span><span class="s2">&quot;Phi&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">rs</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">canonicalize_phases</span><span class="p">(</span><span class="n">refltable</span><span class="p">[</span><span class="s2">&quot;Phi&quot;</span><span class="p">])</span>
+<span></span><span class="c1"># This accounts for the phase shifts between the computed phases and the desired anomalous phases</span>
+<span class="n">refltable</span><span class="p">[</span><span class="s2">&quot;PHANOM&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">ref</span><span class="p">[</span><span class="s2">&quot;PHIFMODEL&quot;</span><span class="p">]</span>
+<span class="n">refltable</span><span class="p">[</span><span class="s2">&quot;PHANOM&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">refltable</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="s2">&quot;PHANOM&quot;</span><span class="p">]</span> <span class="k">if</span> <span class="n">x</span><span class="p">[</span><span class="s2">&quot;dF&quot;</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="k">else</span> <span class="mi">180</span><span class="o">+</span><span class="n">x</span><span class="p">[</span><span class="s2">&quot;PHANOM&quot;</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">refltable</span><span class="p">[</span><span class="s2">&quot;PHANOM&quot;</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">90</span>
+<span class="n">refltable</span><span class="p">[</span><span class="s2">&quot;PHANOM&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">rs</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">canonicalize_phases</span><span class="p">(</span><span class="n">refltable</span><span class="p">[</span><span class="s2">&quot;PHANOM&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s2">&quot;Phase&quot;</span><span class="p">))</span>
+
+<span class="c1"># Using the convention above for the phase shift, we need to take the |Fanom|</span>
+<span class="n">refltable</span><span class="p">[</span><span class="s2">&quot;ANOM&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">refltable</span><span class="p">[</span><span class="s2">&quot;dF&quot;</span><span class="p">])</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s2">&quot;SFAmplitude&quot;</span><span class="p">)</span><span class="o">/</span><span class="mi">2</span>
 </pre></div>
 </div>
 </div>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[344]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[20]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
