@@ -5,4 +5,13 @@ Tools for exploring reciprocal space
 analyzing and manipulating reflection data from crystallography
 experiments.
 
-In order to get started, here is some [documentation](.docs/_build/html/index.html).
+## Getting Started 
+
+We have some documentation, which can be viewed by cloning the repository.
+Someday, we will have this hosted, but not today...
+
+```
+git clone https://github.com/Hekstra-Lab/reciprocalspaceship.git
+cd reciprocalspaceship
+open docs/_build/html/index.html
+```
