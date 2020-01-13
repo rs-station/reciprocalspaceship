@@ -50,7 +50,7 @@ def in_asu(H, spacegroup):
     idx = ccp4_hkl_asu[spacegroup.number-1] 
     return asu_cases[idx](*H_ref.T)
 
-def hkl_to_asu(H, spacegroup, return_phase_shifts=False):
+def hkl_to_asu(H, spacegroup, return_phase_shifts=False, return_isym=False):
     """
     Map hkls to the asymmetric unit and optionally return shifts for the associated phases.
     
@@ -73,6 +73,9 @@ def hkl_to_asu(H, spacegroup, return_phase_shifts=False):
     -------
     H_asu : array
         n x 3 array with the equivalent indices in the asu
+    isymm : array
+        Length n array of the symmetry operation index for each miller index. 
+        This is needed to output an unmerged mtz file.
     phi_coeff : array (optional)
         an array length n containing -1. or 1. for each H
     phi_shift : array (optional)
@@ -85,6 +88,9 @@ def hkl_to_asu(H, spacegroup, return_phase_shifts=False):
     idx = np.vstack([case(*apply_to_hkl(R[:,:,i], basis_op).T) for i in range(R.shape[-1])]).T
     idx[np.cumsum(idx, 1) > 1] = False #This accounts for centrics
     H_asu = R.swapaxes(1, 2)[idx]
+    n = len(spacegroup.operations())
+    isym_order = np.concatenate((np.arange(1,2*n,2),  np.arange(2,2*n+1, 2)))
+    isym = (isym_order * idx).max(1)
 
     if return_phase_shifts:
         R = np.vstack([phase_shift(H, op) for op in spacegroup.operations()]).T
@@ -92,7 +98,7 @@ def hkl_to_asu(H, spacegroup, return_phase_shifts=False):
         R = np.hstack([R, R])
         phi_coeff = phi_coeff[idx]
         phi_shift = np.rad2deg(R[idx])
-        return H_asu, phi_coeff, phi_shift
+        return H_asu, isym, phi_coeff, phi_shift
     else:
-        return H_asu
+        return H_asu, isym
 
