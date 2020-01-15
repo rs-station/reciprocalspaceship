@@ -52,7 +52,7 @@ def read(hklfile, a=None, b=None, c=None, alpha=None, beta=None,
                             usecols=usecols)
             mtztypes = ["H", "H", "H", "F", "Q"]
             
-    elif hklfile.endswith("*.ii"):
+    elif hklfile.endswith(".ii"):
         usecols = range(10)
         F = pd.read_csv(hklfile, header=None, delim_whitespace=True,
                         names=["H", "K", "L", "Multiplicity", "X", "Y",
