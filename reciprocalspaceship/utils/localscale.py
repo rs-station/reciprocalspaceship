@@ -1,6 +1,7 @@
 import subprocess
 import reciprocalspaceship as rs
 import os
+from shutil import which
 
 def localscale(crystal1, crystal2, sf_key1, err_key1, sf_key2, err_key2,
                inplace=False, cleanup=True):
@@ -34,6 +35,10 @@ def localscale(crystal1, crystal2, sf_key1, err_key1, sf_key2, err_key2,
          Local scaled Crystal object
     """
 
+    # Check if phenix.solve is available
+    if not which("phenix.solve"):
+        raise EnvironmentError(f"Command phenix.solve is not available. Please add phenix to PATH.")
+    
     # Assume crystal1 and crystal2 should have same spacegroup
     if crystal1.spacegroup.number != crystal2.spacegroup.number:
         raise ValueError(f"Spacegroup of Crystal objects must match for local scaling")
@@ -176,6 +181,25 @@ def drg2hkl(drgfile, hklfile, crystfile):
 
 def solve_localscale(nativeDRG, derivativeDRG, scaledDRG, crystfile):
 
+    # cmd = f"""phenix.solve <<EOF
+    # @{crystfile}
+    # infile {nativeDRG}
+    # nnatf 1
+    # nnats 2
+    # infile(2) {derivativeDRG}
+    # nderf 1
+    # nders 2
+    # outfile {scaledDRG}
+    
+    # tossbad          ! Lines DOEKE USED
+    # ratmin 0.5       ! Lines DOEKE USED
+    # ratio_out 10     ! Lines DOEKE USED
+
+    # localscale 
+    # end
+    # EOF
+    # """
+
     cmd = f"""phenix.solve <<EOF
     @{crystfile}
     infile {nativeDRG}
@@ -185,16 +209,15 @@ def solve_localscale(nativeDRG, derivativeDRG, scaledDRG, crystfile):
     nderf 1
     nders 2
     outfile {scaledDRG}
-    
-    tossbad          ! Lines DOEKE USED
-    ratmin 0.5       ! Lines DOEKE USED
-    ratio_out 10     ! Lines DOEKE USED
 
+    ratmin 0.1
+    keepall
+    
     localscale 
     end
     EOF
     """
-
+    
     subprocess.call(cmd, shell=True,
                     stdout=subprocess.DEVNULL,
                     stderr=subprocess.DEVNULL)
