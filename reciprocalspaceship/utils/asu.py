@@ -50,7 +50,7 @@ def in_asu(H, spacegroup):
     idx = ccp4_hkl_asu[spacegroup.number-1] 
     return asu_cases[idx](*H_ref.T)
 
-def hkl_to_asu(H, spacegroup, return_phase_shifts=False, return_isym=False):
+def hkl_to_asu(H, spacegroup, return_phase_shifts=False):
     """
     Map hkls to the asymmetric unit and optionally return shifts for the associated phases.
     
