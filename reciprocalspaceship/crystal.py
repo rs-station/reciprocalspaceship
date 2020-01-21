@@ -250,7 +250,7 @@ class Crystal(pd.DataFrame):
             new_crystal = self.copy()
 
         H = np.vstack(new_crystal.index)
-        H, phi_coeff, phi_shift = hkl_to_asu(H, new_crystal.spacegroup, return_phase_shifts=True)
+        H, isym, phi_coeff, phi_shift = hkl_to_asu(H, new_crystal.spacegroup, return_phase_shifts=True)
         new_crystal.reset_index(inplace=True)
         new_crystal.loc[:, ['H', 'K', 'L']] = H
         for k in new_crystal.get_phase_keys():
