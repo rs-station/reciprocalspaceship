@@ -118,6 +118,16 @@ def compute_internal_differences(crystal, symop, sf_key, err_key=None, phase_key
         
     return F
 
+_L = {
+    "P" : 1,
+    "A" : 2,
+    "B" : 2,
+    "C" : 2,
+    "I" : 2,
+    "F" : 4,
+    "R" : 3,
+}
+
 def compute_structurefactor_multiplicity(H, sg):
     """
     Parameters
@@ -141,6 +151,8 @@ def compute_structurefactor_multiplicity(H, sg):
                          f"Received object of type: ({type(sg)}) instead.")
 
     is_centric = group_ops.is_centric()
+    L = _L[group_ops.find_centering()]
+    L = L*(1 + is_centric)
     eps = np.zeros(len(H))
     for op in group_ops:
         h = rs.utils.apply_to_hkl(H, op)
@@ -148,5 +160,5 @@ def compute_structurefactor_multiplicity(H, sg):
             eps += np.all(h==H, 1) | np.all(h==-H, 1)
         else:
             eps += np.all(h==H, 1) 
-    return eps
+    return eps/L
 
