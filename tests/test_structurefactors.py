@@ -30,7 +30,7 @@ class TestStructureFactors(unittest.TestCase):
         self.assertTrue(np.iscomplexobj(sf))
 
         # Test CrystalSeries objects as arguments
-        datadir = join(abspath(dirname(__file__)), 'data')
+        datadir = join(abspath(dirname(__file__)), 'data/fmodel')
         data = rs.read_mtz(join(datadir, '9LYZ.mtz'))
         sfs = rs.utils.to_structurefactor(data["FMODEL"],
                                           data["PHIFMODEL"])
