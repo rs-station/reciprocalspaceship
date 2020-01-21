@@ -8,6 +8,8 @@ from pandas.api.extensions import (
     take
 )
 from pandas.core.tools.numeric import to_numeric
+from pandas.util._decorators import cache_readonly
+
 
 class NumpyFloat32ExtensionDtype(ExtensionDtype):
     """
@@ -21,6 +23,16 @@ class NumpyFloat32ExtensionDtype(ExtensionDtype):
     @property
     def _is_numeric(self):
         return True
+
+    @cache_readonly
+    def numpy_dtype(self):
+        """ Return an instance of our numpy dtype """
+        return np.dtype(self.type)
+
+    @cache_readonly
+    def itemsize(self):
+        """ Return the number of bytes in this dtype """
+        return self.numpy_dtype.itemsize
     
     @classmethod
     def construct_from_string(cls, string):
