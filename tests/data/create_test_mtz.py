@@ -1,8 +1,14 @@
 from subprocess import call
-from os import devnull,rename
+from os import devnull,rename,path,chdir
 from io import StringIO
 from urllib3 import PoolManager
 import pandas as pd
+import os
+
+#Run in the fmodel directory
+abspath = path.abspath(__file__)
+dname = path.dirname(abspath)
+os.chdir(dname) + "/fmodel"
 
 
 high_resolution=8.
@@ -77,8 +83,7 @@ pdbs = pd.read_csv(StringIO("""PDBID, space group number, space group name
 6EDM, 212, P 43 3 2
 6CN8, 213, P 41 3 2
 4I6Y, 214, I 41 3 2
-"""
-), dtype={"PDBID": str, "space group number": int, "space group name": str})
+"""), dtype={"PDBID": str, "space group number": int, "space group name": str})
 
 
 for pdbid in pdbs['PDBID']:

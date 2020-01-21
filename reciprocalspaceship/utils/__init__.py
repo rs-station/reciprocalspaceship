@@ -2,7 +2,8 @@
 from .phases import canonicalize_phases
 from .structurefactors import (to_structurefactor,
                                from_structurefactor,
-                               compute_internal_differences)
+                               compute_internal_differences,
+                               compute_structurefactor_multiplicity)
 from .weights import compute_doeke_weights
 from .localscale import localscale
 from .symop import apply_to_hkl, phase_shift

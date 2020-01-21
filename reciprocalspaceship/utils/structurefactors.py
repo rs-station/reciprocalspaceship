@@ -1,4 +1,5 @@
 import numpy as np
+from gemmi import SpaceGroup,GroupOps
 import reciprocalspaceship as rs
 
 def to_structurefactor(sfamps, phases):
@@ -110,11 +111,42 @@ def compute_internal_differences(crystal, symop, sf_key, err_key=None, phase_key
         F.set_index(["H", "K", "L"], inplace=True)
         F.rename(columns={sf_key:"DF"}, inplace=True)
         
-    # Propagate Errors in quadrature
+    # Propagate errors in quadrature
     if err_key:
         F[err_key] = np.sqrt(Fplus[err_key]**2 + Fminus[err_key]**2)
         F.rename(columns={err_key:"SigDF"}, inplace=True)
         
     return F
 
-    
+def compute_structurefactor_multiplicity(H, sg):
+    """
+    Parameters
+    ----------
+    H : array
+        n x 3 array of Miller indices
+    spacegroup : gemmi.SpaceGroup, gemmi.GroupOps
+        The space group to identify the asymmetric unit
+    Returns
+    -------
+    epsilon : array
+        an array of length n containing the multiplicity
+        of each hkl.
+    """
+    if isinstance(sg, SpaceGroup):
+        group_ops = sg.operations()
+    elif isinstance(sg, GroupOps):
+        group_ops = sg
+    else:
+        raise ValueError(f"gemmi.SpaceGroup or gemmi.GroupOps expected for parameter sg. "
+                         f"Received object of type: ({type(sg)}) instead.")
+
+    is_centric = group_ops.is_centric()
+    eps = np.zeros(len(H))
+    for op in group_ops:
+        h = rs.utils.apply_to_hkl(H, op)
+        if is_centric:
+            eps += np.all(h==H, 1) | np.all(h==-H, 1)
+        else:
+            eps += np.all(h==H, 1) 
+    return eps
+
