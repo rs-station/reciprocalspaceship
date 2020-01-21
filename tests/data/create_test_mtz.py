@@ -1,14 +1,22 @@
 from subprocess import call
-from os import devnull,rename,path,chdir
+from os import devnull,rename,path,chdir,mkdir
 from io import StringIO
 from urllib3 import PoolManager
 import pandas as pd
 import os
 
+try:                              
+    from tqdm import tqdm         
+except:                           
+    tqdm = iter                   
+
+
 #Run in the fmodel directory
 abspath = path.abspath(__file__)
-dname = path.dirname(abspath)
-os.chdir(dname) + "/fmodel"
+dname = path.dirname(abspath) + "/fmodel"
+if not path.exists(dname):
+    mkdir(dname)
+os.chdir(dname) 
 
 
 high_resolution=8.
@@ -86,7 +94,37 @@ pdbs = pd.read_csv(StringIO("""PDBID, space group number, space group name
 """), dtype={"PDBID": str, "space group number": int, "space group name": str})
 
 
-for pdbid in pdbs['PDBID']:
+
+for pdbid in tqdm(pdbs['PDBID']):
+    pdbid = pdbid.upper()
+    with open(devnull, 'w') as null:
+        call(f'wget files.rcsb.org/download/{pdbid}.pdb'.split(), stdout=null, stderr=null)
+        pdbFN = f'{pdbid}.pdb'
+        url = f'files.rcsb.org/download/{pdbFN}'
+        with PoolManager() as http:
+            r = http.request('GET', url)
+            with open(pdbFN, 'wb') as out:
+                out.write(r.data)
+        call(f'phenix.fmodel {pdbFN} high_resolution={high_resolution}'.split(), stdout=null)
+        rename(f'{pdbFN}.mtz', f'{pdbid}.mtz')
+        call(f'phenix.reflection_file_converter {pdbid}.mtz --expand_to_p1 --mtz={pdbid}_p1.mtz'.split(), stdout=null)
+
+
+
+#Run in the r3 directory (this space group is problematic for gemmi)
+dname = path.dirname(abspath) + "/r3"
+if not path.exists(dname):
+    mkdir(dname)
+os.chdir(dname) 
+
+pdbs = pd.read_csv(StringIO("""PDBID, space group number, space group name
+1CTJ, 146, R 3
+2QXX, 155, R 3 2
+"""
+), dtype={"PDBID": str, "space group number": int, "space group name": str})
+
+
+for pdbid in tqdm(pdbs['PDBID']):
     pdbid = pdbid.upper()
     with open(devnull, 'w') as null:
         call(f'wget files.rcsb.org/download/{pdbid}.pdb'.split(), stdout=null, stderr=null)
