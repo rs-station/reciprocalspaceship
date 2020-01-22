@@ -171,7 +171,11 @@ class Crystal(pd.DataFrame):
             F[key] = canonicalize_phases(F[key], deg=True)
             
         return F.__finalize__(self)
-  
+
+    def get_hkls(self):
+        hkl = self.reset_index()[['H', 'K', 'L']].to_numpy()
+        return hkl
+
     def label_centrics(self, inplace=False):
         """
         Label centric reflections in Crystal object. A new column of
@@ -187,13 +191,13 @@ class Crystal(pd.DataFrame):
         else:
             crystal = self.copy()
 
-        crystal['CENTRIC'] = False
-        hkl = np.vstack(crystal.index)
+        hkl = self.get_hkls()
+        centric = np.zeros(len(self), dtype=bool)
         for op in crystal.spacegroup.operations():
+            newhkl = apply_to_hkl(hkl, op)
+            centric = np.all(newhkl == -hkl, 1) | centric
 
-            newhkl = apply_to_hkl(hkl.copy(), op)
-            crystal['CENTRIC'] = np.all(np.isclose(newhkl, -hkl), 1) | crystal['CENTRIC']
-
+        crystal['CENTRIC'] = centric
         return crystal
 
     def compute_dHKL(self, inplace=False):
