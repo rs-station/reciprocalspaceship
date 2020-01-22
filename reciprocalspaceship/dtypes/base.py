@@ -7,15 +7,60 @@ from pandas.api.extensions import (
     ExtensionScalarOpsMixin,
     take
 )
+from pandas.core.arrays.integer import IntegerArray, coerce_to_array
 from pandas.core.tools.numeric import to_numeric
 from pandas.util._decorators import cache_readonly
+from pandas.core.dtypes.cast import astype_nansafe
+import pandas as pd
 
 class MTZDtype(ExtensionDtype):
-    """
-    Base custom Dtype for implementing persistent MTZ data types
-    """
+    """Base custom Dtype for implementing persistent MTZ data types"""
     pass
 
+class MTZInt32Dtype(MTZDtype, pd.Int32Dtype):
+    """Base class for generic MTZ Dtype backed by pd.Int32Dtype"""
+
+    def __repr__(self):
+        return self.name
+
+class MTZIntegerArray(IntegerArray):
+
+    @cache_readonly
+    def dtype(self):
+        return self._dtype
+
+    @classmethod
+    def _from_sequence(cls, scalars, dtype=None, copy=False):
+        values, mask = coerce_to_array(scalars, dtype=dtype, copy=copy)
+        return cls(values, mask)
+
+    @classmethod
+    def _from_factorized(cls, values, original):
+        values, mask = coerce_to_array(values, dtype=original.dtype)
+        return cls(values, mask)
+    
+    def astype(self, dtype, copy=True):
+        if isinstance(dtype, MTZDtype):
+            data = self._coerce_to_ndarray(dtype=dtype.type)
+        else:
+            data = self._coerce_to_ndarray(dtype=dtype)
+        return astype_nansafe(data, dtype, copy=None)
+    
+    def _coerce_to_ndarray(self, dtype=None):
+        """
+        Coerce to an ndarray of native numpy dtype if can. Otherwise,
+        coerce to an object dtype
+        """
+        if not self._mask.any() and dtype:
+            data = self._data.astype(dtype)
+        else:
+            if self._mask.any():
+                data = self._data.astype(object)
+                data[self._mask] = self._na_value
+            else:
+                data = self._data.astype(self.dtype.type)
+        return data
+    
 class NumpyFloat32ExtensionDtype(MTZDtype):
     """
     Base ExtensionDtype for defining a custom Pandas Dtype that uses
