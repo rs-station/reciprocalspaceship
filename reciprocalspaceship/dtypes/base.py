@@ -10,8 +10,13 @@ from pandas.api.extensions import (
 from pandas.core.tools.numeric import to_numeric
 from pandas.util._decorators import cache_readonly
 
+class MTZDtype(ExtensionDtype):
+    """
+    Base custom Dtype for implementing persistent MTZ data types
+    """
+    pass
 
-class NumpyFloat32ExtensionDtype(ExtensionDtype):
+class NumpyFloat32ExtensionDtype(MTZDtype):
     """
     Base ExtensionDtype for defining a custom Pandas Dtype that uses
     np.float32 for storing numeric data.
@@ -221,4 +226,4 @@ class NumpyExtensionArray(ExtensionArray, ExtensionScalarOpsMixin):
             return self.data.astype(self.dtype.type)
 
     def __array__(self, dtype=None):
-        return self._coerce_to_ndarray()
+        return self._coerce_to_ndarray(dtype=dtype)
