@@ -11,6 +11,6 @@ setup(
         "gemmi >= 0.3.1",
         "pandas >= 0.25.0"
     ],
-    test_suite='nose.collector',
-    tests_require=['nose'],
+    setup_requires=['pytest-runner'],
+    tests_require=['pytest'],
 )
