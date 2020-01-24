@@ -188,11 +188,11 @@ class NumpyExtensionArray(ExtensionArray, ExtensionScalarOpsMixin):
         return scalar
 
     def astype(self, dtype, copy=True):
-        if isinstance(dtype, type(self.dtype)):
-            if copy:
-                self = self.copy()
-            return self
-        return super().astype(dtype=dtype, copy=copy)
+        if isinstance(dtype, MTZDtype):
+            data = self._coerce_to_ndarray(dtype=dtype.type)
+        else:
+            data = self._coerce_to_ndarray(dtype=dtype)
+        return astype_nansafe(data, dtype, copy=None)
     
     @classmethod
     def _concat_same_type(cls, to_concat):
@@ -266,9 +266,10 @@ class NumpyExtensionArray(ExtensionArray, ExtensionScalarOpsMixin):
 
     def _coerce_to_ndarray(self, dtype=None):
         if dtype:
-            return self.data.astype(dtype)
+            data = self.data.astype(dtype)
         else:
-            return self.data.astype(self.dtype.type)
+            data = self.data.astype(self.dtype.type)
+        return data
 
     def __array__(self, dtype=None):
         return self._coerce_to_ndarray(dtype=dtype)
