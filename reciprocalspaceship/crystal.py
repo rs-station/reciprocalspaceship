@@ -218,7 +218,7 @@ class Crystal(pd.DataFrame):
         hkls = crystal.reset_index()[['H', 'K', 'L']].values
         dhkls = np.zeros(len(hkls))
         for i, hkl in enumerate(hkls):
-            dhkls[i] = crystal.cell.calculate_d(*hkl)
+            dhkls[i] = crystal.cell.calculate_d(hkl)
         crystal['dHKL'] = dhkls
         return crystal
 
