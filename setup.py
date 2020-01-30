@@ -2,13 +2,13 @@ from setuptools import setup, find_packages
 
 setup(
     name='reciprocalspaceship',
-    version='0.3.0',
+    version='0.4.0',
     author='Kevin M. Dalton; Jack B. Greisman',
     author_email='kmdalton@g.harvard.edu; greisman@g.harvard.edu',
     packages=find_packages(),
     description='Tools for exploring reciprocal space',
     install_requires=[
-        "gemmi >= 0.3.1",
+        "gemmi >= 0.3.3",
         "pandas >= 0.25.0"
     ],
     setup_requires=['pytest-runner'],

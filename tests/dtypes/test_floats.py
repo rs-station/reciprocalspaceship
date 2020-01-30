@@ -7,6 +7,7 @@ import pytest
 import unittest
 import numpy as np
 import reciprocalspaceship as rs
+import pandas as pd
 from pandas.tests.extension import base
 
 array = {
@@ -151,7 +152,6 @@ class TestPrinting(base.BasePrintingTests):
 
 class TestReshaping(base.BaseReshapingTests):
 
-    @pytest.mark.xfail(reason="Casting of ExtensionArray -- unsure if necessary")
     def test_concat_mixed_dtypes(self, data):
         # https://github.com/pandas-dev/pandas/issues/20762
         df1 = pd.DataFrame({"A": data[:3]})
@@ -174,8 +174,10 @@ class TestReshaping(base.BaseReshapingTests):
         expected = pd.concat([df1.astype("object"), df2.astype("object")])
         self.assert_frame_equal(result, expected)
 
+        # Since our custom dtype defaults to a float32, the pd.concat()
+        # call should upcast to a float64 when joining a float32 and int64
         result = pd.concat([df1["A"], df2["A"]])
-        expected = pd.concat([df1["A"].astype("object"), df2["A"].astype("object")])
+        expected = pd.concat([df1["A"].astype("float64"), df2["A"].astype("float64")])
         self.assert_series_equal(result, expected)
 
 class TestSetitem(base.BaseSetitemTests):
