@@ -221,11 +221,7 @@ class Crystal(pd.DataFrame):
         dhkls = np.zeros(len(hkls))
         for i, hkl in enumerate(hkls):
             dhkls[i] = crystal.cell.calculate_d(hkl)
-<<<<<<< HEAD
         crystal['dHKL'] = CrystalSeries(dhkls[inverse], dtype="MTZReal")
-=======
-        crystal['dHKL'] = dhkls
->>>>>>> 97fb41ca42809199076c3d1ad94b31436b4cdb9b
         return crystal
 
     def unmerge_anomalous(self, inplace=False):
