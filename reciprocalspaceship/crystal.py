@@ -173,7 +173,7 @@ class Crystal(pd.DataFrame):
         return F.__finalize__(self)
 
     def get_hkls(self):
-        hkl = self.reset_index()[['H', 'K', 'L']].to_numpy()
+        hkl = self.reset_index()[['H', 'K', 'L']].to_numpy(dtype=np.int32)
         return hkl
 
     def label_centrics(self, inplace=False):
@@ -257,7 +257,7 @@ class Crystal(pd.DataFrame):
 
         index_keys = crystal.index.names
         crystal.reset_index(inplace=True)
-        hkls = crystal[['H', 'K', 'L']].to_numpy()
+        hkls = crystal[['H', 'K', 'L']].to_numpy(dtype=np.int32)
         compressed_hkls,inverse = np.unique(hkls, axis=0, return_inverse=True)
         compressed_hkls, isym, phi_coeff, phi_shift = hkl_to_asu(
             compressed_hkls, 
