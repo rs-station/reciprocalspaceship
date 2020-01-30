@@ -191,13 +191,14 @@ class Crystal(pd.DataFrame):
         else:
             crystal = self.copy()
 
-        hkl = self.get_hkls()
-        centric = np.zeros(len(self), dtype=bool)
+        uncompressed_hkls = crystal.get_hkls()
+        hkl,inverse = np.unique(uncompressed_hkls, axis=0, return_inverse=True)
+        centric = np.zeros(len(hkl), dtype=bool)
         for op in crystal.spacegroup.operations():
             newhkl = apply_to_hkl(hkl, op)
             centric = np.all(newhkl == -hkl, 1) | centric
 
-        crystal['CENTRIC'] = centric
+        crystal['CENTRIC'] = centric[inverse]
         return crystal
 
     def compute_dHKL(self, inplace=False):
@@ -214,12 +215,13 @@ class Crystal(pd.DataFrame):
             crystal = self
         else:
             crystal = self.copy()
-            
-        hkls = crystal.reset_index()[['H', 'K', 'L']].values
+
+        uncompressed_hkls = crystal.get_hkls()
+        hkls,inverse = np.unique(uncompressed_hkls, axis=0, return_inverse=True)
         dhkls = np.zeros(len(hkls))
         for i, hkl in enumerate(hkls):
-            dhkls[i] = crystal.cell.calculate_d(*hkl)
-        crystal['dHKL'] = dhkls
+            dhkls[i] = crystal.cell.calculate_d(hkl)
+        crystal['dHKL'] = CrystalSeries(dhkls[inverse], dtype="MTZReal")
         return crystal
 
     def unmerge_anomalous(self, inplace=False):
@@ -249,19 +251,26 @@ class Crystal(pd.DataFrame):
         This is provisional. Doesn't quite work yet. 
         """
         if inplace:
-            new_crystal = self
+            crystal = self
         else:
-            new_crystal = self.copy()
+            crystal = self.copy()
 
-        H = np.vstack(new_crystal.index)
-        H, isym, phi_coeff, phi_shift = hkl_to_asu(H, new_crystal.spacegroup, return_phase_shifts=True)
-        new_crystal.reset_index(inplace=True)
-        new_crystal.loc[:, ['H', 'K', 'L']] = H
-        for k in new_crystal.get_phase_keys():
-            new_crystal[k] = phi_coeff * (new_crystal[k] + phi_shift)
-        new_crystal._canonicalize_phases(inplace=True)
-        new_crystal.set_index(['H', 'K', 'L'], inplace=True)
-        return new_crystal
+        index_keys = crystal.index.names
+        crystal.reset_index(inplace=True)
+        hkls = crystal[['H', 'K', 'L']].to_numpy()
+        compressed_hkls,inverse = np.unique(hkls, axis=0, return_inverse=True)
+        compressed_hkls, isym, phi_coeff, phi_shift = hkl_to_asu(
+            compressed_hkls, 
+            crystal.spacegroup, 
+            return_phase_shifts=True
+        )
+        crystal.loc[:, ['H', 'K', 'L']] = compressed_hkls[inverse]
+        for k in crystal.get_phase_keys():
+            crystal[k] = phi_coeff[inverse] * (crystal[k] + phi_shift[inverse])
+        crystal['M/ISYM'] = CrystalSeries(isym[inverse], dtype="M_Isym")
+        crystal._canonicalize_phases(inplace=True)
+        crystal.set_index(['H', 'K', 'L'], inplace=True)
+        return crystal
 
     def _canonicalize_phases(self, inplace=False):
         if inplace:
