@@ -1,4 +1,4 @@
-![Python application](https://github.com/Hekstra-Lab/reciprocalspaceship/workflows/Python%20application/badge.svg)
+![Build](https://github.com/Hekstra-Lab/reciprocalspaceship/workflows/Build/badge.svg)
 
 # reciprocalspaceship
 Tools for exploring reciprocal space
