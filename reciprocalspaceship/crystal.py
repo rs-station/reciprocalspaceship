@@ -221,7 +221,7 @@ class Crystal(pd.DataFrame):
         dhkls = np.zeros(len(hkls))
         for i, hkl in enumerate(hkls):
             dhkls[i] = crystal.cell.calculate_d(hkl)
-        crystal['dHKL'] = CrystalSeries(dhkls[inverse], dtype="MTZReal")
+        crystal['dHKL'] = CrystalSeries(dhkls[inverse], dtype="MTZReal", index=crystal.index)
         return crystal
 
     def unmerge_anomalous(self, inplace=False):
