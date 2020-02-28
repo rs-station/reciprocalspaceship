@@ -12,7 +12,7 @@ class TestCrystalSeries(unittest.TestCase):
     def test_constructor(self):
 
         # Test empty constructor
-        cs = rs.CrystalSeries()
+        cs = rs.CrystalSeries(dtype=object)
         self.assertIsInstance(cs, rs.CrystalSeries)
         self.assertEqual(cs.name, None)
         self.assertEqual(len(cs), 0)
