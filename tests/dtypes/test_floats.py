@@ -80,7 +80,7 @@ def na_value(dtype):
 
 @pytest.fixture
 def na_cmp():
-    return lambda x, y: np.isnan(x) and np.isnan(y)
+    return lambda x, y: pd.isna(x) and pd.isna(y)
 
 @pytest.fixture
 def data_for_grouping(dtype):

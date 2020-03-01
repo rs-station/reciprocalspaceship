@@ -1,6 +1,9 @@
 import operator
 import numpy as np
 from pandas.core import nanops
+from pandas.core.indexers import check_array_indexer
+from pandas.core.construction import extract_array
+from pandas._libs import lib
 from pandas.api.extensions import (
     ExtensionDtype,
     ExtensionArray,
@@ -89,8 +92,7 @@ class NumpyFloat32ExtensionDtype(MTZDtype):
         if string == cls.name:
             return cls()
         else:
-            raise TypeError("Cannot construct a '{}' from "
-                            "'{}'".format(cls, string))
+            raise TypeError(f"Cannot construct a '{cls.__name__}' from '{string}'")
 
 class NumpyExtensionArray(ExtensionArray, ExtensionScalarOpsMixin):
     """
@@ -102,7 +104,7 @@ class NumpyExtensionArray(ExtensionArray, ExtensionScalarOpsMixin):
     can_hold_na = True
     __array_priority__ = 1000
 
-    def __init__(self, values, copy=True, dtype=None):
+    def __init__(self, values, copy=False, dtype=None):
         self.data = np.array(values, dtype=self._dtype.type, copy=copy)
         if isinstance(dtype, str):
             type(self._dtype).construct_array_type(dtype)
@@ -115,7 +117,7 @@ class NumpyExtensionArray(ExtensionArray, ExtensionScalarOpsMixin):
 
     @classmethod
     def _from_sequence(cls, scalars, dtype=None, copy=False):
-        return cls(scalars, dtype=dtype)
+        return cls(scalars, copy=copy, dtype=dtype)
 
     @classmethod
     def _from_sequence_of_strings(cls, strings, dtype=None, copy=False):
@@ -141,22 +143,13 @@ class NumpyExtensionArray(ExtensionArray, ExtensionScalarOpsMixin):
     def __len__(self):
         return len(self.data)
 
-    def __getitem__(self, *args):
-        result = operator.getitem(self.data, *args)
-        if isinstance(result, tuple):
-            return self._box_scalar(result)
-        elif result.ndim == 0:
-            return result
-        else:
-            return type(self)(result)
+    def __getitem__(self, item):
+        item = check_array_indexer(self, item)
 
-    def setitem(self, indexer, value):
-        """Set the 'value' inplace.
-        """
-        # I think having a separate than __setitem__ is good
-        # since we have to return here, but __setitem__ doesn't.
-        self[indexer] = value
-        return self
+        result = self.data[item]
+        if not lib.is_scalar(item):
+            result = type(self)(result)
+        return result
 
     @property
     def nbytes(self):
@@ -173,6 +166,14 @@ class NumpyExtensionArray(ExtensionArray, ExtensionScalarOpsMixin):
         return type(self)(self.data.copy())
 
     def __setitem__(self, key, value):
+        value = extract_array(value, extract_numpy=True)
+
+        key = check_array_indexer(self, key)
+        scalar_value = lib.is_scalar(value)
+
+        if not scalar_value:
+            value = np.asarray(value, dtype=self.data.dtype)
+
         self.data[key] = value
 
     def isna(self):

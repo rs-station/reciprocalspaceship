@@ -9,7 +9,7 @@ setup(
     description='Tools for exploring reciprocal space',
     install_requires=[
         "gemmi >= 0.3.3",
-        "pandas == 0.25.3"
+        "pandas > 1.0"
     ],
     setup_requires=['pytest-runner'],
     tests_require=['pytest', 'pytest-cov'],

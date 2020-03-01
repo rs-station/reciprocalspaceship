@@ -57,8 +57,8 @@ def na_value(dtype):
 
 @pytest.fixture
 def na_cmp():
-    # we are np.nan
-    return lambda x, y: np.isnan(x) and np.isnan(y)
+    # we are pd.nan
+    return lambda x, y: pd.isna(x) and pd.isna(y)
 
 @pytest.fixture
 def data_for_grouping(dtype):
@@ -102,11 +102,9 @@ class TestMethods(base.BaseMethodsTests):
         result = rs.CrystalSeries(all_data).value_counts(dropna=dropna).sort_index()
         expected = rs.CrystalSeries(other).value_counts(dropna=dropna).sort_index()
 
-        print(result)
-        print(expected)
-        
         self.assert_series_equal(result, expected)
-        
+    pass
+
 class TestMissing(base.BaseMissingTests):
     pass
 
@@ -114,34 +112,7 @@ class TestPrinting(base.BasePrintingTests):
     pass
 
 class TestReshaping(base.BaseReshapingTests):
-
-    def test_concat_mixed_dtypes(self, data):
-        # https://github.com/pandas-dev/pandas/issues/20762
-        df1 = pd.DataFrame({"A": data[:3]})
-        df2 = pd.DataFrame({"A": [1, 2, 3]})
-        df3 = pd.DataFrame({"A": ["a", "b", "c"]}).astype("category")
-        dfs = [df1, df2, df3]
-
-        # dataframes
-        result = pd.concat(dfs)
-        expected = pd.concat([x.astype(object) for x in dfs])
-        self.assert_frame_equal(result, expected)
-
-        # series
-        result = pd.concat([x["A"] for x in dfs])
-        expected = pd.concat([x["A"].astype(object) for x in dfs])
-        self.assert_series_equal(result, expected)
-
-        # simple test for just EA and one other
-        result = pd.concat([df1, df2])
-        expected = pd.concat([df1.astype("object"), df2.astype("object")])
-        self.assert_frame_equal(result, expected)
-
-        # Since our custom dtype defaults to an int32, the pd.concat()
-        # call should upcast to an int64 when joining an int32 and int64
-        result = pd.concat([df1["A"], df2["A"]])
-        expected = pd.concat([df1["A"].astype("int64"), df2["A"].astype("int64")])
-        self.assert_series_equal(result, expected)
+    pass
 
 class TestSetitem(base.BaseSetitemTests):
     pass
