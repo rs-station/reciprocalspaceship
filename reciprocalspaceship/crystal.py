@@ -45,10 +45,8 @@ class Crystal(pd.DataFrame):
     
     @property
     def _constructor(self):
-        def _c(*args, **kwargs):
-            return Crystal(*args, **kwargs).__finalize__(self)
-        return _c
-
+        return Crystal
+    
     @property
     def _constructor_sliced(self):
         return CrystalSeries
