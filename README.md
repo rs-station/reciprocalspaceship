@@ -1,5 +1,6 @@
 # reciprocalspaceship
 ![Build](https://github.com/Hekstra-Lab/reciprocalspaceship/workflows/Build/badge.svg)
+
 Tools for exploring reciprocal space
 
 `reciprocalspaceship` provides a Pandas-style dataframe object for
