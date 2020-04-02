@@ -11,7 +11,7 @@ experiments.
 ## Getting Started 
 
 We have some documentation, which can be viewed by cloning the repository.
-Someday, we will have this hosted, but not today...
+Once this repository is made public, this documentation will be hosted on a github.io page.
 
 ```
 git clone https://github.com/Hekstra-Lab/reciprocalspaceship.git
