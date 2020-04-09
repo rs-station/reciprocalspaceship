@@ -233,7 +233,7 @@ class NumpyExtensionArray(ExtensionArray, ExtensionScalarOpsMixin):
 
         Returns
         -------
-        counts : CrystalSeries
+        counts : DataSeries
         """
         from pandas import Index
         import reciprocalspaceship as rs
@@ -263,7 +263,7 @@ class NumpyExtensionArray(ExtensionArray, ExtensionScalarOpsMixin):
                 dtype=object,
             )
 
-        return rs.CrystalSeries(array, index=index)
+        return rs.DataSeries(array, index=index)
 
     def _coerce_to_ndarray(self, dtype=None):
         if dtype:
