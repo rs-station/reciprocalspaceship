@@ -1,4 +1,4 @@
-from .crystal import Crystal, CrystalSeries
+from .dataset import DataSet, DataSeries
 from .io import read_mtz, read_hkl
 
 # Add support for MTZ data types:

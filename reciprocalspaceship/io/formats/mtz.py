@@ -1,12 +1,12 @@
 import numpy as np
 import pandas as pd
 import gemmi
-from reciprocalspaceship import Crystal
+from reciprocalspaceship import DataSet
 from reciprocalspaceship.dtypes.mapping import mtzcode2dtype
 
 def read(mtzfile):
     """
-    Populate the crystal object with data from an MTZ reflection file.
+    Populate the dataset object with data from an MTZ reflection file.
 
     Parameters
     ----------
@@ -15,44 +15,44 @@ def read(mtzfile):
     """
     mtzgemmi = gemmi.read_mtz_file(mtzfile)
 
-    crystal = Crystal()
+    dataset = DataSet()
     
     for c in mtzgemmi.columns:
-        crystal[c.label] = c.array
-        crystal[c.label] = crystal[c.label].astype(mtzcode2dtype[c.type])
-    crystal.set_index(["H", "K", "L"], inplace=True)
+        dataset[c.label] = c.array
+        dataset[c.label] = dataset[c.label].astype(mtzcode2dtype[c.type])
+    dataset.set_index(["H", "K", "L"], inplace=True)
     
-    # Set Crystal attributes
-    crystal.cell = mtzgemmi.cell
-    crystal.spacegroup = mtzgemmi.spacegroup
+    # Set DataSet attributes
+    dataset.cell = mtzgemmi.cell
+    dataset.spacegroup = mtzgemmi.spacegroup
 
-    return crystal
+    return dataset
 
-def write(crystal, mtzfile, skip_problem_mtztypes=False):
+def write(dataset, mtzfile, skip_problem_mtztypes=False):
     """
-    Write an MTZ reflection file from the reflection data in a Crystal.
+    Write an MTZ reflection file from the reflection data in a DataSet.
 
     Parameters
     ----------
     mtzfile : str or file
         name of an mtz file or a file object
     skip_problem_mtztypes : bool
-        Whether to skip columns in Crystal that do not have specified
+        Whether to skip columns in DataSet that do not have specified
         mtz datatypes
     """
     # Check that cell and spacegroup are defined
-    if not crystal.cell:
-        raise AttributeError(f"Instance of type {crystal.__class__.__name__} has no unit cell information")
-    if not crystal.spacegroup:
-        raise AttributeError(f"Instance of type {crystal.__class__.__name__} has no space group information")
+    if not dataset.cell:
+        raise AttributeError(f"Instance of type {dataset.__class__.__name__} has no unit cell information")
+    if not dataset.spacegroup:
+        raise AttributeError(f"Instance of type {dataset.__class__.__name__} has no space group information")
 
     # Build up a Gemmi MTZ object
     mtz = gemmi.Mtz()
-    mtz.cell = crystal.cell
-    mtz.spacegroup = crystal.spacegroup
+    mtz.cell = dataset.cell
+    mtz.spacegroup = dataset.spacegroup
     
     mtz.add_dataset("reciprocalspaceship")
-    temp = crystal.reset_index()
+    temp = dataset.reset_index()
     columns = []
     for c in temp.columns:
         try:

@@ -9,9 +9,9 @@ def to_structurefactor(sfamps, phases):
 
     Parameters
     ----------
-    sfamps : CrystalSeries or array-like
+    sfamps : DataSeries or array-like
         Structure factor amplitudes
-    phases : CrystalSeries or array-like
+    phases : DataSeries or array-like
         Phases corresponding to structure factors
 
     Returns
@@ -19,9 +19,9 @@ def to_structurefactor(sfamps, phases):
     sfs : np.ndarray
         Array of complex-valued structure factors
     """
-    if isinstance(sfamps, rs.CrystalSeries):
+    if isinstance(sfamps, rs.DataSeries):
         sfamps = sfamps.to_numpy()
-    if isinstance(phases, rs.CrystalSeries):
+    if isinstance(phases, rs.DataSeries):
         phases = phases.to_numpy()
     return sfamps*np.exp(1j*np.deg2rad(phases))
 
@@ -37,22 +37,22 @@ def from_structurefactor(sfs):
 
     Returns
     -------
-    (sf, phase) : tuple of CrystalSeries
-        Tuple of CrystalSeries for the structure factor amplitudes and 
+    (sf, phase) : tuple of DataSeries
+        Tuple of DataSeries for the structure factor amplitudes and 
         phases corresponding to the provided complex structure factors
     """
-    sf = rs.CrystalSeries(np.abs(sfs), name="F").astype("SFAmplitude")
-    phase = rs.CrystalSeries(np.angle(sfs, deg=True), name="Phi").astype("Phase")
+    sf = rs.DataSeries(np.abs(sfs), name="F").astype("SFAmplitude")
+    phase = rs.DataSeries(np.angle(sfs, deg=True), name="Phi").astype("Phase")
     return sf, phase
 
-def compute_internal_differences(crystal, symop, sf_key, err_key=None, phase_key=None):
+def compute_internal_differences(dataset, symop, sf_key, err_key=None, phase_key=None):
     """
-    Compute internal difference map in provided Crystal object based on
+    Compute internal difference map in provided DataSet object based on
     given symmetry operator.
 
     Parameters
     ----------
-    crystal : Crystal
+    dataset : DataSet
         Reflections in reduced-symmetry space group
     symop : gemmi.Op
         Space group symmetry operator for internal difference map
@@ -66,13 +66,13 @@ def compute_internal_differences(crystal, symop, sf_key, err_key=None, phase_key
 
     Return
     ------
-    Crystal
-        Crystal object representing internal differences based on given
+    DataSet
+        DataSet object representing internal differences based on given
         symmetry operator
     """
 
     # Provided symop should not be in reduced symmetry space group
-    operators = [ op.triplet() for op in crystal.spacegroup.operations() ]
+    operators = [ op.triplet() for op in dataset.spacegroup.operations() ]
     if symop.triplet() in operators:
         raise ValueError(f"Given symmetry operation, {symop.triplet()}, "
                          f"is present in space group {mtz.spacegroup.number}")
@@ -83,8 +83,8 @@ def compute_internal_differences(crystal, symop, sf_key, err_key=None, phase_key
     if phase_key:
         columns.append(phase_key)
 
-    Fplus  = crystal.copy()[columns]
-    Fminus = crystal.copy().unmerge_anomalous()[columns]
+    Fplus  = dataset.copy()[columns]
+    Fminus = dataset.copy().unmerge_anomalous()[columns]
 
     # Apply symop to Fminus
     Fminus.apply_symop(symop, inplace=True)

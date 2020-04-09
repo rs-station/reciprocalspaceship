@@ -5,22 +5,22 @@ from .utils import canonicalize_phases, apply_to_hkl, phase_shift
 from .utils.asu import in_asu,hkl_to_asu
 from .dtypes.mapping import mtzcode2dtype
 
-class CrystalSeries(pd.Series):
+class DataSeries(pd.Series):
     """
-    Representation of a sliced Crystal
+    Representation of a sliced DataSet
     """
     
     @property
     def _constructor(self):
-        return CrystalSeries
+        return DataSeries
 
     @property
     def _constructor_expanddim(self):
-        return Crystal
+        return DataSet
     
-class Crystal(pd.DataFrame):
+class DataSet(pd.DataFrame):
     """
-    Representation of a crystal
+    Representation of a crystallographic dataset. 
 
     Attributes
     ----------
@@ -29,9 +29,9 @@ class Crystal(pd.DataFrame):
     cell : gemmi.UnitCell
         Unit cell constants of crystal (a, b, c, alpha, beta, gamma)
     cache_index_dtypes : Dictionary
-        Dictionary of dtypes for columns in Crystal.index. Populated upon
-        calls to Crystal.set_index() and depopulated by calls to 
-        Crystal.reset_index()
+        Dictionary of dtypes for columns in DataSet.index. Populated upon
+        calls to DataSet.set_index() and depopulated by calls to 
+        DataSet.reset_index()
     """
 
     _metadata = ['spacegroup', 'cell', 'cache_index_dtypes']
@@ -45,11 +45,11 @@ class Crystal(pd.DataFrame):
     
     @property
     def _constructor(self):
-        return Crystal
+        return DataSet
     
     @property
     def _constructor_sliced(self):
-        return CrystalSeries
+        return DataSeries
 
     def set_index(self, keys, **kwargs):
         
@@ -85,14 +85,14 @@ class Crystal(pd.DataFrame):
 
     def write_mtz(self, *args, **kwargs):
         """
-        Write an MTZ reflection file from the reflection data in a Crystal.
+        Write an MTZ reflection file from the reflection data in a DataSet.
 
         Parameters
         ----------
         mtzfile : str or file
             name of an mtz file or a file object
         skip_problem_mtztypes : bool
-            Whether to skip columns in Crystal that do not have specified
+            Whether to skip columns in DataSet that do not have specified
             mtz datatypes
         """
         from reciprocalspaceship import io
@@ -100,16 +100,16 @@ class Crystal(pd.DataFrame):
 
     def write_hkl(self, *args, **kwargs):
         """
-        Write contents of Crystal object to an HKL file
+        Write contents of DataSet object to an HKL file
 
         Parameters
         ----------
         outfile : str or file
             name of an hkl file or file-like object
         sf_key : str
-            key for structure factor in DataFrame
+            key for structure factor in DataSet
         err_key : str
-            key for structure factor error in DataFrame
+            key for structure factor error in DataSet
         """
         from reciprocalspaceship import io
         return io.write_hkl(self, *args, **kwargs)
@@ -134,7 +134,7 @@ class Crystal(pd.DataFrame):
 
     def apply_symop(self, symop, inplace=False):
         """
-        Apply symmetry operation to all reflections in Crystal object. 
+        Apply symmetry operation to all reflections in DataSet object. 
 
         Parameters
         ----------
@@ -176,7 +176,7 @@ class Crystal(pd.DataFrame):
 
     def label_centrics(self, inplace=False):
         """
-        Label centric reflections in Crystal object. A new column of
+        Label centric reflections in DataSet object. A new column of
         booleans, "CENTRIC", is added to the object.
 
         Parameters
@@ -185,19 +185,19 @@ class Crystal(pd.DataFrame):
             Whether to add the column in place or to return a copy
         """
         if inplace:
-            crystal = self
+            dataset = self
         else:
-            crystal = self.copy()
+            dataset = self.copy()
 
-        uncompressed_hkls = crystal.get_hkls()
+        uncompressed_hkls = dataset.get_hkls()
         hkl,inverse = np.unique(uncompressed_hkls, axis=0, return_inverse=True)
         centric = np.zeros(len(hkl), dtype=bool)
-        for op in crystal.spacegroup.operations():
+        for op in dataset.spacegroup.operations():
             newhkl = apply_to_hkl(hkl, op)
             centric = np.all(newhkl == -hkl, 1) | centric
 
-        crystal['CENTRIC'] = centric[inverse]
-        return crystal
+        dataset['CENTRIC'] = centric[inverse]
+        return dataset
 
     def compute_dHKL(self, inplace=False):
         """
@@ -210,17 +210,17 @@ class Crystal(pd.DataFrame):
             Whether to add the column in place or return a copy
         """
         if inplace:
-            crystal = self
+            dataset = self
         else:
-            crystal = self.copy()
+            dataset = self.copy()
 
-        uncompressed_hkls = crystal.get_hkls()
+        uncompressed_hkls = dataset.get_hkls()
         hkls,inverse = np.unique(uncompressed_hkls, axis=0, return_inverse=True)
         dhkls = np.zeros(len(hkls))
         for i, hkl in enumerate(hkls):
-            dhkls[i] = crystal.cell.calculate_d(hkl)
-        crystal['dHKL'] = CrystalSeries(dhkls[inverse], dtype="MTZReal", index=crystal.index)
-        return crystal
+            dhkls[i] = dataset.cell.calculate_d(hkl)
+        dataset['dHKL'] = DataSeries(dhkls[inverse], dtype="MTZReal", index=dataset.index)
+        return dataset
 
     def unmerge_anomalous(self, inplace=False):
         """
@@ -249,37 +249,37 @@ class Crystal(pd.DataFrame):
         This is provisional. Doesn't quite work yet. 
         """
         if inplace:
-            crystal = self
+            dataset = self
         else:
-            crystal = self.copy()
+            dataset = self.copy()
 
-        index_keys = crystal.index.names
-        crystal.reset_index(inplace=True)
-        hkls = crystal[['H', 'K', 'L']].to_numpy(dtype=np.int32)
+        index_keys = dataset.index.names
+        dataset.reset_index(inplace=True)
+        hkls = dataset[['H', 'K', 'L']].to_numpy(dtype=np.int32)
         compressed_hkls,inverse = np.unique(hkls, axis=0, return_inverse=True)
         compressed_hkls, isym, phi_coeff, phi_shift = hkl_to_asu(
             compressed_hkls, 
-            crystal.spacegroup, 
+            dataset.spacegroup, 
             return_phase_shifts=True
         )
-        crystal.loc[:, ['H', 'K', 'L']] = compressed_hkls[inverse]
-        for k in crystal.get_phase_keys():
-            crystal[k] = phi_coeff[inverse] * (crystal[k] + phi_shift[inverse])
-        crystal['M/ISYM'] = CrystalSeries(isym[inverse], dtype="M_Isym")
-        crystal._canonicalize_phases(inplace=True)
-        crystal.set_index(['H', 'K', 'L'], inplace=True)
-        return crystal
+        dataset.loc[:, ['H', 'K', 'L']] = compressed_hkls[inverse]
+        for k in dataset.get_phase_keys():
+            dataset[k] = phi_coeff[inverse] * (dataset[k] + phi_shift[inverse])
+        dataset['M/ISYM'] = DataSeries(isym[inverse], dtype="M_Isym")
+        dataset._canonicalize_phases(inplace=True)
+        dataset.set_index(['H', 'K', 'L'], inplace=True)
+        return dataset
 
     def _canonicalize_phases(self, inplace=False):
         if inplace:
-            new_crystal = self
+            new_dataset = self
 
         else:
-            new_crystal = self.copy()
+            new_dataset = self.copy()
 
-        for k in new_crystal.get_phase_keys():
-            new_crystal[k] = canonicalize_phases(new_crystal[k])
+        for k in new_dataset.get_phase_keys():
+            new_dataset[k] = canonicalize_phases(new_dataset[k])
 
-        return new_crystal
+        return new_dataset
 
 

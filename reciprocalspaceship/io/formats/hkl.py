@@ -1,12 +1,12 @@
 import pandas as pd
 import gemmi
-from reciprocalspaceship import Crystal
+from reciprocalspaceship import DataSet
 from reciprocalspaceship.dtypes.mapping import mtzcode2dtype
 
 def read(hklfile, a=None, b=None, c=None, alpha=None, beta=None,
          gamma=None, sg=None):
     """
-    Initialize attributes and populate the crystal object with data from
+    Initialize attributes and populate the DataSet object with data from
     a HKL file of reflections. This is the output format used by 
     Precognition when processing Laue diffraction data.
 
@@ -60,23 +60,23 @@ def read(hklfile, a=None, b=None, c=None, alpha=None, beta=None,
                         usecols=usecols)
         mtztypes = ["H", "H", "H", "I", "R", "R", "R", "R", "J", "Q"]
         
-    crystal = Crystal()
+    dataset = DataSet()
     for (k,v), mtztype in zip(F.items(), mtztypes):
-        crystal[k] = v
-        crystal[k] = crystal[k].astype(mtzcode2dtype[mtztype])
-    crystal.set_index(["H", "K", "L"], inplace=True)
+        dataset[k] = v
+        dataset[k] = dataset[k].astype(mtzcode2dtype[mtztype])
+    dataset.set_index(["H", "K", "L"], inplace=True)
 
-    # Set Crystal attributes
+    # Set DataSet attributes
     if (a and b and c and alpha and beta and gamma):
-        crystal.cell = gemmi.UnitCell(a, b, c, alpha, beta, gamma)
+        dataset.cell = gemmi.UnitCell(a, b, c, alpha, beta, gamma)
     if sg:
-        crystal.spacegroup = gemmi.SpaceGroup(sg)
+        dataset.spacegroup = gemmi.SpaceGroup(sg)
         
-    return crystal
+    return dataset
 
 def write(self, outfile, sf_key, err_key):
     """
-    Write contents of Crystal object to an HKL file
+    Write contents of DataSet object to an HKL file
 
     Parameters
     ----------
