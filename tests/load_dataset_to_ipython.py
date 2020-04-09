@@ -6,7 +6,7 @@ inFN = '/'.join(abspath(__file__).split('/')[:-1]) + \
     "/data/fmodel/3KXE.mtz"
 
 
-crystal = rs.read_mtz(inFN)
+dataset = rs.read_mtz(inFN)
 
 
 from IPython import embed

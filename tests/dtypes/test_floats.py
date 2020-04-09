@@ -121,8 +121,8 @@ class TestMethods(base.BaseMethodsTests):
         else:
             other = all_data
 
-        result = rs.CrystalSeries(all_data).value_counts(dropna=dropna).sort_index()
-        expected = rs.CrystalSeries(other).value_counts(dropna=dropna).sort_index()
+        result = rs.DataSeries(all_data).value_counts(dropna=dropna).sort_index()
+        expected = rs.DataSeries(other).value_counts(dropna=dropna).sort_index()
 
         print(result)
         print(expected)
@@ -134,10 +134,10 @@ class TestMethods(base.BaseMethodsTests):
         # GH 20825
         # Test that combine works when doing a <= (le) comparison
         orig_data1, orig_data2 = data_repeated(2)
-        s1 = rs.CrystalSeries(orig_data1)
-        s2 = rs.CrystalSeries(orig_data2)
+        s1 = rs.DataSeries(orig_data1)
+        s2 = rs.DataSeries(orig_data2)
         result = s1.combine(s2, lambda x1, x2: x1 <= x2)
-        expected = rs.CrystalSeries(
+        expected = rs.DataSeries(
             [a <= b for (a, b) in zip(list(orig_data1), list(orig_data2))]
         )
         print(result)

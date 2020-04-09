@@ -29,7 +29,7 @@ class TestStructureFactors(unittest.TestCase):
         self.assertEqual(sf.size, 1)
         self.assertTrue(np.iscomplexobj(sf))
 
-        # Test CrystalSeries objects as arguments
+        # Test DataSeries objects as arguments
         datadir = join(abspath(dirname(__file__)), 'data/fmodel')
         data = rs.read_mtz(join(datadir, '9LYZ.mtz'))
         sfs = rs.utils.to_structurefactor(data["FMODEL"],
@@ -46,8 +46,8 @@ class TestStructureFactors(unittest.TestCase):
         sf, phase = rs.utils.from_structurefactor(sfs)
         self.assertEqual(len(sf), len(sfs))
         self.assertEqual(len(phase), len(sfs))
-        self.assertIsInstance(sf, rs.CrystalSeries)
-        self.assertIsInstance(phase, rs.CrystalSeries)
+        self.assertIsInstance(sf, rs.DataSeries)
+        self.assertIsInstance(phase, rs.DataSeries)
         self.assertEqual(sf.dtype.mtztype, "F")
         self.assertEqual(phase.dtype.mtztype, "P")
 

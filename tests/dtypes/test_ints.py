@@ -99,8 +99,8 @@ class TestMethods(base.BaseMethodsTests):
         else:
             other = all_data
 
-        result = rs.CrystalSeries(all_data).value_counts(dropna=dropna).sort_index()
-        expected = rs.CrystalSeries(other).value_counts(dropna=dropna).sort_index()
+        result = rs.DataSeries(all_data).value_counts(dropna=dropna).sort_index()
+        expected = rs.DataSeries(other).value_counts(dropna=dropna).sort_index()
 
         self.assert_series_equal(result, expected)
     pass

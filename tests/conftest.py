@@ -10,7 +10,7 @@ def box_in_series(request):
     params=[
         lambda x: 1,
         lambda x: [1] * len(x),
-        lambda x: rs.CrystalSeries([1] * len(x)),
+        lambda x: rs.DataSeries([1] * len(x)),
         lambda x: x,
     ],
     ids=["scalar", "list", "series", "object"],
