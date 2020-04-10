@@ -1,3 +1,6 @@
+# Version number for reciprocalspaceship
+__version__ = '0.6.0'
+
 from .dataset import DataSet, DataSeries
 from .io import read_mtz, read_hkl
 

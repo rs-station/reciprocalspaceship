@@ -14,6 +14,7 @@
 import os
 import sys
 sys.path.insert(0, os.path.abspath('../reciprocalspaceship'))
+from reciprocalspaceship import __version__
 
 # -- Project information -----------------------------------------------------
 
@@ -22,7 +23,7 @@ copyright = '2020, Jack B. Greisman, Kevin M. Dalton'
 author = 'Jack B. Greisman, Kevin M. Dalton'
 
 # The full version, including alpha/beta/rc tags
-release = '0.2.7'
+release = __version__
 
 
 # -- General configuration ---------------------------------------------------
@@ -77,8 +78,7 @@ master_doc = 'index'
 exclude_patterns = ['_build', '_templates', 'Thumbs.db', '.DS_Store', '**.ipynb_checkpoints']
 
 def setup(app):
-    # app.add_stylesheet("basic.css")
-    app.add_stylesheet("custom.css")
+    app.add_css_file("custom.css")
 
 # -- Options for HTML output -------------------------------------------------
 

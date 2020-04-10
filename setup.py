@@ -1,8 +1,9 @@
 from setuptools import setup, find_packages
+from reciprocalspaceship import __version__
 
 setup(
     name='reciprocalspaceship',
-    version='0.5.1',
+    version=__version__,
     author='Kevin M. Dalton; Jack B. Greisman',
     author_email='kmdalton@g.harvard.edu; greisman@g.harvard.edu',
     packages=find_packages(),
