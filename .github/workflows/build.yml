@@ -41,8 +41,8 @@ jobs:
     - name: Build documentation
       run: |
         pip install sphinx sphinx_rtd_theme nbsphinx ipython jupyter
-	cd docs
-	make html
+        cd docs
+        make html
 
     - name: Commit documentation changes to gh-pages
       run: |
