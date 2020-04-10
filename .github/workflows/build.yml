@@ -37,3 +37,29 @@ jobs:
         token: ${{ secrets.CODECOV_TOKEN }}
         file: ./coverage.xml
         flags: unittests
+
+    - name: Build documentation
+      run: |
+        pip install sphinx sphinx_rtd_theme nbsphinx ipython jupyter
+	cd docs
+	make html
+
+    - name: Commit documentation changes to gh-pages
+      run: |
+        git clone https://github.com/Hekstra-Lab/reciprocalspaceship.git --branch gh-pages --single-branch gh-pages
+        cd gh-pages
+        git rm -r .
+        git checkout HEAD -- .gitignore README.md .nojekyll
+        cp -r ../_build/html/* .
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
+        git add .
+        git commit -m "Upload documentation from latest commit" -a || true
+
+    - name: Push documentation changes to gh-pages
+      run: |
+      uses: ad-m/github-push-action@master
+      with:
+        branch: gh-pages
+        directory: gh-pages
+        github_token: ${{ secrets.GITHUB_TOKEN }}
