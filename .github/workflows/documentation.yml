@@ -38,6 +38,8 @@ jobs:
 
     - name: Commit documentation changes to gh-pages
       run: |
+        pwd
+        cd docs
         git clone https://github.com/Hekstra-Lab/reciprocalspaceship.git --branch gh-pages --single-branch gh-pages
         pwd
         cd gh-pages
