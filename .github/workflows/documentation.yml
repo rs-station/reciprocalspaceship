@@ -48,4 +48,4 @@ jobs:
         git config --local user.name "GitHub Action"
         git add .
         git commit -m "Upload documentation from latest commit" -a || true
-	git push origin gh-pages
+        git push origin gh-pages
