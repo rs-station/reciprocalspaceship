@@ -1,6 +1,7 @@
 # reciprocalspaceship
 ![Build](https://github.com/Hekstra-Lab/reciprocalspaceship/workflows/Build/badge.svg)
-[![codecov](https://codecov.io/gh/Hekstra-Lab/reciprocalspaceship/branch/master/graph/badge.svg?token=4XxNesZmXB)](https://codecov.io/gh/Hekstra-Lab/reciprocalspaceship)  
+[![codecov](https://codecov.io/gh/Hekstra-Lab/reciprocalspaceship/branch/master/graph/badge.svg?token=4XxNesZmXB)](https://codecov.io/gh/Hekstra-Lab/reciprocalspaceship)
+[![apm](https://img.shields.io/apm/l/vim-mode.svg)](https://github.com/Hekstra-Lab/marccd/blob/master/LICENSE)  
 
 Tools for exploring reciprocal space
 
