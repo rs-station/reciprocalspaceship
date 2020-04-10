@@ -38,12 +38,9 @@ jobs:
 
     - name: Commit documentation changes to gh-pages
       run: |
-        pwd
         cd docs
         git clone https://github.com/Hekstra-Lab/reciprocalspaceship.git --branch gh-pages --single-branch gh-pages
-        pwd
         cd gh-pages
-        pwd
         git rm -r .
         git checkout HEAD -- .gitignore README.md .nojekyll
         cp -r ../_build/html/* .
@@ -56,5 +53,4 @@ jobs:
       uses: ad-m/github-push-action@master
       with:
         branch: gh-pages
-        directory: gh-pages
         github_token: ${{ secrets.GITHUB_TOKEN }}
