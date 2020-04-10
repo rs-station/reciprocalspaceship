@@ -27,9 +27,12 @@ jobs:
         pip install pybind11
         python setup.py install
 
+    - name: Set up Pandoc
+      uses: r-lib/actions/setup-pandoc@v1
+
     - name: Build documentation
       run: |
-        pip install sphinx sphinx_rtd_theme nbsphinx ipython jupyter pypandoc
+        pip install sphinx sphinx_rtd_theme nbsphinx ipython jupyter
         cd docs
         make html
 
