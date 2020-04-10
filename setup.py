@@ -1,5 +1,12 @@
 from setuptools import setup, find_packages
-from reciprocalspaceship import __version__
+
+# Get version number
+def getVersionNumber():
+    with open("VERSION", 'r') as vfile:
+        version = vfile.read().strip()
+    return version
+__version__ = getVersionNumber()
+
 
 setup(
     name='reciprocalspaceship',

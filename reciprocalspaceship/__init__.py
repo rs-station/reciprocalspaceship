@@ -1,5 +1,9 @@
 # Version number for reciprocalspaceship
-__version__ = '0.6.0'
+def getVersionNumber():
+    import pkg_resources
+    version = pkg_resources.require("reciprocalspaceship")[0].version
+    return version
+__version__ = getVersionNumber()
 
 from .dataset import DataSet, DataSeries
 from .io import read_mtz, read_hkl
