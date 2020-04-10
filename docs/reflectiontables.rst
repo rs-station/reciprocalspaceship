@@ -12,5 +12,5 @@ Reflection Files
    :nosignatures:
    :template: class.rst
 
-   ~reciprocalspaceship.Crystal
-   ~reciprocalspaceship.CrystalSeries
+   ~reciprocalspaceship.DataSet
+   ~reciprocalspaceship.DataSeries

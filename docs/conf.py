@@ -18,8 +18,8 @@ sys.path.insert(0, os.path.abspath('../reciprocalspaceship'))
 # -- Project information -----------------------------------------------------
 
 project = 'reciprocalspaceship'
-copyright = '2019, Kevin M. Dalton, Jack B. Greisman'
-author = 'Kevin M. Dalton, Jack B. Greisman'
+copyright = '2020, Jack B. Greisman, Kevin M. Dalton'
+author = 'Jack B. Greisman, Kevin M. Dalton'
 
 # The full version, including alpha/beta/rc tags
 release = '0.2.7'
