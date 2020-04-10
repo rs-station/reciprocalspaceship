@@ -40,7 +40,7 @@ jobs:
 
     - name: Build documentation
       run: |
-        pip install sphinx sphinx_rtd_theme nbsphinx ipython jupyter
+        pip install sphinx sphinx_rtd_theme nbsphinx ipython jupyter pandoc
         cd docs
         make html
 
