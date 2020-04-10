@@ -1,0 +1,19 @@
+DataSeries
+==============================
+
+.. currentmodule:: reciprocalspaceship
+
+.. autoclass:: DataSeries
+
+   
+	       
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+   
+   
