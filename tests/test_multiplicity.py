@@ -19,6 +19,14 @@ exclude_hall_symbols = {
     ' A 2 2 -1ab', 
     ' B 2 2 -1ab', 
     ' C 2 2 -1ac', 
+    #These are temporary to remove R3 spacegroup from tests
+    ' R 3 -2"c',
+    ' R 3 2"',
+    '-R 3 2"',
+    ' R 3 -2"',
+    '-R 3',
+    '-R 3 2"c',
+    ' R 3',
 }
 
 class TestMultiplicityCalculation(unittest.TestCase):
