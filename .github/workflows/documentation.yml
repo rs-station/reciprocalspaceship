@@ -10,8 +10,8 @@ jobs:
 
     runs-on: ubuntu-latest
 
-    # Skip CI if 'skip ci' is contained in latest commit message
-    if: "!contains(github.event.head_commit.message, 'skip ci')"
+    # Skip docs if 'skip docs' is contained in latest commit message
+    if: "!contains(github.event.head_commit.message, 'skip docs')"
     
     steps:
     
@@ -39,7 +39,9 @@ jobs:
     - name: Commit documentation changes to gh-pages
       run: |
         git clone https://github.com/Hekstra-Lab/reciprocalspaceship.git --branch gh-pages --single-branch gh-pages
-        cd gh-pages
+	pwd
+	cd gh-pages
+	pwd
         git rm -r .
         git checkout HEAD -- .gitignore README.md .nojekyll
         cp -r ../_build/html/* .
