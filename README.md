@@ -3,28 +3,27 @@
 [![codecov](https://codecov.io/gh/Hekstra-Lab/reciprocalspaceship/branch/master/graph/badge.svg?token=4XxNesZmXB)](https://codecov.io/gh/Hekstra-Lab/reciprocalspaceship)
 [![apm](https://img.shields.io/apm/l/vim-mode.svg)](https://github.com/Hekstra-Lab/marccd/blob/master/LICENSE)  
 
-Tools for exploring reciprocal space
+Tools for exploring reciprocal space.
 
-`reciprocalspaceship` provides a Pandas-style dataframe object for
+`reciprocalspaceship` provides a `pandas`-style interface for
 analyzing and manipulating reflection data from crystallography
-experiments.
+experiments. Using this library, it is possible to interactively
+work with crystallographic data in Python, enabling easy
+integration with modern scientific computing libraries. `reciprocalspaceship`
+is intended to support the rapid prototyping of new crystallographic methods and
+custom analyses while maintaining clear and fast code.
 
-## Getting Started 
+Features of this library include:
 
-We have some documentation, which can be viewed by cloning the repository.
-Once this repository is made public, this documentation will be hosted on a github.io page.
+- `pandas`-style objects, datatypes, and syntax that are familiar to python users.
+- Built-in methods and support for the development of new functions that use space groups,
+  unit cell parameters, and crystallographic symmetry operations.
+- Support for reading and writing MTZ format reflection data.
 
-```
-git clone https://github.com/Hekstra-Lab/reciprocalspaceship.git
-cd reciprocalspaceship
-```
+## Getting Started
 
-Now, open `docs/_build/html/index.html` in the browser of your choice.
+*Coming soon*
 
-```
-# Mac
-open docs/_build/html/index.html
+## Documentation
 
-# Linux
-xdg-open docs/_build/html/index.html
-```
+For more details on the use of `reciprocalspaceship`, check out our [documentation](https://hekstra-lab.github.io/reciprocalspaceship).
