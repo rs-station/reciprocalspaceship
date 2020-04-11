@@ -9,7 +9,6 @@
 build/*
 dist/*
 *.egg*
-docs/api/*
 
 # Coverage reports
 coverage.xml
@@ -17,3 +16,4 @@ coverage.xml
 
 # Documentation
 docs/_build/*
+docs/api/*
