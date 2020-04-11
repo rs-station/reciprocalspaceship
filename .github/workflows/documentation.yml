@@ -43,7 +43,7 @@ jobs:
         cd gh-pages
         git rm -r .
         git checkout HEAD -- .gitignore README.md .nojekyll
-        git reset --hard
+	git push origin --delete gh-pages
         cp -r ../_build/html/* .
         git config --local user.email "action@github.com"
         git config --local user.name "GitHub Action"
