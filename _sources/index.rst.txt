@@ -1,4 +1,4 @@
-ReciprocalSpaceShip
+ReciprocalSpaceship
 ===================
 
 Tools for exploring reciprocal space.
