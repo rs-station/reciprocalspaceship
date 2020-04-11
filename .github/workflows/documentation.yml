@@ -41,11 +41,10 @@ jobs:
         cd docs
         git clone https://github.com/Hekstra-Lab/reciprocalspaceship.git --branch gh-pages --single-branch gh-pages
         cd gh-pages
-        git checkout gh-pages
+	git rm -r .
         cp -r ../_build/html/* .
         git config --local user.email "action@github.com"
         git config --local user.name "GitHub Action"
-        git config --global push.default simple
         git commit -m "Upload documentation from latest commit" -a
 
     - name: Push changes to gh-pages
