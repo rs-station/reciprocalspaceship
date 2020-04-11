@@ -48,6 +48,7 @@ jobs:
         git checkout gh-pages
         git config --local user.email "action@github.com"
         git config --local user.name "GitHub Action"
+        git config --global push.default simple
         git commit -m "Upload documentation from latest commit" -a
 
     - name: Push changes to gh-pages
