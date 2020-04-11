@@ -14,3 +14,6 @@ docs/api/*
 # Coverage reports
 coverage.xml
 .coverage
+
+# Documentation
+docs/_build/*
