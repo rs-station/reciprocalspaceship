@@ -3,9 +3,11 @@
 Building Documentation
 ======================
 
-The ``reciprocalspaceship`` documentation is built using `sphinx <http://sphinx-doc.org/>`_. There are a few additional dependencies that can all be installed using ``pip`` or ``conda``::
+The ``reciprocalspaceship`` documentation is built using `sphinx <http://sphinx-doc.org/>`_. The documentation is automatically rebuilt upon any `git push` action to
+the `master` branch of the repo; however, it is also possible to build it locally in order to preview any changes. There are a few additional dependencies that can all
+be installed using ``pip`` or ``conda``::
 
-  conda install sphinx sphinx_rtd_theme nbsphinx
+  conda install sphinx sphinx_rtd_theme nbsphinx ipython jupyter
 
 The documentation can then be built using the ``Makefile`` in the ``docs/`` subdirectory::
 
