@@ -44,9 +44,10 @@ jobs:
         git rm -r .
         git checkout HEAD -- .gitignore README.md .nojekyll
         cp -r ../_build/html/* .
-        git config --local user.email "action@github.com"
+        git branch -D gh-pages
+        git checkout gh-pages
+	git config --local user.email "action@github.com"
         git config --local user.name "GitHub Action"
-        git config --global push.default tracking
         git commit -m "Upload documentation from latest commit" -a
 
     - name: Push changes to gh-pages
