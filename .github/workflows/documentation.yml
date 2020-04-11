@@ -46,7 +46,7 @@ jobs:
         cp -r ../_build/html/* .
         git branch -D gh-pages
         git checkout gh-pages
-	git config --local user.email "action@github.com"
+        git config --local user.email "action@github.com"
         git config --local user.name "GitHub Action"
         git commit -m "Upload documentation from latest commit" -a
 
