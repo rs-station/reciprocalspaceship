@@ -81,12 +81,12 @@ class TestStructureFactors(unittest.TestCase):
         # Test using GroupOps
         groupops = data.spacegroup.operations()
         eps = rs.utils.compute_structurefactor_multiplicity(H, groupops)
-        self.assertEqual(result, eps)
+        self.assertTrue(np.array_equal(result, eps))
         
         # Test using SpaceGroup
         sg = data.spacegroup
         eps = rs.utils.compute_structurefactor_multiplicity(H, sg)
-        self.assertEqual(result, eps)
+        self.assertTrue(np.array_equal(result, eps))
         
         # Test using incorrect syntax
         with self.assertRaises(ValueError):
