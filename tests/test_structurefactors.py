@@ -53,6 +53,46 @@ class TestStructureFactors(unittest.TestCase):
 
         return
 
+    def test_compute_structurefactor_multiplicity(self):
+
+        # Test Data
+        datadir = join(abspath(dirname(__file__)), 'data/fmodel')
+        data = rs.read_mtz(join(datadir, '9LYZ.mtz'))
+        H = data.get_hkls()
+
+        # Result
+        result = np.array([4., 1., 1., 1., 1., 2., 1., 1., 1., 1., 2.,
+                           1., 1., 1., 1., 1., 1., 1., 1., 1., 2., 1.,
+                           1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1.,
+                           1., 1., 1., 1., 1., 1., 2., 1., 1., 1., 1.,
+                           2., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1.,
+                           1., 1., 1., 1., 1., 1., 1., 1., 1., 2., 1.,
+                           1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1.,
+                           1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1.,
+                           1., 1., 2., 1., 1., 1., 2., 1., 1., 1., 1.,
+                           1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1.,
+                           1., 1., 1., 1., 1., 1., 1., 2., 1., 1., 1.,
+                           1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1.,
+                           1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1.,
+                           2., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1.,
+                           1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1.,
+                           1., 1., 1.])
+        
+        # Test using GroupOps
+        groupops = data.spacegroup.operations()
+        eps = rs.utils.compute_structurefactor_multiplicity(H, groupops)
+        self.assertEqual(result, eps)
+        
+        # Test using SpaceGroup
+        sg = data.spacegroup
+        eps = rs.utils.compute_structurefactor_multiplicity(H, sg)
+        self.assertEqual(result, eps)
+        
+        # Test using incorrect syntax
+        with self.assertRaises(ValueError):
+            eps = rs.utils.compute_structurefactor_multiplicity(H, data)
+
+        return
     
 if __name__ == '__main__':
     unittest.main()
