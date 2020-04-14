@@ -27,7 +27,7 @@ def add_rfree(dataset, fraction=0.05, bins=20, inplace=False):
         dataset = dataset.copy()
     dHKL_present = 'dHKL' in dataset
     if not dHKL_present:
-        dataset = dataset._compute_dHKL()
+        dataset = dataset.compute_dHKL(inplace=True)
 
     bin_edges = np.percentile(dataset['dHKL'], np.linspace(100, 0, bins+1))
     bin_edges = np.vstack([bin_edges[:-1], bin_edges[1:]]).T
