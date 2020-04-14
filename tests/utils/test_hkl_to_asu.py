@@ -13,7 +13,7 @@ except:
 
 class TestSymmetryOps(unittest.TestCase):
     def test_hkl_to_asu(self):
-        datadir = abspath(dirname(__file__)) + '/data/fmodel/'
+        datadir = abspath(dirname(__file__)) + '/../data/fmodel/'
         files = [datadir + i for i in listdir(datadir) if re.match(r'.*(?<!_p1).mtz$', i)] 
         for inFN in tqdm(files):
             x = rs.read_mtz(inFN)

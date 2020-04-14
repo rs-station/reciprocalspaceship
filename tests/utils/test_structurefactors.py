@@ -30,7 +30,7 @@ class TestStructureFactors(unittest.TestCase):
         self.assertTrue(np.iscomplexobj(sf))
 
         # Test DataSeries objects as arguments
-        datadir = join(abspath(dirname(__file__)), 'data/fmodel')
+        datadir = join(abspath(dirname(__file__)), '../data/fmodel')
         data = rs.read_mtz(join(datadir, '9LYZ.mtz'))
         sfs = rs.utils.to_structurefactor(data["FMODEL"],
                                           data["PHIFMODEL"])
@@ -56,7 +56,7 @@ class TestStructureFactors(unittest.TestCase):
     def test_compute_structurefactor_multiplicity(self):
 
         # Test Data
-        datadir = join(abspath(dirname(__file__)), 'data/fmodel')
+        datadir = join(abspath(dirname(__file__)), '../data/fmodel')
         data = rs.read_mtz(join(datadir, '9LYZ.mtz'))
         H = data.get_hkls()
 
