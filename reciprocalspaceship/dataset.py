@@ -98,7 +98,7 @@ class DataSet(pd.DataFrame):
         from reciprocalspaceship import io
         return io.write_mtz(self, *args, **kwargs)
 
-    def write_hkl(self, *args, **kwargs):
+    def write_precognition(self, *args, **kwargs):
         """
         Write contents of DataSet object to an HKL file
 
@@ -112,7 +112,7 @@ class DataSet(pd.DataFrame):
             key for structure factor error in DataSet
         """
         from reciprocalspaceship import io
-        return io.write_hkl(self, *args, **kwargs)
+        return io.write_precognition(self, *args, **kwargs)
 
     def get_phase_keys(self):
         """
