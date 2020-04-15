@@ -1,4 +1,4 @@
-from .formats import hkl, mtz
+from .formats import precognition, mtz
 
 def read_mtz(mtzfile):
     """
@@ -11,12 +11,12 @@ def read_mtz(mtzfile):
     """
     return mtz.read(mtzfile)
 
-def read_hkl(hklfile, a=None, b=None, c=None, alpha=None,
+def read_precognition(hklfile, a=None, b=None, c=None, alpha=None,
              beta=None, gamma=None, sg=None):
     """
     Initialize attributes and populate the crystal object with data 
     from a HKL file of reflections. This is the output format used 
-    by Precognition when processing Laue diffraction data.
+    by Precognition, a Laue analysis suite.
 
     Parameters
     ----------
@@ -38,5 +38,5 @@ def read_hkl(hklfile, a=None, b=None, c=None, alpha=None,
         If int, this should specify the space group number. If str, 
         this should be a space group symbol
     """
-    return hkl.read(hklfile, a, b, c, alpha, beta, gamma, sg)
+    return precognition.read(hklfile, a, b, c, alpha, beta, gamma, sg)
 
