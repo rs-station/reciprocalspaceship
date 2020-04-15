@@ -25,7 +25,7 @@ DataSet
        ~DataSet.reset_index
        ~DataSet.set_index
        ~DataSet.unmerge_anomalous
-       ~DataSet.write_hkl
        ~DataSet.write_mtz
+       ~DataSet.write_precognition
    
    

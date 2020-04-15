@@ -275,11 +275,11 @@ DataSet.reset_index()</p>
 <tr class="row-even"><td><p><a class="reference internal" href="#reciprocalspaceship.DataSet.unmerge_anomalous" title="reciprocalspaceship.DataSet.unmerge_anomalous"><code class="xref py py-obj docutils literal notranslate"><span class="pre">unmerge_anomalous</span></code></a>([inplace])</p></td>
 <td><p>Unmerge Friedel pairs.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#reciprocalspaceship.DataSet.write_hkl" title="reciprocalspaceship.DataSet.write_hkl"><code class="xref py py-obj docutils literal notranslate"><span class="pre">write_hkl</span></code></a>(*args, **kwargs)</p></td>
-<td><p>Write contents of DataSet object to an HKL file</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#reciprocalspaceship.DataSet.write_mtz" title="reciprocalspaceship.DataSet.write_mtz"><code class="xref py py-obj docutils literal notranslate"><span class="pre">write_mtz</span></code></a>(*args, **kwargs)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#reciprocalspaceship.DataSet.write_mtz" title="reciprocalspaceship.DataSet.write_mtz"><code class="xref py py-obj docutils literal notranslate"><span class="pre">write_mtz</span></code></a>(*args, **kwargs)</p></td>
 <td><p>Write an MTZ reflection file from the reflection data in a DataSet.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#reciprocalspaceship.DataSet.write_precognition" title="reciprocalspaceship.DataSet.write_precognition"><code class="xref py py-obj docutils literal notranslate"><span class="pre">write_precognition</span></code></a>(*args, **kwargs)</p></td>
+<td><p>Write contents of DataSet object to an HKL file</p></td>
 </tr>
 </tbody>
 </table>
@@ -583,21 +583,6 @@ be rolled into a bigger unmerge() function</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="reciprocalspaceship.DataSet.write_hkl">
-<code class="sig-name descname">write_hkl</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#reciprocalspaceship.DataSet.write_hkl" title="Permalink to this definition">¶</a></dt>
-<dd><p>Write contents of DataSet object to an HKL file</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>outfile</strong> (<em>str or file</em>) – name of an hkl file or file-like object</p></li>
-<li><p><strong>sf_key</strong> (<em>str</em>) – key for structure factor in DataSet</p></li>
-<li><p><strong>err_key</strong> (<em>str</em>) – key for structure factor error in DataSet</p></li>
-</ul>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
 <dt id="reciprocalspaceship.DataSet.write_mtz">
 <code class="sig-name descname">write_mtz</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#reciprocalspaceship.DataSet.write_mtz" title="Permalink to this definition">¶</a></dt>
 <dd><p>Write an MTZ reflection file from the reflection data in a DataSet.</p>
@@ -607,6 +592,21 @@ be rolled into a bigger unmerge() function</p>
 <li><p><strong>mtzfile</strong> (<em>str or file</em>) – name of an mtz file or a file object</p></li>
 <li><p><strong>skip_problem_mtztypes</strong> (<em>bool</em>) – Whether to skip columns in DataSet that do not have specified
 mtz datatypes</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="reciprocalspaceship.DataSet.write_precognition">
+<code class="sig-name descname">write_precognition</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#reciprocalspaceship.DataSet.write_precognition" title="Permalink to this definition">¶</a></dt>
+<dd><p>Write contents of DataSet object to an HKL file</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>outfile</strong> (<em>str or file</em>) – name of an hkl file or file-like object</p></li>
+<li><p><strong>sf_key</strong> (<em>str</em>) – key for structure factor in DataSet</p></li>
+<li><p><strong>err_key</strong> (<em>str</em>) – key for structure factor error in DataSet</p></li>
 </ul>
 </dd>
 </dl>
