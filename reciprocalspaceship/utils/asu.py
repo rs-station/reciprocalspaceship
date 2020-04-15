@@ -1,5 +1,5 @@
 import numpy as np
-from reciprocalspaceship.utils.symop import apply_to_hkl,phase_shift
+from reciprocalspaceship.utils.symop import apply_to_hkl, phase_shift
 
 ccp4_hkl_asu = [
   0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,  
