@@ -7,7 +7,13 @@ from .dtypes.mapping import mtzcode2dtype
 
 class DataSeries(pd.Series):
     """
-    Representation of a sliced DataSet
+    One-dimensional ndarray with axis labels, representing a slice
+    of a DataSet. DataSeries objects inherit methods from ``pd.Series``,
+    and as such have support for statistical methods that automatically
+    exclude missing data (represented as NaN).
+
+    Operations between DataSeries align values on their associated index
+    values, and as such do not need to have the same length. 
     """
     
     @property
