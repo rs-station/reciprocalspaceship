@@ -254,8 +254,8 @@ DataSet.reset_index()</p>
 <tr class="row-odd"><td><p><a class="reference internal" href="#reciprocalspaceship.DataSet.compute_dHKL" title="reciprocalspaceship.DataSet.compute_dHKL"><code class="xref py py-obj docutils literal notranslate"><span class="pre">compute_dHKL</span></code></a>([inplace])</p></td>
 <td><p>Compute the real space lattice plane spacing, d, associated with the HKL indices in the object.</p></td>
 </tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_hkls</span></code>()</p></td>
-<td><p></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#reciprocalspaceship.DataSet.get_hkls" title="reciprocalspaceship.DataSet.get_hkls"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_hkls</span></code></a>()</p></td>
+<td><p>Get the Miller indices in the DataSet as a ndarray.</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="#reciprocalspaceship.DataSet.get_phase_keys" title="reciprocalspaceship.DataSet.get_phase_keys"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_phase_keys</span></code></a>()</p></td>
 <td><p>Return column labels associated with phase data</p></td>
@@ -305,6 +305,17 @@ the HKL indices in the object.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>inplace</strong> (<em>bool</em>) – Whether to add the column in place or return a copy</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="reciprocalspaceship.DataSet.get_hkls">
+<code class="sig-name descname">get_hkls</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#reciprocalspaceship.DataSet.get_hkls" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the Miller indices in the DataSet as a ndarray.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><strong>hkl</strong> (<em>ndarray, shape=(n_reflections, 3)</em>) – Miller indices in DataSet</p>
 </dd>
 </dl>
 </dd></dl>

@@ -196,7 +196,14 @@
 <dt id="reciprocalspaceship.DataSeries">
 <em class="property">class </em><code class="sig-prename descclassname">reciprocalspaceship.</code><code class="sig-name descname">DataSeries</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">data</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">index</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">dtype</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">name</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">copy</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">fastpath</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="headerlink" href="#reciprocalspaceship.DataSeries" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">pandas.core.series.Series</span></code></p>
-<p>Representation of a sliced DataSet</p>
+<p>One-dimensional ndarray with axis labels, representing a slice
+of a DataSet. DataSeries objects inherit methods from <code class="docutils literal notranslate"><span class="pre">pd.Series</span></code>,
+and as such have support for statistical methods that automatically
+exclude missing data (represented as NaN).</p>
+<p>Operations between DataSeries align values on their associated index
+values, and as such do not need to have the same length.</p>
+<p>For more information on the attributes and methods available with
+DataSeries objects, see the <a class="reference external" href="https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.Series.html">Pandas documentation</a>.</p>
 <dl class="py method">
 <dt id="reciprocalspaceship.DataSeries.__init__">
 <code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">data</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">index</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">dtype</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">name</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">copy</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">fastpath</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="headerlink" href="#reciprocalspaceship.DataSeries.__init__" title="Permalink to this definition">¶</a></dt>
