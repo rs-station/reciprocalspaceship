@@ -14,6 +14,10 @@ class DataSeries(pd.Series):
 
     Operations between DataSeries align values on their associated index
     values, and as such do not need to have the same length. 
+
+    For more information on the attributes and methods available with
+    DataSeries objects, see the `Pandas documentation 
+    <https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.Series.html>`_.
     """
     
     @property
