@@ -181,6 +181,14 @@ class DataSet(pd.DataFrame):
         return F.__finalize__(self)
 
     def get_hkls(self):
+        """
+        Get the Miller indices in the DataSet as a ndarray.
+
+        Returns
+        -------
+        hkl : ndarray, shape=(n_reflections, 3)
+            Miller indices in DataSet 
+        """
         hkl = self.reset_index()[['H', 'K', 'L']].to_numpy(dtype=np.int32)
         return hkl
 
