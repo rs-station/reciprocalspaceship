@@ -3,8 +3,8 @@ import gemmi
 from reciprocalspaceship import DataSet
 from reciprocalspaceship.dtypes.mapping import mtzcode2dtype
 
-def read(hklfile, logfile=None, a=None, b=None, c=None, alpha=None,
-         beta=None, gamma=None, sg=None):
+def read(hklfile,a=None, b=None, c=None, alpha=None,
+         beta=None, gamma=None, sg=None, logfile=None):
     """
     Initialize attributes and populate the DataSet object with data from
     a HKL file of reflections. This is the output format used by 
@@ -14,8 +14,6 @@ def read(hklfile, logfile=None, a=None, b=None, c=None, alpha=None,
     ----------
     hklfile : str or file
         name of an hkl file or a file object
-    logfile : str or file
-        name of a log file to parse to get cell parameters and sg
     a : float
         edge length, a, of the unit cell
     b : float
@@ -31,6 +29,8 @@ def read(hklfile, logfile=None, a=None, b=None, c=None, alpha=None,
     sg : str or int
         If int, this should specify the space group number. If str, 
         this should be a space group symbol
+    logfile : str or file
+        name of a log file to parse to get cell parameters and sg
     """
     # Read data from HKL file
     if hklfile.endswith(".hkl"):

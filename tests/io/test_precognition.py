@@ -97,7 +97,7 @@ class TestPrecognition(unittest.TestCase):
 
         # Read II providing logfile
         dhfr = rs.read_precognition(join(datadir, 'e074a_off1_001.mccd.ii'),
-                                    join(datadir, 'integration.log'))
+                                    logfile=join(datadir, 'integration.log'))
         self.assertEqual(len(dhfr.columns), 7)
         self.assertEqual(list(dhfr.index.names), ["H", "K", "L"])
         self.assertIsInstance(dhfr, rs.DataSet)

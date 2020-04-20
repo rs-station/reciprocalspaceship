@@ -11,8 +11,8 @@ def read_mtz(mtzfile):
     """
     return mtz.read(mtzfile)
 
-def read_precognition(hklfile, logfile=None, a=None, b=None, c=None,
-                      alpha=None, beta=None, gamma=None, sg=None):
+def read_precognition(hklfile, a=None, b=None, c=None, alpha=None,
+                      beta=None, gamma=None, sg=None, logfile=None):
     """
     Initialize attributes and populate the crystal object with data 
     from a HKL file of reflections. This is the output format used 
@@ -22,8 +22,6 @@ def read_precognition(hklfile, logfile=None, a=None, b=None, c=None,
     ----------
     hklfile : str or file
         name of an hkl file or a file object
-    logfile : str or file
-        name of a log file to parse to get cell parameters and sg
     a : float
         edge length, a, of the unit cell
     b : float
@@ -39,6 +37,8 @@ def read_precognition(hklfile, logfile=None, a=None, b=None, c=None,
     sg : str or int
         If int, this should specify the space group number. If str, 
         this should be a space group symbol
+    logfile : str or file
+        name of a log file to parse to get cell parameters and sg
     """
-    return precognition.read(hklfile, logfile, a, b, c, alpha, beta, gamma, sg)
+    return precognition.read(hklfile, a, b, c, alpha, beta, gamma, sg, logfile)
 
