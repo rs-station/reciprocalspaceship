@@ -40,5 +40,5 @@ def read_precognition(hklfile, logfile=None, a=None, b=None, c=None,
         If int, this should specify the space group number. If str, 
         this should be a space group symbol
     """
-    return precognition.read(hklfile, logfilea, b, c, alpha, beta, gamma, sg)
+    return precognition.read(hklfile, logfile, a, b, c, alpha, beta, gamma, sg)
 
