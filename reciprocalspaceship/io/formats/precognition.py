@@ -74,9 +74,9 @@ def read(hklfile, logfile=None, a=None, b=None, c=None, alpha=None,
             # Read cell parameters
             block = [ i for i, l in enumerate(lines) if hklfile in l ]
             lengths = lines[i-19].split()[-3:]
-            a, b, c = *lengths
+            a, b, c = lengths
             angles  = lines[i-18].split()[-3:]
-            alpha, beta, gamma = *angles
+            alpha, beta, gamma = angles
             
     dataset = DataSet()
     for (k,v), mtztype in zip(F.items(), mtztypes):
