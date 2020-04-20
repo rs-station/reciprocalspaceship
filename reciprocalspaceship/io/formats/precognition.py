@@ -75,9 +75,9 @@ def read(hklfile,a=None, b=None, c=None, alpha=None,
 
             # Read cell parameters
             block = [ i for i, l in enumerate(lines) if basename(hklfile) in l ][0]
-            lengths = lines[blocks-19].split()[-3:]
+            lengths = lines[block-19].split()[-3:]
             a, b, c = lengths
-            angles  = lines[blocks-18].split()[-3:]
+            angles  = lines[block-18].split()[-3:]
             alpha, beta, gamma = angles
             
     dataset = DataSet()
