@@ -3,8 +3,8 @@ import gemmi
 from reciprocalspaceship import DataSet
 from reciprocalspaceship.dtypes.mapping import mtzcode2dtype
 
-def read(hklfile, a=None, b=None, c=None, alpha=None, beta=None,
-         gamma=None, sg=None):
+def read(hklfile, logfile=None, a=None, b=None, c=None, alpha=None,
+         beta=None, gamma=None, sg=None):
     """
     Initialize attributes and populate the DataSet object with data from
     a HKL file of reflections. This is the output format used by 
@@ -14,6 +14,8 @@ def read(hklfile, a=None, b=None, c=None, alpha=None, beta=None,
     ----------
     hklfile : str or file
         name of an hkl file or a file object
+    logfile : str or file
+        name of a log file to parse to get cell parameters and sg
     a : float
         edge length, a, of the unit cell
     b : float
@@ -59,7 +61,23 @@ def read(hklfile, a=None, b=None, c=None, alpha=None, beta=None,
                                "Resolution", "Wavelength", "I", "SigI"],
                         usecols=usecols)
         mtztypes = ["H", "H", "H", "I", "R", "R", "R", "R", "J", "Q"]
-        
+
+        # If logfile is given, read cell parameters and spacegroup
+        if logfile:
+            with open(logfile, "r") as log:
+                lines = log.readlines()
+
+            # Read spacegroup
+            sgline = [ l for l in lines if "space-group" in l ]
+            sg = [ s for s in sgline.split() if "#" in s ].lstrip("#")
+
+            # Read cell parameters
+            block = [ i for i, l in enumerate(lines) if hklfile in l ]
+            lengths = lines[i-19].split()[-3:]
+            a, b, c = *lengths
+            angles  = lines[i-18].split()[-3:]
+            alpha, beta, gamma = *angles
+            
     dataset = DataSet()
     for (k,v), mtztype in zip(F.items(), mtztypes):
         dataset[k] = v
