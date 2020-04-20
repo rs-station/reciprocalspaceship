@@ -68,7 +68,7 @@ def read(hklfile,a=None, b=None, c=None, alpha=None,
                 lines = log.readlines()
 
             # Read spacegroup
-            sgline = [ l for l in lines if "space-group" in l ]
+            sgline = [ l for l in lines if "space-group" in l ][0]
             sg = [ s for s in sgline.split() if "#" in s ].lstrip("#")
 
             # Read cell parameters
