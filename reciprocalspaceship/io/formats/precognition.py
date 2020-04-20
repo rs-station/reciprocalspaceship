@@ -64,6 +64,8 @@ def read(hklfile,a=None, b=None, c=None, alpha=None,
 
         # If logfile is given, read cell parameters and spacegroup
         if logfile:
+            from os.path import basename
+            
             with open(logfile, "r") as log:
                 lines = log.readlines()
 
@@ -72,7 +74,7 @@ def read(hklfile,a=None, b=None, c=None, alpha=None,
             sg = [ s for s in sgline.split() if "#" in s ][0].lstrip("#")
 
             # Read cell parameters
-            block = [ i for i, l in enumerate(lines) if hklfile in l ][0]
+            block = [ i for i, l in enumerate(lines) if basename(hklfile) in l ][0]
             lengths = lines[blocks-19].split()[-3:]
             a, b, c = lengths
             angles  = lines[blocks-18].split()[-3:]
