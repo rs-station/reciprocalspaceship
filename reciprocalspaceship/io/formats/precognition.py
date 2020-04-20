@@ -69,7 +69,7 @@ def read(hklfile,a=None, b=None, c=None, alpha=None,
 
             # Read spacegroup
             sgline = [ l for l in lines if "space-group" in l ][0]
-            sg = [ s for s in sgline.split() if "#" in s ].lstrip("#")
+            sg = [ s for s in sgline.split() if "#" in s ][0].lstrip("#")
 
             # Read cell parameters
             block = [ i for i, l in enumerate(lines) if hklfile in l ]
