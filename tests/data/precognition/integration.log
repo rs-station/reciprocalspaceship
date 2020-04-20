@@ -1,0 +1,308 @@
+
+                                  _
+                                 |_)
+                                 | recognition
+
+                                 Release T5.2.2
+                              all rights reserved
+                                   *   *   *
+                                John Zhong Ren
+                              Renz Research, Inc.
+                  P. O. Box 605, Westmont, IL 60559, U. S. A.
+                          Email renzresearch@gmail.com
+                              Tel (630) 430-6190
+
+
+|||)) Welcome to CPLi  0.18.20120619
+|||\\ Renz Research, Inc.
+
+
+Precognition: Input   I: File & keyboard input (e.g., image & parameters)
+              Quit    Q: Exit Precognition (default)
+Precognition: Script file "integrate_e074a_off1_001.inp" is opened for input.
+
+Precognition: Input   I: File & keyboard input (e.g., image & parameters)
+              Quit    Q: Exit Precognition (default)
+Precognition: diagnostic    off
+Message of type "diagnostic" is turned off.
+
+Precognition: Input   I: File & keyboard input (e.g., image & parameters)
+              Quit    Q: Exit Precognition (default)
+Precognition: busy          off
+Message of type "busy" is turned off.
+
+Precognition: Input   I: File & keyboard input (e.g., image & parameters)
+              Quit    Q: Exit Precognition (default)
+Precognition: warning       off
+Message of type "warning" is turned off.
+
+Precognition: Input   I: File & keyboard input (e.g., image & parameters)
+              Quit    Q: Exit Precognition (default)
+Precognition: prompt off
+Message of type "prompt" is turned off.
+result off
+Message of type "result" is turned off.
+
+@/n/holyscratch01/hekstra_lab/greisman/laue/DHFR/201911_e074/geometry/final/e074a_off1_001.mccd.inp
+Script file "/n/holyscratch01/hekstra_lab/greisman/laue/DHFR/201911_e074/geometry/final/e074a_off1_001.mccd.inp" is opened for input.
+Input
+   Crystal    34.466 45.600 99.585 90.000 90.000 90.000 19
+Loading the Space-group Database ... The space-group #19 is loaded.
+File /n/holylfs/LABS/hekstra_lab/garden/precognition/Precognition_5.2_distrib/cpl/ccl/lib/symlib read.
+   Matrix     0.507907 -0.167878 0.844895 -0.022877 0.977851 0.208048 -0.861108 -0.124998 0.492817
+   Omega      0.000 0.000
+   Goniometer 0.000 0.000 -0.000
+
+   Format     RayonixMX340
+   Distance   198.918 0.050
+   Center     1991.05 1974.26 0.20 0.20
+   Pixel      0.088611 0.088600 0.000010 0.000000
+   Swing      0.000 0.000 0.000 0.000
+   Tilt       -0.083727 0.009463 0.100000 0.100000
+   Bulge      0.000000000000 0.000000000000 0.000000000000 0.000000000000
+
+   Image 0    e074a_off1_001.mccd
+   Resolution 2.00 100.00
+   Wavelength 1.02 1.18
+   Quit
+
+Script file is closed.
+
+prompt on
+Message of type "prompt" is turned on.
+
+Precognition: Input   I: File & keyboard input (e.g., image & parameters)
+              Dataset D: Process data set
+              Quit    Q: Exit Precognition (default)
+Precognition: result on
+Message of type "result" is turned on.
+
+Precognition: Input   I: File & keyboard input (e.g., image & parameters)
+              Dataset D: Process data set
+              Quit    Q: Exit Precognition (default)
+Precognition: 
+
+Precognition: Input   I: File & keyboard input (e.g., image & parameters)
+              Dataset D: Process data set
+              Quit    Q: Exit Precognition (default)
+Precognition: Input
+
+Precognition:Input: Format     F: Image format                (f [esrf])
+                    Goniometer G: Goniometer omega, chi, phi  (deg; g 0 0 0)
+                    Omega      O: Omega polar orientation     (deg; o -90 0)
+                    Crystal    X: Crystal info file or cell & SG No
+                    Matrix     M: Missetting matrix           (by row)
+                    Distance   D: Crystal-detector distance   (mm; d 100)
+                    Center     C: Direct-beam                 (pxl; c 1000 1000)
+                    Center     C: Normal projection           (c 50 50 normal)
+                    Pixel      P: Pixel size                  (mm; p 0.1 0.1)
+                    Swing      S: Detector swing angles       (deg; s 30 0)
+                    Tilt       T: Detector tilt angle(s)      (deg; t 0 [0])
+                    Bulge      B: Quadratic & cubic           (10^-12; b 0 0)
+                    Distort    N: Detector distortion         (n 18 numbers)
+                    Image      I: Image or dataset files
+                    Spot       L: Length, width, sigma & file (pxl; l 8 6 2 [f])
+                    Resolution R: User defaults               (A; r 3 20)
+                    Wavelength W: User defaults               (A; w 0.5 2)
+                    Chebyshev  V: Maximum degree of spectrum  (v 64)
+                    Anomalous  A: Anomalous scattering        (a [on/off])
+                    Quit       Q: Exit this menu (default)
+Precognition:Input:    Image      ../../Xray-spectrum_N.lam 
+File ../../Xray-spectrum_N.lam read.
+
+Precognition:Input: Format     F: Image format                (f [esrf])
+                    Center     C: Normal projection           (c 50 50 normal)
+                    Image      I: Image or dataset files
+                    Spot       L: Length, width, sigma & file (pxl; l 8 6 2 [f])
+                    Resolution R: User defaults               (A; r 3 20)
+                    Wavelength W: User defaults               (A; w 0.5 2)
+                    Chebyshev  V: Maximum degree of spectrum  (v 64)
+                    Anomalous  A: Anomalous scattering        (a [on/off])
+                    Quit       Q: Exit this menu (default)
+Precognition:Input:    Spot       6 4 3.5
+
+Precognition:Input: Format     F: Image format                (f [esrf])
+                    Center     C: Normal projection           (c 50 50 normal)
+                    Image      I: Image or dataset files
+                    Spot       L: Length, width, sigma & file (pxl; l 8 6 2 [f])
+                    Resolution R: User defaults               (A; r 3 20)
+                    Wavelength W: User defaults               (A; w 0.5 2)
+                    Chebyshev  V: Maximum degree of spectrum  (v 64)
+                    Anomalous  A: Anomalous scattering        (a [on/off])
+                    Quit       Q: Exit this menu (default)
+Precognition:Input:    Quit
+
+Precognition: Input   I: File & keyboard input (e.g., image & parameters)
+              Dataset D: Process data set
+              Quit    Q: Exit Precognition (default)
+Precognition: Dataset       variableElliptical
+
+Precognition:Dataset: In         I: Image directory
+                      Out        O: Result directory
+                      Path       P: Image/result directory
+                      OK         K: Dummy for backward compatibility
+                      Resolution R: Integration resolution (A; r 3 20)
+                      Wavelength W: Integration bandpass   (A; w .5 2)
+                      Quit       Q: Exit this menu (default)
+Precognition:Dataset:    In         /n/holyscratch01/hekstra_lab/greisman/laue/DHFR/201911_e074/images/
+
+Precognition:Dataset: In         I: Image directory
+                      Out        O: Result directory
+                      Path       P: Image/result directory
+                      OK         K: Dummy for backward compatibility
+                      Resolution R: Integration resolution (A; r 3 20)
+                      Wavelength W: Integration bandpass   (A; w .5 2)
+                      Quit       Q: Exit this menu (default)
+Precognition:Dataset:    Out        ./
+
+Precognition:Dataset: In         I: Image directory
+                      Out        O: Result directory
+                      Path       P: Image/result directory
+                      OK         K: Dummy for backward compatibility
+                      Resolution R: Integration resolution (A; r 3 20)
+                      Wavelength W: Integration bandpass   (A; w .5 2)
+                      Quit       Q: Exit this menu (default)
+Precognition:Dataset:    Resolution 1.4 100
+
+Precognition:Dataset: In         I: Image directory
+                      Out        O: Result directory
+                      Path       P: Image/result directory
+                      OK         K: Dummy for backward compatibility
+                      Resolution R: Integration resolution (A; r 3 20)
+                      Wavelength W: Integration bandpass   (A; w .5 2)
+                      Quit       Q: Exit this menu (default)
+Precognition:Dataset:    Wavelength 1.02 1.18
+
+Precognition:Dataset: In         I: Image directory
+                      Out        O: Result directory
+                      Path       P: Image/result directory
+                      OK         K: Dummy for backward compatibility
+                      Resolution R: Integration resolution (A; r 3 20)
+                      Wavelength W: Integration bandpass   (A; w .5 2)
+                      Quit       Q: Exit this menu (default)
+Precognition:Dataset:    Quit
+
+ ______
+|      )_
+| Report |
+| ------ |
+| ------ |
+| ------ |
+| ----   |
+|________|
+
+Image generic selected.
+
+
+File /n/holyscratch01/hekstra_lab/greisman/laue/DHFR/201911_e074/images/e074a_off1_001.mccd read.
+
+ ______
+|      )_
+| Report |
+| ------ |
+| ------ |
+| ------ |
+| ----   |
+|________|
+
+Image RayonixMX340 selected.
+
+
+File /n/holyscratch01/hekstra_lab/greisman/laue/DHFR/201911_e074/images/e074a_off1_001.mccd read.
+File ./e074a_off1_001.mccd.re.spt is written.
+
+
+ ______
+|      )_
+| Report |
+| ------ |
+| ------ |
+| ------ |
+| ----   |
+|________|
+
+    0    0    0    2438.63  1714.27          0.0        1.0
+    0    0    0    1762.00  2473.48          0.0        1.0
+    0    0    0    2567.11  1779.34          0.0        1.0
+    0    0    0    2086.80  2362.02          0.0        1.0
+    0    0    0    1467.43  1987.47          0.0        1.0
+    0    0    0    1480.25  2095.48          0.0        1.0
+    0    0    0    1908.02  1566.27          0.0        1.0
+    0    0    0    2097.61  2318.42          0.0        1.0
+    0    0    0    2669.91  1966.71          0.0        1.0
+    0    0    0    1992.37  1426.74          0.0        1.0
+    0    0    0    2462.89  1939.58          0.0        1.0
+    0    0    0    2041.62  2531.94          0.0        1.0
+    0    0    0    1768.13  1287.01          0.0        1.0
+    0    0    0    1605.17  2398.36          0.0        1.0
+    0    0    0    1460.22  2150.95          0.0        1.0
+    0    0    0    1893.96  2540.96          0.0        1.0
+    0    0    0    1648.69  1855.37          0.0        1.0
+    0    0    0    2240.85  1399.38          0.0        1.0
+    0    0    0    1655.06  2029.18          0.0        1.0
+    0    0    0    1136.80  2095.84          0.0        1.0
+    0    0    0    2133.36  1436.76          0.0        1.0
+    0    0    0    1856.63  2626.17          0.0        1.0
+    0    0    0    2569.63  1645.42          0.0        1.0
+    0    0    0    2777.65  1920.85          0.0        1.0
+    0    0    0    2218.47  1305.95          0.0        1.0
+    0    0    0    2279.06  1530.07          0.0        1.0
+    0    0    0    2437.13  1778.05          0.0        1.0
+    0    0    0    2107.61  2268.40          0.0        1.0
+    0    0    0    2309.78  1562.08          0.0        1.0
+    0    0    0    1417.82  1866.40          0.0        1.0
+    0    0    0    1533.20  2550.51          0.0        1.0
+    0    0    0    2306.12  1565.94          0.0        1.0
+32 sample spots are used to find an average profile.
+
+ ______
+|      )_
+| Report |
+| ------ |
+| ------ |
+| ------ |
+| ----   |
+|________|
+
+An overall mean profile is recognized.
+Semi-major & -minor axes (pixel): 3.48737 1.13525
+Non-elliptical correction:        0.0132135 0.00679923 -0.00330129 0.0133922
+Non-Gaussian correction:          0.645448 0.828702
+
+Overall spot length is set to 13 pixels.
+Overall spot width  is set to 4 pixels.
+Estimated crystal dimension is 0.204367 mm.
+Estimated mosaic spread in FWHM is 0.114304 degree.
+
+
+
+
+Before integration
+
+Title:                              e074a_off1_001.mccd
+Cell lengths (Angstrom):              34.4660    45.6000    99.5850
+Cell angles (degree):                 90.0000    90.0000    90.0000
+Euler angles (degree):               103.8334    60.4741   -98.2593
+Euler angles (radian):                 1.8122     1.0555    -1.7149
+Missetting matrix:                     0.50790697  -0.16787800   0.84489501
+                                      -0.02287700   0.97785097   0.20804800
+                                      -0.86110801  -0.12499800   0.49281701
+Goniometer omega, chi, phi(degree):    0.0000     0.0000    -0.0000
+Omega-axis polar orientation (deg):    0.0000     0.0000
+Detector type:                     flat
+Crystal-to-detector distance (mm):   198.9180
+Direct-beam center (pixel):         1991.0500    1974.2600    3840  3840
+Pixel size (mm):                       0.0886110    0.0886000
+Detector swing angles (degree):        0.0000       0.0000
+Detector tilt angles (degree):        -0.0837       0.0095
+Detector bulge corrections (10^-12):           0            0
+Detector distortion (pixel):   0.00    0.00      0.00    0.00      0.00    0.00
+                               0.00    0.00      0.00    0.00      0.00    0.00
+                               0.00    0.00      0.00    0.00      0.00    0.00
+File ./e074a_off1_001.mccd.ii is written.
+
+
+Precognition: Input   I: File & keyboard input (e.g., image & parameters)
+              Dataset D: Process data set
+              Quit    Q: Exit Precognition (default)
+Precognition: Quit
