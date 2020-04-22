@@ -280,7 +280,7 @@ class DataSet(pd.DataFrame):
             dataset.spacegroup, 
             return_phase_shifts=True
         )
-        dataset.loc[:, ['H', 'K', 'L']] = compressed_hkls[inverse]
+        dataset['H'],dataset['K'],dataset['L'] = (DataSeries(i, dtype='HKL') for i in compressed_hkls[inverse].T)
         for k in dataset.get_phase_keys():
             dataset[k] = phi_coeff[inverse] * (dataset[k] + phi_shift[inverse])
         dataset['M/ISYM'] = DataSeries(isym[inverse], dtype="M_Isym")
