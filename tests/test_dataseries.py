@@ -1,56 +1,47 @@
-import unittest
+import pytest
 import numpy as np
 import reciprocalspaceship as rs
 
-class TestDataSeries(unittest.TestCase):
+@pytest.mark.parametrize("data", [None, [], np.linspace(-180, 180, 181)])
+@pytest.mark.parametrize("name", [None, "test"])
+@pytest.mark.parametrize("dtype", [object, "float32", rs.PhaseDtype()])
+def test_constructor(data, name, dtype):
+    # Test constructor of DataSeries
 
-    @classmethod
-    def setUpClass(cls):
-        cls.floatdata = np.zeros(100)
-        return
-        
-    def test_constructor(self):
+    ds = rs.DataSeries(data, name=name, dtype=dtype)
+    assert isinstance(ds, rs.DataSeries)
+    assert ds.name == name
+    if data is None:
+        assert len(ds) == 0
+        assert np.array_equal(
+            ds.to_numpy(dtype=float),
+            np.array([], dtype=float)
+        )
+    else:
+        assert len(ds) == len(data)
+        assert np.array_equal(
+            ds.to_numpy(dtype=float),
+            np.array(data, dtype=float)
+        )
 
-        # Test empty constructor
-        cs = rs.DataSeries(dtype=object)
-        self.assertIsInstance(cs, rs.DataSeries)
-        self.assertEqual(cs.name, None)
-        self.assertEqual(len(cs), 0)
 
-        # Test constructor with data and name
-        cs = rs.DataSeries(self.floatdata, name="test")
-        self.assertIsInstance(cs, rs.DataSeries)
-        self.assertTrue(cs.name == "test")
-        self.assertEqual(len(cs), len(self.floatdata))
+@pytest.mark.parametrize("data", [None, [], np.linspace(-180, 180, 181)])
+@pytest.mark.parametrize("series_name", [None, "series_name"])
+@pytest.mark.parametrize("frame_name", [None, "frame_name"])
+@pytest.mark.parametrize("dtype", [object, "float32", rs.PhaseDtype()])
+def test_constructor_expanddim(data, series_name, frame_name, dtype):
+    # Test DataSeries.to_frame()
 
-        # Test constructor with data, name, and dtype
-        cs = rs.DataSeries(self.floatdata, name="test",
-                              dtype=rs.PhaseDtype())
-        self.assertIsInstance(cs, rs.DataSeries)
-        self.assertTrue(cs.name == "test")
-        self.assertEqual(len(cs), len(self.floatdata))
-        self.assertEqual(cs.dtype.mtztype, "P")
-        
-        return
-
-    def test_constructor_expanddim(self):
-
-        cs = rs.DataSeries(self.floatdata, name="test",
-                              dtype=rs.PhaseDtype())
-        c = cs.to_frame()
-
-        # Test that DataSeries expands to DataSet
-        self.assertIsInstance(c, rs.DataSet)
-        self.assertTrue(len(c.columns), 1)
-        self.assertEqual(c.columns[0], "test")
-
-        # If given a name, provided argument becomes column name
-        c = cs.to_frame(name="new")
-        self.assertIsInstance(c, rs.DataSet)
-        self.assertTrue(len(c.columns), 1)
-        self.assertEqual(c.columns[0], "new")
-
-        return
-
-if __name__ == '__main__':
-    unittest.main()
+    ds = rs.DataSeries(data, name=series_name, dtype=dtype)
+    d = ds.to_frame(name=frame_name)
+    assert isinstance(d, rs.DataSet)
+    assert len(d.columns) == 1
+    assert isinstance(d.dtypes[0], type(ds.dtype))
+    
+    # Test hierarchy for column naming
+    if frame_name:
+        assert d.columns[0]  == frame_name
+    elif series_name:
+        assert d.columns[0] == series_name
+    else:
+        assert d.columns[0] == 0
