@@ -1,5 +1,14 @@
 import pytest
+import pandas as pd
 import reciprocalspaceship as rs
+
+@pytest.fixture
+def na_value(dtype):
+    return dtype.na_value
+
+@pytest.fixture
+def na_cmp():
+    return lambda x, y: pd.isna(x) and pd.isna(y)
 
 @pytest.fixture(params=[True, False])
 def box_in_series(request):

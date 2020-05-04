@@ -52,15 +52,6 @@ def all_data(request, data, data_missing):
         return data_missing
     
 @pytest.fixture
-def na_value(dtype):
-    return dtype.na_value
-
-@pytest.fixture
-def na_cmp():
-    # we are pd.nan
-    return lambda x, y: pd.isna(x) and pd.isna(y)
-
-@pytest.fixture
 def data_for_grouping(dtype):
     b = 1
     a = 0
