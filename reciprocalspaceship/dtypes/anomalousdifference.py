@@ -15,6 +15,3 @@ class AnomalousDifferenceArray(NumpyExtensionArray):
     """ExtensionArray for supporting AnomalousDifferenceDtype"""
     _dtype = AnomalousDifferenceDtype()
     pass
-
-AnomalousDifferenceArray._add_arithmetic_ops()
-AnomalousDifferenceArray._add_comparison_ops()

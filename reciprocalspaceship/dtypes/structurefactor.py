@@ -16,9 +16,6 @@ class StructureFactorAmplitudeArray(NumpyExtensionArray):
     _dtype = StructureFactorAmplitudeDtype()
     pass
 
-StructureFactorAmplitudeArray._add_arithmetic_ops()
-StructureFactorAmplitudeArray._add_comparison_ops()
-
 @register_extension_dtype
 class StructureFactorAmplitudeFriedelDtype(NumpyFloat32ExtensionDtype):
     """
@@ -37,9 +34,6 @@ class StructureFactorAmplitudeFriedelArray(NumpyExtensionArray):
     _dtype = StructureFactorAmplitudeFriedelDtype()
     pass
 
-StructureFactorAmplitudeFriedelArray._add_arithmetic_ops()
-StructureFactorAmplitudeFriedelArray._add_comparison_ops()
-
 @register_extension_dtype
 class ScaledStructureFactorAmplitudeDtype(NumpyFloat32ExtensionDtype):
     """Dtype for structure factor amplitude  data"""
@@ -54,6 +48,3 @@ class ScaledStructureFactorAmplitudeArray(NumpyExtensionArray):
     """ExtensionArray for supporting ScaledStructureFactorAmplitudeDtype"""
     _dtype = ScaledStructureFactorAmplitudeDtype()
     pass
-
-ScaledStructureFactorAmplitudeArray._add_arithmetic_ops()
-ScaledStructureFactorAmplitudeArray._add_comparison_ops()

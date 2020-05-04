@@ -16,9 +16,6 @@ class StandardDeviationArray(NumpyExtensionArray):
     _dtype = StandardDeviationDtype()
     pass
 
-StandardDeviationArray._add_arithmetic_ops()
-StandardDeviationArray._add_comparison_ops()
-
 @register_extension_dtype
 class StandardDeviationSFFriedelDtype(NumpyFloat32ExtensionDtype):
     """Dtype for standard deviation of F(+) or F(-)"""
@@ -34,9 +31,6 @@ class StandardDeviationSFFriedelArray(NumpyExtensionArray):
     _dtype = StandardDeviationSFFriedelDtype()
     pass
 
-StandardDeviationSFFriedelArray._add_arithmetic_ops()
-StandardDeviationSFFriedelArray._add_comparison_ops()
-
 @register_extension_dtype
 class StandardDeviationIFriedelDtype(NumpyFloat32ExtensionDtype):
     """Dtype for standard deviation of I(+) or I(-)"""
@@ -51,6 +45,3 @@ class StandardDeviationIFriedelArray(NumpyExtensionArray):
     """ExtensionArray for supporting StandardDeviationIFriedelDtype"""
     _dtype = StandardDeviationIFriedelDtype()
     pass
-
-StandardDeviationIFriedelArray._add_arithmetic_ops()
-StandardDeviationIFriedelArray._add_comparison_ops()

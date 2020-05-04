@@ -16,6 +16,3 @@ class MTZRealArray(NumpyExtensionArray):
     """ExtensionArray for supporting MtzRealDtype"""
     _dtype = MTZRealDtype()
     pass
-
-MTZRealArray._add_arithmetic_ops()
-MTZRealArray._add_comparison_ops()

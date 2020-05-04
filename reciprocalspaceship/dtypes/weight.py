@@ -15,6 +15,3 @@ class WeightArray(NumpyExtensionArray):
     """ExtensionArray for supporting WeightDtype"""
     _dtype = WeightDtype()
     pass
-
-WeightArray._add_arithmetic_ops()
-WeightArray._add_comparison_ops()

@@ -274,3 +274,6 @@ class NumpyExtensionArray(ExtensionArray, ExtensionScalarOpsMixin):
 
     def __array__(self, dtype=None):
         return self._coerce_to_ndarray(dtype=dtype)
+
+NumpyExtensionArray._add_arithmetic_ops()
+NumpyExtensionArray._add_comparison_ops()

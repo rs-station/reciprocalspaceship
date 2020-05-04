@@ -16,9 +16,6 @@ class IntensityArray(NumpyExtensionArray):
     _dtype = IntensityDtype()
     pass
 
-IntensityArray._add_arithmetic_ops()
-IntensityArray._add_comparison_ops()
-
 @register_extension_dtype
 class IntensityFriedelDtype(NumpyFloat32ExtensionDtype):
     """Dtype for I(+) or I(-) data in reflection tables"""
@@ -33,6 +30,3 @@ class IntensityFriedelArray(NumpyExtensionArray):
     """ExtensionArray for supporting IntensityFriedelDtype"""    
     _dtype = IntensityFriedelDtype()
     pass
-
-IntensityFriedelArray._add_arithmetic_ops()
-IntensityFriedelArray._add_comparison_ops()

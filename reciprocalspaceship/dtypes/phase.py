@@ -16,9 +16,6 @@ class PhaseArray(NumpyExtensionArray):
     _dtype = PhaseDtype()
     pass
 
-PhaseArray._add_arithmetic_ops()
-PhaseArray._add_comparison_ops()
-
 @register_extension_dtype
 class HendricksonLattmanDtype(NumpyFloat32ExtensionDtype):
     """
@@ -36,6 +33,3 @@ class HendricksonLattmanArray(NumpyExtensionArray):
     """ExtensionArray for supporting HendricksonLattmanDtype"""
     _dtype = HendricksonLattmanDtype()
     pass
-
-HendricksonLattmanArray._add_arithmetic_ops()
-HendricksonLattmanArray._add_comparison_ops()
