@@ -1,106 +1,68 @@
-import unittest
+import pytest
 import numpy as np
 import reciprocalspaceship as rs
 import gemmi
 
-class TestASU(unittest.TestCase):
-
-    def test_in_asu(self):
-
-        H = np.array([[0, 0, 1],
-                      [0, 1, 0],
-                      [1, 0, 0],
-                      [0, 1, 1],
-                      [1, 1, 0],
-                      [1, 1, 1]])
-        Hneg = H*-1
-        sg1  = gemmi.SpaceGroup(1)
-        sg19 = gemmi.SpaceGroup(19)
-
-        # Test individual reflections
-        bools = rs.utils.asu.in_asu(np.array([[-1, 1, 1]]), sg1)
-        self.assertTrue(bools.all())
-        self.assertEqual(1, len(bools))
-        
-        bools = rs.utils.asu.in_asu(np.array([[-1, 1, 1]]), sg19)
-        self.assertFalse(bools.all())
-        self.assertEqual(1, len(bools))
-        
-        # Vectorized usage
-        bools = rs.utils.asu.in_asu(H, sg1)
-        self.assertTrue(bools.all())
-        self.assertEqual(len(H), len(bools))
-        
-        bools = rs.utils.asu.in_asu(H, sg19)
-        self.assertTrue(bools.all())
-        self.assertEqual(len(H), len(bools))
-        
-        bools = rs.utils.asu.in_asu(Hneg, sg1)
-        self.assertFalse(bools.all())
-        self.assertEqual(len(Hneg), len(bools))
-        
-        bools = rs.utils.asu.in_asu(Hneg, sg19)
-        self.assertFalse(bools.all())
-        self.assertEqual(len(Hneg), len(bools))
-        
-        return
-
-    def test_hkl_to_asu(self):
-
-        H = np.array([[0, 0, 1],
-                      [0, 1, 0],
-                      [1, 0, 0],
-                      [0, 1, 1],
-                      [1, 1, 0],
-                      [1, 1, 1]])
-        Hneg = H*-1
-        sg1  = gemmi.SpaceGroup(1)
-        sg19 = gemmi.SpaceGroup(19)
-
-        # return_phase_shifts=False
-        H_asu, isymm = rs.utils.asu.hkl_to_asu(H, sg1)
-        self.assertTrue(np.array_equal(H, H_asu))
-        self.assertTrue(np.array_equal(np.ones(len(H)), isymm))
-
-        H_asu, isymm = rs.utils.asu.hkl_to_asu(Hneg, sg1)
-        self.assertTrue(np.array_equal(H, H_asu))
-        self.assertTrue(np.array_equal(np.ones(len(H))*2, isymm))
-
-        H_asu, isymm = rs.utils.asu.hkl_to_asu(H, sg19)
-        self.assertTrue(np.array_equal(H, H_asu))
-        self.assertTrue(np.array_equal(np.ones(len(H)), isymm))
-
-        H_asu, isymm = rs.utils.asu.hkl_to_asu(Hneg, sg19)
-        self.assertTrue(np.array_equal(H, H_asu))
-        self.assertTrue(np.array_equal(np.array([5, 3, 3, 5, 3, 2]), isymm))
-
-        # return_phase_shifts=True
-        H_asu, isymm, phi_coeff, phi_shift = rs.utils.asu.hkl_to_asu(H, sg1, True)
-        self.assertTrue(np.array_equal(H, H_asu))
-        self.assertTrue(np.array_equal(np.ones(len(H)), isymm))
-        self.assertTrue(np.array_equal(np.ones(len(H)), phi_coeff))
-        self.assertTrue(np.array_equal(np.zeros(len(H)), phi_shift))
-
-        H_asu, isymm, phi_coeff, phi_shift = rs.utils.asu.hkl_to_asu(Hneg, sg1, True)
-        self.assertTrue(np.array_equal(H, H_asu))
-        self.assertTrue(np.array_equal(np.ones(len(H))*2, isymm))
-        self.assertTrue(np.array_equal(np.ones(len(H))*-1, phi_coeff))
-        self.assertTrue(np.array_equal(np.zeros(len(H)), phi_shift))
-        
-        H_asu, isymm, phi_coeff, phi_shift = rs.utils.asu.hkl_to_asu(H, sg19, True)
-        self.assertTrue(np.array_equal(H, H_asu))
-        self.assertTrue(np.array_equal(np.ones(len(H)), isymm))
-        self.assertTrue(np.array_equal(np.ones(len(H)), phi_coeff))
-        self.assertTrue(np.array_equal(np.zeros(len(H)), phi_shift))
-        
-        H_asu, isymm, phi_coeff, phi_shift = rs.utils.asu.hkl_to_asu(Hneg, sg19, True)
-        self.assertTrue(np.array_equal(H, H_asu))
-        self.assertTrue(np.array_equal(np.array([5, 3, 3, 5, 3, 2]), isymm))
-        phi_coeff_expected = np.array([ 1.,  1.,  1.,  1.,  1., -1.])
-        phi_shift_expected = np.array([ -0.,  -0., 180., 180., 180.,  -0.])
-        self.assertTrue(np.array_equal(phi_coeff_expected, phi_coeff))
-        self.assertTrue(np.array_equal(phi_shift_expected, phi_shift))
-        
-        return
-
+@pytest.mark.parametrize(
+    "refls", [
+        np.array([[1, 1, 1]]),
+        np.array([[0, 0, 1],
+                  [1, 0, 0],
+                  [1, 1, 0],
+                  [1, 1, 1]])
+    ]
+)
+def test_in_asu(refls, common_spacegroup):
+    # Test whether Miller indices are in reciprocal space ASU
     
+    bools = rs.utils.asu.in_asu(refls, common_spacegroup)
+    assert bools.all()
+    assert len(bools) == len(refls)
+
+    bools = rs.utils.asu.in_asu(-1*refls, common_spacegroup)
+    assert not bools.all()
+    assert len(bools) == len(refls)
+
+@pytest.mark.parametrize(
+    "refls", [
+        np.array([[1, 1, 1]]),
+        np.array([[0, 0, 1],
+                  [1, 0, 0],
+                  [1, 1, 0],
+                  [1, 1, 1]])
+    ]
+)
+@pytest.mark.parametrize("return_phase_shifts", [True, False])
+def test_hkl_to_asu(refls, common_spacegroup, return_phase_shifts):
+
+    # In ASU case
+    if return_phase_shifts:
+       Hasu, isymm, phic, phishift = rs.utils.asu.hkl_to_asu(refls,
+                                                             common_spacegroup,
+                                                             return_phase_shifts)
+       assert np.array_equal(np.ones(len(refls)), phic)
+       assert np.array_equal(np.zeros(len(refls)), phishift)
+    else:
+       Hasu, isymm = rs.utils.asu.hkl_to_asu(refls, common_spacegroup,
+                                             return_phase_shifts)
+
+    assert np.array_equal(refls, Hasu)
+    assert np.array_equal(np.ones(len(refls)), isymm)
+
+    # Out of ASU case
+    if return_phase_shifts:
+       Hasu, isymm, phic, phishift = rs.utils.asu.hkl_to_asu(-1*refls,
+                                                             common_spacegroup,
+                                                             return_phase_shifts)
+       ops_plus  = [ op for op in common_spacegroup.operations() ]
+       ops_minus = [ op.negated() for op in common_spacegroup.operations() ]
+       ops = np.array(list(zip(ops_plus, ops_minus))).flatten()
+       phishift_expected = [ ops[i-1].phase_shift(h) for h, i in zip(Hasu, isymm) ]
+       phishift_expected = rs.utils.canonicalize_phases(np.rad2deg(phishift_expected))
+       assert np.isclose(phishift_expected, rs.utils.canonicalize_phases(phishift)).all()
+       
+    else:
+       Hasu, isymm = rs.utils.asu.hkl_to_asu(-1*refls, common_spacegroup,
+                                             return_phase_shifts)
+
+    assert np.array_equal(refls, Hasu)
