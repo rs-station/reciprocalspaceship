@@ -1,5 +1,4 @@
 import pytest
-import unittest
 import numpy as np
 import pandas as pd
 import reciprocalspaceship as rs

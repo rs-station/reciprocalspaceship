@@ -4,7 +4,6 @@ reciprocalspaceship dtypes that are backed by numpy float32 arrays.
 """
 
 import pytest
-import unittest
 import numpy as np
 import reciprocalspaceship as rs
 import pandas as pd
