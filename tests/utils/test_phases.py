@@ -1,69 +1,40 @@
+import pytest
 import unittest
 import numpy as np
 import reciprocalspaceship as rs
 
-class TestPhases(unittest.TestCase):
 
-    def test_canonicalize_phases_deg(self):
+@pytest.fixture(
+    params=[ 50.0, -50.0, 250.0, -250.0,
+             np.array([50., -50., 250., -250.]),
+             rs.DataSeries([50., -50., 250., -250.], dtype="Phase")
+    ]
+)
+def phase_deg(request):
+    """Yields phases (in degrees) for testing"""
+    return request.param
 
-        phases  = np.array([50., -50., 250., -250.])
-        results = np.array([50., -50., -110., 110.])
-        
-        # Test individual values
-        p = rs.utils.canonicalize_phases(phases[0], deg=True)
-        self.assertEqual(p, results[0])
 
-        p = rs.utils.canonicalize_phases(phases[1], deg=True)
-        self.assertEqual(p, results[1])
-        
-        p = rs.utils.canonicalize_phases(phases[2], deg=True)
-        self.assertEqual(p, results[2])
+@pytest.mark.parametrize("deg", [True, False])
+def test_canonicalize_phases(phase_deg, deg):
+    # Test canonicalize_phases
 
-        p = rs.utils.canonicalize_phases(phases[3], deg=True)
-        self.assertEqual(p, results[3])
+    expected_phase = ((phase_deg + 180.) % 360.) - 180.
+    
+    if not deg:
+        phase_deg = np.deg2rad(phase_deg)
+        expected_phase = np.deg2rad(expected_phase)
+    p = rs.utils.canonicalize_phases(phase_deg, deg)
+    assert np.allclose(p, expected_phase)
 
-        # Test array of values
-        p = rs.utils.canonicalize_phases(phases, deg=True)
-        self.assertTrue(np.array_equal(p, results))
 
-        # Test DataSeries
-        ds = rs.DataSeries(phases, dtype="Phase")
-        p  = rs.utils.canonicalize_phases(ds, deg=True)
-        self.assertTrue(np.array_equal(p.values, results))
-        
-        return
+@pytest.mark.parametrize("deg", [True, 1, 1.0, object, None])
+def test_canonicalize_phases_typeerror(deg):
+    # canonicalize_phases raises TypeError if deg is not boolean
 
-    def test_canonicalize_phases_rad(self):
-
-        phases  = np.deg2rad([50., -50., 250., -250.])
-        results = np.deg2rad([50., -50., -110., 110.])
-        
-        # Test individual values
-        p = rs.utils.canonicalize_phases(phases[0], deg=False)
-        self.assertTrue(np.isclose(p, results[0]))
-
-        p = rs.utils.canonicalize_phases(phases[1], deg=False)
-        self.assertTrue(np.isclose(p, results[1]))
-        
-        p = rs.utils.canonicalize_phases(phases[2], deg=False)
-        self.assertTrue(np.isclose(p, results[2]))
-
-        p = rs.utils.canonicalize_phases(phases[3], deg=False)
-        self.assertTrue(np.isclose(p, results[3]))
-
-        # Test array of values
-        p = rs.utils.canonicalize_phases(phases, deg=False)
-        self.assertTrue(np.isclose(p, results).all())
-
-        # Test DataSeries
-        ds = rs.DataSeries(phases, dtype="Phase")
-        p  = rs.utils.canonicalize_phases(ds, deg=False)
-        self.assertTrue(np.isclose(p, results).all())
-
-        return
-
-    def test_canonicalize_phases_typeerror(self):
-
-        with self.assertRaises(TypeError):
-            p = rs.utils.canonicalize_phases(0.0, deg=rs.DataSeries)
-        return
+    if deg == True or deg == False:
+        p = rs.utils.canonicalize_phases(1.0, deg=deg)
+        assert p == 1.0
+    else:
+        with pytest.raises(TypeError):
+            p = rs.utils.canonicalize_phases(0.0, deg=deg)
