@@ -26,7 +26,7 @@ def data(dtype):
 
 def test_repr(dtype):
     # Test MTZInt32Dtype.__repr__ returns dtype name
-    assert dtype[1] == str(dtype[0]())
+    assert dtype[1] == dtype[0]().__repr__()
 
 def test_coerce_to_ndarray(data):
     # Test MTZInt32Dtype._coerce_to_ndarray defaults to returning
