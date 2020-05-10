@@ -26,7 +26,7 @@ H = np.mgrid[hmin:hmax+1:1,hmin:hmax+1:1,hmin:hmax+1:1].reshape((3, -1)).T
 
 
 with open(outFN, 'w') as f:
-    f.write("hall, h, k, l, in_asu\n")
+    f.write("hall,h,k,l,in_asu\n")
     for s in tqdm(list(sgtbx.space_group_symbol_iterator())):
         hall = s.hall()
         sg   = sgtbx.space_group(hall)
@@ -44,7 +44,7 @@ with open(outFN, 'w') as f:
 outFN = dname + '/remapped.csv'
 
 with open(outFN, 'w') as f:
-    f.write("hall, h, k, l, h_asu, k_asu, l_asu\n")
+    f.write("hall,h,k,l,h_asu,k_asu,l_asu\n")
     for s in tqdm(list(sgtbx.space_group_symbol_iterator())):
         hall = s.hall()
         sg   = sgtbx.space_group(hall)
