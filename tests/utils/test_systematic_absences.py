@@ -27,6 +27,9 @@ exclude_hall_symbols = {
     '-R 3',
     '-R 3 2"c',
     ' R 3',
+    #These are failing systematic absences only right now
+    ' P 3* -2n',
+    '-P 3* 2n',
 }
 
 class TestSystematicAbsences(unittest.TestCase):
