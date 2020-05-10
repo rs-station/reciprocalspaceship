@@ -1,7 +1,7 @@
 import pandas as pd
 import numpy as np
 import gemmi
-from .utils import canonicalize_phases, apply_to_hkl, phase_shift
+from .utils import canonicalize_phases, apply_to_hkl, phase_shift, is_centric
 from .utils.asu import in_asu,hkl_to_asu
 from .dtypes.mapping import mtzcode2dtype
 
@@ -207,14 +207,7 @@ class DataSet(pd.DataFrame):
         else:
             dataset = self.copy()
 
-        uncompressed_hkls = dataset.get_hkls()
-        hkl,inverse = np.unique(uncompressed_hkls, axis=0, return_inverse=True)
-        centric = np.zeros(len(hkl), dtype=bool)
-        for op in dataset.spacegroup.operations():
-            newhkl = apply_to_hkl(hkl, op)
-            centric = np.all(newhkl == -hkl, 1) | centric
-
-        dataset['CENTRIC'] = centric[inverse]
+        dataset['CENTRIC'] = is_centric(dataset.get_hkls(), dataset.spacegroup)
         return dataset
 
     def compute_dHKL(self, inplace=False):

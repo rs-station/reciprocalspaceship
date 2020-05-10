@@ -89,3 +89,32 @@ def compute_structurefactor_multiplicity(H, sg):
             eps += np.all(h==H, 1) 
     return eps/L
 
+def is_centric(H, spacegroup):
+    """
+    Determine if structure factors are centric in a given spacegroup
+    Parameters
+    ----------
+    H : array
+        n x 3 array of Miller indices
+    spacegroup : gemmi.SpaceGroup, gemmi.GroupOps
+        The space group in which to classify centrics
+    Returns
+    -------
+    centric : array
+        Boolean arreay with len(centric) == np.shape(H)[0] == n
+    """
+    if isinstance(spacegroup, SpaceGroup):
+        group_ops = spacegroup.operations()
+    elif isinstance(spacegroup, GroupOps):
+        group_ops = spacegroup
+    else:
+        raise ValueError(f"gemmi.SpaceGroup or gemmi.GroupOps expected for parameter sg. "
+                         f"Received object of type: ({type(sg)}) instead.")
+
+    hkl,inverse = np.unique(H, axis=0, return_inverse=True)
+    centric = np.zeros(len(hkl), dtype=bool)
+    for op in group_ops:
+        newhkl = rs.utils.apply_to_hkl(hkl, op)
+        centric = np.all(newhkl == -hkl, 1) | centric
+    return centric[inverse]
+
