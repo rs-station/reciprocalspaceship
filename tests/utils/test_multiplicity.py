@@ -31,16 +31,17 @@ exclude_hall_symbols = {
 
 class TestMultiplicityCalculation(unittest.TestCase):
     def test_epsilon(self):
-        inFN = abspath(dirname(__file__)) + '/../data/epsilon_factors/epsilon_factors.txt'
-        reference_data = pd.read_csv(inFN, index_col=0, header=None).T
-        reference_data.set_index(['h', 'k', 'l'], inplace=True)
-        H = np.vstack(reference_data.index)
-        keys = set(reference_data.keys()) - exclude_hall_symbols
+        inFN = abspath(dirname(__file__)) + '/../data/epsilon_factors/epsilon_factors.txt.bz2'
+        reference_data = pd.read_csv(inFN)
+        keys = set(reference_data.hall.unique()) - exclude_hall_symbols
         for key in tqdm(keys):
             with self.subTest(spacegroup=key):
+                data = reference_data[reference_data.hall == key]
+                H = data[['h', 'k', 'l']].to_numpy()
+                reference_epsilon = data['epsilon'].to_numpy()
                 sg = gemmi.symops_from_hall(key)
-                eps = rs.utils.compute_structurefactor_multiplicity(H, sg)
-                self.assertTrue(np.all(eps == reference_data[key].to_numpy()))
+                epsilon = rs.utils.compute_structurefactor_multiplicity(H, sg)
+                self.assertTrue(np.all(epsilon == reference_epsilon))
 
 if __name__ == '__main__':
     unittest.main()
