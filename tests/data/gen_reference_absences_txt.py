@@ -1,5 +1,6 @@
-#!/usr/bin/env cctbx.python
+#!/bin/bash
 
+cctbx.python - << EOF
 from cctbx import sgtbx
 from cctbx import miller
 import numpy as np
@@ -11,28 +12,45 @@ except:
     tqdm = iter                           
                                           
                                           
-#Run in the fmodel directory              
 abspath = path.abspath(__file__)          
 dname = path.dirname(abspath) + "/systematic_absences" 
 if not path.exists(dname):                
     mkdir(dname)                          
 
-
 outFN = dname + '/systematic_absences.txt'
 
 
-hmin,hmax = -3, 3
-h = np.arange(hmin, hmax+1)
-H = np.array(np.meshgrid(h, h, h))
-H = H.reshape(3, (hmax - hmin + 1)**3).T
+hmin,hmax = -5, 5
+H = np.mgrid[hmin:hmax+1:1,hmin:hmax+1:1,hmin:hmax+1:1].reshape((3, -1)).T
 
 
 with open(outFN, 'w') as f:
-    f.write('h' + ',' + ','.join(map(str, H[:,0])) + '\n')
-    f.write('k' + ',' + ','.join(map(str, H[:,1])) + '\n')
-    f.write('l' + ',' + ','.join(map(str, H[:,2])) + '\n')
+    f.write('h,k,l,hall,absent\n')
     for s in tqdm(list(sgtbx.space_group_symbol_iterator())):
         hall = s.hall()
         sg   = sgtbx.space_group(hall)
-        absent  = [sg.is_sys_absent(i) for i in H]
-        f.write(hall + ',' + ','.join(map(str, absent)) + '\n')
+        for h in H:
+            absent  = sg.is_sys_absent(h)
+            h,k,l = h
+            f.write('{},{},{},{},{}\n'.format(h,k,l,hall,absent))
+
+EOF
+
+
+python - << EOF
+import pandas as pd
+from os import path,remove
+
+abspath = path.abspath(__file__)          
+dname = path.dirname(abspath) + "/systematic_absences" 
+
+inFN = dname + '/systematic_absences.txt'
+
+df = pd.read_csv(inFN)
+df.to_csv(inFN + '.bz2', index=False)
+
+remove(inFN)
+
+EOF
+
+
