@@ -1,9 +1,9 @@
 import numpy as np
-from reciprocalspaceship.utils.symop import apply_to_hkl, phase_shift
+from gemmi import SpaceGroup,GroupOps
+from reciprocalspaceship.utils import apply_to_hkl, phase_shift, is_centric
 
 ccp4_hkl_asu = [
-  0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,  
-  2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,  
+  0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,  2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,  
   2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 3, 3, 3, 3,  
   3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4,  
   4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4,  
@@ -44,7 +44,7 @@ def in_asu(H, spacegroup):
     """
     h,k,l = H.T
     H_ref = np.zeros(H.shape, dtype=H.dtype)
-    basis_op = spacegroup.basisop.inverse()
+    basis_op = spacegroup.basisop
     for i,h in enumerate(H):
         H_ref[i] = basis_op.apply_to_hkl(h)
     idx = ccp4_hkl_asu[spacegroup.number-1] 
@@ -81,7 +81,7 @@ def hkl_to_asu(H, spacegroup, return_phase_shifts=False):
     phi_shift : array (optional)
         an array length n containing phase shifts in degrees
     """
-    basis_op = spacegroup.basisop.inverse()
+    basis_op = spacegroup.basisop
     R = np.dstack([apply_to_hkl(H, op) for op in spacegroup.operations()])
     R = np.dstack([R, -R])
     case = asu_cases[ccp4_hkl_asu[spacegroup.number-1]]
@@ -102,3 +102,32 @@ def hkl_to_asu(H, spacegroup, return_phase_shifts=False):
     else:
         return H_asu, isym
 
+def hkl_is_absent(H, sg):
+    """
+    Parameters
+    ----------
+    H : array
+        n x 3 array of Miller indices
+    sg : gemmi.SpaceGroup
+        The space group to identify the asymmetric unit
+
+    Returns
+    -------
+    absent : array
+        Boolean array of length n. absent[i] == True if H[i] is systematically absent in sg.
+    """
+
+    H,_ = hkl_to_asu(H, sg)
+    n = len(H)
+
+    group_ops = sg.operations()
+
+    absent = np.zeros(n, dtype=bool)
+    for op in group_ops.sym_ops:
+        absent |= np.all(apply_to_hkl(H, op) == H, 1) & ~np.isclose(phase_shift(H, op)%(2.*np.pi), 0.)
+
+    CEN_OPS_DEN = 24
+    for tran in group_ops.cen_ops:
+        absent |= np.matmul(H, tran) % CEN_OPS_DEN != 0
+
+    return absent 
