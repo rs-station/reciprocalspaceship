@@ -15,7 +15,8 @@ Features of this library include:
 
 - ``pandas``-style objects, datatypes, and syntax that are familiar to python users.
 - Built-in methods and support for the development of new functions that use space groups,
-  unit cell parameters, and crystallographic symmetry operations.
+  unit cell parameters, and crystallographic symmetry operations using
+  `GEMMI <https://gemmi.readthedocs.io/en/latest/>`_.
 - Support for reading and writing MTZ format reflection data.
   
 
