@@ -35,3 +35,31 @@ def epsilon_by_xhm(request):
         xhm symbol and reference data DataFrame
     """
     return request.param
+
+def systematic_absences():
+    """
+    Load systematic absences for each extended Hermann-Mauguin (xhm) 
+    symbol.
+
+    Returns
+    -------
+    reference_data : DataFrameGroupBy
+        GroupBy iterator for systematic absences, grouped by xhm symbol
+    """
+    datadir = abspath(join(dirname(__file__), "../data/systematic_absences"))
+    inFN = join(datadir, "systematic_absences.txt.bz2")
+    reference_data = pd.read_csv(inFN)
+    return reference_data.groupby("xhm")
+    
+@pytest.fixture(params=systematic_absences())
+def systematic_absences_by_xhm(request):
+    """
+    Systematic absences grouped by extended Hermann-Manguin symbol for 
+    testing.
+
+    Yields
+    ------
+    Tuple(xhm_str, DataFrame)
+        xhm symbol and reference data DataFrame
+    """
+    return request.param
