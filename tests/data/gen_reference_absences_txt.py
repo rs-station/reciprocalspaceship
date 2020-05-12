@@ -25,14 +25,16 @@ H = np.mgrid[hmin:hmax+1:1,hmin:hmax+1:1,hmin:hmax+1:1].reshape((3, -1)).T
 
 
 with open(outFN, 'w') as f:
-    f.write('h,k,l,hall,absent\n')
+    f.write('xhm,hall,hm,h,k,l,absent\n')
     for s in tqdm(list(sgtbx.space_group_symbol_iterator())):
         hall = s.hall()
-        sg   = sgtbx.space_group(hall)
+        hm   = s.hermann_mauguin()
+        xhm  = s.universal_hermann_mauguin()
+        sg   = sgtbx.space_group(s)
         for h in H:
             absent  = sg.is_sys_absent(h)
             h,k,l = h
-            f.write('{},{},{},{},{}\n'.format(h,k,l,hall,absent))
+            f.write('{},{},{},{},{},{},{}\n'.format(xhm,hall,hm,h,k,l,absent))
 
 EOF
 

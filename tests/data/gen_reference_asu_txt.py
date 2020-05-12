@@ -26,15 +26,19 @@ H = np.mgrid[hmin:hmax+1:1,hmin:hmax+1:1,hmin:hmax+1:1].reshape((3, -1)).T
 
 
 with open(outFN, 'w') as f:
-    f.write("hall,h,k,l,in_asu\n")
+    f.write("xhm,hall,hm,h,k,l,in_asu\n")
     for s in tqdm(list(sgtbx.space_group_symbol_iterator())):
         hall = s.hall()
-        sg   = sgtbx.space_group(hall)
+        hm   = s.hermann_mauguin()
+        xhm  = s.universal_hermann_mauguin()
+        sg   = sgtbx.space_group(s)
         asu = sgtbx.reciprocal_space_asu(sg.type())
         in_asu = [asu.is_inside(i) for i in H]
         for h,value in zip(H, in_asu):
             f.write(','.join([
+                xhm,
                 hall,
+                hm,
                 str(h[0]),
                 str(h[1]),
                 str(h[2]),
@@ -44,15 +48,19 @@ with open(outFN, 'w') as f:
 outFN = dname + '/remapped.csv'
 
 with open(outFN, 'w') as f:
-    f.write("hall,h,k,l,h_asu,k_asu,l_asu\n")
+    f.write("xhm,hall,hm,h,k,l,h_asu,k_asu,l_asu\n")
     for s in tqdm(list(sgtbx.space_group_symbol_iterator())):
         hall = s.hall()
-        sg   = sgtbx.space_group(hall)
+        hm   = s.hermann_mauguin()
+        xhm  = s.universal_hermann_mauguin()
+        sg   = sgtbx.space_group(s)
         asu = sgtbx.reciprocal_space_asu(sg.type())
         H_asu = np.vstack([miller.asym_index(sg, asu, i).h() for i in H])
         for h,h_asu in zip(H, H_asu):
             f.write(','.join([
+                xhm,
                 hall,
+                hm,
                 str(h[0]),
                 str(h[1]),
                 str(h[2]),
