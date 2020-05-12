@@ -14,7 +14,7 @@ def test_multiplicity_epsilon(epsilon_by_xhm):
 
     # Hexagonal lattices seem to cause issues:
     if ":H" in xhm:
-        pytest.xfail("Issues with hexagonal lattices")
+        pytest.xfail(f"Issues with hexagonal lattices: {xhm}")
     
     H = reference[['h', 'k', 'l']].to_numpy()
     reference_epsilon = reference['epsilon'].to_numpy()
