@@ -78,7 +78,10 @@ def compute_structurefactor_multiplicity(H, sg):
                          f"Received object of type: ({type(sg)}) instead.")
 
     is_centric = group_ops.is_centric()
-    L = _L[group_ops.find_centering()]
+    #Lookup based on centering is equivalent to counting the number of translational
+    #centering operations. Using the number of operations has proven more robust. 
+    #L = _L[group_ops.find_centering()]
+    L = len(group_ops.cen_ops)
     L = L*(1 + is_centric)
     eps = np.zeros(len(H))
     for op in group_ops:
