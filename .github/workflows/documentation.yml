@@ -45,7 +45,8 @@ jobs:
         cp -r ../_build/html/* .
         git config --local user.email "action@github.com"
         git config --local user.name "GitHub Action"
-        git diff-index --quiet HEAD || git commit -am "Upload documentation from latest commit" 
+        git add .
+        git diff --quiet && git diff --staged --quiet || git commit -m "Upload documentation from latest commit" 
 
     - name: Push changes to gh-pages
       uses: ad-m/github-push-action@master
