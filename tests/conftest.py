@@ -1,6 +1,6 @@
 import pytest
 from os import listdir
-from os.path import dirname, abspath, basename, join
+from os.path import dirname, abspath, join
 import re
 
 def get_mtz_by_spacegroup():
