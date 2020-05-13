@@ -15,10 +15,10 @@ def test_hkl_to_asu(mtz_by_spacegroup):
 
     Fx    = x.loc[yasu.index, 'FMODEL'].values.astype(float) 
     Fyasu = yasu['FMODEL'].values.astype(float) 
-    assert np.isclose(Fx, Fyasu).min()
+    assert np.isclose(Fx, Fyasu).all()
 
     Phx    = x.loc[yasu.index, 'PHIFMODEL'].values.astype(float) 
     Phyasu = yasu['PHIFMODEL'].values.astype(float) 
     Sx    = Fx*np.exp(1j*np.deg2rad(Phx))
     Syasu = Fyasu*np.exp(1j*np.deg2rad(Phyasu))
-    assert np.isclose(Sx, Syasu, rtol=1e-3).min()
+    assert np.isclose(Sx, Syasu, rtol=1e-3).all()
