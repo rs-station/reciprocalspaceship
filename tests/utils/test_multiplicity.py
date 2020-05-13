@@ -4,7 +4,10 @@ import reciprocalspaceship as rs
 import pandas as pd
 import gemmi
 
-def test_multiplicity_epsilon(epsilon_by_xhm):
+@pytest.mark.parametrize(
+    "sg_type", [gemmi.SpaceGroup, gemmi.GroupOps],
+)
+def test_multiplicity_epsilon(epsilon_by_xhm, sg_type):
     """
     Test rs.utils.compute_structurefactor_multiplicity using reference 
     data generated from sgtbx.
@@ -18,7 +21,10 @@ def test_multiplicity_epsilon(epsilon_by_xhm):
     
     H = reference[['h', 'k', 'l']].to_numpy()
     reference_epsilon = reference['epsilon'].to_numpy()
-    groupops = gemmi.SpaceGroup(xhm).operations()
-    epsilon = rs.utils.compute_structurefactor_multiplicity(H, groupops)
+    if sg_type is gemmi.SpaceGroup:
+        sg = gemmi.SpaceGroup(xhm)
+    elif sg_type is gemmi.GroupOps:
+        sg  = gemmi.SpaceGroup(xhm).operations()
+    epsilon = rs.utils.compute_structurefactor_multiplicity(H, sg)
     assert np.array_equal(epsilon, reference_epsilon)
 

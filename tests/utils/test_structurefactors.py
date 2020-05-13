@@ -1,7 +1,9 @@
+import pytest
 import unittest
 import numpy as np
 from os.path import dirname, abspath, join
 import reciprocalspaceship as rs
+import gemmi
 
 class TestStructureFactors(unittest.TestCase):
 
@@ -53,46 +55,25 @@ class TestStructureFactors(unittest.TestCase):
 
         return
 
-    def test_compute_structurefactor_multiplicity(self):
-
-        # Test Data
-        datadir = join(abspath(dirname(__file__)), '../data/fmodel')
-        data = rs.read_mtz(join(datadir, '9LYZ.mtz'))
-        H = data.get_hkls()
-
-        # Result
-        result = np.array([4., 1., 1., 1., 1., 2., 1., 1., 1., 1., 2.,
-                           1., 1., 1., 1., 1., 1., 1., 1., 1., 2., 1.,
-                           1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1.,
-                           1., 1., 1., 1., 1., 1., 2., 1., 1., 1., 1.,
-                           2., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1.,
-                           1., 1., 1., 1., 1., 1., 1., 1., 1., 2., 1.,
-                           1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1.,
-                           1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1.,
-                           1., 1., 2., 1., 1., 1., 2., 1., 1., 1., 1.,
-                           1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1.,
-                           1., 1., 1., 1., 1., 1., 1., 2., 1., 1., 1.,
-                           1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1.,
-                           1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1.,
-                           2., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1.,
-                           1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1.,
-                           1., 1., 1.])
-        
-        # Test using GroupOps
-        groupops = data.spacegroup.operations()
-        eps = rs.utils.compute_structurefactor_multiplicity(H, groupops)
-        self.assertTrue(np.array_equal(result, eps))
-        
-        # Test using SpaceGroup
-        sg = data.spacegroup
-        eps = rs.utils.compute_structurefactor_multiplicity(H, sg)
-        self.assertTrue(np.array_equal(result, eps))
-        
-        # Test using incorrect syntax
-        with self.assertRaises(ValueError):
-            eps = rs.utils.compute_structurefactor_multiplicity(H, data)
-
-        return
+@pytest.mark.parametrize(
+    "sg", [
+        gemmi.SpaceGroup(1),
+        gemmi.SpaceGroup(1).operations(),
+        "invalid",
+        None,
+    ]
+)
+def test_structurefactor_multiplicity_valueerror(sg):
+    """
+    Test rs.utils.compute_structurefactor_multiplicity() raises 
+    ValueError when invoked with invalid spacegroup
+    """
+    H  = np.array([[1, 1, 1]])
+    if isinstance(sg, gemmi.SpaceGroup) or isinstance(sg, gemmi.GroupOps):
+        epsilon = rs.utils.compute_structurefactor_multiplicity(H, sg)
+    else:
+        with pytest.raises(ValueError):
+            epsilon = rs.utils.compute_structurefactor_multiplicity(H, sg)
     
 if __name__ == '__main__':
     unittest.main()
