@@ -82,22 +82,39 @@ def hkl_to_asu(H, spacegroup, return_phase_shifts=False):
         an array length n containing phase shifts in degrees
     """
     basis_op = spacegroup.basisop
-    R = np.dstack([apply_to_hkl(H, op) for op in spacegroup.operations()])
-    R = np.dstack([R, -R])
-    case = asu_cases[ccp4_hkl_asu[spacegroup.number-1]]
-    idx = np.vstack([case(*apply_to_hkl(R[:,:,i], basis_op).T) for i in range(R.shape[-1])]).T
-    idx[np.cumsum(idx, 1) > 1] = False #This accounts for centrics
-    H_asu = R.swapaxes(1, 2)[idx]
-    n = len(spacegroup.operations())
-    isym_order = np.concatenate((np.arange(1,2*n,2),  np.arange(2,2*n+1, 2)))
-    isym = (isym_order * idx).max(1)
+    group_ops = spacegroup.operations()
+    num_ops = len(group_ops)
+
+    #This array contains all alternative mappings for the input array H
+    R = np.zeros((len(H), 3, 2*num_ops))
+    for i,op in enumerate(group_ops):
+        R[:,:,2*i] = apply_to_hkl(H, op)
+        #Every other op goes through Friedel symmetry
+        R[:,:,2*i+1] = -R[:,:,2*i]
+
+    asu_case_index = ccp4_hkl_asu[spacegroup.number-1]
+    #The case function tells if a given hkl is in the reciprocal space asu
+    in_asu = asu_cases[asu_case_index]
+
+    #This is an N x 3 x num_ops array which has True everywhere an op maps to the asu
+    idx = np.vstack([in_asu(*apply_to_hkl(R[:,:,i], basis_op).T) for i in range(2*num_ops)]).T
+
+    #Centric ops map to the asu more than once, so we need to account for that by unsetting all 
+    #indexes after the first successful one
+    idx[np.cumsum(idx, -1) > 1] = False 
+
+    H_asu = R.swapaxes(1, 2)[idx].astype(int)
+    isym = np.argwhere(idx)[:,1] + 1
 
     if return_phase_shifts:
-        R = np.vstack([phase_shift(H, op) for op in spacegroup.operations()]).T
-        phi_coeff = np.hstack([np.ones(R.shape), -np.ones(R.shape)])
-        R = np.hstack([R, R])
+        phi_shift = np.zeros((len(H), 2*num_ops))
+        phi_coeff = np.ones((len(H), 2*num_ops))
+        for i,op in enumerate(group_ops):
+            phi_shift[:,2*i] = phase_shift(H, op)
+            phi_shift[:,2*i+1] = phi_shift[:,2*i]
+            phi_coeff[:,2*i+1] = -1.
         phi_coeff = phi_coeff[idx]
-        phi_shift = np.rad2deg(R[idx])
+        phi_shift = np.rad2deg(phi_shift[idx])
         return H_asu, isym, phi_coeff, phi_shift
     else:
         return H_asu, isym
