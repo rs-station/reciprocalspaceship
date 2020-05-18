@@ -3,12 +3,12 @@ import numpy as np
 import reciprocalspaceship as rs
 import gemmi
 
-def test_in_asu(in_asu_by_xhm):
+def test_in_asu(asu_by_xhm):
     """
     Test rs.utils.in_asu using reference data generated from sgtbx
     """
-    xhm = in_asu_by_xhm[0]
-    reference  = in_asu_by_xhm[1]
+    xhm = asu_by_xhm[0]
+    reference  = asu_by_xhm[1]
 
     H = reference[['h', 'k', 'l']].to_numpy()
     sg = gemmi.SpaceGroup(xhm)
@@ -16,12 +16,12 @@ def test_in_asu(in_asu_by_xhm):
     ref_in_asu = reference['in_asu'].to_numpy()
     assert np.array_equal(in_asu, ref_in_asu)
 
-def test_hkl_to_asu(reciprocalspace_asu_by_xhm):
+def test_hkl_to_asu(asu_by_xhm):
     """
     Test rs.utils.hkl_to_asu using reference data generated from sgtbx
     """
-    xhm = reciprocalspace_asu_by_xhm[0]
-    reference  = reciprocalspace_asu_by_xhm[1]
+    xhm = asu_by_xhm[0]
+    reference  = asu_by_xhm[1]
 
     H = reference[['h', 'k', 'l']].to_numpy()
     sg = gemmi.SpaceGroup(xhm)
@@ -30,9 +30,9 @@ def test_hkl_to_asu(reciprocalspace_asu_by_xhm):
     assert np.array_equal(mapped2asu, ref_mapped2asu)
 
     if np.array_equal(
-        reference[['h_asu', 'k_asu', 'l_asu']].to_numpy(), 
-        reference[['h_gemmi', 'k_gemmi', 'l_gemmi']].to_numpy()
-        ):
+            reference[['h_asu', 'k_asu', 'l_asu']].to_numpy(),
+            reference[['h_gemmi', 'k_gemmi', 'l_gemmi']].to_numpy()
+    ):
         ref_isym = reference['isym'].to_numpy()
         assert np.array_equal(isym, ref_isym)
     else:
@@ -48,7 +48,7 @@ def test_hkl_to_asu(reciprocalspace_asu_by_xhm):
     ]
 )
 @pytest.mark.parametrize("return_phase_shifts", [True, False])
-def test_hkl_to_asu(refls, common_spacegroup, return_phase_shifts):
+def test_phase_shift(refls, common_spacegroup, return_phase_shifts):
 
     # In ASU case
     if return_phase_shifts:
