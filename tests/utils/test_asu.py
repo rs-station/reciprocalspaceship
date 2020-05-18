@@ -28,7 +28,16 @@ def test_hkl_to_asu(reciprocalspace_asu_by_xhm):
     mapped2asu, isym = rs.utils.hkl_to_asu(H, sg)
     ref_mapped2asu = reference[['h_asu', 'k_asu', 'l_asu']].to_numpy()
     assert np.array_equal(mapped2asu, ref_mapped2asu)
-    
+
+    if np.array_equal(
+        reference[['h_asu', 'k_asu', 'l_asu']].to_numpy(), 
+        reference[['h_gemmi', 'k_gemmi', 'l_gemmi']].to_numpy()
+        ):
+        ref_isym = reference['isym'].to_numpy()
+        assert np.array_equal(isym, ref_isym)
+    else:
+        pytest.xfail(f"Disagreement on mapping to asu between gemmi and sgtbx: {xhm}")
+
 @pytest.mark.parametrize(
     "refls", [
         np.array([[1, 1, 1]]),
