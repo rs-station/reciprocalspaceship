@@ -6,8 +6,8 @@ import gemmi
 reference_data = {
     "epsilon": ["..", "data", "epsilon_factors", "epsilon_factors.txt.bz2"],
     "absences": ["..", "data", "systematic_absences", "systematic_absences.txt.bz2"],
-    "in_asu": ["..", "data", "asu", "inside.csv.bz2"],
-    "map2asu": ["..", "data", "asu", "remapped.csv.bz2"]
+    "in_asu": ["..", "data", "asu", "asu.csv.bz2"],
+    "map2asu": ["..", "data", "asu", "asu.csv.bz2"]
 }
 
 def reference_data_by_xhm(data):
