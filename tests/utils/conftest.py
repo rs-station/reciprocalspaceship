@@ -6,8 +6,7 @@ import gemmi
 reference_data = {
     "epsilon": ["..", "data", "epsilon_factors", "epsilon_factors.txt.bz2"],
     "absences": ["..", "data", "systematic_absences", "systematic_absences.txt.bz2"],
-    "in_asu": ["..", "data", "asu", "asu.csv.bz2"],
-    "map2asu": ["..", "data", "asu", "asu.csv.bz2"]
+    "asu": ["..", "data", "asu", "asu.csv.bz2"],
 }
 
 def reference_data_by_xhm(data):
@@ -50,24 +49,11 @@ def systematic_absences_by_xhm(request):
     """
     return request.param
 
-@pytest.fixture(params=reference_data_by_xhm("in_asu"))
-def in_asu_by_xhm(request):
+@pytest.fixture(params=reference_data_by_xhm("asu"))
+def asu_by_xhm(request):
     """
-    Classifications of reflections as in the reciprocal space ASU, 
+    Tests for reflections related to the reciprocal space ASU, 
     grouped by extended Hermann-Manguin symbol for testing.
-
-    Yields
-    ------
-    Tuple(xhm_str, DataFrame)
-        xhm symbol and reference data DataFrame
-    """
-    return request.param
-
-@pytest.fixture(params=reference_data_by_xhm("map2asu"))
-def reciprocalspace_asu_by_xhm(request):
-    """
-    Reflections mapped to the reciprocal space ASU, grouped by 
-    extended Hermann-Manguin symbol for testing.
 
     Yields
     ------
