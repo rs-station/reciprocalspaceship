@@ -3,26 +3,32 @@ import numpy as np
 import reciprocalspaceship as rs
 import gemmi
 
-@pytest.mark.parametrize(
-    "refls", [
-        np.array([[1, 1, 1]]),
-        np.array([[0, 0, 1],
-                  [1, 0, 0],
-                  [1, 1, 0],
-                  [1, 1, 1]])
-    ]
-)
-def test_in_asu(refls, common_spacegroup):
-    # Test whether Miller indices are in reciprocal space ASU
+def test_in_asu(in_asu_by_xhm):
+    """
+    Test rs.utils.in_asu using reference data generated from sgtbx
+    """
+    xhm = in_asu_by_xhm[0]
+    reference  = in_asu_by_xhm[1]
+
+    H = reference[['h', 'k', 'l']].to_numpy()
+    sg = gemmi.SpaceGroup(xhm)
+    in_asu = rs.utils.in_asu(H, sg)
+    ref_in_asu = reference['in_asu'].to_numpy()
+    assert np.array_equal(in_asu, ref_in_asu)
+
+def test_hkl_to_asu(reciprocalspace_asu_by_xhm):
+    """
+    Test rs.utils.hkl_to_asu using reference data generated from sgtbx
+    """
+    xhm = reciprocalspace_asu_by_xhm[0]
+    reference  = reciprocalspace_asu_by_xhm[1]
+
+    H = reference[['h', 'k', 'l']].to_numpy()
+    sg = gemmi.SpaceGroup(xhm)
+    mapped2asu, isym = rs.utils.hkl_to_asu(H, sg)
+    ref_mapped2asu = reference[['h_asu', 'k_asu', 'l_asu']].to_numpy()
+    assert np.array_equal(mapped2asu, ref_mapped2asu)
     
-    bools = rs.utils.asu.in_asu(refls, common_spacegroup)
-    assert bools.all()
-    assert len(bools) == len(refls)
-
-    bools = rs.utils.asu.in_asu(-1*refls, common_spacegroup)
-    assert not bools.all()
-    assert len(bools) == len(refls)
-
 @pytest.mark.parametrize(
     "refls", [
         np.array([[1, 1, 1]]),
