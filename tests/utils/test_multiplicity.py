@@ -7,13 +7,13 @@ import gemmi
 @pytest.mark.parametrize(
     "sg_type", [gemmi.SpaceGroup, gemmi.GroupOps],
 )
-def test_multiplicity_epsilon(epsilon_by_xhm, sg_type):
+def test_multiplicity_epsilon(sgtbx_by_xhm, sg_type):
     """
     Test rs.utils.compute_structurefactor_multiplicity using reference 
     data generated from sgtbx.
     """
-    xhm = epsilon_by_xhm[0]
-    reference = epsilon_by_xhm[1]
+    xhm = sgtbx_by_xhm[0]
+    reference = sgtbx_by_xhm[1]
 
     # Hexagonal lattices seem to cause issues:
     if ":H" in xhm:

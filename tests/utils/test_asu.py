@@ -3,12 +3,12 @@ import numpy as np
 import reciprocalspaceship as rs
 import gemmi
 
-def test_in_asu(asu_by_xhm):
+def test_in_asu(sgtbx_by_xhm):
     """
     Test rs.utils.in_asu using reference data generated from sgtbx
     """
-    xhm = asu_by_xhm[0]
-    reference  = asu_by_xhm[1]
+    xhm = sgtbx_by_xhm[0]
+    reference  = sgtbx_by_xhm[1]
 
     H = reference[['h', 'k', 'l']].to_numpy()
     sg = gemmi.SpaceGroup(xhm)
@@ -16,12 +16,12 @@ def test_in_asu(asu_by_xhm):
     ref_in_asu = reference['in_asu'].to_numpy()
     assert np.array_equal(in_asu, ref_in_asu)
 
-def test_hkl_to_asu(asu_by_xhm):
+def test_hkl_to_asu(sgtbx_by_xhm):
     """
     Test rs.utils.hkl_to_asu using reference data generated from sgtbx
     """
-    xhm = asu_by_xhm[0]
-    reference  = asu_by_xhm[1]
+    xhm = sgtbx_by_xhm[0]
+    reference  = sgtbx_by_xhm[1]
 
     H = reference[['h', 'k', 'l']].to_numpy()
     sg = gemmi.SpaceGroup(xhm)
