@@ -1,59 +1,54 @@
 import pytest
-import unittest
 import numpy as np
-from os.path import dirname, abspath, join
 import reciprocalspaceship as rs
 import gemmi
 
-class TestStructureFactors(unittest.TestCase):
+@pytest.mark.parametrize(
+    "sfs_phases", [
+        (np.random.rand(10), np.random.rand(10)),
+        (list(np.random.rand(10)), list(np.random.rand(10))),
+        ([], []),
+        (1.0, 90.),
+        (rs.DataSeries(np.linspace(1, 20, 10), name="F", dtype="SFAmplitude"),
+         rs.DataSeries(np.random.rand(10), name="Phi", dtype="Phase"))
+    ]
+)
+def test_to_structurefactor(sfs_phases):
+    """
+    Test rs.utils.to_structurefactor() returns complex structure factors
+    when given amplitudes and phases.
+    """
+    sfamps = sfs_phases[0]
+    phases = sfs_phases[1]
+    sfs = rs.utils.to_structurefactor(sfamps, phases)
 
-    def test_to_structurefactor(self):
+    # Handle DataSeries 
+    if isinstance(sfamps, rs.DataSeries):
+        sfamps = sfamps.to_numpy()
+    if isinstance(phases, rs.DataSeries):
+        phases = phases.to_numpy()
 
-        # Given numpy arrays for SFAmps and Phases, should return
-        # complex numbers
-        sfs1 = rs.utils.to_structurefactor(np.random.rand(10),
-                                           np.random.rand(10))
-        self.assertEqual(len(sfs1), 10)
-        self.assertTrue(np.iscomplexobj(sfs1))
+    reference = sfamps*np.exp(1j*np.deg2rad(phases))
+    assert np.iscomplexobj(sfs)
+    assert np.isclose(sfs, reference).all()
 
-        # Lists should work too
-        sfs2 = rs.utils.to_structurefactor([1], [10])
-        self.assertEqual(len(sfs2), 1)
-        self.assertTrue(np.iscomplexobj(sfs2))
 
-        # Empty lists as arguments should return empty array
-        sfs3 = rs.utils.to_structurefactor([], [])
-        self.assertEqual(len(sfs3), 0)
-        self.assertTrue(np.iscomplexobj(sfs3))
+def test_from_structurefactor():
+    """
+    Test rs.utils.from_structurefactor() returns structure factor 
+    amplitudes and phases when given complex numpy array
+    """
+    sfs = np.random.rand(10)*np.exp(1j*np.random.rand(10))
+    sf, phase = rs.utils.from_structurefactor(sfs)
 
-        # Given single SFAmp + Phase, should return single complex value
-        sf = rs.utils.to_structurefactor(1.4, 130)
-        self.assertEqual(sf.size, 1)
-        self.assertTrue(np.iscomplexobj(sf))
-
-        # Test DataSeries objects as arguments
-        datadir = join(abspath(dirname(__file__)), '../data/fmodel')
-        data = rs.read_mtz(join(datadir, '9LYZ.mtz'))
-        sfs = rs.utils.to_structurefactor(data["FMODEL"],
-                                          data["PHIFMODEL"])
-        self.assertEqual(len(sfs), len(data))
-        self.assertTrue(np.iscomplexobj(sfs))
-
-        return
-
-    def test_from_structurefactor(self):
-
-        # Given complex numpy array, should return SFAmps and phases
-        sfs = np.random.rand(10)*np.exp(1j*np.random.rand(10))
-        sf, phase = rs.utils.from_structurefactor(sfs)
-        self.assertEqual(len(sf), len(sfs))
-        self.assertEqual(len(phase), len(sfs))
-        self.assertIsInstance(sf, rs.DataSeries)
-        self.assertIsInstance(phase, rs.DataSeries)
-        self.assertEqual(sf.dtype.mtztype, "F")
-        self.assertEqual(phase.dtype.mtztype, "P")
-
-        return
+    assert len(sf) == len(sfs)
+    assert len(phase) == len(sfs)
+    assert isinstance(sf, rs.DataSeries)
+    assert isinstance(phase, rs.DataSeries)
+    assert isinstance(sf.dtype, rs.StructureFactorAmplitudeDtype)
+    assert isinstance(phase.dtype, rs.PhaseDtype)
+    assert np.isclose(sf.to_numpy(), np.abs(sfs)).all()
+    assert np.isclose(phase.to_numpy(), np.angle(sfs, deg=True)).all()
 
 @pytest.mark.parametrize(
     "sg", [
@@ -74,6 +69,3 @@ def test_structurefactor_multiplicity_valueerror(sg):
     else:
         with pytest.raises(ValueError):
             epsilon = rs.utils.compute_structurefactor_multiplicity(H, sg)
-    
-if __name__ == '__main__':
-    unittest.main()
