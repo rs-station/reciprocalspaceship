@@ -27,4 +27,3 @@ def test_multiplicity_epsilon(sgtbx_by_xhm, sg_type):
         sg  = gemmi.SpaceGroup(xhm).operations()
     epsilon = rs.utils.compute_structurefactor_multiplicity(H, sg)
     assert np.array_equal(epsilon, reference_epsilon)
-

@@ -116,7 +116,8 @@ def is_centric(H, spacegroup):
 
     hkl,inverse = np.unique(H, axis=0, return_inverse=True)
     centric = np.zeros(len(hkl), dtype=bool)
-    for op in group_ops:
+
+    for op in group_ops.sym_ops[1:]:
         newhkl = rs.utils.apply_to_hkl(hkl, op)
         centric = np.all(newhkl == -hkl, 1) | centric
     return centric[inverse]
