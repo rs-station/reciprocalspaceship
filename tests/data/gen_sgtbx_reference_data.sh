@@ -33,11 +33,11 @@ with open(outFN, 'w') as f:
         xhm  = s.universal_hermann_mauguin()
         sg   = sgtbx.space_group(s)
         asu = sgtbx.reciprocal_space_asu(sg.type())
-        H_asu = np.vstack([miller.asym_index(sg, asu, i).h() for i in H])
-        in_asu = [asu.is_inside(i) for i in H]
-    	is_centric = [sg.is_centric(h) for h in H]
-	is_absent  =  [sg.is_sys_absent(h) for h in H]
-	epsilons   =  [sg.epsilon(h) for h in H]
+        H_asu = np.vstack([miller.asym_index(sg, asu, i.tolist()).h() for i in H])
+        in_asu = [asu.is_inside(i.tolist()) for i in H]
+        is_centric = [sg.is_centric(h.tolist()) for h in H]
+        is_absent  =  [sg.is_sys_absent(h.tolist()) for h in H]
+        epsilons   =  [sg.epsilon(h.tolist()) for h in H]
         for h,h_asu,inside,centric,absent,epsilon in zip(H, H_asu, in_asu, is_centric, is_absent, epsilons):
             f.write(','.join([
                 xhm,
@@ -59,45 +59,16 @@ EOF
 
 python - << EOF
 
-import gemmi 
-import numpy as np
 import pandas as pd
 from os import remove,path
 
-#Run in the fmodel directory
 abspath = path.abspath(__file__)
 dname = path.join(path.dirname(abspath), "sgtbx")
 
 inFN = path.join(dname, 'sgtbx.csv')
-
 df = pd.read_csv(inFN)
+df.to_csv(inFN + '.bz2', index=False)
 
-df['isym'] = 0
-
-def isym(df):
-    xhm = df['xhm'].iloc[0]
-    sg = gemmi.SpaceGroup(xhm)
-    m = gemmi.Mtz()
-    m.spacegroup = sg
-    m.add_dataset('crystal')
-    m.add_column('H', 'H')
-    m.add_column('K', 'H')
-    m.add_column('L', 'H')
-    m.add_column('M/ISYM', 'Y')
-    m.set_data(df[['h', 'k', 'l', 'isym']].to_numpy(dtype=np.float32))
-    success = m.switch_to_asu_hkl()
-
-    if not success:
-        raise ValueError("Mtz.switch_to_asu_hkl retval was False! Failed to map to ASU")
-
-    df['h_gemmi'] = m.column_with_label('H').array.astype(int)
-    df['k_gemmi'] = m.column_with_label('K').array.astype(int)
-    df['l_gemmi'] = m.column_with_label('L').array.astype(int)
-    df['isym']    = m.column_with_label('M/ISYM').array.astype(int)
-    return df
-
-result = df.groupby('xhm', as_index=False).apply(isym)
-result.to_csv(inFN + '.bz2', index=False)
 remove(inFN)
 
 EOF
