@@ -36,7 +36,6 @@ def _acentric_posterior(Iobs, SigIobs, Sigma):
     variance = s**2 * (1 + (alpha*phi(alpha) - beta*phi(beta))/Z - ((phi(alpha) - phi(beta))/Z)**2 )
     return mean, np.sqrt(variance)
 
-
 def _centric_posterior_quad(Iobs, SigIobs, Sigma, npoints=100):
     """
     Use Gaussian-Legendre quadrature to estimate posterior intensities 
@@ -181,7 +180,7 @@ def scale_merged_intensities(ds, intensity_key, sigma_key, output_prefix="FW-",
         ds[outval_label] = ds[outval_label].astype("Intensity")
         ds[outerr_label] = ds[outerr_label].astype("Stddev")
     else:
-        ds[outerr_label] = (ds[outerr_label]/(2*ds[outval_label])).astype("Stddev")
         ds[outval_label] = np.sqrt(ds[outval_label]).astype("SFAmplitude")
+        ds[outerr_label] = (ds[outerr_label]/(2*ds[outval_label])).astype("Stddev")
 
     return ds
