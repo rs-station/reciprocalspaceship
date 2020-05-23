@@ -19,6 +19,15 @@ def load_fw1978():
     fw1978 = pd.read_csv(inFN, dtype=np.float32)
     return fw1978
 
+def load_hewl():
+    """
+    Load HEWL diffraction data from APS 24-ID-C
+    """
+    datapath = ["..", "data", "algorithms", "HEWL_SSAD_24IDC.mtz"]
+    inFN = abspath(join(dirname(__file__), *datapath))
+    mtz = rs.read_mtz(inFN)
+    return mtz
+    
 @pytest.mark.parametrize("dist", ["Acentric", "Centric"])
 @pytest.mark.parametrize(
     "fw1978_refcolumns", [["E(J|I)", "sigma(J|I)"],
@@ -60,3 +69,33 @@ def test_posteriors_fw1978(dist, fw1978_refcolumns):
         refSigF = ref[fw1978_refcolumns[1]].to_numpy()
         assert np.allclose(mean, refF, atol=0.2)
         assert np.allclose(stddev, refSigF, atol=0.1)
+
+@pytest.mark.parametrize("return_intensities", [True, False])
+@pytest.mark.parametrize("inplace", [True, False])
+def test_scale_merged_intensities_validdata(return_intensities, inplace):
+    """
+    Confirm scale_merged_intensities() returns all positive values
+    """
+    mtz = load_hewl().dropna()
+
+    scaled = scale_merged_intensities(mtz, "IMEAN", "SIGIMEAN",
+                                      return_intensities=return_intensities,
+                                      inplace=inplace)
+
+    # Confirm inplace returns same object if true
+    if inplace:
+        assert id(scaled) == id(mtz)
+    else:
+        assert id(scaled) != id(mtz)
+
+    # Confirm intensities are returned if return_intensities is True
+    if return_intensities:
+        assert isinstance(scaled["FW-IMEAN"].dtype, rs.IntensityDtype)
+        assert isinstance(scaled["FW-SIGIMEAN"].dtype, rs.StandardDeviationDtype)
+    else:
+        assert isinstance(scaled["FW-IMEAN"].dtype, rs.StructureFactorAmplitudeDtype)
+        assert isinstance(scaled["FW-SIGIMEAN"].dtype, rs.StandardDeviationDtype)
+
+    assert (scaled["FW-IMEAN"].to_numpy() >= 0).all()
+    assert (scaled["FW-SIGIMEAN"].to_numpy() >= 0).all()    
+        
