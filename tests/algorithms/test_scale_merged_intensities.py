@@ -19,15 +19,6 @@ def load_fw1978():
     fw1978 = pd.read_csv(inFN, dtype=np.float32)
     return fw1978
 
-def load_hewl():
-    """
-    Load HEWL diffraction data from APS 24-ID-C
-    """
-    datapath = ["..", "data", "algorithms", "HEWL_SSAD_24IDC.mtz"]
-    inFN = abspath(join(dirname(__file__), *datapath))
-    mtz = rs.read_mtz(inFN)
-    return mtz
-    
 @pytest.mark.parametrize("dist", ["Acentric", "Centric"])
 @pytest.mark.parametrize(
     "fw1978_refcolumns", [["E(J|I)", "sigma(J|I)"],
@@ -72,11 +63,11 @@ def test_posteriors_fw1978(dist, fw1978_refcolumns):
 
 @pytest.mark.parametrize("return_intensities", [True, False])
 @pytest.mark.parametrize("inplace", [True, False])
-def test_scale_merged_intensities_validdata(return_intensities, inplace):
+def test_scale_merged_intensities_validdata(data_hewl, return_intensities, inplace):
     """
     Confirm scale_merged_intensities() returns all positive values
     """
-    mtz = load_hewl().dropna()
+    mtz = data_hewl.dropna()
 
     scaled = scale_merged_intensities(mtz, "IMEAN", "SIGIMEAN",
                                       return_intensities=return_intensities,
