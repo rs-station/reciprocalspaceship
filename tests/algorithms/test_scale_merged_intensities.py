@@ -94,16 +94,14 @@ def test_centric_posterior(data_fw1978_input):
     assert np.allclose(mean, mean_scipy, rtol=0.08)
     assert np.allclose(stddev, stddev_scipy, rtol=0.01)
     
-@pytest.mark.parametrize("return_intensities", [True, False])
 @pytest.mark.parametrize("inplace", [True, False])
-def test_scale_merged_intensities_validdata(data_hewl, return_intensities, inplace):
+def test_scale_merged_intensities_validdata(data_hewl, inplace):
     """
     Confirm scale_merged_intensities() returns all positive values
     """
     mtz = data_hewl.dropna()
 
     scaled = scale_merged_intensities(mtz, "IMEAN", "SIGIMEAN",
-                                      return_intensities=return_intensities,
                                       inplace=inplace)
 
     # Confirm inplace returns same object if true
@@ -112,13 +110,14 @@ def test_scale_merged_intensities_validdata(data_hewl, return_intensities, inpla
     else:
         assert id(scaled) != id(mtz)
 
-    # Confirm intensities are returned if return_intensities is True
-    if return_intensities:
-        assert isinstance(scaled["FW-IMEAN"].dtype, rs.IntensityDtype)
-        assert isinstance(scaled["FW-SIGIMEAN"].dtype, rs.StandardDeviationDtype)
-    else:
-        assert isinstance(scaled["FW-IMEAN"].dtype, rs.StructureFactorAmplitudeDtype)
-        assert isinstance(scaled["FW-SIGIMEAN"].dtype, rs.StandardDeviationDtype)
+    # Confirm output columns are of desired types
+    assert isinstance(scaled["FW-I-obs"].dtype, rs.IntensityDtype)
+    assert isinstance(scaled["FW-SIGI-obs"].dtype, rs.StandardDeviationDtype)
+    assert isinstance(scaled["FW-F-obs"].dtype, rs.StructureFactorAmplitudeDtype)
+    assert isinstance(scaled["FW-SIGF-obs"].dtype, rs.StandardDeviationDtype)
 
-    assert (scaled["FW-IMEAN"].to_numpy() >= 0).all()
-    assert (scaled["FW-SIGIMEAN"].to_numpy() >= 0).all()
+    # Confirm output columns are strictly positive
+    assert (scaled["FW-I-obs"].to_numpy() >= 0).all()
+    assert (scaled["FW-SIGI-obs"].to_numpy() >= 0).all()
+    assert (scaled["FW-F-obs"].to_numpy() >= 0).all()
+    assert (scaled["FW-SIGF-obs"].to_numpy() >= 0).all()

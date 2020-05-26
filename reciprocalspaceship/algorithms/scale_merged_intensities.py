@@ -118,8 +118,8 @@ def mean_intensity_by_resolution(I, dHKL, bins=50, gridpoints=None):
 
     return Sigma
 
-def scale_merged_intensities(ds, intensity_key, sigma_key, output_prefix="FW-",
-                             bins=100, return_intensities=False, inplace=False):
+def scale_merged_intensities(ds, intensity_key, sigma_key, output_columns=None,
+                             bins=100, inplace=False):
     """
     Scales merged intensities using Bayesian statistics in order to 
     estimate structure factor amplitudes. This method is based on French
@@ -152,21 +152,19 @@ def scale_merged_intensities(ds, intensity_key, sigma_key, output_prefix="FW-",
         Column label for intensities to be scaled
     sigma_key : str
         Column label for error estimates of intensities being scaled
-    output_prefix : str
-        Prefix to be prepended to intensity_key and sigma_key for output 
-        column labels
+    output_columns : list or tuple of column names
+        Column labels to be added to ds for recording scaled I, SigI, F, 
+        and SigF, respectively. output_columns must have len=4. 
     bins : int or array
         Either an integer number of n bins. Or an array of bin edges with shape==(n, 2)
-    return_intensities : bool
-        If True, intensities are returned. If False, structure factor 
-        amplitudes are returned. 
     inplace : bool
         Whether to modify the DataSet in place or create a copy
 
     Returns
     -------
     DataSet
-        
+        DataSet with 4 additional columns corresponding to scaled I, SigI,
+        F, and SigF. 
     """
     if not inplace:
         ds = ds.copy()
@@ -175,21 +173,22 @@ def scale_merged_intensities(ds, intensity_key, sigma_key, output_prefix="FW-",
     if 'CENTRIC' not in ds:
         ds.label_centrics(inplace=True)
 
-    # If intensity_key or sigma_key are not columns in ds, KeyError is
-    # raised
+    if output_columns:
+        outputI, outputSigI, outputF, outputSigF = output_columns
+    else:
+        columns = ["FW-I-obs", "FW-SIGI-obs", "FW-F-obs", "FW-SIGF-obs"]
+        outputI, outputSigI, outputF, outputSigF = columns
+        
+    # Input data for posterior calculations
     I, Sig = ds[intensity_key].to_numpy(), ds[sigma_key].to_numpy()
     dHKL = ds['dHKL'].to_numpy(dtype=np.float64)
-
     Sigma = mean_intensity_by_resolution(I, dHKL, bins)
-
     multiplicity = compute_structurefactor_multiplicity(ds.get_hkls(), ds.spacegroup)
     Sigma = Sigma * multiplicity
 
-    outval_label = output_prefix + intensity_key
-    outerr_label = output_prefix + sigma_key
-    
-    ds[outval_label] = 0.
-    ds[outerr_label] = 0.
+    # Initialize outputs
+    ds[outputI] = 0.
+    ds[outputSigI] = 0.
 
     # We will get posterior centric intensities from integration
     mean, std = _centric_posterior_quad(
@@ -197,9 +196,8 @@ def scale_merged_intensities(ds, intensity_key, sigma_key, output_prefix="FW-",
 	ds.loc[ds.CENTRIC, sigma_key].to_numpy(),
 	Sigma[ds.CENTRIC]
     )
-
-    ds.loc[ds.CENTRIC, outval_label] = mean
-    ds.loc[ds.CENTRIC, outerr_label] = std
+    ds.loc[ds.CENTRIC, outputI] = mean
+    ds.loc[ds.CENTRIC, outputSigI] = std
     
     # We will get posterior acentric intensities from analytical expressions
     mean, std = _acentric_posterior(
@@ -207,15 +205,14 @@ def scale_merged_intensities(ds, intensity_key, sigma_key, output_prefix="FW-",
 	ds.loc[~ds.CENTRIC, sigma_key].to_numpy(),
 	Sigma[~ds.CENTRIC]
     )
-    ds.loc[~ds.CENTRIC, outval_label] = mean
-    ds.loc[~ds.CENTRIC, outerr_label] = std
+    ds.loc[~ds.CENTRIC, outputI] = mean
+    ds.loc[~ds.CENTRIC, outputSigI] = std
 
-    if return_intensities:
-        ds[outval_label] = ds[outval_label].astype("Intensity")
-        ds[outerr_label] = ds[outerr_label].astype("Stddev")
-    else:
-        ds[outval_label] = np.sqrt(ds[outval_label]).astype("SFAmplitude")
-        ds[outerr_label] = (ds[outerr_label]/(2*ds[outval_label])).astype("Stddev")
+    # Convert dtypes of columns to MTZDtypes
+    ds[outputI] = ds[outputI].astype("Intensity")
+    ds[outputSigI] = ds[outputSigI].astype("Stddev")
+    ds[outputF] = np.sqrt(ds[outputI]).astype("SFAmplitude")
+    ds[outputSigF] = (ds[outputSigI]/(2*ds[outputF])).astype("Stddev")
 
     return ds
 
