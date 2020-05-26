@@ -75,6 +75,37 @@ def _centric_posterior_quad(Iobs, SigIobs, Sigma, npoints=100):
     variance = np.sum(prefactor*weights*J*J*P/Z, axis=1) - mean**2
     return mean,np.sqrt(variance)
 
+def mean_intensity_by_miller_index(I, H, bandwidth):
+    """
+    Use a gaussian kernel smoother to compute mean intensities as a function of miller index.
+
+    Parameters
+    ----------
+    I : array
+        Array of observed intensities
+    H : array
+        Nx3 array of miller indices
+    bandwidth : float(optional)
+        Kernel bandwidth in miller units
+
+    Returns
+    -------
+    Sigma : array
+        Array of point estimates for the mean intensity at each miller index in H.
+    """
+    H = np.array(H, dtype=np.float32)
+    I = np.array(I, dtype=np.float32)
+    bandwidth = np.float32(bandwidth)**2.
+    n = len(I)
+
+    S = np.zeros(n)
+    from tqdm import tqdm
+    for i in tqdm(range(n)):
+        K = np.exp(-0.5*((H - H[i])*(H - H[i])).sum(1)/bandwidth)
+        S[i] = (I*K).sum()/K.sum()
+
+    return S
+
 def mean_intensity_by_resolution(I, dHKL, bins=50, gridpoints=None):
     """
     Use a gaussian kernel smoother to compute mean intensities as a function of resolution.
@@ -93,6 +124,11 @@ def mean_intensity_by_resolution(I, dHKL, bins=50, gridpoints=None):
         "bins" is used to determine the kernel bandwidth.
     gridpoints : int(optional)
         Number of gridpoints at which to estimate the mean intensity. This will default to 20*bins
+
+    Returns
+    -------
+    Sigma : array
+        Array of point estimates for the mean intensity at resolution in dHKL.
     """
     #Use double precision
     I = np.array(I, dtype=np.float64)
