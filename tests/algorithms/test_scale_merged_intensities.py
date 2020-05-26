@@ -121,3 +121,27 @@ def test_scale_merged_intensities_validdata(data_hewl, inplace):
     assert (scaled["FW-SIGI"].to_numpy() >= 0).all()
     assert (scaled["FW-F"].to_numpy() >= 0).all()
     assert (scaled["FW-SIGF"].to_numpy() >= 0).all()
+
+def test_scale_merged_intensities_phenix(data_hewl, ref_hewl):
+    """
+    Compare phenix.french_wilson to scale_merged_intensities(). Current
+    test criteria are that >95% of F and SigF are within 1%.
+    """
+    mtz = data_hewl.dropna()
+    scaled = scale_merged_intensities(mtz, "IMEAN", "SIGIMEAN")
+
+    # Assert no reflections were dropped
+    assert len(scaled) == len(ref_hewl)
+    
+    # Intensities should be identical
+    assert np.array_equal(scaled["IMEAN"].to_numpy(), ref_hewl["I"].to_numpy())
+    assert np.array_equal(scaled["SIGIMEAN"].to_numpy(), ref_hewl["SIGI"].to_numpy())
+    
+    rsF = scaled["FW-F"].to_numpy()
+    rsSigF = scaled["FW-SIGF"].to_numpy()
+    refF = ref_hewl["F"].to_numpy()
+    refSigF = ref_hewl["SIGF"].to_numpy()    
+    
+    assert (np.isclose(rsF, refF, rtol=0.01).sum()/len(scaled)) >= 0.95
+    assert (np.isclose(rsSigF, refSigF, rtol=0.01).sum()/len(scaled)) >= 0.95
+    

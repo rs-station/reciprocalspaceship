@@ -14,6 +14,16 @@ def data_hewl():
     mtz = rs.read_mtz(inFN)
     return mtz
 
+@pytest.fixture
+def ref_hewl():
+    """
+    Load phenix.french_wilson output for data_hewl
+    """
+    datapath = ["..", "data", "algorithms", "phenix_fw_ref.mtz"]
+    inFN = abspath(join(dirname(__file__), *datapath))
+    mtz = rs.read_mtz(inFN)
+    return mtz
+
 def load_fw1978():
     """
     Load reference data from French and Wilson, 1978.
