@@ -99,8 +99,7 @@ def mean_intensity_by_miller_index(I, H, bandwidth):
     n = len(I)
 
     S = np.zeros(n)
-    from tqdm import tqdm
-    for i in tqdm(range(n)):
+    for i in range(n):
         K = np.exp(-0.5*((H - H[i])*(H - H[i])).sum(1)/bandwidth)
         S[i] = (I*K).sum()/K.sum()
 
