@@ -1,5 +1,5 @@
 import numpy as np
-from scipy.special import erf
+from scipy.special import ndtr
 from reciprocalspaceship.utils import compute_structurefactor_multiplicity
 
 def _acentric_posterior(Iobs, SigIobs, Sigma):
@@ -17,8 +17,9 @@ def _acentric_posterior(Iobs, SigIobs, Sigma):
         Average intensity in the resolution bin corresponding to Iobs, 
         SigIobs
     """
-    def Phi(x):
-        return 0.5*(1 + erf(x/np.sqrt(2.)))
+    Iobs = np.array(Iobs, dtype=np.float64)
+    SigIobs = np.array(SigIobs, dtype=np.float64)
+    Sigma = np.array(Sigma, dtype=np.float64)
 
     def phi(x):
         return np.exp(-0.5*x**2)/np.sqrt(2*np.pi)
@@ -26,14 +27,12 @@ def _acentric_posterior(Iobs, SigIobs, Sigma):
     eps = 0.
 
     a = 0.
-    b = 1e300
     s = SigIobs
     u = (Iobs - s**2/Sigma)
-    alpha = (a-u)/(s + eps)
-    beta = (b-u)/(s + eps)
-    Z = Phi(beta) - Phi(alpha) + eps
-    mean = u + s * (phi(alpha) - phi(beta))/Z
-    variance = s**2 * (1 + (alpha*phi(alpha) - beta*phi(beta))/Z - ((phi(alpha) - phi(beta))/Z)**2 )
+    alpha = (a-u)/s
+    Z = 1. - ndtr(alpha)
+    mean = u + s * phi(alpha)/Z
+    variance = s**2 * (1 + alpha*phi(alpha)/Z - (phi(alpha)/Z)**2 )
     return mean, np.sqrt(variance)
 
 def _centric_posterior_quad(Iobs, SigIobs, Sigma, npoints=100):
@@ -52,6 +51,10 @@ def _centric_posterior_quad(Iobs, SigIobs, Sigma, npoints=100):
     npoints : int
         Number of sample points and weights (must be >= 1)
     """
+    Iobs = np.array(Iobs, dtype=np.float64)
+    SigIobs = np.array(SigIobs, dtype=np.float64)
+    Sigma = np.array(Sigma, dtype=np.float64)
+
     loc = Iobs-SigIobs**2/2/Sigma
     scale = SigIobs
     upper = np.abs(Iobs) + 10.*SigIobs
@@ -184,3 +187,11 @@ def scale_merged_intensities(ds, intensity_key, sigma_key, output_prefix="FW-",
         ds[outerr_label] = (ds[outerr_label]/(2*ds[outval_label])).astype("Stddev")
 
     return ds
+
+if __name__=="__main__":
+    import reciprocalspaceship as rs
+    from sys import argv
+    ds = rs.read_mtz(argv[1]).dropna()
+    ds = scale_merged_intensities(ds, "I-obs", "SIGI-obs")
+    from IPython import embed
+    embed(colors='Linux')
