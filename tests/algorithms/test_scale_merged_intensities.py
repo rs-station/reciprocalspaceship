@@ -10,57 +10,90 @@ from reciprocalspaceship.algorithms.scale_merged_intensities import (
     _centric_posterior_quad
 )
 
-def load_fw1978():
-    """
-    Load reference data from French and Wilson, 1978.
-    """
-    datapath = ["..", "data", "algorithms", "fw1978.csv"]
-    inFN = abspath(join(dirname(__file__), *datapath))
-    fw1978 = pd.read_csv(inFN, dtype=np.float32)
-    return fw1978
-
-@pytest.mark.parametrize("dist", ["Acentric", "Centric"])
-@pytest.mark.parametrize(
-    "fw1978_refcolumns", [["E(J|I)", "sigma(J|I)"],
-                          ["E(F|I)", "sigma(F|I)"]
-    ]
-)
-def test_posteriors_fw1978(dist, fw1978_refcolumns):
+def test_posteriors_fw1978(data_fw1978_input, data_fw1978_output):
     """
     Test posterior distributions used in scale_merged_intensities() 
     against Table 1 from French and Wilson, Acta Cryst. (1978)
     """
-    # Compute posterior intensities using distribution for acentric
-    # reflections
-    fw1978 = load_fw1978()
-    I = fw1978["I"]
-    SigI = fw1978["SigI"]
-    Sigma = 20.*np.ones(len(I), dtype=np.float32)
+    # Compute posterior intensities using French and Wilson input data
+    I     = data_fw1978_input["I"]
+    SigI  = data_fw1978_input["SigI"]
+    Sigma = data_fw1978_input["Sigma"]
 
-    if dist == "Acentric":
+    if "Acentric" in data_fw1978_output.columns[0]:
         mean, stddev = _acentric_posterior(I, SigI, Sigma)
-    elif dist =="Centric":
+    elif "Centric" in data_fw1978_output.columns[0]:
         mean, stddev = _centric_posterior_quad(I, SigI, Sigma)
 
-    fw1978_refcolumns = [" ".join([dist, c]) for c in fw1978_refcolumns]
-    ref = fw1978[fw1978_refcolumns]
-    
     # Compare intensities
-    if "J" in fw1978_refcolumns[0]:
-        refI = ref[fw1978_refcolumns[0]].to_numpy()
-        refSigI = ref[fw1978_refcolumns[1]].to_numpy()
-        assert np.allclose(mean, refI, atol=0.1)
-        assert np.allclose(stddev, refSigI, atol=0.01)
+    if "J" in data_fw1978_output.columns[0]:
+        refI = data_fw1978_output.iloc[:, 0].to_numpy()
+        refSigI = data_fw1978_output.iloc[:, 1].to_numpy()
+        assert np.allclose(mean, refI, rtol=0.09)
+        assert np.allclose(stddev, refSigI, rtol=0.01)
         
     # Compare structure factor amplitudes
     else:
         mean = np.sqrt(mean)
         stddev = stddev/(2*mean)
-        refF = ref[fw1978_refcolumns[0]].to_numpy()
-        refSigF = ref[fw1978_refcolumns[1]].to_numpy()
-        assert np.allclose(mean, refF, atol=0.2)
-        assert np.allclose(stddev, refSigF, atol=0.1)
+        refF = data_fw1978_output.iloc[:, 0].to_numpy()
+        refSigF =  data_fw1978_output.iloc[:, 1].to_numpy()
+        assert np.allclose(mean, refF, rtol=0.3)
+        assert np.allclose(stddev, refSigF, rtol=0.2)
 
+def test_centric_posterior(data_fw1978_input):
+    """
+    Test Gaussian-Legendre quadrature method against scipy quadrature 
+    implementation to ensure integration results are consistent with 
+    reference implementation. 
+    """
+    # Compute posterior intensities using French and Wilson input data
+    I     = data_fw1978_input["I"]
+    SigI  = data_fw1978_input["SigI"]
+    Sigma = data_fw1978_input["Sigma"]
+
+    def _centric_posterior_scipy(Iobs, SigIobs, Sigma):
+        """
+        Reference implementation using scipy quadrature integration to 
+        estimate posterior intensities with a wilson prior.
+        """
+        from scipy.integrate import quad
+        
+        lower = 0.
+        u = Iobs-SigIobs**2/2/Sigma
+        upper = np.abs(Iobs) + 10.*SigIobs
+        limit = 1000
+
+        Z = np.zeros(len(u))
+        for i in range(len(Z)):
+            Z[i] = quad(
+                lambda J: np.power(J, -0.5)*np.exp(-0.5*((J-u[i])/SigIobs[i])**2),
+                lower, upper[i],
+            )[0]
+
+        mean = np.zeros(len(u))
+        for i in range(len(Z)):
+            mean[i] = quad(
+                lambda J: J*np.power(J, -0.5)*np.exp(-0.5*((J-u[i])/SigIobs[i])**2),
+                lower, upper[i],
+            )[0]
+        mean = mean/Z
+
+        variance = np.zeros(len(u))
+        for i in range(len(Z)):
+            variance[i] = quad(
+                lambda J: J*J*np.power(J, -0.5)*np.exp(-0.5*((J-u[i])/SigIobs[i])**2),
+                lower, upper[i],
+            )[0]
+        variance = variance/Z - mean**2.
+
+        return mean,np.sqrt(variance)
+
+    mean, stddev = _centric_posterior_quad(I, SigI, Sigma)
+    mean_scipy, stddev_scipy = _centric_posterior_scipy(I, SigI, Sigma)
+    assert np.allclose(mean, mean_scipy, rtol=0.08)
+    assert np.allclose(stddev, stddev_scipy, rtol=0.01)
+    
 @pytest.mark.parametrize("return_intensities", [True, False])
 @pytest.mark.parametrize("inplace", [True, False])
 def test_scale_merged_intensities_validdata(data_hewl, return_intensities, inplace):
@@ -88,5 +121,4 @@ def test_scale_merged_intensities_validdata(data_hewl, return_intensities, inpla
         assert isinstance(scaled["FW-SIGIMEAN"].dtype, rs.StandardDeviationDtype)
 
     assert (scaled["FW-IMEAN"].to_numpy() >= 0).all()
-    assert (scaled["FW-SIGIMEAN"].to_numpy() >= 0).all()    
-        
+    assert (scaled["FW-SIGIMEAN"].to_numpy() >= 0).all()
