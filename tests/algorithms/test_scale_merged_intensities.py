@@ -111,13 +111,13 @@ def test_scale_merged_intensities_validdata(data_hewl, inplace):
         assert id(scaled) != id(mtz)
 
     # Confirm output columns are of desired types
-    assert isinstance(scaled["FW-I-obs"].dtype, rs.IntensityDtype)
-    assert isinstance(scaled["FW-SIGI-obs"].dtype, rs.StandardDeviationDtype)
-    assert isinstance(scaled["FW-F-obs"].dtype, rs.StructureFactorAmplitudeDtype)
-    assert isinstance(scaled["FW-SIGF-obs"].dtype, rs.StandardDeviationDtype)
+    assert isinstance(scaled["FW-I"].dtype, rs.IntensityDtype)
+    assert isinstance(scaled["FW-SIGI"].dtype, rs.StandardDeviationDtype)
+    assert isinstance(scaled["FW-F"].dtype, rs.StructureFactorAmplitudeDtype)
+    assert isinstance(scaled["FW-SIGF"].dtype, rs.StandardDeviationDtype)
 
     # Confirm output columns are strictly positive
-    assert (scaled["FW-I-obs"].to_numpy() >= 0).all()
-    assert (scaled["FW-SIGI-obs"].to_numpy() >= 0).all()
-    assert (scaled["FW-F-obs"].to_numpy() >= 0).all()
-    assert (scaled["FW-SIGF-obs"].to_numpy() >= 0).all()
+    assert (scaled["FW-I"].to_numpy() >= 0).all()
+    assert (scaled["FW-SIGI"].to_numpy() >= 0).all()
+    assert (scaled["FW-F"].to_numpy() >= 0).all()
+    assert (scaled["FW-SIGF"].to_numpy() >= 0).all()

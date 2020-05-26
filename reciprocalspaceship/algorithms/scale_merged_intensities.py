@@ -212,7 +212,7 @@ def scale_merged_intensities(ds, intensity_key, sigma_key, output_columns=None,
     if output_columns:
         outputI, outputSigI, outputF, outputSigF = output_columns
     else:
-        columns = ["FW-I-obs", "FW-SIGI-obs", "FW-F-obs", "FW-SIGF-obs"]
+        columns = ["FW-I", "FW-SIGI", "FW-F", "FW-SIGF"]
         outputI, outputSigI, outputF, outputSigF = columns
         
     # Input data for posterior calculations
