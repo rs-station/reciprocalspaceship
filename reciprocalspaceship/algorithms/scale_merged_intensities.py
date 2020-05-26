@@ -75,8 +75,51 @@ def _centric_posterior_quad(Iobs, SigIobs, Sigma, npoints=100):
     variance = np.sum(prefactor*weights*J*J*P/Z, axis=1) - mean**2
     return mean,np.sqrt(variance)
 
+def mean_intensity_by_resolution(I, dHKL, bins=50, gridpoints=None):
+    """
+    Use a gaussian kernel smoother to compute mean intensities as a function of resolution.
+    The kernel smoother is evaulated over the specified number of gridpoints and then interpolated. 
+    Kernel bandwidth is derived from `bins` as follows
+    >>> X = dHKL**-2
+    bw = (X.max() - X.min)/bins
+
+    Parameters
+    ----------
+    I : array
+        Array of observed intensities
+    dHKL : array
+        Array of reflection resolutions
+    bins : float(optional)
+        "bins" is used to determine the kernel bandwidth.
+    gridpoints : int(optional)
+        Number of gridpoints at which to estimate the mean intensity. This will default to 20*bins
+    """
+    #Use double precision
+    I = np.array(I, dtype=np.float64)
+    dHKL = np.array(dHKL, dtype=np.float64)
+
+    if gridpoints is None:
+        gridpoints = int(bins*20)
+
+    X = dHKL**-2.
+    bw = (X.max() - X.min())/bins
+
+    #Evaulate the kernel smoother over grid points
+    grid = np.linspace(X.min(), X.max(), gridpoints)
+    K = np.exp(-0.5*((X[:,None] - grid[None,:])/bw)**2.)
+    K = K/K.sum(0)
+    protos = I@K
+
+    #Use a kernel smoother to interpolate the grid points
+    bw = grid[1] - grid[0]
+    K = np.exp(-0.5*((X[:,None] - grid[None,:])/bw)**2.)
+    K = K/K.sum(1)[:,None]
+    Sigma = K@protos
+
+    return Sigma
+
 def scale_merged_intensities(ds, intensity_key, sigma_key, output_prefix="FW-",
-                             bins=50, return_intensities=False, inplace=False):
+                             bins=100, return_intensities=False, inplace=False):
     """
     Scales merged intensities using Bayesian statistics in order to 
     estimate structure factor amplitudes. This method is based on French
@@ -132,24 +175,12 @@ def scale_merged_intensities(ds, intensity_key, sigma_key, output_prefix="FW-",
     if 'CENTRIC' not in ds:
         ds.label_centrics(inplace=True)
 
-    d = ds.compute_dHKL().dHKL.to_numpy()**-2.
-    if isinstance(bins, int):
-        binedges = np.percentile(d, np.linspace(0, 100, bins+1))
-        binedges = np.vstack((binedges[:-1], binedges[1:]))
-
     # If intensity_key or sigma_key are not columns in ds, KeyError is
     # raised
     I, Sig = ds[intensity_key].to_numpy(), ds[sigma_key].to_numpy()
+    dHKL = ds['dHKL'].to_numpy(dtype=np.float64)
 
-    idx = (d[:,None] > binedges[0]) & (d[:,None] < binedges[1])
-    SigmaMean = (I[:,None]*idx).sum(0)/idx.sum(0)
-    dmean = (d[:,None]*idx).sum(0)/idx.sum(0)
-
-    # Use kernel smoother instead of linear interpolation.
-    h = (d.max() - d.min())/len(dmean) # Bandwidth is roughly the spacing of estimates
-    W = np.exp(-0.5*((d[:,None] - dmean)/h)**2)
-    W = W/W.sum(1)[:,None]
-    Sigma = W@SigmaMean
+    Sigma = mean_intensity_by_resolution(I, dHKL, bins)
 
     multiplicity = compute_structurefactor_multiplicity(ds.get_hkls(), ds.spacegroup)
     Sigma = Sigma * multiplicity
@@ -192,6 +223,6 @@ if __name__=="__main__":
     import reciprocalspaceship as rs
     from sys import argv
     ds = rs.read_mtz(argv[1]).dropna()
-    ds = scale_merged_intensities(ds, "I-obs", "SIGI-obs")
+    ds = scale_merged_intensities(ds, "I-obs", "SIGI-obs", return_intensities=True)
     from IPython import embed
     embed(colors='Linux')
