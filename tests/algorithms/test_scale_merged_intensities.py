@@ -156,4 +156,25 @@ def test_scale_merged_intensities_phenix(data_hewl, ref_hewl, mean_intensity_met
     
     assert (np.isclose(rsF, refF, rtol=0.01).sum()/len(scaled)) >= 0.95
     assert (np.isclose(rsSigF, refSigF, rtol=0.01).sum()/len(scaled)) >= 0.95
+
+@pytest.mark.parametrize("dropna", [True, False])
+def test_scale_merged_intensities_dropna(data_hewl_all, dropna):
+    """
+    Test scale_merged_intensities() using data containing NaNs in different
+    columns.
+    """
+    keys = ["IMEAN", "SIGIMEAN"]
+    nan_in_intensity = data_hewl_all[keys].isna().to_numpy().any()
+
+    if nan_in_intensity and not dropna:
+        with pytest.raises(ValueError):
+            scaled = scale_merged_intensities(data_hewl_all, "IMEAN",
+                                              "SIGIMEAN", dropna=dropna)
+    else:
+        scaled = scale_merged_intensities(data_hewl_all, "IMEAN", "SIGIMEAN",
+                                          dropna=dropna)
+        assert id(scaled) != id(data_hewl_all)
+        assert (scaled["FW-I"].to_numpy() >= 0.).all()
+            
+
     

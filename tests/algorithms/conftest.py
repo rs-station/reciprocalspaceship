@@ -14,6 +14,19 @@ def data_hewl():
     mtz = rs.read_mtz(inFN)
     return mtz
 
+@pytest.fixture(params=["hewl",
+                        "hewl_IMEAN_NaN",
+                        "hewl_I(+)_NaN"])
+def data_hewl_all(data_hewl, request):
+    if request.param == "hewl":
+        return data_hewl
+    elif request.param == "hewl_IMEAN_NaN":
+        data_hewl.loc[(0, 0, 4), "IMEAN"] = np.NaN
+        return data_hewl
+    elif request.param == "hewl_I(+)_NaN":
+        data_hewl.loc[(0, 0, 4), "I(+)"] = np.NaN
+        return data_hewl
+
 @pytest.fixture
 def ref_hewl():
     """
