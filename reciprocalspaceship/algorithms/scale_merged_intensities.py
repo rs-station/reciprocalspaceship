@@ -265,7 +265,7 @@ def scale_merged_intensities(ds, intensity_key, sigma_key, output_columns=None,
 
     return ds
 
-if __name__=="__main__":
+if __name__=="__main__": # pragma: no cover
     import reciprocalspaceship as rs
     from sys import argv
     ds = rs.read_mtz(argv[1]).dropna()
