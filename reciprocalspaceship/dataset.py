@@ -6,7 +6,6 @@ from .utils import canonicalize_phases, apply_to_hkl, phase_shift, is_centric
 from .utils.asu import in_asu,hkl_to_asu
 from .dtypes.mapping import mtzcode2dtype
 
-
 class DataSeries(pd.Series):
     """
     One-dimensional ndarray with axis labels, representing a slice
@@ -234,27 +233,6 @@ class DataSet(pd.DataFrame):
             dhkls[i] = dataset.cell.calculate_d(hkl)
         dataset['dHKL'] = DataSeries(dhkls[inverse], dtype="MTZReal", index=dataset.index)
         return dataset
-
-    def unmerge_anomalous(self, inplace=False):
-        """
-        Unmerge Friedel pairs. In the near future, this should probably
-        be rolled into a bigger unmerge() function
-        """
-        self.label_centrics(inplace=True)
-        Fplus = self.copy()
-        Fminus = self.copy().reset_index()
-        Fminus[['H', 'K', 'L']] = -1*Fminus[['H', 'K', 'L']]
-        for k in self.get_phase_keys():
-            Fminus.loc[~Fminus.CENTRIC, k] = -Fminus.loc[~Fminus.CENTRIC, k]
-        Fminus = Fminus.set_index(['H', 'K', 'L'])
-
-        F = Fplus.append(Fminus.loc[Fminus.index.difference(Fplus.index)])
-        
-        if inplace:
-            self._data = F._data
-            return self
-        else:
-            return F.__finalize__(self)
 
     def stack_anomalous(self, plus_label=None, minus_label=None):
         """
