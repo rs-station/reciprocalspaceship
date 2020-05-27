@@ -95,34 +95,42 @@ def test_centric_posterior(data_fw1978_input):
     assert np.allclose(stddev, stddev_scipy, rtol=0.01)
     
 @pytest.mark.parametrize("inplace", [True, False])
+@pytest.mark.parametrize("output_columns", [None,
+                                            ("FW1", "FW2", "FW3", "FW4")])
 @pytest.mark.parametrize("mean_intensity_method", ["isotropic", "anisotropic"])
-def test_scale_merged_intensities_validdata(data_hewl, inplace, mean_intensity_method):
+def test_scale_merged_intensities_validdata(data_hewl, inplace, output_columns,
+                                            mean_intensity_method):
     """
     Confirm scale_merged_intensities() returns all positive values
     """
-    mtz = data_hewl.dropna()
-
-    scaled = scale_merged_intensities(mtz, "IMEAN", "SIGIMEAN",
+    scaled = scale_merged_intensities(data_hewl, "IMEAN", "SIGIMEAN",
+                                      output_columns=output_columns,
                                       inplace=inplace,
                                       mean_intensity_method=mean_intensity_method)
 
     # Confirm inplace returns same object if true
     if inplace:
-        assert id(scaled) == id(mtz)
+        assert id(scaled) == id(data_hewl)
     else:
-        assert id(scaled) != id(mtz)
+        assert id(scaled) != id(data_hewl)
 
+    defaults = ("FW-I", "FW-SIGI", "FW-F", "FW-SIGF")
+    if output_columns:
+        o1, o2, o3, o4 = output_columns
+    else:
+        o1, o2, o3, o4 = defaults
+        
     # Confirm output columns are of desired types
-    assert isinstance(scaled["FW-I"].dtype, rs.IntensityDtype)
-    assert isinstance(scaled["FW-SIGI"].dtype, rs.StandardDeviationDtype)
-    assert isinstance(scaled["FW-F"].dtype, rs.StructureFactorAmplitudeDtype)
-    assert isinstance(scaled["FW-SIGF"].dtype, rs.StandardDeviationDtype)
+    assert isinstance(scaled[o1].dtype, rs.IntensityDtype)
+    assert isinstance(scaled[o2].dtype, rs.StandardDeviationDtype)
+    assert isinstance(scaled[o3].dtype, rs.StructureFactorAmplitudeDtype)
+    assert isinstance(scaled[o4].dtype, rs.StandardDeviationDtype)
 
     # Confirm output columns are strictly positive
-    assert (scaled["FW-I"].to_numpy() >= 0).all()
-    assert (scaled["FW-SIGI"].to_numpy() >= 0).all()
-    assert (scaled["FW-F"].to_numpy() >= 0).all()
-    assert (scaled["FW-SIGF"].to_numpy() >= 0).all()
+    assert (scaled[o1].to_numpy() >= 0).all()
+    assert (scaled[o2].to_numpy() >= 0).all()
+    assert (scaled[o3].to_numpy() >= 0).all()
+    assert (scaled[o4].to_numpy() >= 0).all()
 
 @pytest.mark.parametrize("mean_intensity_method", ["isotropic", "anisotropic"])
 def test_scale_merged_intensities_phenix(data_hewl, ref_hewl, mean_intensity_method):
