@@ -154,7 +154,7 @@ def mean_intensity_by_resolution(I, dHKL, bins=50, gridpoints=None):
     return Sigma
 
 def scale_merged_intensities(ds, intensity_key, sigma_key, output_columns=None,
-                             inplace=False, mean_intensity_method="isotropic",
+                             dropna=True, inplace=False, mean_intensity_method="isotropic",
                              bins=100, bw=2.0):
     """
     Scales merged intensities using Bayesian statistics in order to 
@@ -190,7 +190,10 @@ def scale_merged_intensities(ds, intensity_key, sigma_key, output_columns=None,
         Column label for error estimates of intensities being scaled
     output_columns : list or tuple of column names
         Column labels to be added to ds for recording scaled I, SigI, F, 
-        and SigF, respectively. output_columns must have len=4. 
+        and SigF, respectively. output_columns must have len=4.
+    dropna : bool
+        Whether to drop reflections with NaNs in intensity_key or sigma_key
+        columns
     inplace : bool
         Whether to modify the DataSet in place or create a copy
     mean_intensity_method : str ["isotropic" or "anisotropic"]
@@ -214,6 +217,17 @@ def scale_merged_intensities(ds, intensity_key, sigma_key, output_columns=None,
     """
     if not inplace:
         ds = ds.copy()
+
+    # Sanitize input or check for invalid reflections
+    if dropna:
+        ds.dropna(subset=[intensity_key, sigma_key], inplace=True)
+    else:
+        if ds[[intensity_key, sigma_key]].isna().to_numpy().any():
+            raise ValueError(f"Input {ds.__class__.__name__} contains NaNs "
+                             f"in columns '{intensity_key}' and/or 'sigma_key'. "
+                             f"Please fix these input values, or run with dropna=True")
+        
+    # Accessory columns needed for algorithm
     if 'dHKL' not in ds:
         ds.compute_dHKL(inplace=True)
     if 'CENTRIC' not in ds:
