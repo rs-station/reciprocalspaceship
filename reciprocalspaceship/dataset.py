@@ -234,7 +234,7 @@ class DataSet(pd.DataFrame):
         dataset['dHKL'] = DataSeries(dhkls[inverse], dtype="MTZReal", index=dataset.index)
         return dataset
 
-    def stack_anomalous(self, plus_label=None, minus_label=None):
+    def stack_anomalous(self, plus_labels=None, minus_labels=None):
         """
         Convert data from two-column anomalous format to one-column
         format. Intensities, structure factor amplitudes, or other data 
@@ -250,10 +250,10 @@ class DataSet(pd.DataFrame):
 
         Parameters
         ----------
-        plus_label: str or list-like
+        plus_labels: str or list-like
             Column label or list of column labels of data associated with
             Friedel-plus reflection (Defaults to columns suffixed with "(+)")
-        minus_label: str or list-like
+        minus_labels: str or list-like
             Column label or list of column labels of data associated with
             Friedel-minus reflection (Defaults to columns suffixed with "(-)")
 
@@ -261,38 +261,39 @@ class DataSet(pd.DataFrame):
         -------
         DataSet
         """
-        if (plus_label is None and minus_label is None):
-            plus_label  = [ l for l in self.columns if "(+)" in l ]
-            minus_label = [ l for l in self.columns if "(-)" in l ]
+        if (plus_labels is None and minus_labels is None):
+            plus_labels  = [ l for l in self.columns if "(+)" in l ]
+            minus_labels = [ l for l in self.columns if "(-)" in l ]
         
         # Check input data
-        if isinstance(plus_label, str) and isinstance(minus_label, str):
-            plus_label = [plus_label]
-            minus_label =[minus_label]
-        elif isinstance(plus_label, list) and isinstance(minus_label, list):
-            if len(plus_label) != len(minus_label):
-                raise ValueError(f"plus_label: {plus_label} and minus_label: "
-                                 f"{minus_label} do not have same length.")
+        if isinstance(plus_labels, str) and isinstance(minus_labels, str):
+            plus_labels = [plus_labels]
+            minus_labels =[minus_labels]
+        elif (isinstance(plus_labels, (list, tuple)) and
+              isinstance(minus_labels, (list, tuple))):
+            if len(plus_labels) != len(minus_labels):
+                raise ValueError(f"plus_labels: {plus_labels} and minus_labels: "
+                                 f"{minus_labels} do not have same length.")
         else:
-            raise ValueError(f"plus_label and minus_label must have same type "
-                             f"and be str or list: plus_label is type "
-                             f"{type(plus_label)} and minus_labe is type "
-                             f"{type(minus_label)}.")
+            raise ValueError(f"plus_labels and minus_labels must have same type "
+                             f"and be str or list: plus_labels is type "
+                             f"{type(plus_labels)} and minus_labe is type "
+                             f"{type(minus_labels)}.")
 
-        for plus, minus in zip(plus_label, minus_label):
+        for plus, minus in zip(plus_labels, minus_labels):
             if self[plus].dtype != self[minus].dtype:
-                raise ValueError(f"Corresponding labels in {plus_label} and "
-                                 f"{minus_label} are not the same dtype: "
+                raise ValueError(f"Corresponding labels in {plus_labels} and "
+                                 f"{minus_labels} are not the same dtype: "
                                  f"{dataset[plus].dtype} and {dataset[minus].dtype}")
 
         # Construct Friedel DataSets
-        new_labels = [ l.rstrip("(+)") for l in plus_label ]
+        new_labels = [ l.rstrip("(+)") for l in plus_labels ]
         dataset_plus = self.copy()
-        dataset_plus.drop(columns=minus_label, inplace=True)
-        dataset_minus = self.copy().drop(columns=plus_label)
+        dataset_plus.drop(columns=minus_labels, inplace=True)
+        dataset_minus = self.copy().drop(columns=plus_labels)
         dataset_minus.apply_symop(gemmi.Op("-x,-y,-z"), inplace=True)
-        column_mapping_plus  = dict(zip(plus_label, new_labels))
-        column_mapping_minus = dict(zip(minus_label, new_labels))
+        column_mapping_plus  = dict(zip(plus_labels, new_labels))
+        column_mapping_minus = dict(zip(minus_labels, new_labels))
         dataset_plus.rename(columns=column_mapping_plus, inplace=True)
         dataset_minus.rename(columns=column_mapping_minus, inplace=True)
 
@@ -309,6 +310,50 @@ class DataSet(pd.DataFrame):
         
         return F.__finalize__(self)
 
+    def unstack_anomalous(self, columns=None, suffixes=("(+)", "(-)")):
+        """
+        Convert data from one-column format to two-column anomalous
+        format. Provided column labels are converted from separate rows 
+        indexed by their Friedel-plus or Friedel-minus Miller index to 
+        different columns indexed at the Friedel-plus HKL.
+
+        Parameters
+        ----------
+        columns : str or list-like
+            Column label or list of column labels of data that should be 
+            associated with Friedel pairs
+        suffixes : tuple of str
+            Suffixes to append to Friedel-plus and Friedel-minus data 
+            columns
+
+        Returns
+        -------
+        DataSet
+        """
+        # Validate input
+        if columns is None:
+            columns = self.columns.to_list()
+        elif isinstance(columns, str):
+            columns =  [columns]
+        elif not isinstance(columns, (list, tuple)):
+            raise ValueError(f"Expected columns to be str, list, or tuple. "
+                             f"Provided value is type {type(columns)}")
+            
+        if len(suffixes) != 2:
+            raise ValueError(f"Expected suffixes to have len of 2")
+
+        # Separate DataSet into Friedel(+) and Friedel(-)
+        dataset = self.hkl_to_asu()
+        dataset_plus  = dataset.loc[dataset["M/ISYM"]%2 == 1]
+        dataset_minus = dataset.loc[dataset["M/ISYM"]%2 == 0, columns]
+
+        merged = dataset_plus.merge(dataset_minus, how="outer",
+                                    left_index=True, right_index=True,
+                                    suffixes=suffixes)
+        merged.drop(columns="M/ISYM", inplace=True)
+
+        return merged.__finalize__(self)
+        
     def hkl_to_asu(self, inplace=False):
         """
         Map all HKL indices to the reciprocal space asymmetric unit; return a copy
