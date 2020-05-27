@@ -158,10 +158,10 @@ def scale_merged_intensities(ds, intensity_key, sigma_key, output_columns=None,
                              bins=100, bw=2.0):
     """
     Scales merged intensities using Bayesian statistics in order to 
-    estimate structure factor amplitudes. This method is based on French
-    and Wilson, Acta Cryst. (1978), and is useful for improving the 
-    estimates of negative and small intensities in order to ensure that 
-    structure factor moduli are strictly positive.
+    estimate structure factor amplitudes. This method is based on the approach
+    by French and Wilson [1]_, and is useful for improving the estimates 
+    of negative and small intensities in order to ensure that structure 
+    factor moduli are strictly positive.
 
     The mean and standard deviation of acentric reflections are computed
     analytically from a truncated normal distribution. The mean and 
@@ -209,11 +209,17 @@ def scale_merged_intensities(ds, intensity_key, sigma_key, output_columns=None,
         parameter controls the distance that each reflection impacts in 
         reciprocal space. Only affects output if mean_intensity_method is
         "anisotropic".
+
     Returns
     -------
     DataSet
         DataSet with 4 additional columns corresponding to scaled I, SigI,
         F, and SigF. 
+
+    References
+    ----------
+    .. [1] French S. and Wilson K. "On the Treatment of Negative Intensity
+       Observations," Acta Cryst. A34 (1978).
     """
     if not inplace:
         ds = ds.copy()
