@@ -95,14 +95,16 @@ def test_centric_posterior(data_fw1978_input):
     assert np.allclose(stddev, stddev_scipy, rtol=0.01)
     
 @pytest.mark.parametrize("inplace", [True, False])
-def test_scale_merged_intensities_validdata(data_hewl, inplace):
+@pytest.mark.parametrize("mean_intensity_method", ["isotropic", "anisotropic"])
+def test_scale_merged_intensities_validdata(data_hewl, inplace, mean_intensity_method):
     """
     Confirm scale_merged_intensities() returns all positive values
     """
     mtz = data_hewl.dropna()
 
     scaled = scale_merged_intensities(mtz, "IMEAN", "SIGIMEAN",
-                                      inplace=inplace)
+                                      inplace=inplace,
+                                      mean_intensity_method=mean_intensity_method)
 
     # Confirm inplace returns same object if true
     if inplace:
@@ -122,13 +124,15 @@ def test_scale_merged_intensities_validdata(data_hewl, inplace):
     assert (scaled["FW-F"].to_numpy() >= 0).all()
     assert (scaled["FW-SIGF"].to_numpy() >= 0).all()
 
-def test_scale_merged_intensities_phenix(data_hewl, ref_hewl):
+@pytest.mark.parametrize("mean_intensity_method", ["isotropic", "anisotropic"])
+def test_scale_merged_intensities_phenix(data_hewl, ref_hewl, mean_intensity_method):
     """
     Compare phenix.french_wilson to scale_merged_intensities(). Current
     test criteria are that >95% of F and SigF are within 1%.
     """
     mtz = data_hewl.dropna()
-    scaled = scale_merged_intensities(mtz, "IMEAN", "SIGIMEAN")
+    scaled = scale_merged_intensities(mtz, "IMEAN", "SIGIMEAN",
+                                      mean_intensity_method=mean_intensity_method)
 
     # Assert no reflections were dropped
     assert len(scaled) == len(ref_hewl)
