@@ -154,7 +154,8 @@ def mean_intensity_by_resolution(I, dHKL, bins=50, gridpoints=None):
     return Sigma
 
 def scale_merged_intensities(ds, intensity_key, sigma_key, output_columns=None,
-                             bins=100, inplace=False):
+                             inplace=False, mean_intensity_method="isotropic",
+                             bins=100, bw=2.0):
     """
     Scales merged intensities using Bayesian statistics in order to 
     estimate structure factor amplitudes. This method is based on French
@@ -190,11 +191,21 @@ def scale_merged_intensities(ds, intensity_key, sigma_key, output_columns=None,
     output_columns : list or tuple of column names
         Column labels to be added to ds for recording scaled I, SigI, F, 
         and SigF, respectively. output_columns must have len=4. 
-    bins : int or array
-        Either an integer number of n bins. Or an array of bin edges with shape==(n, 2)
     inplace : bool
         Whether to modify the DataSet in place or create a copy
-
+    mean_intensity_method : str ["isotropic" or "anisotropic"]
+        If "isotropic", mean intensity is determined by resolution bin.
+        If "anisotropic", mean intensity is determined by Miller index 
+        using provided bandwidth.
+    bins : int or array
+        Either an integer number of n bins. Or an array of bin edges with 
+        shape==(n, 2). Only affects output if mean_intensity_method is
+        "isotropic".
+    bw : float
+        Bandwidth to use for computing anisotropic mean intensity. This 
+        parameter controls the distance that each reflection impacts in 
+        reciprocal space. Only affects output if mean_intensity_method is
+        "anisotropic".
     Returns
     -------
     DataSet
@@ -216,8 +227,11 @@ def scale_merged_intensities(ds, intensity_key, sigma_key, output_columns=None,
         
     # Input data for posterior calculations
     I, Sig = ds[intensity_key].to_numpy(), ds[sigma_key].to_numpy()
-    dHKL = ds['dHKL'].to_numpy(dtype=np.float64)
-    Sigma = mean_intensity_by_resolution(I, dHKL, bins)
+    if mean_intensity_method == "isotropic":
+        dHKL = ds['dHKL'].to_numpy(dtype=np.float64)
+        Sigma = mean_intensity_by_resolution(I, dHKL, bins)
+    elif mean_intensity_method == "anisotropic":
+        Sigma = mean_intensity_by_miller_index(I, ds.get_hkls(), bw)
     multiplicity = compute_structurefactor_multiplicity(ds.get_hkls(), ds.spacegroup)
     Sigma = Sigma * multiplicity
 
