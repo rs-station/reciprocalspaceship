@@ -1,9 +1,11 @@
 import pandas as pd
 import numpy as np
 import gemmi
+import reciprocalspaceship as rs
 from .utils import canonicalize_phases, apply_to_hkl, phase_shift, is_centric
 from .utils.asu import in_asu,hkl_to_asu
 from .dtypes.mapping import mtzcode2dtype
+
 
 class DataSeries(pd.Series):
     """
@@ -253,6 +255,81 @@ class DataSet(pd.DataFrame):
             return self
         else:
             return F.__finalize__(self)
+
+    def stack_anomalous(self, plus_label=None, minus_label=None):
+        """
+        Convert data from two-column anomalous format to one-column
+        format. Intensities, structure factor amplitudes, or other data 
+        are converted from separate columns corresponding to a single 
+        Miller index to the same data column at different rows indexed 
+        by the Friedel-plus or Friedel-minus Miller index. 
+
+        Notes
+        -----
+        - It is assumed that Friedel-plus column labels are suffixed with (+),
+          and that Friedel-minus column labels are suffixed with (-)
+        - Corresponding column labels are expected to be given in the same order
+
+        Parameters
+        ----------
+        plus_label: str or list-like
+            Column label or list of column labels of data associated with
+            Friedel-plus reflection (Defaults to columns suffixed with "(+)")
+        minus_label: str or list-like
+            Column label or list of column labels of data associated with
+            Friedel-minus reflection (Defaults to columns suffixed with "(-)")
+
+        Returns
+        -------
+        DataSet
+        """
+        if (plus_label is None and minus_label is None):
+            plus_label  = [ l for l in self.columns if "(+)" in l ]
+            minus_label = [ l for l in self.columns if "(-)" in l ]
+        
+        # Check input data
+        if isinstance(plus_label, str) and isinstance(minus_label, str):
+            plus_label = [plus_label]
+            minus_label =[minus_label]
+        elif isinstance(plus_label, list) and isinstance(minus_label, list):
+            if len(plus_label) != len(minus_label):
+                raise ValueError(f"plus_label: {plus_label} and minus_label: "
+                                 f"{minus_label} do not have same length.")
+        else:
+            raise ValueError(f"plus_label and minus_label must have same type "
+                             f"and be str or list: plus_label is type "
+                             f"{type(plus_label)} and minus_labe is type "
+                             f"{type(minus_label)}.")
+
+        for plus, minus in zip(plus_label, minus_label):
+            if self[plus].dtype != self[minus].dtype:
+                raise ValueError(f"Corresponding labels in {plus_label} and "
+                                 f"{minus_label} are not the same dtype: "
+                                 f"{dataset[plus].dtype} and {dataset[minus].dtype}")
+
+        # Construct Friedel DataSets
+        new_labels = [ l.rstrip("(+)") for l in plus_label ]
+        dataset_plus = self.copy()
+        dataset_plus.drop(columns=minus_label, inplace=True)
+        dataset_minus = self.copy().drop(columns=plus_label)
+        dataset_minus.apply_symop(gemmi.Op("-x,-y,-z"), inplace=True)
+        column_mapping_plus  = dict(zip(plus_label, new_labels))
+        column_mapping_minus = dict(zip(minus_label, new_labels))
+        dataset_plus.rename(columns=column_mapping_plus, inplace=True)
+        dataset_minus.rename(columns=column_mapping_minus, inplace=True)
+
+        # Combine Friedel datasets and change label MTZDtypes as needed
+        F = dataset_plus.append(dataset_minus)
+        for label in new_labels:
+            if isinstance(F.dtypes[label], rs.StructureFactorAmplitudeFriedelDtype):
+                F[label] = F[label].astype(rs.StructureFactorAmplitudeDtype())
+            elif isinstance(F.dtypes[label], rs.IntensityFriedelDtype):
+                F[label] = F[label].astype(rs.IntensityDtype())
+            elif (isinstance(F.dtypes[label], rs.StandardDeviationIFriedelDtype) or
+                  isinstance(F.dtypes[label], rs.StandardDeviationSFFriedelDtype)):
+                F[label] = F[label].astype(rs.StandardDeviationDtype())
+        
+        return F.__finalize__(self)
 
     def hkl_to_asu(self, inplace=False):
         """
