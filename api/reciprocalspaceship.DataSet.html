@@ -272,13 +272,16 @@ DataSet.reset_index()</p>
 <tr class="row-odd"><td><p><a class="reference internal" href="#reciprocalspaceship.DataSet.set_index" title="reciprocalspaceship.DataSet.set_index"><code class="xref py py-obj docutils literal notranslate"><span class="pre">set_index</span></code></a>(keys, **kwargs)</p></td>
 <td><p>Set the DataFrame index using existing columns.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#reciprocalspaceship.DataSet.unmerge_anomalous" title="reciprocalspaceship.DataSet.unmerge_anomalous"><code class="xref py py-obj docutils literal notranslate"><span class="pre">unmerge_anomalous</span></code></a>([inplace])</p></td>
-<td><p>Unmerge Friedel pairs.</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#reciprocalspaceship.DataSet.stack_anomalous" title="reciprocalspaceship.DataSet.stack_anomalous"><code class="xref py py-obj docutils literal notranslate"><span class="pre">stack_anomalous</span></code></a>([plus_labels, minus_labels])</p></td>
+<td><p>Convert data from two-column anomalous format to one-column format.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#reciprocalspaceship.DataSet.write_mtz" title="reciprocalspaceship.DataSet.write_mtz"><code class="xref py py-obj docutils literal notranslate"><span class="pre">write_mtz</span></code></a>(*args, **kwargs)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#reciprocalspaceship.DataSet.unstack_anomalous" title="reciprocalspaceship.DataSet.unstack_anomalous"><code class="xref py py-obj docutils literal notranslate"><span class="pre">unstack_anomalous</span></code></a>([columns, suffixes])</p></td>
+<td><p>Convert data from one-column format to two-column anomalous format.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#reciprocalspaceship.DataSet.write_mtz" title="reciprocalspaceship.DataSet.write_mtz"><code class="xref py py-obj docutils literal notranslate"><span class="pre">write_mtz</span></code></a>(*args, **kwargs)</p></td>
 <td><p>Write an MTZ reflection file from the reflection data in a DataSet.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#reciprocalspaceship.DataSet.write_precognition" title="reciprocalspaceship.DataSet.write_precognition"><code class="xref py py-obj docutils literal notranslate"><span class="pre">write_precognition</span></code></a>(*args, **kwargs)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#reciprocalspaceship.DataSet.write_precognition" title="reciprocalspaceship.DataSet.write_precognition"><code class="xref py py-obj docutils literal notranslate"><span class="pre">write_precognition</span></code></a>(*args, **kwargs)</p></td>
 <td><p>Write contents of DataSet object to an HKL file</p></td>
 </tr>
 </tbody>
@@ -587,10 +590,54 @@ method.</p></li>
 </dd></dl>
 
 <dl class="py method">
-<dt id="reciprocalspaceship.DataSet.unmerge_anomalous">
-<code class="sig-name descname">unmerge_anomalous</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">inplace</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="headerlink" href="#reciprocalspaceship.DataSet.unmerge_anomalous" title="Permalink to this definition">¶</a></dt>
-<dd><p>Unmerge Friedel pairs. In the near future, this should probably
-be rolled into a bigger unmerge() function</p>
+<dt id="reciprocalspaceship.DataSet.stack_anomalous">
+<code class="sig-name descname">stack_anomalous</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">plus_labels</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">minus_labels</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#reciprocalspaceship.DataSet.stack_anomalous" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert data from two-column anomalous format to one-column
+format. Intensities, structure factor amplitudes, or other data
+are converted from separate columns corresponding to a single
+Miller index to the same data column at different rows indexed
+by the Friedel-plus or Friedel-minus Miller index.</p>
+<p class="rubric">Notes</p>
+<ul class="simple">
+<li><p>It is assumed that Friedel-plus column labels are suffixed with (+),
+and that Friedel-minus column labels are suffixed with (-)</p></li>
+<li><p>Corresponding column labels are expected to be given in the same order</p></li>
+</ul>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>plus_labels</strong> (<em>str or list-like</em>) – Column label or list of column labels of data associated with
+Friedel-plus reflection (Defaults to columns suffixed with “(+)”)</p></li>
+<li><p><strong>minus_labels</strong> (<em>str or list-like</em>) – Column label or list of column labels of data associated with
+Friedel-minus reflection (Defaults to columns suffixed with “(-)”)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><em>DataSet</em></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="reciprocalspaceship.DataSet.unstack_anomalous">
+<code class="sig-name descname">unstack_anomalous</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">columns</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">suffixes</span><span class="o">=</span><span class="default_value">'(+)', '(-)'</span></em><span class="sig-paren">)</span><a class="headerlink" href="#reciprocalspaceship.DataSet.unstack_anomalous" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert data from one-column format to two-column anomalous
+format. Provided column labels are converted from separate rows
+indexed by their Friedel-plus or Friedel-minus Miller index to
+different columns indexed at the Friedel-plus HKL.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>columns</strong> (<em>str or list-like</em>) – Column label or list of column labels of data that should be
+associated with Friedel pairs</p></li>
+<li><p><strong>suffixes</strong> (<em>tuple of str</em>) – Suffixes to append to Friedel-plus and Friedel-minus data
+columns</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><em>DataSet</em></p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py method">

@@ -24,7 +24,8 @@ DataSet
        ~DataSet.label_centrics
        ~DataSet.reset_index
        ~DataSet.set_index
-       ~DataSet.unmerge_anomalous
+       ~DataSet.stack_anomalous
+       ~DataSet.unstack_anomalous
        ~DataSet.write_mtz
        ~DataSet.write_precognition
    
