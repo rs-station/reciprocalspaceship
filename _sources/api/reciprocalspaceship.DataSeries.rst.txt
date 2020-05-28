@@ -15,5 +15,7 @@ DataSeries
 
    .. autosummary::
    
+       ~DataSeries.from_friedel_dtype
+       ~DataSeries.to_friedel_dtype
    
    
