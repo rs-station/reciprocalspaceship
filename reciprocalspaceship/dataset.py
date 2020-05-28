@@ -321,6 +321,8 @@ class DataSet(pd.DataFrame):
 
         # Separate DataSet into Friedel(+) and Friedel(-)
         dataset = self.hkl_to_asu()
+        for column in columns:
+            dataset[column] = dataset[column].to_friedel_dtype()
         dataset_plus  = dataset.loc[dataset["M/ISYM"]%2 == 1]
         dataset_minus = dataset.loc[dataset["M/ISYM"]%2 == 0, columns]
 

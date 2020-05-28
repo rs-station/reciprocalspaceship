@@ -31,7 +31,7 @@ class DataSeries(pd.Series):
         there is not a Friedel equivalent dtype, the DataSeries is returned
         unchanged.
         """
-        if isinstance(self.dtype, rs.StructureFactorAmplitude):
+        if isinstance(self.dtype, rs.StructureFactorAmplitudeDtype):
             return self.astype(rs.StructureFactorAmplitudeFriedelDtype(), copy=copy)
         elif isinstance(self.dtype, rs.IntensityDtype):
             return self.astype(rs.IntensityFriedelDtype(), copy=copy)
