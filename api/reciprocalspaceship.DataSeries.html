@@ -217,17 +217,17 @@ DataSeries objects, see the <a class="reference external" href="https://pandas.p
 <col style="width: 90%" />
 </colgroup>
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="#reciprocalspaceship.DataSeries.from_friedel_dtype" title="reciprocalspaceship.DataSeries.from_friedel_dtype"><code class="xref py py-obj docutils literal notranslate"><span class="pre">from_friedel_dtype</span></code></a>([copy])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#reciprocalspaceship.DataSeries.from_friedel_dtype" title="reciprocalspaceship.DataSeries.from_friedel_dtype"><code class="xref py py-obj docutils literal notranslate"><span class="pre">from_friedel_dtype</span></code></a>()</p></td>
 <td><p>Return DataSeries with dtype set from Friedel equivalent.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#reciprocalspaceship.DataSeries.to_friedel_dtype" title="reciprocalspaceship.DataSeries.to_friedel_dtype"><code class="xref py py-obj docutils literal notranslate"><span class="pre">to_friedel_dtype</span></code></a>([copy])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#reciprocalspaceship.DataSeries.to_friedel_dtype" title="reciprocalspaceship.DataSeries.to_friedel_dtype"><code class="xref py py-obj docutils literal notranslate"><span class="pre">to_friedel_dtype</span></code></a>()</p></td>
 <td><p>Return DataSeries with dtype set to Friedel equivalent.</p></td>
 </tr>
 </tbody>
 </table>
 <dl class="py method">
 <dt id="reciprocalspaceship.DataSeries.from_friedel_dtype">
-<code class="sig-name descname">from_friedel_dtype</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">copy</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="headerlink" href="#reciprocalspaceship.DataSeries.from_friedel_dtype" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">from_friedel_dtype</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#reciprocalspaceship.DataSeries.from_friedel_dtype" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return DataSeries with dtype set from Friedel equivalent. For example,
 rs.IntensityFriedelDtype is converted to rs.IntensityDtype(). If
 there is not a Friedel equivalent dtype, the DataSeries is returned
@@ -236,7 +236,7 @@ unchanged.</p>
 
 <dl class="py method">
 <dt id="reciprocalspaceship.DataSeries.to_friedel_dtype">
-<code class="sig-name descname">to_friedel_dtype</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">copy</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="headerlink" href="#reciprocalspaceship.DataSeries.to_friedel_dtype" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">to_friedel_dtype</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#reciprocalspaceship.DataSeries.to_friedel_dtype" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return DataSeries with dtype set to Friedel equivalent. For example,
 rs.IntensityDtype is converted to rs.IntensityFriedelDtype(). If
 there is not a Friedel equivalent dtype, the DataSeries is returned
