@@ -56,3 +56,26 @@ def get_mtz_by_spacegroup():
 def mtz_by_spacegroup(request):
     """Yields paths to MTZ files for each crystallographic spacegroup"""
     return request.param
+
+@pytest.fixture(params=[
+    rs.HKLIndexDtype,                        # H
+    rs.IntensityDtype,                       # J
+    rs.StructureFactorAmplitudeDtype,        # F
+    rs.AnomalousDifferenceDtype,             # D
+    rs.StandardDeviationDtype,               # Q
+    rs.StructureFactorAmplitudeFriedelDtype, # G
+    rs.StandardDeviationSFFriedelDtype,      # L
+    rs.IntensityFriedelDtype,                # K
+    rs.StandardDeviationIFriedelDtype,       # M
+    rs.ScaledStructureFactorAmplitudeDtype,  # E
+    rs.PhaseDtype,                           # P
+    rs.WeightDtype,                          # W
+    rs.HendricksonLattmanDtype,              # A
+    rs.BatchDtype,                           # B
+    rs.M_IsymDtype,                          # Y
+    rs.MTZIntDtype,                          # I
+    rs.MTZRealDtype                          # R
+])
+def dtype_all(request):
+    """Yields MTZ dtypes"""
+    return request.param()

@@ -36,10 +36,10 @@ class DataSeries(pd.Series):
         elif isinstance(self.dtype, rs.IntensityDtype):
             return self.astype(rs.IntensityFriedelDtype())
         elif (isinstance(self.dtype, rs.StandardDeviationDtype) and
-              "F" in self.name):
+              "SIGF" in self.name.upper()):
             return self.astype(rs.StandardDeviationSFFriedelDtype())
         elif (isinstance(self.dtype, rs.StandardDeviationDtype) and
-              "I" in self.name):
+              "SIGI" in self.name.upper()):
             return self.astype(rs.StandardDeviationIFriedelDtype())
         return self
 
