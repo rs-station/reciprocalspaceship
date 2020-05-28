@@ -3,6 +3,19 @@ import numpy as np
 import reciprocalspaceship as rs
 import gemmi
 
+def test_get_phase_keys(data_fmodel):
+    """Test DataSet.get_phase_keys()"""
+    result = data_fmodel.get_phase_keys()
+    expected = "PHIFMODEL"
+    assert len(result) == 1
+    assert result[0] == expected
+
+    # Add non-MTZDtype column
+    data_fmodel.label_centrics(inplace=True)
+    result = data_fmodel.get_phase_keys()
+    assert len(result) == 1
+    assert result[0] == expected
+    
 def test_get_hkls(data_hewl):
     """Test DataSet.get_hkls()"""
     H = data_hewl.get_hkls()
