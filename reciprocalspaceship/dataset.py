@@ -2,9 +2,14 @@ import pandas as pd
 import numpy as np
 import gemmi
 import reciprocalspaceship as rs
-from .utils import canonicalize_phases, apply_to_hkl, phase_shift, is_centric
-from .utils.asu import in_asu,hkl_to_asu
-from .dtypes.mapping import mtzcode2dtype
+from .utils import (
+    canonicalize_phases,
+    apply_to_hkl,
+    phase_shift,
+    is_centric,
+    in_asu,
+    hkl_to_asu,
+)
 
 class DataSeries(pd.Series):
     """
