@@ -24,7 +24,7 @@ class DataSeries(pd.Series):
     def _constructor_expanddim(self):
         return rs.DataSet
 
-    def to_friedel_dtype(self, copy=False):
+    def to_friedel_dtype(self):
         """
         Return DataSeries with dtype set to Friedel equivalent. For example, 
         rs.IntensityDtype is converted to rs.IntensityFriedelDtype(). If
@@ -32,18 +32,18 @@ class DataSeries(pd.Series):
         unchanged.
         """
         if isinstance(self.dtype, rs.StructureFactorAmplitudeDtype):
-            return self.astype(rs.StructureFactorAmplitudeFriedelDtype(), copy=copy)
+            return self.astype(rs.StructureFactorAmplitudeFriedelDtype())
         elif isinstance(self.dtype, rs.IntensityDtype):
-            return self.astype(rs.IntensityFriedelDtype(), copy=copy)
+            return self.astype(rs.IntensityFriedelDtype())
         elif (isinstance(self.dtype, rs.StandardDeviationDtype) and
               "F" in self.name):
-            return self.astype(rs.StandardDeviationSFFriedelDtype(), copy=copy)
+            return self.astype(rs.StandardDeviationSFFriedelDtype())
         elif (isinstance(self.dtype, rs.StandardDeviationDtype) and
               "I" in self.name):
-            return self.astype(rs.StandardDeviationIFriedelDtype(), copy=copy)
+            return self.astype(rs.StandardDeviationIFriedelDtype())
         return self
 
-    def from_friedel_dtype(self, copy=False):
+    def from_friedel_dtype(self):
         """
         Return DataSeries with dtype set from Friedel equivalent. For example, 
         rs.IntensityFriedelDtype is converted to rs.IntensityDtype(). If
@@ -51,10 +51,10 @@ class DataSeries(pd.Series):
         unchanged.
         """
         if isinstance(self.dtype, rs.StructureFactorAmplitudeFriedelDtype):
-            return self.astype(rs.StructureFactorAmplitudeDtype(), copy=copy)
+            return self.astype(rs.StructureFactorAmplitudeDtype())
         elif isinstance(self.dtype, rs.IntensityFriedelDtype):
-            return self.astype(rs.IntensityDtype(), copy=copy)
+            return self.astype(rs.IntensityDtype())
         elif (isinstance(self.dtype, rs.StandardDeviationIFriedelDtype) or
               isinstance(self.dtype, rs.StandardDeviationSFFriedelDtype)):
-            return self.astype(rs.StandardDeviationDtype(), copy=copy)
+            return self.astype(rs.StandardDeviationDtype())
         return self
