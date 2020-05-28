@@ -137,7 +137,7 @@ class DataSet(pd.DataFrame):
         keys = []
         for k in self:
             try:
-                if self[k].dtype.mtztype == "P":
+                if isinstance(self[k].dtype, rs.PhaseDtype):
                     keys.append(k)
             except:
                 continue
