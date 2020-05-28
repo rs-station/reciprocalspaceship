@@ -62,3 +62,46 @@ def test_compute_dHKL(dataset_hkl, inplace, cell):
     assert np.allclose(result["dHKL"].to_numpy(), expected)
     assert isinstance(result["dHKL"].dtype, rs.MTZRealDtype)
 
+@pytest.mark.parametrize("inplace", [True, False])
+@pytest.mark.parametrize("op", ["-x,-y,-z",
+                                gemmi.Op("x,y,z"),
+                                gemmi.Op("-x,-y,-z"),
+                                gemmi.Op("x,y,-z"),
+                                gemmi.Op("x,-y,-z"),
+                                gemmi.Op("-x,y,-z"),
+])
+def test_apply_symop_hkl(data_fmodel, inplace, op):
+    """
+    Test DataSet.apply_symop() using fmodel dataset. This test is purely
+    for the HKL indices, but will not explicitly test phase shift for cases
+    other than pure rotations.
+    """
+
+    copy = data_fmodel.copy()
+
+    if isinstance(op, gemmi.Op):
+
+        result = data_fmodel.apply_symop(op, inplace=inplace)
+        expectedH = [ op.apply_to_hkl(h) for h in copy.get_hkls() ]
+        expectedH = np.array(expectedH)
+
+        assert np.array_equal(result["FMODEL"].to_numpy(),
+                              copy["FMODEL"].to_numpy())
+        assert np.array_equal(result.get_hkls(), expectedH)
+
+        # Confirm Miller indices are still correct dtype
+        temp = result.reset_index()
+        assert isinstance(temp.H.dtype, rs.HKLIndexDtype)
+        assert isinstance(temp.K.dtype, rs.HKLIndexDtype)
+        assert isinstance(temp.L.dtype, rs.HKLIndexDtype)        
+        
+        # Confirm copy when desired
+        if inplace:
+            assert id(result) == id(data_fmodel)
+        else:
+            assert id(result) != id(data_fmodel)
+
+    else:
+        with pytest.raises(ValueError):
+            result = data_fmodel.apply_symop(op, inplace=inplace)
+        
