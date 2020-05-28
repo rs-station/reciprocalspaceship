@@ -2,6 +2,7 @@ import pandas as pd
 import numpy as np
 import gemmi
 import reciprocalspaceship as rs
+from reciprocalspaceship.dataseries import DataSeries
 from .utils import (
     canonicalize_phases,
     apply_to_hkl,
@@ -11,29 +12,6 @@ from .utils import (
     hkl_to_asu,
 )
 
-class DataSeries(pd.Series):
-    """
-    One-dimensional ndarray with axis labels, representing a slice
-    of a DataSet. DataSeries objects inherit methods from ``pd.Series``,
-    and as such have support for statistical methods that automatically
-    exclude missing data (represented as NaN).
-
-    Operations between DataSeries align values on their associated index
-    values, and as such do not need to have the same length. 
-
-    For more information on the attributes and methods available with
-    DataSeries objects, see the `Pandas documentation 
-    <https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.Series.html>`_.
-    """
-    
-    @property
-    def _constructor(self):
-        return DataSeries
-
-    @property
-    def _constructor_expanddim(self):
-        return DataSet
-    
 class DataSet(pd.DataFrame):
     """
     Representation of a crystallographic dataset. 
@@ -305,13 +283,7 @@ class DataSet(pd.DataFrame):
         # Combine Friedel datasets and change label MTZDtypes as needed
         F = dataset_plus.append(dataset_minus)
         for label in new_labels:
-            if isinstance(F.dtypes[label], rs.StructureFactorAmplitudeFriedelDtype):
-                F[label] = F[label].astype(rs.StructureFactorAmplitudeDtype())
-            elif isinstance(F.dtypes[label], rs.IntensityFriedelDtype):
-                F[label] = F[label].astype(rs.IntensityDtype())
-            elif (isinstance(F.dtypes[label], rs.StandardDeviationIFriedelDtype) or
-                  isinstance(F.dtypes[label], rs.StandardDeviationSFFriedelDtype)):
-                F[label] = F[label].astype(rs.StandardDeviationDtype())
+            F[label] = F[label].from_friedel_dtype()
         
         return F.__finalize__(self)
 

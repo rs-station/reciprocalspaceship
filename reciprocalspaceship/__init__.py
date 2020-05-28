@@ -5,7 +5,8 @@ def getVersionNumber():
     return version
 __version__ = getVersionNumber()
 
-from .dataset import DataSet, DataSeries
+from .dataset import DataSet
+from .dataseries import DataSeries
 from .io import read_mtz, read_precognition
 
 # Add support for MTZ data types:
