@@ -75,10 +75,8 @@ def test_hkl_to_asu(sgtbx_by_xhm, return_phase_shifts):
     else:
         Hasu_gemmi, ref_isym = gemmi_map2asu(H, sg, return_phase_shifts)
 
-    if np.array_equal(Hasu_sgtbx, Hasu_gemmi):
-        assert np.array_equal(isym, ref_isym)
-        if return_phase_shifts:
-            assert np.isclose(np.sin(phis), np.sin(ref_phis)).all()
-            assert np.isclose(np.cos(phis), np.cos(ref_phis)).all()
-    else:
-        pytest.xfail(f"Disagreement on reciprocal ASU between gemmi and sgtbx: {xhm}")
+    assert np.array_equal(isym, ref_isym)
+    if return_phase_shifts:
+        assert np.isclose(np.sin(phis), np.sin(ref_phis)).all()
+        assert np.isclose(np.cos(phis), np.cos(ref_phis)).all()
+

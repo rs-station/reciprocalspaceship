@@ -15,10 +15,6 @@ def test_multiplicity_epsilon(sgtbx_by_xhm, sg_type):
     xhm = sgtbx_by_xhm[0]
     reference = sgtbx_by_xhm[1]
 
-    # Hexagonal lattices seem to cause issues:
-    if ":H" in xhm:
-        pytest.xfail(f"Issues with hexagonal lattices: {xhm}")
-    
     H = reference[['h', 'k', 'l']].to_numpy()
     reference_epsilon = reference['epsilon'].to_numpy()
     if sg_type is gemmi.SpaceGroup:
