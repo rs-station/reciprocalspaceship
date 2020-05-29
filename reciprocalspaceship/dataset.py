@@ -139,26 +139,21 @@ class DataSet(pd.DataFrame):
         """
         if not isinstance(symop, gemmi.Op):
             raise ValueError(f"Provided symop is not of type gemmi.Op")
-        
-        # Apply symop to generate new HKL indices and phase shifts
-        hkl = np.vstack(self.index)
-        phase_shifts  = np.zeros(len(hkl))
 
-        hkl = apply_to_hkl(hkl, symop)
-        phase_shifts = np.rad2deg(phase_shift(hkl, symop))
-            
         if inplace:
-            self.reset_index(inplace=True)
-            self[['H', 'K', 'L']] = hkl
-            self[['H', 'K', 'L']] = self[['H', 'K', 'L']].astype(rs.HKLIndexDtype())            
-            self.set_index(['H', 'K', 'L'], inplace=True)
             F = self
         else:
             F = self.copy()
-            F.reset_index(inplace=True)
-            F[['H', 'K', 'L']] = hkl
-            F[['H', 'K', 'L']] = F[['H', 'K', 'L']].astype(rs.HKLIndexDtype())
-            F.set_index(['H', 'K', 'L'], inplace=True)
+            
+        # Apply symop to generate new HKL indices and phase shifts
+        H = F.get_hkls()
+        hkl = apply_to_hkl(H, symop)
+        phase_shifts = np.rad2deg(phase_shift(H, symop))
+            
+        F.reset_index(inplace=True)
+        F[['H', 'K', 'L']] = hkl
+        F[['H', 'K', 'L']] = F[['H', 'K', 'L']].astype(rs.HKLIndexDtype())
+        F.set_index(['H', 'K', 'L'], inplace=True)
 
         # Shift phases according to symop
         for key in F.get_phase_keys():

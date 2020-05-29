@@ -105,3 +105,20 @@ def test_apply_symop_hkl(data_fmodel, inplace, op):
         with pytest.raises(ValueError):
             result = data_fmodel.apply_symop(op, inplace=inplace)
         
+def test_apply_symop_roundtrip(mtz_by_spacegroup):
+    """
+    Test DataSet.apply_symop() using fmodel datasets. This test will
+    apply one of the symmetry operations, and confirm that hkl_to_asu()
+    returns it to the same HKL, with the same phase
+    """
+    dataset = rs.read_mtz(mtz_by_spacegroup)
+    for op in dataset.spacegroup.operations():
+        applied = dataset.apply_symop(op)
+        back = applied.hkl_to_asu()
+
+        assert np.array_equal(back.FMODEL.to_numpy(), dataset.FMODEL.to_numpy())
+        assert np.array_equal(back.get_hkls(), dataset.get_hkls())
+
+        original = rs.utils.to_structurefactor(dataset.FMODEL, dataset.PHIFMODEL)
+        back = rs.utils.to_structurefactor(back.FMODEL, back.PHIFMODEL)
+        assert np.isclose(original, back, rtol=1e-3).all()
