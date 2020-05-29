@@ -117,13 +117,7 @@ class DataSet(pd.DataFrame):
         keys : list of strings
             list of column labels
         """
-        keys = []
-        for k in self:
-            try:
-                if isinstance(self[k].dtype, rs.PhaseDtype):
-                    keys.append(k)
-            except:
-                continue
+        keys = [ k for k in self if isinstance(self[k].dtype, rs.PhaseDtype) ]
         return keys
 
     def apply_symop(self, symop, inplace=False):
