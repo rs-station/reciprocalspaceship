@@ -89,8 +89,10 @@
 <li class="toctree-l1 current"><a class="reference internal" href="examples.html">Examples</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="gettingstarted.html">Getting Started</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">Making an Anomalous Difference Map</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#Computing-differences">Computing differences</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Background">Background</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Computing-Structure-Factor-Amplitudes">Computing Structure Factor Amplitudes</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#Obtaining-Phases-by-Isomorphous-Replacement">Obtaining Phases by Isomorphous Replacement</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Viewing-the-Map">Viewing the Map</a></li>
 </ul>
 </li>
 </ul>
@@ -424,7 +426,6 @@ div.rendered_html tbody tr:hover {
 </style>
 <div class="section" id="Making-an-Anomalous-Difference-Map">
 <h1>Making an Anomalous Difference Map<a class="headerlink" href="#Making-an-Anomalous-Difference-Map" title="Permalink to this headline">¶</a></h1>
-<p>Note: This section is currently handled in a hacky and imprecise way. This example will be updated in the near future to more properly reflect how to generate an anomalous difference map.</p>
 <p>In <a class="reference internal" href="gettingstarted.html"><span class="doc">Getting Started</span></a> we loaded a room-temperature dataset that was collected at ~6550 eV of tetragonal HEWL. Let’s now use that data to generate an anomalous difference map based on the native anomalous signal from sulfur atoms.</p>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
@@ -432,6 +433,7 @@ div.rendered_html tbody tr:hover {
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
 <span></span><span class="kn">import</span> <span class="nn">reciprocalspaceship</span> <span class="k">as</span> <span class="nn">rs</span>
+<span class="kn">from</span> <span class="nn">reciprocalspaceship</span> <span class="kn">import</span> <span class="n">algorithms</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 </pre></div>
 </div>
@@ -581,83 +583,37 @@ Number of reflections: 12563
 </pre></div></div>
 </div>
 <hr class="docutils" />
-<div class="section" id="Computing-differences">
-<h2>Computing differences<a class="headerlink" href="#Computing-differences" title="Permalink to this headline">¶</a></h2>
-<p>In order to compute a difference map, let’s first compute the differences in structure factor amplitude between Friedel pairs. We will do this in the following steps:</p>
-<ol class="arabic simple">
-<li><p>Filter out any reflections without observation of both Friedel pairs, or negative intensities</p></li>
-<li><p>Filter out any centric reflections (Unnecessary)</p></li>
-<li><p>Convert the observed intensities into structure factor amplitudes</p></li>
-<li><p>Compute difference in magnitude between Friedel pairs (<span class="math notranslate nohighlight">\(F_{HKL}^+ - F_{HKL}^-\)</span>)</p></li>
-</ol>
-<div class="nbinput nblast docutils container">
+<div class="section" id="Background">
+<h2>Background<a class="headerlink" href="#Background" title="Permalink to this headline">¶</a></h2>
+<p>Since this dataset was collected at a single wavelength, we can compute an anomalous difference map from the anomalous structure factor amplitudes, <span class="math notranslate nohighlight">\(|F_{A}|\)</span>, and their phase shifts, <span class="math notranslate nohighlight">\(\alpha\)</span>, relative to the computed phases from an isomorphous structure of tetragonal HEWL. We will compute <span class="math notranslate nohighlight">\(|F_{A}|\)</span> based on the following:</p>
+<p><span class="math">\begin{equation*}
+|F_{A}| \propto \Delta_{\mathrm{ano}} = |F_{HKL}| - |F_{\overline{HKL}}|
+\end{equation*}</span></p>
+<p>We will then use the PDB: 1VAT and <code class="docutils literal notranslate"><span class="pre">phenix.fmodel</span></code> to compute isomorphous phases, <span class="math notranslate nohighlight">\(\phi_c\)</span>, which can be used to determine the phases for the anomalous contribution, <span class="math notranslate nohighlight">\(\phi_A\)</span>, using the phase shift, <span class="math notranslate nohighlight">\(\alpha\)</span>:</p>
+<p><span class="math">\begin{equation*}
+\phi_A = \phi_c - \alpha
+\end{equation*}</span></p>
+<p>Since this is a SAD experiment, we can assume <span class="math notranslate nohighlight">\(\alpha\)</span> is 90˚ when <span class="math notranslate nohighlight">\(\Delta_{\mathrm{ano}}\)</span> is negative and 270˚ when it is positive. This formalism is based on <a class="reference external" href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3246834/pdf/j-44-01285.pdf">Thorn and Sheldrick, J Appl. Cryst. (2011)</a>.</p>
+</div>
+<hr class="docutils" />
+<div class="section" id="Computing-Structure-Factor-Amplitudes">
+<h2>Computing Structure Factor Amplitudes<a class="headerlink" href="#Computing-Structure-Factor-Amplitudes" title="Permalink to this headline">¶</a></h2>
+<p>The dataset being used is the direct output from running scaling and merging in <a class="reference external" href="http://www.ccp4.ac.uk/html/aimless.html">AIMLESS</a>. As a first processing step, we need to convert the observed merged intensities, <span class="math notranslate nohighlight">\(I(+)\)</span> and <span class="math notranslate nohighlight">\(I(-)\)</span>, into observed structure factor amplitudes, <span class="math notranslate nohighlight">\(F(+)\)</span> and <span class="math notranslate nohighlight">\(F(-)\)</span>.</p>
+<div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="c1"># 1. Filter out reflections without both Friedel pairs</span>
-<span class="n">refltable</span> <span class="o">=</span> <span class="n">refltable</span><span class="o">.</span><span class="n">loc</span><span class="p">[(</span><span class="n">refltable</span><span class="p">[</span><span class="s2">&quot;N(+)&quot;</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span> <span class="o">&amp;</span>
-                          <span class="p">(</span><span class="n">refltable</span><span class="p">[</span><span class="s2">&quot;N(-)&quot;</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span> <span class="o">&amp;</span>
-                          <span class="p">(</span><span class="n">refltable</span><span class="p">[</span><span class="s2">&quot;I(+)&quot;</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span> <span class="o">&amp;</span>
-                          <span class="p">(</span><span class="n">refltable</span><span class="p">[</span><span class="s2">&quot;I(-)&quot;</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)]</span>
-</pre></div>
-</div>
-</div>
-<div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
-</pre></div>
-</div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Number of reflections: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">refltable</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span></span><span class="c1"># In order to scale the merged intensities, we must first get them into a single DataSet column</span>
+<span class="n">stacked</span> <span class="o">=</span> <span class="n">refltable</span><span class="o">.</span><span class="n">stack_anomalous</span><span class="p">()</span>
+<span class="n">stacked</span> <span class="o">=</span> <span class="n">stacked</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">stacked</span><span class="p">[</span><span class="s2">&quot;N&quot;</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">]</span>
+<span class="n">stacked</span><span class="o">.</span><span class="n">sort_index</span><span class="p">(</span><span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">stacked</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-Number of reflections: 12333
-</pre></div></div>
-</div>
-<div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
-</pre></div>
-</div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="c1"># 2. Filter out centric reflections (Unnecessary; but they won&#39;t have anomalous signal)</span>
-<span class="n">refltable</span> <span class="o">=</span> <span class="n">refltable</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="o">~</span><span class="n">refltable</span><span class="o">.</span><span class="n">label_centrics</span><span class="p">()[</span><span class="s2">&quot;CENTRIC&quot;</span><span class="p">]]</span>
-</pre></div>
-</div>
-</div>
-<div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
-</pre></div>
-</div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Number of reflections: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">refltable</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-Number of reflections: 10328
-</pre></div></div>
-</div>
-<div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
-</pre></div>
-</div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">refltable</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
-</pre></div>
-</div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
 </pre></div>
 </div>
 <div class="output_area rendered_html docutils container">
@@ -684,12 +640,131 @@ Number of reflections: 10328
       <th>FreeR_flag</th>
       <th>IMEAN</th>
       <th>SIGIMEAN</th>
-      <th>I(+)</th>
-      <th>SIGI(+)</th>
-      <th>I(-)</th>
-      <th>SIGI(-)</th>
-      <th>N(+)</th>
-      <th>N(-)</th>
+      <th>I</th>
+      <th>SIGI</th>
+      <th>N</th>
+    </tr>
+    <tr>
+      <th>H</th>
+      <th>K</th>
+      <th>L</th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th rowspan="5" valign="top">-45</th>
+      <th rowspan="2" valign="top">-10</th>
+      <th>-1</th>
+      <td>19</td>
+      <td>6.4083962</td>
+      <td>1.9782588</td>
+      <td>5.543211</td>
+      <td>2.965243</td>
+      <td>4</td>
+    </tr>
+    <tr>
+      <th>0</th>
+      <td>16</td>
+      <td>7.999073</td>
+      <td>2.9954805</td>
+      <td>7.999073</td>
+      <td>2.9954805</td>
+      <td>4</td>
+    </tr>
+    <tr>
+      <th rowspan="3" valign="top">-9</th>
+      <th>-2</th>
+      <td>11</td>
+      <td>26.471386</td>
+      <td>3.8778236</td>
+      <td>26.471386</td>
+      <td>3.8778236</td>
+      <td>4</td>
+    </tr>
+    <tr>
+      <th>-1</th>
+      <td>6</td>
+      <td>4.3246555</td>
+      <td>1.9706693</td>
+      <td>2.7027502</td>
+      <td>2.668546</td>
+      <td>4</td>
+    </tr>
+    <tr>
+      <th>0</th>
+      <td>17</td>
+      <td>60.28856</td>
+      <td>5.675214</td>
+      <td>60.28856</td>
+      <td>5.675214</td>
+      <td>4</td>
+    </tr>
+  </tbody>
+</table>
+</div></div>
+</div>
+<p>In order to get structure factor amplitudes, we must first account for mean intensities that are negative due to background subtraction. We will use a method based on the Bayesian approach first proposed by <a class="reference external" href="https://scripts.iucr.org/cgi-bin/paper?a15572">French and Wilson</a> to ensure that all intensities are strictly positive. This method is implemented in <code class="docutils literal notranslate"><span class="pre">reciprocalspaceship.algorithms.scale_merged_intensities()</span></code>.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">scaled</span> <span class="o">=</span> <span class="n">algorithms</span><span class="o">.</span><span class="n">scale_merged_intensities</span><span class="p">(</span><span class="n">stacked</span><span class="p">,</span> <span class="s2">&quot;I&quot;</span><span class="p">,</span> <span class="s2">&quot;SIGI&quot;</span><span class="p">,</span> <span class="n">mean_intensity_method</span><span class="o">=</span><span class="s2">&quot;anisotropic&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">scaled</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th></th>
+      <th></th>
+      <th>FreeR_flag</th>
+      <th>IMEAN</th>
+      <th>SIGIMEAN</th>
+      <th>I</th>
+      <th>SIGI</th>
+      <th>N</th>
+      <th>dHKL</th>
+      <th>CENTRIC</th>
+      <th>FW-I</th>
+      <th>FW-SIGI</th>
+      <th>FW-F</th>
+      <th>FW-SIGF</th>
     </tr>
     <tr>
       <th>H</th>
@@ -704,98 +779,229 @@ Number of reflections: 10328
       <th></th>
       <th></th>
       <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
     </tr>
   </thead>
   <tbody>
     <tr>
-      <th rowspan="5" valign="top">2</th>
-      <th rowspan="5" valign="top">1</th>
-      <th>1</th>
-      <td>0</td>
-      <td>199.67992</td>
-      <td>2.1387444</td>
-      <td>208.31882</td>
-      <td>3.0264542</td>
-      <td>191.06168</td>
-      <td>3.0228317</td>
-      <td>64</td>
-      <td>64</td>
-    </tr>
-    <tr>
-      <th>2</th>
-      <td>13</td>
-      <td>881.6192</td>
-      <td>9.878236</td>
-      <td>845.6465</td>
-      <td>13.966452</td>
-      <td>917.6278</td>
-      <td>13.973421</td>
-      <td>64</td>
-      <td>64</td>
-    </tr>
-    <tr>
-      <th>3</th>
+      <th rowspan="5" valign="top">-45</th>
+      <th rowspan="2" valign="top">-10</th>
+      <th>-1</th>
+      <td>19</td>
+      <td>6.4083962</td>
+      <td>1.9782588</td>
+      <td>5.543211</td>
+      <td>2.965243</td>
       <td>4</td>
-      <td>423.35788</td>
-      <td>4.799563</td>
-      <td>419.0855</td>
-      <td>6.7865486</td>
-      <td>427.63293</td>
-      <td>6.7886667</td>
-      <td>64</td>
-      <td>64</td>
+      <td>1.7194215</td>
+      <td>False</td>
+      <td>5.588304</td>
+      <td>2.7283347</td>
+      <td>2.3639593</td>
+      <td>0.57706887</td>
     </tr>
     <tr>
-      <th>4</th>
-      <td>15</td>
-      <td>722.5178</td>
-      <td>8.301497</td>
-      <td>685.8678</td>
-      <td>11.732637</td>
-      <td>759.2611</td>
-      <td>11.747558</td>
-      <td>64</td>
-      <td>64</td>
+      <th>0</th>
+      <td>16</td>
+      <td>7.999073</td>
+      <td>2.9954805</td>
+      <td>7.999073</td>
+      <td>2.9954805</td>
+      <td>4</td>
+      <td>1.7212021</td>
+      <td>True</td>
+      <td>7.1421466</td>
+      <td>3.141908</td>
+      <td>2.6724794</td>
+      <td>0.58782643</td>
     </tr>
     <tr>
-      <th>5</th>
-      <td>15</td>
-      <td>1415.0105</td>
-      <td>20.677141</td>
-      <td>1405.6847</td>
-      <td>29.239077</td>
-      <td>1424.34</td>
-      <td>29.24471</td>
-      <td>40</td>
-      <td>40</td>
+      <th rowspan="3" valign="top">-9</th>
+      <th>-2</th>
+      <td>11</td>
+      <td>26.471386</td>
+      <td>3.8778236</td>
+      <td>26.471386</td>
+      <td>3.8778236</td>
+      <td>4</td>
+      <td>1.7217635</td>
+      <td>False</td>
+      <td>26.15096</td>
+      <td>3.8778236</td>
+      <td>5.113801</td>
+      <td>0.37915277</td>
+    </tr>
+    <tr>
+      <th>-1</th>
+      <td>6</td>
+      <td>4.3246555</td>
+      <td>1.9706693</td>
+      <td>2.7027502</td>
+      <td>2.668546</td>
+      <td>4</td>
+      <td>1.7271441</td>
+      <td>False</td>
+      <td>3.3600478</td>
+      <td>2.0947244</td>
+      <td>1.8330433</td>
+      <td>0.5713789</td>
+    </tr>
+    <tr>
+      <th>0</th>
+      <td>17</td>
+      <td>60.28856</td>
+      <td>5.675214</td>
+      <td>60.28856</td>
+      <td>5.675214</td>
+      <td>4</td>
+      <td>1.728949</td>
+      <td>True</td>
+      <td>59.65461</td>
+      <td>5.68847</td>
+      <td>7.7236395</td>
+      <td>0.3682506</td>
     </tr>
   </tbody>
 </table>
 </div></div>
 </div>
 <div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="c1"># Remove columns that won&#39;t be used</span>
+<span class="n">scaled</span> <span class="o">=</span> <span class="n">scaled</span><span class="p">[[</span><span class="s2">&quot;FW-F&quot;</span><span class="p">,</span> <span class="s2">&quot;FW-SIGF&quot;</span><span class="p">,</span> <span class="s2">&quot;N&quot;</span><span class="p">]]</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="c1"># &quot;Unstack&quot; anomalous data from one-column to two-column format</span>
+<span class="n">refltable</span> <span class="o">=</span> <span class="n">scaled</span><span class="o">.</span><span class="n">unstack_anomalous</span><span class="p">([</span><span class="s2">&quot;FW-F&quot;</span><span class="p">,</span> <span class="s2">&quot;FW-SIGF&quot;</span><span class="p">,</span> <span class="s2">&quot;N&quot;</span><span class="p">])</span><span class="o">.</span><span class="n">dropna</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="c1"># 3. Convert intensities to structure factor amplitudes</span>
-<span class="n">refltable</span><span class="p">[</span><span class="s2">&quot;F(+)&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">rs</span><span class="o">.</span><span class="n">DataSeries</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">refltable</span><span class="p">[</span><span class="s2">&quot;I(+)&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()),</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;SFAmplitudeFriedel&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">values</span>
-<span class="n">refltable</span><span class="p">[</span><span class="s2">&quot;F(-)&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">rs</span><span class="o">.</span><span class="n">DataSeries</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">refltable</span><span class="p">[</span><span class="s2">&quot;I(-)&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()),</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;SFAmplitudeFriedel&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">values</span>
-<span class="n">refltable</span><span class="p">[</span><span class="s2">&quot;SIGF(+)&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">rs</span><span class="o">.</span><span class="n">DataSeries</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">refltable</span><span class="p">[</span><span class="s2">&quot;SIGI(+)&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()),</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;StddevSFFriedel&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">values</span>
-<span class="n">refltable</span><span class="p">[</span><span class="s2">&quot;SIGF(-)&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">rs</span><span class="o">.</span><span class="n">DataSeries</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">refltable</span><span class="p">[</span><span class="s2">&quot;SIGI(-)&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()),</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;StddevSFFriedel&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">values</span>
+<span></span><span class="n">refltable</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
 </pre></div>
 </div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th></th>
+      <th></th>
+      <th>FW-F(+)</th>
+      <th>FW-SIGF(+)</th>
+      <th>N(+)</th>
+      <th>FW-F(-)</th>
+      <th>FW-SIGF(-)</th>
+      <th>N(-)</th>
+    </tr>
+    <tr>
+      <th>H</th>
+      <th>K</th>
+      <th>L</th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th rowspan="5" valign="top">0</th>
+      <th rowspan="5" valign="top">0</th>
+      <th>4</th>
+      <td>25.895874</td>
+      <td>0.42886934</td>
+      <td>16</td>
+      <td>25.895874</td>
+      <td>0.42886934</td>
+      <td>16</td>
+    </tr>
+    <tr>
+      <th>8</th>
+      <td>57.19014</td>
+      <td>0.9409411</td>
+      <td>16</td>
+      <td>57.190083</td>
+      <td>0.94094205</td>
+      <td>16</td>
+    </tr>
+    <tr>
+      <th>12</th>
+      <td>36.96789</td>
+      <td>0.5865023</td>
+      <td>16</td>
+      <td>36.96788</td>
+      <td>0.58650255</td>
+      <td>16</td>
+    </tr>
+    <tr>
+      <th>16</th>
+      <td>64.35631</td>
+      <td>1.5460751</td>
+      <td>8</td>
+      <td>64.356346</td>
+      <td>1.5460743</td>
+      <td>8</td>
+    </tr>
+    <tr>
+      <th>20</th>
+      <td>1.8891001</td>
+      <td>0.9376929</td>
+      <td>1</td>
+      <td>1.8891151</td>
+      <td>0.9376951</td>
+      <td>1</td>
+    </tr>
+  </tbody>
+</table>
+</div></div>
 </div>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="c1"># 4. Compute differences</span>
-<span class="n">dF</span>    <span class="o">=</span> <span class="n">refltable</span><span class="p">[</span><span class="s2">&quot;F(+)&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span> <span class="o">-</span> <span class="n">refltable</span><span class="p">[</span><span class="s2">&quot;F(-)&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span>
-<span class="n">sigDF</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">refltable</span><span class="p">[</span><span class="s2">&quot;SIGF(+)&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="n">refltable</span><span class="p">[</span><span class="s2">&quot;SIGF(-)&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
-<span class="n">refltable</span><span class="p">[</span><span class="s2">&quot;dF&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">rs</span><span class="o">.</span><span class="n">DataSeries</span><span class="p">(</span><span class="n">dF</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;dF&quot;</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;SFAmplitude&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">values</span>
-<span class="n">refltable</span><span class="p">[</span><span class="s2">&quot;SigDF&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">rs</span><span class="o">.</span><span class="n">DataSeries</span><span class="p">(</span><span class="n">sigDF</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;SigDF&quot;</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;Stddev&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">values</span>
+<span></span><span class="c1"># Compute differences</span>
+<span class="n">dF</span>    <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">refltable</span><span class="p">[</span><span class="s2">&quot;FW-F(+)&quot;</span><span class="p">]</span> <span class="o">-</span> <span class="n">refltable</span><span class="p">[</span><span class="s2">&quot;FW-F(-)&quot;</span><span class="p">])</span>
+<span class="n">sigDF</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">refltable</span><span class="p">[</span><span class="s2">&quot;FW-SIGF(+)&quot;</span><span class="p">]</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="n">refltable</span><span class="p">[</span><span class="s2">&quot;FW-SIGF(-)&quot;</span><span class="p">]</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">refltable</span><span class="p">[</span><span class="s2">&quot;ANOM&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">rs</span><span class="o">.</span><span class="n">DataSeries</span><span class="p">(</span><span class="n">dF</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;SFAmplitude&quot;</span><span class="p">)</span>
+<span class="n">refltable</span><span class="p">[</span><span class="s2">&quot;SigANOM&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">rs</span><span class="o">.</span><span class="n">DataSeries</span><span class="p">(</span><span class="n">sigDF</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;Stddev&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -804,9 +1010,7 @@ Number of reflections: 10328
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="c1"># Drop extraneous columns</span>
-<span class="n">refltable</span> <span class="o">=</span> <span class="n">refltable</span><span class="p">[[</span><span class="s2">&quot;F(+)&quot;</span><span class="p">,</span> <span class="s2">&quot;SIGF(+)&quot;</span><span class="p">,</span> <span class="s2">&quot;F(-)&quot;</span><span class="p">,</span> <span class="s2">&quot;SIGF(-)&quot;</span><span class="p">,</span> <span class="s2">&quot;dF&quot;</span><span class="p">,</span> <span class="s2">&quot;SigDF&quot;</span><span class="p">]]</span>
-<span class="n">refltable</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+<span></span><span class="n">refltable</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
@@ -835,12 +1039,14 @@ Number of reflections: 10328
       <th></th>
       <th></th>
       <th></th>
-      <th>F(+)</th>
-      <th>SIGF(+)</th>
-      <th>F(-)</th>
-      <th>SIGF(-)</th>
-      <th>dF</th>
-      <th>SigDF</th>
+      <th>FW-F(+)</th>
+      <th>FW-SIGF(+)</th>
+      <th>N(+)</th>
+      <th>FW-F(-)</th>
+      <th>FW-SIGF(-)</th>
+      <th>N(-)</th>
+      <th>ANOM</th>
+      <th>SigANOM</th>
     </tr>
     <tr>
       <th>H</th>
@@ -852,100 +1058,80 @@ Number of reflections: 10328
       <th></th>
       <th></th>
       <th></th>
+      <th></th>
+      <th></th>
     </tr>
   </thead>
   <tbody>
     <tr>
-      <th rowspan="5" valign="top">2</th>
-      <th rowspan="5" valign="top">1</th>
-      <th>1</th>
-      <td>14.433254</td>
-      <td>1.7396708</td>
-      <td>13.822506</td>
-      <td>1.7386292</td>
-      <td>0.6107483</td>
-      <td>2.4595296</td>
-    </tr>
-    <tr>
-      <th>2</th>
-      <td>29.080002</td>
-      <td>3.7371716</td>
-      <td>30.292372</td>
-      <td>3.7381039</td>
-      <td>-1.2123699</td>
-      <td>5.285818</td>
-    </tr>
-    <tr>
-      <th>3</th>
-      <td>20.471579</td>
-      <td>2.6051004</td>
-      <td>20.679287</td>
-      <td>2.605507</td>
-      <td>-0.20770836</td>
-      <td>3.6844559</td>
-    </tr>
-    <tr>
+      <th rowspan="5" valign="top">0</th>
+      <th rowspan="5" valign="top">0</th>
       <th>4</th>
-      <td>26.189077</td>
-      <td>3.4252937</td>
-      <td>27.554693</td>
-      <td>3.427471</td>
-      <td>-1.3656158</td>
-      <td>4.8456364</td>
+      <td>25.895874</td>
+      <td>0.42886934</td>
+      <td>16</td>
+      <td>25.895874</td>
+      <td>0.42886934</td>
+      <td>16</td>
+      <td>0.0</td>
+      <td>0.60651284</td>
     </tr>
     <tr>
-      <th>5</th>
-      <td>37.492462</td>
-      <td>5.407317</td>
-      <td>37.74043</td>
-      <td>5.407838</td>
-      <td>-0.24796677</td>
-      <td>7.6474695</td>
+      <th>8</th>
+      <td>57.19014</td>
+      <td>0.9409411</td>
+      <td>16</td>
+      <td>57.190083</td>
+      <td>0.94094205</td>
+      <td>16</td>
+      <td>5.722046e-05</td>
+      <td>1.3306923</td>
+    </tr>
+    <tr>
+      <th>12</th>
+      <td>36.96789</td>
+      <td>0.5865023</td>
+      <td>16</td>
+      <td>36.96788</td>
+      <td>0.58650255</td>
+      <td>16</td>
+      <td>1.1444092e-05</td>
+      <td>0.82943964</td>
+    </tr>
+    <tr>
+      <th>16</th>
+      <td>64.35631</td>
+      <td>1.5460751</td>
+      <td>8</td>
+      <td>64.356346</td>
+      <td>1.5460743</td>
+      <td>8</td>
+      <td>3.8146973e-05</td>
+      <td>2.1864798</td>
+    </tr>
+    <tr>
+      <th>20</th>
+      <td>1.8891001</td>
+      <td>0.9376929</td>
+      <td>1</td>
+      <td>1.8891151</td>
+      <td>0.9376951</td>
+      <td>1</td>
+      <td>1.50203705e-05</td>
+      <td>1.3260995</td>
     </tr>
   </tbody>
 </table>
 </div></div>
 </div>
-<p>Let’s plot the signal-to-noise of the observed anomalous difference signal</p>
-<div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
-</pre></div>
-</div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="o">%</span><span class="k">matplotlib</span> inline
-<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
-</pre></div>
-</div>
-</div>
-<div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
-</pre></div>
-</div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">9</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">refltable</span><span class="o">.</span><span class="n">dF</span><span class="o">.</span><span class="n">values</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">refltable</span><span class="o">.</span><span class="n">dF</span><span class="o">.</span><span class="n">values</span><span class="p">)</span><span class="o">/</span><span class="n">refltable</span><span class="o">.</span><span class="n">SigDF</span><span class="o">.</span><span class="n">values</span><span class="p">,</span> <span class="s2">&quot;k.&quot;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.3</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">xlim</span><span class="p">(</span><span class="o">-</span><span class="n">refltable</span><span class="o">.</span><span class="n">dF</span><span class="o">.</span><span class="n">abs</span><span class="p">()</span><span class="o">.</span><span class="n">max</span><span class="p">(),</span> <span class="n">refltable</span><span class="o">.</span><span class="n">dF</span><span class="o">.</span><span class="n">abs</span><span class="p">()</span><span class="o">.</span><span class="n">max</span><span class="p">())</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;$F_</span><span class="si">{hkl}</span><span class="s2">^{+} - F_</span><span class="si">{hkl}</span><span class="s2">^{-}$&quot;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;$\frac{|F_</span><span class="si">{hkl}</span><span class="s2">^{+} - F_</span><span class="si">{hkl}</span><span class="s2">^{-}|}{\sigma_</span><span class="si">{dF}</span><span class="s2">}$&quot;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
-</pre></div>
-</div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<img alt="../_images/examples_anomalousdifference_15_0.png" src="../_images/examples_anomalousdifference_15_0.png" />
-</div>
-</div>
 </div>
 <hr class="docutils" />
 <div class="section" id="Obtaining-Phases-by-Isomorphous-Replacement">
 <h2>Obtaining Phases by Isomorphous Replacement<a class="headerlink" href="#Obtaining-Phases-by-Isomorphous-Replacement" title="Permalink to this headline">¶</a></h2>
-<p>In order to turn these anomalous differences into a map, we need to get phases. We will do that by isomorphous replacement with a published structure, <a class="reference external" href="https://www.rcsb.org/structure/1vat">1VAT</a>. Phases were generated from the PDB model using <a class="reference external" href="https://www.phenix-online.org/documentation/reference/fmodel.html">fmodel</a>, and then we will compute the necessary phase shifts in order to go from the conventional structure factor phases to phases associated with the anomalous scattering
+<p>In order to turn these anomalous differences into a map, we need to get phases. We will do that by isomorphous replacement with a published structure, <a class="reference external" href="https://www.rcsb.org/structure/1vat">1VAT</a>. Phases were generated from the PDB model using <a class="reference external" href="https://www.phenix-online.org/documentation/reference/fmodel.html">phenix.fmodel</a>, and then we will compute the necessary phase shifts in order to go from the conventional structure factor phases to phases associated with the anomalous scattering
 contributions.</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -954,7 +1140,7 @@ contributions.</p>
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -963,7 +1149,7 @@ contributions.</p>
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
 </pre></div>
 </div>
 <div class="output_area rendered_html docutils container">
@@ -1030,12 +1216,43 @@ contributions.</p>
 </table>
 </div></div>
 </div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="c1"># Find common HKL indices</span>
+<span class="n">hkls</span> <span class="o">=</span> <span class="n">refltable</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">intersection</span><span class="p">(</span><span class="n">ref</span><span class="o">.</span><span class="n">index</span><span class="p">)</span><span class="o">.</span><span class="n">sort_values</span><span class="p">()</span>
+<span class="n">refltable</span> <span class="o">=</span> <span class="n">refltable</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">hkls</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<p>As mentioned in <a class="reference external" href="#background">Background</a>, we can compute the anomalous phases as follows:</p>
+<p><span class="math">\begin{equation*}
+\phi_A = \phi_c - \alpha
+\end{equation*}</span></p>
+<p>where <span class="math notranslate nohighlight">\(\alpha\)</span> is 90˚ when <span class="math notranslate nohighlight">\(\Delta_{\mathrm{ano}}\)</span> is negative and 270˚ when it is positive.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">alpha</span> <span class="o">=</span> <span class="mi">90</span> <span class="o">+</span> <span class="mi">180</span><span class="o">*</span><span class="p">(</span><span class="n">refltable</span><span class="p">[</span><span class="s2">&quot;FW-F(+)&quot;</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="n">refltable</span><span class="p">[</span><span class="s2">&quot;FW-F(-)&quot;</span><span class="p">])</span>
+<span class="n">refltable</span><span class="p">[</span><span class="s2">&quot;PHANOM&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">ref</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">hkls</span><span class="p">,</span> <span class="s2">&quot;PHIFMODEL&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="n">alpha</span>
+<span class="n">refltable</span><span class="p">[</span><span class="s2">&quot;PHANOM&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">rs</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">canonicalize_phases</span><span class="p">(</span><span class="n">refltable</span><span class="p">[</span><span class="s2">&quot;PHANOM&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s2">&quot;Phase&quot;</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="Viewing-the-Map">
+<h2>Viewing the Map<a class="headerlink" href="#Viewing-the-Map" title="Permalink to this headline">¶</a></h2>
+<p>Since we have structure factor amplitudes, <code class="docutils literal notranslate"><span class="pre">refltable[&quot;ANOM&quot;]</span></code>, and phases, <code class="docutils literal notranslate"><span class="pre">refltable[&quot;PHANOM&quot;]</span></code>, for the anomalous structure factors, we can now view the anomalous difference map. This can be done by writing out an MTZ file, and loading it into COOT, PyMOL, or any other molecular graphics package.</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">ref</span><span class="o">.</span><span class="n">dtypes</span>
+<span></span><span class="n">refltable</span><span class="o">.</span><span class="n">dtypes</span>
 </pre></div>
 </div>
 </div>
@@ -1045,8 +1262,15 @@ contributions.</p>
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-FMODEL       SFAmplitude
-PHIFMODEL          Phase
+FW-F(+)       SFAmplitudeFriedel
+FW-SIGF(+)       StddevSFFriedel
+N(+)                      MTZInt
+FW-F(-)       SFAmplitudeFriedel
+FW-SIGF(-)       StddevSFFriedel
+N(-)                      MTZInt
+ANOM                 SFAmplitude
+SigANOM                   Stddev
+PHANOM                     Phase
 dtype: object
 </pre></div></div>
 </div>
@@ -1055,59 +1279,14 @@ dtype: object
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="c1"># Find common HKL indices</span>
-<span class="n">hkls</span> <span class="o">=</span> <span class="n">refltable</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">intersection</span><span class="p">(</span><span class="n">ref</span><span class="o">.</span><span class="n">index</span><span class="p">)</span>
-<span class="n">hkls</span> <span class="o">=</span> <span class="n">hkls</span><span class="o">.</span><span class="n">sort_values</span><span class="p">()</span>
-<span class="n">refltable</span> <span class="o">=</span> <span class="n">refltable</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">hkls</span><span class="p">]</span>
-<span class="n">ref</span> <span class="o">=</span> <span class="n">ref</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">hkls</span><span class="p">]</span>
-</pre></div>
-</div>
-</div>
-<div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
-</pre></div>
-</div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Number of reflections: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">refltable</span><span class="p">)</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">refltable</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-Number of reflections: 10328, 10328
-</pre></div></div>
-</div>
-<div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[19]:
-</pre></div>
-</div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="c1"># This accounts for the phase shifts between the computed phases and the desired anomalous phases</span>
-<span class="n">refltable</span><span class="p">[</span><span class="s2">&quot;PHANOM&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">ref</span><span class="p">[</span><span class="s2">&quot;PHIFMODEL&quot;</span><span class="p">]</span>
-<span class="n">refltable</span><span class="p">[</span><span class="s2">&quot;PHANOM&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">refltable</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="s2">&quot;PHANOM&quot;</span><span class="p">]</span> <span class="k">if</span> <span class="n">x</span><span class="p">[</span><span class="s2">&quot;dF&quot;</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="k">else</span> <span class="mi">180</span><span class="o">+</span><span class="n">x</span><span class="p">[</span><span class="s2">&quot;PHANOM&quot;</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-<span class="n">refltable</span><span class="p">[</span><span class="s2">&quot;PHANOM&quot;</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">90</span>
-<span class="n">refltable</span><span class="p">[</span><span class="s2">&quot;PHANOM&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">rs</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">canonicalize_phases</span><span class="p">(</span><span class="n">refltable</span><span class="p">[</span><span class="s2">&quot;PHANOM&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s2">&quot;Phase&quot;</span><span class="p">))</span>
-
-<span class="c1"># Using the convention above for the phase shift, we need to take the |Fanom|</span>
-<span class="n">refltable</span><span class="p">[</span><span class="s2">&quot;ANOM&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">refltable</span><span class="p">[</span><span class="s2">&quot;dF&quot;</span><span class="p">])</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s2">&quot;SFAmplitude&quot;</span><span class="p">)</span><span class="o">/</span><span class="mi">2</span>
-</pre></div>
-</div>
-</div>
-<div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[20]:
-</pre></div>
-</div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
 <span></span><span class="n">refltable</span><span class="o">.</span><span class="n">write_mtz</span><span class="p">(</span><span class="s2">&quot;data/anomdiff.mtz&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
-<p>Looking at the map on the <code class="docutils literal notranslate"><span class="pre">1VAT</span></code> structure, we can see difference density on all of the sulfurs in HEWL. Here is an image of this density contoured at +5<span class="math notranslate nohighlight">\(\sigma\)</span>:</p>
-<p><img alt="Anomalous Map" src="../_images/anomalousmap.png" /></p>
-</div>
+<p>Looking at the map on the <code class="docutils literal notranslate"><span class="pre">1VAT</span></code> structure in PyMOL, we can see difference density on all of the sulfurs in HEWL.</p>
+<figure><p><a class="reference internal" href="../_images/anomalousmap.png"><img alt="Anomalous Difference Map" src="../_images/anomalousmap.png" style="width: 611px; height: 401px;" /></a></p>
+<center><figcaption><p>Anomalous difference map from HEWL crystal. Map is contoured at +5<span class="math notranslate nohighlight">\(\sigma\)</span>.</p>
+</figcaption></center></figure></div>
 </div>
 
 
