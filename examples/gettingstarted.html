@@ -673,7 +673,7 @@ dtype: object
 <hr class="docutils" />
 <div class="section" id="Plotting-reflection-data">
 <h2>Plotting reflection data<a class="headerlink" href="#Plotting-reflection-data" title="Permalink to this headline">¶</a></h2>
-<p>For illustration purposes, let’s plot the <span class="math notranslate nohighlight">\(I(+)\)</span> data against the <span class="math notranslate nohighlight">\(I(-)\)</span> data</p>
+<p>For illustrative purposes, let’s plot the <span class="math notranslate nohighlight">\(I(+)\)</span> data against the <span class="math notranslate nohighlight">\(I(-)\)</span> data</p>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
 </pre></div>
@@ -690,7 +690,7 @@ dtype: object
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
 <span></span><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">refltable</span><span class="p">[</span><span class="s1">&#39;I(+)&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">,</span> <span class="n">refltable</span><span class="p">[</span><span class="s1">&#39;I(-)&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">,</span> <span class="s1">&#39;k.&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.1</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">refltable</span><span class="p">[</span><span class="s1">&#39;I(+)&#39;</span><span class="p">],</span> <span class="n">refltable</span><span class="p">[</span><span class="s1">&#39;I(-)&#39;</span><span class="p">],</span> <span class="s1">&#39;k.&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.1</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;Hint of Anomalous Signal...&quot;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;I(+)&quot;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;I(-)&quot;</span><span class="p">)</span>
@@ -705,11 +705,12 @@ dtype: object
 <img alt="../_images/examples_gettingstarted_17_0.png" src="../_images/examples_gettingstarted_17_0.png" />
 </div>
 </div>
+<p>In the <a class="reference internal" href="anomalousdifference.html"><span class="doc">next example</span></a>, we will use these differences in observed intensity between Friedel pairs to demonstrate how to make an anomalous difference map in <code class="docutils literal notranslate"><span class="pre">reciprocalspaceship</span></code>.</p>
 </div>
 <hr class="docutils" />
 <div class="section" id="Writing-Reflection-Data">
 <h2>Writing Reflection Data<a class="headerlink" href="#Writing-Reflection-Data" title="Permalink to this headline">¶</a></h2>
-<p>It is also possible to write out MTZ files using <code class="docutils literal notranslate"><span class="pre">DataSet.write_mtz()</span></code></p>
+<p>It is also possible to write out MTZ files using <code class="docutils literal notranslate"><span class="pre">DataSet.write_mtz()</span></code>. This functionality depends on the correct setting of each column’s <code class="docutils literal notranslate"><span class="pre">dtype</span></code>.</p>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
 </pre></div>
