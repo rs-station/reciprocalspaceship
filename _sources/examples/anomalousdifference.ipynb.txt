@@ -940,7 +940,7 @@
    "cell_type": "markdown",
    "metadata": {},
    "source": [
-    "As mentioned in [Background](#background), we can compute the anomalous phases as follows:\n",
+    "As mentioned in [Background](anomalousdifference.ipynb#Background), we can compute the anomalous phases as follows:\n",
     "\n",
     "\\begin{equation*}\n",
     "\\phi_A = \\phi_c - \\alpha\n",
