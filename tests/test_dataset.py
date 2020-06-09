@@ -2,6 +2,7 @@ import pytest
 import numpy as np
 import reciprocalspaceship as rs
 import gemmi
+from pandas.testing import assert_frame_equal
 
 def test_get_phase_keys(data_fmodel):
     """Test DataSet.get_phase_keys()"""
@@ -122,3 +123,16 @@ def test_apply_symop_roundtrip(mtz_by_spacegroup):
         original = rs.utils.to_structurefactor(dataset.FMODEL, dataset.PHIFMODEL)
         back = rs.utils.to_structurefactor(back.FMODEL, back.PHIFMODEL)
         assert np.isclose(original, back, rtol=1e-3).all()
+
+def test_stack_anomalous_roundtrip(data_hewl):
+    """
+    Test that DataSet is unchanged by roundtrip call of DataSet.stack_anomalous()
+    followed by DataSet.unstack_anomalous()
+    """
+    stacked = data_hewl.stack_anomalous()
+    result = stacked.unstack_anomalous(["I", "SIGI", "N"])
+
+    # Re-order columns if needed
+    result = result[data_hewl.columns]
+
+    assert_frame_equal(result, data_hewl)
