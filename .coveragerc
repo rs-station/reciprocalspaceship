@@ -1,3 +1,6 @@
 [run]
 source = reciprocalspaceship
 omit = reciprocalspaceship/commandline/*
+
+[report]
+omit = reciprocalspaceship/commandline/*
