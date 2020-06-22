@@ -1,3 +1,10 @@
-from .io import read_precognition, read_mtz
-from .formats.mtz import write as write_mtz
-from .formats.precognition import write as write_precognition
+from .mtz import (
+    from_gemmi,
+    to_gemmi,
+    read_mtz,
+    write_mtz,
+)
+from .precognition import (
+    read_precognition,
+    write_precognition,
+)

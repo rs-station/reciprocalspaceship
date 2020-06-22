@@ -3,8 +3,8 @@ import gemmi
 from reciprocalspaceship import DataSet
 from reciprocalspaceship.dtypes.mapping import mtzcode2dtype
 
-def read(hklfile,a=None, b=None, c=None, alpha=None,
-         beta=None, gamma=None, sg=None, logfile=None):
+def read_precognition(hklfile,a=None, b=None, c=None, alpha=None,
+                      beta=None, gamma=None, sg=None, logfile=None):
     """
     Initialize attributes and populate the DataSet object with data from
     a HKL file of reflections. This is the output format used by 
@@ -94,7 +94,7 @@ def read(hklfile,a=None, b=None, c=None, alpha=None,
         
     return dataset
 
-def write(self, outfile, sf_key, err_key):
+def write_precognition(self, outfile, sf_key, err_key):
     """
     Write contents of DataSet object to an HKL file
 

@@ -73,7 +73,7 @@ def to_gemmi(dataset, skip_problem_mtztypes=False):
 
     return mtz
     
-def read(mtzfile):
+def read_mtz(mtzfile):
     """
     Populate the dataset object with data from an MTZ reflection file.
 
@@ -85,7 +85,7 @@ def read(mtzfile):
     gemmi_mtz = gemmi.read_mtz_file(mtzfile)
     return from_gemmi(gemmi_mtz)
 
-def write(dataset, mtzfile, skip_problem_mtztypes=False):
+def write_mtz(dataset, mtzfile, skip_problem_mtztypes=False):
     """
     Write an MTZ reflection file from the reflection data in a DataSet.
 
