@@ -106,6 +106,9 @@ class TestMethods(base.BaseMethodsTests):
 
     @pytest.mark.parametrize("dropna", [True, False])
     def test_value_counts(self, all_data, dropna):
+        """
+        Rewrite original test to use rs.DataSeries instead of pd.Series
+        """
         all_data = all_data[:10]
         if dropna:
             other = all_data[~all_data.isna()]
@@ -120,19 +123,20 @@ class TestMethods(base.BaseMethodsTests):
         
         self.assert_series_equal(result, expected)
 
-    @pytest.mark.xfail(reason="seems to be due to use of ExtensionArray")
     def test_combine_le(self, data_repeated):
-        # GH 20825
-        # Test that combine works when doing a <= (le) comparison
+        """
+        pd.Series.combine() returns Series with original dtype when an 
+        ExtensionArray is used. This test needed to be updated to reflect
+        that behavior.
+        """
         orig_data1, orig_data2 = data_repeated(2)
         s1 = rs.DataSeries(orig_data1)
         s2 = rs.DataSeries(orig_data2)
         result = s1.combine(s2, lambda x1, x2: x1 <= x2)
         expected = rs.DataSeries(
-            [a <= b for (a, b) in zip(list(orig_data1), list(orig_data2))]
+            [a <= b for (a, b) in zip(list(orig_data1), list(orig_data2))],
+            dtype=s1.dtype
         )
-        print(result)
-        print(expected)
         self.assert_series_equal(result, expected)
         
 class TestMissing(base.BaseMissingTests):
