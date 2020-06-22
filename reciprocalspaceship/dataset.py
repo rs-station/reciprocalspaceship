@@ -30,11 +30,16 @@ class DataSet(pd.DataFrame):
 
     _metadata = ['spacegroup', 'cell', 'cache_index_dtypes']
 
-    def __init__(self, *args, **kwargs):
-        self.spacegroup = kwargs.pop('spacegroup', None)
-        self.cell = kwargs.pop('cell', None)
-        self.cache_index_dtypes = kwargs.pop('cache_index_dtypes', {})
-        super().__init__(*args, **kwargs)
+    def __init__(self, data=None, index=None, columns=None, dtype=None,
+                 copy=False, spacegroup=None, cell=None):
+        # Initialize custom DataSet attributes
+        self.spacegroup = spacegroup
+        self.cell = cell
+        self.cache_index_dtypes = {}
+
+        # Build DataSet using DataFrame.__init__()
+        super().__init__(data=data, index=index, columns=columns,
+                         dtype=dtype, copy=copy)
         return
     
     @property
