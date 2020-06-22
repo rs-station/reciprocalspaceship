@@ -6,5 +6,4 @@ from .mtz import (
 )
 from .precognition import (
     read_precognition,
-    write_precognition,
 )

@@ -1,7 +1,6 @@
 import unittest
-from os.path import dirname, abspath, join, exists
+from os.path import dirname, abspath, join
 from os import remove
-import filecmp
 import gemmi
 import reciprocalspaceship as rs
 
@@ -113,32 +112,3 @@ class TestPrecognition(unittest.TestCase):
         self.assertEqual(dhfr.cell.gamma, 90.0)
         
         return
-
-    def test_write(self):
-        
-        datadir = join(abspath(dirname(__file__)), '../data/precognition')
-        hewl = rs.read_precognition(join(datadir, 'hewl.hkl'))
-
-        # Writing HKL shoul produce a file
-        hewl.write_precognition("temp.hkl", "F", "SigF")
-        self.assertTrue(exists("temp.hkl"))
-        remove("temp.hkl")
-
-        return
-
-    def test_roundtrip(self):
-
-        datadir = join(abspath(dirname(__file__)), '../data/precognition')
-        hewl = rs.read_precognition(join(datadir, 'hewl.hkl'))
-
-        # Write data, read data, write data again... shouldn't change
-        hewl.write_precognition("temp.hkl", "F", "SigF")
-        hewl2 = rs.read_precognition("temp.hkl")
-        hewl2.write_precognition("temp2.hkl", "F", "SigF")
-
-        self.assertTrue(hewl.equals(hewl2))
-        self.assertTrue(filecmp.cmp("temp.hkl", "temp2.hkl"))
-
-        # Clean up
-        remove("temp.hkl")
-        remove("temp2.hkl")

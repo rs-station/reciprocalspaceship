@@ -93,23 +93,3 @@ def read_precognition(hklfile,a=None, b=None, c=None, alpha=None,
         dataset.spacegroup = gemmi.SpaceGroup(sg)
         
     return dataset
-
-def write_precognition(self, outfile, sf_key, err_key):
-    """
-    Write contents of DataSet object to an HKL file
-
-    Parameters
-    ----------
-    outfile : str or file
-        name of an hkl file or file-like object
-    sf_key : str
-        key for structure factor in DataFrame
-    err_key : str
-        key for structure factor error in DataFrame
-    """
-
-    with open(outfile, 'w') as out:
-        for (h, k, l), d in self.iterrows():
-            out.write(f"{h:5d}{k:5d}{l:5d}{d[sf_key]:15.3f}{d[err_key]:15.3f}\n")
-
-    return

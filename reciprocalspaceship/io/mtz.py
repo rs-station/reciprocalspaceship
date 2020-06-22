@@ -91,11 +91,13 @@ def write_mtz(dataset, mtzfile, skip_problem_mtztypes=False):
 
     Parameters
     ----------
+    dataset : DataSet
+        DataSet object to be written to MTZ file
     mtzfile : str or file
         name of an mtz file or a file object
     skip_problem_mtztypes : bool
         Whether to skip columns in DataSet that do not have specified
-        mtz datatypes
+        MTZ datatypes
     """
     mtz = to_gemmi(dataset, skip_problem_mtztypes)
     mtz.write_to_file(mtzfile)

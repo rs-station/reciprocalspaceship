@@ -77,9 +77,9 @@ class DataSet(pd.DataFrame):
                 newdf.cache_index_dtypes = {}
             return newdf
 
-    def write_mtz(self, *args, **kwargs):
+    def write_mtz(self, mtzfile, skip_problem_mtztypes=False):
         """
-        Write an MTZ reflection file from the reflection data in a DataSet.
+        Write DataSet to MTZ file
 
         Parameters
         ----------
@@ -87,26 +87,10 @@ class DataSet(pd.DataFrame):
             name of an mtz file or a file object
         skip_problem_mtztypes : bool
             Whether to skip columns in DataSet that do not have specified
-            mtz datatypes
+            MTZ datatypes
         """
         from reciprocalspaceship import io
-        return io.write_mtz(self, *args, **kwargs)
-
-    def write_precognition(self, *args, **kwargs):
-        """
-        Write contents of DataSet object to an HKL file
-
-        Parameters
-        ----------
-        outfile : str or file
-            name of an hkl file or file-like object
-        sf_key : str
-            key for structure factor in DataSet
-        err_key : str
-            key for structure factor error in DataSet
-        """
-        from reciprocalspaceship import io
-        return io.write_precognition(self, *args, **kwargs)
+        return io.write_mtz(self, mtzfile, skip_problem_mtztypes)
 
     def get_phase_keys(self):
         """
