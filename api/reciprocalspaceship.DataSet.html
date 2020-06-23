@@ -197,7 +197,7 @@
 <h1>DataSet<a class="headerlink" href="#dataset" title="Permalink to this headline">¶</a></h1>
 <dl class="py class">
 <dt id="reciprocalspaceship.DataSet">
-<em class="property">class </em><code class="sig-prename descclassname">reciprocalspaceship.</code><code class="sig-name descname">DataSet</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#reciprocalspaceship.DataSet" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">reciprocalspaceship.</code><code class="sig-name descname">DataSet</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">data</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">index</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">columns</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">dtype</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">copy</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">spacegroup</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">cell</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#reciprocalspaceship.DataSet" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">pandas.core.frame.DataFrame</span></code></p>
 <p>Representation of a crystallographic dataset.</p>
 <dl class="py attribute">
@@ -227,7 +227,7 @@
 <code class="sig-name descname">cache_index_dtypes</code><a class="headerlink" href="#reciprocalspaceship.DataSet.cache_index_dtypes" title="Permalink to this definition">¶</a></dt>
 <dd><p>Dictionary of dtypes for columns in DataSet.index. Populated upon
 calls to DataSet.set_index() and depopulated by calls to
-DataSet.reset_index()</p>
+DataSet.reset_index().</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
 <dd class="field-odd"><p>Dictionary</p>
@@ -237,7 +237,7 @@ DataSet.reset_index()</p>
 
 <dl class="py method">
 <dt id="reciprocalspaceship.DataSet.__init__">
-<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#reciprocalspaceship.DataSet.__init__" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">data</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">index</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">columns</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">dtype</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">copy</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">spacegroup</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">cell</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#reciprocalspaceship.DataSet.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Initialize self.  See help(type(self)) for accurate signature.</p>
 </dd></dl>
 
@@ -248,7 +248,7 @@ DataSet.reset_index()</p>
 <col style="width: 90%" />
 </colgroup>
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="#reciprocalspaceship.DataSet.__init__" title="reciprocalspaceship.DataSet.__init__"><code class="xref py py-obj docutils literal notranslate"><span class="pre">__init__</span></code></a>(*args, **kwargs)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#reciprocalspaceship.DataSet.__init__" title="reciprocalspaceship.DataSet.__init__"><code class="xref py py-obj docutils literal notranslate"><span class="pre">__init__</span></code></a>([data, index, columns, dtype, …])</p></td>
 <td><p>Initialize self.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#reciprocalspaceship.DataSet.apply_symop" title="reciprocalspaceship.DataSet.apply_symop"><code class="xref py py-obj docutils literal notranslate"><span class="pre">apply_symop</span></code></a>(symop[, inplace])</p></td>
@@ -257,35 +257,38 @@ DataSet.reset_index()</p>
 <tr class="row-odd"><td><p><a class="reference internal" href="#reciprocalspaceship.DataSet.compute_dHKL" title="reciprocalspaceship.DataSet.compute_dHKL"><code class="xref py py-obj docutils literal notranslate"><span class="pre">compute_dHKL</span></code></a>([inplace])</p></td>
 <td><p>Compute the real space lattice plane spacing, d, associated with the HKL indices in the object.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#reciprocalspaceship.DataSet.get_hkls" title="reciprocalspaceship.DataSet.get_hkls"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_hkls</span></code></a>()</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#reciprocalspaceship.DataSet.from_gemmi" title="reciprocalspaceship.DataSet.from_gemmi"><code class="xref py py-obj docutils literal notranslate"><span class="pre">from_gemmi</span></code></a>(gemmiMtz)</p></td>
+<td><p>Creates DataSet object from gemmi.Mtz object</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#reciprocalspaceship.DataSet.get_hkls" title="reciprocalspaceship.DataSet.get_hkls"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_hkls</span></code></a>()</p></td>
 <td><p>Get the Miller indices in the DataSet as a ndarray.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#reciprocalspaceship.DataSet.get_phase_keys" title="reciprocalspaceship.DataSet.get_phase_keys"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_phase_keys</span></code></a>()</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#reciprocalspaceship.DataSet.get_phase_keys" title="reciprocalspaceship.DataSet.get_phase_keys"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_phase_keys</span></code></a>()</p></td>
 <td><p>Return column labels associated with phase data</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#reciprocalspaceship.DataSet.hkl_to_asu" title="reciprocalspaceship.DataSet.hkl_to_asu"><code class="xref py py-obj docutils literal notranslate"><span class="pre">hkl_to_asu</span></code></a>([inplace])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#reciprocalspaceship.DataSet.hkl_to_asu" title="reciprocalspaceship.DataSet.hkl_to_asu"><code class="xref py py-obj docutils literal notranslate"><span class="pre">hkl_to_asu</span></code></a>([inplace])</p></td>
 <td><p>Map all HKL indices to the reciprocal space asymmetric unit; return a copy This is provisional.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#reciprocalspaceship.DataSet.label_centrics" title="reciprocalspaceship.DataSet.label_centrics"><code class="xref py py-obj docutils literal notranslate"><span class="pre">label_centrics</span></code></a>([inplace])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#reciprocalspaceship.DataSet.label_centrics" title="reciprocalspaceship.DataSet.label_centrics"><code class="xref py py-obj docutils literal notranslate"><span class="pre">label_centrics</span></code></a>([inplace])</p></td>
 <td><p>Label centric reflections in DataSet object.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#reciprocalspaceship.DataSet.reset_index" title="reciprocalspaceship.DataSet.reset_index"><code class="xref py py-obj docutils literal notranslate"><span class="pre">reset_index</span></code></a>(**kwargs)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#reciprocalspaceship.DataSet.reset_index" title="reciprocalspaceship.DataSet.reset_index"><code class="xref py py-obj docutils literal notranslate"><span class="pre">reset_index</span></code></a>(**kwargs)</p></td>
 <td><p>Reset the index, or a level of it.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#reciprocalspaceship.DataSet.set_index" title="reciprocalspaceship.DataSet.set_index"><code class="xref py py-obj docutils literal notranslate"><span class="pre">set_index</span></code></a>(keys, **kwargs)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#reciprocalspaceship.DataSet.set_index" title="reciprocalspaceship.DataSet.set_index"><code class="xref py py-obj docutils literal notranslate"><span class="pre">set_index</span></code></a>(keys, **kwargs)</p></td>
 <td><p>Set the DataFrame index using existing columns.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#reciprocalspaceship.DataSet.stack_anomalous" title="reciprocalspaceship.DataSet.stack_anomalous"><code class="xref py py-obj docutils literal notranslate"><span class="pre">stack_anomalous</span></code></a>([plus_labels, minus_labels])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#reciprocalspaceship.DataSet.stack_anomalous" title="reciprocalspaceship.DataSet.stack_anomalous"><code class="xref py py-obj docutils literal notranslate"><span class="pre">stack_anomalous</span></code></a>([plus_labels, minus_labels])</p></td>
 <td><p>Convert data from two-column anomalous format to one-column format.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#reciprocalspaceship.DataSet.to_gemmi" title="reciprocalspaceship.DataSet.to_gemmi"><code class="xref py py-obj docutils literal notranslate"><span class="pre">to_gemmi</span></code></a>([skip_problem_mtztypes])</p></td>
+<td><p>Creates gemmi.Mtz object from DataSet object</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="#reciprocalspaceship.DataSet.unstack_anomalous" title="reciprocalspaceship.DataSet.unstack_anomalous"><code class="xref py py-obj docutils literal notranslate"><span class="pre">unstack_anomalous</span></code></a>([columns, suffixes])</p></td>
 <td><p>Convert data from one-column format to two-column anomalous format.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#reciprocalspaceship.DataSet.write_mtz" title="reciprocalspaceship.DataSet.write_mtz"><code class="xref py py-obj docutils literal notranslate"><span class="pre">write_mtz</span></code></a>(*args, **kwargs)</p></td>
-<td><p>Write an MTZ reflection file from the reflection data in a DataSet.</p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#reciprocalspaceship.DataSet.write_precognition" title="reciprocalspaceship.DataSet.write_precognition"><code class="xref py py-obj docutils literal notranslate"><span class="pre">write_precognition</span></code></a>(*args, **kwargs)</p></td>
-<td><p>Write contents of DataSet object to an HKL file</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#reciprocalspaceship.DataSet.write_mtz" title="reciprocalspaceship.DataSet.write_mtz"><code class="xref py py-obj docutils literal notranslate"><span class="pre">write_mtz</span></code></a>(mtzfile[, skip_problem_mtztypes])</p></td>
+<td><p>Write DataSet to MTZ file</p></td>
 </tr>
 </tbody>
 </table>
@@ -311,6 +314,20 @@ the HKL indices in the object.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>inplace</strong> (<em>bool</em>) – Whether to add the column in place or return a copy</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="reciprocalspaceship.DataSet.from_gemmi">
+<em class="property">classmethod </em><code class="sig-name descname">from_gemmi</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">gemmiMtz</span></em><span class="sig-paren">)</span><a class="headerlink" href="#reciprocalspaceship.DataSet.from_gemmi" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates DataSet object from gemmi.Mtz object</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>gemmiMtz</strong> (<em>gemmi.Mtz</em>)</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><em>DataSet</em></p>
 </dd>
 </dl>
 </dd></dl>
@@ -622,6 +639,21 @@ Friedel-minus reflection (Defaults to columns suffixed with “(-)”)</p></li>
 </dd></dl>
 
 <dl class="py method">
+<dt id="reciprocalspaceship.DataSet.to_gemmi">
+<code class="sig-name descname">to_gemmi</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">skip_problem_mtztypes</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="headerlink" href="#reciprocalspaceship.DataSet.to_gemmi" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates gemmi.Mtz object from DataSet object</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>skip_problem_mtztypes</strong> (<em>bool</em>) – Whether to skip columns in DataSet that do not have specified
+MTZ datatypes</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><em>gemmi.Mtz</em></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
 <dt id="reciprocalspaceship.DataSet.unstack_anomalous">
 <code class="sig-name descname">unstack_anomalous</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">columns</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">suffixes</span><span class="o">=</span><span class="default_value">'(+)', '(-)'</span></em><span class="sig-paren">)</span><a class="headerlink" href="#reciprocalspaceship.DataSet.unstack_anomalous" title="Permalink to this definition">¶</a></dt>
 <dd><p>Convert data from one-column format to two-column anomalous
@@ -645,29 +677,14 @@ columns</p></li>
 
 <dl class="py method">
 <dt id="reciprocalspaceship.DataSet.write_mtz">
-<code class="sig-name descname">write_mtz</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#reciprocalspaceship.DataSet.write_mtz" title="Permalink to this definition">¶</a></dt>
-<dd><p>Write an MTZ reflection file from the reflection data in a DataSet.</p>
+<code class="sig-name descname">write_mtz</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">mtzfile</span></em>, <em class="sig-param"><span class="n">skip_problem_mtztypes</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="headerlink" href="#reciprocalspaceship.DataSet.write_mtz" title="Permalink to this definition">¶</a></dt>
+<dd><p>Write DataSet to MTZ file</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>mtzfile</strong> (<em>str or file</em>) – name of an mtz file or a file object</p></li>
 <li><p><strong>skip_problem_mtztypes</strong> (<em>bool</em>) – Whether to skip columns in DataSet that do not have specified
-mtz datatypes</p></li>
-</ul>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt id="reciprocalspaceship.DataSet.write_precognition">
-<code class="sig-name descname">write_precognition</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#reciprocalspaceship.DataSet.write_precognition" title="Permalink to this definition">¶</a></dt>
-<dd><p>Write contents of DataSet object to an HKL file</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>outfile</strong> (<em>str or file</em>) – name of an hkl file or file-like object</p></li>
-<li><p><strong>sf_key</strong> (<em>str</em>) – key for structure factor in DataSet</p></li>
-<li><p><strong>err_key</strong> (<em>str</em>) – key for structure factor error in DataSet</p></li>
+MTZ datatypes</p></li>
 </ul>
 </dd>
 </dl>

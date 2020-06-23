@@ -18,6 +18,7 @@ DataSet
        ~DataSet.__init__
        ~DataSet.apply_symop
        ~DataSet.compute_dHKL
+       ~DataSet.from_gemmi
        ~DataSet.get_hkls
        ~DataSet.get_phase_keys
        ~DataSet.hkl_to_asu
@@ -25,8 +26,8 @@ DataSet
        ~DataSet.reset_index
        ~DataSet.set_index
        ~DataSet.stack_anomalous
+       ~DataSet.to_gemmi
        ~DataSet.unstack_anomalous
        ~DataSet.write_mtz
-       ~DataSet.write_precognition
    
    
