@@ -25,18 +25,32 @@ class DataSet(pd.DataFrame):
     cache_index_dtypes : Dictionary
         Dictionary of dtypes for columns in DataSet.index. Populated upon
         calls to DataSet.set_index() and depopulated by calls to 
-        DataSet.reset_index()
+        DataSet.reset_index().
     """
 
     _metadata = ['spacegroup', 'cell', 'cache_index_dtypes']
-
+    spacegroup = None
+    cell = None
+    cache_index_dtypes = {}
+    
     def __init__(self, data=None, index=None, columns=None, dtype=None,
                  copy=False, spacegroup=None, cell=None):
-        # Initialize custom DataSet attributes
-        self.spacegroup = spacegroup
-        self.cell = cell
-        self.cache_index_dtypes = {}
 
+        if isinstance(data, DataSet):
+            self.__finalize__(data)
+
+        elif isinstance(data, gemmi.Mtz):
+            from reciprocalspaceship import io
+            dataset = io.from_gemmi(data)
+            self.__finalize__(dataset)
+            data = dataset
+
+        # Provided values for DataSet attributes take precedence
+        if spacegroup:
+            self.spacegroup = spacegroup
+        if cell:
+            self.cell = cell
+        
         # Build DataSet using DataFrame.__init__()
         super().__init__(data=data, index=index, columns=columns,
                          dtype=dtype, copy=copy)
@@ -82,6 +96,38 @@ class DataSet(pd.DataFrame):
                 newdf.cache_index_dtypes = {}
             return newdf
 
+    @classmethod
+    def from_gemmi(cls, gemmiMtz):
+        """
+        Creates DataSet object from gemmi.Mtz object
+
+        Parameters
+        ----------
+        gemmiMtz : gemmi.Mtz
+
+        Returns
+        -------
+        DataSet
+        """
+        return cls(gemmiMtz)
+
+    def to_gemmi(self, skip_problem_mtztypes=False):
+        """
+        Creates gemmi.Mtz object from DataSet object
+
+        Parameters
+        ----------
+        skip_problem_mtztypes : bool
+            Whether to skip columns in DataSet that do not have specified
+            MTZ datatypes
+
+        Returns
+        -------
+        gemmi.Mtz
+        """
+        from reciprocalspaceship import io
+        return io.to_gemmi(self, skip_problem_mtztypes)
+    
     def write_mtz(self, mtzfile, skip_problem_mtztypes=False):
         """
         Write DataSet to MTZ file

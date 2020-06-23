@@ -5,6 +5,7 @@ import numpy as np
 import pandas as pd
 import re
 import reciprocalspaceship as rs
+import gemmi
 
 @pytest.fixture
 def dataset_hkl():
@@ -17,14 +18,16 @@ def dataset_hkl():
     dataset.set_index(["H", "K", "L"], inplace=True)
     return dataset
 
-def load_dataset(datapath):
+def load_dataset(datapath, as_gemmi=False):
     """
     Load dataset at given datapath. Datapath is expected to be a list of
     directories to follow.
     """
     inFN = abspath(join(dirname(__file__), *datapath))
-    mtz = rs.read_mtz(inFN)
-    return mtz
+    if as_gemmi:
+        return gemmi.read_mtz_file(inFN)
+    else:
+        return rs.read_mtz(inFN)
     
 @pytest.fixture
 def data_hewl():
@@ -33,6 +36,14 @@ def data_hewl():
     """
     datapath = ["data", "algorithms", "HEWL_SSAD_24IDC.mtz"]
     return load_dataset(datapath)
+
+@pytest.fixture
+def data_gemmi():
+    """
+    Load HEWL diffraction data from APS 24-ID-C as gemmi.Mtz
+    """
+    datapath = ["data", "fmodel", "9LYZ.mtz"]
+    return load_dataset(datapath, as_gemmi=True)
 
 @pytest.fixture
 def data_fmodel():
