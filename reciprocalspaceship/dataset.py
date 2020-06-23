@@ -14,28 +14,27 @@ from .utils import (
 
 class DataSet(pd.DataFrame):
     """
-    Representation of a crystallographic dataset. 
+    Representation of a crystallographic dataset.
 
-    Attributes
-    ----------
-    spacegroup : gemmi.SpaceGroup
-        Crystallographic space group containing symmetry operations
-    cell : gemmi.UnitCell
-        Unit cell constants of crystal (a, b, c, alpha, beta, gamma)
-    cache_index_dtypes : Dictionary
-        Dictionary of dtypes for columns in DataSet.index. Populated upon
-        calls to DataSet.set_index() and depopulated by calls to 
-        DataSet.reset_index().
+    A DataSet object provides a tabular representation of reflection data. 
+    Reflections are conventionally indexed by Miller indices (rows), but 
+    can also be indexed by additional metadata. Per-reflection data can be 
+    stored as columns. For additional information about inherited methods 
+    and attributes, please see the `Pandas.DataFrame documentation`_.
+    
+    .. _Pandas.DataFrame documentation: https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.html
     """
+    _metadata = ['_spacegroup', '_cell', '_cache_index_dtypes']
 
-    _metadata = ['spacegroup', 'cell', 'cache_index_dtypes']
-    spacegroup = None
-    cell = None
-    cache_index_dtypes = {}
+    #-------------------------------------------------------------------
+    # __init__ method
     
     def __init__(self, data=None, index=None, columns=None, dtype=None,
                  copy=False, spacegroup=None, cell=None):
-
+        self._cache_index_dtypes = {}
+        self._spacegroup = None
+        self._cell = None
+        
         if isinstance(data, DataSet):
             self.__finalize__(data)
 
@@ -47,14 +46,17 @@ class DataSet(pd.DataFrame):
 
         # Provided values for DataSet attributes take precedence
         if spacegroup:
-            self.spacegroup = spacegroup
+            self._spacegroup = spacegroup
         if cell:
-            self.cell = cell
+            self._cell = cell
         
         # Build DataSet using DataFrame.__init__()
         super().__init__(data=data, index=index, columns=columns,
                          dtype=dtype, copy=copy)
         return
+
+    #-------------------------------------------------------------------
+    # Attributes
     
     @property
     def _constructor(self):
@@ -64,11 +66,32 @@ class DataSet(pd.DataFrame):
     def _constructor_sliced(self):
         return DataSeries
 
+    @property
+    def spacegroup(self):
+        """Crystallographic space group"""
+        return self._spacegroup
+
+    @spacegroup.setter
+    def spacegroup(self, val):
+        self._spacegroup = val
+    
+    @property
+    def cell(self):
+        """Unit cell parameters (a, b, c, alpha, beta, gamma)"""
+        return self._cell
+
+    @cell.setter
+    def cell(self, val):
+        self._cell = val
+
+    #-------------------------------------------------------------------
+    # Methods
+    
     def set_index(self, keys, **kwargs):
         
         # Copy dtypes of keys to cache
         for key in keys:
-            self.cache_index_dtypes[key] = self[key].dtype.name
+            self._cache_index_dtypes[key] = self[key].dtype.name
 
         return super().set_index(keys, **kwargs)
 
@@ -79,10 +102,10 @@ class DataSet(pd.DataFrame):
 
             # Cast all values to cached dtypes
             if not kwargs.get("drop", False):
-                for key in self.cache_index_dtypes.keys():
-                    dtype = self.cache_index_dtypes[key]
+                for key in self._cache_index_dtypes.keys():
+                    dtype = self._cache_index_dtypes[key]
                     self[key] = self[key].astype(dtype)
-                self.cache_index_dtypes = {}
+                self._cache_index_dtypes = {}
             return
         
         else:
@@ -90,10 +113,10 @@ class DataSet(pd.DataFrame):
 
             # Cast all values to cached dtypes
             if not kwargs.get("drop", False):
-                for key in newdf.cache_index_dtypes.keys():
-                    dtype = newdf.cache_index_dtypes[key]
+                for key in newdf._cache_index_dtypes.keys():
+                    dtype = newdf._cache_index_dtypes[key]
                     newdf[key] = newdf[key].astype(dtype)
-                newdf.cache_index_dtypes = {}
+                newdf._cache_index_dtypes = {}
             return newdf
 
     @classmethod
@@ -398,5 +421,3 @@ class DataSet(pd.DataFrame):
             new_dataset[k] = canonicalize_phases(new_dataset[k])
 
         return new_dataset
-
-

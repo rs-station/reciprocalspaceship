@@ -8,7 +8,6 @@ def test_constructor_empty():
     """Test DataSet.__init__()"""
     result = rs.DataSet()
     assert len(result) == 0
-    assert len(result.cache_index_dtypes) == 0
     assert result.spacegroup is None
     assert result.cell is None
 
@@ -71,7 +70,7 @@ def test_from_gemmi(data_gemmi):
     assert_frame_equal(result, expected)
     assert result.spacegroup == expected.spacegroup
     assert result.cell == expected.cell
-    assert result.cache_index_dtypes == expected.cache_index_dtypes
+    assert result._cache_index_dtypes == expected._cache_index_dtypes
         
 
 def test_get_phase_keys(data_fmodel):
