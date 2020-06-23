@@ -6,9 +6,36 @@ DataSet
 .. autoclass:: DataSet
 
    
+
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+   
+   
+   
+   
+      ~DataSet.cell
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+      ~DataSet.spacegroup
+   
+   
+   
+   
+   
 	       
    
-   .. automethod:: __init__
 
    
    .. rubric:: Methods

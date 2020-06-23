@@ -6,9 +6,39 @@ DataSeries
 .. autoclass:: DataSeries
 
    
+
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
 	       
    
-   .. automethod:: __init__
 
    
    .. rubric:: Methods

@@ -200,47 +200,26 @@
 <em class="property">class </em><code class="sig-prename descclassname">reciprocalspaceship.</code><code class="sig-name descname">DataSet</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">data</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">index</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">columns</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">dtype</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">copy</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">spacegroup</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">cell</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#reciprocalspaceship.DataSet" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">pandas.core.frame.DataFrame</span></code></p>
 <p>Representation of a crystallographic dataset.</p>
-<dl class="py attribute">
-<dt id="reciprocalspaceship.DataSet.spacegroup">
-<code class="sig-name descname">spacegroup</code><a class="headerlink" href="#reciprocalspaceship.DataSet.spacegroup" title="Permalink to this definition">¶</a></dt>
-<dd><p>Crystallographic space group containing symmetry operations</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type</dt>
-<dd class="field-odd"><p>gemmi.SpaceGroup</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py attribute">
-<dt id="reciprocalspaceship.DataSet.cell">
-<code class="sig-name descname">cell</code><a class="headerlink" href="#reciprocalspaceship.DataSet.cell" title="Permalink to this definition">¶</a></dt>
-<dd><p>Unit cell constants of crystal (a, b, c, alpha, beta, gamma)</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type</dt>
-<dd class="field-odd"><p>gemmi.UnitCell</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py attribute">
-<dt id="reciprocalspaceship.DataSet.cache_index_dtypes">
-<code class="sig-name descname">cache_index_dtypes</code><a class="headerlink" href="#reciprocalspaceship.DataSet.cache_index_dtypes" title="Permalink to this definition">¶</a></dt>
-<dd><p>Dictionary of dtypes for columns in DataSet.index. Populated upon
-calls to DataSet.set_index() and depopulated by calls to
-DataSet.reset_index().</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type</dt>
-<dd class="field-odd"><p>Dictionary</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt id="reciprocalspaceship.DataSet.__init__">
-<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">data</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">index</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">columns</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">dtype</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">copy</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">spacegroup</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">cell</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#reciprocalspaceship.DataSet.__init__" title="Permalink to this definition">¶</a></dt>
-<dd><p>Initialize self.  See help(type(self)) for accurate signature.</p>
-</dd></dl>
-
+<p>A DataSet object provides a tabular representation of reflection data.
+Reflections are conventionally indexed by Miller indices (rows), but
+can also be indexed by additional metadata. Per-reflection data can be
+stored as columns. For additional information about inherited methods
+and attributes, please see the <a class="reference external" href="https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.html">Pandas.DataFrame documentation</a>.</p>
+<p class="rubric">Attributes</p>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#reciprocalspaceship.DataSet.cell" title="reciprocalspaceship.DataSet.cell"><code class="xref py py-obj docutils literal notranslate"><span class="pre">cell</span></code></a></p></td>
+<td><p>Unit cell parameters (a, b, c, alpha, beta, gamma)</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#reciprocalspaceship.DataSet.spacegroup" title="reciprocalspaceship.DataSet.spacegroup"><code class="xref py py-obj docutils literal notranslate"><span class="pre">spacegroup</span></code></a></p></td>
+<td><p>Crystallographic space group</p></td>
+</tr>
+</tbody>
+</table>
 <p class="rubric">Methods</p>
 <table class="longtable docutils align-default">
 <colgroup>
@@ -248,7 +227,7 @@ DataSet.reset_index().</p>
 <col style="width: 90%" />
 </colgroup>
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="#reciprocalspaceship.DataSet.__init__" title="reciprocalspaceship.DataSet.__init__"><code class="xref py py-obj docutils literal notranslate"><span class="pre">__init__</span></code></a>([data, index, columns, dtype, …])</p></td>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">__init__</span></code>([data, index, columns, dtype, …])</p></td>
 <td><p>Initialize self.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#reciprocalspaceship.DataSet.apply_symop" title="reciprocalspaceship.DataSet.apply_symop"><code class="xref py py-obj docutils literal notranslate"><span class="pre">apply_symop</span></code></a>(symop[, inplace])</p></td>
@@ -304,6 +283,12 @@ DataSet.reset_index().</p>
 </ul>
 </dd>
 </dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="reciprocalspaceship.DataSet.cell">
+<em class="property">property </em><code class="sig-name descname">cell</code><a class="headerlink" href="#reciprocalspaceship.DataSet.cell" title="Permalink to this definition">¶</a></dt>
+<dd><p>Unit cell parameters (a, b, c, alpha, beta, gamma)</p>
 </dd></dl>
 
 <dl class="py method">
@@ -607,6 +592,12 @@ method.</p></li>
 <span class="go">4 16     10  2014    31</span>
 </pre></div>
 </div>
+</dd></dl>
+
+<dl class="py method">
+<dt id="reciprocalspaceship.DataSet.spacegroup">
+<em class="property">property </em><code class="sig-name descname">spacegroup</code><a class="headerlink" href="#reciprocalspaceship.DataSet.spacegroup" title="Permalink to this definition">¶</a></dt>
+<dd><p>Crystallographic space group</p>
 </dd></dl>
 
 <dl class="py method">
