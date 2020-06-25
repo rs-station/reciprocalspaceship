@@ -17,11 +17,17 @@ from pandas.core.dtypes.cast import astype_nansafe
 import pandas as pd
 
 class MTZDtype(ExtensionDtype):
-    """Base custom Dtype for implementing persistent MTZ data types"""
-    pass
+    """Base ExtensionDtype for implementing persistent MTZ data types"""
+
+    @classmethod
+    def construct_from_string(cls, string):
+        if string == cls.name or string == cls.mtztype:
+            return cls()
+        else:
+            raise TypeError(f"Cannot construct a '{cls.__name__}' from '{string}'")
 
 class MTZInt32Dtype(MTZDtype, pd.Int32Dtype):
-    """Base class for generic MTZ Dtype backed by pd.Int32Dtype"""
+    """Base ExtensionDtype class for MTZDtype backed by pd.Int32Dtype"""
 
     def __repr__(self):
         return self.name
@@ -65,10 +71,8 @@ class MTZIntegerArray(IntegerArray):
         return data
     
 class NumpyFloat32ExtensionDtype(MTZDtype):
-    """
-    Base ExtensionDtype for defining a custom Pandas Dtype that uses
-    np.float32 for storing numeric data.
-    """
+    """Base ExtensionDtype class for generic MTZDtype backed by np.float32"""
+
     type = np.float32
     kind = 'f'
     na_value = np.nan
@@ -86,13 +90,6 @@ class NumpyFloat32ExtensionDtype(MTZDtype):
     def itemsize(self):
         """ Return the number of bytes in this dtype """
         return self.numpy_dtype.itemsize
-    
-    @classmethod
-    def construct_from_string(cls, string):
-        if string == cls.name:
-            return cls()
-        else:
-            raise TypeError(f"Cannot construct a '{cls.__name__}' from '{string}'")
 
 class NumpyExtensionArray(ExtensionArray, ExtensionScalarOpsMixin):
     """
