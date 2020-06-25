@@ -138,8 +138,47 @@ class TestMethods(base.BaseMethodsTests):
             dtype=s1.dtype
         )
         self.assert_series_equal(result, expected)
+
+class TestArithmetics(base.BaseArithmeticOpsTests):
+    divmod_exc = None
+    series_scalar_exc = None
+    frame_scalar_exc = None
+    series_array_exc = None
+
+    def test_divmod_series_array(self, data):
+        s = pd.Series(data)
+        self._check_divmod_op(s, divmod, data, exc=None)
+
+    @pytest.mark.skip("We implement ops")
+    def test_error(self, data, all_arithmetic_operators):
+        pass
+
         
+class TestComparisonOps(base.BaseComparisonOpsTests):
+    
+    def _check_op(self, s, op, other, op_name, exc=NotImplementedError):
+        if exc is None:
+            result = op(s, other)
+            # Override to do the astype to boolean
+            expected = s.combine(other, op).astype(bool)
+            self.assert_series_equal(result, expected)
+        else:
+            with pytest.raises(exc):
+                op(s, other)
+
+    def check_opname(self, s, op_name, other, exc=None):
+        super().check_opname(s, op_name, other, exc=None)
+
+    def _compare_other(self, s, data, op_name, other):
+        self.check_opname(s, op_name, other)
+
 class TestMissing(base.BaseMissingTests):
+    pass
+
+class TestBooleanReduce(base.BaseBooleanReduceTests):
+    pass
+
+class TestNumericReduce(base.BaseNumericReduceTests):
     pass
 
 class TestPrinting(base.BasePrintingTests):
