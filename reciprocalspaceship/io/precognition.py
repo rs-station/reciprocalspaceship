@@ -34,26 +34,18 @@ def read_precognition(hklfile,a=None, b=None, c=None, alpha=None,
     """
     # Read data from HKL file
     if hklfile.endswith(".hkl"):
-        try:
-            usecols = [0, 1, 2, 3, 4, 5, 6]
-            F = pd.read_csv(hklfile, header=None, delim_whitespace=True,
-                            names=["H", "K", "L", "F+", "SigF+", "F-", "SigF-"],
-                            usecols=usecols)
-            mtztypes = ["H", "H", "H", "G", "L", "G", "L"]
+        usecols = [0, 1, 2, 3, 4, 5, 6]
+        F = pd.read_csv(hklfile, header=None, delim_whitespace=True,
+                        names=["H", "K", "L", "F+", "SigF+", "F-", "SigF-"],
+                        usecols=usecols)
+        mtztypes = ["H", "H", "H", "G", "L", "G", "L"]
 
-            # Check if any anomalous data is actually included
-            if len(F["F-"].unique()) == 1:
-                F = F[["H", "K", "L", "F+", "SigF+"]]
-                F.rename(columns={"F+":"F", "SigF+":"SigF"}, inplace=True)
-                mtztypes = ["H", "H", "H", "F", "Q"]
-
-        except:
-            usecols = [0, 1, 2, 3, 4]
-            F = pd.read_csv(hklfile, header=None, delim_whitespace=True,
-                            names=["H", "K", "L", "F", "SigF"],
-                            usecols=usecols)
+        # Check if any anomalous data is actually included
+        if len(F["F-"].unique()) == 1: 
+            F = F[["H", "K", "L", "F+", "SigF+"]]
+            F.rename(columns={"F+":"F", "SigF+":"SigF"}, inplace=True)
             mtztypes = ["H", "H", "H", "F", "Q"]
-            
+
     elif hklfile.endswith(".ii"):
         usecols = range(10)
         F = pd.read_csv(hklfile, header=None, delim_whitespace=True,
