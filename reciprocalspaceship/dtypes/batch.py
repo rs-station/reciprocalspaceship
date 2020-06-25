@@ -5,7 +5,7 @@ from .base import MTZInt32Dtype, MTZIntegerArray
 class BatchDtype(MTZInt32Dtype):
     """Dtype for representing batch numbers"""
     name = 'Batch'
-    mtztype = 'I'
+    mtztype = 'B'
 
     @classmethod
     def construct_array_type(cls):
