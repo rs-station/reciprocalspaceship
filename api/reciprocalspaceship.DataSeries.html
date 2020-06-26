@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>DataSeries &mdash; reciprocalspaceship 0.8.1 documentation</title>
+  <title>DataSeries &mdash; reciprocalspaceship 0.8.2 documentation</title>
   
 
   
@@ -197,7 +197,7 @@
 <h1>DataSeries<a class="headerlink" href="#dataseries" title="Permalink to this headline">¶</a></h1>
 <dl class="py class">
 <dt id="reciprocalspaceship.DataSeries">
-<em class="property">class </em><code class="sig-prename descclassname">reciprocalspaceship.</code><code class="sig-name descname">DataSeries</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">data</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">index</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">dtype</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">name</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">copy</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">fastpath</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="headerlink" href="#reciprocalspaceship.DataSeries" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">reciprocalspaceship.</code><code class="sig-name descname">DataSeries</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">data</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">index</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">dtype</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">name</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">copy</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">fastpath</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/Hekstra-Lab/reciprocalspaceship/blob/master/reciprocalspaceship/dataseries.py#L4-L60"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#reciprocalspaceship.DataSeries" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">pandas.core.series.Series</span></code></p>
 <p>One-dimensional ndarray with axis labels, representing a slice
 of a DataSet. DataSeries objects inherit methods from <code class="docutils literal notranslate"><span class="pre">pd.Series</span></code>,
@@ -233,18 +233,18 @@ DataSeries objects, see the <a class="reference external" href="https://pandas.p
 </table>
 <dl class="py method">
 <dt id="reciprocalspaceship.DataSeries.from_friedel_dtype">
-<code class="sig-name descname">from_friedel_dtype</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#reciprocalspaceship.DataSeries.from_friedel_dtype" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">from_friedel_dtype</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/Hekstra-Lab/reciprocalspaceship/blob/master/reciprocalspaceship/dataseries.py#L46-L60"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#reciprocalspaceship.DataSeries.from_friedel_dtype" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return DataSeries with dtype set from Friedel equivalent. For example,
-rs.IntensityFriedelDtype is converted to rs.IntensityDtype(). If
+rs.FriedelIntensityDtype is converted to rs.IntensityDtype(). If
 there is not a Friedel equivalent dtype, the DataSeries is returned
 unchanged.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt id="reciprocalspaceship.DataSeries.to_friedel_dtype">
-<code class="sig-name descname">to_friedel_dtype</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#reciprocalspaceship.DataSeries.to_friedel_dtype" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">to_friedel_dtype</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/Hekstra-Lab/reciprocalspaceship/blob/master/reciprocalspaceship/dataseries.py#L27-L44"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#reciprocalspaceship.DataSeries.to_friedel_dtype" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return DataSeries with dtype set to Friedel equivalent. For example,
-rs.IntensityDtype is converted to rs.IntensityFriedelDtype(). If
+rs.IntensityDtype is converted to rs.FriedelIntensityDtype(). If
 there is not a Friedel equivalent dtype, the DataSeries is returned
 unchanged.</p>
 </dd></dl>
