@@ -2,7 +2,6 @@ import numpy as np
 import pandas as pd
 import gemmi
 from reciprocalspaceship import DataSet
-from reciprocalspaceship.dtypes.mapping import mtzcode2dtype
 from reciprocalspaceship.dtypes.base import MTZDtype
 
 def from_gemmi(gemmi_mtz):
@@ -23,7 +22,7 @@ def from_gemmi(gemmi_mtz):
     # Build up DataSet
     for c in gemmi_mtz.columns:
         dataset[c.label] = c.array
-        dataset[c.label] = dataset[c.label].astype(mtzcode2dtype[c.type])
+        dataset[c.label] = dataset[c.label].astype(c.type)
     dataset.set_index(["H", "K", "L"], inplace=True)
 
     return dataset

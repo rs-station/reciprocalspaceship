@@ -1,7 +1,6 @@
 import pandas as pd
 import gemmi
 from reciprocalspaceship import DataSet
-from reciprocalspaceship.dtypes.mapping import mtzcode2dtype
 
 def read_precognition(hklfile,a=None, b=None, c=None, alpha=None,
                       beta=None, gamma=None, sg=None, logfile=None):
@@ -75,7 +74,7 @@ def read_precognition(hklfile,a=None, b=None, c=None, alpha=None,
     dataset = DataSet()
     for (k,v), mtztype in zip(F.items(), mtztypes):
         dataset[k] = v
-        dataset[k] = dataset[k].astype(mtzcode2dtype[mtztype])
+        dataset[k] = dataset[k].astype(mtztype)
     dataset.set_index(["H", "K", "L"], inplace=True)
 
     # Set DataSet attributes
