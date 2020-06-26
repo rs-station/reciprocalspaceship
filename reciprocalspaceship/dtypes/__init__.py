@@ -27,3 +27,5 @@ from .m_isym import M_IsymDtype
 # This will be handled by reversing the list.
 from pandas.core.dtypes.dtypes import registry
 registry.dtypes = registry.dtypes[::-1]
+
+from .printing import print_mtz_dtypes
