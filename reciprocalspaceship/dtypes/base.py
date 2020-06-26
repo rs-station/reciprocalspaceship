@@ -105,8 +105,6 @@ class NumpyExtensionArray(ExtensionArray, ExtensionScalarOpsMixin):
         self.data = np.array(values, dtype=self._dtype.type, copy=copy)
         if isinstance(dtype, str):
             type(self._dtype).construct_array_type(dtype)
-        elif dtype:
-            assert isinstance(dtype, type(self._dtype))
     
     @property
     def dtype(self):
