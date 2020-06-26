@@ -68,25 +68,37 @@ def mtz_by_spacegroup(request):
     """Yields paths to MTZ files for each crystallographic spacegroup"""
     return request.param
 
-@pytest.fixture(params=[
-    rs.HKLIndexDtype,                        # H
-    rs.IntensityDtype,                       # J
-    rs.StructureFactorAmplitudeDtype,        # F
-    rs.AnomalousDifferenceDtype,             # D
-    rs.StandardDeviationDtype,               # Q
-    rs.StructureFactorAmplitudeFriedelDtype, # G
-    rs.StandardDeviationSFFriedelDtype,      # L
-    rs.IntensityFriedelDtype,                # K
-    rs.StandardDeviationIFriedelDtype,       # M
-    rs.ScaledStructureFactorAmplitudeDtype,  # E
-    rs.PhaseDtype,                           # P
-    rs.WeightDtype,                          # W
-    rs.HendricksonLattmanDtype,              # A
-    rs.BatchDtype,                           # B
-    rs.M_IsymDtype,                          # Y
-    rs.MTZIntDtype,                          # I
-    rs.MTZRealDtype                          # R
-])
+integer_dtypes=[
+    (rs.HKLIndexDtype, "HKL"),
+    (rs.MTZIntDtype, "MTZInt"),
+    (rs.BatchDtype, "Batch"),
+    (rs.M_IsymDtype, "M/ISYM")
+]
+
+float_dtypes=[
+    (rs.IntensityDtype, "Intensity"),
+    (rs.StructureFactorAmplitudeDtype, "SFAmplitude"),
+    (rs.AnomalousDifferenceDtype, "AnomalousDifference"),
+    (rs.StandardDeviationDtype, "Stddev"),
+    (rs.FriedelStructureFactorAmplitudeDtype, "FriedelSFAmplitude"),
+    (rs.StandardDeviationFriedelSFDtype, "StddevFriedelSF"),
+    (rs.FriedelIntensityDtype, "FriedelIntensity"),
+    (rs.StandardDeviationFriedelIDtype, "StddevFriedelI"),
+    (rs.NormalizedStructureFactorAmplitudeDtype, "NormalizedSFAmplitude"),
+    (rs.PhaseDtype, "Phase"),
+    (rs.WeightDtype, "Weight"),
+    (rs.HendricksonLattmanDtype, "HendricksonLattman"),
+    (rs.MTZRealDtype, "MTZReal")
+]
+    
+@pytest.fixture(params=integer_dtypes)
+def dtype_ints(request):
+    return request.param
+
+@pytest.fixture(params=float_dtypes)
+def dtype_floats(request):
+    return request.param
+
+@pytest.fixture(params=integer_dtypes + float_dtypes)
 def dtype_all(request):
-    """Yields MTZ dtypes"""
-    return request.param()
+    return request.param

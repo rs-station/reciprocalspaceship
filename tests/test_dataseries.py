@@ -48,18 +48,18 @@ def test_constructor_expanddim(data, series_name, frame_name, dtype):
 @pytest.mark.parametrize("name", ["Name", "SIGF", "SIGI"])
 def test_to_friedel_dtype(dtype_all, name):
     """Test DataSeries.to_friedel_dtype"""
-    ds = rs.DataSeries(np.arange(0, 10), name=name, dtype=dtype_all)
+    ds = rs.DataSeries(np.arange(0, 10), name=name, dtype=dtype_all[0]())
     result = ds.to_friedel_dtype()
-    expected = dtype_all.__class__    
-    if isinstance(dtype_all, rs.StandardDeviationDtype):
+    expected = dtype_all[0]
+    if isinstance(ds.dtype, rs.StandardDeviationDtype):
         if name == "SIGF":
-            expected = rs.StandardDeviationSFFriedelDtype
+            expected = rs.StandardDeviationFriedelSFDtype
         elif name == "SIGI":
-            expected = rs.StandardDeviationIFriedelDtype
-    elif isinstance(dtype_all, rs.IntensityDtype):
-        expected = rs.IntensityFriedelDtype
-    elif isinstance(dtype_all, rs.StructureFactorAmplitudeDtype):
-        expected = rs.StructureFactorAmplitudeFriedelDtype
+            expected = rs.StandardDeviationFriedelIDtype
+    elif isinstance(ds.dtype, rs.IntensityDtype):
+        expected = rs.FriedelIntensityDtype
+    elif isinstance(ds.dtype, rs.StructureFactorAmplitudeDtype):
+        expected = rs.FriedelStructureFactorAmplitudeDtype
 
     assert isinstance(result.dtype, expected)
     assert result.name == name
@@ -67,15 +67,15 @@ def test_to_friedel_dtype(dtype_all, name):
 
 def test_from_friedel_dtype(dtype_all):
     """Test DataSeries.from_friedel_dtype"""
-    ds = rs.DataSeries(np.arange(0, 10), dtype=dtype_all)
+    ds = rs.DataSeries(np.arange(0, 10), dtype=dtype_all[0]())
     result = ds.from_friedel_dtype()
-    expected = dtype_all.__class__    
-    if (isinstance(dtype_all, rs.StandardDeviationSFFriedelDtype) or
-        isinstance(dtype_all, rs.StandardDeviationIFriedelDtype)):
+    expected = dtype_all[0]
+    if (isinstance(ds.dtype, rs.StandardDeviationFriedelSFDtype) or
+        isinstance(ds.dtype, rs.StandardDeviationFriedelIDtype)):
             expected = rs.StandardDeviationDtype
-    elif isinstance(dtype_all, rs.IntensityFriedelDtype):
+    elif isinstance(ds.dtype, rs.FriedelIntensityDtype):
         expected = rs.IntensityDtype
-    elif isinstance(dtype_all, rs.StructureFactorAmplitudeFriedelDtype):
+    elif isinstance(ds.dtype, rs.FriedelStructureFactorAmplitudeDtype):
         expected = rs.StructureFactorAmplitudeDtype
 
     assert isinstance(result.dtype, expected)

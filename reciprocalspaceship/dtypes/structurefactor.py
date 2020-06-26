@@ -17,34 +17,34 @@ class StructureFactorAmplitudeArray(NumpyExtensionArray):
     pass
 
 @register_extension_dtype
-class StructureFactorAmplitudeFriedelDtype(NumpyFloat32ExtensionDtype):
+class FriedelStructureFactorAmplitudeDtype(NumpyFloat32ExtensionDtype):
     """
     Dtype for structure factor amplitude data from Friedel pairs -- 
     F(+) or F(-)
     """
-    name = 'SFAmplitudeFriedel'
+    name = 'FriedelSFAmplitude'
     mtztype = "G"
 
     @classmethod
     def construct_array_type(cls):
-        return StructureFactorAmplitudeFriedelArray
+        return FriedelStructureFactorAmplitudeArray
 
-class StructureFactorAmplitudeFriedelArray(NumpyExtensionArray):
-    """ExtensionArray for supporting StructureFactorAmplitudeFriedelDtype"""
-    _dtype = StructureFactorAmplitudeFriedelDtype()
+class FriedelStructureFactorAmplitudeArray(NumpyExtensionArray):
+    """ExtensionArray for supporting FriedelStructureFactorAmplitudeDtype"""
+    _dtype = FriedelStructureFactorAmplitudeDtype()
     pass
 
 @register_extension_dtype
-class ScaledStructureFactorAmplitudeDtype(NumpyFloat32ExtensionDtype):
-    """Dtype for structure factor amplitude  data"""
-    name = 'F_over_eps'
+class NormalizedStructureFactorAmplitudeDtype(NumpyFloat32ExtensionDtype):
+    """Dtype for normalized structure factor amplitude data"""
+    name = 'NormalizedSFAmplitude'
     mtztype = "E"
 
     @classmethod
     def construct_array_type(cls):
-        return ScaledStructureFactorAmplitudeArray
+        return NormalizedStructureFactorAmplitudeArray
 
-class ScaledStructureFactorAmplitudeArray(NumpyExtensionArray):
-    """ExtensionArray for supporting ScaledStructureFactorAmplitudeDtype"""
-    _dtype = ScaledStructureFactorAmplitudeDtype()
+class NormalizedStructureFactorAmplitudeArray(NumpyExtensionArray):
+    """ExtensionArray for supporting NormalizedStructureFactorAmplitudeDtype"""
+    _dtype = NormalizedStructureFactorAmplitudeDtype()
     pass

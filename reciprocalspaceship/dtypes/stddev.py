@@ -17,31 +17,31 @@ class StandardDeviationArray(NumpyExtensionArray):
     pass
 
 @register_extension_dtype
-class StandardDeviationSFFriedelDtype(NumpyFloat32ExtensionDtype):
+class StandardDeviationFriedelSFDtype(NumpyFloat32ExtensionDtype):
     """Dtype for standard deviation of F(+) or F(-)"""
-    name = 'StddevSFFriedel'
+    name = 'StddevFriedelSF'
     mtztype = "L"
 
     @classmethod
     def construct_array_type(cls):
-        return StandardDeviationSFFriedelArray
+        return StandardDeviationFriedelSFArray
 
-class StandardDeviationSFFriedelArray(NumpyExtensionArray):
-    """ExtensionArray for supporting StandardDeviationSFFriedelDtype"""
-    _dtype = StandardDeviationSFFriedelDtype()
+class StandardDeviationFriedelSFArray(NumpyExtensionArray):
+    """ExtensionArray for supporting StandardDeviationFriedelSFDtype"""
+    _dtype = StandardDeviationFriedelSFDtype()
     pass
 
 @register_extension_dtype
-class StandardDeviationIFriedelDtype(NumpyFloat32ExtensionDtype):
+class StandardDeviationFriedelIDtype(NumpyFloat32ExtensionDtype):
     """Dtype for standard deviation of I(+) or I(-)"""
-    name = 'StddevIFriedel'
+    name = 'StddevFriedelI'
     mtztype = "M"
 
     @classmethod
     def construct_array_type(cls):
-        return StandardDeviationIFriedelArray
+        return StandardDeviationFriedelIArray
 
-class StandardDeviationIFriedelArray(NumpyExtensionArray):
-    """ExtensionArray for supporting StandardDeviationIFriedelDtype"""
-    _dtype = StandardDeviationIFriedelDtype()
+class StandardDeviationFriedelIArray(NumpyExtensionArray):
+    """ExtensionArray for supporting StandardDeviationFriedelIDtype"""
+    _dtype = StandardDeviationFriedelIDtype()
     pass

@@ -27,34 +27,34 @@ class DataSeries(pd.Series):
     def to_friedel_dtype(self):
         """
         Return DataSeries with dtype set to Friedel equivalent. For example, 
-        rs.IntensityDtype is converted to rs.IntensityFriedelDtype(). If
+        rs.IntensityDtype is converted to rs.FriedelIntensityDtype(). If
         there is not a Friedel equivalent dtype, the DataSeries is returned
         unchanged.
         """
         if isinstance(self.dtype, rs.StructureFactorAmplitudeDtype):
-            return self.astype(rs.StructureFactorAmplitudeFriedelDtype())
+            return self.astype(rs.FriedelStructureFactorAmplitudeDtype())
         elif isinstance(self.dtype, rs.IntensityDtype):
-            return self.astype(rs.IntensityFriedelDtype())
+            return self.astype(rs.FriedelIntensityDtype())
         elif (isinstance(self.dtype, rs.StandardDeviationDtype) and
               "SIGF" in self.name.upper()):
-            return self.astype(rs.StandardDeviationSFFriedelDtype())
+            return self.astype(rs.StandardDeviationFriedelSFDtype())
         elif (isinstance(self.dtype, rs.StandardDeviationDtype) and
               "SIGI" in self.name.upper()):
-            return self.astype(rs.StandardDeviationIFriedelDtype())
+            return self.astype(rs.StandardDeviationFriedelIDtype())
         return self
 
     def from_friedel_dtype(self):
         """
         Return DataSeries with dtype set from Friedel equivalent. For example, 
-        rs.IntensityFriedelDtype is converted to rs.IntensityDtype(). If
+        rs.FriedelIntensityDtype is converted to rs.IntensityDtype(). If
         there is not a Friedel equivalent dtype, the DataSeries is returned 
         unchanged.
         """
-        if isinstance(self.dtype, rs.StructureFactorAmplitudeFriedelDtype):
+        if isinstance(self.dtype, rs.FriedelStructureFactorAmplitudeDtype):
             return self.astype(rs.StructureFactorAmplitudeDtype())
-        elif isinstance(self.dtype, rs.IntensityFriedelDtype):
+        elif isinstance(self.dtype, rs.FriedelIntensityDtype):
             return self.astype(rs.IntensityDtype())
-        elif (isinstance(self.dtype, rs.StandardDeviationIFriedelDtype) or
-              isinstance(self.dtype, rs.StandardDeviationSFFriedelDtype)):
+        elif (isinstance(self.dtype, rs.StandardDeviationFriedelIDtype) or
+              isinstance(self.dtype, rs.StandardDeviationFriedelSFDtype)):
             return self.astype(rs.StandardDeviationDtype())
         return self

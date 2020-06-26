@@ -161,58 +161,23 @@ array = {
     "HKL": rs.dtypes.hklindex.HKLIndexArray,
     "MTZInt": rs.dtypes.mtzint.MTZIntArray,
     "Batch": rs.dtypes.batch.BatchArray,
-    "M_Isym": rs.dtypes.m_isym.M_IsymArray,
+    "M/ISYM": rs.dtypes.m_isym.M_IsymArray,
 
     # Float32 dtypes
     "Intensity": rs.dtypes.intensity.IntensityArray,
     "SFAmplitude": rs.dtypes.structurefactor.StructureFactorAmplitudeArray,
     "AnomalousDifference": rs.dtypes.anomalousdifference.AnomalousDifferenceArray,
     "Stddev": rs.dtypes.stddev.StandardDeviationArray,
-    "SFAmplitudeFriedel": rs.dtypes.structurefactor.StructureFactorAmplitudeFriedelArray,
-    "StddevSFFriedel": rs.dtypes.stddev.StandardDeviationSFFriedelArray,
-    "IntensityFriedel": rs.dtypes.intensity.IntensityFriedelArray,
-    "StddevIFriedel": rs.dtypes.stddev.StandardDeviationIFriedelArray,
-    "F_over_eps": rs.dtypes.structurefactor.ScaledStructureFactorAmplitudeArray,
+    "FriedelSFAmplitude": rs.dtypes.structurefactor.FriedelStructureFactorAmplitudeArray,
+    "StddevFriedelSF": rs.dtypes.stddev.StandardDeviationFriedelSFArray,
+    "FriedelIntensity": rs.dtypes.intensity.FriedelIntensityArray,
+    "StddevFriedelI": rs.dtypes.stddev.StandardDeviationFriedelIArray,
+    "NormalizedSFAmplitude": rs.dtypes.structurefactor.NormalizedStructureFactorAmplitudeArray,
     "Phase": rs.dtypes.phase.PhaseArray,
     "Weight": rs.dtypes.weight.WeightArray,
     "HendricksonLattman": rs.dtypes.phase.HendricksonLattmanArray,
     "MTZReal": rs.dtypes.mtzreal.MTZRealArray
 }
-
-integer_dtypes=[
-    (rs.HKLIndexDtype, "HKL"),
-    (rs.MTZIntDtype, "MTZInt"),
-    (rs.BatchDtype, "Batch"),
-    (rs.M_IsymDtype, "M_Isym")
-]
-
-float_dtypes=[
-    (rs.IntensityDtype, "Intensity"),
-    (rs.StructureFactorAmplitudeDtype, "SFAmplitude"),
-    (rs.AnomalousDifferenceDtype, "AnomalousDifference"),
-    (rs.StandardDeviationDtype, "Stddev"),
-    (rs.StructureFactorAmplitudeFriedelDtype, "SFAmplitudeFriedel"),
-    (rs.StandardDeviationSFFriedelDtype, "StddevSFFriedel"),
-    (rs.IntensityFriedelDtype, "IntensityFriedel"),
-    (rs.StandardDeviationIFriedelDtype, "StddevIFriedel"),
-    (rs.ScaledStructureFactorAmplitudeDtype, "F_over_eps"),
-    (rs.PhaseDtype, "Phase"),
-    (rs.WeightDtype, "Weight"),
-    (rs.HendricksonLattmanDtype, "HendricksonLattman"),
-    (rs.MTZRealDtype, "MTZReal")
-]
-    
-@pytest.fixture(params=integer_dtypes)
-def dtype_ints(request):
-    return request.param
-
-@pytest.fixture(params=float_dtypes)
-def dtype_floats(request):
-    return request.param
-
-@pytest.fixture(params=integer_dtypes + float_dtypes)
-def dtype_all(request):
-    return request.param
 
 @pytest.fixture
 def data_int(dtype_ints):

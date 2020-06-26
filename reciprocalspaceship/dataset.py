@@ -405,7 +405,7 @@ class DataSet(pd.DataFrame):
         dataset['H'],dataset['K'],dataset['L'] = (DataSeries(i, dtype='HKL') for i in compressed_hkls[inverse].T)
         for k in dataset.get_phase_keys():
             dataset[k] = phi_coeff[inverse] * (dataset[k] + phi_shift[inverse])
-        dataset['M/ISYM'] = DataSeries(isym[inverse], dtype="M_Isym")
+        dataset['M/ISYM'] = DataSeries(isym[inverse], dtype="M/ISYM")
         dataset._canonicalize_phases(inplace=True)
         dataset.set_index(['H', 'K', 'L'], inplace=True)
         return dataset

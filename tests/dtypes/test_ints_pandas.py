@@ -8,7 +8,7 @@ array = {
     "HKL": rs.dtypes.hklindex.HKLIndexArray,
     "MTZInt": rs.dtypes.mtzint.MTZIntArray,
     "Batch": rs.dtypes.batch.BatchArray,
-    "M_Isym": rs.dtypes.m_isym.M_IsymArray
+    "M/ISYM": rs.dtypes.m_isym.M_IsymArray
 }
 
 @pytest.fixture(

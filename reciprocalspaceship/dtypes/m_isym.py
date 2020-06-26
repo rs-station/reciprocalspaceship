@@ -3,8 +3,8 @@ from .base import MTZInt32Dtype, MTZIntegerArray
 
 @register_extension_dtype
 class M_IsymDtype(MTZInt32Dtype):
-    """Dtype for representing M/Isym values"""
-    name = 'M_Isym'
+    """Dtype for representing M/ISYM values"""
+    name = 'M/ISYM'
     mtztype = "Y"
     
     @classmethod

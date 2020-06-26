@@ -3,18 +3,18 @@ from .mtzint import MTZIntDtype
 from .mtzreal import MTZRealDtype
 from .intensity import (
     IntensityDtype,
-    IntensityFriedelDtype
+    FriedelIntensityDtype
 )
 from .structurefactor import (
     StructureFactorAmplitudeDtype,
-    StructureFactorAmplitudeFriedelDtype,
-    ScaledStructureFactorAmplitudeDtype
+    FriedelStructureFactorAmplitudeDtype,
+    NormalizedStructureFactorAmplitudeDtype
 )
 from .anomalousdifference import AnomalousDifferenceDtype
 from .stddev import (
     StandardDeviationDtype,
-    StandardDeviationSFFriedelDtype,
-    StandardDeviationIFriedelDtype
+    StandardDeviationFriedelSFDtype,
+    StandardDeviationFriedelIDtype
 )
 from .phase import PhaseDtype, HendricksonLattmanDtype
 from .weight import WeightDtype

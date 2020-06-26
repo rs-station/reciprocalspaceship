@@ -17,16 +17,16 @@ class IntensityArray(NumpyExtensionArray):
     pass
 
 @register_extension_dtype
-class IntensityFriedelDtype(NumpyFloat32ExtensionDtype):
+class FriedelIntensityDtype(NumpyFloat32ExtensionDtype):
     """Dtype for I(+) or I(-) data in reflection tables"""
-    name = 'IntensityFriedel'
+    name = 'FriedelIntensity'
     mtztype = "K"
 
     @classmethod
     def construct_array_type(cls):
-        return IntensityFriedelArray
+        return FriedelIntensityArray
 
-class IntensityFriedelArray(NumpyExtensionArray):
-    """ExtensionArray for supporting IntensityFriedelDtype"""    
-    _dtype = IntensityFriedelDtype()
+class FriedelIntensityArray(NumpyExtensionArray):
+    """ExtensionArray for supporting FriedelIntensityDtype"""
+    _dtype = FriedelIntensityDtype()
     pass
