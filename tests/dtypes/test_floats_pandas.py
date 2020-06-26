@@ -139,21 +139,6 @@ class TestMethods(base.BaseMethodsTests):
         )
         self.assert_series_equal(result, expected)
 
-class TestArithmetics(base.BaseArithmeticOpsTests):
-    divmod_exc = None
-    series_scalar_exc = None
-    frame_scalar_exc = None
-    series_array_exc = None
-
-    def test_divmod_series_array(self, data):
-        s = pd.Series(data)
-        self._check_divmod_op(s, divmod, data, exc=None)
-
-    @pytest.mark.skip("We implement ops")
-    def test_error(self, data, all_arithmetic_operators):
-        pass
-
-        
 class TestComparisonOps(base.BaseComparisonOpsTests):
     
     def _check_op(self, s, op, other, op_name, exc=NotImplementedError):
