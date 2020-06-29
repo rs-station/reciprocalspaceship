@@ -8,6 +8,7 @@ from pandas.testing import assert_series_equal
     (rs.DataSeries(range(10), name="Phi", dtype=rs.PhaseDtype()), "P"),
     (rs.DataSeries(range(10), name=None), "I"),
     (rs.DataSeries(range(10), name=None, dtype=float), "R"),
+    (rs.DataSeries(range(10), name="blah", dtype=float), "R"),    
     (rs.DataSeries(range(10), name=None), "I"),
     (rs.DataSeries(range(10), name=None, dtype=float), "R"),
     (rs.DataSeries(["h"]*3, name=None, dtype=object), object),
