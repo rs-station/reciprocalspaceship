@@ -9,7 +9,7 @@ class DataSeries(pd.Series):
     exclude missing data (represented as NaN).
 
     Operations between DataSeries align values on their associated index
-    values, and as such do not need to have the same length. 
+    values so they do not need to have the same length. 
 
     For more information on the attributes and methods available with
     DataSeries objects, see the `Pandas documentation 
@@ -26,10 +26,17 @@ class DataSeries(pd.Series):
 
     def to_friedel_dtype(self):
         """
-        Return DataSeries with dtype set to Friedel equivalent. For example, 
-        rs.IntensityDtype is converted to rs.FriedelIntensityDtype(). If
-        there is not a Friedel equivalent dtype, the DataSeries is returned
+        Convert dtype of DataSeries to the Friedel equivalent. If there
+        is not a Friedel equivalent dtype, the DataSeries is returned 
         unchanged.
+
+        Returns
+        -------
+        DataSeries
+
+        See Also
+        --------
+        DataSeries.from_friedel_dtype
         """
         if isinstance(self.dtype, rs.StructureFactorAmplitudeDtype):
             return self.astype(rs.FriedelStructureFactorAmplitudeDtype())
@@ -45,10 +52,17 @@ class DataSeries(pd.Series):
 
     def from_friedel_dtype(self):
         """
-        Return DataSeries with dtype set from Friedel equivalent. For example, 
-        rs.FriedelIntensityDtype is converted to rs.IntensityDtype(). If
-        there is not a Friedel equivalent dtype, the DataSeries is returned 
+        Convert dtype of DataSeries from the Friedel equivalent. If
+        DataSeries is not a Friedel-related dtype, it is returned 
         unchanged.
+
+        Returns
+        -------
+        DataSeries
+
+        See Also
+        --------
+        DataSeries.to_friedel_dtype
         """
         if isinstance(self.dtype, rs.FriedelStructureFactorAmplitudeDtype):
             return self.astype(rs.StructureFactorAmplitudeDtype())
@@ -60,5 +74,25 @@ class DataSeries(pd.Series):
         return self
 
     def infer_mtz_dtype(self):
+        """
+        Infer MTZ dtype from column name and underlying data.
+        
+        Notes
+        -----
+        - If name does not match a common MTZ column, the method will return 
+          an MTZInt or MTZReal depending on whether the data is composed of 
+          integers or floats, respectively.
+        - If the data is non-numeric, the returned dtype will be unchanged.
+        - If input dataseries is already a MTZDtype, it will be returned
+          unchanged
+        
+        Returns
+        -------
+        DataSeries
+
+        See Also
+        --------
+        DataSet.infer_mtz_dtypes
+        """
         from reciprocalspaceship.dtypes.inference import infer_mtz_dtype
         return infer_mtz_dtype(self)
