@@ -36,7 +36,37 @@ class DataSeries(pd.Series):
 
         See Also
         --------
-        DataSeries.from_friedel_dtype
+        DataSeries.from_friedel_dtype : Convert dtype of DataSeries from the Friedel equivalent.
+
+        Examples
+        --------
+        DataSeries has a Friedel equivalent:
+
+        >>> s = rs.DataSeries([1, 2, 3], dtype="Intensity")
+        >>> s
+        0   1.0
+        1   2.0
+        2   3.0
+        dtype: Intensity
+        >>> s.to_friedel_dtype()
+        0   1.0
+        1   2.0
+        2   3.0
+        dtype: FriedelIntensity
+
+        DataSeries does not have a Friedel equivalent:
+
+        >>> s = rs.DataSeries([1, 2, 3], dtype="HKL")
+        >>> s
+        0    1
+        1    2
+        2    3
+        dtype: HKL
+        >>> s.to_friedel_dtype()
+        0    1
+        1    2
+        2    3
+        dtype: HKL
         """
         if isinstance(self.dtype, rs.StructureFactorAmplitudeDtype):
             return self.astype(rs.FriedelStructureFactorAmplitudeDtype())
@@ -62,7 +92,38 @@ class DataSeries(pd.Series):
 
         See Also
         --------
-        DataSeries.to_friedel_dtype
+        DataSeries.to_friedel_dtype : Convert dtype of DataSeries to the Friedel equivalent
+
+        Examples
+        --------
+        DataSeries has a Friedel equivalent:
+
+        >>> s = rs.DataSeries([1, 2, 3], dtype="FriedelIntensity")
+        >>> s
+        0   1.0
+        1   2.0
+        2   3.0
+        dtype: FriedelIntensity
+        >>> s.from_friedel_dtype()
+        0   1.0
+        1   2.0
+        2   3.0
+        dtype: Intensity
+
+        DataSeries does not have a Friedel equivalent:
+
+        >>> s = rs.DataSeries([1, 2, 3], dtype="HKL")
+        >>> s
+        0    1
+        1    2
+        2    3
+        dtype: HKL
+        >>> s.from_friedel_dtype()
+        0    1
+        1    2
+        2    3
+        dtype: HKL
+
         """
         if isinstance(self.dtype, rs.FriedelStructureFactorAmplitudeDtype):
             return self.astype(rs.StructureFactorAmplitudeDtype())
@@ -77,14 +138,11 @@ class DataSeries(pd.Series):
         """
         Infer MTZ dtype from column name and underlying data.
         
-        Notes
-        -----
-        - If name does not match a common MTZ column, the method will return 
-          an MTZInt or MTZReal depending on whether the data is composed of 
-          integers or floats, respectively.
-        - If the data is non-numeric, the returned dtype will be unchanged.
-        - If input dataseries is already a MTZDtype, it will be returned
-          unchanged
+        If name does not match a common MTZ column, the method will return 
+        an MTZInt or MTZReal depending on whether the data is composed of 
+        integers or floats, respectively. If the data is non-numeric, 
+        the returned dtype will be unchanged. If input dataseries is 
+        already a MTZDtype, it will be returned unchanged.
         
         Returns
         -------
@@ -92,7 +150,36 @@ class DataSeries(pd.Series):
 
         See Also
         --------
-        DataSet.infer_mtz_dtypes
+        DataSet.infer_mtz_dtypes : Infer MTZ dtypes for columns in DataSet
+
+        Examples
+        --------
+        Common intensity column name:
+
+        >>> s = rs.DataSeries([1, 2, 3], name="I")
+        >>> s.infer_mtz_dtype()
+        0   1.0
+        1   2.0
+        2   3.0
+        Name: I, dtype: Intensity
+
+        Common intensity column name for anomalous data:
+
+        >>> s = rs.DataSeries([1, 2, 3], name="I(+)")
+        >>> s.infer_mtz_dtype()
+        0   1.0
+        1   2.0
+        2   3.0
+        Name: I(+), dtype: FriedelIntensity
+        
+        Ambiguous name case:
+
+        >>> s = rs.DataSeries([1, 2, 3], name="Something")
+        >>> s.infer_mtz_dtype()
+        0    1
+        1    2
+        2    3
+        Name: Something, dtype: MTZInt
         """
         from reciprocalspaceship.dtypes.inference import infer_mtz_dtype
         return infer_mtz_dtype(self)
