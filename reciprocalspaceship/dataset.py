@@ -426,7 +426,8 @@ class DataSet(pd.DataFrame):
         merged = dataset_plus.merge(dataset_minus, how="outer",
                                     left_index=True, right_index=True,
                                     suffixes=suffixes)
-        merged.drop(columns="M/ISYM", inplace=True)
+        if "M/ISYM" not in columns:
+            merged.drop(columns="M/ISYM", inplace=True)
 
         return merged.__finalize__(self)
         
