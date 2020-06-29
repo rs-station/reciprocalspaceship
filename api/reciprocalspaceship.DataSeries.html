@@ -197,7 +197,7 @@
 <h1>DataSeries<a class="headerlink" href="#dataseries" title="Permalink to this headline">¶</a></h1>
 <dl class="py class">
 <dt id="reciprocalspaceship.DataSeries">
-<em class="property">class </em><code class="sig-prename descclassname">reciprocalspaceship.</code><code class="sig-name descname">DataSeries</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">data</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">index</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">dtype</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">name</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">copy</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">fastpath</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/Hekstra-Lab/reciprocalspaceship/blob/master/reciprocalspaceship/dataseries.py#L4-L98"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#reciprocalspaceship.DataSeries" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">reciprocalspaceship.</code><code class="sig-name descname">DataSeries</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">data</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">index</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">dtype</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">name</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">copy</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">fastpath</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/Hekstra-Lab/reciprocalspaceship/blob/master/reciprocalspaceship/dataseries.py#L4-L185"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#reciprocalspaceship.DataSeries" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">pandas.core.series.Series</span></code></p>
 <p>One-dimensional ndarray with axis labels, representing a slice
 of a DataSet. DataSeries objects inherit methods from <code class="docutils literal notranslate"><span class="pre">pd.Series</span></code>,
@@ -236,7 +236,7 @@ DataSeries objects, see the <a class="reference external" href="https://pandas.p
 </table>
 <dl class="py method">
 <dt id="reciprocalspaceship.DataSeries.from_friedel_dtype">
-<code class="sig-name descname">from_friedel_dtype</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/Hekstra-Lab/reciprocalspaceship/blob/master/reciprocalspaceship/dataseries.py#L53-L74"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#reciprocalspaceship.DataSeries.from_friedel_dtype" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">from_friedel_dtype</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/Hekstra-Lab/reciprocalspaceship/blob/master/reciprocalspaceship/dataseries.py#L83-L135"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#reciprocalspaceship.DataSeries.from_friedel_dtype" title="Permalink to this definition">¶</a></dt>
 <dd><p>Convert dtype of DataSeries from the Friedel equivalent. If
 DataSeries is not a Friedel-related dtype, it is returned
 unchanged.</p>
@@ -247,23 +247,51 @@ unchanged.</p>
 </dl>
 <div class="admonition seealso">
 <p class="admonition-title">See also</p>
-<p><a class="reference internal" href="#reciprocalspaceship.DataSeries.to_friedel_dtype" title="reciprocalspaceship.DataSeries.to_friedel_dtype"><code class="xref py py-meth docutils literal notranslate"><span class="pre">DataSeries.to_friedel_dtype()</span></code></a></p>
+<dl class="simple">
+<dt><a class="reference internal" href="#reciprocalspaceship.DataSeries.to_friedel_dtype" title="reciprocalspaceship.DataSeries.to_friedel_dtype"><code class="xref py py-meth docutils literal notranslate"><span class="pre">DataSeries.to_friedel_dtype()</span></code></a></dt><dd><p>Convert dtype of DataSeries to the Friedel equivalent</p>
+</dd>
+</dl>
+</div>
+<p class="rubric">Examples</p>
+<p>DataSeries has a Friedel equivalent:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">s</span> <span class="o">=</span> <span class="n">rs</span><span class="o">.</span><span class="n">DataSeries</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;FriedelIntensity&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">s</span>
+<span class="go">0   1.0</span>
+<span class="go">1   2.0</span>
+<span class="go">2   3.0</span>
+<span class="go">dtype: FriedelIntensity</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">s</span><span class="o">.</span><span class="n">from_friedel_dtype</span><span class="p">()</span>
+<span class="go">0   1.0</span>
+<span class="go">1   2.0</span>
+<span class="go">2   3.0</span>
+<span class="go">dtype: Intensity</span>
+</pre></div>
+</div>
+<p>DataSeries does not have a Friedel equivalent:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">s</span> <span class="o">=</span> <span class="n">rs</span><span class="o">.</span><span class="n">DataSeries</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;HKL&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">s</span>
+<span class="go">0    1</span>
+<span class="go">1    2</span>
+<span class="go">2    3</span>
+<span class="go">dtype: HKL</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">s</span><span class="o">.</span><span class="n">from_friedel_dtype</span><span class="p">()</span>
+<span class="go">0    1</span>
+<span class="go">1    2</span>
+<span class="go">2    3</span>
+<span class="go">dtype: HKL</span>
+</pre></div>
 </div>
 </dd></dl>
 
 <dl class="py method">
 <dt id="reciprocalspaceship.DataSeries.infer_mtz_dtype">
-<code class="sig-name descname">infer_mtz_dtype</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/Hekstra-Lab/reciprocalspaceship/blob/master/reciprocalspaceship/dataseries.py#L76-L98"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#reciprocalspaceship.DataSeries.infer_mtz_dtype" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">infer_mtz_dtype</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/Hekstra-Lab/reciprocalspaceship/blob/master/reciprocalspaceship/dataseries.py#L137-L185"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#reciprocalspaceship.DataSeries.infer_mtz_dtype" title="Permalink to this definition">¶</a></dt>
 <dd><p>Infer MTZ dtype from column name and underlying data.</p>
-<p class="rubric">Notes</p>
-<ul class="simple">
-<li><p>If name does not match a common MTZ column, the method will return
+<p>If name does not match a common MTZ column, the method will return
 an MTZInt or MTZReal depending on whether the data is composed of
-integers or floats, respectively.</p></li>
-<li><p>If the data is non-numeric, the returned dtype will be unchanged.</p></li>
-<li><p>If input dataseries is already a MTZDtype, it will be returned
-unchanged</p></li>
-</ul>
+integers or floats, respectively. If the data is non-numeric,
+the returned dtype will be unchanged. If input dataseries is
+already a MTZDtype, it will be returned unchanged.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p><em>DataSeries</em></p>
@@ -271,13 +299,44 @@ unchanged</p></li>
 </dl>
 <div class="admonition seealso">
 <p class="admonition-title">See also</p>
-<p><a class="reference internal" href="reciprocalspaceship.DataSet.html#reciprocalspaceship.DataSet.infer_mtz_dtypes" title="reciprocalspaceship.DataSet.infer_mtz_dtypes"><code class="xref py py-meth docutils literal notranslate"><span class="pre">DataSet.infer_mtz_dtypes()</span></code></a></p>
+<dl class="simple">
+<dt><a class="reference internal" href="reciprocalspaceship.DataSet.html#reciprocalspaceship.DataSet.infer_mtz_dtypes" title="reciprocalspaceship.DataSet.infer_mtz_dtypes"><code class="xref py py-meth docutils literal notranslate"><span class="pre">DataSet.infer_mtz_dtypes()</span></code></a></dt><dd><p>Infer MTZ dtypes for columns in DataSet</p>
+</dd>
+</dl>
+</div>
+<p class="rubric">Examples</p>
+<p>Common intensity column name:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">s</span> <span class="o">=</span> <span class="n">rs</span><span class="o">.</span><span class="n">DataSeries</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;I&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">s</span><span class="o">.</span><span class="n">infer_mtz_dtype</span><span class="p">()</span>
+<span class="go">0   1.0</span>
+<span class="go">1   2.0</span>
+<span class="go">2   3.0</span>
+<span class="go">Name: I, dtype: Intensity</span>
+</pre></div>
+</div>
+<p>Common intensity column name for anomalous data:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">s</span> <span class="o">=</span> <span class="n">rs</span><span class="o">.</span><span class="n">DataSeries</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;I(+)&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">s</span><span class="o">.</span><span class="n">infer_mtz_dtype</span><span class="p">()</span>
+<span class="go">0   1.0</span>
+<span class="go">1   2.0</span>
+<span class="go">2   3.0</span>
+<span class="go">Name: I(+), dtype: FriedelIntensity</span>
+</pre></div>
+</div>
+<p>Ambiguous name case:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">s</span> <span class="o">=</span> <span class="n">rs</span><span class="o">.</span><span class="n">DataSeries</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;Something&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">s</span><span class="o">.</span><span class="n">infer_mtz_dtype</span><span class="p">()</span>
+<span class="go">0    1</span>
+<span class="go">1    2</span>
+<span class="go">2    3</span>
+<span class="go">Name: Something, dtype: MTZInt</span>
+</pre></div>
 </div>
 </dd></dl>
 
 <dl class="py method">
 <dt id="reciprocalspaceship.DataSeries.to_friedel_dtype">
-<code class="sig-name descname">to_friedel_dtype</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/Hekstra-Lab/reciprocalspaceship/blob/master/reciprocalspaceship/dataseries.py#L27-L51"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#reciprocalspaceship.DataSeries.to_friedel_dtype" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">to_friedel_dtype</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/Hekstra-Lab/reciprocalspaceship/blob/master/reciprocalspaceship/dataseries.py#L27-L81"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#reciprocalspaceship.DataSeries.to_friedel_dtype" title="Permalink to this definition">¶</a></dt>
 <dd><p>Convert dtype of DataSeries to the Friedel equivalent. If there
 is not a Friedel equivalent dtype, the DataSeries is returned
 unchanged.</p>
@@ -288,7 +347,39 @@ unchanged.</p>
 </dl>
 <div class="admonition seealso">
 <p class="admonition-title">See also</p>
-<p><a class="reference internal" href="#reciprocalspaceship.DataSeries.from_friedel_dtype" title="reciprocalspaceship.DataSeries.from_friedel_dtype"><code class="xref py py-meth docutils literal notranslate"><span class="pre">DataSeries.from_friedel_dtype()</span></code></a></p>
+<dl class="simple">
+<dt><a class="reference internal" href="#reciprocalspaceship.DataSeries.from_friedel_dtype" title="reciprocalspaceship.DataSeries.from_friedel_dtype"><code class="xref py py-meth docutils literal notranslate"><span class="pre">DataSeries.from_friedel_dtype()</span></code></a></dt><dd><p>Convert dtype of DataSeries from the Friedel equivalent.</p>
+</dd>
+</dl>
+</div>
+<p class="rubric">Examples</p>
+<p>DataSeries has a Friedel equivalent:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">s</span> <span class="o">=</span> <span class="n">rs</span><span class="o">.</span><span class="n">DataSeries</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;Intensity&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">s</span>
+<span class="go">0   1.0</span>
+<span class="go">1   2.0</span>
+<span class="go">2   3.0</span>
+<span class="go">dtype: Intensity</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">s</span><span class="o">.</span><span class="n">to_friedel_dtype</span><span class="p">()</span>
+<span class="go">0   1.0</span>
+<span class="go">1   2.0</span>
+<span class="go">2   3.0</span>
+<span class="go">dtype: FriedelIntensity</span>
+</pre></div>
+</div>
+<p>DataSeries does not have a Friedel equivalent:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">s</span> <span class="o">=</span> <span class="n">rs</span><span class="o">.</span><span class="n">DataSeries</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;HKL&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">s</span>
+<span class="go">0    1</span>
+<span class="go">1    2</span>
+<span class="go">2    3</span>
+<span class="go">dtype: HKL</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">s</span><span class="o">.</span><span class="n">to_friedel_dtype</span><span class="p">()</span>
+<span class="go">0    1</span>
+<span class="go">1    2</span>
+<span class="go">2    3</span>
+<span class="go">dtype: HKL</span>
+</pre></div>
 </div>
 </dd></dl>
 
