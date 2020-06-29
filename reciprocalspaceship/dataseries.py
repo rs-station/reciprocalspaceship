@@ -58,3 +58,7 @@ class DataSeries(pd.Series):
               isinstance(self.dtype, rs.StandardDeviationFriedelSFDtype)):
             return self.astype(rs.StandardDeviationDtype())
         return self
+
+    def infer_mtz_dtype(self):
+        from reciprocalspaceship.dtypes.inference import infer_mtz_dtype
+        return infer_mtz_dtype(self)
