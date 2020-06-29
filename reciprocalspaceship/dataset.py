@@ -299,9 +299,8 @@ class DataSet(pd.DataFrame):
 
         uncompressed_hkls = dataset.get_hkls()
         hkls,inverse = np.unique(uncompressed_hkls, axis=0, return_inverse=True)
-        dhkls = np.zeros(len(hkls))
-        for i, hkl in enumerate(hkls):
-            dhkls[i] = dataset.cell.calculate_d(hkl)
+        A = np.array(self.cell.orthogonalization_matrix.tolist()).astype(np.float32)
+        dhkls = 1./np.linalg.norm((hkls@np.linalg.inv(A)), 2, 1)
         dataset['dHKL'] = DataSeries(dhkls[inverse], dtype="MTZReal", index=dataset.index)
         return dataset
 
