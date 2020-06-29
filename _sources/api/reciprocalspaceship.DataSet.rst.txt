@@ -49,6 +49,7 @@ DataSet
        ~DataSet.get_hkls
        ~DataSet.get_phase_keys
        ~DataSet.hkl_to_asu
+       ~DataSet.infer_mtz_dtypes
        ~DataSet.label_centrics
        ~DataSet.reset_index
        ~DataSet.set_index

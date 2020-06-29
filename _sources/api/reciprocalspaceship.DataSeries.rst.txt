@@ -46,6 +46,7 @@ DataSeries
    .. autosummary::
    
        ~DataSeries.from_friedel_dtype
+       ~DataSeries.infer_mtz_dtype
        ~DataSeries.to_friedel_dtype
    
    
