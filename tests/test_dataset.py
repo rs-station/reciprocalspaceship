@@ -224,3 +224,21 @@ def test_stack_anomalous_roundtrip(data_merged):
     result = result[data_merged.columns]
 
     assert_frame_equal(result, data_merged)
+
+
+@pytest.mark.parametrize("inplace", [True, False])
+def test_canonicalize_phases(data_fmodel, inplace):
+    """Test DataSet.canonicalize_phases()"""
+    temp = data_fmodel.copy()
+    temp["PHIFMODEL"] += np.random.randint(-5, 5, len(temp))*360.0
+    result = temp.canonicalize_phases(inplace=inplace)
+    
+    original = rs.utils.to_structurefactor(data_fmodel.FMODEL, data_fmodel.PHIFMODEL)
+    new = rs.utils.to_structurefactor(result.FMODEL, result.PHIFMODEL)
+    assert (result["PHIFMODEL"] >= -180.).all()
+    assert (result["PHIFMODEL"] <= 180.).all()
+    assert np.allclose(new, original)
+    if inplace:
+        assert id(result) == id(temp)
+    else:
+        assert id(result) != id(temp)

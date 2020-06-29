@@ -210,7 +210,7 @@ class DataSet(pd.DataFrame):
         # Shift phases according to symop
         for key in F.get_phase_keys():
             F[key] += phase_shifts
-            F[key] = canonicalize_phases(F[key], deg=True)
+            F[key] = utils.canonicalize_phases(F[key], deg=True)
             
         return F.__finalize__(self)
 
