@@ -455,7 +455,7 @@ class DataSet(pd.DataFrame):
             dataset[k] = phi_coeff[inverse] * (dataset[k] + phi_shift[inverse])
         dataset['M/ISYM'] = DataSeries(isym[inverse], dtype="M/ISYM")
         dataset._canonicalize_phases(inplace=True)
-        dataset.set_index(['H', 'K', 'L'], inplace=True)
+        dataset.set_index(index_keys, inplace=True)
         return dataset
 
     def _canonicalize_phases(self, inplace=False):
