@@ -44,6 +44,7 @@ DataSet
    
        ~DataSet.__init__
        ~DataSet.apply_symop
+       ~DataSet.canonicalize_phases
        ~DataSet.compute_dHKL
        ~DataSet.from_gemmi
        ~DataSet.get_hkls
