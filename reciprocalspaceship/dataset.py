@@ -331,6 +331,10 @@ class DataSet(pd.DataFrame):
         Returns
         -------
         DataSet
+
+        See Also
+        --------
+        DataSet.unstack_anomalous : Opposite of stack_anomalous
         """
         if (plus_labels is None and minus_labels is None):
             plus_labels  = [ l for l in self.columns if "(+)" in l ]
@@ -386,7 +390,8 @@ class DataSet(pd.DataFrame):
         ----------
         columns : str or list-like
             Column label or list of column labels of data that should be 
-            associated with Friedel pairs
+            associated with Friedel pairs. If None, all columns are 
+            converted are converted to the two-column anomalous format.
         suffixes : tuple of str
             Suffixes to append to Friedel-plus and Friedel-minus data 
             columns
@@ -394,6 +399,10 @@ class DataSet(pd.DataFrame):
         Returns
         -------
         DataSet
+
+        See Also
+        --------
+        DataSet.stack_anomalous : Opposite of unstack_anomalous
         """
         # Validate input
         if columns is None:
