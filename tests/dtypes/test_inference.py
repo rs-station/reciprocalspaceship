@@ -47,6 +47,7 @@ from pandas.testing import assert_series_equal
     (rs.DataSeries(range(10), name="weight"), "W"),
     (rs.DataSeries(range(10), name="weights"), "W"),
     (rs.DataSeries(range(10), name="W"), "W"),
+    (rs.DataSeries(range(10), name="FreeR_flag"), "I"),
 ])
 def test_inference(dataseries):
     """Test DataSeries.infer_mtz_dtype()"""

@@ -112,6 +112,19 @@ def test_label_centrics(data_fmodel, inplace):
 
 
 @pytest.mark.parametrize("inplace", [True, False])
+def test_infer_mtz_dtypes(data_hewl, inplace):
+    """Test DataSet.infer_mtz_dtypes()"""
+    expected = data_hewl
+    temp = data_hewl.astype(object, copy=False)
+    result = temp.infer_mtz_dtypes(inplace=inplace)
+    assert_frame_equal(result, expected)
+    if inplace:
+        assert id(result) == id(temp)
+    else:
+        assert id(result) != id(temp)
+        
+    
+@pytest.mark.parametrize("inplace", [True, False])
 @pytest.mark.parametrize("cell", [
     gemmi.UnitCell(10., 20., 30., 90., 90., 90.,),
     gemmi.UnitCell(60., 60., 90., 90., 90., 120.),

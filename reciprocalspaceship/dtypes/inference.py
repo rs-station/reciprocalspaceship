@@ -1,4 +1,4 @@
-from pandas.api.types import is_integer_dtype, is_float_dtype
+from pandas.api.types import is_integer_dtype, is_float_dtype, is_object_dtype
 from reciprocalspaceship.dtypes.base import MTZDtype
 
 def infer_mtz_dtype(dataseries):
@@ -26,15 +26,21 @@ def infer_mtz_dtype(dataseries):
         DataSeries with the inferred dtype
     """
     name = dataseries.name
-
+    dtype = dataseries.dtype
+    
+    # If dtype is object, try to coerce to more informative dtype
+    if is_object_dtype(dataseries.dtype):
+        new = dataseries.convert_dtypes()
+        dtype = new.dtype
+    
     if isinstance(dataseries.dtype, MTZDtype):
         return dataseries
-    
+
     # Name is None
     elif name is None:
-        if is_integer_dtype(dataseries.dtype):
+        if is_integer_dtype(dtype):
             return dataseries.astype("I")
-        elif is_float_dtype(dataseries.dtype):
+        elif is_float_dtype(dtype):
             return dataseries.astype("R")
         else:
             return dataseries
@@ -60,34 +66,36 @@ def infer_mtz_dtype(dataseries):
     elif name.upper().startswith("WEIGHT") or name.upper() == "W":
         return dataseries.astype("W")
     
-    elif dataseries.name.upper().startswith("SIG"):
+    elif name.upper().startswith("SIG"):
         # Check Friedel
-        if any(match in dataseries.name for match in ["(+)", "(-)"]):
+        if any(match in name for match in ["(+)", "(-)"]):
             # Check SF or I
-            if "F" in dataseries.name.upper():
+            if "F" in name.upper():
                 return dataseries.astype("L")
             else:
                 return dataseries.astype("M")
         else:
             return dataseries.astype("Q")
 
-    elif dataseries.name.upper().startswith("I"):
-        if any(match in dataseries.name for match in ["(+)", "(-)"]):
+    elif name.upper().startswith("I"):
+        if any(match in name for match in ["(+)", "(-)"]):
             return dataseries.astype("K")
         else:
             return dataseries.astype("J")
 
-    elif (dataseries.name.upper().startswith("F") or
-          "ANOM" in dataseries.name.upper()):
-        if any(match in dataseries.name for match in ["(+)", "(-)"]):
+    elif name.upper().startswith("FREE"):
+        return dataseries.astype("I")
+        
+    elif (name.upper().startswith("F") or "ANOM" in name.upper()):
+        if any(match in name for match in ["(+)", "(-)"]):
             return dataseries.astype("G")
         else:
             return dataseries.astype("F")
         
     # Fall back to general dtypes
-    if is_integer_dtype(dataseries.dtype):
+    if is_integer_dtype(dtype):
         return dataseries.astype("I")
-    elif is_float_dtype(dataseries.dtype):
+    elif is_float_dtype(dtype):
         return dataseries.astype("R")
     else:
         return dataseries

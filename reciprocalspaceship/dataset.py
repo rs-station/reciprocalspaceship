@@ -244,6 +244,44 @@ class DataSet(pd.DataFrame):
         dataset['CENTRIC'] = is_centric(dataset.get_hkls(), dataset.spacegroup)
         return dataset
 
+    def infer_mtz_dtypes(self, inplace=False):
+        """
+        Infers MTZ dtypes from column names and underlying data. This 
+        method iterates over each column in the DataSet and tries to infer
+        its proper MTZ dtype based on common MTZ naming conventions.
+
+        If a given column is already a MTZDtype, its type will be unchanged.
+
+        Notes
+        -----
+        - This method will also try to infer dtypes for columns that are
+          in the DataSet.index
+
+        Parameters
+        ----------
+        inplace : bool
+            Whether to modify the dtypes in place or to return a copy
+
+        Returns
+        -------
+        DataSet
+
+        See Also
+        --------
+        DataSeries.infer_mtz_dtype : Infer MTZ dtype for DataSeries
+        """
+        if inplace:
+            dataset = self
+        else:
+            dataset = self.copy()
+
+        index_keys = dataset.index.names
+        dataset.reset_index(inplace=True)
+        for c in dataset:
+            dataset[c] = dataset[c].infer_mtz_dtype()
+        dataset.set_index(index_keys, inplace=True)
+        return dataset
+
     def compute_dHKL(self, inplace=False):
         """
         Compute the real space lattice plane spacing, d, associated with
