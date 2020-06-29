@@ -3,8 +3,8 @@ import numpy as np
 import gemmi
 import reciprocalspaceship as rs
 from reciprocalspaceship.dataseries import DataSeries
-from .utils import (
-    canonicalize_phases,
+from reciprocalspaceship import utils
+from reciprocalspaceship.utils import (
     apply_to_hkl,
     phase_shift,
     is_centric,
@@ -433,8 +433,18 @@ class DataSet(pd.DataFrame):
         
     def hkl_to_asu(self, inplace=False):
         """
-        Map all HKL indices to the reciprocal space asymmetric unit; return a copy
-        This is provisional. Doesn't quite work yet. 
+        Map HKL indices to the reciprocal space asymmetric unit. If phases
+        are included in the DataSet, they will be changed according to the
+        phase shift associated with the necessary symmetry operation.
+
+        Parameters
+        ----------
+        inplace : bool
+            Whether to modify the DataSet in place or return a copy
+
+        Returns
+        -------
+        DataSet
         """
         if inplace:
             dataset = self
@@ -454,18 +464,31 @@ class DataSet(pd.DataFrame):
         for k in dataset.get_phase_keys():
             dataset[k] = phi_coeff[inverse] * (dataset[k] + phi_shift[inverse])
         dataset['M/ISYM'] = DataSeries(isym[inverse], dtype="M/ISYM")
-        dataset._canonicalize_phases(inplace=True)
+        dataset.canonicalize_phases(inplace=True)
         dataset.set_index(index_keys, inplace=True)
         return dataset
 
-    def _canonicalize_phases(self, inplace=False):
+    def canonicalize_phases(self, inplace=False):
+        """
+        Canonicalize columns with phase data to fall in the interval between
+        -180 and 180 degrees. This method will modify the values within any
+        column composed of data with the PhaseDtype.
+
+        Parameters
+        ----------
+        inplace : bool
+            Whether to modify the DataSet in place or return a copy
+
+        Returns
+        -------
+        DataSet
+        """
         if inplace:
-            new_dataset = self
-
+            dataset = self
         else:
-            new_dataset = self.copy()
+            dataset = self.copy()
 
-        for k in new_dataset.get_phase_keys():
-            new_dataset[k] = canonicalize_phases(new_dataset[k])
+        for k in dataset.get_phase_keys():
+            dataset[k] = utils.canonicalize_phases(dataset[k])
 
-        return new_dataset
+        return dataset
