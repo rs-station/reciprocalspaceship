@@ -14,6 +14,23 @@ class DataSeries(pd.Series):
     For more information on the attributes and methods available with
     DataSeries objects, see the `Pandas documentation 
     <https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.Series.html>`_.
+
+    Parameters
+    ----------
+    data : array-like, Iterable, dict, or scalar value
+        data to be stored in DataSeries.
+    index : array-like or Index
+        Values must be hashable and have the same length as `data`.
+        Non-unique index values are allowed. Will default to
+        RangeIndex (0, 1, 2, ..., n) if not provided. If a dict is provided 
+        as `data` and a `index` is given, `index` will override the keys
+        found in the dict.
+    dtype : str, numpy.dtype, or ExtensionDtype, optional
+        Data type for the DataSeries.
+    name : str, optional
+        The name to give to the DataSeries.
+    copy : bool, default False
+        Copy input data.
     """
     
     @property
