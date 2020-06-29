@@ -30,12 +30,28 @@ def load_dataset(datapath, as_gemmi=False):
         return rs.read_mtz(inFN)
     
 @pytest.fixture
-def data_hewl():
+def data_merged():
     """
     Load HEWL diffraction data from APS 24-ID-C
     """
     datapath = ["data", "algorithms", "HEWL_SSAD_24IDC.mtz"]
     return load_dataset(datapath)
+
+@pytest.fixture
+def data_unmerged():
+    """
+    Load HEWL diffraction data from APS 24-ID-C
+    """
+    datapath = ["data", "algorithms", "HEWL_unmerged.mtz"]
+    return load_dataset(datapath)
+
+@pytest.fixture(params=[
+    ["data", "algorithms", "HEWL_SSAD_24IDC.mtz"],
+    ["data", "algorithms", "HEWL_unmerged.mtz"],
+])
+def data_hewl(request):
+    """Yields DataSet objects for merged and unmerged MTZ files"""
+    return load_dataset(request.param)
 
 @pytest.fixture
 def data_gemmi():

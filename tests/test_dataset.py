@@ -112,10 +112,10 @@ def test_label_centrics(data_fmodel, inplace):
 
 
 @pytest.mark.parametrize("inplace", [True, False])
-def test_infer_mtz_dtypes(data_hewl, inplace):
+def test_infer_mtz_dtypes(data_merged, inplace):
     """Test DataSet.infer_mtz_dtypes()"""
-    expected = data_hewl
-    temp = data_hewl.astype(object, copy=False)
+    expected = data_merged
+    temp = data_merged.astype(object, copy=False)
     result = temp.infer_mtz_dtypes(inplace=inplace)
     assert_frame_equal(result, expected)
     if inplace:
@@ -212,15 +212,15 @@ def test_apply_symop_roundtrip(mtz_by_spacegroup):
         assert np.isclose(original, back, rtol=1e-3).all()
 
 
-def test_stack_anomalous_roundtrip(data_hewl):
+def test_stack_anomalous_roundtrip(data_merged):
     """
     Test that DataSet is unchanged by roundtrip call of DataSet.stack_anomalous()
     followed by DataSet.unstack_anomalous()
     """
-    stacked = data_hewl.stack_anomalous()
+    stacked = data_merged.stack_anomalous()
     result = stacked.unstack_anomalous(["I", "SIGI", "N"])
 
     # Re-order columns if needed
-    result = result[data_hewl.columns]
+    result = result[data_merged.columns]
 
-    assert_frame_equal(result, data_hewl)
+    assert_frame_equal(result, data_merged)

@@ -7,15 +7,15 @@ import reciprocalspaceship as rs
 @pytest.fixture(params=["hewl",
                         "hewl_IMEAN_NaN",
                         "hewl_I(+)_NaN"])
-def data_hewl_all(data_hewl, request):
+def data_hewl_all(data_merged, request):
     if request.param == "hewl":
-        return data_hewl
+        return data_merged
     elif request.param == "hewl_IMEAN_NaN":
-        data_hewl.loc[(0, 0, 4), "IMEAN"] = np.NaN
-        return data_hewl
+        data_merged.loc[(0, 0, 4), "IMEAN"] = np.NaN
+        return data_merged
     elif request.param == "hewl_I(+)_NaN":
-        data_hewl.loc[(0, 0, 4), "I(+)"] = np.NaN
-        return data_hewl
+        data_merged.loc[(0, 0, 4), "I(+)"] = np.NaN
+        return data_merged
 
 @pytest.fixture
 def ref_hewl():
