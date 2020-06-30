@@ -1,0 +1,62 @@
+DataSet
+===========================
+
+.. currentmodule:: reciprocalspaceship
+
+.. autoclass:: DataSet
+
+   
+
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+   
+   
+   
+   
+      ~DataSet.cell
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+      ~DataSet.spacegroup
+   
+   
+   
+   
+   
+	       
+   
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+       ~DataSet.__init__
+       ~DataSet.apply_symop
+       ~DataSet.canonicalize_phases
+       ~DataSet.compute_dHKL
+       ~DataSet.from_gemmi
+       ~DataSet.get_hkls
+       ~DataSet.get_phase_keys
+       ~DataSet.hkl_to_asu
+       ~DataSet.infer_mtz_dtypes
+       ~DataSet.label_centrics
+       ~DataSet.reset_index
+       ~DataSet.set_index
+       ~DataSet.stack_anomalous
+       ~DataSet.to_gemmi
+       ~DataSet.unstack_anomalous
+       ~DataSet.write_mtz
+   
+   

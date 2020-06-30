@@ -1,0 +1,52 @@
+DataSeries
+==============================
+
+.. currentmodule:: reciprocalspaceship
+
+.. autoclass:: DataSeries
+
+   
+
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+	       
+   
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+       ~DataSeries.from_friedel_dtype
+       ~DataSeries.infer_mtz_dtype
+       ~DataSeries.to_friedel_dtype
+   
+   
