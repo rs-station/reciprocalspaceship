@@ -22,4 +22,4 @@ help:
 clean: myclean
 
 myclean:
-	rm -rf api
+	rm -rf api/autoapi

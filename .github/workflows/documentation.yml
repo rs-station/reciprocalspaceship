@@ -31,7 +31,7 @@ jobs:
 
     - name: Build documentation
       run: |
-        pip install sphinx sphinx_rtd_theme nbsphinx ipython jupyter
+        pip install sphinx sphinx_rtd_theme nbsphinx ipython jupyter sphinx-panels
         cd docs
         make clean
         make html

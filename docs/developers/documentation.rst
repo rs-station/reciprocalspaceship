@@ -8,7 +8,8 @@ the ``master`` branch of the repo; however, it is also possible to build it loca
 be installed using ``pip`` or ``conda``::
 
   conda install -c conda-forge sphinx sphinx_rtd_theme nbsphinx ipython jupyter
-
+  pip install sphinx-panels
+  
 The documentation can then be built using the ``Makefile`` in the ``docs/`` subdirectory::
 
   cd docs

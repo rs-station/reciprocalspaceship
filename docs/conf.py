@@ -39,6 +39,7 @@ extensions = [
     'sphinx_rtd_theme',
     'nbsphinx',
     "sphinx.ext.linkcode",
+    "sphinx_panels"
 ]
 
 napoleon_google_docstring = False
