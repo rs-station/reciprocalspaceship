@@ -18,29 +18,36 @@ Features of this library include:
   unit cell parameters, and crystallographic symmetry operations using
   `GEMMI <https://gemmi.readthedocs.io/en/latest/>`_.
 - Support for reading and writing MTZ format reflection data.
-  
 
-User Guide
-----------
+.. panels::
+    :container: container-lg pb-3
+    :column: col-lg-4 col-md-4 col-sm-6 col-xs-12 p-2
+
+    The user guide provides information about installing and using ``reciprocalspaceship``
+    +++
+    .. link-button:: ../userguide/index
+       :type: ref
+       :text: User Guide
+       :classes: btn-outline-primary btn-block stretched-link
+    ---
+    The API reference provides detailed information about the Python API for the library
+    +++
+    .. link-button:: ../api/index
+        :type: ref
+        :text: API Reference
+        :classes: btn-outline-primary btn-block stretched-link
+    ---
+    The developer's guide is a resource for those looking to contribute to this project
+    +++
+    .. link-button:: ../developers/index
+        :type: ref
+        :text: Developer Guide
+        :classes: btn-outline-primary btn-block stretched-link
 
 .. toctree::
    :maxdepth: 1
+   :hidden:
 
-   installation
-   examples/examples
-   
-API Reference
--------------
-
-.. toctree::
-   :maxdepth: 1
-
-   reflectiontables
-
-For Developers
---------------
-
-.. toctree::
-   :maxdepth: 1
-
-   documentation
+   userguide/index
+   api/index
+   developers/index
