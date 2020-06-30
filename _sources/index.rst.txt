@@ -25,21 +25,21 @@ Features of this library include:
 
     The user guide provides information about installing and using ``reciprocalspaceship``
     +++
-    .. link-button:: ../userguide/index
+    .. link-button:: userguide/index
        :type: ref
        :text: User Guide
        :classes: btn-outline-primary btn-block stretched-link
     ---
     The API reference provides detailed information about the Python API for the library
     +++
-    .. link-button:: ../api/index
+    .. link-button:: api/index
         :type: ref
         :text: API Reference
         :classes: btn-outline-primary btn-block stretched-link
     ---
     The developer's guide is a resource for those looking to contribute to this project
     +++
-    .. link-button:: ../developers/index
+    .. link-button:: developers/index
         :type: ref
         :text: Developer Guide
         :classes: btn-outline-primary btn-block stretched-link
