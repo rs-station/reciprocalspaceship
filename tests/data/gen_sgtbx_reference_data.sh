@@ -25,8 +25,18 @@ H = np.mgrid[hmin:hmax+1:1,hmin:hmax+1:1,hmin:hmax+1:1].reshape((3, -1)).T
 
 outFN = dname + '/sgtbx.csv'
 
+def valid_phases(sg, h):
+    h = [int(h[0]), int(h[1]), int(h[2])]
+    if sg.is_centric(h):
+        ph = sg.phase_restriction(h)
+        valid_ph = np.unique([ph.nearest_valid_phase(i) for i in np.linspace(-np.pi, np.pi, 100)])
+        phase_restrictions = '"{}"'.format(','.join(map(str, valid_ph)))
+        return phase_restrictions
+    else:
+        return '"None"'
+
 with open(outFN, 'w') as f:
-    f.write("xhm,hall,hm,h,k,l,h_asu,k_asu,l_asu,in_asu,is_centric,is_absent,epsilon\n")
+    f.write("xhm,hall,hm,h,k,l,h_asu,k_asu,l_asu,in_asu,is_centric,is_absent,epsilon,phase_restrictions\n")
     for s in tqdm(list(sgtbx.space_group_symbol_iterator())):
         hall = s.hall()
         hm   = s.hermann_mauguin()
@@ -39,6 +49,7 @@ with open(outFN, 'w') as f:
         is_absent  =  [sg.is_sys_absent(h.tolist()) for h in H]
         epsilons   =  [sg.epsilon(h.tolist()) for h in H]
         for h,h_asu,inside,centric,absent,epsilon in zip(H, H_asu, in_asu, is_centric, is_absent, epsilons):
+            phase_restrictions = valid_phases(sg, h)
             f.write(','.join([
                 xhm,
                 hall,
@@ -50,9 +61,10 @@ with open(outFN, 'w') as f:
                 str(h_asu[1]),
                 str(h_asu[2]),
                 str(inside),
-		str(centric),
-		str(absent),
-		str(epsilon),
+		            str(centric),
+		            str(absent),
+		            str(epsilon),
+                phase_restrictions,
             ]) + '\n')
 
 EOF
