@@ -276,10 +276,17 @@ class DataSet(pd.DataFrame):
             dataset = self.copy()
 
         index_keys = dataset.index.names
-        dataset.reset_index(inplace=True)
+
+        #This will be the case for some types of indices particularly RangeIndex
+        if None not in index_keys:
+            dataset.reset_index(inplace=True)
+
         for c in dataset:
             dataset[c] = dataset[c].infer_mtz_dtype()
-        dataset.set_index(index_keys, inplace=True)
+
+        if None not in index_keys:
+            dataset.set_index(index_keys, inplace=True)
+
         return dataset
 
     def compute_dHKL(self, inplace=False):
