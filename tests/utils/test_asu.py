@@ -80,3 +80,12 @@ def test_hkl_to_asu(sgtbx_by_xhm, return_phase_shifts):
         assert np.isclose(np.sin(phis), np.sin(ref_phis)).all()
         assert np.isclose(np.cos(phis), np.cos(ref_phis)).all()
 
+def test_original_hkl(sgtbx_by_xhm):
+    xhm = sgtbx_by_xhm[0]
+    reference  = sgtbx_by_xhm[1]
+    H = reference[['h', 'k', 'l']].to_numpy()
+    sg = gemmi.SpaceGroup(xhm)
+    Hasu, isym = rs.utils.hkl_to_asu(H, sg)
+    H_original = rs.utils.original_hkl(Hasu, isym, sg)
+    assert np.array_equal(H, H_original)
+
