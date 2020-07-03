@@ -112,17 +112,33 @@ def test_label_centrics(data_fmodel, inplace):
 
 
 @pytest.mark.parametrize("inplace", [True, False])
-def test_infer_mtz_dtypes(data_merged, inplace):
+@pytest.mark.parametrize("index", [True, False])
+def test_infer_mtz_dtypes(data_merged, inplace, index):
     """Test DataSet.infer_mtz_dtypes()"""
     expected = data_merged
     temp = data_merged.astype(object, copy=False)
-    result = temp.infer_mtz_dtypes(inplace=inplace)
+    result = temp.infer_mtz_dtypes(inplace=inplace, index=index)
     assert_frame_equal(result, expected)
     if inplace:
         assert id(result) == id(temp)
     else:
         assert id(result) != id(temp)
-        
+
+
+@pytest.mark.parametrize("inplace", [True, False])
+@pytest.mark.parametrize("index", [True, False])
+def test_infer_mtz_dtypes_rangeindex(data_merged, inplace, index):
+    """Test DataSet.infer_mtz_dtypes() with RangeIndex"""
+    data_merged.reset_index(inplace=True)
+    expected = data_merged
+    temp = data_merged.astype(object, copy=False)
+    result = temp.infer_mtz_dtypes(inplace=inplace, index=index)
+    assert_frame_equal(result, expected)
+    if inplace:
+        assert id(result) == id(temp)
+    else:
+        assert id(result) != id(temp)
+
     
 @pytest.mark.parametrize("inplace", [True, False])
 @pytest.mark.parametrize("cell", [

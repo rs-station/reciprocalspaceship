@@ -244,23 +244,22 @@ class DataSet(pd.DataFrame):
         dataset['CENTRIC'] = is_centric(dataset.get_hkls(), dataset.spacegroup)
         return dataset
 
-    def infer_mtz_dtypes(self, inplace=False):
+    def infer_mtz_dtypes(self, inplace=False, index=True):
         """
         Infers MTZ dtypes from column names and underlying data. This 
         method iterates over each column in the DataSet and tries to infer
         its proper MTZ dtype based on common MTZ naming conventions.
 
-        If a given column is already a MTZDtype, its type will be unchanged.
-
-        Notes
-        -----
-        - This method will also try to infer dtypes for columns that are
-          in the DataSet.index
+        If a given column is already a MTZDtype, its type will be unchanged. 
+        If index is True, the MTZ dtypes will be inferred for named columns
+        in the index.
 
         Parameters
         ----------
         inplace : bool
             Whether to modify the dtypes in place or to return a copy
+        index : bool
+            Infer MTZ dtypes for named column(s) in the DataSet index
 
         Returns
         -------
@@ -275,16 +274,16 @@ class DataSet(pd.DataFrame):
         else:
             dataset = self.copy()
 
-        index_keys = dataset.index.names
-
-        #This will be the case for some types of indices particularly RangeIndex
-        if None not in index_keys:
-            dataset.reset_index(inplace=True)
+        # See GH#2: Handle unnamed Index objects such as RangeIndex
+        if index:
+            index_keys = list(filter(None, dataset.index.names))
+            if index_keys:
+                dataset.reset_index(inplace=True, level=index_keys)
 
         for c in dataset:
             dataset[c] = dataset[c].infer_mtz_dtype()
 
-        if None not in index_keys:
+        if index and index_keys:
             dataset.set_index(index_keys, inplace=True)
 
         return dataset
