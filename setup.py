@@ -16,7 +16,7 @@ setup(
     packages=find_packages(),
     description='Tools for exploring reciprocal space',
     install_requires=[
-        "gemmi == 0.3.8",
+        "gemmi >= 0.4.0.post1",
         "pandas > 1.0",
         "numpy >  1.0",
         "scipy > 1.4",
