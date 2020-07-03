@@ -1,8 +1,8 @@
-#!/bin/bash
-
-cctbx.python - << EOF
+#!/usr/bin/env cctbx.python 
+import pandas as pd
 from cctbx import sgtbx
 from cctbx import miller
+from os import remove,path
 import numpy as np
 from os import path,mkdir
 
@@ -67,12 +67,6 @@ with open(outFN, 'w') as f:
                 phase_restrictions,
             ]) + '\n')
 
-EOF
-
-python - << EOF
-
-import pandas as pd
-from os import remove,path
 
 abspath = path.abspath(__file__)
 dname = path.join(path.dirname(abspath), "sgtbx")
@@ -82,5 +76,3 @@ df = pd.read_csv(inFN)
 df.to_csv(inFN + '.bz2', index=False)
 
 remove(inFN)
-
-EOF
