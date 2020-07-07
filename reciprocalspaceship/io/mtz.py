@@ -25,10 +25,11 @@ def from_gemmi(gemmi_mtz):
         dataset[c.label] = dataset[c.label].astype(c.type)
     dataset.set_index(["H", "K", "L"], inplace=True)
 
-    # Handle unmerged DataSet
+    # Handle unmerged DataSet. It is assumed that there is a single
+    # M/ISYM column
     if "M/ISYM" in dataset.dtypes:
         dataset.merged = False
-        m_isym = dataset.dtypes[dataset.dtypes == "M/ISYM"].index.to_list()
+        m_isym = dataset.dtypes[dataset.dtypes == "M/ISYM"].index.values[0]
         dataset.hkl_to_observed(m_isym, inplace=True)
     else:
         dataset.merged = True

@@ -3,6 +3,8 @@ from os.path import dirname, abspath, join, exists
 from os import remove
 import filecmp
 import gemmi
+import numpy as np
+from pandas.testing import assert_frame_equal
 import reciprocalspaceship as rs
 
 class TestMTZ(unittest.TestCase):
@@ -76,3 +78,25 @@ class TestMTZ(unittest.TestCase):
         remove("temp2.mtz")
         
         return
+
+def test_read_unmerged(data_unmerged):
+    """Test rs.read_mtz() with unmerged data"""
+    in_asu = data_unmerged.hkl_to_asu()
+    assert not data_unmerged.merged
+    assert not np.allclose(data_unmerged.get_hkls(), in_asu.get_hkls())
+
+def test_roundtrip(data_unmerged):
+    """
+    Test roundtrip of rs.read_mtz() and DataSet.write_mtz() with unmerged data
+    """
+    data_unmerged.write_mtz("temp.mtz")
+    data2 = rs.read_mtz("temp.mtz")
+    data2.write_mtz("temp2.mtz")
+
+    assert filecmp.cmp("temp.mtz", "temp2.mtz")
+    assert_frame_equal(data_unmerged, data2)
+    assert data_unmerged.merged == data2.merged
+
+    # Clean up
+    remove("temp.mtz")
+    remove("temp2.mtz")
