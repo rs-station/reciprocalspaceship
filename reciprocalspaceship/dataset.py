@@ -516,8 +516,8 @@ class DataSet(pd.DataFrame):
             dataset = self.copy()
 
         hkls = dataset.get_hkls()
-        m_isym = dataset[m_isym].to_numpy()
-        observed_hkls = hkl_to_observed(hkls, m_isym, dataset.spacegroup)
+        isym = (dataset[m_isym] % 256).to_numpy() # Convert M/ISYM to ISYM
+        observed_hkls = hkl_to_observed(hkls, isym, dataset.spacegroup)
 
         # Update HKLs
         index_keys = dataset.index.names
