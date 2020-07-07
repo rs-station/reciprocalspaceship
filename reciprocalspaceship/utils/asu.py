@@ -119,7 +119,7 @@ def hkl_to_asu(H, spacegroup, return_phase_shifts=False):
     else:
         return H_asu, isym
 
-def original_hkl(H, isym, sg):
+def hkl_to_observed(H, isym, sg):
     """
     Parameters
     ----------
@@ -132,20 +132,20 @@ def original_hkl(H, isym, sg):
 
     Returns
     -------
-    original_H : array
+    observed_H : array
         n x 3 array of the original Miller indices before they were mapped to the ASU through isym.
     """
 
     H = np.array(H, dtype=np.float32)
     isym = np.array(isym, dtype=int)
-    original_H = np.zeros_like(H)
+    observed_H = np.zeros_like(H)
     for i,op in enumerate(sg.operations()):
         idx = (isym == i*2+1)
-        original_H[idx] = apply_to_hkl(H[idx], op.inverse())
+        observed_H[idx] = apply_to_hkl(H[idx], op.inverse())
         #Friedel
         idx = (isym == i*2+2)
-        original_H[idx] = -apply_to_hkl(H[idx], op.inverse())
-    return original_H
+        observed_H[idx] = -apply_to_hkl(H[idx], op.inverse())
+    return observed_H
 
 def hkl_is_absent(H, sg):
     """

@@ -17,7 +17,7 @@ def from_gemmi(gemmi_mtz):
     -------
     rs.DataSet
     """
-    dataset = DataSet(spacegroup=gemmi_mtz.spacegroup ,cell=gemmi_mtz.cell)
+    dataset = DataSet(spacegroup=gemmi_mtz.spacegroup, cell=gemmi_mtz.cell)
 
     # Build up DataSet
     for c in gemmi_mtz.columns:
@@ -25,6 +25,14 @@ def from_gemmi(gemmi_mtz):
         dataset[c.label] = dataset[c.label].astype(c.type)
     dataset.set_index(["H", "K", "L"], inplace=True)
 
+    # Handle unmerged DataSet
+    if "M/ISYM" in dataset.dtypes:
+        dataset.merged = False
+        m_isym = dataset.dtypes[dataset.dtypes == "M/ISYM"].index.to_list()
+        dataset.hkl_to_observed(m_isym, inplace=True)
+    else:
+        dataset.merged = True
+        
     return dataset
 
 def to_gemmi(dataset, skip_problem_mtztypes=False):
@@ -54,6 +62,10 @@ def to_gemmi(dataset, skip_problem_mtztypes=False):
     mtz.cell = dataset.cell
     mtz.spacegroup = dataset.spacegroup
 
+    # Handle Unmerged data
+    if not dataset.merged:
+        dataset.hkl_to_asu(inplace=True)
+    
     # Construct data for Mtz object. 
     mtz.add_dataset("reciprocalspaceship")
     temp = dataset.reset_index()

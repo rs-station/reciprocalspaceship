@@ -10,6 +10,7 @@ from reciprocalspaceship.utils import (
     is_centric,
     in_asu,
     hkl_to_asu,
+    hkl_to_observed,
 )
 
 class DataSet(pd.DataFrame):
@@ -24,16 +25,17 @@ class DataSet(pd.DataFrame):
     
     .. _Pandas.DataFrame documentation: https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.html
     """
-    _metadata = ['_spacegroup', '_cell', '_cache_index_dtypes']
+    _metadata = ['_spacegroup', '_cell', '_cache_index_dtypes', '_merged']
 
     #-------------------------------------------------------------------
     # __init__ method
     
     def __init__(self, data=None, index=None, columns=None, dtype=None,
-                 copy=False, spacegroup=None, cell=None):
+                 copy=False, spacegroup=None, cell=None, merged=None):
         self._cache_index_dtypes = {}
         self._spacegroup = None
         self._cell = None
+        self._merged = None
         
         if isinstance(data, DataSet):
             self.__finalize__(data)
@@ -49,7 +51,9 @@ class DataSet(pd.DataFrame):
             self._spacegroup = spacegroup
         if cell:
             self._cell = cell
-        
+        if merged:
+            self._merged = merged
+            
         # Build DataSet using DataFrame.__init__()
         super().__init__(data=data, index=index, columns=columns,
                          dtype=dtype, copy=copy)
@@ -83,6 +87,15 @@ class DataSet(pd.DataFrame):
     @cell.setter
     def cell(self, val):
         self._cell = val
+
+    @property
+    def merged(self):
+        """Boolean determining whether DataSet is merged or unmerged"""
+        return self._merged
+
+    @merged.setter
+    def merged(self, val):
+        self._merged = val
 
     #-------------------------------------------------------------------
     # Methods
@@ -450,6 +463,10 @@ class DataSet(pd.DataFrame):
         Returns
         -------
         DataSet
+
+        See Also
+        --------
+        DataSet.hkl_to_observed : Opposite of DataSet.hkl_to_asu()
         """
         if inplace:
             dataset = self
@@ -473,6 +490,44 @@ class DataSet(pd.DataFrame):
         dataset.set_index(index_keys, inplace=True)
         return dataset
 
+    def hkl_to_observed(self, m_isym="M/ISYM", inplace=False):
+        """
+        Map HKL indices from the reciprocal space ASU to their observed 
+        indices.
+
+        Parameters
+        ----------
+        m_isym : str (default = "M/ISYM")
+            Column label for M/ISYM values in DataSet
+        inplace : bool
+            Whether to modify the DataSet in place or return a copy
+
+        Returns
+        -------
+        DataSet
+
+        See Also
+        --------
+        DataSet.hkl_to_asu : Opposite of DataSet.hkl_to_observed()
+        """ 
+        if inplace:
+            dataset = self
+        else:
+            dataset = self.copy()
+
+        hkls = dataset.get_hkls()
+        m_isym = dataset[m_isym].to_numpy()
+        observed_hkls = hkl_to_observed(hkls, m_isym, dataset.spacegroup)
+
+        # Update HKLs
+        index_keys = dataset.index.names
+        dataset.reset_index(inplace=True)
+        dataset[["H", "K", "L"]] = observed_hkls
+        dataset[["H", "K", "L"]] = dataset[["H", "K", "L"]].astype("HKL")
+        dataset.set_index(index_keys, inplace=True)
+
+        return dataset
+            
     def canonicalize_phases(self, inplace=False):
         """
         Canonicalize columns with phase data to fall in the interval between
