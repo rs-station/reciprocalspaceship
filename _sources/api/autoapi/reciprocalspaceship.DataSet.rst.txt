@@ -25,6 +25,8 @@ DataSet
    
    
    
+      ~DataSet.merged
+   
    
    
    
@@ -50,6 +52,7 @@ DataSet
        ~DataSet.get_hkls
        ~DataSet.get_phase_keys
        ~DataSet.hkl_to_asu
+       ~DataSet.hkl_to_observed
        ~DataSet.infer_mtz_dtypes
        ~DataSet.label_centrics
        ~DataSet.reset_index
