@@ -90,7 +90,7 @@ class DataSet(pd.DataFrame):
 
     @property
     def merged(self):
-        """Boolean determining whether DataSet is merged or unmerged"""
+        """Whether DataSet contains merged reflection data (boolean)"""
         return self._merged
 
     @merged.setter
