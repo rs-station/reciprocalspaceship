@@ -119,8 +119,15 @@ def hkl_to_asu(H, spacegroup, return_phase_shifts=False):
     else:
         return H_asu, isym
 
-def hkl_to_observed(H, isym, sg):
+def hkl_to_observed(H, isym, sg, return_phase_shifts=False):
     """
+    Apply symmetry operations to move miller indices in the reciprocal asymmetric unit to their originally observed locations. Optionally, return the corresponding phase shifts. 
+
+    Examples
+    --------
+    >>> H_obs, phi_coeff, phi_shift = hkl_to_observed(H, isym, spacegroup, return_phase_shifts=True)
+    >>> phase_obs = phi_coeff * (phase + phi_shift)
+
     Parameters
     ----------
     H : array
@@ -129,23 +136,47 @@ def hkl_to_observed(H, isym, sg):
         integer array of isym values corresponding to the symmetry operator used to map the original miller index into the asu. see mtz spec for an explanation of this.
     sg : gemmi.SpaceGroup
         The space group to identify the asymmetric unit
+    return_phase_shifts : bool (optional)
+        If True, return the phase shift and phase multiplier to apply to each miller index
 
     Returns
     -------
     observed_H : array
         n x 3 array of the original Miller indices before they were mapped to the ASU through isym.
+    phi_coeff : array (optional)
+        an array length n containing -1. or 1. for each H
+    phi_shift : array (optional)
+        an array length n containing phase shifts in degrees
     """
 
     H = np.array(H, dtype=np.float32)
     isym = np.array(isym, dtype=int)
     observed_H = np.zeros_like(H)
-    for i,op in enumerate(sg.operations()):
-        idx = (isym == i*2+1)
-        observed_H[idx] = apply_to_hkl(H[idx], op.inverse())
-        #Friedel
-        idx = (isym == i*2+2)
-        observed_H[idx] = -apply_to_hkl(H[idx], op.inverse())
-    return observed_H
+
+    if return_phase_shifts:
+        phi_coeff = np.zeros(len(H))
+        phi_shift = np.zeros(len(H))
+        for i,op in enumerate(sg.operations()):
+            op = op.inverse()
+            idx = (isym == i*2+1)
+            observed_H[idx] = apply_to_hkl(H[idx], op)
+            phi_shift[idx] = phase_shift(H[idx], op)
+            phi_coeff[idx] = 1.
+            #Friedel
+            idx = (isym == i*2+2)
+            observed_H[idx] = -apply_to_hkl(H[idx], op)
+            phi_shift[idx] = phase_shift(H[idx], op)
+            phi_coeff[idx] = -1.
+        return observed_H, phi_coeff, phi_shift
+    else:
+        for i,op in enumerate(sg.operations()):
+            idx = (isym == i*2+1)
+            op = op.inverse()
+            observed_H[idx] = apply_to_hkl(H[idx], op)
+            #Friedel
+            idx = (isym == i*2+2)
+            observed_H[idx] = -apply_to_hkl(H[idx], op)
+        return observed_H
 
 def hkl_is_absent(H, sg):
     """
