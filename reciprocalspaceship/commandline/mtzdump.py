@@ -4,12 +4,17 @@ Summarize the contents of an MTZ file.
 
 Examples
 --------
-In order to summarize contents of file.mtz:
-> rs.mtzdump file.mtz
+In order to summarize contents of file.mtz::
+
+    > rs.mtzdump file.mtz
 
 If you would like to interactively inspect file.mtz in an IPython 
-shell, use the "--embed" argument:
-> rs.mtzdump file.mtz --embed
+shell, use the "--embed" argument::
+
+    > rs.mtzdump file.mtz --embed
+
+Usage Details
+-------------
 """
 import argparse
 import pandas as pd
@@ -31,11 +36,13 @@ def parse_arguments():
     parser.add_argument("-p", "--precision", type=int, default=3,
                         help="Number of significant digits to output for floats")
     
-    return parser.parse_args()
-                        
+    return parser
+
 def main():
 
-    args = parse_arguments()
+    # Parse commandline arguments
+    parser = parse_arguments()
+    args = parser.parse_args()
 
     # Summarize contents of MTZ
     mtz = rs.read_mtz(args.mtz)
@@ -56,6 +63,8 @@ def main():
         header = f"rs.DataSet stored as {bold}mtz{end}"
         print()
         embed(colors='neutral', header=header)
+
+    return parser
     
 if __name__ == "__main__":
-    main()
+    parser = main()

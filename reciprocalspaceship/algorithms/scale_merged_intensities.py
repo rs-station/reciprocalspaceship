@@ -14,8 +14,7 @@ def _acentric_posterior(Iobs, SigIobs, Sigma):
     SigIobs : np.ndarray (float)
         Observed merged refl std deviation
     Sigma : np.ndarray (float)
-        Average intensity in the resolution bin corresponding to Iobs, 
-        SigIobs
+        Average intensity in the resolution bin corresponding to Iobs, SigIobs
     """
     Iobs = np.array(Iobs, dtype=np.float64)
     SigIobs = np.array(SigIobs, dtype=np.float64)
@@ -171,13 +170,14 @@ def scale_merged_intensities(ds, intensity_key, sigma_key, output_columns=None,
 
     Notes
     -----
-    This method follows the same approach as French and Wilson, with 
-    the following modifications:
-    - Numerical integration under a  Wilson prior is used to estimate the
-      mean and standard deviation of centric reflections at runtime, rather
-      than using cached results and a look-up table
-    - Same procedure is used for all centric reflections; original work 
-      handled high intensity centric reflections differently. 
+        This method follows the same approach as French and Wilson, with 
+        the following modifications:
+
+        * Numerical integration under a Wilson prior is used to estimate the
+          mean and standard deviation of centric reflections at runtime, 
+          rather than using precomputed results and a look-up table.
+        * Same procedure is used for all centric reflections; original work 
+          handled high intensity centric reflections differently.
 
     Parameters
     ----------
@@ -203,12 +203,12 @@ def scale_merged_intensities(ds, intensity_key, sigma_key, output_columns=None,
     bins : int or array
         Either an integer number of n bins. Or an array of bin edges with 
         shape==(n, 2). Only affects output if mean_intensity_method is
-        "isotropic".
+        \"isotropic\".
     bw : float
         Bandwidth to use for computing anisotropic mean intensity. This 
         parameter controls the distance that each reflection impacts in 
         reciprocal space. Only affects output if mean_intensity_method is
-        "anisotropic".
+        \"anisotropic\".
 
     Returns
     -------
@@ -218,8 +218,8 @@ def scale_merged_intensities(ds, intensity_key, sigma_key, output_columns=None,
 
     References
     ----------
-    .. [1] French S. and Wilson K. "On the Treatment of Negative Intensity
-       Observations," Acta Cryst. A34 (1978).
+    .. [1] French S. and Wilson K. \"On the Treatment of Negative Intensity
+       Observations,\" Acta Cryst. A34 (1978).
     """
     if not inplace:
         ds = ds.copy()
