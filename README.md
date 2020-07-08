@@ -12,18 +12,19 @@ experiments. Using this library, it is possible to interactively
 work with crystallographic data in Python, enabling easy
 integration with modern scientific computing libraries. `reciprocalspaceship`
 is intended to support the rapid prototyping of new crystallographic methods and
-custom analyses while maintaining clear and fast code.
+custom analyses while maintaining clear and performant code.
 
 Features of this library include:
 
-- `pandas`-style objects, datatypes, and syntax that are familiar to Python users.
-- Built-in methods and support for the development of new functions that use space groups,
-  unit cell parameters, and crystallographic symmetry operations using [GEMMI](https://gemmi.readthedocs.io/en/latest/)
-- Support for reading and writing MTZ format reflection data.
+- Crystallographically-aware `pandas` objects, datatypes, and syntax that are familiar to Python users.
+- Convenient integration with [GEMMI](https://gemmi.readthedocs.io/en/latest/) to provide built-in methods and
+  support for developing functions that use space groups, unit cell parameters, and crystallographic
+  symmetry operations.
+- Support for reading and writing MTZ reflection files.
 
-## Getting Started
+## Quickstart
 
-*Coming soon*
+To get started with `reciprocalspaceship`, see our [quickstart guide](https://hekstra-lab.github.io/reciprocalspaceship/userguide/quickstart.html)
 
 ## Documentation
 
