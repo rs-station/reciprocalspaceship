@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Getting Started &mdash; reciprocalspaceship 0.8.2 documentation</title>
+  <title>Quickstart &mdash; reciprocalspaceship 0.8.2 documentation</title>
   
 
   
@@ -42,8 +42,8 @@
     
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Making an Anomalous Difference Map" href="anomalousdifference.html" />
-    <link rel="prev" title="Examples" href="examples.html" /> 
+    <link rel="next" title="MTZ dtypes" href="../userguide/dtypes.html" />
+    <link rel="prev" title="Installation" href="../userguide/installation.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -92,18 +92,9 @@
 <li class="toctree-l1 current"><a class="reference internal" href="../userguide/index.html">User Guide</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="../userguide/overview.html">Overview and Goals</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../userguide/installation.html">Installation</a></li>
-<li class="toctree-l2"><a class="reference internal" href="quickstart.html">Quickstart</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Quickstart</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../userguide/dtypes.html">MTZ dtypes</a></li>
-<li class="toctree-l2 current"><a class="reference internal" href="examples.html">Examples</a><ul class="current">
-<li class="toctree-l3 current"><a class="current reference internal" href="#">Getting Started</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#Loading-reflection-data">Loading reflection data</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#Plotting-reflection-data">Plotting reflection data</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#Writing-Reflection-Data">Writing Reflection Data</a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="anomalousdifference.html">Making an Anomalous Difference Map</a></li>
-</ul>
-</li>
+<li class="toctree-l2"><a class="reference internal" href="examples.html">Examples</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../api/index.html">API Reference</a></li>
@@ -156,15 +147,13 @@
         
           <li><a href="../userguide/index.html">User Guide</a> &raquo;</li>
         
-          <li><a href="examples.html">Examples</a> &raquo;</li>
-        
-      <li>Getting Started</li>
+      <li>Quickstart</li>
     
     
       <li class="wy-breadcrumbs-aside">
         
             
-            <a href="../_sources/examples/gettingstarted.ipynb.txt" rel="nofollow"> View page source</a>
+            <a href="../_sources/examples/quickstart.ipynb.txt" rel="nofollow"> View page source</a>
           
         
       </li>
@@ -432,9 +421,9 @@ div.rendered_html tbody tr:hover {
     text-align: unset;
 }
 </style>
-<div class="section" id="Getting-Started">
-<h1>Getting Started<a class="headerlink" href="#Getting-Started" title="Permalink to this headline">¶</a></h1>
-<p><code class="docutils literal notranslate"><span class="pre">reciprocalspaceship</span></code> provides methods for reading and writing MTZ files, and can be easily used to join reflection data by Miller indices. We will demonstrate these uses by loading diffraction data of tetragonal hen egg-white lysozyme (HEWL).</p>
+<div class="section" id="Quickstart">
+<h1>Quickstart<a class="headerlink" href="#Quickstart" title="Permalink to this headline">¶</a></h1>
+<p>Load reflection data and preview the <code class="docutils literal notranslate"><span class="pre">rs.DataSet</span></code> object.</p>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
 </pre></div>
@@ -444,43 +433,18 @@ div.rendered_html tbody tr:hover {
 </pre></div>
 </div>
 </div>
-<p>This diffraction data was collected at the Sector 24-ID-C beamline at <a class="reference external" href="https://lilith.nec.aps.anl.gov/">NE-CAT</a> at APS. Diffraction images were collected at ambient room temperature (295K), and low energy (6550 eV) in order to collect native sulfur anomalous diffraction for experimental phasing. The diffraction images were processed in <a class="reference external" href="https://dials.github.io/">DIALS</a> for indexing, geometry refinement, and spot integration, and scaling and merging was done in
-<a class="reference external" href="http://www.ccp4.ac.uk/html/aimless.html">AIMLESS</a>. This data reduction yielded an MTZ file that is included in the <code class="docutils literal notranslate"><span class="pre">data/</span></code> subdirectory. Here, we will load the MTZ file and inspect its contents. In the <a class="reference internal" href="anomalousdifference.html"><span class="doc">next example</span></a> we will generate an anomalous difference map.</p>
-<hr class="docutils" />
-<div class="section" id="Loading-reflection-data">
-<h2>Loading reflection data<a class="headerlink" href="#Loading-reflection-data" title="Permalink to this headline">¶</a></h2>
-<p>Reflection tables can be loaded using the top-level function, <code class="docutils literal notranslate"><span class="pre">rs.read_mtz()</span></code>. This returns a <code class="docutils literal notranslate"><span class="pre">DataSet</span></code> object, that is analogous to a <code class="docutils literal notranslate"><span class="pre">pandas.DataFrame</span></code>.</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">refltable</span> <span class="o">=</span> <span class="n">rs</span><span class="o">.</span><span class="n">read_mtz</span><span class="p">(</span><span class="s2">&quot;data/HEWL_SSAD_24IDC.mtz&quot;</span><span class="p">)</span>
-<span class="nb">type</span><span class="p">(</span><span class="n">refltable</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span>
+<span></span><span class="n">dataset</span> <span class="o">=</span> <span class="n">rs</span><span class="o">.</span><span class="n">read_mtz</span><span class="p">(</span><span class="s2">&quot;data/HEWL_SSAD_24IDC.mtz&quot;</span><span class="p">)</span>
+<span class="n">dataset</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
 <div class="nboutput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
-</pre></div>
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-&#39;DataSet&#39;
-</pre></div></div>
-</div>
-<p>This reflection table was produced directly from <code class="docutils literal notranslate"><span class="pre">AIMLESS</span></code>, and contains several different data columns:</p>
-<div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
-</pre></div>
-</div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">refltable</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
-</pre></div>
-</div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
 </pre></div>
 </div>
 <div class="output_area rendered_html docutils container">
@@ -596,114 +560,30 @@ div.rendered_html tbody tr:hover {
 </table>
 </div></div>
 </div>
+<p>The above table should look familiar to Python users that have experience with <code class="docutils literal notranslate"><span class="pre">pandas</span></code>. The<code class="docutils literal notranslate"><span class="pre">rs.DataSet</span></code> objects also store unit cell and spacegroup information as attributes. These attributes are stored as <code class="docutils literal notranslate"><span class="pre">gemmi</span></code> objects. For more information on the <code class="docutils literal notranslate"><span class="pre">gemmi</span></code> Python library, please see their <a class="reference external" href="https://gemmi.readthedocs.io/en/latest/">documentation</a>.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Number of reflections: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">refltable</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span></span><span class="nb">print</span><span class="p">(</span><span class="n">dataset</span><span class="o">.</span><span class="n">cell</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="nboutput nblast docutils container">
 <div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-Number of reflections: 12563
-</pre></div></div>
-</div>
-<p>Internally, each of these data columns is stored using a custom <code class="docutils literal notranslate"><span class="pre">dtype</span></code> that was added to the conventional <code class="docutils literal notranslate"><span class="pre">pandas</span></code> and <code class="docutils literal notranslate"><span class="pre">numpy</span></code> datatypes. This enables <code class="docutils literal notranslate"><span class="pre">DataSet</span></code> reflection tables to be written back to MTZ files. There is a <code class="docutils literal notranslate"><span class="pre">dtype</span></code> for each of the possible datatypes listed in the <a class="reference external" href="http://www.ccp4.ac.uk/html/f2mtz.html#CTYPOUT">MTZ file specification</a>.</p>
-<div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
-</pre></div>
-</div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">refltable</span><span class="o">.</span><span class="n">dtypes</span>
-</pre></div>
-</div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
-</pre></div>
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-FreeR_flag              MTZInt
-IMEAN                Intensity
-SIGIMEAN                Stddev
-I(+)          IntensityFriedel
-SIGI(+)         StddevIFriedel
-I(-)          IntensityFriedel
-SIGI(-)         StddevIFriedel
-N(+)                    MTZInt
-N(-)                    MTZInt
-dtype: object
-</pre></div></div>
-</div>
-<p>Additional crystallographic metadata is read from the MTZ file and can be stored as attributes of the <code class="docutils literal notranslate"><span class="pre">DataSet</span></code>. These include the crystallographic spacegroup and unit cell parameters, which are stored as <code class="docutils literal notranslate"><span class="pre">gemmi.SpaceGroup</span></code> and <code class="docutils literal notranslate"><span class="pre">gemmi.UnitCell</span></code> objects.</p>
-<div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
-</pre></div>
-</div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">refltable</span><span class="o">.</span><span class="n">spacegroup</span>
-</pre></div>
-</div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
-</pre></div>
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-&lt;gemmi.SpaceGroup(&#34;P 43 21 2&#34;)&gt;
-</pre></div></div>
-</div>
-<div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
-</pre></div>
-</div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">refltable</span><span class="o">.</span><span class="n">cell</span>
-</pre></div>
-</div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
-</pre></div>
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
 &lt;gemmi.UnitCell(79.3435, 79.3435, 37.8098, 90, 90, 90)&gt;
 </pre></div></div>
 </div>
-</div>
-<hr class="docutils" />
-<div class="section" id="Plotting-reflection-data">
-<h2>Plotting reflection data<a class="headerlink" href="#Plotting-reflection-data" title="Permalink to this headline">¶</a></h2>
-<p>For illustrative purposes, let’s plot the <span class="math notranslate nohighlight">\(I(+)\)</span> data against the <span class="math notranslate nohighlight">\(I(-)\)</span> data</p>
-<div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
-</pre></div>
-</div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="o">%</span><span class="k">matplotlib</span> inline
-<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
-</pre></div>
-</div>
-</div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">refltable</span><span class="p">[</span><span class="s1">&#39;I(+)&#39;</span><span class="p">],</span> <span class="n">refltable</span><span class="p">[</span><span class="s1">&#39;I(-)&#39;</span><span class="p">],</span> <span class="s1">&#39;k.&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.1</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;Hint of Anomalous Signal...&quot;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;I(+)&quot;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;I(-)&quot;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+<span></span><span class="nb">print</span><span class="p">(</span><span class="n">dataset</span><span class="o">.</span><span class="n">spacegroup</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -711,24 +591,161 @@ dtype: object
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../_images/examples_gettingstarted_17_0.png" src="../_images/examples_gettingstarted_17_0.png" />
+<div class="highlight"><pre>
+&lt;gemmi.SpaceGroup(&#34;P 43 21 2&#34;)&gt;
+</pre></div></div>
 </div>
-</div>
-<p>In the <a class="reference internal" href="anomalousdifference.html"><span class="doc">next example</span></a>, we will use these differences in observed intensity between Friedel pairs to demonstrate how to make an anomalous difference map in <code class="docutils literal notranslate"><span class="pre">reciprocalspaceship</span></code>.</p>
-</div>
-<hr class="docutils" />
-<div class="section" id="Writing-Reflection-Data">
-<h2>Writing Reflection Data<a class="headerlink" href="#Writing-Reflection-Data" title="Permalink to this headline">¶</a></h2>
-<p>It is also possible to write out MTZ files using <code class="docutils literal notranslate"><span class="pre">DataSet.write_mtz()</span></code>. This functionality depends on the correct setting of each column’s <code class="docutils literal notranslate"><span class="pre">dtype</span></code>.</p>
-<div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+<p>To illustrate using the unit cell parameter information, let’s compute the highest resolution reflection in the dataset:</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">refltable</span><span class="o">.</span><span class="n">write_mtz</span><span class="p">(</span><span class="s2">&quot;data/HEWL_SSAD_24IDC.mtz&quot;</span><span class="p">)</span>
+<span></span><span class="n">dataset</span><span class="o">.</span><span class="n">compute_dHKL</span><span class="p">(</span><span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">dataset</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th></th>
+      <th></th>
+      <th>FreeR_flag</th>
+      <th>IMEAN</th>
+      <th>SIGIMEAN</th>
+      <th>I(+)</th>
+      <th>SIGI(+)</th>
+      <th>I(-)</th>
+      <th>SIGI(-)</th>
+      <th>N(+)</th>
+      <th>N(-)</th>
+      <th>dHKL</th>
+    </tr>
+    <tr>
+      <th>H</th>
+      <th>K</th>
+      <th>L</th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th rowspan="5" valign="top">0</th>
+      <th rowspan="5" valign="top">0</th>
+      <th>4</th>
+      <td>14</td>
+      <td>671.0396</td>
+      <td>22.205784</td>
+      <td>671.0396</td>
+      <td>22.205784</td>
+      <td>671.0396</td>
+      <td>22.205784</td>
+      <td>16</td>
+      <td>16</td>
+      <td>9.45245</td>
+    </tr>
+    <tr>
+      <th>8</th>
+      <td>4</td>
+      <td>3273.7385</td>
+      <td>107.59589</td>
+      <td>3273.7385</td>
+      <td>107.59589</td>
+      <td>3273.7385</td>
+      <td>107.59589</td>
+      <td>16</td>
+      <td>16</td>
+      <td>4.726225</td>
+    </tr>
+    <tr>
+      <th>12</th>
+      <td>6</td>
+      <td>1367.5679</td>
+      <td>43.352566</td>
+      <td>1367.5679</td>
+      <td>43.352566</td>
+      <td>1367.5679</td>
+      <td>43.352566</td>
+      <td>16</td>
+      <td>16</td>
+      <td>3.1508167</td>
+    </tr>
+    <tr>
+      <th>16</th>
+      <td>19</td>
+      <td>4158.55</td>
+      <td>198.88382</td>
+      <td>4158.55</td>
+      <td>198.88382</td>
+      <td>4158.55</td>
+      <td>198.88382</td>
+      <td>8</td>
+      <td>8</td>
+      <td>2.3631124</td>
+    </tr>
+    <tr>
+      <th>20</th>
+      <td>8</td>
+      <td>2.4992087</td>
+      <td>5.7103205</td>
+      <td>2.4992087</td>
+      <td>5.7103205</td>
+      <td>2.4992087</td>
+      <td>5.7103205</td>
+      <td>1</td>
+      <td>1</td>
+      <td>1.8904899</td>
+    </tr>
+  </tbody>
+</table>
+</div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">dataset</span><span class="o">.</span><span class="n">dHKL</span><span class="o">.</span><span class="n">min</span><span class="p">()</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2"> angstroms&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+1.71 angstroms
+</pre></div></div>
 </div>
 </div>
 
@@ -740,10 +757,10 @@ dtype: object
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="anomalousdifference.html" class="btn btn-neutral float-right" title="Making an Anomalous Difference Map" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="../userguide/dtypes.html" class="btn btn-neutral float-right" title="MTZ dtypes" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="examples.html" class="btn btn-neutral float-left" title="Examples" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="../userguide/installation.html" class="btn btn-neutral float-left" title="Installation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   

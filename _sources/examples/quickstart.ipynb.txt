@@ -1,0 +1,411 @@
+{
+ "cells": [
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "# Quickstart  \n",
+    "\n",
+    "Load reflection data and preview the ``rs.DataSet`` object."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 1,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "import reciprocalspaceship as rs"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 2,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/html": [
+       "<div>\n",
+       "<style scoped>\n",
+       "    .dataframe tbody tr th:only-of-type {\n",
+       "        vertical-align: middle;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe tbody tr th {\n",
+       "        vertical-align: top;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe thead th {\n",
+       "        text-align: right;\n",
+       "    }\n",
+       "</style>\n",
+       "<table border=\"1\" class=\"dataframe\">\n",
+       "  <thead>\n",
+       "    <tr style=\"text-align: right;\">\n",
+       "      <th></th>\n",
+       "      <th></th>\n",
+       "      <th></th>\n",
+       "      <th>FreeR_flag</th>\n",
+       "      <th>IMEAN</th>\n",
+       "      <th>SIGIMEAN</th>\n",
+       "      <th>I(+)</th>\n",
+       "      <th>SIGI(+)</th>\n",
+       "      <th>I(-)</th>\n",
+       "      <th>SIGI(-)</th>\n",
+       "      <th>N(+)</th>\n",
+       "      <th>N(-)</th>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>H</th>\n",
+       "      <th>K</th>\n",
+       "      <th>L</th>\n",
+       "      <th></th>\n",
+       "      <th></th>\n",
+       "      <th></th>\n",
+       "      <th></th>\n",
+       "      <th></th>\n",
+       "      <th></th>\n",
+       "      <th></th>\n",
+       "      <th></th>\n",
+       "      <th></th>\n",
+       "    </tr>\n",
+       "  </thead>\n",
+       "  <tbody>\n",
+       "    <tr>\n",
+       "      <th rowspan=\"5\" valign=\"top\">0</th>\n",
+       "      <th rowspan=\"5\" valign=\"top\">0</th>\n",
+       "      <th>4</th>\n",
+       "      <td>14</td>\n",
+       "      <td>671.0396</td>\n",
+       "      <td>22.205784</td>\n",
+       "      <td>671.0396</td>\n",
+       "      <td>22.205784</td>\n",
+       "      <td>671.0396</td>\n",
+       "      <td>22.205784</td>\n",
+       "      <td>16</td>\n",
+       "      <td>16</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>8</th>\n",
+       "      <td>4</td>\n",
+       "      <td>3273.7385</td>\n",
+       "      <td>107.59589</td>\n",
+       "      <td>3273.7385</td>\n",
+       "      <td>107.59589</td>\n",
+       "      <td>3273.7385</td>\n",
+       "      <td>107.59589</td>\n",
+       "      <td>16</td>\n",
+       "      <td>16</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>12</th>\n",
+       "      <td>6</td>\n",
+       "      <td>1367.5679</td>\n",
+       "      <td>43.352566</td>\n",
+       "      <td>1367.5679</td>\n",
+       "      <td>43.352566</td>\n",
+       "      <td>1367.5679</td>\n",
+       "      <td>43.352566</td>\n",
+       "      <td>16</td>\n",
+       "      <td>16</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>16</th>\n",
+       "      <td>19</td>\n",
+       "      <td>4158.55</td>\n",
+       "      <td>198.88382</td>\n",
+       "      <td>4158.55</td>\n",
+       "      <td>198.88382</td>\n",
+       "      <td>4158.55</td>\n",
+       "      <td>198.88382</td>\n",
+       "      <td>8</td>\n",
+       "      <td>8</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>20</th>\n",
+       "      <td>8</td>\n",
+       "      <td>2.4992087</td>\n",
+       "      <td>5.7103205</td>\n",
+       "      <td>2.4992087</td>\n",
+       "      <td>5.7103205</td>\n",
+       "      <td>2.4992087</td>\n",
+       "      <td>5.7103205</td>\n",
+       "      <td>1</td>\n",
+       "      <td>1</td>\n",
+       "    </tr>\n",
+       "  </tbody>\n",
+       "</table>\n",
+       "</div>"
+      ],
+      "text/plain": [
+       "        FreeR_flag     IMEAN  SIGIMEAN      I(+)   SIGI(+)      I(-)  \\\n",
+       "H K L                                                                  \n",
+       "0 0 4           14  671.0396 22.205784  671.0396 22.205784  671.0396   \n",
+       "    8            4 3273.7385 107.59589 3273.7385 107.59589 3273.7385   \n",
+       "    12           6 1367.5679 43.352566 1367.5679 43.352566 1367.5679   \n",
+       "    16          19   4158.55 198.88382   4158.55 198.88382   4158.55   \n",
+       "    20           8 2.4992087 5.7103205 2.4992087 5.7103205 2.4992087   \n",
+       "\n",
+       "         SIGI(-)  N(+)  N(-)  \n",
+       "H K L                         \n",
+       "0 0 4  22.205784    16    16  \n",
+       "    8  107.59589    16    16  \n",
+       "    12 43.352566    16    16  \n",
+       "    16 198.88382     8     8  \n",
+       "    20 5.7103205     1     1  "
+      ]
+     },
+     "execution_count": 2,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "dataset = rs.read_mtz(\"data/HEWL_SSAD_24IDC.mtz\")\n",
+    "dataset.head()"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "The above table should look familiar to Python users that have experience with ``pandas``. The``rs.DataSet`` objects also store unit cell and spacegroup information as attributes. These attributes are stored as ``gemmi`` objects. For more information on the ``gemmi`` Python library, please see their [documentation](https://gemmi.readthedocs.io/en/latest/)."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 3,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "<gemmi.UnitCell(79.3435, 79.3435, 37.8098, 90, 90, 90)>\n"
+     ]
+    }
+   ],
+   "source": [
+    "print(dataset.cell)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 4,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "<gemmi.SpaceGroup(\"P 43 21 2\")>\n"
+     ]
+    }
+   ],
+   "source": [
+    "print(dataset.spacegroup)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "To illustrate using the unit cell parameter information, let's compute the highest resolution reflection in the dataset:"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 5,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/html": [
+       "<div>\n",
+       "<style scoped>\n",
+       "    .dataframe tbody tr th:only-of-type {\n",
+       "        vertical-align: middle;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe tbody tr th {\n",
+       "        vertical-align: top;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe thead th {\n",
+       "        text-align: right;\n",
+       "    }\n",
+       "</style>\n",
+       "<table border=\"1\" class=\"dataframe\">\n",
+       "  <thead>\n",
+       "    <tr style=\"text-align: right;\">\n",
+       "      <th></th>\n",
+       "      <th></th>\n",
+       "      <th></th>\n",
+       "      <th>FreeR_flag</th>\n",
+       "      <th>IMEAN</th>\n",
+       "      <th>SIGIMEAN</th>\n",
+       "      <th>I(+)</th>\n",
+       "      <th>SIGI(+)</th>\n",
+       "      <th>I(-)</th>\n",
+       "      <th>SIGI(-)</th>\n",
+       "      <th>N(+)</th>\n",
+       "      <th>N(-)</th>\n",
+       "      <th>dHKL</th>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>H</th>\n",
+       "      <th>K</th>\n",
+       "      <th>L</th>\n",
+       "      <th></th>\n",
+       "      <th></th>\n",
+       "      <th></th>\n",
+       "      <th></th>\n",
+       "      <th></th>\n",
+       "      <th></th>\n",
+       "      <th></th>\n",
+       "      <th></th>\n",
+       "      <th></th>\n",
+       "      <th></th>\n",
+       "    </tr>\n",
+       "  </thead>\n",
+       "  <tbody>\n",
+       "    <tr>\n",
+       "      <th rowspan=\"5\" valign=\"top\">0</th>\n",
+       "      <th rowspan=\"5\" valign=\"top\">0</th>\n",
+       "      <th>4</th>\n",
+       "      <td>14</td>\n",
+       "      <td>671.0396</td>\n",
+       "      <td>22.205784</td>\n",
+       "      <td>671.0396</td>\n",
+       "      <td>22.205784</td>\n",
+       "      <td>671.0396</td>\n",
+       "      <td>22.205784</td>\n",
+       "      <td>16</td>\n",
+       "      <td>16</td>\n",
+       "      <td>9.45245</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>8</th>\n",
+       "      <td>4</td>\n",
+       "      <td>3273.7385</td>\n",
+       "      <td>107.59589</td>\n",
+       "      <td>3273.7385</td>\n",
+       "      <td>107.59589</td>\n",
+       "      <td>3273.7385</td>\n",
+       "      <td>107.59589</td>\n",
+       "      <td>16</td>\n",
+       "      <td>16</td>\n",
+       "      <td>4.726225</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>12</th>\n",
+       "      <td>6</td>\n",
+       "      <td>1367.5679</td>\n",
+       "      <td>43.352566</td>\n",
+       "      <td>1367.5679</td>\n",
+       "      <td>43.352566</td>\n",
+       "      <td>1367.5679</td>\n",
+       "      <td>43.352566</td>\n",
+       "      <td>16</td>\n",
+       "      <td>16</td>\n",
+       "      <td>3.1508167</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>16</th>\n",
+       "      <td>19</td>\n",
+       "      <td>4158.55</td>\n",
+       "      <td>198.88382</td>\n",
+       "      <td>4158.55</td>\n",
+       "      <td>198.88382</td>\n",
+       "      <td>4158.55</td>\n",
+       "      <td>198.88382</td>\n",
+       "      <td>8</td>\n",
+       "      <td>8</td>\n",
+       "      <td>2.3631124</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>20</th>\n",
+       "      <td>8</td>\n",
+       "      <td>2.4992087</td>\n",
+       "      <td>5.7103205</td>\n",
+       "      <td>2.4992087</td>\n",
+       "      <td>5.7103205</td>\n",
+       "      <td>2.4992087</td>\n",
+       "      <td>5.7103205</td>\n",
+       "      <td>1</td>\n",
+       "      <td>1</td>\n",
+       "      <td>1.8904899</td>\n",
+       "    </tr>\n",
+       "  </tbody>\n",
+       "</table>\n",
+       "</div>"
+      ],
+      "text/plain": [
+       "        FreeR_flag     IMEAN  SIGIMEAN      I(+)   SIGI(+)      I(-)  \\\n",
+       "H K L                                                                  \n",
+       "0 0 4           14  671.0396 22.205784  671.0396 22.205784  671.0396   \n",
+       "    8            4 3273.7385 107.59589 3273.7385 107.59589 3273.7385   \n",
+       "    12           6 1367.5679 43.352566 1367.5679 43.352566 1367.5679   \n",
+       "    16          19   4158.55 198.88382   4158.55 198.88382   4158.55   \n",
+       "    20           8 2.4992087 5.7103205 2.4992087 5.7103205 2.4992087   \n",
+       "\n",
+       "         SIGI(-)  N(+)  N(-)      dHKL  \n",
+       "H K L                                   \n",
+       "0 0 4  22.205784    16    16   9.45245  \n",
+       "    8  107.59589    16    16  4.726225  \n",
+       "    12 43.352566    16    16 3.1508167  \n",
+       "    16 198.88382     8     8 2.3631124  \n",
+       "    20 5.7103205     1     1 1.8904899  "
+      ]
+     },
+     "execution_count": 5,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "dataset.compute_dHKL(inplace=True)\n",
+    "dataset.head()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 6,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "1.71 angstroms\n"
+     ]
+    }
+   ],
+   "source": [
+    "print(f\"{dataset.dHKL.min():.2f} angstroms\")"
+   ]
+  }
+ ],
+ "metadata": {
+  "kernelspec": {
+   "display_name": "Python 3",
+   "language": "python",
+   "name": "python3"
+  },
+  "language_info": {
+   "codemirror_mode": {
+    "name": "ipython",
+    "version": 3
+   },
+   "file_extension": ".py",
+   "mimetype": "text/x-python",
+   "name": "python",
+   "nbconvert_exporter": "python",
+   "pygments_lexer": "ipython3",
+   "version": "3.7.7"
+  }
+ },
+ "nbformat": 4,
+ "nbformat_minor": 4
+}
