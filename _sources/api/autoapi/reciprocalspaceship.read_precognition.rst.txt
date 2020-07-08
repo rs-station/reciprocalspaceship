@@ -1,0 +1,6 @@
+reciprocalspaceship.read\_precognition
+======================================
+
+.. currentmodule:: reciprocalspaceship
+
+.. autofunction:: read_precognition

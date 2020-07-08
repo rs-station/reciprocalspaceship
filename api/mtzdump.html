@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Building Documentation &mdash; reciprocalspaceship 0.8.2 documentation</title>
+  <title>rs.mtzdump &mdash; reciprocalspaceship 0.8.2 documentation</title>
   
 
   
@@ -42,7 +42,8 @@
     
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="prev" title="Running Tests" href="testing.html" /> 
+    <link rel="next" title="For Developers" href="../developers/index.html" />
+    <link rel="prev" title="reciprocalspaceship.print_mtz_dtypes" href="autoapi/reciprocalspaceship.print_mtz_dtypes.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -89,13 +90,22 @@
             
               <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../userguide/index.html">User Guide</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../api/index.html">API Reference</a></li>
-<li class="toctree-l1 current"><a class="reference internal" href="index.html">For Developers</a><ul class="current">
-<li class="toctree-l2"><a class="reference internal" href="contributing.html">Contributing to <code class="docutils literal notranslate"><span class="pre">reciprocalspaceship</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="testing.html">Running Tests</a></li>
-<li class="toctree-l2 current"><a class="current reference internal" href="#">Building Documentation</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">API Reference</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="index.html#reflection-data">Reflection Data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="index.html#input-output">Input/Output</a></li>
+<li class="toctree-l2"><a class="reference internal" href="index.html#algorithms">Algorithms</a></li>
+<li class="toctree-l2"><a class="reference internal" href="index.html#helpful-functions">Helpful Functions</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="index.html#commandline-tools">Commandline Tools</a><ul class="current">
+<li class="toctree-l3 current"><a class="current reference internal" href="#">rs.mtzdump</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#examples">Examples</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#usage-details">Usage Details</a></li>
 </ul>
 </li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../developers/index.html">For Developers</a></li>
 </ul>
 
             
@@ -142,15 +152,15 @@
     
       <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
         
-          <li><a href="index.html">For Developers</a> &raquo;</li>
+          <li><a href="index.html">API Reference</a> &raquo;</li>
         
-      <li>Building Documentation</li>
+      <li>rs.mtzdump</li>
     
     
       <li class="wy-breadcrumbs-aside">
         
             
-            <a href="../_sources/developers/documentation.rst.txt" rel="nofollow"> View page source</a>
+            <a href="../_sources/api/mtzdump.rst.txt" rel="nofollow"> View page source</a>
           
         
       </li>
@@ -187,25 +197,50 @@
     text-align: unset;
 }
 </style>
-<div class="section" id="building-documentation">
-<span id="documentation"></span><h1>Building Documentation<a class="headerlink" href="#building-documentation" title="Permalink to this headline">¶</a></h1>
-<p>The <code class="docutils literal notranslate"><span class="pre">reciprocalspaceship</span></code> documentation is built using <a class="reference external" href="http://sphinx-doc.org/">sphinx</a>. The documentation is automatically rebuilt upon any <code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">push</span></code> action to
-the <code class="docutils literal notranslate"><span class="pre">master</span></code> branch of the repo; however, it is also possible to build it locally in order to preview any changes. There are a few additional dependencies that can all
-be installed using <code class="docutils literal notranslate"><span class="pre">pip</span></code> or <code class="docutils literal notranslate"><span class="pre">conda</span></code>:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">conda</span> <span class="n">install</span> <span class="o">-</span><span class="n">c</span> <span class="n">conda</span><span class="o">-</span><span class="n">forge</span> <span class="n">sphinx</span> <span class="n">sphinx_rtd_theme</span> <span class="n">nbsphinx</span> <span class="n">ipython</span> <span class="n">jupyter</span>
-<span class="n">pip</span> <span class="n">install</span> <span class="n">sphinx</span><span class="o">-</span><span class="n">panels</span> <span class="n">sphinxcontrib</span><span class="o">-</span><span class="n">autoprogram</span>
+<div class="section" id="rs-mtzdump">
+<span id="mtzdump"></span><h1>rs.mtzdump<a class="headerlink" href="#rs-mtzdump" title="Permalink to this headline">¶</a></h1>
+<p>Summarize the contents of an MTZ file.</p>
+<div class="section" id="examples">
+<h2>Examples<a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h2>
+<p>In order to summarize contents of file.mtz:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&gt;</span> <span class="n">rs</span><span class="o">.</span><span class="n">mtzdump</span> <span class="n">file</span><span class="o">.</span><span class="n">mtz</span>
 </pre></div>
 </div>
-<p>The documentation can then be built using the <code class="docutils literal notranslate"><span class="pre">Makefile</span></code> in the <code class="docutils literal notranslate"><span class="pre">docs/</span></code> subdirectory:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cd</span> <span class="n">docs</span>
-<span class="n">make</span> <span class="n">html</span>
-<span class="n">cd</span> <span class="o">..</span>
+<p>If you would like to interactively inspect file.mtz in an IPython 
+shell, use the “–embed” argument:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&gt;</span> <span class="n">rs</span><span class="o">.</span><span class="n">mtzdump</span> <span class="n">file</span><span class="o">.</span><span class="n">mtz</span> <span class="o">--</span><span class="n">embed</span>
 </pre></div>
 </div>
-<p>The <code class="docutils literal notranslate"><span class="pre">index.html</span></code> of the documentation will then be found in <code class="docutils literal notranslate"><span class="pre">docs/_build/</span></code>.</p>
-<p>If you have a partial build of the documentation, or if you make a change to the reStructuredText (RST) templates, it may be necessary to remove the existing documentation files. This can be accomplished by running the following command in the <code class="docutils literal notranslate"><span class="pre">docs/</span></code> subdirectory:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">make</span> <span class="n">clean</span>
+</div>
+<div class="section" id="usage-details">
+<h2>Usage Details<a class="headerlink" href="#usage-details" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">usage: rs.mtzdump [-h] [--embed] [-p PRECISION] mtz</span>
 </pre></div>
+</div>
+<dl class="std option">
+<dt id="cmdoption-rs.mtzdump-arg-mtz">
+<code class="sig-name descname">mtz</code><code class="sig-prename descclassname"></code><a class="headerlink" href="#cmdoption-rs.mtzdump-arg-mtz" title="Permalink to this definition">¶</a></dt>
+<dd><p>MTZ file to summarize</p>
+</dd></dl>
+
+<dl class="std option">
+<dt id="cmdoption-rs.mtzdump-h">
+<code class="sig-name descname">-h</code><code class="sig-prename descclassname"></code><code class="sig-prename descclassname">, </code><code class="sig-name descname">--help</code><code class="sig-prename descclassname"></code><a class="headerlink" href="#cmdoption-rs.mtzdump-h" title="Permalink to this definition">¶</a></dt>
+<dd><p>show this help message and exit</p>
+</dd></dl>
+
+<dl class="std option">
+<dt id="cmdoption-rs.mtzdump-embed">
+<code class="sig-name descname">--embed</code><code class="sig-prename descclassname"></code><a class="headerlink" href="#cmdoption-rs.mtzdump-embed" title="Permalink to this definition">¶</a></dt>
+<dd><p>MTZ file will be summarized, and an IPython shell will be started</p>
+</dd></dl>
+
+<dl class="std option">
+<dt id="cmdoption-rs.mtzdump-p">
+<code class="sig-name descname">-p</code><code class="sig-prename descclassname"> &lt;precision&gt;</code><code class="sig-prename descclassname">, </code><code class="sig-name descname">--precision</code><code class="sig-prename descclassname"> &lt;precision&gt;</code><a class="headerlink" href="#cmdoption-rs.mtzdump-p" title="Permalink to this definition">¶</a></dt>
+<dd><p>Number of significant digits to output for floats</p>
+</dd></dl>
+
 </div>
 </div>
 
@@ -217,8 +252,10 @@ be installed using <code class="docutils literal notranslate"><span class="pre">
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
+        <a href="../developers/index.html" class="btn btn-neutral float-right" title="For Developers" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
-        <a href="testing.html" class="btn btn-neutral float-left" title="Running Tests" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+        <a href="autoapi/reciprocalspaceship.print_mtz_dtypes.html" class="btn btn-neutral float-left" title="reciprocalspaceship.print_mtz_dtypes" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   

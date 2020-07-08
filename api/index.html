@@ -42,7 +42,7 @@
     
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Working with Reflection Data" href="reflectiontables.html" />
+    <link rel="next" title="DataSet" href="autoapi/reciprocalspaceship.DataSet.html" />
     <link rel="prev" title="Making an Anomalous Difference Map" href="../examples/anomalousdifference.html" /> 
 </head>
 
@@ -91,7 +91,28 @@
               <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../userguide/index.html">User Guide</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">API Reference</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="reflectiontables.html">Working with Reflection Data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#reflection-data">Reflection Data</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="autoapi/reciprocalspaceship.DataSet.html">DataSet</a></li>
+<li class="toctree-l3"><a class="reference internal" href="autoapi/reciprocalspaceship.DataSeries.html">DataSeries</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#input-output">Input/Output</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="autoapi/reciprocalspaceship.read_mtz.html">reciprocalspaceship.read_mtz</a></li>
+<li class="toctree-l3"><a class="reference internal" href="autoapi/reciprocalspaceship.read_precognition.html">reciprocalspaceship.read_precognition</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#algorithms">Algorithms</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="autoapi/reciprocalspaceship.algorithms.scale_merged_intensities.html">reciprocalspaceship.algorithms.scale_merged_intensities</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#helpful-functions">Helpful Functions</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="autoapi/reciprocalspaceship.print_mtz_dtypes.html">reciprocalspaceship.print_mtz_dtypes</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#commandline-tools">Commandline Tools</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="mtzdump.html">rs.mtzdump</a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../developers/index.html">For Developers</a></li>
@@ -186,11 +207,98 @@
 </style>
 <div class="section" id="api-reference">
 <span id="api"></span><h1>API Reference<a class="headerlink" href="#api-reference" title="Permalink to this headline">¶</a></h1>
-<div class="toctree-wrapper compound">
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="reflectiontables.html">Working with Reflection Data</a></li>
-</ul>
+<p>This page provides documentation for all public-facing objects, methods,  and functions in <code class="docutils literal notranslate"><span class="pre">reciprocalspaceship</span></code>. Since this
+library was designed to provide a “crystallographically-aware” <code class="docutils literal notranslate"><span class="pre">pandas.DataFrame</span></code>, many methods are inherited directly
+from or are compatible with the <a class="reference external" href="https://pandas.pydata.org/docs/reference/index.html#api">Pandas API</a>.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Functions available through the <code class="docutils literal notranslate"><span class="pre">rs.utils</span></code> namespace are considered private, and may change between releases.
+These functions underlie the symmetry/spacegroup-related operations that are supported in <code class="docutils literal notranslate"><span class="pre">reciprocalspaceship</span></code>,
+and user-facing methods that use the <code class="docutils literal notranslate"><span class="pre">rs.utils</span></code> functions are available as methods of <code class="docutils literal notranslate"><span class="pre">rs.DataSet</span></code>.</p>
 </div>
+<div class="section" id="reflection-data">
+<h2>Reflection Data<a class="headerlink" href="#reflection-data" title="Permalink to this headline">¶</a></h2>
+<p>Python objects for representing reflection data – tabular data with values (columns) that are indexed by Miller HKL indices.
+These two objects can be thought of as crystallographically-aware versions of <code class="docutils literal notranslate"><span class="pre">pandas.DataFrame</span></code> and <code class="docutils literal notranslate"><span class="pre">pandas.Series</span></code>, respectively.</p>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="autoapi/reciprocalspaceship.DataSet.html#reciprocalspaceship.DataSet" title="reciprocalspaceship.DataSet"><code class="xref py py-obj docutils literal notranslate"><span class="pre">DataSet</span></code></a></p></td>
+<td><p>Representation of a crystallographic dataset.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="autoapi/reciprocalspaceship.DataSeries.html#reciprocalspaceship.DataSeries" title="reciprocalspaceship.DataSeries"><code class="xref py py-obj docutils literal notranslate"><span class="pre">DataSeries</span></code></a></p></td>
+<td><p>One-dimensional ndarray with axis labels, representing a slice of a DataSet.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="input-output">
+<h2>Input/Output<a class="headerlink" href="#input-output" title="Permalink to this headline">¶</a></h2>
+<p>Supported crystallographic file formats for data I/O. Write functions are available as methods of <code class="docutils literal notranslate"><span class="pre">rs.DataSet</span></code> objects.</p>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="autoapi/reciprocalspaceship.read_mtz.html#reciprocalspaceship.read_mtz" title="reciprocalspaceship.read_mtz"><code class="xref py py-obj docutils literal notranslate"><span class="pre">read_mtz</span></code></a></p></td>
+<td><p>Populate the dataset object with data from an MTZ reflection file.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="autoapi/reciprocalspaceship.read_precognition.html#reciprocalspaceship.read_precognition" title="reciprocalspaceship.read_precognition"><code class="xref py py-obj docutils literal notranslate"><span class="pre">read_precognition</span></code></a></p></td>
+<td><p>Initialize attributes and populate the DataSet object with data from a HKL file of reflections.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="algorithms">
+<h2>Algorithms<a class="headerlink" href="#algorithms" title="Permalink to this headline">¶</a></h2>
+<p>Algorithms for processing reflection data stored in <code class="docutils literal notranslate"><span class="pre">rs.DataSet</span></code> objects.</p>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="autoapi/reciprocalspaceship.algorithms.scale_merged_intensities.html#reciprocalspaceship.algorithms.scale_merged_intensities" title="reciprocalspaceship.algorithms.scale_merged_intensities"><code class="xref py py-obj docutils literal notranslate"><span class="pre">scale_merged_intensities</span></code></a></p></td>
+<td><p>Scales merged intensities using Bayesian statistics in order to estimate structure factor amplitudes.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="helpful-functions">
+<h2>Helpful Functions<a class="headerlink" href="#helpful-functions" title="Permalink to this headline">¶</a></h2>
+<p>Functions intended to help users work with the library. These functions are available from the top-level <code class="docutils literal notranslate"><span class="pre">rs</span></code> namespace.</p>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="autoapi/reciprocalspaceship.print_mtz_dtypes.html#reciprocalspaceship.print_mtz_dtypes" title="reciprocalspaceship.print_mtz_dtypes"><code class="xref py py-obj docutils literal notranslate"><span class="pre">print_mtz_dtypes</span></code></a></p></td>
+<td><p>Prints a table summarizing the MTZ Dtypes that can be used in a DataSet or DataSeries.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="commandline-tools">
+<h2>Commandline Tools<a class="headerlink" href="#commandline-tools" title="Permalink to this headline">¶</a></h2>
+<p>Commandline tools to support common use cases.</p>
+<div class="toctree-wrapper compound">
+</div>
+<table class="longtable docutils align-default">
+      <colgroup>
+      <col style="width: 10%" />
+      <col style="width: 90%" />
+      </colgroup>
+      <tbody>
+      <tr class="row-odd"><td><p><a class="reference internal" href="mtzdump.html"><code class="xref py py-obj docutils literal notranslate"><span class="pre">rs.mtzdump</span></code></a></p></td>
+      <td><p>Summarize the contents of an MTZ file</p></td>
+      </tr>
+      </tbody>
+</table></div>
 </div>
 
 
@@ -201,7 +309,7 @@
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="reflectiontables.html" class="btn btn-neutral float-right" title="Working with Reflection Data" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="autoapi/reciprocalspaceship.DataSet.html" class="btn btn-neutral float-right" title="DataSet" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
         <a href="../examples/anomalousdifference.html" class="btn btn-neutral float-left" title="Making an Anomalous Difference Map" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>

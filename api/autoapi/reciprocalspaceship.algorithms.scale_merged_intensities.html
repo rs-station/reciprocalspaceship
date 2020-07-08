@@ -1,0 +1,317 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>reciprocalspaceship.algorithms.scale_merged_intensities &mdash; reciprocalspaceship 0.8.2 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/sphinx-dropdown.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/panels-bootstrap.min.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/language_data.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="reciprocalspaceship.print_mtz_dtypes" href="reciprocalspaceship.print_mtz_dtypes.html" />
+    <link rel="prev" title="reciprocalspaceship.read_precognition" href="reciprocalspaceship.read_precognition.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../index.html" class="icon icon-home" alt="Documentation Home"> reciprocalspaceship
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../userguide/index.html">User Guide</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">API Reference</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../index.html#reflection-data">Reflection Data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../index.html#input-output">Input/Output</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../index.html#algorithms">Algorithms</a><ul class="current">
+<li class="toctree-l3 current"><a class="current reference internal" href="#">reciprocalspaceship.algorithms.scale_merged_intensities</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../index.html#helpful-functions">Helpful Functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../index.html#commandline-tools">Commandline Tools</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../developers/index.html">For Developers</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">reciprocalspaceship</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../index.html">API Reference</a> &raquo;</li>
+        
+      <li>reciprocalspaceship.algorithms.scale_merged_intensities</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../_sources/api/autoapi/reciprocalspaceship.algorithms.scale_merged_intensities.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  
+<style>
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast.container,
+.nboutput.nblast.container {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast.container + .nbinput.container {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<div class="section" id="reciprocalspaceship-algorithms-scale-merged-intensities">
+<h1>reciprocalspaceship.algorithms.scale_merged_intensities<a class="headerlink" href="#reciprocalspaceship-algorithms-scale-merged-intensities" title="Permalink to this headline">¶</a></h1>
+<dl class="py function">
+<dt id="reciprocalspaceship.algorithms.scale_merged_intensities">
+<code class="sig-prename descclassname">reciprocalspaceship.algorithms.</code><code class="sig-name descname">scale_merged_intensities</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">ds</span></em>, <em class="sig-param"><span class="n">intensity_key</span></em>, <em class="sig-param"><span class="n">sigma_key</span></em>, <em class="sig-param"><span class="n">output_columns</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">dropna</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">inplace</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">mean_intensity_method</span><span class="o">=</span><span class="default_value">'isotropic'</span></em>, <em class="sig-param"><span class="n">bins</span><span class="o">=</span><span class="default_value">100</span></em>, <em class="sig-param"><span class="n">bw</span><span class="o">=</span><span class="default_value">2.0</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/Hekstra-Lab/reciprocalspaceship/blob/master/reciprocalspaceship/algorithms/scale_merged_intensities.py#L155-L286"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#reciprocalspaceship.algorithms.scale_merged_intensities" title="Permalink to this definition">¶</a></dt>
+<dd><p>Scales merged intensities using Bayesian statistics in order to
+estimate structure factor amplitudes. This method is based on the approach
+by French and Wilson <a class="footnote-reference brackets" href="#id2" id="id1">1</a>, and is useful for improving the estimates
+of negative and small intensities in order to ensure that structure
+factor moduli are strictly positive.</p>
+<p>The mean and standard deviation of acentric reflections are computed
+analytically from a truncated normal distribution. The mean and
+standard deviation for centric reflections are computed by numerical
+integration of the posterior intensity distribution under a Wilson
+prior, and then by interpolation with a kernel smoother.</p>
+<p class="rubric">Notes</p>
+<p>This method follows the same approach as French and Wilson, with
+the following modifications:</p>
+<ul class="simple">
+<li><p>Numerical integration under a Wilson prior is used to estimate the
+mean and standard deviation of centric reflections at runtime,
+rather than using precomputed results and a look-up table.</p></li>
+<li><p>Same procedure is used for all centric reflections; original work
+handled high intensity centric reflections differently.</p></li>
+</ul>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>ds</strong> (<em>DataSet</em>) – Input DataSet containing columns with intensity_key and sigma_key
+labels</p></li>
+<li><p><strong>intensity_key</strong> (<em>str</em>) – Column label for intensities to be scaled</p></li>
+<li><p><strong>sigma_key</strong> (<em>str</em>) – Column label for error estimates of intensities being scaled</p></li>
+<li><p><strong>output_columns</strong> (<em>list or tuple of column names</em>) – Column labels to be added to ds for recording scaled I, SigI, F,
+and SigF, respectively. output_columns must have len=4.</p></li>
+<li><p><strong>dropna</strong> (<em>bool</em>) – Whether to drop reflections with NaNs in intensity_key or sigma_key
+columns</p></li>
+<li><p><strong>inplace</strong> (<em>bool</em>) – Whether to modify the DataSet in place or create a copy</p></li>
+<li><p><strong>mean_intensity_method</strong> (<em>str [“isotropic” or “anisotropic”]</em>) – If “isotropic”, mean intensity is determined by resolution bin.
+If “anisotropic”, mean intensity is determined by Miller index
+using provided bandwidth.</p></li>
+<li><p><strong>bins</strong> (<em>int or array</em>) – Either an integer number of n bins. Or an array of bin edges with
+shape==(n, 2). Only affects output if mean_intensity_method is
+“isotropic”.</p></li>
+<li><p><strong>bw</strong> (<em>float</em>) – Bandwidth to use for computing anisotropic mean intensity. This
+parameter controls the distance that each reflection impacts in
+reciprocal space. Only affects output if mean_intensity_method is
+“anisotropic”.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><em>DataSet</em> – DataSet with 4 additional columns corresponding to scaled I, SigI,
+F, and SigF.</p>
+</dd>
+</dl>
+<p class="rubric">References</p>
+<dl class="footnote brackets">
+<dt class="label" id="id2"><span class="brackets"><a class="fn-backref" href="#id1">1</a></span></dt>
+<dd><p>French S. and Wilson K. “On the Treatment of Negative Intensity
+Observations,” Acta Cryst. A34 (1978).</p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="reciprocalspaceship.print_mtz_dtypes.html" class="btn btn-neutral float-right" title="reciprocalspaceship.print_mtz_dtypes" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="reciprocalspaceship.read_precognition.html" class="btn btn-neutral float-left" title="reciprocalspaceship.read_precognition" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, Jack B. Greisman, Kevin M. Dalton
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

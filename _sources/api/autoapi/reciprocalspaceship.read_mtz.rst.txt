@@ -1,0 +1,6 @@
+reciprocalspaceship.read\_mtz
+=============================
+
+.. currentmodule:: reciprocalspaceship
+
+.. autofunction:: read_mtz

@@ -1,0 +1,6 @@
+reciprocalspaceship.algorithms.scale\_merged\_intensities
+=========================================================
+
+.. currentmodule:: reciprocalspaceship.algorithms
+
+.. autofunction:: scale_merged_intensities
