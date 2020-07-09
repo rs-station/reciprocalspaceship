@@ -41,8 +41,8 @@ setup(
     license='MIT',
     description=DESCRIPTION,
     long_description=LONG_DESCRIPTION,
-    author='Kevin M. Dalton; Jack B. Greisman',
-    author_email='kmdalton@g.harvard.edu; greisman@g.harvard.edu',
+    author='Kevin M. Dalton, Jack B. Greisman',
+    author_email='kmdalton@g.harvard.edu, greisman@g.harvard.edu',
     url="https://hekstra-lab.github.io/reciprocalspaceship/",
     project_urls=PROJECT_URLS,
     install_requires=[
