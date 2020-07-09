@@ -50,7 +50,7 @@ class TestMTZ(unittest.TestCase):
         # Having a non-MTZType should raise AttributeError, unless flag
         # is set
         data["nonMTZ"] = 1
-        with self.assertRaises(AttributeError):
+        with self.assertRaises(ValueError):
             data.write_mtz("temp.mtz")
         data.write_mtz("temp.mtz", skip_problem_mtztypes=True)
         self.assertTrue(exists("temp.mtz"))
