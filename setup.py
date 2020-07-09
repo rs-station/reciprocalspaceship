@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 # Get version number
 def getVersionNumber():
-    with open("VERSION", 'r') as vfile:
+    with open("reciprocalspaceship/VERSION", 'r') as vfile:
         version = vfile.read().strip()
     return version
 __version__ = getVersionNumber()
