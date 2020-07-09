@@ -12,6 +12,6 @@ of the essential functionality for a new user to get started.
    overview
    installation
    ../examples/quickstart
-   dtypes
+   mtzdtypes.ipynb
    ../examples/examples
 
