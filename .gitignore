@@ -13,6 +13,7 @@ dist/*
 # Coverage reports
 coverage.xml
 .coverage
+.coverage.*
 
 # Documentation
 docs/_build/*

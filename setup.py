@@ -22,7 +22,7 @@ setup(
         "scipy > 1.4",
     ],
     setup_requires=['pytest-runner'],
-    tests_require=['pytest', 'pytest-cov'],
+    tests_require=['pytest', 'pytest-cov', 'pytest-xdist'],
     entry_points={
         'console_scripts': [
             'rs.mtzdump=reciprocalspaceship.commandline.mtzdump:main',
