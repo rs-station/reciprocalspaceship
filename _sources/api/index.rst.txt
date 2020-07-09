@@ -62,7 +62,7 @@ Functions intended to help users work with the library. These functions are avai
    :toctree: autoapi
    :nosignatures:
 
-   ~reciprocalspaceship.print_mtz_dtypes
+   ~reciprocalspaceship.summarize_mtz_dtypes
 
 Commandline Tools
 -----------------

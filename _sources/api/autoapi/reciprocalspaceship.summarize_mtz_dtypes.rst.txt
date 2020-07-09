@@ -1,0 +1,6 @@
+reciprocalspaceship.summarize\_mtz\_dtypes
+==========================================
+
+.. currentmodule:: reciprocalspaceship
+
+.. autofunction:: summarize_mtz_dtypes
