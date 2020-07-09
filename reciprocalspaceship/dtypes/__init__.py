@@ -28,4 +28,4 @@ from .m_isym import M_IsymDtype
 from pandas.core.dtypes.dtypes import registry
 registry.dtypes = registry.dtypes[::-1]
 
-from .printing import print_mtz_dtypes
+from .summarize import summarize_mtz_dtypes

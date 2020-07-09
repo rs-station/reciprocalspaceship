@@ -1,8 +1,8 @@
 import pytest
 import reciprocalspaceship as rs
 
-def test_print_mtz_dtypes(capsys):
-    """Test rs.print_mtz_dtypes()"""
+def test_summarize_mtz_dtypes(capsys):
+    """Test rs.summarize_mtz_dtypes()"""
     rs.print_mtz_dtypes()
     out, err = capsys.readouterr()
     out = out.splitlines()
