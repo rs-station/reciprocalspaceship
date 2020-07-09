@@ -93,7 +93,12 @@
 <li class="toctree-l1 current"><a class="reference internal" href="index.html">For Developers</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="contributing.html">Contributing to <code class="docutils literal notranslate"><span class="pre">reciprocalspaceship</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="testing.html">Running Tests</a></li>
-<li class="toctree-l2 current"><a class="current reference internal" href="#">Building Documentation</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Building Documentation</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#dependencies">Dependencies</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#local-preview-of-documentation">Local Preview of Documentation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pushing-changes-to-documentation">Pushing Changes to Documentation</a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
@@ -190,22 +195,35 @@
 <div class="section" id="building-documentation">
 <span id="documentation"></span><h1>Building Documentation<a class="headerlink" href="#building-documentation" title="Permalink to this headline">¶</a></h1>
 <p>The <code class="docutils literal notranslate"><span class="pre">reciprocalspaceship</span></code> documentation is built using <a class="reference external" href="http://sphinx-doc.org/">sphinx</a>. The documentation is automatically rebuilt upon any <code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">push</span></code> action to
-the <code class="docutils literal notranslate"><span class="pre">master</span></code> branch of the repo; however, it is also possible to build it locally in order to preview any changes. There are a few additional dependencies that can all
-be installed using <code class="docutils literal notranslate"><span class="pre">pip</span></code> or <code class="docutils literal notranslate"><span class="pre">conda</span></code>:</p>
+the <code class="docutils literal notranslate"><span class="pre">master</span></code> branch of the repo; however, it is also possible to build it locally in order to preview any changes.</p>
+<div class="section" id="dependencies">
+<h2>Dependencies<a class="headerlink" href="#dependencies" title="Permalink to this headline">¶</a></h2>
+<p>There are a few additional dependencies that can all be installed using <code class="docutils literal notranslate"><span class="pre">pip</span></code> or <code class="docutils literal notranslate"><span class="pre">conda</span></code>:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">conda</span> <span class="n">install</span> <span class="o">-</span><span class="n">c</span> <span class="n">conda</span><span class="o">-</span><span class="n">forge</span> <span class="n">sphinx</span> <span class="n">sphinx_rtd_theme</span> <span class="n">nbsphinx</span> <span class="n">ipython</span> <span class="n">jupyter</span>
 <span class="n">pip</span> <span class="n">install</span> <span class="n">sphinx</span><span class="o">-</span><span class="n">panels</span> <span class="n">sphinxcontrib</span><span class="o">-</span><span class="n">autoprogram</span>
 </pre></div>
 </div>
+</div>
+<div class="section" id="local-preview-of-documentation">
+<h2>Local Preview of Documentation<a class="headerlink" href="#local-preview-of-documentation" title="Permalink to this headline">¶</a></h2>
 <p>The documentation can then be built using the <code class="docutils literal notranslate"><span class="pre">Makefile</span></code> in the <code class="docutils literal notranslate"><span class="pre">docs/</span></code> subdirectory:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cd</span> <span class="n">docs</span>
 <span class="n">make</span> <span class="n">html</span>
-<span class="n">cd</span> <span class="o">..</span>
 </pre></div>
 </div>
-<p>The <code class="docutils literal notranslate"><span class="pre">index.html</span></code> of the documentation will then be found in <code class="docutils literal notranslate"><span class="pre">docs/_build/</span></code>.</p>
-<p>If you have a partial build of the documentation, or if you make a change to the reStructuredText (RST) templates, it may be necessary to remove the existing documentation files. This can be accomplished by running the following command in the <code class="docutils literal notranslate"><span class="pre">docs/</span></code> subdirectory:</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">index.html</span></code> of the documentation will then be found in <code class="docutils literal notranslate"><span class="pre">docs/_build/</span></code>, and can be viewed in any browser.</p>
+<p>If you have a partial build of the documentation, or if you make a change to the reStructuredText (RST) templates,
+it may be necessary to remove the existing documentation files. This can be accomplished by running the following
+command in the <code class="docutils literal notranslate"><span class="pre">docs/</span></code> subdirectory:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">make</span> <span class="n">clean</span>
 </pre></div>
+</div>
+</div>
+<div class="section" id="pushing-changes-to-documentation">
+<h2>Pushing Changes to Documentation<a class="headerlink" href="#pushing-changes-to-documentation" title="Permalink to this headline">¶</a></h2>
+<p>The documentation is rebuilt by default upon any <code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">push</span></code> action to the master branch. This occurs when a Pull
+Request is merged into the master branch. As such, please feel free to propose changes to the documentation via a
+Pull Request. The changes will take place when the Pull Request is merged into the project repository.</p>
 </div>
 </div>
 

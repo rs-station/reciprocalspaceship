@@ -20,5 +20,5 @@ some use cases.
 .. toctree::
    :maxdepth: 1
 
-   gettingstarted.ipynb
+   basics.ipynb
    anomalousdifference.ipynb
