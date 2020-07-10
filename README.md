@@ -1,7 +1,7 @@
 # reciprocalspaceship
 ![Build](https://github.com/Hekstra-Lab/reciprocalspaceship/workflows/Build/badge.svg)
 [![Documentation](https://github.com/Hekstra-Lab/reciprocalspaceship/workflows/Documentation/badge.svg)](https://hekstra-lab.github.io/reciprocalspaceship)
-[![PyPI](https://img.shields.io/pypi/v/reciprocalspaceship)](https://pypi.org/project/reciprocalspaceship/)
+[![PyPI](https://img.shields.io/pypi/v/reciprocalspaceship?color=blue)](https://pypi.org/project/reciprocalspaceship/)
 [![codecov](https://codecov.io/gh/Hekstra-Lab/reciprocalspaceship/branch/master/graph/badge.svg?token=4XxNesZmXB)](https://codecov.io/gh/Hekstra-Lab/reciprocalspaceship)
 [![apm](https://img.shields.io/apm/l/vim-mode.svg)](https://github.com/Hekstra-Lab/reciprocalspaceship/blob/master/LICENSE)  
 
