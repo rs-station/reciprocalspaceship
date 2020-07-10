@@ -64,7 +64,7 @@ def main():
         print()
         embed(colors='neutral', header=header)
 
-    return parser
+    return
     
 if __name__ == "__main__":
     parser = main()
