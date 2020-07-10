@@ -23,9 +23,19 @@ Features of this library include:
   symmetry operations.
 - Support for reading and writing MTZ reflection files.
 
+## Installation
+
+The fastest way to install `reciprocalspaceship` is using `pip`:
+
+```
+pip install reciprocalspaceship
+```
+
+For more installation options, see our [installation guide](https://hekstra-lab.github.io/reciprocalspaceship/userguide/installation.html).
+
 ## Quickstart
 
-To get started with `reciprocalspaceship`, see our [quickstart guide](https://hekstra-lab.github.io/reciprocalspaceship/userguide/quickstart.html)
+To get started with `reciprocalspaceship`, see our [quickstart guide](https://hekstra-lab.github.io/reciprocalspaceship/userguide/quickstart.html).
 
 ## Documentation
 
