@@ -11,6 +11,7 @@ from reciprocalspaceship.utils import (
     in_asu,
     hkl_to_asu,
     hkl_to_observed,
+    compute_dHKL,
 )
 
 class DataSet(pd.DataFrame):
@@ -316,11 +317,8 @@ class DataSet(pd.DataFrame):
         else:
             dataset = self.copy()
 
-        uncompressed_hkls = dataset.get_hkls()
-        hkls,inverse = np.unique(uncompressed_hkls, axis=0, return_inverse=True)
-        A = np.array(self.cell.orthogonalization_matrix.tolist()).astype(np.float32)
-        dhkls = 1./np.linalg.norm((hkls@np.linalg.inv(A)), 2, 1)
-        dataset['dHKL'] = DataSeries(dhkls[inverse], dtype="MTZReal", index=dataset.index)
+        dHKL = compute_dHKL(self.get_hkls(), self.cell)
+        dataset['dHKL'] = rs.DataSeries(dHKL, dtype='R', index=dataset.index)
         return dataset
 
     def stack_anomalous(self, plus_labels=None, minus_labels=None):
