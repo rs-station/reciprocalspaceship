@@ -144,7 +144,8 @@ def test_infer_mtz_dtypes_rangeindex(data_merged, inplace, index):
 @pytest.mark.parametrize("cell", [
     gemmi.UnitCell(10., 20., 30., 90., 90., 90.,),
     gemmi.UnitCell(60., 60., 90., 90., 90., 120.),
-    gemmi.UnitCell(291., 423., 315., 90., 100., 90.)
+    gemmi.UnitCell(291., 423., 315., 90., 100., 90.),
+    gemmi.UnitCell(30., 50., 90., 75., 80., 106.),
 ])
 def test_compute_dHKL(dataset_hkl, inplace, cell):
     """Test DataSet.compute_dHKL()"""
