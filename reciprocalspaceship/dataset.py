@@ -514,16 +514,21 @@ class DataSet(pd.DataFrame):
             dataset = self.copy()
 
         hkls = dataset.get_hkls()
-        isym = (dataset[m_isym] % 256).to_numpy() # Convert M/ISYM to ISYM
-        observed_hkls = hkl_to_observed(hkls, isym, dataset.spacegroup)
 
-        # Update HKLs
+        # GH#3: Separate combined M/ISYM into M and ISYM
+        isym = (dataset[m_isym] % 256).to_numpy()
+        dataset["PARTIAL"] = (dataset[m_isym]/256).astype(int) != 0
+        dataset.drop(columns=m_isym, inplace=True)
+        
+        # Update HKLs        
+        observed_hkls = hkl_to_observed(hkls, isym, dataset.spacegroup)
         index_keys = dataset.index.names
         dataset.reset_index(inplace=True)
         dataset[["H", "K", "L"]] = observed_hkls
         dataset[["H", "K", "L"]] = dataset[["H", "K", "L"]].astype("HKL")
         dataset.set_index(index_keys, inplace=True)
-
+        dataset.sort_index(inplace=True)
+        
         return dataset
             
     def canonicalize_phases(self, inplace=False):
