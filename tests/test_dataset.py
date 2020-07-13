@@ -96,19 +96,25 @@ def test_get_hkls(data_fmodel):
 
 
 @pytest.mark.parametrize("inplace", [True, False])
-def test_label_centrics(data_fmodel, inplace):
+@pytest.mark.parametrize("no_sg", [True, False])
+def test_label_centrics(data_fmodel, inplace, no_sg):
     """Test DataSet.label_centrics()"""
-    result = data_fmodel.label_centrics(inplace=inplace)
-
-    # Test inplace
-    if inplace:
-        assert id(result) == id(data_fmodel)
+    if no_sg:
+        data_fmodel.spacegroup = None
+        with pytest.raises(ValueError):
+            result = data_fmodel.label_centrics(inplace=inplace)
     else:
-        assert id(result) != id(data_fmodel)
+        result = data_fmodel.label_centrics(inplace=inplace)
 
-    # Test centric column
-    assert "CENTRIC" in result
-    assert result["CENTRIC"].dtype.name == "bool"
+        # Test inplace
+        if inplace:
+            assert id(result) == id(data_fmodel)
+        else:
+            assert id(result) != id(data_fmodel)
+            
+        # Test centric column
+        assert "CENTRIC" in result
+        assert result["CENTRIC"].dtype.name == "bool"
 
 
 @pytest.mark.parametrize("inplace", [True, False])
