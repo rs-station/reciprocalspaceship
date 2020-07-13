@@ -45,16 +45,6 @@ def from_structurefactor(sfs):
     phase = rs.DataSeries(np.angle(sfs, deg=True), name="Phi").astype("Phase")
     return sf, phase
 
-_L = {
-    "P" : 1,
-    "A" : 2,
-    "B" : 2,
-    "C" : 2,
-    "I" : 2,
-    "F" : 4,
-    "R" : 3,
-}
-
 def compute_structurefactor_multiplicity(H, sg):
     """
     Parameters
@@ -63,6 +53,7 @@ def compute_structurefactor_multiplicity(H, sg):
         n x 3 array of Miller indices
     spacegroup : gemmi.SpaceGroup, gemmi.GroupOps
         The space group to identify the asymmetric unit
+
     Returns
     -------
     epsilon : array
@@ -78,9 +69,9 @@ def compute_structurefactor_multiplicity(H, sg):
                          f"Received object of type: ({type(sg)}) instead.")
 
     is_centric = group_ops.is_centric()
+
     #Lookup based on centering is equivalent to counting the number of translational
     #centering operations. Using the number of operations has proven more robust. 
-    #L = _L[group_ops.find_centering()]
     L = len(group_ops.cen_ops)
     L = L*(1 + is_centric)
     eps = np.zeros(len(H))
@@ -94,13 +85,15 @@ def compute_structurefactor_multiplicity(H, sg):
 
 def is_centric(H, spacegroup):
     """
-    Determine if structure factors are centric in a given spacegroup
+    Determine if Miller indices are centric in a given spacegroup
+
     Parameters
     ----------
     H : array
         n x 3 array of Miller indices
     spacegroup : gemmi.SpaceGroup, gemmi.GroupOps
         The space group in which to classify centrics
+
     Returns
     -------
     centric : array
