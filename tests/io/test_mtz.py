@@ -1,3 +1,4 @@
+import pytest
 import unittest
 from os.path import dirname, abspath, join, exists
 from os import remove
@@ -6,6 +7,7 @@ import gemmi
 import numpy as np
 from pandas.testing import assert_frame_equal
 import reciprocalspaceship as rs
+from reciprocalspaceship.utils import in_asu
 
 class TestMTZ(unittest.TestCase):
 
@@ -79,16 +81,24 @@ class TestMTZ(unittest.TestCase):
         
         return
 
+
 def test_read_unmerged(data_unmerged):
     """Test rs.read_mtz() with unmerged data"""
-    in_asu = data_unmerged.hkl_to_asu()
+    # Unmerged data will not be in asu, and should have a PARTIAL column
+    assert not in_asu(data_unmerged.get_hkls(), data_unmerged.spacegroup).all()
+    assert "PARTIAL" in data_unmerged.columns
+    assert data_unmerged["PARTIAL"].dtype.name == "bool"
+    assert not  "M/ISYM" in data_unmerged.columns
     assert not data_unmerged.merged
-    assert not np.allclose(data_unmerged.get_hkls(), in_asu.get_hkls())
 
-def test_roundtrip(data_unmerged):
+
+@pytest.mark.parametrize("label_centrics", [True, False])
+def test_roundtrip(data_unmerged, label_centrics):
     """
     Test roundtrip of rs.read_mtz() and DataSet.write_mtz() with unmerged data
     """
+    if label_centrics:
+        data_unmerged.label_centrics(inplace=True)
     data_unmerged.write_mtz("temp.mtz")
     data2 = rs.read_mtz("temp.mtz")
     data2.write_mtz("temp2.mtz")
