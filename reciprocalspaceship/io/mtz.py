@@ -22,7 +22,11 @@ def from_gemmi(gemmi_mtz):
     # Build up DataSet
     for c in gemmi_mtz.columns:
         dataset[c.label] = c.array
-        dataset[c.label] = dataset[c.label].astype(c.type)
+        # Special case for CENTRIC and PARTIAL flags
+        if c.type == "I" and c.label in ["CENTRIC", "PARTIAL"]:
+            dataset[c.label] = dataset[c.label].astype(bool)
+        else:
+            dataset[c.label] = dataset[c.label].astype(c.type)
     dataset.set_index(["H", "K", "L"], inplace=True)
 
     # Handle unmerged DataSet. It is assumed that there is a single
@@ -65,7 +69,7 @@ def to_gemmi(dataset, skip_problem_mtztypes=False):
 
     # Handle Unmerged data
     if not dataset.merged:
-        dataset.hkl_to_asu(inplace=True)
+        dataset = dataset.hkl_to_asu()
     
     # Construct data for Mtz object. 
     mtz.add_dataset("reciprocalspaceship")
@@ -75,6 +79,11 @@ def to_gemmi(dataset, skip_problem_mtztypes=False):
         cseries = temp[c]
         if isinstance(cseries.dtype, MTZDtype):
             mtzcol = mtz.add_column(label=c, type=cseries.dtype.mtztype)
+            columns.append(c)
+        # Special case for centrics and partiality flags
+        elif cseries.dtype.name == "bool" and c in ["CENTRIC", "PARTIAL"]:
+            temp[c] = temp[c].astype("MTZInt")
+            mtzcol = mtz.add_column(label=c, type="I")
             columns.append(c)
         elif skip_problem_mtztypes:
             continue
