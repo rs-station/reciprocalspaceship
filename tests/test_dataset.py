@@ -216,6 +216,20 @@ def test_apply_symop_hkl(data_fmodel, inplace, op):
             result = data_fmodel.apply_symop(op, inplace=inplace)
 
 
+def test_hklmapping_roundtrip(data_hewl):
+    """
+    Test roundtrip of DataSet.hkl_to_asu() and DataSet.hkl_to_observed()
+    """
+    temp = data_hewl.hkl_to_asu()
+    result = temp.hkl_to_observed()
+    result = result[data_hewl.columns]
+
+    if data_hewl.merged:
+        assert_frame_equal(result, data_hewl)
+    else:
+        pytest.xfail("DIALS M/ISYM column does not always use smallest ISYM value")
+
+            
 def test_apply_symop_roundtrip(mtz_by_spacegroup):
     """
     Test DataSet.apply_symop() using fmodel datasets. This test will
@@ -235,20 +249,6 @@ def test_apply_symop_roundtrip(mtz_by_spacegroup):
         assert np.isclose(original, back, rtol=1e-3).all()
 
 
-def test_stack_anomalous_roundtrip(data_merged):
-    """
-    Test that DataSet is unchanged by roundtrip call of DataSet.stack_anomalous()
-    followed by DataSet.unstack_anomalous()
-    """
-    stacked = data_merged.stack_anomalous()
-    result = stacked.unstack_anomalous(["I", "SIGI", "N"])
-
-    # Re-order columns if needed
-    result = result[data_merged.columns]
-
-    assert_frame_equal(result, data_merged)
-
-
 @pytest.mark.parametrize("inplace", [True, False])
 def test_canonicalize_phases(data_fmodel, inplace):
     """Test DataSet.canonicalize_phases()"""
@@ -265,3 +265,4 @@ def test_canonicalize_phases(data_fmodel, inplace):
         assert id(result) == id(temp)
     else:
         assert id(result) != id(temp)
+
