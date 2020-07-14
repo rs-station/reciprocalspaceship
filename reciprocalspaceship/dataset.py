@@ -439,11 +439,12 @@ class DataSet(pd.DataFrame):
             raise ValueError(f"Expected columns to be str, list or tuple. "
                              f"Provided value is type {type(columns)}")
             
-        if not isinstance(suffixes, (list, tuple)) and len(suffixes) != 2:
+        if not (isinstance(suffixes, (list, tuple)) and len(suffixes) == 2):
             raise ValueError(f"Expected suffixes to be tuple or list of len() of 2")
 
         # Separate DataSet into Friedel(+) and Friedel(-)
         dataset = self.hkl_to_asu()
+        if "PARTIAL" in columns: columns.remove("PARTIAL")
         for column in columns:
             dataset[column] = dataset[column].to_friedel_dtype()
         dataset_plus  = dataset.loc[dataset["M/ISYM"]%2 == 1].copy()
