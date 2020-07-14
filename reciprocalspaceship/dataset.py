@@ -360,8 +360,8 @@ class DataSet(pd.DataFrame):
         if isinstance(plus_labels, str) and isinstance(minus_labels, str):
             plus_labels = [plus_labels]
             minus_labels =[minus_labels]
-        elif (isinstance(plus_labels, (list, tuple)) and
-              isinstance(minus_labels, (list, tuple))):
+        elif (isinstance(plus_labels, list) and
+              isinstance(minus_labels, list)):
             if len(plus_labels) != len(minus_labels):
                 raise ValueError(f"plus_labels: {plus_labels} and minus_labels: "
                                  f"{minus_labels} do not have same length.")
@@ -375,9 +375,9 @@ class DataSet(pd.DataFrame):
             if self[plus].dtype != self[minus].dtype:
                 raise ValueError(f"Corresponding labels in {plus_labels} and "
                                  f"{minus_labels} are not the same dtype: "
-                                 f"{dataset[plus].dtype} and {dataset[minus].dtype}")
+                                 f"{self[plus].dtype} and {self[minus].dtype}")
 
-        new_labels = [ l.rstrip("(+)") for l in plus_labels ]            
+        new_labels = [ l.rstrip("(+)") for l in plus_labels ]
         column_mapping_plus  = dict(zip(plus_labels, new_labels))
         column_mapping_minus = dict(zip(minus_labels, new_labels))
 
@@ -436,7 +436,7 @@ class DataSet(pd.DataFrame):
         elif isinstance(columns, str):
             columns =  [columns]
         elif not isinstance(columns, (list, tuple)):
-            raise ValueError(f"Expected columns to be str, list, or tuple. "
+            raise ValueError(f"Expected columns to be str, list or tuple. "
                              f"Provided value is type {type(columns)}")
             
         if not isinstance(suffixes, (list, tuple)) and len(suffixes) != 2:
