@@ -436,16 +436,31 @@ class DataSet(pd.DataFrame):
         dataset = self.hkl_to_asu()
         for column in columns:
             dataset[column] = dataset[column].to_friedel_dtype()
-        dataset_plus  = dataset.loc[dataset["M/ISYM"]%2 == 1]
-        dataset_minus = dataset.loc[dataset["M/ISYM"]%2 == 0, columns]
+        dataset_plus  = dataset.loc[dataset["M/ISYM"]%2 == 1].copy()
+        dataset_minus = dataset.loc[dataset["M/ISYM"]%2 == 0].copy()
 
-        merged = dataset_plus.merge(dataset_minus, how="outer",
-                                    left_index=True, right_index=True,
-                                    suffixes=suffixes)
+        # Handle merged DataSet
+        if self.merged:
+            dataset_minus = dataset_minus.loc[:, columns]
+            result = dataset_plus.merge(dataset_minus, how="outer",
+                                        left_index=True, right_index=True,
+                                        suffixes=suffixes)
+            
+        # Handle unmerged DataSet
+        else:
+            # Rename columns
+            cplus  = [ c+suffixes[0] for c in columns ]
+            cminus = [ c+suffixes[1] for c in columns ]
+            dataset_plus.rename(columns=dict(zip(columns, cplus)), inplace=True)
+            dataset_minus.rename(columns=dict(zip(columns, cminus)), inplace=True)
+            result = dataset_plus.append(dataset_minus)
+            
         if "M/ISYM" not in columns:
-            merged.drop(columns="M/ISYM", inplace=True)
+            result.drop(columns="M/ISYM", inplace=True)
 
-        return merged.__finalize__(self)
+        result.sort_index(inplace=True)
+            
+        return result.__finalize__(self)
         
     def hkl_to_asu(self, inplace=False):
         """
