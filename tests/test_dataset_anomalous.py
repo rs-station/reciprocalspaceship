@@ -82,7 +82,7 @@ def test_unstack_anomalous(data_hewl, columns, suffixes):
     elif not isinstance(columns, (list, tuple)):
         check_ValueError(data_hewl, columns, suffixes)
         return
-    if not isinstance(suffixes, (list, tuple)) and len(suffixes) != 2:
+    if not (isinstance(suffixes, (list, tuple)) and len(suffixes) == 2):
         check_ValueError(data_hewl, columns, suffixes)
         return
 
@@ -123,17 +123,13 @@ def test_roundtrip_unmerged(data_unmerged):
     # Re-order columns if needed
     result = result[data_unmerged.columns]
     result.reset_index(inplace=True)
-    result.set_index(["H", "K", "L", "BATCH", "M/ISYM"], inplace=True)
-    data_unmerged.set_index(["BATCH", "M/ISYM"], append=True, inplace=True)
+    result.set_index(["H", "K", "L", "BATCH"], inplace=True)
+    data_unmerged.set_index(["BATCH"], append=True, inplace=True)
     
     # Sort indices for comparison
     result.sort_index(inplace=True)
     data_unmerged.sort_index(inplace=True)
 
-    # Drop M/ISYM because of DIALS convention issues
-    result.reset_index(level="M/ISYM", drop=True, inplace=True)
-    data_unmerged.reset_index(level="M/ISYM", drop=True, inplace=True)
-    
     assert_frame_equal(result, data_unmerged)
 
 
