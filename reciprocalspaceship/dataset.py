@@ -508,7 +508,15 @@ class DataSet(pd.DataFrame):
         dataset['H'],dataset['K'],dataset['L'] = (DataSeries(i, dtype='HKL') for i in compressed_hkls[inverse].T)
         for k in dataset.get_phase_keys():
             dataset[k] = phi_coeff[inverse] * (dataset[k] + phi_shift[inverse])
-        dataset['M/ISYM'] = DataSeries(isym[inverse], dtype="M/ISYM")
+
+        # GH#3: if PARTIAL column exists, use it to construct M/ISYM
+        if "PARTIAL" in dataset.columns:
+            m_isym = isym[inverse] + 256*dataset["PARTIAL"].to_numpy()
+            dataset['M/ISYM'] = DataSeries(isym[inverse], dtype="M/ISYM")
+            dataset.drop(columns="PARTIAL", inplace=True)
+        else:
+            dataset['M/ISYM'] = DataSeries(isym[inverse], dtype="M/ISYM")
+
         dataset.canonicalize_phases(inplace=True)
         dataset.set_index(index_keys, inplace=True)
         return dataset
