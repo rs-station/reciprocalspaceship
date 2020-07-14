@@ -377,22 +377,32 @@ class DataSet(pd.DataFrame):
                                  f"{minus_labels} are not the same dtype: "
                                  f"{dataset[plus].dtype} and {dataset[minus].dtype}")
 
-        # Construct Friedel DataSets
-        new_labels = [ l.rstrip("(+)") for l in plus_labels ]
-        dataset_plus = self.copy()
-        dataset_plus.drop(columns=minus_labels, inplace=True)
-        dataset_minus = self.copy().drop(columns=plus_labels)
-        dataset_minus.apply_symop(gemmi.Op("-x,-y,-z"), inplace=True)
+        new_labels = [ l.rstrip("(+)") for l in plus_labels ]            
         column_mapping_plus  = dict(zip(plus_labels, new_labels))
         column_mapping_minus = dict(zip(minus_labels, new_labels))
+
+        # Handle merged DataSet case
+        if self.merged:
+            dataset_plus = self.copy()
+            dataset_plus.drop(columns=minus_labels, inplace=True)
+            dataset_minus = self.copy().drop(columns=plus_labels)
+            dataset_minus.apply_symop(gemmi.Op("-x,-y,-z"), inplace=True)
+            
+        # Handle unmerged DataSet case
+        else:
+            dataset_plus = self.loc[self[minus_labels].isna().agg("all", axis=1)].copy()
+            dataset_minus = self.loc[self[plus_labels].isna().agg("all", axis=1)].copy()
+            dataset_plus.drop(columns=minus_labels, inplace=True)
+            dataset_minus.drop(columns=plus_labels, inplace=True)
+            dataset_plus.hkl_to_observed(inplace=True)
+            dataset_minus.hkl_to_observed(inplace=True)
+
         dataset_plus.rename(columns=column_mapping_plus, inplace=True)
         dataset_minus.rename(columns=column_mapping_minus, inplace=True)
-
-        # Combine Friedel datasets and change label MTZDtypes as needed
         F = dataset_plus.append(dataset_minus)
         for label in new_labels:
             F[label] = F[label].from_friedel_dtype()
-        
+            
         return F.__finalize__(self)
 
     def unstack_anomalous(self, columns=None, suffixes=("(+)", "(-)")):
@@ -408,7 +418,7 @@ class DataSet(pd.DataFrame):
             Column label or list of column labels of data that should be 
             associated with Friedel pairs. If None, all columns are 
             converted are converted to the two-column anomalous format.
-        suffixes : tuple of str
+        suffixes : tuple or list  of str
             Suffixes to append to Friedel-plus and Friedel-minus data 
             columns
 
@@ -429,8 +439,8 @@ class DataSet(pd.DataFrame):
             raise ValueError(f"Expected columns to be str, list, or tuple. "
                              f"Provided value is type {type(columns)}")
             
-        if len(suffixes) != 2:
-            raise ValueError(f"Expected suffixes to have len of 2")
+        if not isinstance(suffixes, (list, tuple)) and len(suffixes) != 2:
+            raise ValueError(f"Expected suffixes to be tuple or list of len() of 2")
 
         # Separate DataSet into Friedel(+) and Friedel(-)
         dataset = self.hkl_to_asu()
@@ -445,20 +455,20 @@ class DataSet(pd.DataFrame):
             result = dataset_plus.merge(dataset_minus, how="outer",
                                         left_index=True, right_index=True,
                                         suffixes=suffixes)
-            
+
         # Handle unmerged DataSet
         else:
-            # Rename columns
             cplus  = [ c+suffixes[0] for c in columns ]
             cminus = [ c+suffixes[1] for c in columns ]
             dataset_plus.rename(columns=dict(zip(columns, cplus)), inplace=True)
             dataset_minus.rename(columns=dict(zip(columns, cminus)), inplace=True)
             result = dataset_plus.append(dataset_minus)
-            
-        if "M/ISYM" not in columns:
-            result.drop(columns="M/ISYM", inplace=True)
+            # Fix dtypes -- NA values can cause upcast to object dtype
+            result[cplus] = result[cplus].astype(dataset_plus[cplus].dtypes.to_dict())
+            result[cminus] = result[cminus].astype(dataset_minus[cminus].dtypes.to_dict())
 
-        result.sort_index(inplace=True)
+        if "M/ISYM" not in self.columns and self.merged:
+            result.drop(columns="M/ISYM", inplace=True)
             
         return result.__finalize__(self)
         
