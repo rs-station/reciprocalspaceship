@@ -156,27 +156,24 @@ def hkl_to_observed(H, isym, sg, return_phase_shifts=False):
     if return_phase_shifts:
         phi_coeff = np.zeros(len(H))
         phi_shift = np.zeros(len(H))
-        for i,op in enumerate(sg.operations()):
-            op = op.inverse()
-            idx = (isym == i*2+1)
-            observed_H[idx] = apply_to_hkl(H[idx], op)
+
+    for i,op in enumerate(sg.operations()):
+        op = op.inverse()
+        idx = (isym == i*2+1)
+        observed_H[idx] = apply_to_hkl(H[idx], op)
+        if return_phase_shifts:
             phi_shift[idx] = phase_shift(H[idx], op)
             phi_coeff[idx] = 1.
-            #Friedel
-            idx = (isym == i*2+2)
-            observed_H[idx] = -apply_to_hkl(H[idx], op)
+        #Friedel
+        idx = (isym == i*2+2)
+        observed_H[idx] = apply_to_hkl(H[idx], op.negated())
+        if return_phase_shifts:
             phi_shift[idx] = phase_shift(H[idx], op)
             phi_coeff[idx] = -1.
-        return observed_H, phi_coeff, phi_shift
-    else:
-        for i,op in enumerate(sg.operations()):
-            idx = (isym == i*2+1)
-            op = op.inverse()
-            observed_H[idx] = apply_to_hkl(H[idx], op)
-            #Friedel
-            idx = (isym == i*2+2)
-            observed_H[idx] = -apply_to_hkl(H[idx], op)
-        return observed_H
+
+    if return_phase_shifts:
+        return observed_H, phi_coeff, np.rad2deg(phi_shift)
+    return observed_H
 
 def hkl_is_absent(H, sg):
     """

@@ -580,13 +580,23 @@ class DataSet(pd.DataFrame):
         dataset.drop(columns=m_isym, inplace=True)
         
         # Update HKLs        
-        observed_hkls = hkl_to_observed(hkls, isym, dataset.spacegroup)
+        observed_hkls, phi_coeff, phi_shift = hkl_to_observed(
+            hkls,
+            isym,
+            dataset.spacegroup,
+            return_phase_shifts=True
+        )
         index_keys = dataset.index.names
         dataset.reset_index(inplace=True)
         dataset[["H", "K", "L"]] = observed_hkls
         dataset[["H", "K", "L"]] = dataset[["H", "K", "L"]].astype("HKL")
         dataset.set_index(index_keys, inplace=True)
-        
+
+        # Handle phase shift
+        for k in dataset.get_phase_keys():
+            dataset[k] = phi_coeff * (dataset[k] + phi_shift)
+        dataset.canonicalize_phases(inplace=True)
+            
         return dataset
             
     def canonicalize_phases(self, inplace=False):

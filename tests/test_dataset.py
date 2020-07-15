@@ -256,6 +256,22 @@ def test_hklmapping_roundtrip(data_hewl, m_isym):
             pytest.xfail("DIALS M/ISYM column does not always use smallest ISYM value")
 
             
+def test_hkl_to_observed(data_fmodel_P1):
+    """Test DataSet.hkl_to_observed() handling of phase"""
+    data_fmodel_P1.spacegroup = gemmi.SpaceGroup(96)
+    asu = data_fmodel_P1.hkl_to_asu()
+    result = asu.hkl_to_observed()
+
+    # Check phases have been canonicalized
+    assert (result["PHIFMODEL"] >= -180.).all()
+    assert (result["PHIFMODEL"] <= 180.).all()
+    
+    # Compare as complex structure factors
+    original = rs.utils.to_structurefactor(data_fmodel_P1.FMODEL, data_fmodel_P1.PHIFMODEL)
+    new = rs.utils.to_structurefactor(result.FMODEL, result.PHIFMODEL)
+    assert np.allclose(new, original)
+
+
 def test_apply_symop_roundtrip(mtz_by_spacegroup):
     """
     Test DataSet.apply_symop() using fmodel datasets. This test will
