@@ -561,7 +561,6 @@ class DataSet(pd.DataFrame):
         dataset[["H", "K", "L"]] = observed_hkls
         dataset[["H", "K", "L"]] = dataset[["H", "K", "L"]].astype("HKL")
         dataset.set_index(index_keys, inplace=True)
-        dataset.sort_index(inplace=True)
         
         return dataset
             
