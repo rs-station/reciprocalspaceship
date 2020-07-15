@@ -29,7 +29,7 @@ def from_gemmi(gemmi_mtz):
             dataset[c.label] = dataset[c.label].astype(c.type)
     dataset.set_index(["H", "K", "L"], inplace=True)
 
-    # Handle unmerged DataSet. ValueError is raised for multiple M/ISYM columns
+    # Handle unmerged DataSet. Raise ValueError if M/ISYM column is not unique
     m_isym = dataset.get_m_isym_keys()
     if m_isym:
         if len(m_isym) == 1:

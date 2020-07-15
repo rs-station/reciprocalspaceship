@@ -570,8 +570,9 @@ class DataSet(pd.DataFrame):
                 m_isym = m_isym[0]
             else:
                 raise ValueError(f"Method requires a single M/ISYM column -- found: {m_isym}")
-        elif not (isinstance(m_isym, str) and
-                  isinstance(dataset.dtypes[m_isym], rs.M_IsymDtype)):
+        elif not isinstance(m_isym, str):
+            raise ValueError("Provided M/ISYM column label should be type str")
+        elif not isinstance(dataset.dtypes[m_isym], rs.M_IsymDtype):
             raise ValueError(f"Provided M/ISYM column label is of wrong dtype")
         
         isym = (dataset[m_isym] % 256).to_numpy()
