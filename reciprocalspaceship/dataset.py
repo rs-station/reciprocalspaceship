@@ -192,6 +192,18 @@ class DataSet(pd.DataFrame):
         keys = [ k for k in self if isinstance(self[k].dtype, rs.PhaseDtype) ]
         return keys
 
+    def get_m_isym_keys(self):
+        """
+        Return column labels associated with M/ISYM values
+
+        Returns
+        -------
+        key : list of strings
+            list of columns labels M/ISYM dtype
+        """
+        keys = [ k for k in self if isinstance(self.dtypes[k], rs.M_IsymDtype) ]
+        return keys
+    
     def apply_symop(self, symop, inplace=False):
         """
         Apply symmetry operation to all reflections in DataSet object. 
@@ -522,15 +534,17 @@ class DataSet(pd.DataFrame):
         dataset.set_index(index_keys, inplace=True)
         return dataset
 
-    def hkl_to_observed(self, m_isym="M/ISYM", inplace=False):
+    def hkl_to_observed(self, m_isym=None, inplace=False):
         """
         Map HKL indices from the reciprocal space ASU to their observed 
         indices.
 
         Parameters
         ----------
-        m_isym : str (default = "M/ISYM")
-            Column label for M/ISYM values in DataSet
+        m_isym : str
+            Column label for M/ISYM values in DataSet. If m_isym is None 
+            and a single M/ISYM column is present, it will automatically 
+            be used.
         inplace : bool
             Whether to modify the DataSet in place or return a copy
 
@@ -550,6 +564,16 @@ class DataSet(pd.DataFrame):
         hkls = dataset.get_hkls()
 
         # GH#3: Separate combined M/ISYM into M and ISYM
+        if m_isym is None:
+            m_isym = dataset.get_m_isym_keys()
+            if len(m_isym) == 1:
+                m_isym = m_isym[0]
+            else:
+                raise ValueError(f"Method requires a single M/ISYM column -- found: {m_isym}")
+        elif not (isinstance(m_isym, str) and
+                  isinstance(dataset.dtypes[m_isym], rs.M_IsymDtype)):
+            raise ValueError(f"Provided M/ISYM column label is of wrong dtype")
+        
         isym = (dataset[m_isym] % 256).to_numpy()
         dataset["PARTIAL"] = (dataset[m_isym]/256).astype(int) != 0
         dataset.drop(columns=m_isym, inplace=True)
