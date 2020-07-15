@@ -91,6 +91,16 @@ def test_read_unmerged(data_unmerged):
     assert not  "M/ISYM" in data_unmerged.columns
     assert not data_unmerged.merged
 
+def test_read_unmerged_2m_isym(data_unmerged):
+    """Test rs.read_mtz() with unmerged data containing 2 M/ISYM columns"""
+    data_unmerged["EXTRA"] = 1
+    data_unmerged["EXTRA"] = data_unmerged["EXTRA"].astype("M/ISYM")
+    data_unmerged.write_mtz("temp.mtz")
+    with pytest.raises(ValueError):
+        fails = rs.read_mtz("temp.mtz")
+
+    # Clean up
+    remove("temp.mtz")
 
 @pytest.mark.parametrize("label_centrics", [True, False])
 def test_roundtrip(data_unmerged, label_centrics):

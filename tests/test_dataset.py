@@ -255,8 +255,8 @@ def test_hklmapping_roundtrip(data_hewl, m_isym):
         else:
             pytest.xfail("DIALS M/ISYM column does not always use smallest ISYM value")
 
-            
-def test_hkl_to_observed(data_fmodel_P1):
+
+def test_hkl_to_observed_phase(data_fmodel_P1):
     """Test DataSet.hkl_to_observed() handling of phase"""
     data_fmodel_P1.spacegroup = gemmi.SpaceGroup(96)
     asu = data_fmodel_P1.hkl_to_asu()
@@ -272,6 +272,27 @@ def test_hkl_to_observed(data_fmodel_P1):
     assert np.allclose(new, original)
 
 
+def test_hkl_to_observed_no_m_isym(data_fmodel_P1):
+    """
+    Test DataSet.hkl_to_observed() raises ValueError when DataSet has no
+    M/ISYM columns
+    """
+    with pytest.raises(ValueError):
+        data_fmodel_P1.hkl_to_observed()
+
+
+def test_hkl_to_observed_2_m_isym(data_fmodel_P1):
+    """
+    Test DataSet.hkl_to_observed() raises ValueError when DataSet has 2
+    M/ISYM columns
+    """
+    asu = data_fmodel_P1.hkl_to_asu()
+    asu["EXTRA"] = 1
+    asu["EXTRA"] = asu["EXTRA"].astype("M/ISYM")
+    with pytest.raises(ValueError):
+        data_fmodel_P1.hkl_to_observed()
+
+    
 def test_apply_symop_roundtrip(mtz_by_spacegroup):
     """
     Test DataSet.apply_symop() using fmodel datasets. This test will
