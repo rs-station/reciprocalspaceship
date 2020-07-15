@@ -228,18 +228,32 @@ def test_apply_symop_hkl(data_fmodel, inplace, op):
             result = data_fmodel.apply_symop(op, inplace=inplace)
 
 
-def test_hklmapping_roundtrip(data_hewl):
+@pytest.mark.parametrize("m_isym", [0, None, "M/ISYM", "I"])
+def test_hklmapping_roundtrip(data_hewl, m_isym):
     """
     Test roundtrip of DataSet.hkl_to_asu() and DataSet.hkl_to_observed()
     """
     temp = data_hewl.hkl_to_asu()
-    result = temp.hkl_to_observed()
-    result = result[data_hewl.columns]
-
-    if data_hewl.merged:
-        assert_frame_equal(result, data_hewl)
+    if m_isym == 0:
+        with pytest.raises(ValueError):
+            result = temp.hkl_to_observed(m_isym)
+            return
+    elif m_isym is not None and not m_isym in temp.columns:
+        with pytest.raises(KeyError):
+            result = temp.hkl_to_observed(m_isym)
+            return
+    elif m_isym == "I":
+        with pytest.raises(ValueError):
+            result = temp.hkl_to_observed(m_isym)
+            return
     else:
-        pytest.xfail("DIALS M/ISYM column does not always use smallest ISYM value")
+        result = temp.hkl_to_observed(m_isym)
+        result = result[data_hewl.columns]
+
+        if data_hewl.merged:
+            assert_frame_equal(result, data_hewl)
+        else:
+            pytest.xfail("DIALS M/ISYM column does not always use smallest ISYM value")
 
             
 def test_apply_symop_roundtrip(mtz_by_spacegroup):
