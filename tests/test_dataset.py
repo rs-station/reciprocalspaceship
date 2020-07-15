@@ -87,6 +87,18 @@ def test_get_phase_keys(data_fmodel):
     assert result[0] == expected
     
 
+def test_get_m_isym_keys(data_fmodel):
+    """Test DataSet.get_m_isym_keys()"""
+    result = data_fmodel.get_m_isym_keys()
+    assert result == []
+
+    data_fmodel.hkl_to_asu(inplace=True)
+    result = data_fmodel.get_m_isym_keys()
+    assert len(result) == 1
+    assert isinstance(result, list)
+    assert isinstance(data_fmodel.dtypes[result[0]], rs.M_IsymDtype)
+
+    
 def test_get_hkls(data_fmodel):
     """Test DataSet.get_hkls()"""
     result = data_fmodel.get_hkls()
