@@ -29,12 +29,14 @@ def from_gemmi(gemmi_mtz):
             dataset[c.label] = dataset[c.label].astype(c.type)
     dataset.set_index(["H", "K", "L"], inplace=True)
 
-    # Handle unmerged DataSet. It is assumed that there is a single
-    # M/ISYM column
-    if "M/ISYM" in dataset.dtypes:
-        dataset.merged = False
-        m_isym = dataset.dtypes[dataset.dtypes == "M/ISYM"].index.values[0]
-        dataset.hkl_to_observed(m_isym, inplace=True)
+    # Handle unmerged DataSet. ValueError is raised for multiple M/ISYM columns
+    m_isym = dataset.get_m_isym_keys()
+    if m_isym:
+        if len(m_isym) == 1:
+            dataset.merged = False
+            dataset.hkl_to_observed(m_isym[0], inplace=True)
+        else:
+            raise ValueError("Only a single M/ISYM column is supported for unmerged data")
     else:
         dataset.merged = True
         
