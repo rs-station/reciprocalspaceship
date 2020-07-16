@@ -136,7 +136,16 @@ class DataSet(pd.DataFrame):
     @classmethod
     def from_gemmi(cls, gemmiMtz):
         """
-        Creates DataSet object from gemmi.Mtz object
+        Creates DataSet object from gemmi.Mtz object.
+
+        If the gemmi.Mtz object contains an M/ISYM column, an unmerged
+        DataSet will be constructed. The Miller indices will be mapped to
+        their observed values, and a partiality flag will be extracted 
+        and stored as a boolean column with the label, ``PARTIAL``. 
+
+        If columns are found with the ``MTZInt`` dtype and are labeled ``PARTIAL``
+        or ``CENTRIC``, these will be interpreted as boolean flags used to 
+        label partial or centric reflections, respectively.
 
         Parameters
         ----------
@@ -150,7 +159,14 @@ class DataSet(pd.DataFrame):
 
     def to_gemmi(self, skip_problem_mtztypes=False):
         """
-        Creates gemmi.Mtz object from DataSet object
+        Creates gemmi.Mtz object from DataSet object.
+
+        If ``dataset.merged == False``, the reflections will be mapped to the
+        reciprocal space ASU, and a M/ISYM column will be constructed. 
+
+        If boolean flags with the label ``PARTIAL`` or ``CENTRIC`` are found
+        in the DataSet, these will be cast to the ``MTZInt`` dtype, and included
+        in the gemmi.Mtz object. 
 
         Parameters
         ----------
@@ -167,7 +183,14 @@ class DataSet(pd.DataFrame):
     
     def write_mtz(self, mtzfile, skip_problem_mtztypes=False):
         """
-        Write DataSet to MTZ file
+        Write DataSet to MTZ file.
+
+        If ``DataSet.merged == False``, the reflections will be mapped to the
+        reciprocal space ASU, and a M/ISYM column will be constructed. 
+        
+        If boolean flags with the label ``PARTIAL`` or ``CENTRIC`` are found
+        in the DataSet, these will be cast to the ``MTZInt`` dtype, and included
+        in the output MTZ file. 
 
         Parameters
         ----------
@@ -182,16 +205,28 @@ class DataSet(pd.DataFrame):
 
     def get_phase_keys(self):
         """
-        Return column labels associated with phase data
+        Return column labels for data with Phase dtype.
 
         Returns
         -------
         keys : list of strings
-            list of column labels
+            list of column labels with ``Phase`` dtype
         """
         keys = [ k for k in self if isinstance(self[k].dtype, rs.PhaseDtype) ]
         return keys
 
+    def get_m_isym_keys(self):
+        """
+        Return column labels for data with M/ISYM dtype.
+
+        Returns
+        -------
+        key : list of strings
+            list of column labels with ``M/ISYM`` dtype
+        """
+        keys = [ k for k in self if isinstance(self.dtypes[k], rs.M_IsymDtype) ]
+        return keys
+    
     def apply_symop(self, symop, inplace=False):
         """
         Apply symmetry operation to all reflections in DataSet object. 
@@ -242,7 +277,7 @@ class DataSet(pd.DataFrame):
 
     def label_centrics(self, inplace=False):
         """
-        Label centric reflections in DataSet object. A new column of
+        Label centric reflections in DataSet. A new column of
         booleans, "CENTRIC", is added to the object.
 
         Parameters
@@ -329,6 +364,18 @@ class DataSet(pd.DataFrame):
         Miller index to the same data column at different rows indexed 
         by the Friedel-plus or Friedel-minus Miller index. 
 
+        If ``DataSet.merged == True``, this method will return a DataSet
+        with twice as many rows as the original --  one row for each Friedel
+        pair. If ``DataSet.merged == False``, this method will return a 
+        DataSet with the same number of rows as the original. 
+
+        For a merged DataSet, this has the effect of mapping reflections 
+        from the positive reciprocal space ASU to the positive and negative 
+        reciprocal space ASU, for Friedel-plus and Friedel-minus reflections, 
+        respectively. For an unmerged DataSet, Bijvoet reflections are mapped
+        from the positive reciprocal space ASU to their observed Miller 
+        indices. 
+
         Notes
         -----
         - It is assumed that Friedel-plus column labels are suffixed with (+),
@@ -412,6 +459,21 @@ class DataSet(pd.DataFrame):
         indexed by their Friedel-plus or Friedel-minus Miller index to 
         different columns indexed at the Friedel-plus HKL.
 
+        If ``DataSet.merged == True``, this method will return a DataSet
+        with half as many rows as the original --  one row with both Friedel
+        pairs. If ``DataSet.merged == False``, this method will return a 
+        DataSet with the same number of rows as the original. 
+
+        For a merged DataSet, this has the effect of mapping reflections 
+        to the positive reciprocal space ASU, including data for both Friedel 
+        pairs at the Friedel-plus Miller index. For an unmerged DataSet, 
+        all Bijvoet reflections are mapped to the Miller index of the positive 
+        reciprocal space ASU; however, the reflection data is kept in distinct
+        rows with the anomalous data in columns suffixed according to whether
+        the underlying reflection is Friedel-plus or Friedel-minus. A M/ISYM
+        column is added to an unmerged DataSet to allow reflections to be
+        mapped back to their observed Miller index. 
+
         Parameters
         ----------
         columns : str or list-like
@@ -439,11 +501,12 @@ class DataSet(pd.DataFrame):
             raise ValueError(f"Expected columns to be str, list or tuple. "
                              f"Provided value is type {type(columns)}")
             
-        if not isinstance(suffixes, (list, tuple)) and len(suffixes) != 2:
+        if not (isinstance(suffixes, (list, tuple)) and len(suffixes) == 2):
             raise ValueError(f"Expected suffixes to be tuple or list of len() of 2")
 
         # Separate DataSet into Friedel(+) and Friedel(-)
         dataset = self.hkl_to_asu()
+        if "PARTIAL" in columns: columns.remove("PARTIAL")
         for column in columns:
             dataset[column] = dataset[column].to_friedel_dtype()
         dataset_plus  = dataset.loc[dataset["M/ISYM"]%2 == 1].copy()
@@ -478,6 +541,11 @@ class DataSet(pd.DataFrame):
         are included in the DataSet, they will be changed according to the
         phase shift associated with the necessary symmetry operation.
 
+        If ``DataSet.merged == False``, and a partiality flag labeled ``PARTIAL``
+        is included in the DataSet, the partiality flag will be used to 
+        construct a proper M/ISYM column. Both merged and unmerged DataSets
+        will have an M/ISYM column added. 
+
         Parameters
         ----------
         inplace : bool
@@ -508,20 +576,39 @@ class DataSet(pd.DataFrame):
         dataset['H'],dataset['K'],dataset['L'] = (DataSeries(i, dtype='HKL') for i in compressed_hkls[inverse].T)
         for k in dataset.get_phase_keys():
             dataset[k] = phi_coeff[inverse] * (dataset[k] + phi_shift[inverse])
-        dataset['M/ISYM'] = DataSeries(isym[inverse], dtype="M/ISYM")
+
+        # GH#3: if PARTIAL column exists, use it to construct M/ISYM
+        if "PARTIAL" in dataset.columns:
+            m_isym = isym[inverse] + 256*dataset["PARTIAL"].to_numpy()
+            dataset['M/ISYM'] = DataSeries(isym[inverse], dtype="M/ISYM")
+            dataset.drop(columns="PARTIAL", inplace=True)
+        else:
+            dataset['M/ISYM'] = DataSeries(isym[inverse], dtype="M/ISYM")
+
         dataset.canonicalize_phases(inplace=True)
         dataset.set_index(index_keys, inplace=True)
         return dataset
 
-    def hkl_to_observed(self, m_isym="M/ISYM", inplace=False):
+    def hkl_to_observed(self, m_isym=None, inplace=False):
         """
-        Map HKL indices from the reciprocal space ASU to their observed 
-        indices.
+        Map HKL indices to their observed index using an ``M/ISYM`` column. 
+        This method applies the symmetry operation specified by the ``M/ISYM``
+        column to each Miller index in the DataSet. If phases are included
+        in the DataSet, they will be changed by the phase shift associated
+        with the symmetry operation.
+
+        If ``DataSet.merged == False``, the ``M/ISYM`` column is used to 
+        construct a partiality flag labeled ``PARTIAL``. This is added to 
+        the DataSet, and the M/ISYM column is dropped. If 
+        ``DataSet.merged == True``, the ``M/ISYM`` column is dropped, but
+        a partiality flag is not added.
 
         Parameters
         ----------
-        m_isym : str (default = "M/ISYM")
-            Column label for M/ISYM values in DataSet
+        m_isym : str
+            Column label for M/ISYM values in DataSet. If m_isym is None 
+            and a single M/ISYM column is present, it will automatically 
+            be used.
         inplace : bool
             Whether to modify the DataSet in place or return a copy
 
@@ -539,16 +626,41 @@ class DataSet(pd.DataFrame):
             dataset = self.copy()
 
         hkls = dataset.get_hkls()
-        isym = (dataset[m_isym] % 256).to_numpy() # Convert M/ISYM to ISYM
-        observed_hkls = hkl_to_observed(hkls, isym, dataset.spacegroup)
 
-        # Update HKLs
+        # GH#3: Separate combined M/ISYM into M and ISYM
+        if m_isym is None:
+            m_isym = dataset.get_m_isym_keys()
+            if len(m_isym) == 1:
+                m_isym = m_isym[0]
+            else:
+                raise ValueError(f"Method requires a single M/ISYM column -- found: {m_isym}")
+        elif not isinstance(m_isym, str):
+            raise ValueError("Provided M/ISYM column label should be type str")
+        elif not isinstance(dataset.dtypes[m_isym], rs.M_IsymDtype):
+            raise ValueError(f"Provided M/ISYM column label is of wrong dtype")
+        
+        isym = (dataset[m_isym] % 256).to_numpy()
+        dataset["PARTIAL"] = (dataset[m_isym]/256).astype(int) != 0
+        dataset.drop(columns=m_isym, inplace=True)
+        
+        # Update HKLs        
+        observed_hkls, phi_coeff, phi_shift = hkl_to_observed(
+            hkls,
+            isym,
+            dataset.spacegroup,
+            return_phase_shifts=True
+        )
         index_keys = dataset.index.names
         dataset.reset_index(inplace=True)
         dataset[["H", "K", "L"]] = observed_hkls
         dataset[["H", "K", "L"]] = dataset[["H", "K", "L"]].astype("HKL")
         dataset.set_index(index_keys, inplace=True)
 
+        # Handle phase shift
+        for k in dataset.get_phase_keys():
+            dataset[k] = phi_coeff * (dataset[k] + phi_shift)
+        dataset.canonicalize_phases(inplace=True)
+            
         return dataset
             
     def canonicalize_phases(self, inplace=False):

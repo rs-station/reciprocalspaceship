@@ -87,6 +87,18 @@ def test_get_phase_keys(data_fmodel):
     assert result[0] == expected
     
 
+def test_get_m_isym_keys(data_fmodel):
+    """Test DataSet.get_m_isym_keys()"""
+    result = data_fmodel.get_m_isym_keys()
+    assert result == []
+
+    data_fmodel.hkl_to_asu(inplace=True)
+    result = data_fmodel.get_m_isym_keys()
+    assert len(result) == 1
+    assert isinstance(result, list)
+    assert isinstance(data_fmodel.dtypes[result[0]], rs.M_IsymDtype)
+
+    
 def test_get_hkls(data_fmodel):
     """Test DataSet.get_hkls()"""
     result = data_fmodel.get_hkls()
@@ -216,20 +228,71 @@ def test_apply_symop_hkl(data_fmodel, inplace, op):
             result = data_fmodel.apply_symop(op, inplace=inplace)
 
 
-def test_hklmapping_roundtrip(data_hewl):
+@pytest.mark.parametrize("m_isym", [0, None, "M/ISYM", "I"])
+def test_hklmapping_roundtrip(data_hewl, m_isym):
     """
     Test roundtrip of DataSet.hkl_to_asu() and DataSet.hkl_to_observed()
     """
     temp = data_hewl.hkl_to_asu()
-    result = temp.hkl_to_observed()
-    result = result[data_hewl.columns]
-
-    if data_hewl.merged:
-        assert_frame_equal(result, data_hewl)
+    if m_isym == 0:
+        with pytest.raises(ValueError):
+            result = temp.hkl_to_observed(m_isym)
+            return
+    elif m_isym is not None and not m_isym in temp.columns:
+        with pytest.raises(KeyError):
+            result = temp.hkl_to_observed(m_isym)
+            return
+    elif m_isym == "I":
+        with pytest.raises(ValueError):
+            result = temp.hkl_to_observed(m_isym)
+            return
     else:
-        pytest.xfail("DIALS M/ISYM column does not always use smallest ISYM value")
+        result = temp.hkl_to_observed(m_isym)
+        result = result[data_hewl.columns]
 
-            
+        if data_hewl.merged:
+            assert_frame_equal(result, data_hewl)
+        else:
+            pytest.xfail("DIALS M/ISYM column does not always use smallest ISYM value")
+
+
+def test_hkl_to_observed_phase(data_fmodel_P1):
+    """Test DataSet.hkl_to_observed() handling of phase"""
+    data_fmodel_P1.spacegroup = gemmi.SpaceGroup(96)
+    asu = data_fmodel_P1.hkl_to_asu()
+    result = asu.hkl_to_observed()
+
+    # Check phases have been canonicalized
+    assert (result["PHIFMODEL"] >= -180.).all()
+    assert (result["PHIFMODEL"] <= 180.).all()
+    
+    # Compare as complex structure factors
+    original = rs.utils.to_structurefactor(data_fmodel_P1.FMODEL, data_fmodel_P1.PHIFMODEL)
+    new = rs.utils.to_structurefactor(result.FMODEL, result.PHIFMODEL)
+    assert np.allclose(new, original)
+
+
+def test_hkl_to_observed_no_m_isym(data_fmodel_P1):
+    """
+    Test DataSet.hkl_to_observed() raises ValueError when DataSet has no
+    M/ISYM columns
+    """
+    with pytest.raises(ValueError):
+        data_fmodel_P1.hkl_to_observed()
+
+
+def test_hkl_to_observed_2_m_isym(data_fmodel_P1):
+    """
+    Test DataSet.hkl_to_observed() raises ValueError when DataSet has 2
+    M/ISYM columns
+    """
+    asu = data_fmodel_P1.hkl_to_asu()
+    asu["EXTRA"] = 1
+    asu["EXTRA"] = asu["EXTRA"].astype("M/ISYM")
+    with pytest.raises(ValueError):
+        data_fmodel_P1.hkl_to_observed()
+
+    
 def test_apply_symop_roundtrip(mtz_by_spacegroup):
     """
     Test DataSet.apply_symop() using fmodel datasets. This test will
