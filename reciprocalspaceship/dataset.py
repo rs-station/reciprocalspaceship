@@ -564,29 +564,33 @@ class DataSet(pd.DataFrame):
         else:
             dataset = self.copy()
 
-        index_keys = dataset.index.names
-        dataset.reset_index(inplace=True)
-        hkls = dataset[['H', 'K', 'L']].to_numpy(dtype=np.int32)
-        compressed_hkls,inverse = np.unique(hkls, axis=0, return_inverse=True)
-        compressed_hkls, isym, phi_coeff, phi_shift = hkl_to_asu(
+        # Compute new HKLs and phase shifts
+        hkls = dataset.get_hkls()
+        compressed_hkls, inverse = np.unique(hkls, axis=0, return_inverse=True)
+        asu_hkls, isym, phi_coeff, phi_shift = hkl_to_asu(
             compressed_hkls, 
             dataset.spacegroup, 
             return_phase_shifts=True
         )
-        dataset['H'],dataset['K'],dataset['L'] = (DataSeries(i, dtype='HKL') for i in compressed_hkls[inverse].T)
+        index_keys = dataset.index.names
+        dataset.reset_index(inplace=True)
+        dataset[["H", "K", "L"]] = asu_hkls[inverse]
+        dataset[["H", "K", "L"]] = dataset[["H", "K", "L"]].astype("HKL")
+        dataset.set_index(index_keys, inplace=True)
+
+        # Apply phase shift
         for k in dataset.get_phase_keys():
             dataset[k] = phi_coeff[inverse] * (dataset[k] + phi_shift[inverse])
-
+        dataset.canonicalize_phases(inplace=True)
+        
         # GH#3: if PARTIAL column exists, use it to construct M/ISYM
         if "PARTIAL" in dataset.columns:
             m_isym = isym[inverse] + 256*dataset["PARTIAL"].to_numpy()
-            dataset['M/ISYM'] = DataSeries(isym[inverse], dtype="M/ISYM")
+            dataset['M/ISYM'] = DataSeries(m_isym, dtype="M/ISYM", index=dataset.index)
             dataset.drop(columns="PARTIAL", inplace=True)
         else:
-            dataset['M/ISYM'] = DataSeries(isym[inverse], dtype="M/ISYM")
+            dataset['M/ISYM'] = DataSeries(isym[inverse], dtype="M/ISYM", index=dataset.index)
 
-        dataset.canonicalize_phases(inplace=True)
-        dataset.set_index(index_keys, inplace=True)
         return dataset
 
     def hkl_to_observed(self, m_isym=None, inplace=False):
@@ -625,9 +629,7 @@ class DataSet(pd.DataFrame):
         else:
             dataset = self.copy()
 
-        hkls = dataset.get_hkls()
-
-        # GH#3: Separate combined M/ISYM into M and ISYM
+        # Validate input
         if m_isym is None:
             m_isym = dataset.get_m_isym_keys()
             if len(m_isym) == 1:
@@ -638,12 +640,15 @@ class DataSet(pd.DataFrame):
             raise ValueError("Provided M/ISYM column label should be type str")
         elif not isinstance(dataset.dtypes[m_isym], rs.M_IsymDtype):
             raise ValueError(f"Provided M/ISYM column label is of wrong dtype")
-        
+
+        # GH#3: Separate combined M/ISYM into M and ISYM        
         isym = (dataset[m_isym] % 256).to_numpy()
-        dataset["PARTIAL"] = (dataset[m_isym]/256).astype(int) != 0
+        if not dataset.merged:
+            dataset["PARTIAL"] = (dataset[m_isym]/256).astype(int) != 0
         dataset.drop(columns=m_isym, inplace=True)
         
-        # Update HKLs        
+        # Compute new HKLs and phase shifts
+        hkls = dataset.get_hkls()
         observed_hkls, phi_coeff, phi_shift = hkl_to_observed(
             hkls,
             isym,
@@ -656,11 +661,11 @@ class DataSet(pd.DataFrame):
         dataset[["H", "K", "L"]] = dataset[["H", "K", "L"]].astype("HKL")
         dataset.set_index(index_keys, inplace=True)
 
-        # Handle phase shift
+        # Apply phase shift
         for k in dataset.get_phase_keys():
             dataset[k] = phi_coeff * (dataset[k] + phi_shift)
         dataset.canonicalize_phases(inplace=True)
-            
+        
         return dataset
             
     def canonicalize_phases(self, inplace=False):
