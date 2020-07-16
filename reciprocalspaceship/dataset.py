@@ -642,28 +642,30 @@ class DataSet(pd.DataFrame):
             raise ValueError(f"Provided M/ISYM column label is of wrong dtype")
 
         # GH#3: Separate combined M/ISYM into M and ISYM        
-        isym = (dataset[m_isym] % 256).to_numpy()
+        isym = (dataset[m_isym] % 256).to_numpy(dtype=np.int32)
         if not dataset.merged:
             dataset["PARTIAL"] = (dataset[m_isym]/256).astype(int) != 0
         dataset.drop(columns=m_isym, inplace=True)
         
         # Compute new HKLs and phase shifts
         hkls = dataset.get_hkls()
+        hkls_isym = np.concatenate([hkls, isym.reshape(-1, 1)], axis=1)
+        compressed, inverse = np.unique(hkls_isym, axis=0, return_inverse=True)
         observed_hkls, phi_coeff, phi_shift = hkl_to_observed(
-            hkls,
-            isym,
+            compressed[:, :3],       # compressed HKLs
+            compressed[:, 3],        # compressed ISYM
             dataset.spacegroup,
             return_phase_shifts=True
         )
         index_keys = dataset.index.names
         dataset.reset_index(inplace=True)
-        dataset[["H", "K", "L"]] = observed_hkls
+        dataset[["H", "K", "L"]] = observed_hkls[inverse]
         dataset[["H", "K", "L"]] = dataset[["H", "K", "L"]].astype("HKL")
         dataset.set_index(index_keys, inplace=True)
 
         # Apply phase shift
         for k in dataset.get_phase_keys():
-            dataset[k] = phi_coeff * (dataset[k] + phi_shift)
+            dataset[k] = phi_coeff[inverse] * (dataset[k] + phi_shift[inverse])
         dataset.canonicalize_phases(inplace=True)
         
         return dataset
