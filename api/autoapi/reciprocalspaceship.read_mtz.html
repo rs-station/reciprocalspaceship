@@ -198,11 +198,21 @@
 <h1>reciprocalspaceship.read_mtz<a class="headerlink" href="#reciprocalspaceship-read-mtz" title="Permalink to this headline">¶</a></h1>
 <dl class="py function">
 <dt id="reciprocalspaceship.read_mtz">
-<code class="sig-prename descclassname">reciprocalspaceship.</code><code class="sig-name descname">read_mtz</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">mtzfile</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/Hekstra-Lab/reciprocalspaceship/blob/master/reciprocalspaceship/io/mtz.py#L88-L98"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#reciprocalspaceship.read_mtz" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">reciprocalspaceship.</code><code class="sig-name descname">read_mtz</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">mtzfile</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/Hekstra-Lab/reciprocalspaceship/blob/master/reciprocalspaceship/io/mtz.py#L115-L138"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#reciprocalspaceship.read_mtz" title="Permalink to this definition">¶</a></dt>
 <dd><p>Populate the dataset object with data from an MTZ reflection file.</p>
+<p>If the MTZ file contains an M/ISYM column, an unmerged
+DataSet will be constructed. The Miller indices will be mapped to
+their observed values, and a partiality flag will be extracted
+and stored as a boolean column with the label, <code class="docutils literal notranslate"><span class="pre">PARTIAL</span></code>.</p>
+<p>If columns are found with the <code class="docutils literal notranslate"><span class="pre">MTZInt</span></code> dtype and are labeled <code class="docutils literal notranslate"><span class="pre">PARTIAL</span></code>
+or <code class="docutils literal notranslate"><span class="pre">CENTRIC</span></code>, these will be interpreted as boolean flags used to
+label partial or centric reflections, respectively.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>mtzfile</strong> (<em>str or file</em>) – name of an mtz file or a file object</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><em>DataSet</em></p>
 </dd>
 </dl>
 </dd></dl>

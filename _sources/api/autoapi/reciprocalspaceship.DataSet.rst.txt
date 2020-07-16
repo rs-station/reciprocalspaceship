@@ -50,6 +50,7 @@ DataSet
        ~DataSet.compute_dHKL
        ~DataSet.from_gemmi
        ~DataSet.get_hkls
+       ~DataSet.get_m_isym_keys
        ~DataSet.get_phase_keys
        ~DataSet.hkl_to_asu
        ~DataSet.hkl_to_observed
