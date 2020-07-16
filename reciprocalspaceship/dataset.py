@@ -212,7 +212,7 @@ class DataSet(pd.DataFrame):
         keys : list of strings
             list of column labels with ``Phase`` dtype
         """
-        keys = [ k for k in self if isinstance(self[k].dtype, rs.PhaseDtype) ]
+        keys = [ k for k in self if isinstance(self.dtypes[k], rs.PhaseDtype) ]
         return keys
 
     def get_m_isym_keys(self):
