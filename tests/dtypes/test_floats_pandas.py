@@ -139,6 +139,18 @@ class TestMethods(base.BaseMethodsTests):
         )
         self.assert_series_equal(result, expected)
 
+    def test_value_counts_with_normalize(self, data):
+        # GH 33172
+        data = data[:10].unique()
+        values = np.array(data[~data.isna()])
+
+        result = (
+            rs.DataSeries(data, dtype=data.dtype).value_counts(normalize=True).sort_index()
+        )
+
+        expected = rs.DataSeries([1 / len(values)] * len(values), index=result.index)
+        self.assert_series_equal(result, expected)
+        
 class TestComparisonOps(base.BaseComparisonOpsTests):
     
     def _check_op(self, s, op, other, op_name, exc=NotImplementedError):
@@ -170,34 +182,7 @@ class TestPrinting(base.BasePrintingTests):
     pass
 
 class TestReshaping(base.BaseReshapingTests):
-
-    def test_concat_mixed_dtypes(self, data):
-        # https://github.com/pandas-dev/pandas/issues/20762
-        df1 = pd.DataFrame({"A": data[:3]})
-        df2 = pd.DataFrame({"A": [1, 2, 3]})
-        df3 = pd.DataFrame({"A": ["a", "b", "c"]}).astype("category")
-        dfs = [df1, df2, df3]
-
-        # dataframes
-        result = pd.concat(dfs)
-        expected = pd.concat([x.astype(object) for x in dfs])
-        self.assert_frame_equal(result, expected)
-
-        # series
-        result = pd.concat([x["A"] for x in dfs])
-        expected = pd.concat([x["A"].astype(object) for x in dfs])
-        self.assert_series_equal(result, expected)
-
-        # simple test for just EA and one other
-        result = pd.concat([df1, df2])
-        expected = pd.concat([df1.astype("object"), df2.astype("object")])
-        self.assert_frame_equal(result, expected)
-
-        # Since our custom dtype defaults to a float32, the pd.concat()
-        # call should upcast to a float64 when joining a float32 and int64
-        result = pd.concat([df1["A"], df2["A"]])
-        expected = pd.concat([df1["A"].astype("float64"), df2["A"].astype("float64")])
-        self.assert_series_equal(result, expected)
+    pass
 
 class TestSetitem(base.BaseSetitemTests):
     pass

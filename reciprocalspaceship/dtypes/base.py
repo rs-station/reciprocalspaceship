@@ -21,14 +21,22 @@ class MTZDtype(ExtensionDtype):
 
     @classmethod
     def construct_from_string(cls, string):
-        if string == cls.name or string == cls.mtztype:
-            return cls()
-        else:
+        if not isinstance(string, str):
+            raise TypeError(f"'construct_from_string' expects a string, got {type(string)}")
+        elif string != cls.name and string != cls.mtztype:
             raise TypeError(f"Cannot construct a '{cls.__name__}' from '{string}'")
+        return cls()
 
 class MTZInt32Dtype(MTZDtype, pd.Int32Dtype):
     """Base ExtensionDtype class for MTZDtype backed by pd.Int32Dtype"""
 
+    def _get_common_dtype(self, dtypes):
+        if len(set(dtypes)) == 1:
+            # only itself
+            return self
+        else:
+            return super(pd.Int32Dtype, self)._get_common_dtype(dtypes)
+    
     def __repr__(self):
         return self.name
 
@@ -47,28 +55,6 @@ class MTZIntegerArray(IntegerArray):
     def _from_factorized(cls, values, original):
         values, mask = coerce_to_array(values, dtype=original.dtype)
         return cls(values, mask)
-    
-    def astype(self, dtype, copy=True):
-        if isinstance(dtype, MTZDtype):
-            data = self._coerce_to_ndarray(dtype=dtype.type)
-        else:
-            data = self._coerce_to_ndarray(dtype=dtype)
-        return astype_nansafe(data, dtype, copy=None)
-    
-    def _coerce_to_ndarray(self, dtype=None):
-        """
-        Coerce to an ndarray of native numpy dtype if can. Otherwise,
-        coerce to an object dtype
-        """
-        if not self._mask.any() and dtype:
-            data = self._data.astype(dtype)
-        else:
-            if self._mask.any():
-                data = self._data.astype(object)
-                data[self._mask] = self._na_value
-            else:
-                data = self._data.astype(self.dtype.type)
-        return data
     
 class NumpyFloat32ExtensionDtype(MTZDtype):
     """Base ExtensionDtype class for generic MTZDtype backed by np.float32"""
@@ -184,8 +170,12 @@ class NumpyExtensionArray(ExtensionArray, ExtensionScalarOpsMixin):
         return scalar
 
     def astype(self, dtype, copy=True):
+        from pandas.core.arrays.string_ import StringDtype
+        
         if isinstance(dtype, MTZDtype):
             data = self._coerce_to_ndarray(dtype=dtype.type)
+        elif isinstance(dtype, StringDtype):
+            return dtype.construct_array_type()._from_sequence(self, copy=False)
         else:
             data = self._coerce_to_ndarray(dtype=dtype)
         return astype_nansafe(data, dtype, copy=None)

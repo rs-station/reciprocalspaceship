@@ -193,3 +193,11 @@ def data_float(dtype_floats):
 def data_all(dtype_all):
     return array[dtype_all[0].name]._from_sequence(np.arange(0, 100),
                                                    dtype=dtype_all[0]())
+
+@pytest.fixture(params=[None, lambda x: x])
+def sort_by_key(request):
+    """
+    Simple fixture for testing keys in sorting methods.
+    Tests None (no key) and the identity key.
+    """
+    return request.param
