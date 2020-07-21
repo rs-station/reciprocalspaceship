@@ -7,10 +7,6 @@ def test_repr(dtype_ints):
     """Test MTZInt32Dtype.__repr__ returns dtype name"""
     assert dtype_ints[1] == dtype_ints[0]().__repr__()
 
-def test_coerce_to_ndarray(data_int):
-    """Test MTZInt32Dtype._coerce_to_ndarray defaults to returning np.int32"""
-    assert data_int._coerce_to_ndarray().dtype.type is np.int32
-
 def test_itemsize(dtype_floats):
     """Test NumpyFloat32ExtensionDtype.itemsize"""
     assert dtype_floats[0]().itemsize == dtype_floats[0]().type().itemsize
