@@ -3,13 +3,21 @@ import numpy as np
 import reciprocalspaceship as rs
 
 @pytest.mark.parametrize("inplace", [True, False])
-def test_hkl_to_asu(mtz_by_spacegroup, inplace):
+@pytest.mark.parametrize("reset_index", [True, False])
+def test_hkl_to_asu(mtz_by_spacegroup, inplace, reset_index):
     """Test DataSet.hkl_to_asu() for common spacegroups"""
     x = rs.read_mtz(mtz_by_spacegroup)
     y = rs.read_mtz(mtz_by_spacegroup[:-4] + '_p1.mtz')
     y.spacegroup = x.spacegroup
 
+    if reset_index:
+        y.reset_index(inplace=True)
+
     yasu = y.hkl_to_asu(inplace=inplace)
+
+    if reset_index:
+        yasu.set_index(['H', 'K', 'L'], inplace=True)
+
     assert len(x.index.difference(yasu.index)) == 0
     assert len(yasu.index.difference(x.index)) == 0
 

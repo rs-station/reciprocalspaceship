@@ -564,6 +564,11 @@ class DataSet(pd.DataFrame):
         else:
             dataset = self.copy()
 
+        index_keys = None
+        if "H" in dataset.index.names or "K" in dataset.index.names or "L" in dataset.index.names:
+            index_keys = dataset.index.names
+            dataset.reset_index(inplace=True)
+
         # Compute new HKLs and phase shifts
         hkls = dataset.get_hkls()
         compressed_hkls, inverse = np.unique(hkls, axis=0, return_inverse=True)
@@ -572,17 +577,19 @@ class DataSet(pd.DataFrame):
             dataset.spacegroup, 
             return_phase_shifts=True
         )
-        index_keys = dataset.index.names
-        dataset.reset_index(inplace=True)
+
+
         dataset[["H", "K", "L"]] = asu_hkls[inverse]
         dataset[["H", "K", "L"]] = dataset[["H", "K", "L"]].astype("HKL")
-        dataset.set_index(index_keys, inplace=True)
+
+        if index_keys is not None:
+            dataset.set_index(index_keys, inplace=True)
 
         # Apply phase shift
         for k in dataset.get_phase_keys():
             dataset[k] = phi_coeff[inverse] * (dataset[k] + phi_shift[inverse])
         dataset.canonicalize_phases(inplace=True)
-        
+
         # GH#3: if PARTIAL column exists, use it to construct M/ISYM
         if "PARTIAL" in dataset.columns:
             m_isym = isym[inverse] + 256*dataset["PARTIAL"].to_numpy()
