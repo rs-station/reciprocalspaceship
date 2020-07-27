@@ -51,6 +51,7 @@ setup(
         "pandas >= 1.1.0rc",
         "numpy >  1.0",
         "scipy > 1.4",
+        "IPython", 
     ],
     setup_requires=['pytest-runner'],
     tests_require=['pytest', 'pytest-cov', 'pytest-xdist'],
