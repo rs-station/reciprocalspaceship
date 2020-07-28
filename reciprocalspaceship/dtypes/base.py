@@ -55,6 +55,50 @@ class MTZIntegerArray(IntegerArray):
     def _from_factorized(cls, values, original):
         values, mask = coerce_to_array(values, dtype=original.dtype)
         return cls(values, mask)
+
+    def value_counts(self, dropna=True):
+        """
+        Returns a DataSeries containing counts of each category.
+        Every category will have an entry, even those with a count of 0.
+
+        Parameters
+        ----------
+        dropna : bool, default True
+            Don't include counts of NaN.
+
+        Returns
+        -------
+        counts : DataSeries
+        """
+        from pandas import Index
+        import reciprocalspaceship as rs
+
+        # compute counts on the data with no nans
+        data = self._data[~self._mask]
+        value_counts = Index(data).value_counts()
+        array = value_counts.values
+
+        # TODO(extension)
+        # if we have allow Index to hold an ExtensionArray
+        # this is easier
+        index = value_counts.index.astype(object)
+
+        # if we want nans, count the mask
+        if not dropna:
+
+            # TODO(extension)
+            # appending to an Index *always* infers
+            # w/o passing the dtype
+            array = np.append(array, [self._mask.sum()])
+            index = Index(
+                np.concatenate(
+                    [index.values, np.array([self.dtype.na_value], dtype=object)]
+                ),
+                dtype=object,
+            )
+
+        return rs.DataSeries(array, index=index)
+
     
 class NumpyFloat32ExtensionDtype(MTZDtype):
     """Base ExtensionDtype class for generic MTZDtype backed by np.float32"""
@@ -89,8 +133,6 @@ class NumpyExtensionArray(ExtensionArray, ExtensionScalarOpsMixin):
 
     def __init__(self, values, copy=False, dtype=None):
         self.data = np.array(values, dtype=self._dtype.type, copy=copy)
-        if isinstance(dtype, str):
-            type(self._dtype).construct_array_type(dtype)
     
     @property
     def dtype(self):
@@ -208,7 +250,7 @@ class NumpyExtensionArray(ExtensionArray, ExtensionScalarOpsMixin):
 
     def value_counts(self, dropna=True):
         """
-        Returns a Series containing counts of each category.
+        Returns a DataSeries containing counts of each category.
         Every category will have an entry, even those with a count of 0.
 
         Parameters

@@ -94,6 +94,18 @@ class TestMethods(base.BaseMethodsTests):
 
         self.assert_series_equal(result, expected)
 
+    def test_value_counts_with_normalize(self, data):
+        # GH 33172
+        data = data[:10].unique()
+        values = np.array(data[~data.isna()])
+
+        result = (
+            rs.DataSeries(data, dtype=data.dtype).value_counts(normalize=True).sort_index()
+        )
+
+        expected = rs.DataSeries([1 / len(values)] * len(values), index=result.index)
+        self.assert_series_equal(result, expected)
+
 class TestComparisonOps(base.BaseComparisonOpsTests):
     # Copied from pandas/tests/extension/test_integer.py
     
