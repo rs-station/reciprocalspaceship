@@ -52,7 +52,7 @@ class DataSet(pd.DataFrame):
             self._spacegroup = spacegroup
         if cell:
             self._cell = cell
-        if merged:
+        if merged is not None:
             self._merged = merged
             
         # Build DataSet using DataFrame.__init__()

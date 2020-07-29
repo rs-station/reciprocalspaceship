@@ -14,11 +14,17 @@ def test_constructor_empty():
 
 @pytest.mark.parametrize("spacegroup", [None, gemmi.SpaceGroup(1)])
 @pytest.mark.parametrize("cell", [None, gemmi.UnitCell(1, 1, 1, 90, 90, 90)])
-def test_constructor_dataset(data_fmodel, spacegroup, cell):
+@pytest.mark.parametrize("merged", [None, True, False])
+def test_constructor_dataset(data_fmodel, spacegroup, cell, merged):
     """Test DataSet.__init__() when called with a DataSet"""
-    result = rs.DataSet(data_fmodel, spacegroup=spacegroup, cell=cell)
+    result = rs.DataSet(data_fmodel, spacegroup=spacegroup, cell=cell, merged=merged)
     assert_frame_equal(result, data_fmodel)
 
+    if merged is not None:
+        assert result.merged == merged
+    else:
+        assert result.merged == True
+        
     # Ensure provided values take precedence
     if spacegroup:
         assert result.spacegroup == spacegroup
