@@ -1,0 +1,6 @@
+reciprocalspaceship.concat
+==========================
+
+.. currentmodule:: reciprocalspaceship
+
+.. autofunction:: concat

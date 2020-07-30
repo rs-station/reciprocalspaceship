@@ -45,6 +45,7 @@ DataSet
    .. autosummary::
    
        ~DataSet.__init__
+       ~DataSet.append
        ~DataSet.apply_symop
        ~DataSet.canonicalize_phases
        ~DataSet.compute_dHKL
@@ -55,6 +56,7 @@ DataSet
        ~DataSet.hkl_to_asu
        ~DataSet.hkl_to_observed
        ~DataSet.infer_mtz_dtypes
+       ~DataSet.is_isomorphous
        ~DataSet.label_centrics
        ~DataSet.reset_index
        ~DataSet.set_index
