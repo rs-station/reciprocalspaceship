@@ -186,6 +186,10 @@ class DataSet(pd.DataFrame):
         from reciprocalspaceship import io
         return io.to_gemmi(self, skip_problem_mtztypes)
     
+    def append(self, *args, **kwargs):
+        dataset = super().append(*args, **kwargs)
+        return dataset.__finalize__(self)
+
     def write_mtz(self, mtzfile, skip_problem_mtztypes=False):
         """
         Write DataSet to MTZ file.
@@ -540,6 +544,48 @@ class DataSet(pd.DataFrame):
             
         return result.__finalize__(self)
         
+    def is_isomorphous(self, other, cell_threshold=0.05):
+        """
+        Determine whether DataSet is isomorphous to another DataSet. This
+        method confirms isomorphism by ensuring the spacegroups are equivalent,
+        and that the cell parameters are within a specified percentage 
+        (see `cell_threshold`). 
+
+        Parameters
+        ----------
+        other : rs.DataSet
+            DataSet to which it will be compared
+        cell_threshold : float
+            Acceptable percent difference between unit cell parameters
+
+        Returns
+        -------
+        bool
+        """
+        # Check for spacegroup and cell attributes
+        if not isinstance(self.spacegroup, gemmi.SpaceGroup):
+            raise AttributeError(f"Calling dataset's spacegroup attribute is not set")
+        elif not isinstance(other.spacegroup, gemmi.SpaceGroup):
+            raise AttributeError(f"`other` dataset's spacegroup attribute is not set")
+        elif not isinstance(self.cell, gemmi.UnitCell):
+            raise AttributeError(f"Calling dataset's cell attribute is not set")
+        elif not isinstance(other.cell, gemmi.UnitCell):
+            raise AttributeError(f"`other` dataset's cell attribute is not set")            
+        
+        # Check spacegroup
+        if self.spacegroup.xhm() != other.spacegroup.xhm():
+            return False
+
+        # Check cell parameters
+        params = ["a", "b", "c", "alpha", "beta", "gamma"]
+        for param in params:
+            param1 = self.cell.__getattribute__(param)
+            param2 = other.cell.__getattribute__(param)
+            if (np.abs((param1 - param2)) / 100.) > cell_threshold:
+                return False
+        
+        return True
+
     def hkl_to_asu(self, inplace=False):
         """
         Map HKL indices to the reciprocal space asymmetric unit. If phases
