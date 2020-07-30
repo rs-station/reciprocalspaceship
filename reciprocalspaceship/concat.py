@@ -24,6 +24,10 @@ def concat(*args, check_isomorphous=True, **kwargs):
     rs.DataSet or rs.DataSeries
         Returns rs.DataSeries when concatenating rs.DataSeries along the
         index (axis=0). Returns rs.DataSet in all other cases.   
+
+    See Also
+    --------
+    DataSet.append : Concatenate DataSets
     """
     objs = kwargs.get("objs", args[0])
     first = objs[0]
