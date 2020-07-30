@@ -16,7 +16,7 @@ def concat(*args, check_isomorphous=True, **kwargs):
     ----------
     check_isomorphous : bool
         If `objs` to concatenate are instances of ``rs.DataSet``, their
-        cell and spacegroup attributes will be confirmed to ensure they are
+        cell and spacegroup attributes will be compared to ensure they are
         isomorphous. 
 
     Returns
