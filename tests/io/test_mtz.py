@@ -1,7 +1,7 @@
 import pytest
 import unittest
 from os.path import dirname, abspath, join, exists
-from os import remove
+import tempfile
 import filecmp
 import gemmi
 import numpy as np
@@ -32,31 +32,34 @@ class TestMTZ(unittest.TestCase):
         datadir = join(abspath(dirname(__file__)), '../data/fmodel')
         data = rs.read_mtz(join(datadir, '9LYZ.mtz'))
 
+        temp = tempfile.NamedTemporaryFile(suffix=".mtz")
+
         # Missing cell should raise AttributeError
         data_missingcell = data.copy()
         data_missingcell.cell = None
         with self.assertRaises(AttributeError):
-            data_missingcell.write_mtz("temp.mtz")
+            data_missingcell.write_mtz(temp.name)
             
         # Missing spacegroup should raise AttributeError
         data_missingsg = data.copy()
         data_missingsg.spacegroup = None
         with self.assertRaises(AttributeError):
-            data_missingsg.write_mtz("temp.mtz")
+            data_missingsg.write_mtz(temp.name)
 
         # Writing MTZ should produce a file
-        data.write_mtz("temp.mtz")
-        self.assertTrue(exists("temp.mtz"))
-        remove("temp.mtz")
+        data.write_mtz(temp.name)
+        self.assertTrue(exists(temp.name))
+        temp.close()
 
         # Having a non-MTZType should raise AttributeError, unless flag
         # is set
+        temp = tempfile.NamedTemporaryFile(suffix=".mtz")
         data["nonMTZ"] = 1
         with self.assertRaises(ValueError):
-            data.write_mtz("temp.mtz")
-        data.write_mtz("temp.mtz", skip_problem_mtztypes=True)
-        self.assertTrue(exists("temp.mtz"))
-        remove("temp.mtz")
+            data.write_mtz(temp.name)
+        data.write_mtz(temp.name, skip_problem_mtztypes=True)
+        self.assertTrue(exists(temp.name))
+        temp.close()
 
         return
     
@@ -66,18 +69,20 @@ class TestMTZ(unittest.TestCase):
         data = rs.read_mtz(join(datadir, '9LYZ.mtz'))
 
         # Write data, read data, write data again... shouldn't change
-        data.write_mtz("temp.mtz")
-        data2 = rs.read_mtz("temp.mtz")
-        data2.write_mtz("temp2.mtz")
+        temp = tempfile.NamedTemporaryFile(suffix=".mtz")
+        data.write_mtz(temp.name)
+        data2 = rs.read_mtz(temp.name)
+        temp2 = tempfile.NamedTemporaryFile(suffix=".mtz")
+        data2.write_mtz(temp2.name)
 
         self.assertTrue(data.equals(data2))
         self.assertEqual(data.spacegroup.number, data2.spacegroup.number)
         self.assertEqual(data.cell.a, data2.cell.a)
-        self.assertTrue(filecmp.cmp("temp.mtz", "temp2.mtz"))
+        self.assertTrue(filecmp.cmp(temp.name, temp2.name))
 
         # Clean up
-        remove("temp.mtz")
-        remove("temp2.mtz")
+        temp.close()
+        temp2.close()
         
         return
 
@@ -95,12 +100,14 @@ def test_read_unmerged_2m_isym(data_unmerged):
     """Test rs.read_mtz() with unmerged data containing 2 M/ISYM columns"""
     data_unmerged["EXTRA"] = 1
     data_unmerged["EXTRA"] = data_unmerged["EXTRA"].astype("M/ISYM")
-    data_unmerged.write_mtz("temp.mtz")
+    temp = tempfile.NamedTemporaryFile(suffix=".mtz")
+    data_unmerged.write_mtz(temp.name)
     with pytest.raises(ValueError):
-        fails = rs.read_mtz("temp.mtz")
+        fails = rs.read_mtz(temp.name)
 
     # Clean up
-    remove("temp.mtz")
+    temp.close()
+
 
 @pytest.mark.parametrize("label_centrics", [True, False])
 def test_roundtrip(data_unmerged, label_centrics):
@@ -109,14 +116,17 @@ def test_roundtrip(data_unmerged, label_centrics):
     """
     if label_centrics:
         data_unmerged.label_centrics(inplace=True)
-    data_unmerged.write_mtz("temp.mtz")
-    data2 = rs.read_mtz("temp.mtz")
-    data2.write_mtz("temp2.mtz")
 
-    assert filecmp.cmp("temp.mtz", "temp2.mtz")
+    temp  = tempfile.NamedTemporaryFile(suffix=".mtz")
+    temp2 = tempfile.NamedTemporaryFile(suffix=".mtz")    
+    data_unmerged.write_mtz(temp.name)
+    data2 = rs.read_mtz(temp.name)
+    data2.write_mtz(temp2.name)
+
+    assert filecmp.cmp(temp.name, temp2.name)
     assert_frame_equal(data_unmerged, data2)
     assert data_unmerged.merged == data2.merged
 
     # Clean up
-    remove("temp.mtz")
-    remove("temp2.mtz")
+    temp.close()
+    temp2.close()
