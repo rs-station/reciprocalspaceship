@@ -4,6 +4,7 @@ import reciprocalspaceship as rs
 import gemmi
 from pandas.testing import assert_frame_equal
 
+
 def test_constructor_empty():
     """Test DataSet.__init__()"""
     result = rs.DataSet()
@@ -335,3 +336,34 @@ def test_canonicalize_phases(data_fmodel, inplace):
     else:
         assert id(result) != id(temp)
 
+
+@pytest.mark.parametrize("sg1", [gemmi.SpaceGroup(96), None])
+@pytest.mark.parametrize("sg2", [gemmi.SpaceGroup(96), gemmi.SpaceGroup(19), None])
+@pytest.mark.parametrize("cell1", [
+    gemmi.UnitCell(78.9, 78.9, 38.1, 90, 90, 90),
+    None
+])
+@pytest.mark.parametrize("cell2", [
+    gemmi.UnitCell(78.97, 78.97, 38.25, 90, 90, 90),
+    gemmi.UnitCell(70.1, 70.1, 38.25, 90, 90, 90),
+    None
+])
+def test_is_isomorphous(data_unmerged, data_fmodel, sg1, sg2, cell1, cell2):
+    """
+    Test DataSet.is_isomorphous() using HEWL data and FMODEL mtz files. 
+    9LYZ is isomorphous, and should return True. 
+    """
+    data_unmerged.spacegroup = sg1
+    data_unmerged.cell = cell1
+    data_fmodel.spacegroup = sg2
+    data_fmodel.cell = cell2
+
+    if (sg1 is None) or (sg2 is None) or (cell1 is None) or (cell2 is None):
+        with pytest.raises(AttributeError):
+            result = data_unmerged.is_isomorphous(data_fmodel)
+    else:
+        result = data_unmerged.is_isomorphous(data_fmodel)
+        if (sg2.number == 96) and (cell2.a == 78.97):
+            assert result
+        else:
+            assert not result
