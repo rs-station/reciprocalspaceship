@@ -186,10 +186,30 @@ class DataSet(pd.DataFrame):
         from reciprocalspaceship import io
         return io.to_gemmi(self, skip_problem_mtztypes)
     
-    def append(self, *args, **kwargs):
-        dataset = super().append(*args, **kwargs)
-        return dataset.__finalize__(self)
+    def append(self, *args, check_isomorphous=True, **kwargs):
+        other = kwargs.get("other", args[0])
+        if check_isomorphous:
+            if not self.is_isomorphous(other):
+                raise ValueError("`other` DataSet is not isomorphous")
+        result = super().append(*args, **kwargs)
+        return result.__finalize__(self)
 
+    def merge(self, *args, check_isomorphous=True, **kwargs):
+        right = kwargs.get("right", args[0])
+        if check_isomorphous:
+            if not self.is_isomorphous(right):
+                raise ValueError("`right` DataSet is not isomorphous")
+        result = super().merge(*args, **kwargs)
+        return result.__finalize__(self)
+
+    def join(self, *args, check_isomorphous=True, **kwargs):
+        other = kwargs.get("other", args[0])
+        if check_isomorphous:
+            if not self.is_isomorphous(other):
+                raise ValueError("`other` DataSet is not isomorphous")
+        result = super().join(*args, **kwargs)
+        return result.__finalize__(self)
+    
     def write_mtz(self, mtzfile, skip_problem_mtztypes=False):
         """
         Write DataSet to MTZ file.
