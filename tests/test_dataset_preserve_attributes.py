@@ -4,7 +4,8 @@ import gemmi
 
 @pytest.mark.parametrize("check_isomorphous", [True, False])
 @pytest.mark.parametrize("sg", [gemmi.SpaceGroup(19), gemmi.SpaceGroup(96)])
-def test_concat(data_fmodel, check_isomorphous, sg):
+@pytest.mark.parametrize("ignore_index", [True, False])
+def test_concat(data_fmodel, check_isomorphous, sg, ignore_index):
     """
     Test whether attributes of DataSet are preserved through calls to 
     pd.concat()
@@ -13,17 +14,24 @@ def test_concat(data_fmodel, check_isomorphous, sg):
     other.spacegroup = sg
     if check_isomorphous and sg.number == 19:
         with pytest.raises(ValueError):
-            result = rs.concat([data_fmodel, other], check_isomorphous=check_isomorphous)
+            result = rs.concat([data_fmodel, other], ignore_index=ignore_index,
+                               check_isomorphous=check_isomorphous)
     else:
-        result = rs.concat([data_fmodel, other], check_isomorphous=check_isomorphous)
+        result = rs.concat([data_fmodel, other], ignore_index=ignore_index,
+                           check_isomorphous=check_isomorphous)
         assert isinstance(result, rs.DataSet)
         assert len(result) == len(data_fmodel)*2
+        if ignore_index:
+            assert result._cache_index_dtypes == {}
         for attr in data_fmodel._metadata:
+            if attr ==  "_cache_index_dtypes":
+                continue
             assert result.__getattr__(attr) == data_fmodel.__getattr__(attr)
 
 @pytest.mark.parametrize("check_isomorphous", [True, False])
 @pytest.mark.parametrize("sg", [gemmi.SpaceGroup(19), gemmi.SpaceGroup(96)])
-def test_append(data_fmodel, check_isomorphous, sg):
+@pytest.mark.parametrize("ignore_index", [True, False])
+def test_append(data_fmodel, check_isomorphous, sg, ignore_index):
     """
     Test whether attributes of DataSet are preserved through calls to 
     DataSet.append()
@@ -32,14 +40,18 @@ def test_append(data_fmodel, check_isomorphous, sg):
     other.spacegroup = sg
     if check_isomorphous and sg.number == 19:
         with pytest.raises(ValueError):
-            result = data_fmodel.append(other, check_isomorphous=check_isomorphous)
+            result = data_fmodel.append(other, ignore_index, check_isomorphous=check_isomorphous)
     else:
-        result = data_fmodel.append(other, check_isomorphous=check_isomorphous)
+        result = data_fmodel.append(other, ignore_index, check_isomorphous=check_isomorphous)
         assert isinstance(result, rs.DataSet)
         assert len(result) == len(data_fmodel)*2
+        if ignore_index:
+            assert result._cache_index_dtypes == {}
         for attr in data_fmodel._metadata:
+            if attr ==  "_cache_index_dtypes":
+                continue
             assert result.__getattr__(attr) == data_fmodel.__getattr__(attr)
-
+            
 @pytest.mark.parametrize("check_isomorphous", [True, False])
 @pytest.mark.parametrize("sg", [gemmi.SpaceGroup(19), gemmi.SpaceGroup(96)])
 def test_merge(data_fmodel, check_isomorphous, sg):

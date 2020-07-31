@@ -38,4 +38,11 @@ def concat(*args, check_isomorphous=True, **kwargs):
         
     result = pd.concat(*args, **kwargs)
 
+    # If `ignore_index=True`, the _cache_index_dtypes attribute should
+    # be reset.
+    if isinstance(result.index, pd.RangeIndex) and first._cache_index_dtypes != {}:
+        result.__finalize__(first)
+        result._cache_index_dtypes = {}
+        return result
+    
     return result.__finalize__(first)

@@ -192,6 +192,14 @@ class DataSet(pd.DataFrame):
             if not self.is_isomorphous(other):
                 raise ValueError("`other` DataSet is not isomorphous")
         result = super().append(*args, **kwargs)
+
+        # If `ignore_index=True`, the _cache_index_dtypes attribute should
+        # be reset.
+        if isinstance(result.index, pd.RangeIndex) and self._cache_index_dtypes != {}:
+            result.__finalize__(self)
+            result._cache_index_dtypes = {}
+            return result
+        
         return result.__finalize__(self)
 
     def merge(self, *args, check_isomorphous=True, **kwargs):
