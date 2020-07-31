@@ -57,7 +57,9 @@ DataSet
        ~DataSet.hkl_to_observed
        ~DataSet.infer_mtz_dtypes
        ~DataSet.is_isomorphous
+       ~DataSet.join
        ~DataSet.label_centrics
+       ~DataSet.merge
        ~DataSet.reset_index
        ~DataSet.set_index
        ~DataSet.stack_anomalous
