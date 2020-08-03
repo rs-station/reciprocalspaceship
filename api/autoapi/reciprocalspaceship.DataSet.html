@@ -198,7 +198,7 @@
 <h1>DataSet<a class="headerlink" href="#dataset" title="Permalink to this headline">¶</a></h1>
 <dl class="py class">
 <dt id="reciprocalspaceship.DataSet">
-<em class="property">class </em><code class="sig-prename descclassname">reciprocalspaceship.</code><code class="sig-name descname">DataSet</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">data</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">index</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">columns</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">dtype</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">copy</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">spacegroup</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">cell</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">merged</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/Hekstra-Lab/reciprocalspaceship/blob/master/reciprocalspaceship/dataset.py#L17-L782"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#reciprocalspaceship.DataSet" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">reciprocalspaceship.</code><code class="sig-name descname">DataSet</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">data</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">index</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">columns</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">dtype</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">copy</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">spacegroup</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">cell</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">merged</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/Hekstra-Lab/reciprocalspaceship/blob/master/reciprocalspaceship/dataset.py#L17-L866"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#reciprocalspaceship.DataSet" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">pandas.core.frame.DataFrame</span></code></p>
 <p>Representation of a crystallographic dataset.</p>
 <p>A DataSet object provides a tabular representation of reflection data.
@@ -235,7 +235,7 @@ and attributes, please see the <a class="reference external" href="https://panda
 <td><p>Initialize self.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#reciprocalspaceship.DataSet.append" title="reciprocalspaceship.DataSet.append"><code class="xref py py-obj docutils literal notranslate"><span class="pre">append</span></code></a>(*args[, check_isomorphous])</p></td>
-<td><p>Append rows of <cite>other</cite> to the end of caller, returning a new object.</p></td>
+<td><p>Append rows of <cite>other</cite> to the end of calling DataSet, returning a new DataSet object.</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="#reciprocalspaceship.DataSet.apply_symop" title="reciprocalspaceship.DataSet.apply_symop"><code class="xref py py-obj docutils literal notranslate"><span class="pre">apply_symop</span></code></a>(symop[, inplace])</p></td>
 <td><p>Apply symmetry operation to all reflections in DataSet object.</p></td>
@@ -271,13 +271,13 @@ and attributes, please see the <a class="reference external" href="https://panda
 <td><p>Determine whether DataSet is isomorphous to another DataSet.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#reciprocalspaceship.DataSet.join" title="reciprocalspaceship.DataSet.join"><code class="xref py py-obj docutils literal notranslate"><span class="pre">join</span></code></a>(*args[, check_isomorphous])</p></td>
-<td><p>Join columns of another DataFrame.</p></td>
+<td><p>Join DataSets or named DataSeries using a database-style join on columns or indices.</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="#reciprocalspaceship.DataSet.label_centrics" title="reciprocalspaceship.DataSet.label_centrics"><code class="xref py py-obj docutils literal notranslate"><span class="pre">label_centrics</span></code></a>([inplace])</p></td>
 <td><p>Label centric reflections in DataSet.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#reciprocalspaceship.DataSet.merge" title="reciprocalspaceship.DataSet.merge"><code class="xref py py-obj docutils literal notranslate"><span class="pre">merge</span></code></a>(*args[, check_isomorphous])</p></td>
-<td><p>Merge DataFrame or named Series objects with a database-style join.</p></td>
+<td><p>Merge DataSet or named DataSeries using a database-style join on columns or indices.</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="#reciprocalspaceship.DataSet.reset_index" title="reciprocalspaceship.DataSet.reset_index"><code class="xref py py-obj docutils literal notranslate"><span class="pre">reset_index</span></code></a>(**kwargs)</p></td>
 <td><p>Reset the index, or a level of it.</p></td>
@@ -301,99 +301,34 @@ and attributes, please see the <a class="reference external" href="https://panda
 </table>
 <dl class="py method">
 <dt id="reciprocalspaceship.DataSet.append">
-<code class="sig-name descname">append</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span></em>, <em class="sig-param"><span class="n">check_isomorphous</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/Hekstra-Lab/reciprocalspaceship/blob/master/reciprocalspaceship/dataset.py#L189-L203"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#reciprocalspaceship.DataSet.append" title="Permalink to this definition">¶</a></dt>
-<dd><p>Append rows of <cite>other</cite> to the end of caller, returning a new object.</p>
-<p>Columns in <cite>other</cite> that are not in the caller are added as new columns.</p>
-<dl class="field-list">
+<code class="sig-name descname">append</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span></em>, <em class="sig-param"><span class="n">check_isomorphous</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/Hekstra-Lab/reciprocalspaceship/blob/master/reciprocalspaceship/dataset.py#L189-L233"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#reciprocalspaceship.DataSet.append" title="Permalink to this definition">¶</a></dt>
+<dd><p>Append rows of <cite>other</cite> to the end of calling DataSet, returning
+a new DataSet object. Any columns in <cite>other</cite> that are not present
+in the calling DataSet are added as new columns.</p>
+<p>For additional documentation on accepted arguments, see the
+<a href="#id3"><span class="problematic" id="id4">`Pandas API Reference page`_</span></a>.</p>
+<dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul>
-<li><p><strong>other</strong> (<em>DataFrame or Series/dict-like object, or list of these</em>) – The data to append.</p></li>
-<li><p><strong>ignore_index</strong> (<em>bool, default False</em>) – If True, the resulting axis will be labeled 0, 1, …, n - 1.</p></li>
-<li><p><strong>verify_integrity</strong> (<em>bool, default False</em>) – If True, raise ValueError on creating index with duplicates.</p></li>
-<li><p><strong>sort</strong> (<em>bool, default False</em>) – Sort columns if the columns of <cite>self</cite> and <cite>other</cite> are not aligned.</p>
-<div class="versionadded">
-<p><span class="versionmodified added">New in version 0.23.0.</span></p>
-</div>
-<div class="versionchanged">
-<p><span class="versionmodified changed">Changed in version 1.0.0: </span>Changed to not sort by default.</p>
-</div>
-</li>
-</ul>
+<dd class="field-odd"><p><strong>check_isomorphous</strong> (<em>bool</em>) – If True, the spacegroup and cell attributes of DataSets in <cite>other</cite>
+will be compared to those of the calling DataSet to ensure
+they are isomorphous.</p>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p><em>DataFrame</em></p>
+<dd class="field-even"><p><em>rs.DataSet</em></p>
 </dd>
 </dl>
 <div class="admonition seealso">
 <p class="admonition-title">See also</p>
 <dl class="simple">
-<dt><a class="reference internal" href="reciprocalspaceship.concat.html#reciprocalspaceship.concat" title="reciprocalspaceship.concat"><code class="xref py py-meth docutils literal notranslate"><span class="pre">concat()</span></code></a></dt><dd><p>General function to concatenate DataFrame or Series objects.</p>
+<dt><code class="xref py py-meth docutils literal notranslate"><span class="pre">rs.concat()</span></code></dt><dd><p>Concatenate <code class="docutils literal notranslate"><span class="pre">rs</span></code> objects</p>
 </dd>
 </dl>
-</div>
-<p class="rubric">Notes</p>
-<p>If a list of dict/series is passed and the keys are all contained in
-the DataFrame’s index, the order of the columns in the resulting
-DataFrame will be unchanged.</p>
-<p>Iteratively appending rows to a DataFrame can be more computationally
-intensive than a single concatenate. A better solution is to append
-those rows to a list and then concatenate the list with the original
-DataFrame all at once.</p>
-<p class="rubric">Examples</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">([[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span> <span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">]],</span> <span class="n">columns</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span><span class="s1">&#39;AB&#39;</span><span class="p">))</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">df</span>
-<span class="go">   A  B</span>
-<span class="go">0  1  2</span>
-<span class="go">1  3  4</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">df2</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">([[</span><span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">],</span> <span class="p">[</span><span class="mi">7</span><span class="p">,</span> <span class="mi">8</span><span class="p">]],</span> <span class="n">columns</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span><span class="s1">&#39;AB&#39;</span><span class="p">))</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">df</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">df2</span><span class="p">)</span>
-<span class="go">   A  B</span>
-<span class="go">0  1  2</span>
-<span class="go">1  3  4</span>
-<span class="go">0  5  6</span>
-<span class="go">1  7  8</span>
-</pre></div>
-</div>
-<p>With <cite>ignore_index</cite> set to True:</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">df</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">df2</span><span class="p">,</span> <span class="n">ignore_index</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<span class="go">   A  B</span>
-<span class="go">0  1  2</span>
-<span class="go">1  3  4</span>
-<span class="go">2  5  6</span>
-<span class="go">3  7  8</span>
-</pre></div>
-</div>
-<p>The following, while not recommended methods for generating DataFrames,
-show two ways to generate a DataFrame from multiple data sources.</p>
-<p>Less efficient:</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;A&#39;</span><span class="p">])</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">5</span><span class="p">):</span>
-<span class="gp">... </span>    <span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">append</span><span class="p">({</span><span class="s1">&#39;A&#39;</span><span class="p">:</span> <span class="n">i</span><span class="p">},</span> <span class="n">ignore_index</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">df</span>
-<span class="go">   A</span>
-<span class="go">0  0</span>
-<span class="go">1  1</span>
-<span class="go">2  2</span>
-<span class="go">3  3</span>
-<span class="go">4  4</span>
-</pre></div>
-</div>
-<p>More efficient:</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">([</span><span class="n">i</span><span class="p">],</span> <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;A&#39;</span><span class="p">])</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">5</span><span class="p">)],</span>
-<span class="gp">... </span>          <span class="n">ignore_index</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<span class="go">   A</span>
-<span class="go">0  0</span>
-<span class="go">1  1</span>
-<span class="go">2  2</span>
-<span class="go">3  3</span>
-<span class="go">4  4</span>
-</pre></div>
 </div>
 </dd></dl>
 
 <dl class="py method">
 <dt id="reciprocalspaceship.DataSet.apply_symop">
-<code class="sig-name descname">apply_symop</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">symop</span></em>, <em class="sig-param"><span class="n">inplace</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/Hekstra-Lab/reciprocalspaceship/blob/master/reciprocalspaceship/dataset.py#L267-L301"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#reciprocalspaceship.DataSet.apply_symop" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">apply_symop</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">symop</span></em>, <em class="sig-param"><span class="n">inplace</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/Hekstra-Lab/reciprocalspaceship/blob/master/reciprocalspaceship/dataset.py#L351-L385"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#reciprocalspaceship.DataSet.apply_symop" title="Permalink to this definition">¶</a></dt>
 <dd><p>Apply symmetry operation to all reflections in DataSet object.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -407,7 +342,7 @@ show two ways to generate a DataFrame from multiple data sources.</p>
 
 <dl class="py method">
 <dt id="reciprocalspaceship.DataSet.canonicalize_phases">
-<code class="sig-name descname">canonicalize_phases</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">inplace</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/Hekstra-Lab/reciprocalspaceship/blob/master/reciprocalspaceship/dataset.py#L759-L782"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#reciprocalspaceship.DataSet.canonicalize_phases" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">canonicalize_phases</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">inplace</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/Hekstra-Lab/reciprocalspaceship/blob/master/reciprocalspaceship/dataset.py#L843-L866"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#reciprocalspaceship.DataSet.canonicalize_phases" title="Permalink to this definition">¶</a></dt>
 <dd><p>Canonicalize columns with phase data to fall in the interval between
 -180 and 180 degrees. This method will modify the values within any
 column composed of data with the PhaseDtype.</p>
@@ -429,7 +364,7 @@ column composed of data with the PhaseDtype.</p>
 
 <dl class="py method">
 <dt id="reciprocalspaceship.DataSet.compute_dHKL">
-<code class="sig-name descname">compute_dHKL</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">inplace</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/Hekstra-Lab/reciprocalspaceship/blob/master/reciprocalspaceship/dataset.py#L377-L394"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#reciprocalspaceship.DataSet.compute_dHKL" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">compute_dHKL</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">inplace</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/Hekstra-Lab/reciprocalspaceship/blob/master/reciprocalspaceship/dataset.py#L461-L478"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#reciprocalspaceship.DataSet.compute_dHKL" title="Permalink to this definition">¶</a></dt>
 <dd><p>Compute the real space lattice plane spacing, d, associated with
 the HKL indices in the object.</p>
 <dl class="field-list simple">
@@ -462,7 +397,7 @@ label partial or centric reflections, respectively.</p>
 
 <dl class="py method">
 <dt id="reciprocalspaceship.DataSet.get_hkls">
-<code class="sig-name descname">get_hkls</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/Hekstra-Lab/reciprocalspaceship/blob/master/reciprocalspaceship/dataset.py#L303-L313"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#reciprocalspaceship.DataSet.get_hkls" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">get_hkls</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/Hekstra-Lab/reciprocalspaceship/blob/master/reciprocalspaceship/dataset.py#L387-L397"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#reciprocalspaceship.DataSet.get_hkls" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the Miller indices in the DataSet as a ndarray.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
@@ -473,7 +408,7 @@ label partial or centric reflections, respectively.</p>
 
 <dl class="py method">
 <dt id="reciprocalspaceship.DataSet.get_m_isym_keys">
-<code class="sig-name descname">get_m_isym_keys</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/Hekstra-Lab/reciprocalspaceship/blob/master/reciprocalspaceship/dataset.py#L255-L265"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#reciprocalspaceship.DataSet.get_m_isym_keys" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">get_m_isym_keys</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/Hekstra-Lab/reciprocalspaceship/blob/master/reciprocalspaceship/dataset.py#L339-L349"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#reciprocalspaceship.DataSet.get_m_isym_keys" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return column labels for data with M/ISYM dtype.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
@@ -484,7 +419,7 @@ label partial or centric reflections, respectively.</p>
 
 <dl class="py method">
 <dt id="reciprocalspaceship.DataSet.get_phase_keys">
-<code class="sig-name descname">get_phase_keys</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/Hekstra-Lab/reciprocalspaceship/blob/master/reciprocalspaceship/dataset.py#L243-L253"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#reciprocalspaceship.DataSet.get_phase_keys" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">get_phase_keys</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/Hekstra-Lab/reciprocalspaceship/blob/master/reciprocalspaceship/dataset.py#L327-L337"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#reciprocalspaceship.DataSet.get_phase_keys" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return column labels for data with Phase dtype.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
@@ -495,7 +430,7 @@ label partial or centric reflections, respectively.</p>
 
 <dl class="py method">
 <dt id="reciprocalspaceship.DataSet.hkl_to_asu">
-<code class="sig-name descname">hkl_to_asu</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">inplace</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/Hekstra-Lab/reciprocalspaceship/blob/master/reciprocalspaceship/dataset.py#L617-L680"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#reciprocalspaceship.DataSet.hkl_to_asu" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">hkl_to_asu</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">inplace</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/Hekstra-Lab/reciprocalspaceship/blob/master/reciprocalspaceship/dataset.py#L701-L764"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#reciprocalspaceship.DataSet.hkl_to_asu" title="Permalink to this definition">¶</a></dt>
 <dd><p>Map HKL indices to the reciprocal space asymmetric unit. If phases
 are included in the DataSet, they will be changed according to the
 phase shift associated with the necessary symmetry operation.</p>
@@ -522,7 +457,7 @@ will have an M/ISYM column added.</p>
 
 <dl class="py method">
 <dt id="reciprocalspaceship.DataSet.hkl_to_observed">
-<code class="sig-name descname">hkl_to_observed</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">m_isym</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">inplace</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/Hekstra-Lab/reciprocalspaceship/blob/master/reciprocalspaceship/dataset.py#L682-L757"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#reciprocalspaceship.DataSet.hkl_to_observed" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">hkl_to_observed</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">m_isym</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">inplace</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/Hekstra-Lab/reciprocalspaceship/blob/master/reciprocalspaceship/dataset.py#L766-L841"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#reciprocalspaceship.DataSet.hkl_to_observed" title="Permalink to this definition">¶</a></dt>
 <dd><p>Map HKL indices to their observed index using an <code class="docutils literal notranslate"><span class="pre">M/ISYM</span></code> column.
 This method applies the symmetry operation specified by the <code class="docutils literal notranslate"><span class="pre">M/ISYM</span></code>
 column to each Miller index in the DataSet. If phases are included
@@ -557,7 +492,7 @@ be used.</p></li>
 
 <dl class="py method">
 <dt id="reciprocalspaceship.DataSet.infer_mtz_dtypes">
-<code class="sig-name descname">infer_mtz_dtypes</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">inplace</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">index</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/Hekstra-Lab/reciprocalspaceship/blob/master/reciprocalspaceship/dataset.py#L333-L375"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#reciprocalspaceship.DataSet.infer_mtz_dtypes" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">infer_mtz_dtypes</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">inplace</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">index</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/Hekstra-Lab/reciprocalspaceship/blob/master/reciprocalspaceship/dataset.py#L417-L459"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#reciprocalspaceship.DataSet.infer_mtz_dtypes" title="Permalink to this definition">¶</a></dt>
 <dd><p>Infers MTZ dtypes from column names and underlying data. This
 method iterates over each column in the DataSet and tries to infer
 its proper MTZ dtype based on common MTZ naming conventions.</p>
@@ -586,7 +521,7 @@ in the index.</p>
 
 <dl class="py method">
 <dt id="reciprocalspaceship.DataSet.is_isomorphous">
-<code class="sig-name descname">is_isomorphous</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">other</span></em>, <em class="sig-param"><span class="n">cell_threshold</span><span class="o">=</span><span class="default_value">0.05</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/Hekstra-Lab/reciprocalspaceship/blob/master/reciprocalspaceship/dataset.py#L575-L615"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#reciprocalspaceship.DataSet.is_isomorphous" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">is_isomorphous</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">other</span></em>, <em class="sig-param"><span class="n">cell_threshold</span><span class="o">=</span><span class="default_value">0.05</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/Hekstra-Lab/reciprocalspaceship/blob/master/reciprocalspaceship/dataset.py#L659-L699"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#reciprocalspaceship.DataSet.is_isomorphous" title="Permalink to this definition">¶</a></dt>
 <dd><p>Determine whether DataSet is isomorphous to another DataSet. This
 method confirms isomorphism by ensuring the spacegroups are equivalent,
 and that the cell parameters are within a specified percentage
@@ -606,126 +541,34 @@ and that the cell parameters are within a specified percentage
 
 <dl class="py method">
 <dt id="reciprocalspaceship.DataSet.join">
-<code class="sig-name descname">join</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span></em>, <em class="sig-param"><span class="n">check_isomorphous</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/Hekstra-Lab/reciprocalspaceship/blob/master/reciprocalspaceship/dataset.py#L213-L219"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#reciprocalspaceship.DataSet.join" title="Permalink to this definition">¶</a></dt>
-<dd><p>Join columns of another DataFrame.</p>
-<p>Join columns with <cite>other</cite> DataFrame either on index or on a key
-column. Efficiently join multiple DataFrame objects by index at once by
-passing a list.</p>
+<code class="sig-name descname">join</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span></em>, <em class="sig-param"><span class="n">check_isomorphous</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/Hekstra-Lab/reciprocalspaceship/blob/master/reciprocalspaceship/dataset.py#L267-L303"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#reciprocalspaceship.DataSet.join" title="Permalink to this definition">¶</a></dt>
+<dd><p>Join DataSets or named DataSeries using a database-style join on
+columns or indices. This method can be used to join lists <code class="docutils literal notranslate"><span class="pre">rs</span></code> objects
+to a given DataSet.</p>
+<p>For additional documentation on accepted arguments, see the
+<a href="#id5"><span class="problematic" id="id6">`Pandas API Reference page`_</span></a>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>other</strong> (<em>DataFrame, Series, or list of DataFrame</em>) – Index should be similar to one of the columns in this one. If a
-Series is passed, its name attribute must be set, and that will be
-used as the column name in the resulting joined DataFrame.</p></li>
-<li><p><strong>on</strong> (<em>str, list of str, or array-like, optional</em>) – Column or index level name(s) in the caller to join on the index
-in <cite>other</cite>, otherwise joins index-on-index. If multiple
-values given, the <cite>other</cite> DataFrame must have a MultiIndex. Can
-pass an array as the join key if it is not already contained in
-the calling DataFrame. Like an Excel VLOOKUP operation.</p></li>
-<li><p><strong>how</strong> (<em>{‘left’, ‘right’, ‘outer’, ‘inner’}, default ‘left’</em>) – How to handle the operation of the two objects.</p>
-<ul>
-<li><p>left: use calling frame’s index (or column if on is specified)</p></li>
-<li><p>right: use <cite>other</cite>’s index.</p></li>
-<li><p>outer: form union of calling frame’s index (or column if on is
-specified) with <cite>other</cite>’s index, and sort it.
-lexicographically.</p></li>
-<li><p>inner: form intersection of calling frame’s index (or column if
-on is specified) with <cite>other</cite>’s index, preserving the order
-of the calling’s one.</p></li>
-</ul>
-</li>
-<li><p><strong>lsuffix</strong> (<em>str, default ‘’</em>) – Suffix to use from left frame’s overlapping columns.</p></li>
-<li><p><strong>rsuffix</strong> (<em>str, default ‘’</em>) – Suffix to use from right frame’s overlapping columns.</p></li>
-<li><p><strong>sort</strong> (<em>bool, default False</em>) – Order result DataFrame lexicographically by the join key. If False,
-the order of the join key depends on the join type (how keyword).</p></li>
-</ul>
+<dd class="field-odd"><p><strong>check_isomorphous</strong> (<em>bool</em>) – If True, the spacegroup and cell attributes of DataSets in <cite>other</cite>
+will be compared to those of the calling DataSet to ensure
+they are isomorphous.</p>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p><em>DataFrame</em> – A dataframe containing columns from both the caller and <cite>other</cite>.</p>
+<dd class="field-even"><p><em>rs.DataSet</em></p>
 </dd>
 </dl>
 <div class="admonition seealso">
 <p class="admonition-title">See also</p>
 <dl class="simple">
-<dt><code class="xref py py-meth docutils literal notranslate"><span class="pre">DataFrame.merge()</span></code></dt><dd><p>For column(s)-on-columns(s) operations.</p>
+<dt><a class="reference internal" href="#reciprocalspaceship.DataSet.merge" title="reciprocalspaceship.DataSet.merge"><code class="xref py py-meth docutils literal notranslate"><span class="pre">DataSet.merge()</span></code></a></dt><dd><p>Similar method with added flexibility for distinct column labels</p>
 </dd>
 </dl>
-</div>
-<p class="rubric">Notes</p>
-<p>Parameters <cite>on</cite>, <cite>lsuffix</cite>, and <cite>rsuffix</cite> are not supported when
-passing a list of <cite>DataFrame</cite> objects.</p>
-<p>Support for specifying index levels as the <cite>on</cite> parameter was added
-in version 0.23.0.</p>
-<p class="rubric">Examples</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s1">&#39;key&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;K0&#39;</span><span class="p">,</span> <span class="s1">&#39;K1&#39;</span><span class="p">,</span> <span class="s1">&#39;K2&#39;</span><span class="p">,</span> <span class="s1">&#39;K3&#39;</span><span class="p">,</span> <span class="s1">&#39;K4&#39;</span><span class="p">,</span> <span class="s1">&#39;K5&#39;</span><span class="p">],</span>
-<span class="gp">... </span>                   <span class="s1">&#39;A&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;A0&#39;</span><span class="p">,</span> <span class="s1">&#39;A1&#39;</span><span class="p">,</span> <span class="s1">&#39;A2&#39;</span><span class="p">,</span> <span class="s1">&#39;A3&#39;</span><span class="p">,</span> <span class="s1">&#39;A4&#39;</span><span class="p">,</span> <span class="s1">&#39;A5&#39;</span><span class="p">]})</span>
-</pre></div>
-</div>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">df</span>
-<span class="go">  key   A</span>
-<span class="go">0  K0  A0</span>
-<span class="go">1  K1  A1</span>
-<span class="go">2  K2  A2</span>
-<span class="go">3  K3  A3</span>
-<span class="go">4  K4  A4</span>
-<span class="go">5  K5  A5</span>
-</pre></div>
-</div>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">other</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s1">&#39;key&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;K0&#39;</span><span class="p">,</span> <span class="s1">&#39;K1&#39;</span><span class="p">,</span> <span class="s1">&#39;K2&#39;</span><span class="p">],</span>
-<span class="gp">... </span>                      <span class="s1">&#39;B&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;B0&#39;</span><span class="p">,</span> <span class="s1">&#39;B1&#39;</span><span class="p">,</span> <span class="s1">&#39;B2&#39;</span><span class="p">]})</span>
-</pre></div>
-</div>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">other</span>
-<span class="go">  key   B</span>
-<span class="go">0  K0  B0</span>
-<span class="go">1  K1  B1</span>
-<span class="go">2  K2  B2</span>
-</pre></div>
-</div>
-<p>Join DataFrames using their indexes.</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">df</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="n">lsuffix</span><span class="o">=</span><span class="s1">&#39;_caller&#39;</span><span class="p">,</span> <span class="n">rsuffix</span><span class="o">=</span><span class="s1">&#39;_other&#39;</span><span class="p">)</span>
-<span class="go">  key_caller   A key_other    B</span>
-<span class="go">0         K0  A0        K0   B0</span>
-<span class="go">1         K1  A1        K1   B1</span>
-<span class="go">2         K2  A2        K2   B2</span>
-<span class="go">3         K3  A3       NaN  NaN</span>
-<span class="go">4         K4  A4       NaN  NaN</span>
-<span class="go">5         K5  A5       NaN  NaN</span>
-</pre></div>
-</div>
-<p>If we want to join using the key columns, we need to set key to be
-the index in both <cite>df</cite> and <cite>other</cite>. The joined DataFrame will have
-key as its index.</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">df</span><span class="o">.</span><span class="n">set_index</span><span class="p">(</span><span class="s1">&#39;key&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">other</span><span class="o">.</span><span class="n">set_index</span><span class="p">(</span><span class="s1">&#39;key&#39;</span><span class="p">))</span>
-<span class="go">      A    B</span>
-<span class="go">key</span>
-<span class="go">K0   A0   B0</span>
-<span class="go">K1   A1   B1</span>
-<span class="go">K2   A2   B2</span>
-<span class="go">K3   A3  NaN</span>
-<span class="go">K4   A4  NaN</span>
-<span class="go">K5   A5  NaN</span>
-</pre></div>
-</div>
-<p>Another option to join using the key columns is to use the <cite>on</cite>
-parameter. DataFrame.join always uses <cite>other</cite>’s index but we can use
-any column in <cite>df</cite>. This method preserves the original DataFrame’s
-index in the result.</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">df</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">other</span><span class="o">.</span><span class="n">set_index</span><span class="p">(</span><span class="s1">&#39;key&#39;</span><span class="p">),</span> <span class="n">on</span><span class="o">=</span><span class="s1">&#39;key&#39;</span><span class="p">)</span>
-<span class="go">  key   A    B</span>
-<span class="go">0  K0  A0   B0</span>
-<span class="go">1  K1  A1   B1</span>
-<span class="go">2  K2  A2   B2</span>
-<span class="go">3  K3  A3  NaN</span>
-<span class="go">4  K4  A4  NaN</span>
-<span class="go">5  K5  A5  NaN</span>
-</pre></div>
 </div>
 </dd></dl>
 
 <dl class="py method">
 <dt id="reciprocalspaceship.DataSet.label_centrics">
-<code class="sig-name descname">label_centrics</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">inplace</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/Hekstra-Lab/reciprocalspaceship/blob/master/reciprocalspaceship/dataset.py#L315-L331"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#reciprocalspaceship.DataSet.label_centrics" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">label_centrics</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">inplace</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/Hekstra-Lab/reciprocalspaceship/blob/master/reciprocalspaceship/dataset.py#L399-L415"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#reciprocalspaceship.DataSet.label_centrics" title="Permalink to this definition">¶</a></dt>
 <dd><p>Label centric reflections in DataSet. A new column of
 booleans, “CENTRIC”, is added to the object.</p>
 <dl class="field-list simple">
@@ -737,141 +580,27 @@ booleans, “CENTRIC”, is added to the object.</p>
 
 <dl class="py method">
 <dt id="reciprocalspaceship.DataSet.merge">
-<code class="sig-name descname">merge</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span></em>, <em class="sig-param"><span class="n">check_isomorphous</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/Hekstra-Lab/reciprocalspaceship/blob/master/reciprocalspaceship/dataset.py#L205-L211"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#reciprocalspaceship.DataSet.merge" title="Permalink to this definition">¶</a></dt>
-<dd><p>Merge DataFrame or named Series objects with a database-style join.</p>
-<p>The join is done on columns or indexes. If joining columns on
-columns, the DataFrame indexes <em>will be ignored</em>. Otherwise if joining indexes
-on indexes or indexes on a column or columns, the index will be passed on.</p>
+<code class="sig-name descname">merge</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span></em>, <em class="sig-param"><span class="n">check_isomorphous</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/Hekstra-Lab/reciprocalspaceship/blob/master/reciprocalspaceship/dataset.py#L235-L265"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#reciprocalspaceship.DataSet.merge" title="Permalink to this definition">¶</a></dt>
+<dd><p>Merge DataSet or named DataSeries using a database-style join on
+columns or indices.</p>
+<p>For additional documentation on accepted arguments, see the
+<a href="#id7"><span class="problematic" id="id8">`Pandas API Reference page`_</span></a>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>right</strong> (<em>DataFrame or named Series</em>) – Object to merge with.</p></li>
-<li><p><strong>how</strong> (<em>{‘left’, ‘right’, ‘outer’, ‘inner’}, default ‘inner’</em>) – Type of merge to be performed.</p>
-<ul>
-<li><p>left: use only keys from left frame, similar to a SQL left outer join;
-preserve key order.</p></li>
-<li><p>right: use only keys from right frame, similar to a SQL right outer join;
-preserve key order.</p></li>
-<li><p>outer: use union of keys from both frames, similar to a SQL full outer
-join; sort keys lexicographically.</p></li>
-<li><p>inner: use intersection of keys from both frames, similar to a SQL inner
-join; preserve the order of the left keys.</p></li>
-</ul>
-</li>
-<li><p><strong>on</strong> (<em>label or list</em>) – Column or index level names to join on. These must be found in both
-DataFrames. If <cite>on</cite> is None and not merging on indexes then this defaults
-to the intersection of the columns in both DataFrames.</p></li>
-<li><p><strong>left_on</strong> (<em>label or list, or array-like</em>) – Column or index level names to join on in the left DataFrame. Can also
-be an array or list of arrays of the length of the left DataFrame.
-These arrays are treated as if they are columns.</p></li>
-<li><p><strong>right_on</strong> (<em>label or list, or array-like</em>) – Column or index level names to join on in the right DataFrame. Can also
-be an array or list of arrays of the length of the right DataFrame.
-These arrays are treated as if they are columns.</p></li>
-<li><p><strong>left_index</strong> (<em>bool, default False</em>) – Use the index from the left DataFrame as the join key(s). If it is a
-MultiIndex, the number of keys in the other DataFrame (either the index
-or a number of columns) must match the number of levels.</p></li>
-<li><p><strong>right_index</strong> (<em>bool, default False</em>) – Use the index from the right DataFrame as the join key. Same caveats as
-left_index.</p></li>
-<li><p><strong>sort</strong> (<em>bool, default False</em>) – Sort the join keys lexicographically in the result DataFrame. If False,
-the order of the join keys depends on the join type (how keyword).</p></li>
-<li><p><strong>suffixes</strong> (<em>list-like, default is (“_x”, “_y”)</em>) – A length-2 sequence where each element is optionally a string
-indicating the suffix to add to overlapping column names in
-<cite>left</cite> and <cite>right</cite> respectively. Pass a value of <cite>None</cite> instead
-of a string to indicate that the column name from <cite>left</cite> or
-<cite>right</cite> should be left as-is, with no suffix. At least one of the
-values must not be None.</p></li>
-<li><p><strong>copy</strong> (<em>bool, default True</em>) – If False, avoid copy if possible.</p></li>
-<li><p><strong>indicator</strong> (<em>bool or str, default False</em>) – If True, adds a column to the output DataFrame called “_merge” with
-information on the source of each row. The column can be given a different
-name by providing a string argument. The column will have a Categorical
-type with the value of “left_only” for observations whose merge key only
-appears in the left DataFrame, “right_only” for observations
-whose merge key only appears in the right DataFrame, and “both”
-if the observation’s merge key is found in both DataFrames.</p></li>
-<li><p><strong>validate</strong> (<em>str, optional</em>) – If specified, checks if merge is of specified type.</p>
-<ul>
-<li><p>“one_to_one” or “1:1”: check if merge keys are unique in both
-left and right datasets.</p></li>
-<li><p>“one_to_many” or “1:m”: check if merge keys are unique in left
-dataset.</p></li>
-<li><p>“many_to_one” or “m:1”: check if merge keys are unique in right
-dataset.</p></li>
-<li><p>“many_to_many” or “m:m”: allowed, but does not result in checks.</p></li>
-</ul>
-</li>
-</ul>
+<dd class="field-odd"><p><strong>check_isomorphous</strong> (<em>bool</em>) – If True, the spacegroup and cell attributes of DataSets in <cite>other</cite>
+will be compared to those of the calling DataSet to ensure
+they are isomorphous.</p>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p><em>DataFrame</em> – A DataFrame of the two merged objects.</p>
+<dd class="field-even"><p><em>rs.DataSet</em></p>
 </dd>
 </dl>
 <div class="admonition seealso">
 <p class="admonition-title">See also</p>
 <dl class="simple">
-<dt><code class="xref py py-meth docutils literal notranslate"><span class="pre">merge_ordered()</span></code></dt><dd><p>Merge with optional filling/interpolation.</p>
-</dd>
-<dt><code class="xref py py-meth docutils literal notranslate"><span class="pre">merge_asof()</span></code></dt><dd><p>Merge on nearest keys.</p>
-</dd>
-<dt><code class="xref py py-meth docutils literal notranslate"><span class="pre">DataFrame.join()</span></code></dt><dd><p>Similar method using indices.</p>
+<dt><a class="reference internal" href="#reciprocalspaceship.DataSet.join" title="reciprocalspaceship.DataSet.join"><code class="xref py py-meth docutils literal notranslate"><span class="pre">DataSet.join()</span></code></a></dt><dd><p>Similar method with support for lists of <code class="docutils literal notranslate"><span class="pre">rs</span></code> objects</p>
 </dd>
 </dl>
-</div>
-<p class="rubric">Notes</p>
-<p>Support for specifying index levels as the <cite>on</cite>, <cite>left_on</cite>, and
-<cite>right_on</cite> parameters was added in version 0.23.0
-Support for merging named Series objects was added in version 0.24.0</p>
-<p class="rubric">Examples</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">df1</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s1">&#39;lkey&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;foo&#39;</span><span class="p">,</span> <span class="s1">&#39;bar&#39;</span><span class="p">,</span> <span class="s1">&#39;baz&#39;</span><span class="p">,</span> <span class="s1">&#39;foo&#39;</span><span class="p">],</span>
-<span class="gp">... </span>                    <span class="s1">&#39;value&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">5</span><span class="p">]})</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">df2</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s1">&#39;rkey&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;foo&#39;</span><span class="p">,</span> <span class="s1">&#39;bar&#39;</span><span class="p">,</span> <span class="s1">&#39;baz&#39;</span><span class="p">,</span> <span class="s1">&#39;foo&#39;</span><span class="p">],</span>
-<span class="gp">... </span>                    <span class="s1">&#39;value&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">8</span><span class="p">]})</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">df1</span>
-<span class="go">    lkey value</span>
-<span class="go">0   foo      1</span>
-<span class="go">1   bar      2</span>
-<span class="go">2   baz      3</span>
-<span class="go">3   foo      5</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">df2</span>
-<span class="go">    rkey value</span>
-<span class="go">0   foo      5</span>
-<span class="go">1   bar      6</span>
-<span class="go">2   baz      7</span>
-<span class="go">3   foo      8</span>
-</pre></div>
-</div>
-<p>Merge df1 and df2 on the lkey and rkey columns. The value columns have
-the default suffixes, _x and _y, appended.</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">df1</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">df2</span><span class="p">,</span> <span class="n">left_on</span><span class="o">=</span><span class="s1">&#39;lkey&#39;</span><span class="p">,</span> <span class="n">right_on</span><span class="o">=</span><span class="s1">&#39;rkey&#39;</span><span class="p">)</span>
-<span class="go">  lkey  value_x rkey  value_y</span>
-<span class="go">0  foo        1  foo        5</span>
-<span class="go">1  foo        1  foo        8</span>
-<span class="go">2  foo        5  foo        5</span>
-<span class="go">3  foo        5  foo        8</span>
-<span class="go">4  bar        2  bar        6</span>
-<span class="go">5  baz        3  baz        7</span>
-</pre></div>
-</div>
-<p>Merge DataFrames df1 and df2 with specified left and right suffixes
-appended to any overlapping columns.</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">df1</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">df2</span><span class="p">,</span> <span class="n">left_on</span><span class="o">=</span><span class="s1">&#39;lkey&#39;</span><span class="p">,</span> <span class="n">right_on</span><span class="o">=</span><span class="s1">&#39;rkey&#39;</span><span class="p">,</span>
-<span class="gp">... </span>          <span class="n">suffixes</span><span class="o">=</span><span class="p">(</span><span class="s1">&#39;_left&#39;</span><span class="p">,</span> <span class="s1">&#39;_right&#39;</span><span class="p">))</span>
-<span class="go">  lkey  value_left rkey  value_right</span>
-<span class="go">0  foo           1  foo            5</span>
-<span class="go">1  foo           1  foo            8</span>
-<span class="go">2  foo           5  foo            5</span>
-<span class="go">3  foo           5  foo            8</span>
-<span class="go">4  bar           2  bar            6</span>
-<span class="go">5  baz           3  baz            7</span>
-</pre></div>
-</div>
-<p>Merge DataFrames df1 and df2, but raise an exception if the DataFrames have
-any overlapping columns.</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">df1</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">df2</span><span class="p">,</span> <span class="n">left_on</span><span class="o">=</span><span class="s1">&#39;lkey&#39;</span><span class="p">,</span> <span class="n">right_on</span><span class="o">=</span><span class="s1">&#39;rkey&#39;</span><span class="p">,</span> <span class="n">suffixes</span><span class="o">=</span><span class="p">(</span><span class="kc">False</span><span class="p">,</span> <span class="kc">False</span><span class="p">))</span>
-<span class="gt">Traceback (most recent call last):</span>
-<span class="c">...</span>
-<span class="gr">ValueError</span>: <span class="n">columns overlap but no suffix specified:</span>
-<span class="go">    Index([&#39;value&#39;], dtype=&#39;object&#39;)</span>
-</pre></div>
 </div>
 </dd></dl>
 
@@ -1125,7 +854,7 @@ method.</p></li>
 
 <dl class="py method">
 <dt id="reciprocalspaceship.DataSet.stack_anomalous">
-<code class="sig-name descname">stack_anomalous</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">plus_labels</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">minus_labels</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/Hekstra-Lab/reciprocalspaceship/blob/master/reciprocalspaceship/dataset.py#L396-L490"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#reciprocalspaceship.DataSet.stack_anomalous" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">stack_anomalous</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">plus_labels</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">minus_labels</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/Hekstra-Lab/reciprocalspaceship/blob/master/reciprocalspaceship/dataset.py#L480-L574"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#reciprocalspaceship.DataSet.stack_anomalous" title="Permalink to this definition">¶</a></dt>
 <dd><p>Convert data from two-column anomalous format to one-column
 format. Intensities, structure factor amplitudes, or other data
 are converted from separate columns corresponding to a single
@@ -1191,7 +920,7 @@ MTZ datatypes</p>
 
 <dl class="py method">
 <dt id="reciprocalspaceship.DataSet.unstack_anomalous">
-<code class="sig-name descname">unstack_anomalous</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">columns</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">suffixes</span><span class="o">=</span><span class="default_value">'(+)', '(-)'</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/Hekstra-Lab/reciprocalspaceship/blob/master/reciprocalspaceship/dataset.py#L492-L573"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#reciprocalspaceship.DataSet.unstack_anomalous" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">unstack_anomalous</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">columns</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">suffixes</span><span class="o">=</span><span class="default_value">'(+)', '(-)'</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/Hekstra-Lab/reciprocalspaceship/blob/master/reciprocalspaceship/dataset.py#L576-L657"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#reciprocalspaceship.DataSet.unstack_anomalous" title="Permalink to this definition">¶</a></dt>
 <dd><p>Convert data from one-column format to two-column anomalous
 format. Provided column labels are converted from separate rows
 indexed by their Friedel-plus or Friedel-minus Miller index to
@@ -1234,7 +963,7 @@ columns</p></li>
 
 <dl class="py method">
 <dt id="reciprocalspaceship.DataSet.write_mtz">
-<code class="sig-name descname">write_mtz</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">mtzfile</span></em>, <em class="sig-param"><span class="n">skip_problem_mtztypes</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/Hekstra-Lab/reciprocalspaceship/blob/master/reciprocalspaceship/dataset.py#L221-L241"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#reciprocalspaceship.DataSet.write_mtz" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">write_mtz</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">mtzfile</span></em>, <em class="sig-param"><span class="n">skip_problem_mtztypes</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/Hekstra-Lab/reciprocalspaceship/blob/master/reciprocalspaceship/dataset.py#L305-L325"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#reciprocalspaceship.DataSet.write_mtz" title="Permalink to this definition">¶</a></dt>
 <dd><p>Write DataSet to MTZ file.</p>
 <p>If <code class="docutils literal notranslate"><span class="pre">DataSet.merged</span> <span class="pre">==</span> <span class="pre">False</span></code>, the reflections will be mapped to the
 reciprocal space ASU, and a M/ISYM column will be constructed.</p>
