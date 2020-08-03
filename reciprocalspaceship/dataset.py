@@ -234,7 +234,28 @@ class DataSet(pd.DataFrame):
 
     def merge(self, *args, check_isomorphous=True, **kwargs):
         """
-        
+        Merge DataSet or named DataSeries using a database-style join on
+        columns or indices.
+
+        For additional documentation on accepted arguments, see the 
+        `Pandas API Reference page`_.
+
+        .. _Pandas API Reference page: https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.merge.html
+
+        Parameters
+        ----------
+        check_isomorphous : bool
+            If True, the spacegroup and cell attributes of DataSets in `other`
+            will be compared to those of the calling DataSet to ensure
+            they are isomorphous. 
+
+        Returns
+        -------
+        rs.DataSet
+
+        See Also
+        --------
+        DataSet.join : Similar method with support for lists of ``rs`` objects
         """
         right = kwargs.get("right", args[0])
         if check_isomorphous and isinstance(right, DataSet):
@@ -244,6 +265,31 @@ class DataSet(pd.DataFrame):
         return result.__finalize__(self)
 
     def join(self, *args, check_isomorphous=True, **kwargs):
+        """
+        Join DataSets or named DataSeries using a database-style join on
+        columns or indices. This method can be used to join lists ``rs`` objects
+        to a given DataSet. 
+
+        For additional documentation on accepted arguments, see the 
+        `Pandas API Reference page`_.
+
+        .. _Pandas API Reference page: https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.join.html
+
+        Parameters
+        ----------
+        check_isomorphous : bool
+            If True, the spacegroup and cell attributes of DataSets in `other`
+            will be compared to those of the calling DataSet to ensure
+            they are isomorphous. 
+
+        Returns
+        -------
+        rs.DataSet
+
+        See Also
+        --------
+        DataSet.merge : Similar method with added flexibility for distinct column labels
+        """
         other = kwargs.get("other", args[0])
         if check_isomorphous:
             if isinstance(other, (list, tuple)):
