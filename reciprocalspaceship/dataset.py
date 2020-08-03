@@ -187,10 +187,40 @@ class DataSet(pd.DataFrame):
         return io.to_gemmi(self, skip_problem_mtztypes)
     
     def append(self, *args, check_isomorphous=True, **kwargs):
+        """
+        Append rows of `other` to the end of calling DataSet, returning
+        a new DataSet object. Any columns in `other` that are not present
+        in the calling DataSet are added as new columns. 
+
+        For additional documentation on accepted arguments, see the 
+        `Pandas API Reference page`_.
+
+        .. _Pandas API Reference page: https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.append.html
+
+        Parameters
+        ----------
+        check_isomorphous : bool
+            If True, the spacegroup and cell attributes of DataSets in `other`
+            will be compared to those of the calling DataSet to ensure
+            they are isomorphous. 
+
+        Returns
+        -------
+        rs.DataSet
+
+        See Also
+        --------
+        rs.concat : Concatenate ``rs`` objects
+        """
         other = kwargs.get("other", args[0])
         if check_isomorphous:
-            if not self.is_isomorphous(other):
-                raise ValueError("`other` DataSet is not isomorphous")
+            if isinstance(other, (list, tuple)):
+                for o in other:
+                    if isinstance(o, DataSet) and not self.is_isomorphous(o):
+                        raise ValueError("DataSet in `other` is not isomorphous")
+            else:
+                if isinstance(other, DataSet) and not self.is_isomorphous(other):
+                    raise ValueError("`other` DataSet is not isomorphous")
         result = super().append(*args, **kwargs)
 
         # If `ignore_index=True`, the _cache_index_dtypes attribute should
@@ -203,8 +233,11 @@ class DataSet(pd.DataFrame):
         return result.__finalize__(self)
 
     def merge(self, *args, check_isomorphous=True, **kwargs):
+        """
+        
+        """
         right = kwargs.get("right", args[0])
-        if check_isomorphous:
+        if check_isomorphous and isinstance(right, DataSet):
             if not self.is_isomorphous(right):
                 raise ValueError("`right` DataSet is not isomorphous")
         result = super().merge(*args, **kwargs)
@@ -213,8 +246,13 @@ class DataSet(pd.DataFrame):
     def join(self, *args, check_isomorphous=True, **kwargs):
         other = kwargs.get("other", args[0])
         if check_isomorphous:
-            if not self.is_isomorphous(other):
-                raise ValueError("`other` DataSet is not isomorphous")
+            if isinstance(other, (list, tuple)):
+                for o in other:
+                    if isinstance(o, DataSet) and not self.is_isomorphous(o):
+                        raise ValueError("DataSet in `other` is not isomorphous")
+            else:
+                if isinstance(other, DataSet) and not self.is_isomorphous(other):
+                    raise ValueError("`other` DataSet is not isomorphous")
         result = super().join(*args, **kwargs)
         return result.__finalize__(self)
     
