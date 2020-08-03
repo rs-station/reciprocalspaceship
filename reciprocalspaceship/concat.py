@@ -8,9 +8,8 @@ def concat(*args, check_isomorphous=True, **kwargs):
     attributes (such as `cell` and `spacegroup`) are set in the returned DataSet. 
     The returned attributes are inherited from the first object in `objs`.
 
-    For the full documentation, see the `Pandas API Reference page`_. 
-
-    .. _Pandas API Reference page: https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.concat.html
+    For additional documentation on accepted arguments, see the `Pandas API Reference page
+    <https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.concat.html>`_. 
 
     Parameters
     ----------

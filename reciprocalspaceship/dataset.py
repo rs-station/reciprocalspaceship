@@ -193,9 +193,7 @@ class DataSet(pd.DataFrame):
         in the calling DataSet are added as new columns. 
 
         For additional documentation on accepted arguments, see the 
-        `Pandas API Reference page`_.
-
-        .. _Pandas API Reference page: https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.append.html
+        `Pandas DataFrame.append() API <https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.append.html>`_.
 
         Parameters
         ----------
@@ -210,7 +208,7 @@ class DataSet(pd.DataFrame):
 
         See Also
         --------
-        rs.concat : Concatenate ``rs`` objects
+        concat : Concatenate ``rs`` objects
         """
         other = kwargs.get("other", args[0])
         if check_isomorphous:
@@ -238,9 +236,7 @@ class DataSet(pd.DataFrame):
         columns or indices.
 
         For additional documentation on accepted arguments, see the 
-        `Pandas API Reference page`_.
-
-        .. _Pandas API Reference page: https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.merge.html
+        `Pandas DataFrame.merge() API <https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.merge.html>`_.
 
         Parameters
         ----------
@@ -271,9 +267,7 @@ class DataSet(pd.DataFrame):
         to a given DataSet. 
 
         For additional documentation on accepted arguments, see the 
-        `Pandas API Reference page`_.
-
-        .. _Pandas API Reference page: https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.join.html
+        `Pandas DataFrame.join() API <https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.join.html>`_.
 
         Parameters
         ----------
