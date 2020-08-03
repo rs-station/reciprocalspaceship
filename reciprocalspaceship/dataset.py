@@ -109,13 +109,39 @@ class DataSet(pd.DataFrame):
 
         return super().set_index(keys, **kwargs)
 
-    def reset_index(self, **kwargs):
+    def reset_index(self, level=None, drop=False, inplace=False, col_level=0, col_fill=''):
+        """
+        Reset the index or a specific level of a MultiIndex.
 
+        Reset the index to use a numbered RangeIndex. Using the `level`
+        argument, it is possible to reset one or more levels of a MultiIndex.
+
+        Parameters
+        ----------
+        level : int, str, tuple, list
+            Only remove given levels from the index. Defaults to all levels
+        drop : bool
+            Do not try to insert index into dataframe columns.
+        inplace ; bool
+            Modify the DataSet in place (do not create a new object).
+        col_level : int or str
+            If the columns have multiple levels, determines which level 
+            the labels are inserted into. By default it is inserted into
+            the first level.
+        col_fill : object
+            If the columns have multiple levels, determines how the other
+            levels are named. If None then the index name is repeated.
+
+        Returns
+        -------
+        DataSet or None
+            DataSet with the new index or None if `inplace=True`
+        """
+        
         # GH#6: Handle level argument to reset_index
-        columns = kwargs.get("level")
-        if columns is None:
+        columns = level
+        if level is None:
             columns = list(self._cache_index_dtypes.keys())
-        drop = kwargs.get("drop", False)
         
         def _handle_cached_dtypes(dataset, columns, drop):
             """Use _cache_index_dtypes to restore dtypes"""
@@ -128,12 +154,12 @@ class DataSet(pd.DataFrame):
                     dataset[key] = dataset[key].astype(dtype)
             return dataset
         
-        if kwargs.get("inplace", False):
-            super().reset_index(**kwargs)
+        if inplace:
+            super().reset_index(level, drop, inplace, col_level, col_fill)
             _handle_cached_dtypes(self, columns, drop)
             return
         else:
-            dataset = super().reset_index(**kwargs)
+            dataset = super().reset_index(level, drop, inplace, col_level, col_fill)
             dataset._cache_index_dtypes = dataset._cache_index_dtypes.copy()
             dataset = _handle_cached_dtypes(dataset, columns, drop)
             return dataset
