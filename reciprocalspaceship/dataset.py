@@ -135,17 +135,20 @@ class DataSet(pd.DataFrame):
         --------
         DataSet.reset_index : Reset index
         """
+        if not isinstance(keys, list):
+            keys = [keys]
         
         # Copy dtypes of keys to cache
-        if isinstance(keys, (tuple, list)):
-            for key in keys:
-                if isinstance(key, str):
-                    self._cache_index_dtypes[key] = self[key].dtype.name
-                elif isinstance(key, np.ndarray):
-                    self._cache_index_dtypes = key.dtype.name
-        elif isinstance(keys, str):
-            self._cache_index_dtypes[key] = self[key].dtype.name
-                    
+        for key in keys:
+            if isinstance(key, str):
+                self._cache_index_dtypes[key] = self[key].dtype.name
+            elif isinstance(key, (np.ndarray, pd.Index, pd.Series)):
+                self._cache_index_dtypes = key.dtype.name
+            elif isinstance(key, list):
+                self._cache_index_dtypes = type(key[0])
+            else:
+                raise ValueError(f"{key} is not an instance of type str, np.ndarray, pd.Index, pd.Series, or list")
+            
         return super().set_index(keys, drop, append, inplace, verify_integrity)
 
     def reset_index(self, level=None, drop=False, inplace=False, col_level=0, col_fill=''):
