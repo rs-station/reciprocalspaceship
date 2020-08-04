@@ -101,13 +101,52 @@ class DataSet(pd.DataFrame):
     #-------------------------------------------------------------------
     # Methods
     
-    def set_index(self, keys, **kwargs):
+    def set_index(self, keys, drop=True, append=False, inplace=False, verify_integrity=False):
+        """
+        Set the DataSet index using existing columns.
+
+        Set the DataSet index (row labels) using one or more existing 
+        columns or arrays (of the correct length). The index can replace
+        the existing index or expand on it.
+
+        Parameters
+        ----------
+        keys : label or array-like or list of labels/arrays
+            This parameter can be either a single column key, a single 
+            array of the same length as the calling DataSet, or a list 
+            containing an arbitrary combination of column keys and arrays. 
+        drop : bool
+            Whether to delete columns to be used as the new index.
+        append : bool
+            Whether to append columns to existing index.
+        inplace  : bool
+            Modify the DataFrame in place (do not create a new object).
+        verify_integrity : bool
+            Check the new index for duplicates. Otherwise defer the check
+            until necessary. Setting to False will improve the performance 
+            of this method
+
+        Returns
+        -------
+        DataSet or None
+            DataSet with the new index or None if `inplace=True`
+
+        See Also
+        --------
+        DataSet.reset_index : Reset index
+        """
         
         # Copy dtypes of keys to cache
-        for key in keys:
+        if isinstance(keys, (tuple, list)):
+            for key in keys:
+                if isinstance(key, str):
+                    self._cache_index_dtypes[key] = self[key].dtype.name
+                elif isinstance(key, np.ndarray):
+                    self._cache_index_dtypes = key.dtype.name
+        elif isinstance(keys, str):
             self._cache_index_dtypes[key] = self[key].dtype.name
-
-        return super().set_index(keys, **kwargs)
+                    
+        return super().set_index(keys, drop, append, inplace, verify_integrity)
 
     def reset_index(self, level=None, drop=False, inplace=False, col_level=0, col_fill=''):
         """
@@ -136,6 +175,10 @@ class DataSet(pd.DataFrame):
         -------
         DataSet or None
             DataSet with the new index or None if `inplace=True`
+
+        See Also
+        --------
+        DataSet.set_index : Set index
         """
         
         # GH#6: Handle level argument to reset_index
