@@ -45,7 +45,7 @@ def from_structurefactor(sfs):
     phase = rs.DataSeries(np.angle(sfs, deg=True), name="Phi").astype("Phase")
     return sf, phase
 
-def compute_structurefactor_multiplicity(H, sg):
+def compute_structurefactor_multiplicity(H, sg, include_centering=True):
     """
     Parameters
     ----------
@@ -53,6 +53,10 @@ def compute_structurefactor_multiplicity(H, sg):
         n x 3 array of Miller indices
     spacegroup : gemmi.SpaceGroup, gemmi.GroupOps
         The space group to identify the asymmetric unit
+    include_centering : bool
+        Whether or not to include the multiplicity inherent in the lattice centering.
+        The default is True. If False, the minimum value of epsilon will be 1 
+        irrespective of space group.
 
     Returns
     -------
@@ -72,8 +76,12 @@ def compute_structurefactor_multiplicity(H, sg):
 
     #Lookup based on centering is equivalent to counting the number of translational
     #centering operations. Using the number of operations has proven more robust. 
-    L = len(group_ops.cen_ops)
-    L = L*(1 + is_centric)
+    if include_centering:
+        L = (1 + is_centric)
+    else:
+        L = len(group_ops.cen_ops)
+        L = L*(1 + is_centric)
+
     eps = np.zeros(len(H))
     for op in group_ops:
         h = rs.utils.apply_to_hkl(H, op)
