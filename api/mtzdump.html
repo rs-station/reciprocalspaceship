@@ -211,16 +211,21 @@ shell, use the “–embed” argument:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&gt;</span> <span class="n">rs</span><span class="o">.</span><span class="n">mtzdump</span> <span class="n">file</span><span class="o">.</span><span class="n">mtz</span> <span class="o">--</span><span class="n">embed</span>
 </pre></div>
 </div>
+<p>If multiple MTZ files are listed, they will be summarized sequentially,
+and can be accessed in an IPython shell as a dictionary called <cite>mtzs</cite>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&gt;</span> <span class="n">rs</span><span class="o">.</span><span class="n">mtzdump</span> <span class="n">file1</span><span class="o">.</span><span class="n">mtz</span> <span class="n">file2</span><span class="o">.</span><span class="n">mtz</span> <span class="n">file3</span><span class="o">.</span><span class="n">mtz</span> <span class="o">--</span><span class="n">embed</span>
+</pre></div>
+</div>
 </div>
 <div class="section" id="usage-details">
 <h2>Usage Details<a class="headerlink" href="#usage-details" title="Permalink to this headline">¶</a></h2>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">usage: rs.mtzdump [-h] [--embed] [-p PRECISION] mtz</span>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">usage: rs.mtzdump [-h] [--embed] [-p PRECISION] mtz [mtz ...]</span>
 </pre></div>
 </div>
 <dl class="std option">
 <dt id="cmdoption-rs.mtzdump-arg-mtz">
 <code class="sig-name descname">mtz</code><code class="sig-prename descclassname"></code><a class="headerlink" href="#cmdoption-rs.mtzdump-arg-mtz" title="Permalink to this definition">¶</a></dt>
-<dd><p>MTZ file to summarize</p>
+<dd><p>MTZ file(s) to summarize</p>
 </dd></dl>
 
 <dl class="std option">
@@ -232,7 +237,7 @@ shell, use the “–embed” argument:</p>
 <dl class="std option">
 <dt id="cmdoption-rs.mtzdump-embed">
 <code class="sig-name descname">--embed</code><code class="sig-prename descclassname"></code><a class="headerlink" href="#cmdoption-rs.mtzdump-embed" title="Permalink to this definition">¶</a></dt>
-<dd><p>MTZ file will be summarized, and an IPython shell will be started</p>
+<dd><p>MTZ file(s) will be summarized, and an IPython shell will be started</p>
 </dd></dl>
 
 <dl class="std option">
