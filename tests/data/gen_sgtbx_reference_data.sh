@@ -1,5 +1,6 @@
 #!/usr/bin/env cctbx.python 
 import pandas as pd
+import gemmi
 from cctbx import sgtbx
 from cctbx import miller
 from os import remove,path
@@ -36,7 +37,7 @@ def valid_phases(sg, h):
         return '"None"'
 
 with open(outFN, 'w') as f:
-    f.write("xhm,hall,hm,h,k,l,h_asu,k_asu,l_asu,in_asu,is_centric,is_absent,epsilon,phase_restrictions\n")
+    f.write("xhm,hall,hm,h,k,l,h_asu,k_asu,l_asu,in_asu,is_centric,is_absent,epsilon,gemmi_epsilon,gemmi_epsilon_without_centering,phase_restrictions\n")
     for s in tqdm(list(sgtbx.space_group_symbol_iterator())):
         hall = s.hall()
         hm   = s.hermann_mauguin()
@@ -48,7 +49,31 @@ with open(outFN, 'w') as f:
         is_centric = [sg.is_centric(h.tolist()) for h in H]
         is_absent  =  [sg.is_sys_absent(h.tolist()) for h in H]
         epsilons   =  [sg.epsilon(h.tolist()) for h in H]
-        for h,h_asu,inside,centric,absent,epsilon in zip(H, H_asu, in_asu, is_centric, is_absent, epsilons):
+
+        gemmi_sg = gemmi.SpaceGroup(xhm)
+        gemmi_go = gemmi_sg.operations()
+        gemmi_epsilons = [gemmi_go.epsilon_factor(h) for h in H]
+        gemmi_epsilons_without_centering = [gemmi_go.epsilon_factor_without_centering(h) for h in H]
+
+        for [
+          h,
+          h_asu,
+          inside,
+          centric,
+          absent,
+          epsilon,
+          gemmi_epsilon,
+          gemmi_epsilon_without_centering
+          ] in zip(
+            H, 
+            H_asu, 
+            in_asu, 
+            is_centric, 
+            is_absent, 
+            epsilons, 
+            gemmi_epsilons,
+            gemmi_epsilons_without_centering
+          ):
             phase_restrictions = valid_phases(sg, h)
             f.write(','.join([
                 xhm,
@@ -64,6 +89,8 @@ with open(outFN, 'w') as f:
 		            str(centric),
 		            str(absent),
 		            str(epsilon),
+		            str(gemmi_epsilon),
+		            str(gemmi_epsilon),
                 phase_restrictions,
             ]) + '\n')
 
