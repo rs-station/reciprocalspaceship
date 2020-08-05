@@ -90,7 +90,7 @@ with open(outFN, 'w') as f:
 		            str(absent),
 		            str(epsilon),
 		            str(gemmi_epsilon),
-		            str(gemmi_epsilon),
+		            str(gemmi_epsilon_without_centering),
                 phase_restrictions,
             ]) + '\n')
 
