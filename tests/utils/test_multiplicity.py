@@ -22,14 +22,16 @@ def test_multiplicity_epsilon(sgtbx_by_xhm, sg_type):
     reference = reference[idx]
 
     H = reference[['h', 'k', 'l']].to_numpy()
-    reference_epsilon_without_centering = reference['epsilon'].to_numpy() #This is computed by sgtbx
-    reference_epsilon = reference['gemmi_epsilon'].to_numpy() #This is computed by gemmi
+    sgtbx_epsilon_without_centering = reference['epsilon'].to_numpy() #This is computed by sgtbx
+    gemmi_epsilon = reference['gemmi_epsilon'].to_numpy() #This is computed by gemmi
+    gemmi_epsilon_without_centering = reference['gemmi_epsilon_without_centering'].to_numpy() #This is computed by gemmi
     if sg_type is gemmi.SpaceGroup:
         sg = gemmi.SpaceGroup(xhm)
     elif sg_type is gemmi.GroupOps:
         sg  = gemmi.SpaceGroup(xhm).operations()
     epsilon = rs.utils.compute_structurefactor_multiplicity(H, sg)
     epsilon_without_centering = rs.utils.compute_structurefactor_multiplicity(H, sg, include_centering=False)
-    assert np.array_equal(epsilon, reference_epsilon)
-    assert np.array_equal(epsilon_without_centering, reference_epsilon_without_centering)
+    assert np.array_equal(epsilon_without_centering, sgtbx_epsilon_without_centering)
+    assert np.array_equal(epsilon_without_centering, gemmi_epsilon_without_centering)
+    assert np.array_equal(epsilon, gemmi_epsilon)
 
