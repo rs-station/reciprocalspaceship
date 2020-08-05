@@ -8,10 +8,11 @@ def from_gemmi(gemmi_mtz):
     """
     Construct DataSet from gemmi.Mtz object
     
-    If the gemmi.Mtz object contains an M/ISYM column, an unmerged
-    DataSet will be constructed. The Miller indices will be mapped to
-    their observed values, and a partiality flag will be extracted 
-    and stored as a boolean column with the label, ``PARTIAL``. 
+    If the gemmi.Mtz object contains an M/ISYM column and contains duplicated
+    Miller indices, an unmerged DataSet will be constructed. The Miller indices 
+    will be mapped to their observed values, and a partiality flag will be 
+    extracted and stored as a boolean column with the label, ``PARTIAL``. 
+    Otherwise, a merged DataSet will be constructed.
 
     If columns are found with the ``MTZInt`` dtype and are labeled ``PARTIAL``
     or ``CENTRIC``, these will be interpreted as boolean flags used to 
@@ -40,7 +41,7 @@ def from_gemmi(gemmi_mtz):
 
     # Handle unmerged DataSet. Raise ValueError if M/ISYM column is not unique
     m_isym = dataset.get_m_isym_keys()
-    if m_isym:
+    if m_isym and dataset.index.duplicated().any():
         if len(m_isym) == 1:
             dataset.merged = False
             dataset.hkl_to_observed(m_isym[0], inplace=True)
@@ -116,10 +117,11 @@ def read_mtz(mtzfile):
     """
     Populate the dataset object with data from an MTZ reflection file.
 
-    If the MTZ file contains an M/ISYM column, an unmerged
-    DataSet will be constructed. The Miller indices will be mapped to
-    their observed values, and a partiality flag will be extracted 
-    and stored as a boolean column with the label, ``PARTIAL``. 
+    If the gemmi.Mtz object contains an M/ISYM column and contains duplicated
+    Miller indices, an unmerged DataSet will be constructed. The Miller indices 
+    will be mapped to their observed values, and a partiality flag will be 
+    extracted and stored as a boolean column with the label, ``PARTIAL``. 
+    Otherwise, a merged DataSet will be constructed.
 
     If columns are found with the ``MTZInt`` dtype and are labeled ``PARTIAL``
     or ``CENTRIC``, these will be interpreted as boolean flags used to 
