@@ -56,6 +56,9 @@ class MTZIntegerArray(IntegerArray):
         values, mask = coerce_to_array(values, dtype=original.dtype)
         return cls(values, mask)
 
+    def reshape(self, *args, **kwargs):
+        return self._data.reshape(*args, **kwargs)
+
     def value_counts(self, dropna=True):
         """
         Returns a DataSeries containing counts of each category.
@@ -178,6 +181,9 @@ class NumpyExtensionArray(ExtensionArray, ExtensionScalarOpsMixin):
     def nbytes(self):
         return self._itemsize * len(self)
 
+    def reshape(self, *args, **kwargs):
+        return self.data.reshape(*args, **kwargs)
+    
     def _formatter(self, boxed=False):
         def fmt(x):
             if np.isnan(x):
