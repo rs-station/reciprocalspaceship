@@ -22,9 +22,14 @@ Usage Details
 -------------
 """
 import argparse
-from pylab import *
 import pandas as pd
 import reciprocalspaceship as rs
+
+# If matplotlib is available, use pylab to setup IPython environment
+try:
+    from pylab import *
+except:
+    pass
 
 def parse_arguments():
     """Parse commandline arguments"""
