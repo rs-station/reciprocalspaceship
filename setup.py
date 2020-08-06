@@ -49,8 +49,8 @@ setup(
     install_requires=[
         "gemmi >= 0.4.0.post1",
         "pandas >= 1.1.0rc",
-        "numpy >  1.0",
-        "scipy > 1.4",
+        "numpy",
+        "scipy",
         "IPython", 
     ],
     setup_requires=['pytest-runner'],
