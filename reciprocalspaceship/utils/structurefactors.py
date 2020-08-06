@@ -115,11 +115,7 @@ def is_centric(H, spacegroup):
         raise ValueError(f"gemmi.SpaceGroup or gemmi.GroupOps expected for parameter sg. "
                          f"Received object of type: ({type(spacegroup)}) instead.")
 
-    hkl,inverse = np.unique(H, axis=0, return_inverse=True)
-    centric = np.zeros(len(hkl), dtype=bool)
-
-    for op in group_ops.sym_ops[1:]:
-        newhkl = rs.utils.apply_to_hkl(hkl, op)
-        centric = np.all(newhkl == -hkl, 1) | centric
+    hkl, inverse = np.unique(H, axis=0, return_inverse=True)
+    centric = group_ops.centric_flag_array(hkl)
     return centric[inverse]
 

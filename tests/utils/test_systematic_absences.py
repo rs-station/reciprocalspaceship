@@ -10,9 +10,6 @@ def test_systematic_absences(sgtbx_by_xhm):
     """
     xhm = sgtbx_by_xhm[0]
     reference = sgtbx_by_xhm[1]
-
-    if xhm in {"R 3 c :R", "R -3 c :R"}:
-        pytest.xfail("Issues with hexagonal lattices: {xhm}")
     
     H = reference[['h', 'k', 'l']].to_numpy()
     groupops = gemmi.SpaceGroup(xhm)

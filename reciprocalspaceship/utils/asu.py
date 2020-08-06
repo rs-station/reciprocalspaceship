@@ -189,18 +189,4 @@ def hkl_is_absent(H, sg):
     absent : array
         Boolean array of length n. absent[i] == True if H[i] is systematically absent in sg.
     """
-
-    H,_ = hkl_to_asu(H, sg)
-    n = len(H)
-
-    group_ops = sg.operations()
-
-    absent = np.zeros(n, dtype=bool)
-    for op in group_ops.sym_ops:
-        absent |= np.all(apply_to_hkl(H, op) == H, 1) & ~np.isclose(phase_shift(H, op)%(2.*np.pi), 0.)
-
-    CEN_OPS_DEN = 24
-    for tran in group_ops.cen_ops:
-        absent |= np.matmul(H, tran) % CEN_OPS_DEN != 0
-
-    return absent 
+    return sg.operations().systematic_absences(H)
