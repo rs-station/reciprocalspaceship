@@ -198,6 +198,7 @@ def test_compute_dHKL(dataset_hkl, inplace, cell):
                                 gemmi.Op("x,y,-z"),
                                 gemmi.Op("x,-y,-z"),
                                 gemmi.Op("-x,y,-z"),
+                                5,
 ])
 def test_apply_symop_hkl(data_fmodel, inplace, op):
     """
@@ -208,8 +209,10 @@ def test_apply_symop_hkl(data_fmodel, inplace, op):
 
     copy = data_fmodel.copy()
 
-    if isinstance(op, gemmi.Op):
-
+    if isinstance(op, (gemmi.Op, str)):
+        if isinstance(op, str):
+            op = gemmi.Op(op)
+        
         result = data_fmodel.apply_symop(op, inplace=inplace)
         expectedH = [ op.apply_to_hkl(h) for h in copy.get_hkls() ]
         expectedH = np.array(expectedH)

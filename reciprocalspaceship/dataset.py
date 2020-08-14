@@ -421,12 +421,14 @@ class DataSet(pd.DataFrame):
 
         Parameters
         ----------
-        symop : gemmi.Op
-            Gemmi symmetry operation
+        symop : str, gemmi.Op
+            Gemmi symmetry operation or string representing symmetry op
         inplace : bool
             Whether to return a new DataFrame or make the change in place
         """
-        if not isinstance(symop, gemmi.Op):
+        if isinstance(symop, str):
+            symop = gemmi.Op(symop)
+        elif not isinstance(symop, gemmi.Op):
             raise ValueError(f"Provided symop is not of type gemmi.Op")
 
         if inplace:
