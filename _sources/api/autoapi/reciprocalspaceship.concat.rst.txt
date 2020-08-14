@@ -1,4 +1,4 @@
-reciprocalspaceship.concat
+﻿reciprocalspaceship.concat
 ==========================
 
 .. currentmodule:: reciprocalspaceship

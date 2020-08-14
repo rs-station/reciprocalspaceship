@@ -1,4 +1,4 @@
-reciprocalspaceship.summarize\_mtz\_dtypes
+﻿reciprocalspaceship.summarize\_mtz\_dtypes
 ==========================================
 
 .. currentmodule:: reciprocalspaceship

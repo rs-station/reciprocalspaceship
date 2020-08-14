@@ -198,7 +198,7 @@
 <h1>DataSet<a class="headerlink" href="#dataset" title="Permalink to this headline">¶</a></h1>
 <dl class="py class">
 <dt id="reciprocalspaceship.DataSet">
-<em class="property">class </em><code class="sig-prename descclassname">reciprocalspaceship.</code><code class="sig-name descname">DataSet</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">data</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">index</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">columns</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">dtype</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">copy</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">spacegroup</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">cell</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">merged</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/Hekstra-Lab/reciprocalspaceship/blob/master/reciprocalspaceship/dataset.py#L17-L933"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#reciprocalspaceship.DataSet" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">reciprocalspaceship.</code><code class="sig-name descname">DataSet</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">data</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">index</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">columns</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">dtype</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">copy</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">spacegroup</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">cell</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">merged</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/Hekstra-Lab/reciprocalspaceship/blob/master/reciprocalspaceship/dataset.py#L17-L935"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#reciprocalspaceship.DataSet" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">pandas.core.frame.DataFrame</span></code></p>
 <p>Representation of a crystallographic dataset.</p>
 <p>A DataSet object provides a tabular representation of reflection data.
@@ -309,7 +309,7 @@ in the calling DataSet are added as new columns.</p>
 <a class="reference external" href="https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.append.html">Pandas DataFrame.append() API</a>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>check_isomorphous</strong> (<em>bool</em>) – If True, the spacegroup and cell attributes of DataSets in <cite>other</cite>
+<dd class="field-odd"><p><strong>check_isomorphous</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code>) – If True, the spacegroup and cell attributes of DataSets in <cite>other</cite>
 will be compared to those of the calling DataSet to ensure
 they are isomorphous.</p>
 </dd>
@@ -328,13 +328,13 @@ they are isomorphous.</p>
 
 <dl class="py method">
 <dt id="reciprocalspaceship.DataSet.apply_symop">
-<code class="sig-name descname">apply_symop</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">symop</span></em>, <em class="sig-param"><span class="n">inplace</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/Hekstra-Lab/reciprocalspaceship/blob/master/reciprocalspaceship/dataset.py#L418-L452"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#reciprocalspaceship.DataSet.apply_symop" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">apply_symop</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">symop</span></em>, <em class="sig-param"><span class="n">inplace</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/Hekstra-Lab/reciprocalspaceship/blob/master/reciprocalspaceship/dataset.py#L418-L454"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#reciprocalspaceship.DataSet.apply_symop" title="Permalink to this definition">¶</a></dt>
 <dd><p>Apply symmetry operation to all reflections in DataSet object.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>symop</strong> (<em>gemmi.Op</em>) – Gemmi symmetry operation</p></li>
-<li><p><strong>inplace</strong> (<em>bool</em>) – Whether to return a new DataFrame or make the change in place</p></li>
+<li><p><strong>symop</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">gemmi.Op</span></code>) – Gemmi symmetry operation or string representing symmetry op</p></li>
+<li><p><strong>inplace</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code>) – Whether to return a new DataFrame or make the change in place</p></li>
 </ul>
 </dd>
 </dl>
@@ -342,13 +342,13 @@ they are isomorphous.</p>
 
 <dl class="py method">
 <dt id="reciprocalspaceship.DataSet.canonicalize_phases">
-<code class="sig-name descname">canonicalize_phases</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">inplace</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/Hekstra-Lab/reciprocalspaceship/blob/master/reciprocalspaceship/dataset.py#L910-L933"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#reciprocalspaceship.DataSet.canonicalize_phases" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">canonicalize_phases</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">inplace</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/Hekstra-Lab/reciprocalspaceship/blob/master/reciprocalspaceship/dataset.py#L912-L935"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#reciprocalspaceship.DataSet.canonicalize_phases" title="Permalink to this definition">¶</a></dt>
 <dd><p>Canonicalize columns with phase data to fall in the interval between
 -180 and 180 degrees. This method will modify the values within any
 column composed of data with the PhaseDtype.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>inplace</strong> (<em>bool</em>) – Whether to modify the DataSet in place or return a copy</p>
+<dd class="field-odd"><p><strong>inplace</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code>) – Whether to modify the DataSet in place or return a copy</p>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p><em>DataSet</em></p>
@@ -364,12 +364,12 @@ column composed of data with the PhaseDtype.</p>
 
 <dl class="py method">
 <dt id="reciprocalspaceship.DataSet.compute_dHKL">
-<code class="sig-name descname">compute_dHKL</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">inplace</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/Hekstra-Lab/reciprocalspaceship/blob/master/reciprocalspaceship/dataset.py#L528-L545"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#reciprocalspaceship.DataSet.compute_dHKL" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">compute_dHKL</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">inplace</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/Hekstra-Lab/reciprocalspaceship/blob/master/reciprocalspaceship/dataset.py#L530-L547"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#reciprocalspaceship.DataSet.compute_dHKL" title="Permalink to this definition">¶</a></dt>
 <dd><p>Compute the real space lattice plane spacing, d, associated with
 the HKL indices in the object.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>inplace</strong> (<em>bool</em>) – Whether to add the column in place or return a copy</p>
+<dd class="field-odd"><p><strong>inplace</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code>) – Whether to add the column in place or return a copy</p>
 </dd>
 </dl>
 </dd></dl>
@@ -388,7 +388,7 @@ or <code class="docutils literal notranslate"><span class="pre">CENTRIC</span></
 label partial or centric reflections, respectively.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>gemmiMtz</strong> (<em>gemmi.Mtz</em>)</p>
+<dd class="field-odd"><p><strong>gemmiMtz</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">gemmi.Mtz</span></code>)</p>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p><em>DataSet</em></p>
@@ -398,11 +398,11 @@ label partial or centric reflections, respectively.</p>
 
 <dl class="py method">
 <dt id="reciprocalspaceship.DataSet.get_hkls">
-<code class="sig-name descname">get_hkls</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/Hekstra-Lab/reciprocalspaceship/blob/master/reciprocalspaceship/dataset.py#L454-L464"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#reciprocalspaceship.DataSet.get_hkls" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">get_hkls</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/Hekstra-Lab/reciprocalspaceship/blob/master/reciprocalspaceship/dataset.py#L456-L466"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#reciprocalspaceship.DataSet.get_hkls" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the Miller indices in the DataSet as a ndarray.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p><strong>hkl</strong> (<em>ndarray, shape=(n_reflections, 3)</em>) – Miller indices in DataSet</p>
+<dd class="field-odd"><p><strong>hkl</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">shape=(n_reflections</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">3)</span></code>) – Miller indices in DataSet</p>
 </dd>
 </dl>
 </dd></dl>
@@ -413,7 +413,7 @@ label partial or centric reflections, respectively.</p>
 <dd><p>Return column labels for data with M/ISYM dtype.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p><strong>key</strong> (<em>list of strings</em>) – list of column labels with <code class="docutils literal notranslate"><span class="pre">M/ISYM</span></code> dtype</p>
+<dd class="field-odd"><p><strong>key</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code> of <code class="xref py py-class docutils literal notranslate"><span class="pre">strings</span></code>) – list of column labels with <code class="docutils literal notranslate"><span class="pre">M/ISYM</span></code> dtype</p>
 </dd>
 </dl>
 </dd></dl>
@@ -424,14 +424,14 @@ label partial or centric reflections, respectively.</p>
 <dd><p>Return column labels for data with Phase dtype.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p><strong>keys</strong> (<em>list of strings</em>) – list of column labels with <code class="docutils literal notranslate"><span class="pre">Phase</span></code> dtype</p>
+<dd class="field-odd"><p><strong>keys</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code> of <code class="xref py py-class docutils literal notranslate"><span class="pre">strings</span></code>) – list of column labels with <code class="docutils literal notranslate"><span class="pre">Phase</span></code> dtype</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
 <dt id="reciprocalspaceship.DataSet.hkl_to_asu">
-<code class="sig-name descname">hkl_to_asu</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">inplace</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/Hekstra-Lab/reciprocalspaceship/blob/master/reciprocalspaceship/dataset.py#L768-L831"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#reciprocalspaceship.DataSet.hkl_to_asu" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">hkl_to_asu</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">inplace</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/Hekstra-Lab/reciprocalspaceship/blob/master/reciprocalspaceship/dataset.py#L770-L833"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#reciprocalspaceship.DataSet.hkl_to_asu" title="Permalink to this definition">¶</a></dt>
 <dd><p>Map HKL indices to the reciprocal space asymmetric unit. If phases
 are included in the DataSet, they will be changed according to the
 phase shift associated with the necessary symmetry operation.</p>
@@ -441,7 +441,7 @@ construct a proper M/ISYM column. Both merged and unmerged DataSets
 will have an M/ISYM column added.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>inplace</strong> (<em>bool</em>) – Whether to modify the DataSet in place or return a copy</p>
+<dd class="field-odd"><p><strong>inplace</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code>) – Whether to modify the DataSet in place or return a copy</p>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p><em>DataSet</em></p>
@@ -458,7 +458,7 @@ will have an M/ISYM column added.</p>
 
 <dl class="py method">
 <dt id="reciprocalspaceship.DataSet.hkl_to_observed">
-<code class="sig-name descname">hkl_to_observed</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">m_isym</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">inplace</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/Hekstra-Lab/reciprocalspaceship/blob/master/reciprocalspaceship/dataset.py#L833-L908"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#reciprocalspaceship.DataSet.hkl_to_observed" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">hkl_to_observed</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">m_isym</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">inplace</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/Hekstra-Lab/reciprocalspaceship/blob/master/reciprocalspaceship/dataset.py#L835-L910"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#reciprocalspaceship.DataSet.hkl_to_observed" title="Permalink to this definition">¶</a></dt>
 <dd><p>Map HKL indices to their observed index using an <code class="docutils literal notranslate"><span class="pre">M/ISYM</span></code> column.
 This method applies the symmetry operation specified by the <code class="docutils literal notranslate"><span class="pre">M/ISYM</span></code>
 column to each Miller index in the DataSet. If phases are included
@@ -472,10 +472,10 @@ a partiality flag is not added.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>m_isym</strong> (<em>str</em>) – Column label for M/ISYM values in DataSet. If m_isym is None
+<li><p><strong>m_isym</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – Column label for M/ISYM values in DataSet. If m_isym is None
 and a single M/ISYM column is present, it will automatically
 be used.</p></li>
-<li><p><strong>inplace</strong> (<em>bool</em>) – Whether to modify the DataSet in place or return a copy</p></li>
+<li><p><strong>inplace</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code>) – Whether to modify the DataSet in place or return a copy</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -493,7 +493,7 @@ be used.</p></li>
 
 <dl class="py method">
 <dt id="reciprocalspaceship.DataSet.infer_mtz_dtypes">
-<code class="sig-name descname">infer_mtz_dtypes</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">inplace</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">index</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/Hekstra-Lab/reciprocalspaceship/blob/master/reciprocalspaceship/dataset.py#L484-L526"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#reciprocalspaceship.DataSet.infer_mtz_dtypes" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">infer_mtz_dtypes</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">inplace</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">index</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/Hekstra-Lab/reciprocalspaceship/blob/master/reciprocalspaceship/dataset.py#L486-L528"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#reciprocalspaceship.DataSet.infer_mtz_dtypes" title="Permalink to this definition">¶</a></dt>
 <dd><p>Infers MTZ dtypes from column names and underlying data. This
 method iterates over each column in the DataSet and tries to infer
 its proper MTZ dtype based on common MTZ naming conventions.</p>
@@ -503,8 +503,8 @@ in the index.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>inplace</strong> (<em>bool</em>) – Whether to modify the dtypes in place or to return a copy</p></li>
-<li><p><strong>index</strong> (<em>bool</em>) – Infer MTZ dtypes for named column(s) in the DataSet index</p></li>
+<li><p><strong>inplace</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code>) – Whether to modify the dtypes in place or to return a copy</p></li>
+<li><p><strong>index</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code>) – Infer MTZ dtypes for named column(s) in the DataSet index</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -522,7 +522,7 @@ in the index.</p>
 
 <dl class="py method">
 <dt id="reciprocalspaceship.DataSet.is_isomorphous">
-<code class="sig-name descname">is_isomorphous</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">other</span></em>, <em class="sig-param"><span class="n">cell_threshold</span><span class="o">=</span><span class="default_value">0.05</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/Hekstra-Lab/reciprocalspaceship/blob/master/reciprocalspaceship/dataset.py#L726-L766"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#reciprocalspaceship.DataSet.is_isomorphous" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">is_isomorphous</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">other</span></em>, <em class="sig-param"><span class="n">cell_threshold</span><span class="o">=</span><span class="default_value">0.05</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/Hekstra-Lab/reciprocalspaceship/blob/master/reciprocalspaceship/dataset.py#L728-L768"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#reciprocalspaceship.DataSet.is_isomorphous" title="Permalink to this definition">¶</a></dt>
 <dd><p>Determine whether DataSet is isomorphous to another DataSet. This
 method confirms isomorphism by ensuring the spacegroups are equivalent,
 and that the cell parameters are within a specified percentage
@@ -530,8 +530,8 @@ and that the cell parameters are within a specified percentage
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>other</strong> (<em>rs.DataSet</em>) – DataSet to which it will be compared</p></li>
-<li><p><strong>cell_threshold</strong> (<em>float</em>) – Acceptable percent difference between unit cell parameters</p></li>
+<li><p><strong>other</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">rs.DataSet</span></code>) – DataSet to which it will be compared</p></li>
+<li><p><strong>cell_threshold</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>) – Acceptable percent difference between unit cell parameters</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -550,7 +550,7 @@ to a given DataSet.</p>
 <a class="reference external" href="https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.join.html">Pandas DataFrame.join() API</a>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>check_isomorphous</strong> (<em>bool</em>) – If True, the spacegroup and cell attributes of DataSets in <cite>other</cite>
+<dd class="field-odd"><p><strong>check_isomorphous</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code>) – If True, the spacegroup and cell attributes of DataSets in <cite>other</cite>
 will be compared to those of the calling DataSet to ensure
 they are isomorphous.</p>
 </dd>
@@ -569,12 +569,12 @@ they are isomorphous.</p>
 
 <dl class="py method">
 <dt id="reciprocalspaceship.DataSet.label_centrics">
-<code class="sig-name descname">label_centrics</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">inplace</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/Hekstra-Lab/reciprocalspaceship/blob/master/reciprocalspaceship/dataset.py#L466-L482"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#reciprocalspaceship.DataSet.label_centrics" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">label_centrics</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">inplace</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/Hekstra-Lab/reciprocalspaceship/blob/master/reciprocalspaceship/dataset.py#L468-L484"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#reciprocalspaceship.DataSet.label_centrics" title="Permalink to this definition">¶</a></dt>
 <dd><p>Label centric reflections in DataSet. A new column of
 booleans, “CENTRIC”, is added to the object.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>inplace</strong> (<em>bool</em>) – Whether to add the column in place or to return a copy</p>
+<dd class="field-odd"><p><strong>inplace</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code>) – Whether to add the column in place or to return a copy</p>
 </dd>
 </dl>
 </dd></dl>
@@ -588,7 +588,7 @@ columns or indices.</p>
 <a class="reference external" href="https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.merge.html">Pandas DataFrame.merge() API</a>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>check_isomorphous</strong> (<em>bool</em>) – If True, the spacegroup and cell attributes of DataSets in <cite>other</cite>
+<dd class="field-odd"><p><strong>check_isomorphous</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code>) – If True, the spacegroup and cell attributes of DataSets in <cite>other</cite>
 will be compared to those of the calling DataSet to ensure
 they are isomorphous.</p>
 </dd>
@@ -620,13 +620,13 @@ argument, it is possible to reset one or more levels of a MultiIndex.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>level</strong> (<em>int, str, tuple, list</em>) – Only remove given levels from the index. Defaults to all levels</p></li>
-<li><p><strong>drop</strong> (<em>bool</em>) – Do not try to insert index into dataframe columns.</p></li>
+<li><p><strong>level</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">tuple</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code>) – Only remove given levels from the index. Defaults to all levels</p></li>
+<li><p><strong>drop</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code>) – Do not try to insert index into dataframe columns.</p></li>
 <li><p><strong>inplace ; bool</strong> – Modify the DataSet in place (do not create a new object).</p></li>
-<li><p><strong>col_level</strong> (<em>int or str</em>) – If the columns have multiple levels, determines which level
+<li><p><strong>col_level</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code> or <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – If the columns have multiple levels, determines which level
 the labels are inserted into. By default it is inserted into
 the first level.</p></li>
-<li><p><strong>col_fill</strong> (<em>object</em>) – If the columns have multiple levels, determines how the other
+<li><p><strong>col_fill</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code>) – If the columns have multiple levels, determines how the other
 levels are named. If None then the index name is repeated.</p></li>
 </ul>
 </dd>
@@ -653,13 +653,13 @@ the existing index or expand on it.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>keys</strong> (<em>label or array-like or list of labels/arrays</em>) – This parameter can be either a single column key, a single
+<li><p><strong>keys</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">label</span></code> or <code class="xref py py-class docutils literal notranslate"><span class="pre">array-like</span></code> or <code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code> of <code class="xref py py-class docutils literal notranslate"><span class="pre">labels/arrays</span></code>) – This parameter can be either a single column key, a single
 array of the same length as the calling DataSet, or a list
 containing an arbitrary combination of column keys and arrays.</p></li>
-<li><p><strong>drop</strong> (<em>bool</em>) – Whether to delete columns to be used as the new index.</p></li>
-<li><p><strong>append</strong> (<em>bool</em>) – Whether to append columns to existing index.</p></li>
-<li><p><strong>inplace</strong> (<em>bool</em>) – Modify the DataFrame in place (do not create a new object).</p></li>
-<li><p><strong>verify_integrity</strong> (<em>bool</em>) – Check the new index for duplicates. Otherwise defer the check
+<li><p><strong>drop</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code>) – Whether to delete columns to be used as the new index.</p></li>
+<li><p><strong>append</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code>) – Whether to append columns to existing index.</p></li>
+<li><p><strong>inplace</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code>) – Modify the DataFrame in place (do not create a new object).</p></li>
+<li><p><strong>verify_integrity</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code>) – Check the new index for duplicates. Otherwise defer the check
 until necessary. Setting to False will improve the performance
 of this method</p></li>
 </ul>
@@ -685,7 +685,7 @@ of this method</p></li>
 
 <dl class="py method">
 <dt id="reciprocalspaceship.DataSet.stack_anomalous">
-<code class="sig-name descname">stack_anomalous</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">plus_labels</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">minus_labels</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/Hekstra-Lab/reciprocalspaceship/blob/master/reciprocalspaceship/dataset.py#L547-L641"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#reciprocalspaceship.DataSet.stack_anomalous" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">stack_anomalous</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">plus_labels</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">minus_labels</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/Hekstra-Lab/reciprocalspaceship/blob/master/reciprocalspaceship/dataset.py#L549-L643"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#reciprocalspaceship.DataSet.stack_anomalous" title="Permalink to this definition">¶</a></dt>
 <dd><p>Convert data from two-column anomalous format to one-column
 format. Intensities, structure factor amplitudes, or other data
 are converted from separate columns corresponding to a single
@@ -710,9 +710,9 @@ and that Friedel-minus column labels are suffixed with (-)</p></li>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>plus_labels</strong> (<em>str or list-like</em>) – Column label or list of column labels of data associated with
+<li><p><strong>plus_labels</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code> or <code class="xref py py-class docutils literal notranslate"><span class="pre">list-like</span></code>) – Column label or list of column labels of data associated with
 Friedel-plus reflection (Defaults to columns suffixed with “(+)”)</p></li>
-<li><p><strong>minus_labels</strong> (<em>str or list-like</em>) – Column label or list of column labels of data associated with
+<li><p><strong>minus_labels</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code> or <code class="xref py py-class docutils literal notranslate"><span class="pre">list-like</span></code>) – Column label or list of column labels of data associated with
 Friedel-minus reflection (Defaults to columns suffixed with “(-)”)</p></li>
 </ul>
 </dd>
@@ -740,7 +740,7 @@ in the DataSet, these will be cast to the <code class="docutils literal notransl
 in the gemmi.Mtz object.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>skip_problem_mtztypes</strong> (<em>bool</em>) – Whether to skip columns in DataSet that do not have specified
+<dd class="field-odd"><p><strong>skip_problem_mtztypes</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code>) – Whether to skip columns in DataSet that do not have specified
 MTZ datatypes</p>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -751,7 +751,7 @@ MTZ datatypes</p>
 
 <dl class="py method">
 <dt id="reciprocalspaceship.DataSet.unstack_anomalous">
-<code class="sig-name descname">unstack_anomalous</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">columns</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">suffixes</span><span class="o">=</span><span class="default_value">'(+)', '(-)'</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/Hekstra-Lab/reciprocalspaceship/blob/master/reciprocalspaceship/dataset.py#L643-L724"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#reciprocalspaceship.DataSet.unstack_anomalous" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">unstack_anomalous</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">columns</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">suffixes</span><span class="o">=</span><span class="default_value">'(+)', '(-)'</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/Hekstra-Lab/reciprocalspaceship/blob/master/reciprocalspaceship/dataset.py#L645-L726"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#reciprocalspaceship.DataSet.unstack_anomalous" title="Permalink to this definition">¶</a></dt>
 <dd><p>Convert data from one-column format to two-column anomalous
 format. Provided column labels are converted from separate rows
 indexed by their Friedel-plus or Friedel-minus Miller index to
@@ -772,10 +772,10 @@ mapped back to their observed Miller index.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>columns</strong> (<em>str or list-like</em>) – Column label or list of column labels of data that should be
+<li><p><strong>columns</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code> or <code class="xref py py-class docutils literal notranslate"><span class="pre">list-like</span></code>) – Column label or list of column labels of data that should be
 associated with Friedel pairs. If None, all columns are
 converted are converted to the two-column anomalous format.</p></li>
-<li><p><strong>suffixes</strong> (<em>tuple or list  of str</em>) – Suffixes to append to Friedel-plus and Friedel-minus data
+<li><p><strong>suffixes</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">tuple</span></code> or list  of <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – Suffixes to append to Friedel-plus and Friedel-minus data
 columns</p></li>
 </ul>
 </dd>
@@ -804,8 +804,8 @@ in the output MTZ file.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>mtzfile</strong> (<em>str or file</em>) – name of an mtz file or a file object</p></li>
-<li><p><strong>skip_problem_mtztypes</strong> (<em>bool</em>) – Whether to skip columns in DataSet that do not have specified
+<li><p><strong>mtzfile</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code> or <code class="xref py py-class docutils literal notranslate"><span class="pre">file</span></code>) – name of an mtz file or a file object</p></li>
+<li><p><strong>skip_problem_mtztypes</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code>) – Whether to skip columns in DataSet that do not have specified
 MTZ datatypes</p></li>
 </ul>
 </dd>

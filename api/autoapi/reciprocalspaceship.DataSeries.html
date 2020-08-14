@@ -211,15 +211,15 @@ DataSeries objects, see the <a class="reference external" href="https://pandas.p
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>data</strong> (<em>array-like, Iterable, dict, or scalar value</em>) – data to be stored in DataSeries.</p></li>
-<li><p><strong>index</strong> (<em>array-like or Index</em>) – Values must be hashable and have the same length as <cite>data</cite>.
+<li><p><strong>data</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">array-like</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">Iterable</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code>, or <code class="xref py py-class docutils literal notranslate"><span class="pre">scalar</span> <span class="pre">value</span></code>) – data to be stored in DataSeries.</p></li>
+<li><p><strong>index</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">array-like</span></code> or <code class="xref py py-class docutils literal notranslate"><span class="pre">Index</span></code>) – Values must be hashable and have the same length as <cite>data</cite>.
 Non-unique index values are allowed. Will default to
 RangeIndex (0, 1, 2, …, n) if not provided. If a dict is provided
 as <cite>data</cite> and a <cite>index</cite> is given, <cite>index</cite> will override the keys
 found in the dict.</p></li>
-<li><p><strong>dtype</strong> (<em>str, numpy.dtype, or ExtensionDtype, optional</em>) – Data type for the DataSeries.</p></li>
-<li><p><strong>name</strong> (<em>str, optional</em>) – The name to give to the DataSeries.</p></li>
-<li><p><strong>copy</strong> (<em>bool, default False</em>) – Copy input data.</p></li>
+<li><p><strong>dtype</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.dtype</span></code>, or <code class="xref py py-class docutils literal notranslate"><span class="pre">ExtensionDtype</span></code>, <em>optional</em>) – Data type for the DataSeries.</p></li>
+<li><p><strong>name</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>, <em>optional</em>) – The name to give to the DataSeries.</p></li>
+<li><p><strong>copy</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code>, <em>default</em> <code class="xref py py-obj docutils literal notranslate"><span class="pre">False</span></code>) – Copy input data.</p></li>
 </ul>
 </dd>
 </dl>

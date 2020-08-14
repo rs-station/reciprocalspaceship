@@ -1,4 +1,4 @@
-reciprocalspaceship.read\_precognition
+﻿reciprocalspaceship.read\_precognition
 ======================================
 
 .. currentmodule:: reciprocalspaceship

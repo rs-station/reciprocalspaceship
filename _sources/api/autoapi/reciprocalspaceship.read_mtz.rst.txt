@@ -1,4 +1,4 @@
-reciprocalspaceship.read\_mtz
+﻿reciprocalspaceship.read\_mtz
 =============================
 
 .. currentmodule:: reciprocalspaceship
