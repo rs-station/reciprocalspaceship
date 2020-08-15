@@ -1,4 +1,4 @@
-from .phases import canonicalize_phases
+from .phases import canonicalize_phases, get_phase_restrictions
 from .structurefactors import (to_structurefactor,
                                from_structurefactor,
                                compute_structurefactor_multiplicity,
