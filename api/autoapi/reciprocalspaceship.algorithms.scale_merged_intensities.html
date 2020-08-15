@@ -221,22 +221,22 @@ handled high intensity centric reflections differently.</p></li>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>ds</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">DataSet</span></code>) – Input DataSet containing columns with intensity_key and sigma_key
+<li><p><strong>ds</strong> (<em>DataSet</em>) – Input DataSet containing columns with intensity_key and sigma_key
 labels</p></li>
-<li><p><strong>intensity_key</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – Column label for intensities to be scaled</p></li>
-<li><p><strong>sigma_key</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – Column label for error estimates of intensities being scaled</p></li>
-<li><p><strong>output_columns</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code> or <code class="xref py py-class docutils literal notranslate"><span class="pre">tuple</span></code> of <code class="xref py py-class docutils literal notranslate"><span class="pre">column</span> <span class="pre">names</span></code>) – Column labels to be added to ds for recording scaled I, SigI, F,
+<li><p><strong>intensity_key</strong> (<em>str</em>) – Column label for intensities to be scaled</p></li>
+<li><p><strong>sigma_key</strong> (<em>str</em>) – Column label for error estimates of intensities being scaled</p></li>
+<li><p><strong>output_columns</strong> (<em>list or tuple of column names</em>) – Column labels to be added to ds for recording scaled I, SigI, F,
 and SigF, respectively. output_columns must have len=4.</p></li>
-<li><p><strong>dropna</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code>) – Whether to drop reflections with NaNs in intensity_key or sigma_key
+<li><p><strong>dropna</strong> (<em>bool</em>) – Whether to drop reflections with NaNs in intensity_key or sigma_key
 columns</p></li>
-<li><p><strong>inplace</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code>) – Whether to modify the DataSet in place or create a copy</p></li>
-<li><p><strong>mean_intensity_method</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span> <span class="pre">[``</span></code>”isotropic”`` or <code class="docutils literal notranslate"><span class="pre">&quot;anisotropic&quot;</span></code><code class="xref py py-class docutils literal notranslate"><span class="pre">]</span></code>) – If “isotropic”, mean intensity is determined by resolution bin.
+<li><p><strong>inplace</strong> (<em>bool</em>) – Whether to modify the DataSet in place or create a copy</p></li>
+<li><p><strong>mean_intensity_method</strong> (<em>str [“isotropic” or “anisotropic”]</em>) – If “isotropic”, mean intensity is determined by resolution bin.
 If “anisotropic”, mean intensity is determined by Miller index
 using provided bandwidth.</p></li>
-<li><p><strong>bins</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code> or <code class="xref py py-class docutils literal notranslate"><span class="pre">array</span></code>) – Either an integer number of n bins. Or an array of bin edges with
+<li><p><strong>bins</strong> (<em>int or array</em>) – Either an integer number of n bins. Or an array of bin edges with
 shape==(n, 2). Only affects output if mean_intensity_method is
 “isotropic”.</p></li>
-<li><p><strong>bw</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>) – Bandwidth to use for computing anisotropic mean intensity. This
+<li><p><strong>bw</strong> (<em>float</em>) – Bandwidth to use for computing anisotropic mean intensity. This
 parameter controls the distance that each reflection impacts in
 reciprocal space. Only affects output if mean_intensity_method is
 “anisotropic”.</p></li>

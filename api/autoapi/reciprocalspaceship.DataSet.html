@@ -309,7 +309,7 @@ in the calling DataSet are added as new columns.</p>
 <a class="reference external" href="https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.append.html">Pandas DataFrame.append() API</a>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>check_isomorphous</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code>) – If True, the spacegroup and cell attributes of DataSets in <cite>other</cite>
+<dd class="field-odd"><p><strong>check_isomorphous</strong> (<em>bool</em>) – If True, the spacegroup and cell attributes of DataSets in <cite>other</cite>
 will be compared to those of the calling DataSet to ensure
 they are isomorphous.</p>
 </dd>
@@ -333,8 +333,8 @@ they are isomorphous.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>symop</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">gemmi.Op</span></code>) – Gemmi symmetry operation or string representing symmetry op</p></li>
-<li><p><strong>inplace</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code>) – Whether to return a new DataFrame or make the change in place</p></li>
+<li><p><strong>symop</strong> (<em>str, gemmi.Op</em>) – Gemmi symmetry operation or string representing symmetry op</p></li>
+<li><p><strong>inplace</strong> (<em>bool</em>) – Whether to return a new DataFrame or make the change in place</p></li>
 </ul>
 </dd>
 </dl>
@@ -348,7 +348,7 @@ they are isomorphous.</p>
 column composed of data with the PhaseDtype.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>inplace</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code>) – Whether to modify the DataSet in place or return a copy</p>
+<dd class="field-odd"><p><strong>inplace</strong> (<em>bool</em>) – Whether to modify the DataSet in place or return a copy</p>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p><em>DataSet</em></p>
@@ -369,7 +369,7 @@ column composed of data with the PhaseDtype.</p>
 the HKL indices in the object.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>inplace</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code>) – Whether to add the column in place or return a copy</p>
+<dd class="field-odd"><p><strong>inplace</strong> (<em>bool</em>) – Whether to add the column in place or return a copy</p>
 </dd>
 </dl>
 </dd></dl>
@@ -388,7 +388,7 @@ or <code class="docutils literal notranslate"><span class="pre">CENTRIC</span></
 label partial or centric reflections, respectively.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>gemmiMtz</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">gemmi.Mtz</span></code>)</p>
+<dd class="field-odd"><p><strong>gemmiMtz</strong> (<em>gemmi.Mtz</em>)</p>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p><em>DataSet</em></p>
@@ -402,7 +402,7 @@ label partial or centric reflections, respectively.</p>
 <dd><p>Get the Miller indices in the DataSet as a ndarray.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p><strong>hkl</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">shape=(n_reflections</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">3)</span></code>) – Miller indices in DataSet</p>
+<dd class="field-odd"><p><strong>hkl</strong> (<em>ndarray, shape=(n_reflections, 3)</em>) – Miller indices in DataSet</p>
 </dd>
 </dl>
 </dd></dl>
@@ -413,7 +413,7 @@ label partial or centric reflections, respectively.</p>
 <dd><p>Return column labels for data with M/ISYM dtype.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p><strong>key</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code> of <code class="xref py py-class docutils literal notranslate"><span class="pre">strings</span></code>) – list of column labels with <code class="docutils literal notranslate"><span class="pre">M/ISYM</span></code> dtype</p>
+<dd class="field-odd"><p><strong>key</strong> (<em>list of strings</em>) – list of column labels with <code class="docutils literal notranslate"><span class="pre">M/ISYM</span></code> dtype</p>
 </dd>
 </dl>
 </dd></dl>
@@ -424,7 +424,7 @@ label partial or centric reflections, respectively.</p>
 <dd><p>Return column labels for data with Phase dtype.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p><strong>keys</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code> of <code class="xref py py-class docutils literal notranslate"><span class="pre">strings</span></code>) – list of column labels with <code class="docutils literal notranslate"><span class="pre">Phase</span></code> dtype</p>
+<dd class="field-odd"><p><strong>keys</strong> (<em>list of strings</em>) – list of column labels with <code class="docutils literal notranslate"><span class="pre">Phase</span></code> dtype</p>
 </dd>
 </dl>
 </dd></dl>
@@ -441,7 +441,7 @@ construct a proper M/ISYM column. Both merged and unmerged DataSets
 will have an M/ISYM column added.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>inplace</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code>) – Whether to modify the DataSet in place or return a copy</p>
+<dd class="field-odd"><p><strong>inplace</strong> (<em>bool</em>) – Whether to modify the DataSet in place or return a copy</p>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p><em>DataSet</em></p>
@@ -472,10 +472,10 @@ a partiality flag is not added.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>m_isym</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – Column label for M/ISYM values in DataSet. If m_isym is None
+<li><p><strong>m_isym</strong> (<em>str</em>) – Column label for M/ISYM values in DataSet. If m_isym is None
 and a single M/ISYM column is present, it will automatically
 be used.</p></li>
-<li><p><strong>inplace</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code>) – Whether to modify the DataSet in place or return a copy</p></li>
+<li><p><strong>inplace</strong> (<em>bool</em>) – Whether to modify the DataSet in place or return a copy</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -503,8 +503,8 @@ in the index.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>inplace</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code>) – Whether to modify the dtypes in place or to return a copy</p></li>
-<li><p><strong>index</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code>) – Infer MTZ dtypes for named column(s) in the DataSet index</p></li>
+<li><p><strong>inplace</strong> (<em>bool</em>) – Whether to modify the dtypes in place or to return a copy</p></li>
+<li><p><strong>index</strong> (<em>bool</em>) – Infer MTZ dtypes for named column(s) in the DataSet index</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -530,8 +530,8 @@ and that the cell parameters are within a specified percentage
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>other</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">rs.DataSet</span></code>) – DataSet to which it will be compared</p></li>
-<li><p><strong>cell_threshold</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>) – Acceptable percent difference between unit cell parameters</p></li>
+<li><p><strong>other</strong> (<em>rs.DataSet</em>) – DataSet to which it will be compared</p></li>
+<li><p><strong>cell_threshold</strong> (<em>float</em>) – Acceptable percent difference between unit cell parameters</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -550,7 +550,7 @@ to a given DataSet.</p>
 <a class="reference external" href="https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.join.html">Pandas DataFrame.join() API</a>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>check_isomorphous</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code>) – If True, the spacegroup and cell attributes of DataSets in <cite>other</cite>
+<dd class="field-odd"><p><strong>check_isomorphous</strong> (<em>bool</em>) – If True, the spacegroup and cell attributes of DataSets in <cite>other</cite>
 will be compared to those of the calling DataSet to ensure
 they are isomorphous.</p>
 </dd>
@@ -574,7 +574,7 @@ they are isomorphous.</p>
 booleans, “CENTRIC”, is added to the object.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>inplace</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code>) – Whether to add the column in place or to return a copy</p>
+<dd class="field-odd"><p><strong>inplace</strong> (<em>bool</em>) – Whether to add the column in place or to return a copy</p>
 </dd>
 </dl>
 </dd></dl>
@@ -588,7 +588,7 @@ columns or indices.</p>
 <a class="reference external" href="https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.merge.html">Pandas DataFrame.merge() API</a>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>check_isomorphous</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code>) – If True, the spacegroup and cell attributes of DataSets in <cite>other</cite>
+<dd class="field-odd"><p><strong>check_isomorphous</strong> (<em>bool</em>) – If True, the spacegroup and cell attributes of DataSets in <cite>other</cite>
 will be compared to those of the calling DataSet to ensure
 they are isomorphous.</p>
 </dd>
@@ -620,13 +620,13 @@ argument, it is possible to reset one or more levels of a MultiIndex.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>level</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">tuple</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code>) – Only remove given levels from the index. Defaults to all levels</p></li>
-<li><p><strong>drop</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code>) – Do not try to insert index into dataframe columns.</p></li>
+<li><p><strong>level</strong> (<em>int, str, tuple, list</em>) – Only remove given levels from the index. Defaults to all levels</p></li>
+<li><p><strong>drop</strong> (<em>bool</em>) – Do not try to insert index into dataframe columns.</p></li>
 <li><p><strong>inplace ; bool</strong> – Modify the DataSet in place (do not create a new object).</p></li>
-<li><p><strong>col_level</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code> or <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – If the columns have multiple levels, determines which level
+<li><p><strong>col_level</strong> (<em>int or str</em>) – If the columns have multiple levels, determines which level
 the labels are inserted into. By default it is inserted into
 the first level.</p></li>
-<li><p><strong>col_fill</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code>) – If the columns have multiple levels, determines how the other
+<li><p><strong>col_fill</strong> (<em>object</em>) – If the columns have multiple levels, determines how the other
 levels are named. If None then the index name is repeated.</p></li>
 </ul>
 </dd>
@@ -653,13 +653,13 @@ the existing index or expand on it.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>keys</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">label</span></code> or <code class="xref py py-class docutils literal notranslate"><span class="pre">array-like</span></code> or <code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code> of <code class="xref py py-class docutils literal notranslate"><span class="pre">labels/arrays</span></code>) – This parameter can be either a single column key, a single
+<li><p><strong>keys</strong> (<em>label or array-like or list of labels/arrays</em>) – This parameter can be either a single column key, a single
 array of the same length as the calling DataSet, or a list
 containing an arbitrary combination of column keys and arrays.</p></li>
-<li><p><strong>drop</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code>) – Whether to delete columns to be used as the new index.</p></li>
-<li><p><strong>append</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code>) – Whether to append columns to existing index.</p></li>
-<li><p><strong>inplace</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code>) – Modify the DataFrame in place (do not create a new object).</p></li>
-<li><p><strong>verify_integrity</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code>) – Check the new index for duplicates. Otherwise defer the check
+<li><p><strong>drop</strong> (<em>bool</em>) – Whether to delete columns to be used as the new index.</p></li>
+<li><p><strong>append</strong> (<em>bool</em>) – Whether to append columns to existing index.</p></li>
+<li><p><strong>inplace</strong> (<em>bool</em>) – Modify the DataFrame in place (do not create a new object).</p></li>
+<li><p><strong>verify_integrity</strong> (<em>bool</em>) – Check the new index for duplicates. Otherwise defer the check
 until necessary. Setting to False will improve the performance
 of this method</p></li>
 </ul>
@@ -710,9 +710,9 @@ and that Friedel-minus column labels are suffixed with (-)</p></li>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>plus_labels</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code> or <code class="xref py py-class docutils literal notranslate"><span class="pre">list-like</span></code>) – Column label or list of column labels of data associated with
+<li><p><strong>plus_labels</strong> (<em>str or list-like</em>) – Column label or list of column labels of data associated with
 Friedel-plus reflection (Defaults to columns suffixed with “(+)”)</p></li>
-<li><p><strong>minus_labels</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code> or <code class="xref py py-class docutils literal notranslate"><span class="pre">list-like</span></code>) – Column label or list of column labels of data associated with
+<li><p><strong>minus_labels</strong> (<em>str or list-like</em>) – Column label or list of column labels of data associated with
 Friedel-minus reflection (Defaults to columns suffixed with “(-)”)</p></li>
 </ul>
 </dd>
@@ -740,7 +740,7 @@ in the DataSet, these will be cast to the <code class="docutils literal notransl
 in the gemmi.Mtz object.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>skip_problem_mtztypes</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code>) – Whether to skip columns in DataSet that do not have specified
+<dd class="field-odd"><p><strong>skip_problem_mtztypes</strong> (<em>bool</em>) – Whether to skip columns in DataSet that do not have specified
 MTZ datatypes</p>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -772,10 +772,10 @@ mapped back to their observed Miller index.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>columns</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code> or <code class="xref py py-class docutils literal notranslate"><span class="pre">list-like</span></code>) – Column label or list of column labels of data that should be
+<li><p><strong>columns</strong> (<em>str or list-like</em>) – Column label or list of column labels of data that should be
 associated with Friedel pairs. If None, all columns are
 converted are converted to the two-column anomalous format.</p></li>
-<li><p><strong>suffixes</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">tuple</span></code> or list  of <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – Suffixes to append to Friedel-plus and Friedel-minus data
+<li><p><strong>suffixes</strong> (<em>tuple or list  of str</em>) – Suffixes to append to Friedel-plus and Friedel-minus data
 columns</p></li>
 </ul>
 </dd>
@@ -804,8 +804,8 @@ in the output MTZ file.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>mtzfile</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code> or <code class="xref py py-class docutils literal notranslate"><span class="pre">file</span></code>) – name of an mtz file or a file object</p></li>
-<li><p><strong>skip_problem_mtztypes</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code>) – Whether to skip columns in DataSet that do not have specified
+<li><p><strong>mtzfile</strong> (<em>str or file</em>) – name of an mtz file or a file object</p></li>
+<li><p><strong>skip_problem_mtztypes</strong> (<em>bool</em>) – Whether to skip columns in DataSet that do not have specified
 MTZ datatypes</p></li>
 </ul>
 </dd>
