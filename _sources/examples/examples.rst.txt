@@ -13,9 +13,10 @@ some use cases.
 .. note::
    Each of these examples is contained within a Jupyter notebook. Feel free to view the
    examples in the browser by following the links below. These notebooks can also be viewed
-   interactively by downloading the notebook files from the `Examples Directory
-   <https://github.com/Hekstra-Lab/reciprocalspaceship/tree/master/docs/examples>`_ and
-   starting a notebook server. 
+   interactively on `binder <https://mybinder.org/v2/gh/Hekstra-Lab/reciprocalspaceship/master?filepath=docs%2Fexamples>`_
+   or by downloading the notebook files from the 
+   `Examples Directory <https://github.com/Hekstra-Lab/reciprocalspaceship/tree/master/docs/examples>`_ 
+   and starting a notebook server. 
 
 .. toctree::
    :maxdepth: 1
