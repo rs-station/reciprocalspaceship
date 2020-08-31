@@ -1,4 +1,4 @@
-# reciprocalspaceship
+# 1 /:rocket: = reciprocalspaceship
 ![Build](https://github.com/Hekstra-Lab/reciprocalspaceship/workflows/Build/badge.svg)
 [![Documentation](https://github.com/Hekstra-Lab/reciprocalspaceship/workflows/Documentation/badge.svg)](https://hekstra-lab.github.io/reciprocalspaceship)
 [![PyPI](https://img.shields.io/pypi/v/reciprocalspaceship?color=blue)](https://pypi.org/project/reciprocalspaceship/)
@@ -36,7 +36,7 @@ For more installation options, see our [installation guide](https://hekstra-lab.
 
 ## Quickstart
 
-To get started with `reciprocalspaceship`, see our [quickstart guide](https://hekstra-lab.github.io/reciprocalspaceship/userguide/quickstart.html).
+To get started with `reciprocalspaceship`, see our [quickstart guide](https://hekstra-lab.github.io/reciprocalspaceship/examples/quickstart.html).
 
 ## Documentation
 
