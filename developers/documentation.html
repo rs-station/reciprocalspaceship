@@ -19,6 +19,8 @@
 
   
   
+    <link rel="shortcut icon" href="../_static/rs-favicon_32x32.png"/>
+  
   
   
 
@@ -60,6 +62,9 @@
           
 
           
+            
+            <img src="../_static/rs.png" class="logo" alt="Logo"/>
+          
           </a>
 
           
@@ -91,7 +96,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../userguide/index.html">User Guide</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../api/index.html">API Reference</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="index.html">For Developers</a><ul class="current">
-<li class="toctree-l2"><a class="reference internal" href="contributing.html">Contributing to <code class="docutils literal notranslate"><span class="pre">reciprocalspaceship</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="contributing.html">Contributing to <code class="docutils literal notranslate"><span class="pre">rs</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="testing.html">Running Tests</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">Building Documentation</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#dependencies">Dependencies</a></li>
@@ -198,9 +203,8 @@
 the <code class="docutils literal notranslate"><span class="pre">master</span></code> branch of the repo; however, it is also possible to build it locally in order to preview any changes.</p>
 <div class="section" id="dependencies">
 <h2>Dependencies<a class="headerlink" href="#dependencies" title="Permalink to this headline">¶</a></h2>
-<p>There are a few additional dependencies that can all be installed using <code class="docutils literal notranslate"><span class="pre">pip</span></code> or <code class="docutils literal notranslate"><span class="pre">conda</span></code>:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">conda</span> <span class="n">install</span> <span class="o">-</span><span class="n">c</span> <span class="n">conda</span><span class="o">-</span><span class="n">forge</span> <span class="n">sphinx</span> <span class="n">sphinx_rtd_theme</span> <span class="n">nbsphinx</span> <span class="n">ipython</span> <span class="n">jupyter</span>
-<span class="n">pip</span> <span class="n">install</span> <span class="n">sphinx</span><span class="o">-</span><span class="n">panels</span> <span class="n">sphinxcontrib</span><span class="o">-</span><span class="n">autoprogram</span>
+<p>There are a few additional dependencies that are needed to build the documentation. These can be installed by running the following command in your cloned (or forked) repository:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="o">-</span><span class="n">e</span> <span class="o">.</span><span class="p">[</span><span class="n">dev</span><span class="p">]</span>
 </pre></div>
 </div>
 </div>
