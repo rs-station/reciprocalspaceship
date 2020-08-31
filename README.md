@@ -36,7 +36,7 @@ For more installation options, see our [installation guide](https://hekstra-lab.
 
 ## Quickstart
 
-To get started with `reciprocalspaceship`, see our [quickstart guide](https://hekstra-lab.github.io/reciprocalspaceship/userguide/quickstart.html).
+To get started with `reciprocalspaceship`, see our [quickstart guide](https://hekstra-lab.github.io/reciprocalspaceship/examples/quickstart.html).
 
 ## Documentation
 
