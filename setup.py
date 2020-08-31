@@ -47,14 +47,24 @@ setup(
     project_urls=PROJECT_URLS,
     python_requires='>3.6',
     install_requires=[
-        "gemmi >= 0.4.0.post1",
-        "pandas >= 1.1.0rc",
+        "gemmi >= 0.4.2",
+        "pandas >= 1.1.0",
         "numpy",
         "scipy",
-        "IPython", 
+        "ipython",
     ],
     setup_requires=['pytest-runner'],
     tests_require=['pytest', 'pytest-cov', 'pytest-xdist'],
+    extras_require={
+        'dev': [
+            "sphinx",
+            "sphinx_rtd_theme",
+            "nbsphinx",
+            "sphinx-panels",
+            "sphinxcontrib-autoprogram",
+            "jupyter",
+        ]
+    },
     entry_points={
         'console_scripts': [
             'rs.mtzdump=reciprocalspaceship.commandline.mtzdump:main',
