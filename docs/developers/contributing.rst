@@ -1,6 +1,6 @@
 .. _contributing:
 
-Contributing to ``reciprocalspaceship``
+Contributing to ``rs``
 =======================================
 
 We encourage you to file `Issues on GitHub <https://github.com/Hekstra-Lab/reciprocalspaceship/issues>`_ if you run into any problems when using

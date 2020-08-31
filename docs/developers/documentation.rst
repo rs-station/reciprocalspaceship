@@ -9,10 +9,9 @@ the ``master`` branch of the repo; however, it is also possible to build it loca
 Dependencies
 ------------
 
-There are a few additional dependencies that can all be installed using ``pip`` or ``conda``::
+There are a few additional dependencies that are needed to build the documentation. These can be installed by running the following command in your cloned (or forked) repository::
 
-  conda install -c conda-forge sphinx sphinx_rtd_theme nbsphinx ipython jupyter
-  pip install sphinx-panels sphinxcontrib-autoprogram
+  pip install -e .[dev]
 
 Local Preview of Documentation
 ------------------------------

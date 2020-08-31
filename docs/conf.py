@@ -92,6 +92,12 @@ html_theme = 'sphinx_rtd_theme'
 # so a file named "default.css" will overwrite the builtin "default.css".
 html_static_path = ['_static']
 
+# Add favicon
+html_favicon = 'img/rs-favicon_32x32.png'
+
+# Add 
+html_logo = 'img/rs.png'
+
 # -- Resolve links to source code --------------------------------------------
 
 # based on pandas/doc/source/conf.py
