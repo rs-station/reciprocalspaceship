@@ -24,14 +24,13 @@ jobs:
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
-        python setup.py install
+        pip install -e .[dev]
 
     - name: Set up Pandoc
       uses: r-lib/actions/setup-pandoc@v1
 
     - name: Build documentation
       run: |
-        pip install sphinx sphinx_rtd_theme nbsphinx ipython jupyter sphinx-panels sphinxcontrib-autoprogram
         cd docs
         make clean
         make html
