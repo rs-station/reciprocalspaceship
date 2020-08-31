@@ -1,4 +1,4 @@
-# reciprocalspaceship
+# 1 /:rocket: = reciprocalspaceship
 ![Build](https://github.com/Hekstra-Lab/reciprocalspaceship/workflows/Build/badge.svg)
 [![Documentation](https://github.com/Hekstra-Lab/reciprocalspaceship/workflows/Documentation/badge.svg)](https://hekstra-lab.github.io/reciprocalspaceship)
 [![PyPI](https://img.shields.io/pypi/v/reciprocalspaceship?color=blue)](https://pypi.org/project/reciprocalspaceship/)
