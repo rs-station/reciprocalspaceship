@@ -190,7 +190,35 @@ def test_compute_dHKL(dataset_hkl, inplace, cell):
     assert np.allclose(result["dHKL"].to_numpy(), expected)
     assert isinstance(result["dHKL"].dtype, rs.MTZRealDtype)
 
+@pytest.mark.parametrize("bins", [5, 10, 20, 50])
+@pytest.mark.parametrize("inplace", [True, False])
+@pytest.mark.parametrize("return_labels", [True, False])
+def test_assign_resolution_bins(data_fmodel, bins, inplace, return_labels):
+    """Test DataSet.assign_resolution_bins"""
+    
+    result = data_fmodel.assign_resolution_bins(bins=bins,
+                                                inplace=inplace,
+                                                return_labels=return_labels)
 
+    if return_labels:
+        result, labels = result
+        
+    # Test bins
+    assert "bin" in result.columns
+    assert len(result["bin"].unique()) == bins
+    assert result.bin.max() == bins-1
+
+    # Test inplace
+    if inplace:
+        assert id(result) == id(data_fmodel)
+    else:
+        assert id(result) != id(data_fmodel)
+
+    # Test labels
+    if return_labels:
+        assert len(labels) == bins
+
+    
 @pytest.mark.parametrize("inplace", [True, False])
 @pytest.mark.parametrize("op", ["-x,-y,-z",
                                 gemmi.Op("x,y,z"),
