@@ -546,6 +546,44 @@ class DataSet(pd.DataFrame):
         dataset['dHKL'] = rs.DataSeries(dHKL, dtype='R', index=dataset.index)
         return dataset
 
+    def assign_resolution_bins(self, bins=20, inplace=False, return_labels=True):
+        """
+        Assign reflections in DataSet to resolution bins.
+
+        Parameters
+        ----------
+        bins : int
+            Number of bins
+        inplace : bool
+            Whether to add the column in place or return a copy
+        return_labels : bool
+            Whether to return a list of labels corresponding to the edges
+            of each resolution bin
+
+        Returns
+        -------
+        DataSet and/or list
+        """
+        if inplace:
+            dataset = self
+        else:
+            dataset = self.copy()
+        dHKL = dataset.compute_dHKL()["dHKL"]
+
+        assignments, labels = rs.utils.bin_by_percentile(dHKL, bins=bins, ascending=False)
+        dataset["bin"] = rs.DataSeries(assignments, dtype="I", index=dataset.index)
+
+        if inplace:
+            if return_labels:
+                return labels
+            else:
+                return
+        else:
+            if return_labels:
+                return dataset, labels
+            else:
+                return dataset
+        
     def stack_anomalous(self, plus_labels=None, minus_labels=None):
         """
         Convert data from two-column anomalous format to one-column
