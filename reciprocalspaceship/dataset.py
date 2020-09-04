@@ -562,7 +562,7 @@ class DataSet(pd.DataFrame):
 
         Returns
         -------
-        DataSet and/or list
+        (DataSet, list) or DataSet
         """
         if inplace:
             dataset = self
@@ -573,16 +573,10 @@ class DataSet(pd.DataFrame):
         assignments, labels = rs.utils.bin_by_percentile(dHKL, bins=bins, ascending=False)
         dataset["bin"] = rs.DataSeries(assignments, dtype="I", index=dataset.index)
 
-        if inplace:
-            if return_labels:
-                return labels
-            else:
-                return
+        if return_labels:
+            return dataset, labels
         else:
-            if return_labels:
-                return dataset, labels
-            else:
-                return dataset
+            return dataset
         
     def stack_anomalous(self, plus_labels=None, minus_labels=None):
         """
