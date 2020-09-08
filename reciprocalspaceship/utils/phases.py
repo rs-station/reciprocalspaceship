@@ -17,9 +17,9 @@ def get_phase_restrictions(H, spacegroup):
     """
     Return phase restrictions for Miller indices in a given space group.
 
-    If there are no phase restrictions, an empty array is returned for that
+    If there are no phase restrictions, an empty list is returned for that
     Miller index. If a given Miller index is systematically absent an
-    empty array is also returned. 
+    empty list is also returned. 
 
     Parameters
     ----------
@@ -30,8 +30,9 @@ def get_phase_restrictions(H, spacegroup):
 
     Returns
     -------
-    restrictions : list of arrays
-         list of arrays with phase restrictions for each Miller index
+    restrictions : list of lists
+         List of lists of phase restrictions for each Miller index. An empty
+         list is returned for Miller indices without phase restrictions
     """
     from reciprocalspaceship.utils.asu import hkl_is_absent
     from reciprocalspaceship.utils.structurefactors import is_centric
@@ -49,7 +50,7 @@ def get_phase_restrictions(H, spacegroup):
                     restriction = np.array([shift/2, 180+(shift/2)])
                     restriction = canonicalize_phases(restriction)
                     restriction.sort()
-                    restrictions.append(restriction)
+                    restrictions.append(restriction.tolist())
                     hit = True
                     break
                 

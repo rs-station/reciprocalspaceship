@@ -28,7 +28,7 @@ def test_phase_restrictions(sgtbx_by_xhm):
     restrictions = rs.utils.get_phase_restrictions(H, sg)
     assert len(ref_restrictions) == len(restrictions)
     for ref, test in zip(ref_restrictions, restrictions):
-        if isinstance(ref, list):
+        if ref is []:
             assert ref == test
         else:
-            assert np.allclose(np.sin(np.deg2rad(ref)), np.sin(np.deg2rad(test)))
+            assert np.allclose(np.sin(np.deg2rad(ref)), np.sin(np.deg2rad(np.array(test))))
