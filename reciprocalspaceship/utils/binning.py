@@ -33,7 +33,7 @@ def bin_by_percentile(data, bins=20, ascending=True, format_str=".2f"):
     # 0-index bins and ensure that right-most datapoint is in correct bin
     assignments = np.digitize(data, bins=bin_edges, right=right) - 1
     rightmost = np.where(assignments == bins)[0]
-    assignments[rightmost[0]] -= 1
+    assignments[rightmost] -= 1
 
     bin_labels = [ f"{edge1:{format_str}} - {edge2:{format_str}}" for edge1, edge2 in zip(bin_edges[0:-1], bin_edges[1:]) ]
 
