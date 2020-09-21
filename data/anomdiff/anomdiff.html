@@ -70,14 +70,18 @@
   <footer id="help"></footer>
   <div id="inset"></div>
   <script>
+    /*Make Viewer and load model+map*/
     V = new UM.Viewer({viewer: "viewer", hud: "hud", help: "help"});
-    V.load_pdb("https://hekstra-lab.github.io/reciprocalspaceship/data/1VAT.pdb");
+    V.load_pdb("https://hekstra-lab.github.io/reciprocalspaceship/data/anomdiff/1VAT.pdb");
     GemmiMtz().then(function(Module) {
-	UM.load_maps_from_mtz(Module, V, "https://hekstra-lab.github.io/reciprocalspaceship/data/anomdiff.mtz", ['ANOM', 'PHANOM']);
+	UM.load_maps_from_mtz(Module, V, "https://hekstra-lab.github.io/reciprocalspaceship/data/anomdiff/anomdiff.mtz", ['ANOM', 'PHANOM']);
     });;
+    
+    /*Customizations to Default Settings*/
     V.config.default_isolevel = 5.0;
     V.config.colors.map_den = new UM.Color(0xEE82EE);
     V.config.map_radius = 12
+    V.config.water_style = "invisible" 
   </script>
 </body>
 </html>
