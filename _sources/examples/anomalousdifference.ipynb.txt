@@ -1025,7 +1025,7 @@
      "data": {
       "text/html": [
        "<center>\n",
-       "    <iframe src=\"https://hekstra-lab.github.io/reciprocalspaceship/data/anomdiff.html#zoom=25\", width=600, height=600></iframe>\n",
+       "    <iframe src=\"https://hekstra-lab.github.io/reciprocalspaceship/data/anomdiff/anomdiff.html#zoom=25\", width=600, height=600></iframe>\n",
        "    <br>Anomalous difference map from HEWL crystal overlayed with <b>PDB: 1VAT</b>. Map is contoured at +5&sigma;.\n",
        "</center>\n"
       ],
@@ -1040,7 +1040,7 @@
    "source": [
     "%%html\n",
     "<center>\n",
-    "    <iframe src=\"https://hekstra-lab.github.io/reciprocalspaceship/data/anomdiff.html#zoom=25\", width=600, height=600></iframe>\n",
+    "    <iframe src=\"https://hekstra-lab.github.io/reciprocalspaceship/data/anomdiff/anomdiff.html#zoom=25\", width=600, height=600></iframe>\n",
     "    <br>Anomalous difference map from HEWL crystal overlayed with <b>PDB: 1VAT</b>. Map is contoured at +5&sigma;.\n",
     "</center>"
    ]
