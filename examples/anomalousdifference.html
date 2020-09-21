@@ -14,8 +14,9 @@
   <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
   <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
-  <link rel="stylesheet" href="../_static/sphinx-dropdown.css" type="text/css" />
-  <link rel="stylesheet" href="../_static/panels-bootstrap.min.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/spanels-index--0afa1ebdab0bb23b98b56d34c23d9f57.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/spanels-bootstrap-index--5fd3999ee7762ccc51105388f4a9d115.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/spanels-variables--ffc7f74dcb1b9eecba2dbcbc22818714.css" type="text/css" />
 
   
   
@@ -809,7 +810,7 @@ Number of reflections: 12563
       <td>5.543211</td>
       <td>2.965243</td>
       <td>4</td>
-      <td>1.7194215</td>
+      <td>1.7194214</td>
       <td>False</td>
       <td>5.588304</td>
       <td>2.7283347</td>
@@ -855,7 +856,7 @@ Number of reflections: 12563
       <td>2.7027502</td>
       <td>2.668546</td>
       <td>4</td>
-      <td>1.7271441</td>
+      <td>1.727144</td>
       <td>False</td>
       <td>3.3600478</td>
       <td>2.0947244</td>
@@ -1297,10 +1298,30 @@ dtype: object
 </pre></div>
 </div>
 </div>
-<p>Looking at the map on the <code class="docutils literal notranslate"><span class="pre">1VAT</span></code> structure in PyMOL, we can see difference density on all of the sulfurs in HEWL.</p>
-<figure><p><img alt="Anomalous Difference Map" class="no-scaled-link" src="../_images/anomalousmap.png" style="width: 611px; height: 401px;" /></p>
-<center><figcaption><p>Anomalous difference map from HEWL crystal. Map is contoured at +5<span class="math notranslate nohighlight">\(\sigma\)</span>.</p>
-</figcaption></center></figure></div>
+<p>Looking at the anomalous difference map on the <code class="docutils literal notranslate"><span class="pre">1VAT</span></code> structure, we can see positive difference density on all of the sulfurs in HEWL (shown below in purple):</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span>%%html
+&lt;center&gt;
+    &lt;iframe src=&quot;https://hekstra-lab.github.io/reciprocalspaceship/data/anomdiff.html#zoom=25&quot;, width=600, height=600&gt;&lt;/iframe&gt;
+    &lt;br&gt;Anomalous difference map from HEWL crystal overlayed with &lt;b&gt;PDB: 1VAT&lt;/b&gt;. Map is contoured at +5&amp;sigma;.
+&lt;/center&gt;
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area rendered_html docutils container">
+<center>
+    <iframe src="https://hekstra-lab.github.io/reciprocalspaceship/data/anomdiff.html#zoom=25", width=600, height=600></iframe>
+    <br>Anomalous difference map from HEWL crystal overlayed with <b>PDB: 1VAT</b>. Map is contoured at +5&sigma;.
+</center></div>
+</div>
+</div>
 </div>
 
 
