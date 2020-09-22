@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <title>Time-Resolved PYP</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, user-scalable=no">
+  <meta name="theme-color" content="#333333">
+  <style>
+   body {  background-color: #888; font-family: sans-serif; }
+   canvas { display: block; }
+   #viewer1, #viewer2 { position:absolute; top:0; width:49.6%; height:100%; }
+   #viewer1 { left: 0; }
+   #viewer2 { right: 0; }
+   #hud {
+     font-size: 14px;
+     color: #ddd;
+     background-color: rgba(0,0,0,0.6);
+     text-align: center;
+     position: absolute;
+     top: 10px;
+     left: 50%;
+     transform: translateX(-50%);
+     padding: 2px 8px;
+     border-radius: 5px;
+     z-index: 9;
+     white-space: pre-line;
+   }
+   #hud u { padding: 0 8px; text-decoration: none;
+            border: solid; border-width: 1px 0; }
+   #hud s { padding: 0 8px; text-decoration: none; opacity: 0.5; }
+   #help {
+     display: none;
+     font-size: 16px;
+     color: #eee;
+     background-color: rgba(0,0,0,0.7);
+     position: absolute;
+     left: 20px;
+     top: 50%;
+     transform: translateY(-50%);
+     cursor: default;
+     padding: 5px;
+     border-radius: 5px;
+     z-index: 9;
+     white-space: pre-line;
+   }
+   a { color: #59C; }
+   #viewer1 b, #viewer2 b { color: #fff; background-color: rgba(0,0,0,0.6); }
+   #viewer1 b { position: absolute; bottom: 30px; left: 30px; }
+   #viewer2 b { position: absolute; bottom: 30px; right: 30px; }
+  </style>
+
+  <script src="https://hekstra-lab.github.io/reciprocalspaceship/src/uglymol.js"></script>
+  <script src="https://hekstra-lab.github.io/reciprocalspaceship/src/mtz.js"></script> 
+
+</head>
+<body>
+  <div id="viewer1"><b>Unweighted</b></div>
+  <div id="viewer2"><b>Weighted (&alpha; = 0.05)</b></div>
+  <header id="hud"></header>
+  <footer id="help"></footer>
+  <script>
+
+    /* Viewer 1 -- Unweighted */
+    V1 = new UM.Viewer({viewer: "viewer1", focusable: true});
+    V1.config.colors.C = new UM.Color(0x8B0000)
+    V1.config.water_style = "invisible"
+    V1.load_pdb("https://files.rcsb.org/download/2PHY.pdb", null, function () {
+	V1.load_pdb("https://files.rcsb.org/download/3UME.pdb", null, function () {
+	    V1.model_bags[1].hue_shift = 0.4;
+	    V1.redraw_models();
+	});
+    });
+    V1.load_map("https://hekstra-lab.github.io/reciprocalspaceship/data/pypdiff/PYP_DF.map", {diff_map: true, format: "ccp4"})
+
+    /* Viewer 2 -- Weighted */
+    V2 = new UM.Viewer({viewer: "viewer2", focusable: true, share_view: V1});
+    V2.config.colors.C = new UM.Color(0x8B0000)
+    V2.config.water_style = "invisible"
+    V2.load_pdb("https://files.rcsb.org/download/2PHY.pdb", null, function () {
+	V2.load_pdb("https://files.rcsb.org/download/3UME.pdb", null, function () {
+	    V2.model_bags[1].hue_shift = 0.4;
+	    V2.redraw_models();
+	});
+    });
+    V2.load_map("https://hekstra-lab.github.io/reciprocalspaceship/data/pypdiff/PYP_WDF.map", {diff_map: true, format: "ccp4"})    
+    
+    V1.renderer.domElement.focus();
+
+  </script>
+</body>
+</html>

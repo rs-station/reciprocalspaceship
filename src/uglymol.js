@@ -6480,8 +6480,7 @@ var ColorSchemes /*:ColorScheme[]*/ = [ // Viewer.prototype.ColorSchemes
     def: 0x808080,
   } ];
 
-var INIT_HUD_TEXT = 'This is UglyMol not Coot. ' +
-  '<a href="#" onclick="V.toggle_help(); return false;">H shows help.</a>';
+var INIT_HUD_TEXT = '<a href="#" onclick="V.toggle_help(); return false;">H shows help.</a>';
 
 // options handled by select_next()
 
