@@ -443,8 +443,8 @@ div.rendered_html tbody tr:hover {
 </style>
 <div class="section" id="HEWL-S-SAD-Merging-Statistics">
 <h1>HEWL S-SAD Merging Statistics<a class="headerlink" href="#HEWL-S-SAD-Merging-Statistics" title="Permalink to this headline">¶</a></h1>
-<p>Merging statistics are a useful means to assess data quality in crystallography. However, each statistic has inherent shortcomings. For example, R-merge will appear inflated if the multiplicity of high, and the Pearson correlation coefficients used for <span class="math notranslate nohighlight">\(CC_{1/2}\)</span> are very sensitive to outliers.</p>
-<p>Most scaling and merging programs output multiple merging statistics to get around these shortcomings. However, one can imagine that it could also be useful to customize certain parameters, such as how many resolution bins are used or whether a Pearson or Spearman correlation coefficient is reported. Or, perhaps a better statistic will be developed that is worth implementing.</p>
+<p>Merging statistics are a useful means to assess data quality in crystallography. However, each statistic has inherent shortcomings. For example, R-merge will appear inflated if the multiplicity is high, and the Pearson correlation coefficients used for <span class="math notranslate nohighlight">\(CC_{1/2}\)</span> are very sensitive to outliers.</p>
+<p>Most scaling and merging programs output multiple merging statistics to get around these shortcomings. However, one can imagine that it could also be useful to customize certain parameters, such as how many resolution bins are used. Or, perhaps a better statistic will be developed that is worth implementing.</p>
 <p>In this notebook, <code class="docutils literal notranslate"><span class="pre">reciprocalspaceship</span></code> is used to compute half dataset correlation coefficients (<span class="math notranslate nohighlight">\(CC_{1/2}\)</span> and <span class="math notranslate nohighlight">\(CC_{anom}\)</span>) for a dataset collected from a tetragonal hen egg-white lysozyme (HEWL) crystal at 6550 eV. These data are unmerged, but were scaled in AIMLESS. They contain sufficient sulfur anomalous signal to determine a solution by the SAD method. This illustrates the use of <code class="docutils literal notranslate"><span class="pre">rs</span></code> to create a custom analysis, and could be useful as a template for other exploratory
 crystallographic data analyses. As an example, we will compare half dataset correlations computed using both Pearson and Spearman correlation coefficients.</p>
 <div class="nbinput nblast docutils container">
@@ -619,7 +619,12 @@ I_h = \frac{\sum_{i}w_{h,i} I_{h,i}}{\sum_{i} w_{h,i}}
 <p><span class="math">\begin{equation}
 w_{h,i} = \frac{1}{(\sigma_{h,i})^2}
 \end{equation}</span></p>
-<p>We will randomly split the observations into half-datasets by image number, and we will calculate an - <strong>IMEAN</strong> : the averge of intensity both Friedel mates, <span class="math notranslate nohighlight">\(I_h\)</span> and <span class="math notranslate nohighlight">\(I_{-h}\)</span> - <strong>I(+)</strong> : the intensity of <span class="math notranslate nohighlight">\(I_h\)</span> - <strong>I(-)</strong> : the intensity of <span class="math notranslate nohighlight">\(I_{-h}\)</span></p>
+<div class="line-block">
+<div class="line">We will randomly split the observations into half-datasets by image number, and we will calculate:</div>
+<div class="line">- <strong>IMEAN</strong> : the averge intensity of both Friedel mates, <span class="math notranslate nohighlight">\(I_h\)</span> and <span class="math notranslate nohighlight">\(I_{-h}\)</span></div>
+<div class="line">- <strong>I(+)</strong> : the average intensity of <span class="math notranslate nohighlight">\(I_h\)</span></div>
+<div class="line">- <strong>I(-)</strong> : the average intensity of <span class="math notranslate nohighlight">\(I_{-h}\)</span></div>
+</div>
 <p>for each unique Friedel pair in each half-dataset. We will compare these values across half-datasets in order to compute correlation coefficients by resolution bin, and we will resample the half-datasets multiple times in order to get a sense of the distribution of the correlation coefficients within each resolution bin.</p>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
@@ -690,7 +695,7 @@ w_{h,i} = \frac{1}{(\sigma_{h,i})^2}
 <hr class="docutils" />
 <div class="section" id="Merge-HEWL-data">
 <h2>Merge HEWL data<a class="headerlink" href="#Merge-HEWL-data" title="Permalink to this headline">¶</a></h2>
-<p>We will now merge the HEWL data, repeatedly sampling across half-datasets in order to assess the distribution of correlation coefficients across resolution bins.</p>
+<p>We will now merge the HEWL data, repeatedly sampling across half-datasets in order to assess the distribution of correlation coefficients.</p>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
 </pre></div>
@@ -945,7 +950,7 @@ w_{h,i} = \frac{1}{(\sigma_{h,i})^2}
 <img alt="../_images/examples_2_mergingstats_19_0.png" src="../_images/examples_2_mergingstats_19_0.png" />
 </div>
 </div>
-<p>It is important to keep. in mind the scale on the y-axis – this dataset is edge-limited, and such the <span class="math notranslate nohighlight">\(CC_{1/2}\)</span> is very high across all resolution bins. The Spearman CC appears higher across all resolution bins except at high resolution, and overall has a lower standard deviation among samples. This is consistent with our expectation that Spearman CC is a more robust estimator of correlation than Pearson.</p>
+<p>It is important to note the scale on the y-axis – this dataset is edge-limited, and as such the <span class="math notranslate nohighlight">\(CC_{1/2}\)</span> is very high across all resolution bins. The Spearman CC appears higher across all resolution bins except at high resolution, and overall has a lower standard deviation among samples. This is consistent with our expectation that Spearman CCs are a more robust estimator of correlation than Pearson CCs.</p>
 <p>The following cell repeats this procedure for the anomalous correlations.</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
@@ -983,7 +988,7 @@ w_{h,i} = \frac{1}{(\sigma_{h,i})^2}
 <img alt="../_images/examples_2_mergingstats_21_0.png" src="../_images/examples_2_mergingstats_21_0.png" />
 </div>
 </div>
-<p>There is significant anomalous signal across all but the highest resolution bin. The comparison between Pearson and Spearman correlation coefficients shows that the Pearson CC is greatly influenced by outliers in the <span class="math notranslate nohighlight">\(2.00Å-1.96Å\)</span> resolution bin.</p>
+<p>There is significant anomalous signal across all but the highest resolution bin. The comparison between Pearson and Spearman correlation coefficients shows that the Pearson CC is greatly influenced by outliers in the <span class="math notranslate nohighlight">\(2.25Å-2.18Å\)</span> and <span class="math notranslate nohighlight">\(2.00Å-1.96Å\)</span> resolution bins.</p>
 </div>
 </div>
 
