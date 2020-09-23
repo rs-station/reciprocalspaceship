@@ -619,12 +619,12 @@ I_h = \frac{\sum_{i}w_{h,i} I_{h,i}}{\sum_{i} w_{h,i}}
 <p><span class="math">\begin{equation}
 w_{h,i} = \frac{1}{(\sigma_{h,i})^2}
 \end{equation}</span></p>
-<div class="line-block">
-<div class="line">We will randomly split the observations into half-datasets by image number, and we will calculate:</div>
-<div class="line">- <strong>IMEAN</strong> : the averge intensity of both Friedel mates, <span class="math notranslate nohighlight">\(I_h\)</span> and <span class="math notranslate nohighlight">\(I_{-h}\)</span></div>
-<div class="line">- <strong>I(+)</strong> : the average intensity of <span class="math notranslate nohighlight">\(I_h\)</span></div>
-<div class="line">- <strong>I(-)</strong> : the average intensity of <span class="math notranslate nohighlight">\(I_{-h}\)</span></div>
-</div>
+<p>We will randomly split the observations into half-datasets by image number, and we will calculate:</p>
+<ul class="simple">
+<li><p><strong>IMEAN</strong> : the averge intensity of both Friedel mates, <span class="math notranslate nohighlight">\(I_h\)</span> and <span class="math notranslate nohighlight">\(I_{-h}\)</span></p></li>
+<li><p><strong>I(+)</strong> : the average intensity of <span class="math notranslate nohighlight">\(I_h\)</span></p></li>
+<li><p><strong>I(-)</strong> : the average intensity of <span class="math notranslate nohighlight">\(I_{-h}\)</span></p></li>
+</ul>
 <p>for each unique Friedel pair in each half-dataset. We will compare these values across half-datasets in order to compute correlation coefficients by resolution bin, and we will resample the half-datasets multiple times in order to get a sense of the distribution of the correlation coefficients within each resolution bin.</p>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
