@@ -13,6 +13,6 @@ def test_systematic_absences(sgtbx_by_xhm):
     
     H = reference[['h', 'k', 'l']].to_numpy()
     groupops = gemmi.SpaceGroup(xhm)
-    absent = rs.utils.hkl_is_absent(H, groupops)
+    absent = rs.utils.is_absent(H, groupops)
     reference_absent = reference['is_absent'].to_numpy()
     assert np.array_equal(absent, reference_absent)
