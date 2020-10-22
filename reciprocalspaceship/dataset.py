@@ -8,6 +8,7 @@ from reciprocalspaceship.utils import (
     apply_to_hkl,
     phase_shift,
     is_centric,
+    is_absent,
     in_asu,
     hkl_to_asu,
     hkl_to_observed,
@@ -481,6 +482,24 @@ class DataSet(pd.DataFrame):
             dataset = self.copy()
 
         dataset['CENTRIC'] = is_centric(dataset.get_hkls(), dataset.spacegroup)
+        return dataset
+
+    def label_absences(self, inplace=False):
+        """
+        Label systematically absent reflections in DataSet. A new column 
+        of booleans, "ABSENT", is added to the object.
+
+        Parameters
+        ----------
+        inplace : bool
+            Whether to add the column in place or to return a copy
+        """
+        if inplace:
+            dataset = self
+        else:
+            dataset = self.copy()
+
+        dataset['ABSENT'] = is_absent(dataset.get_hkls(), dataset.spacegroup)
         return dataset
 
     def infer_mtz_dtypes(self, inplace=False, index=True):
