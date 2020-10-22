@@ -59,6 +59,7 @@
        ~DataSet.infer_mtz_dtypes
        ~DataSet.is_isomorphous
        ~DataSet.join
+       ~DataSet.label_absences
        ~DataSet.label_centrics
        ~DataSet.merge
        ~DataSet.reset_index
