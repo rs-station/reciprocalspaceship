@@ -119,3 +119,31 @@ def is_centric(H, spacegroup):
     centric = group_ops.centric_flag_array(hkl)
     return centric[inverse]
 
+def is_absent(H, spacegroup):
+    """
+    Determine if Miller indices are systematically absent in a given 
+    spacegroup.
+
+    Parameters
+    ----------
+    H : array
+        n x 3 array of Miller indices
+    spacegroup : gemmi.SpaceGroup, gemmi.GroupOps
+        The space group in which to classify systematic absences
+
+    Returns
+    -------
+    absent : array
+        Boolean array of length n. absent[i] == True if H[i] is systematically absent in sg.
+    """
+    if isinstance(spacegroup, SpaceGroup):
+        group_ops = spacegroup.operations()
+    elif isinstance(spacegroup, GroupOps):
+        group_ops = spacegroup
+    else:
+        raise ValueError(f"gemmi.SpaceGroup or gemmi.GroupOps expected for parameter sg. "
+                         f"Received object of type: ({type(spacegroup)}) instead.")
+
+
+    return group_ops.systematic_absences(H)
+

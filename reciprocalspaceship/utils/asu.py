@@ -175,18 +175,3 @@ def hkl_to_observed(H, isym, sg, return_phase_shifts=False):
         return observed_H, phi_coeff, np.rad2deg(phi_shift)
     return observed_H
 
-def hkl_is_absent(H, sg):
-    """
-    Parameters
-    ----------
-    H : array
-        n x 3 array of Miller indices
-    sg : gemmi.SpaceGroup
-        The space group to identify the asymmetric unit
-
-    Returns
-    -------
-    absent : array
-        Boolean array of length n. absent[i] == True if H[i] is systematically absent in sg.
-    """
-    return sg.operations().systematic_absences(H)
