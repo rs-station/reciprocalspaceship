@@ -34,12 +34,11 @@ def get_phase_restrictions(H, spacegroup):
          List of lists of phase restrictions for each Miller index. An empty
          list is returned for Miller indices without phase restrictions
     """
-    from reciprocalspaceship.utils.asu import hkl_is_absent
-    from reciprocalspaceship.utils.structurefactors import is_centric
+    from reciprocalspaceship.utils.structurefactors import is_centric, is_absent
     
     restrictions = []
     for h in H:
-        if not is_centric([h], spacegroup)[0] or hkl_is_absent([h], spacegroup)[0]:
+        if not is_centric([h], spacegroup)[0] or is_absent([h], spacegroup)[0]:
             restrictions.append([])
         else:
             friedelop = gemmi.Op("-x,-y,-z")
