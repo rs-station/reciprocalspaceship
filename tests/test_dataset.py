@@ -185,7 +185,7 @@ def test_infer_mtz_dtypes_rangeindex(data_merged, inplace, index):
     else:
         assert id(result) != id(temp)
 
-    
+
 @pytest.mark.parametrize("inplace", [True, False])
 @pytest.mark.parametrize("cell", [
     gemmi.UnitCell(10., 20., 30., 90., 90., 90.,),
@@ -210,6 +210,37 @@ def test_compute_dHKL(dataset_hkl, inplace, cell):
         expected[i] = cell.calculate_d(h)
     assert np.allclose(result["dHKL"].to_numpy(), expected)
     assert isinstance(result["dHKL"].dtype, rs.MTZRealDtype)
+
+@pytest.mark.parametrize("inplace", [True, False])
+@pytest.mark.parametrize("include_centering", [True, False])
+@pytest.mark.parametrize("spacegroup", [
+    gemmi.SpaceGroup(19),
+    gemmi.SpaceGroup(4),
+])
+def test_compute_multiplicity(dataset_hkl, inplace, include_centering, spacegroup):
+    """Test DataSet.compute_dHKL()"""
+    dataset_hkl.spacegroup = spacegroup 
+    result = dataset_hkl.compute_multiplicity(inplace=inplace, include_centering=include_centering)
+
+    # Test inplace
+    if inplace:
+        assert id(result) == id(dataset_hkl)
+    else:
+        assert id(result) != id(dataset_hkl)
+
+    # Compare to gemmi result
+    expected = np.zeros(len(result), dtype=np.float32)
+    ops = spacegroup.operations()
+    if include_centering:
+        for i, h in enumerate(result.get_hkls()):
+            expected[i] = ops.epsilon_factor(h)
+    else:
+        for i, h in enumerate(result.get_hkls()):
+            expected[i] = ops.epsilon_factor_without_centering(h)
+
+    assert np.allclose(result["EPSILON"].to_numpy(), expected)
+    assert isinstance(result["EPSILON"].dtype, rs.MTZRealDtype)
+
 
 @pytest.mark.parametrize("bins", [5, 10, 20, 50])
 @pytest.mark.parametrize("inplace", [True, False])
