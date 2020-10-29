@@ -50,6 +50,7 @@
        ~DataSet.assign_resolution_bins
        ~DataSet.canonicalize_phases
        ~DataSet.compute_dHKL
+       ~DataSet.compute_multiplicity
        ~DataSet.from_gemmi
        ~DataSet.get_hkls
        ~DataSet.get_m_isym_keys
