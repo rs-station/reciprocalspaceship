@@ -13,6 +13,7 @@ from reciprocalspaceship.utils import (
     hkl_to_asu,
     hkl_to_observed,
     compute_dHKL,
+    compute_structurefactor_multiplicity,
 )
 
 class DataSet(pd.DataFrame):
@@ -563,6 +564,28 @@ class DataSet(pd.DataFrame):
 
         dHKL = compute_dHKL(self.get_hkls(), self.cell)
         dataset['dHKL'] = rs.DataSeries(dHKL, dtype='R', index=dataset.index)
+        return dataset
+
+    def compute_multiplicity(self, inplace=False, include_centering=True):
+        """
+        Compute the multiplicity of reflections in DataSet. A new column of
+        floats, "EPSILON", is added to the object.
+
+        Parameters
+        ----------
+        inplace : bool
+            Whether to add the column in place or to return a copy
+        include_centering : bool
+            Whether to include centering operations in the multiplicity calculation.
+            The default is to include them.
+        """
+        if inplace:
+            dataset = self
+        else:
+            dataset = self.copy()
+
+        epsilon = compute_structurefactor_multiplicity(self.get_hkls(), self.spacegroup, include_centering)
+        dataset['EPSILON'] = rs.DataSeries(epsilon, dtype='I', index=dataset.index)
         return dataset
 
     def assign_resolution_bins(self, bins=20, inplace=False, return_labels=True):
