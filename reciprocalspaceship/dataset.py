@@ -585,7 +585,7 @@ class DataSet(pd.DataFrame):
             dataset = self.copy()
 
         epsilon = compute_structurefactor_multiplicity(self.get_hkls(), self.spacegroup, include_centering)
-        dataset['EPSILON'] = rs.DataSeries(epsilon, dtype='R', index=dataset.index)
+        dataset['EPSILON'] = rs.DataSeries(epsilon, dtype='I', index=dataset.index)
         return dataset
 
     def assign_resolution_bins(self, bins=20, inplace=False, return_labels=True):
