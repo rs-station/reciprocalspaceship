@@ -65,7 +65,7 @@ class MTZIntegerArray(IntegerArray):
 
         If array does not contain any NaN values, will return a np.int32
         ndarray. If array contains NaN values, will return a ndarray of 
-        np.float32 dtype.
+        object dtype.
 
         Parameters
         ----------
@@ -88,6 +88,7 @@ class MTZIntegerArray(IntegerArray):
         """
         if na_value is lib.no_default:
             na_value = libmissing.NA
+
         if dtype is None:
             if self._hasna:
                 dtype = object
@@ -99,6 +100,7 @@ class MTZIntegerArray(IntegerArray):
             data[self._mask] = na_value
         else:
             data = self._data.astype(dtype, copy=copy)
+
         return data
 
     def value_counts(self, dropna=True):
