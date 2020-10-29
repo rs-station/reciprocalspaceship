@@ -3,7 +3,7 @@ import numpy as np
 from pandas.core import nanops
 from pandas.core.indexers import check_array_indexer
 from pandas.core.construction import extract_array
-from pandas._libs import lib
+from pandas._libs import lib, missing as libmissing
 from pandas.api.extensions import (
     ExtensionDtype,
     ExtensionArray,
@@ -58,6 +58,48 @@ class MTZIntegerArray(IntegerArray):
 
     def reshape(self, *args, **kwargs):
         return self._data.reshape(*args, **kwargs)
+
+    def to_numpy(self, dtype=None, copy=False, na_value=lib.no_default):
+        """
+        Convert to a NumPy Array.
+
+        If array does not contain any NaN values, will return a np.int32
+        ndarray. If array contains NaN values, will return a ndarray of 
+        np.float32 dtype.
+
+        Parameters
+        ----------
+        dtype : dtype, default np.int32 or np.float32
+            The numpy dtype to return
+        copy : bool, default False
+            Whether to ensure that the returned value is a not a view on
+            the array. Note that ``copy=False`` does not *ensure* that
+            ``to_numpy()`` is no-copy. Rather, ``copy=True`` ensure that
+            a copy is made, even if not strictly necessary. This is typically
+            only possible when no missing values are present and `dtype`
+            is the equivalent numpy dtype.
+        na_value : scalar, optional
+             Scalar missing value indicator to use in numpy array. Defaults
+             to the native missing value indicator of this array.
+
+        Returns
+        -------
+        numpy.ndarray
+        """
+        if na_value is lib.no_default:
+            na_value = libmissing.NA
+        if dtype is None:
+            if self._hasna:
+                dtype = object
+            else:
+                dtype = np.int32
+
+        if self._hasna:
+            data = self._data.astype(dtype, copy=copy)
+            data[self._mask] = na_value
+        else:
+            data = self._data.astype(dtype, copy=copy)
+        return data
 
     def value_counts(self, dropna=True):
         """
