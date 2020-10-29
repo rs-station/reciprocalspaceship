@@ -218,7 +218,7 @@ def test_compute_dHKL(dataset_hkl, inplace, cell):
     gemmi.SpaceGroup(4),
 ])
 def test_compute_multiplicity(dataset_hkl, inplace, include_centering, spacegroup):
-    """Test DataSet.compute_dHKL()"""
+    """Test DataSet.compute_multiplicity()"""
     dataset_hkl.spacegroup = spacegroup 
     result = dataset_hkl.compute_multiplicity(inplace=inplace, include_centering=include_centering)
 
@@ -229,7 +229,7 @@ def test_compute_multiplicity(dataset_hkl, inplace, include_centering, spacegrou
         assert id(result) != id(dataset_hkl)
 
     # Compare to gemmi result
-    expected = np.zeros(len(result), dtype=np.float32)
+    expected = np.zeros(len(result), dtype=np.int32)
     ops = spacegroup.operations()
     if include_centering:
         for i, h in enumerate(result.get_hkls()):
@@ -238,8 +238,8 @@ def test_compute_multiplicity(dataset_hkl, inplace, include_centering, spacegrou
         for i, h in enumerate(result.get_hkls()):
             expected[i] = ops.epsilon_factor_without_centering(h)
 
-    assert np.allclose(result["EPSILON"].to_numpy(), expected)
-    assert isinstance(result["EPSILON"].dtype, rs.MTZRealDtype)
+    assert np.all(result["EPSILON"].to_numpy() == expected)
+    assert isinstance(result["EPSILON"].dtype, rs.MTZIntDtype)
 
 
 @pytest.mark.parametrize("bins", [5, 10, 20, 50])
