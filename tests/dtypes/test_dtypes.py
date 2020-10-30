@@ -37,3 +37,15 @@ def test_astype_name(dtype_all):
     result = expected.astype(expected.dtype.name)
     assert_series_equal(result, expected)
     assert expected.dtype.name == str(result.dtype)
+
+@pytest.mark.parametrize("with_nan", [True,  False])
+def test_to_numpy_nan(data_int, with_nan):
+    """Test int32-backed ExtensionArray to_numpy() method"""
+    if with_nan:
+        data_int[10] = data_int._na_value
+
+    result = data_int.to_numpy()
+    if with_nan:
+        assert result.dtype.name == "object"
+    else:
+        assert result.dtype.name == "int32"
