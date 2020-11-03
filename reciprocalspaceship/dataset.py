@@ -14,6 +14,7 @@ from reciprocalspaceship.utils import (
     hkl_to_observed,
     compute_dHKL,
     compute_structurefactor_multiplicity,
+    bin_by_percentile
 )
 
 class DataSet(pd.DataFrame):
@@ -612,7 +613,7 @@ class DataSet(pd.DataFrame):
             dataset = self.copy()
         dHKL = dataset.compute_dHKL()["dHKL"]
 
-        assignments, labels = rs.utils.bin_by_percentile(dHKL, bins=bins, ascending=False)
+        assignments, labels = bin_by_percentile(dHKL, bins=bins, ascending=False)
         dataset["bin"] = rs.DataSeries(assignments, dtype="I", index=dataset.index)
 
         if return_labels:
