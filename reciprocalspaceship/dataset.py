@@ -1029,7 +1029,29 @@ class DataSet(pd.DataFrame):
         dataset.canonicalize_phases(inplace=True)
         
         return dataset
-            
+
+    def expand_to_p1(self):
+        """
+        Generates all symmetrically equivalent reflections. The spacegroup 
+        symmetry is set to P1.
+        
+        Returns
+        -------
+        DataSet
+        """
+        if not self.merged:
+            raise ValueError("This function is only applicable for merged DataSets")
+
+        groupops = self.spacegroup.operations()
+        p1 = rs.concat([ self.apply_symop(op) for op in groupops ])
+        p1.spacegroup = gemmi.SpaceGroup(1)
+        p1.hkl_to_asu(inplace=True)
+        p1.reset_index(inplace=True)
+        p1.drop_duplicates(subset=["H", "K", "L"], inplace=True)
+        p1.set_index(["H", "K", "L"], inplace=True)
+        p1.drop(columns="M/ISYM", inplace=True)
+        return p1
+    
     def canonicalize_phases(self, inplace=False):
         """
         Canonicalize columns with phase data to fall in the interval between

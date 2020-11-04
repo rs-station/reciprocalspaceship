@@ -1,5 +1,6 @@
 import pytest
 import numpy as np
+from pandas.testing  import assert_index_equal
 import reciprocalspaceship as rs
 
 @pytest.mark.parametrize("inplace", [True, False])
@@ -35,3 +36,20 @@ def test_hkl_to_asu(mtz_by_spacegroup, inplace, reset_index):
         assert id(yasu) == id(y)
     else:
         assert id(yasu) != id(y)
+
+
+def test_expand_to_p1(mtz_by_spacegroup):
+    """Test DataSet.expand_to_p1() for common spacegroups"""
+    x = rs.read_mtz(mtz_by_spacegroup)
+
+    expected = rs.read_mtz(mtz_by_spacegroup[:-4] + '_p1.mtz')
+    expected.sort_index(inplace=True)
+    result = x.expand_to_p1()
+    result.sort_index(inplace=True)
+
+    expected_sf = expected.to_structurefactor("FMODEL", "PHIFMODEL")
+    result_sf  = result.to_structurefactor("FMODEL", "PHIFMODEL")
+    
+    assert_index_equal(result.index, expected.index)
+    assert np.allclose(result_sf.to_numpy(), expected_sf.to_numpy(), rtol=1e-4)
+    
