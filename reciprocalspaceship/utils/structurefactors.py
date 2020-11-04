@@ -41,8 +41,11 @@ def from_structurefactor(sfs):
         Tuple of DataSeries for the structure factor amplitudes and 
         phases corresponding to the provided complex structure factors
     """
-    sf = rs.DataSeries(np.abs(sfs), name="F").astype("SFAmplitude")
-    phase = rs.DataSeries(np.angle(sfs, deg=True), name="Phi").astype("Phase")
+    index = None
+    if isinstance(sfs, rs.DataSeries):
+        index = sfs.index
+    sf = rs.DataSeries(np.abs(sfs), index=index, name="F").astype("SFAmplitude")
+    phase = rs.DataSeries(np.angle(sfs, deg=True), index=index, name="Phi").astype("Phase")
     return sf, phase
 
 def compute_structurefactor_multiplicity(H, sg, include_centering=True):

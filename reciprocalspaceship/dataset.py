@@ -261,7 +261,53 @@ class DataSet(pd.DataFrame):
         """
         from reciprocalspaceship import io
         return io.to_gemmi(self, skip_problem_mtztypes)
-    
+
+    def to_structurefactor(self, sf_key, phase_key):
+        """
+        Convert structure factor amplitudes and phases to complex structure
+        factors
+
+        Parameters
+        ----------
+        sf_key : str
+            Column label for structure factor amplitudes
+        phase_key : str
+            Column label for phases
+
+        Returns
+        -------
+        rs.DataSeries
+            Complex structure factors
+
+        See Also
+        --------
+        DataSet.from_structurefactor : Convert complex structure factor to amplitude and phase
+        """
+        sfs = utils.to_structurefactor(self[sf_key], self[phase_key])
+        return rs.DataSeries(sfs, index=self.index)
+
+    def from_structurefactor(self, sf_key):
+        """
+        Convert complex structure factors to structure factor amplitudes
+        and phases
+
+        Parameters
+        ----------
+        sf_key : str
+            Column label for complex structure factors
+        
+        Returns
+        -------
+        (sf, phase) : tuple of DataSeris
+            Tuple of DataSeries for the structure factor amplitudes and
+            phases corresponding to the complex structure factors
+
+        See Also
+        --------
+        DataSet.to_structurefactor : Convert amplitude and phase to complex structure factor
+        """
+        return utils.from_structurefactor(self[sf_key])
+        
     def append(self, *args, check_isomorphous=True, **kwargs):
         """
         Append rows of `other` to the end of calling DataSet, returning

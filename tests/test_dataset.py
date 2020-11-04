@@ -55,7 +55,28 @@ def test_constructor_gemmi(data_gemmi, spacegroup, cell):
     else:
         assert result.cell == data_gemmi.cell
 
+def test_to_structurefactor(data_fmodel):
+    """Test DataSet.to_structurefactor()"""
+    result = data_fmodel.to_structurefactor("FMODEL", "PHIFMODEL")
+    sfamps = data_fmodel["FMODEL"].to_numpy()
+    phases = data_fmodel["PHIFMODEL"].to_numpy()
+    expected = sfamps*np.exp(1j*np.deg2rad(phases))
+    assert isinstance(result, rs.DataSeries)
+    assert np.allclose(result.to_numpy(), expected)
 
+
+def test_from_structurefactor(data_fmodel):
+    """Test DataSet.from_structurefactor()"""
+    data_fmodel["sf"] = data_fmodel.to_structurefactor("FMODEL", "PHIFMODEL")
+    f, phi = data_fmodel.from_structurefactor("sf")
+    assert isinstance(f, rs.DataSeries)
+    assert isinstance(phi, rs.DataSeries)
+    assert isinstance(f.dtype, rs.StructureFactorAmplitudeDtype)
+    assert isinstance(phi.dtype, rs.PhaseDtype)
+    assert np.allclose(f.to_numpy(), data_fmodel["FMODEL"].to_numpy())
+    assert np.allclose(np.sin(np.deg2rad(phi.to_numpy())), np.sin(np.deg2rad(data_fmodel["PHIFMODEL"].to_numpy())), atol=1e-6)
+    assert np.allclose(np.cos(np.deg2rad(phi.to_numpy())), np.cos(np.deg2rad(data_fmodel["PHIFMODEL"].to_numpy())), atol=1e-6)    
+    
 @pytest.mark.parametrize("skip_problem_mtztypes", [True, False])
 def test_to_gemmi_roundtrip(data_gemmi, skip_problem_mtztypes):
     """Test DataSet.to_gemmi() and DataSet.from_gemmi() roundtrip"""
