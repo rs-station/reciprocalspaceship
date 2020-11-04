@@ -53,3 +53,8 @@ def test_expand_to_p1(mtz_by_spacegroup):
     assert_index_equal(result.index, expected.index)
     assert np.allclose(result_sf.to_numpy(), expected_sf.to_numpy(), rtol=1e-4)
     
+
+def test_expand_to_p1_unmerged(data_unmerged):
+    """Test DataSet.expand_to_p1() raises ValueError with unmerged data"""
+    with pytest.raises(ValueError):
+        result = data_unmerged.expand_to_p1()
