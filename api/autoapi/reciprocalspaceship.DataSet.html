@@ -204,7 +204,7 @@
 <h1>DataSet<a class="headerlink" href="#dataset" title="Permalink to this headline">¶</a></h1>
 <dl class="py class">
 <dt id="reciprocalspaceship.DataSet">
-<em class="property">class </em><code class="sig-prename descclassname">reciprocalspaceship.</code><code class="sig-name descname">DataSet</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">data</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">index</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">columns</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">dtype</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">copy</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">spacegroup</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">cell</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">merged</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/Hekstra-Lab/reciprocalspaceship/blob/master/reciprocalspaceship/dataset.py#L19-L1009"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#reciprocalspaceship.DataSet" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">reciprocalspaceship.</code><code class="sig-name descname">DataSet</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">data</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">index</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">columns</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">dtype</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">copy</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">spacegroup</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">cell</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">merged</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/Hekstra-Lab/reciprocalspaceship/blob/master/reciprocalspaceship/dataset.py#L20-L1056"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#reciprocalspaceship.DataSet" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">pandas.core.frame.DataFrame</span></code></p>
 <p>Representation of a crystallographic dataset.</p>
 <p>A DataSet object provides a tabular representation of reflection data.
@@ -261,50 +261,56 @@ and attributes, please see the <a class="reference external" href="https://panda
 <tr class="row-even"><td><p><a class="reference internal" href="#reciprocalspaceship.DataSet.from_gemmi" title="reciprocalspaceship.DataSet.from_gemmi"><code class="xref py py-obj docutils literal notranslate"><span class="pre">from_gemmi</span></code></a>(gemmiMtz)</p></td>
 <td><p>Creates DataSet object from gemmi.Mtz object.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#reciprocalspaceship.DataSet.get_hkls" title="reciprocalspaceship.DataSet.get_hkls"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_hkls</span></code></a>()</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#reciprocalspaceship.DataSet.from_structurefactor" title="reciprocalspaceship.DataSet.from_structurefactor"><code class="xref py py-obj docutils literal notranslate"><span class="pre">from_structurefactor</span></code></a>(sf_key)</p></td>
+<td><p>Convert complex structure factors to structure factor amplitudes and phases</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#reciprocalspaceship.DataSet.get_hkls" title="reciprocalspaceship.DataSet.get_hkls"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_hkls</span></code></a>()</p></td>
 <td><p>Get the Miller indices in the DataSet as a ndarray.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#reciprocalspaceship.DataSet.get_m_isym_keys" title="reciprocalspaceship.DataSet.get_m_isym_keys"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_m_isym_keys</span></code></a>()</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#reciprocalspaceship.DataSet.get_m_isym_keys" title="reciprocalspaceship.DataSet.get_m_isym_keys"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_m_isym_keys</span></code></a>()</p></td>
 <td><p>Return column labels for data with M/ISYM dtype.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#reciprocalspaceship.DataSet.get_phase_keys" title="reciprocalspaceship.DataSet.get_phase_keys"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_phase_keys</span></code></a>()</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#reciprocalspaceship.DataSet.get_phase_keys" title="reciprocalspaceship.DataSet.get_phase_keys"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_phase_keys</span></code></a>()</p></td>
 <td><p>Return column labels for data with Phase dtype.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#reciprocalspaceship.DataSet.hkl_to_asu" title="reciprocalspaceship.DataSet.hkl_to_asu"><code class="xref py py-obj docutils literal notranslate"><span class="pre">hkl_to_asu</span></code></a>([inplace])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#reciprocalspaceship.DataSet.hkl_to_asu" title="reciprocalspaceship.DataSet.hkl_to_asu"><code class="xref py py-obj docutils literal notranslate"><span class="pre">hkl_to_asu</span></code></a>([inplace])</p></td>
 <td><p>Map HKL indices to the reciprocal space asymmetric unit.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#reciprocalspaceship.DataSet.hkl_to_observed" title="reciprocalspaceship.DataSet.hkl_to_observed"><code class="xref py py-obj docutils literal notranslate"><span class="pre">hkl_to_observed</span></code></a>([m_isym, inplace])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#reciprocalspaceship.DataSet.hkl_to_observed" title="reciprocalspaceship.DataSet.hkl_to_observed"><code class="xref py py-obj docutils literal notranslate"><span class="pre">hkl_to_observed</span></code></a>([m_isym, inplace])</p></td>
 <td><p>Map HKL indices to their observed index using an <code class="docutils literal notranslate"><span class="pre">M/ISYM</span></code> column.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#reciprocalspaceship.DataSet.infer_mtz_dtypes" title="reciprocalspaceship.DataSet.infer_mtz_dtypes"><code class="xref py py-obj docutils literal notranslate"><span class="pre">infer_mtz_dtypes</span></code></a>([inplace, index])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#reciprocalspaceship.DataSet.infer_mtz_dtypes" title="reciprocalspaceship.DataSet.infer_mtz_dtypes"><code class="xref py py-obj docutils literal notranslate"><span class="pre">infer_mtz_dtypes</span></code></a>([inplace, index])</p></td>
 <td><p>Infers MTZ dtypes from column names and underlying data.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#reciprocalspaceship.DataSet.is_isomorphous" title="reciprocalspaceship.DataSet.is_isomorphous"><code class="xref py py-obj docutils literal notranslate"><span class="pre">is_isomorphous</span></code></a>(other[, cell_threshold])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#reciprocalspaceship.DataSet.is_isomorphous" title="reciprocalspaceship.DataSet.is_isomorphous"><code class="xref py py-obj docutils literal notranslate"><span class="pre">is_isomorphous</span></code></a>(other[, cell_threshold])</p></td>
 <td><p>Determine whether DataSet is isomorphous to another DataSet.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#reciprocalspaceship.DataSet.join" title="reciprocalspaceship.DataSet.join"><code class="xref py py-obj docutils literal notranslate"><span class="pre">join</span></code></a>(*args[, check_isomorphous])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#reciprocalspaceship.DataSet.join" title="reciprocalspaceship.DataSet.join"><code class="xref py py-obj docutils literal notranslate"><span class="pre">join</span></code></a>(*args[, check_isomorphous])</p></td>
 <td><p>Join DataSets or named DataSeries using a database-style join on columns or indices.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#reciprocalspaceship.DataSet.label_absences" title="reciprocalspaceship.DataSet.label_absences"><code class="xref py py-obj docutils literal notranslate"><span class="pre">label_absences</span></code></a>([inplace])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#reciprocalspaceship.DataSet.label_absences" title="reciprocalspaceship.DataSet.label_absences"><code class="xref py py-obj docutils literal notranslate"><span class="pre">label_absences</span></code></a>([inplace])</p></td>
 <td><p>Label systematically absent reflections in DataSet.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#reciprocalspaceship.DataSet.label_centrics" title="reciprocalspaceship.DataSet.label_centrics"><code class="xref py py-obj docutils literal notranslate"><span class="pre">label_centrics</span></code></a>([inplace])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#reciprocalspaceship.DataSet.label_centrics" title="reciprocalspaceship.DataSet.label_centrics"><code class="xref py py-obj docutils literal notranslate"><span class="pre">label_centrics</span></code></a>([inplace])</p></td>
 <td><p>Label centric reflections in DataSet.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#reciprocalspaceship.DataSet.merge" title="reciprocalspaceship.DataSet.merge"><code class="xref py py-obj docutils literal notranslate"><span class="pre">merge</span></code></a>(*args[, check_isomorphous])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#reciprocalspaceship.DataSet.merge" title="reciprocalspaceship.DataSet.merge"><code class="xref py py-obj docutils literal notranslate"><span class="pre">merge</span></code></a>(*args[, check_isomorphous])</p></td>
 <td><p>Merge DataSet or named DataSeries using a database-style join on columns or indices.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#reciprocalspaceship.DataSet.reset_index" title="reciprocalspaceship.DataSet.reset_index"><code class="xref py py-obj docutils literal notranslate"><span class="pre">reset_index</span></code></a>([level, drop, inplace, …])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#reciprocalspaceship.DataSet.reset_index" title="reciprocalspaceship.DataSet.reset_index"><code class="xref py py-obj docutils literal notranslate"><span class="pre">reset_index</span></code></a>([level, drop, inplace, …])</p></td>
 <td><p>Reset the index or a specific level of a MultiIndex.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#reciprocalspaceship.DataSet.set_index" title="reciprocalspaceship.DataSet.set_index"><code class="xref py py-obj docutils literal notranslate"><span class="pre">set_index</span></code></a>(keys[, drop, append, inplace, …])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#reciprocalspaceship.DataSet.set_index" title="reciprocalspaceship.DataSet.set_index"><code class="xref py py-obj docutils literal notranslate"><span class="pre">set_index</span></code></a>(keys[, drop, append, inplace, …])</p></td>
 <td><p>Set the DataSet index using existing columns.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#reciprocalspaceship.DataSet.stack_anomalous" title="reciprocalspaceship.DataSet.stack_anomalous"><code class="xref py py-obj docutils literal notranslate"><span class="pre">stack_anomalous</span></code></a>([plus_labels, minus_labels])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#reciprocalspaceship.DataSet.stack_anomalous" title="reciprocalspaceship.DataSet.stack_anomalous"><code class="xref py py-obj docutils literal notranslate"><span class="pre">stack_anomalous</span></code></a>([plus_labels, minus_labels])</p></td>
 <td><p>Convert data from two-column anomalous format to one-column format.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#reciprocalspaceship.DataSet.to_gemmi" title="reciprocalspaceship.DataSet.to_gemmi"><code class="xref py py-obj docutils literal notranslate"><span class="pre">to_gemmi</span></code></a>([skip_problem_mtztypes])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#reciprocalspaceship.DataSet.to_gemmi" title="reciprocalspaceship.DataSet.to_gemmi"><code class="xref py py-obj docutils literal notranslate"><span class="pre">to_gemmi</span></code></a>([skip_problem_mtztypes])</p></td>
 <td><p>Creates gemmi.Mtz object from DataSet object.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#reciprocalspaceship.DataSet.to_structurefactor" title="reciprocalspaceship.DataSet.to_structurefactor"><code class="xref py py-obj docutils literal notranslate"><span class="pre">to_structurefactor</span></code></a>(sf_key, phase_key)</p></td>
+<td><p>Convert structure factor amplitudes and phases to complex structure factors</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#reciprocalspaceship.DataSet.unstack_anomalous" title="reciprocalspaceship.DataSet.unstack_anomalous"><code class="xref py py-obj docutils literal notranslate"><span class="pre">unstack_anomalous</span></code></a>([columns, suffixes])</p></td>
 <td><p>Convert data from one-column format to two-column anomalous format.</p></td>
@@ -316,7 +322,7 @@ and attributes, please see the <a class="reference external" href="https://panda
 </table>
 <dl class="py method">
 <dt id="reciprocalspaceship.DataSet.append">
-<code class="sig-name descname">append</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span></em>, <em class="sig-param"><span class="n">check_isomorphous</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/Hekstra-Lab/reciprocalspaceship/blob/master/reciprocalspaceship/dataset.py#L264-L306"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#reciprocalspaceship.DataSet.append" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">append</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span></em>, <em class="sig-param"><span class="n">check_isomorphous</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/Hekstra-Lab/reciprocalspaceship/blob/master/reciprocalspaceship/dataset.py#L311-L353"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#reciprocalspaceship.DataSet.append" title="Permalink to this definition">¶</a></dt>
 <dd><p>Append rows of <cite>other</cite> to the end of calling DataSet, returning
 a new DataSet object. Any columns in <cite>other</cite> that are not present
 in the calling DataSet are added as new columns.</p>
@@ -343,7 +349,7 @@ they are isomorphous.</p>
 
 <dl class="py method">
 <dt id="reciprocalspaceship.DataSet.apply_symop">
-<code class="sig-name descname">apply_symop</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">symop</span></em>, <em class="sig-param"><span class="n">inplace</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/Hekstra-Lab/reciprocalspaceship/blob/master/reciprocalspaceship/dataset.py#L420-L456"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#reciprocalspaceship.DataSet.apply_symop" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">apply_symop</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">symop</span></em>, <em class="sig-param"><span class="n">inplace</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/Hekstra-Lab/reciprocalspaceship/blob/master/reciprocalspaceship/dataset.py#L467-L503"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#reciprocalspaceship.DataSet.apply_symop" title="Permalink to this definition">¶</a></dt>
 <dd><p>Apply symmetry operation to all reflections in DataSet object.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -357,7 +363,7 @@ they are isomorphous.</p>
 
 <dl class="py method">
 <dt id="reciprocalspaceship.DataSet.assign_resolution_bins">
-<code class="sig-name descname">assign_resolution_bins</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">bins</span><span class="o">=</span><span class="default_value">20</span></em>, <em class="sig-param"><span class="n">inplace</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">return_labels</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/Hekstra-Lab/reciprocalspaceship/blob/master/reciprocalspaceship/dataset.py#L591-L621"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#reciprocalspaceship.DataSet.assign_resolution_bins" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">assign_resolution_bins</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">bins</span><span class="o">=</span><span class="default_value">20</span></em>, <em class="sig-param"><span class="n">inplace</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">return_labels</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/Hekstra-Lab/reciprocalspaceship/blob/master/reciprocalspaceship/dataset.py#L638-L668"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#reciprocalspaceship.DataSet.assign_resolution_bins" title="Permalink to this definition">¶</a></dt>
 <dd><p>Assign reflections in DataSet to resolution bins.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -376,7 +382,7 @@ of each resolution bin</p></li>
 
 <dl class="py method">
 <dt id="reciprocalspaceship.DataSet.canonicalize_phases">
-<code class="sig-name descname">canonicalize_phases</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">inplace</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/Hekstra-Lab/reciprocalspaceship/blob/master/reciprocalspaceship/dataset.py#L986-L1009"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#reciprocalspaceship.DataSet.canonicalize_phases" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">canonicalize_phases</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">inplace</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/Hekstra-Lab/reciprocalspaceship/blob/master/reciprocalspaceship/dataset.py#L1033-L1056"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#reciprocalspaceship.DataSet.canonicalize_phases" title="Permalink to this definition">¶</a></dt>
 <dd><p>Canonicalize columns with phase data to fall in the interval between
 -180 and 180 degrees. This method will modify the values within any
 column composed of data with the PhaseDtype.</p>
@@ -398,7 +404,7 @@ column composed of data with the PhaseDtype.</p>
 
 <dl class="py method">
 <dt id="reciprocalspaceship.DataSet.compute_dHKL">
-<code class="sig-name descname">compute_dHKL</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">inplace</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/Hekstra-Lab/reciprocalspaceship/blob/master/reciprocalspaceship/dataset.py#L550-L567"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#reciprocalspaceship.DataSet.compute_dHKL" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">compute_dHKL</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">inplace</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/Hekstra-Lab/reciprocalspaceship/blob/master/reciprocalspaceship/dataset.py#L597-L614"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#reciprocalspaceship.DataSet.compute_dHKL" title="Permalink to this definition">¶</a></dt>
 <dd><p>Compute the real space lattice plane spacing, d, associated with
 the HKL indices in the object.</p>
 <dl class="field-list simple">
@@ -410,7 +416,7 @@ the HKL indices in the object.</p>
 
 <dl class="py method">
 <dt id="reciprocalspaceship.DataSet.compute_multiplicity">
-<code class="sig-name descname">compute_multiplicity</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">inplace</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">include_centering</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/Hekstra-Lab/reciprocalspaceship/blob/master/reciprocalspaceship/dataset.py#L569-L589"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#reciprocalspaceship.DataSet.compute_multiplicity" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">compute_multiplicity</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">inplace</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">include_centering</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/Hekstra-Lab/reciprocalspaceship/blob/master/reciprocalspaceship/dataset.py#L616-L636"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#reciprocalspaceship.DataSet.compute_multiplicity" title="Permalink to this definition">¶</a></dt>
 <dd><p>Compute the multiplicity of reflections in DataSet. A new column of
 floats, “EPSILON”, is added to the object.</p>
 <dl class="field-list simple">
@@ -426,7 +432,7 @@ The default is to include them.</p></li>
 
 <dl class="py method">
 <dt id="reciprocalspaceship.DataSet.from_gemmi">
-<em class="property">classmethod </em><code class="sig-name descname">from_gemmi</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">gemmiMtz</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/Hekstra-Lab/reciprocalspaceship/blob/master/reciprocalspaceship/dataset.py#L215-L238"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#reciprocalspaceship.DataSet.from_gemmi" title="Permalink to this definition">¶</a></dt>
+<em class="property">classmethod </em><code class="sig-name descname">from_gemmi</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">gemmiMtz</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/Hekstra-Lab/reciprocalspaceship/blob/master/reciprocalspaceship/dataset.py#L216-L239"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#reciprocalspaceship.DataSet.from_gemmi" title="Permalink to this definition">¶</a></dt>
 <dd><p>Creates DataSet object from gemmi.Mtz object.</p>
 <p>If the gemmi.Mtz object contains an M/ISYM column and contains duplicated
 Miller indices, an unmerged DataSet will be constructed. The Miller indices
@@ -447,8 +453,31 @@ label partial or centric reflections, respectively.</p>
 </dd></dl>
 
 <dl class="py method">
+<dt id="reciprocalspaceship.DataSet.from_structurefactor">
+<code class="sig-name descname">from_structurefactor</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">sf_key</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/Hekstra-Lab/reciprocalspaceship/blob/master/reciprocalspaceship/dataset.py#L289-L309"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#reciprocalspaceship.DataSet.from_structurefactor" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert complex structure factors to structure factor amplitudes
+and phases</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>sf_key</strong> (<em>str</em>) – Column label for complex structure factors</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>(sf, phase)</strong> (<em>tuple of DataSeris</em>) – Tuple of DataSeries for the structure factor amplitudes and
+phases corresponding to the complex structure factors</p>
+</dd>
+</dl>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<dl class="simple">
+<dt><a class="reference internal" href="#reciprocalspaceship.DataSet.to_structurefactor" title="reciprocalspaceship.DataSet.to_structurefactor"><code class="xref py py-obj docutils literal notranslate"><span class="pre">DataSet.to_structurefactor</span></code></a></dt><dd><p>Convert amplitude and phase to complex structure factor</p>
+</dd>
+</dl>
+</div>
+</dd></dl>
+
+<dl class="py method">
 <dt id="reciprocalspaceship.DataSet.get_hkls">
-<code class="sig-name descname">get_hkls</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/Hekstra-Lab/reciprocalspaceship/blob/master/reciprocalspaceship/dataset.py#L458-L468"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#reciprocalspaceship.DataSet.get_hkls" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">get_hkls</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/Hekstra-Lab/reciprocalspaceship/blob/master/reciprocalspaceship/dataset.py#L505-L515"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#reciprocalspaceship.DataSet.get_hkls" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the Miller indices in the DataSet as a ndarray.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
@@ -459,7 +488,7 @@ label partial or centric reflections, respectively.</p>
 
 <dl class="py method">
 <dt id="reciprocalspaceship.DataSet.get_m_isym_keys">
-<code class="sig-name descname">get_m_isym_keys</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/Hekstra-Lab/reciprocalspaceship/blob/master/reciprocalspaceship/dataset.py#L408-L418"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#reciprocalspaceship.DataSet.get_m_isym_keys" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">get_m_isym_keys</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/Hekstra-Lab/reciprocalspaceship/blob/master/reciprocalspaceship/dataset.py#L455-L465"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#reciprocalspaceship.DataSet.get_m_isym_keys" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return column labels for data with M/ISYM dtype.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
@@ -470,7 +499,7 @@ label partial or centric reflections, respectively.</p>
 
 <dl class="py method">
 <dt id="reciprocalspaceship.DataSet.get_phase_keys">
-<code class="sig-name descname">get_phase_keys</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/Hekstra-Lab/reciprocalspaceship/blob/master/reciprocalspaceship/dataset.py#L396-L406"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#reciprocalspaceship.DataSet.get_phase_keys" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">get_phase_keys</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/Hekstra-Lab/reciprocalspaceship/blob/master/reciprocalspaceship/dataset.py#L443-L453"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#reciprocalspaceship.DataSet.get_phase_keys" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return column labels for data with Phase dtype.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
@@ -481,7 +510,7 @@ label partial or centric reflections, respectively.</p>
 
 <dl class="py method">
 <dt id="reciprocalspaceship.DataSet.hkl_to_asu">
-<code class="sig-name descname">hkl_to_asu</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">inplace</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/Hekstra-Lab/reciprocalspaceship/blob/master/reciprocalspaceship/dataset.py#L844-L907"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#reciprocalspaceship.DataSet.hkl_to_asu" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">hkl_to_asu</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">inplace</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/Hekstra-Lab/reciprocalspaceship/blob/master/reciprocalspaceship/dataset.py#L891-L954"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#reciprocalspaceship.DataSet.hkl_to_asu" title="Permalink to this definition">¶</a></dt>
 <dd><p>Map HKL indices to the reciprocal space asymmetric unit. If phases
 are included in the DataSet, they will be changed according to the
 phase shift associated with the necessary symmetry operation.</p>
@@ -508,7 +537,7 @@ will have an M/ISYM column added.</p>
 
 <dl class="py method">
 <dt id="reciprocalspaceship.DataSet.hkl_to_observed">
-<code class="sig-name descname">hkl_to_observed</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">m_isym</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">inplace</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/Hekstra-Lab/reciprocalspaceship/blob/master/reciprocalspaceship/dataset.py#L909-L984"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#reciprocalspaceship.DataSet.hkl_to_observed" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">hkl_to_observed</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">m_isym</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">inplace</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/Hekstra-Lab/reciprocalspaceship/blob/master/reciprocalspaceship/dataset.py#L956-L1031"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#reciprocalspaceship.DataSet.hkl_to_observed" title="Permalink to this definition">¶</a></dt>
 <dd><p>Map HKL indices to their observed index using an <code class="docutils literal notranslate"><span class="pre">M/ISYM</span></code> column.
 This method applies the symmetry operation specified by the <code class="docutils literal notranslate"><span class="pre">M/ISYM</span></code>
 column to each Miller index in the DataSet. If phases are included
@@ -543,7 +572,7 @@ be used.</p></li>
 
 <dl class="py method">
 <dt id="reciprocalspaceship.DataSet.infer_mtz_dtypes">
-<code class="sig-name descname">infer_mtz_dtypes</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">inplace</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">index</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/Hekstra-Lab/reciprocalspaceship/blob/master/reciprocalspaceship/dataset.py#L506-L548"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#reciprocalspaceship.DataSet.infer_mtz_dtypes" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">infer_mtz_dtypes</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">inplace</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">index</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/Hekstra-Lab/reciprocalspaceship/blob/master/reciprocalspaceship/dataset.py#L553-L595"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#reciprocalspaceship.DataSet.infer_mtz_dtypes" title="Permalink to this definition">¶</a></dt>
 <dd><p>Infers MTZ dtypes from column names and underlying data. This
 method iterates over each column in the DataSet and tries to infer
 its proper MTZ dtype based on common MTZ naming conventions.</p>
@@ -572,7 +601,7 @@ in the index.</p>
 
 <dl class="py method">
 <dt id="reciprocalspaceship.DataSet.is_isomorphous">
-<code class="sig-name descname">is_isomorphous</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">other</span></em>, <em class="sig-param"><span class="n">cell_threshold</span><span class="o">=</span><span class="default_value">0.05</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/Hekstra-Lab/reciprocalspaceship/blob/master/reciprocalspaceship/dataset.py#L802-L842"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#reciprocalspaceship.DataSet.is_isomorphous" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">is_isomorphous</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">other</span></em>, <em class="sig-param"><span class="n">cell_threshold</span><span class="o">=</span><span class="default_value">0.05</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/Hekstra-Lab/reciprocalspaceship/blob/master/reciprocalspaceship/dataset.py#L849-L889"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#reciprocalspaceship.DataSet.is_isomorphous" title="Permalink to this definition">¶</a></dt>
 <dd><p>Determine whether DataSet is isomorphous to another DataSet. This
 method confirms isomorphism by ensuring the spacegroups are equivalent,
 and that the cell parameters are within a specified percentage
@@ -592,7 +621,7 @@ and that the cell parameters are within a specified percentage
 
 <dl class="py method">
 <dt id="reciprocalspaceship.DataSet.join">
-<code class="sig-name descname">join</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span></em>, <em class="sig-param"><span class="n">check_isomorphous</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/Hekstra-Lab/reciprocalspaceship/blob/master/reciprocalspaceship/dataset.py#L338-L372"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#reciprocalspaceship.DataSet.join" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">join</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span></em>, <em class="sig-param"><span class="n">check_isomorphous</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/Hekstra-Lab/reciprocalspaceship/blob/master/reciprocalspaceship/dataset.py#L385-L419"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#reciprocalspaceship.DataSet.join" title="Permalink to this definition">¶</a></dt>
 <dd><p>Join DataSets or named DataSeries using a database-style join on
 columns or indices. This method can be used to join lists <code class="docutils literal notranslate"><span class="pre">rs</span></code> objects
 to a given DataSet.</p>
@@ -619,7 +648,7 @@ they are isomorphous.</p>
 
 <dl class="py method">
 <dt id="reciprocalspaceship.DataSet.label_absences">
-<code class="sig-name descname">label_absences</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">inplace</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/Hekstra-Lab/reciprocalspaceship/blob/master/reciprocalspaceship/dataset.py#L488-L504"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#reciprocalspaceship.DataSet.label_absences" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">label_absences</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">inplace</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/Hekstra-Lab/reciprocalspaceship/blob/master/reciprocalspaceship/dataset.py#L535-L551"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#reciprocalspaceship.DataSet.label_absences" title="Permalink to this definition">¶</a></dt>
 <dd><p>Label systematically absent reflections in DataSet. A new column
 of booleans, “ABSENT”, is added to the object.</p>
 <dl class="field-list simple">
@@ -631,7 +660,7 @@ of booleans, “ABSENT”, is added to the object.</p>
 
 <dl class="py method">
 <dt id="reciprocalspaceship.DataSet.label_centrics">
-<code class="sig-name descname">label_centrics</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">inplace</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/Hekstra-Lab/reciprocalspaceship/blob/master/reciprocalspaceship/dataset.py#L470-L486"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#reciprocalspaceship.DataSet.label_centrics" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">label_centrics</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">inplace</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/Hekstra-Lab/reciprocalspaceship/blob/master/reciprocalspaceship/dataset.py#L517-L533"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#reciprocalspaceship.DataSet.label_centrics" title="Permalink to this definition">¶</a></dt>
 <dd><p>Label centric reflections in DataSet. A new column of
 booleans, “CENTRIC”, is added to the object.</p>
 <dl class="field-list simple">
@@ -643,7 +672,7 @@ booleans, “CENTRIC”, is added to the object.</p>
 
 <dl class="py method">
 <dt id="reciprocalspaceship.DataSet.merge">
-<code class="sig-name descname">merge</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span></em>, <em class="sig-param"><span class="n">check_isomorphous</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/Hekstra-Lab/reciprocalspaceship/blob/master/reciprocalspaceship/dataset.py#L308-L336"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#reciprocalspaceship.DataSet.merge" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">merge</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span></em>, <em class="sig-param"><span class="n">check_isomorphous</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/Hekstra-Lab/reciprocalspaceship/blob/master/reciprocalspaceship/dataset.py#L355-L383"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#reciprocalspaceship.DataSet.merge" title="Permalink to this definition">¶</a></dt>
 <dd><p>Merge DataSet or named DataSeries using a database-style join on
 columns or indices.</p>
 <p>For additional documentation on accepted arguments, see the
@@ -675,7 +704,7 @@ they are isomorphous.</p>
 
 <dl class="py method">
 <dt id="reciprocalspaceship.DataSet.reset_index">
-<code class="sig-name descname">reset_index</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">level</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">drop</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">inplace</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">col_level</span><span class="o">=</span><span class="default_value">0</span></em>, <em class="sig-param"><span class="n">col_fill</span><span class="o">=</span><span class="default_value">''</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/Hekstra-Lab/reciprocalspaceship/blob/master/reciprocalspaceship/dataset.py#L156-L213"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#reciprocalspaceship.DataSet.reset_index" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">reset_index</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">level</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">drop</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">inplace</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">col_level</span><span class="o">=</span><span class="default_value">0</span></em>, <em class="sig-param"><span class="n">col_fill</span><span class="o">=</span><span class="default_value">''</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/Hekstra-Lab/reciprocalspaceship/blob/master/reciprocalspaceship/dataset.py#L157-L214"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#reciprocalspaceship.DataSet.reset_index" title="Permalink to this definition">¶</a></dt>
 <dd><p>Reset the index or a specific level of a MultiIndex.</p>
 <p>Reset the index to use a numbered RangeIndex. Using the <cite>level</cite>
 argument, it is possible to reset one or more levels of a MultiIndex.</p>
@@ -707,7 +736,7 @@ levels are named. If None then the index name is repeated.</p></li>
 
 <dl class="py method">
 <dt id="reciprocalspaceship.DataSet.set_index">
-<code class="sig-name descname">set_index</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">keys</span></em>, <em class="sig-param"><span class="n">drop</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">append</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">inplace</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">verify_integrity</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/Hekstra-Lab/reciprocalspaceship/blob/master/reciprocalspaceship/dataset.py#L106-L154"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#reciprocalspaceship.DataSet.set_index" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">set_index</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">keys</span></em>, <em class="sig-param"><span class="n">drop</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">append</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">inplace</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">verify_integrity</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/Hekstra-Lab/reciprocalspaceship/blob/master/reciprocalspaceship/dataset.py#L107-L155"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#reciprocalspaceship.DataSet.set_index" title="Permalink to this definition">¶</a></dt>
 <dd><p>Set the DataSet index using existing columns.</p>
 <p>Set the DataSet index (row labels) using one or more existing
 columns or arrays (of the correct length). The index can replace
@@ -747,7 +776,7 @@ of this method</p></li>
 
 <dl class="py method">
 <dt id="reciprocalspaceship.DataSet.stack_anomalous">
-<code class="sig-name descname">stack_anomalous</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">plus_labels</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">minus_labels</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/Hekstra-Lab/reciprocalspaceship/blob/master/reciprocalspaceship/dataset.py#L623-L717"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#reciprocalspaceship.DataSet.stack_anomalous" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">stack_anomalous</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">plus_labels</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">minus_labels</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/Hekstra-Lab/reciprocalspaceship/blob/master/reciprocalspaceship/dataset.py#L670-L764"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#reciprocalspaceship.DataSet.stack_anomalous" title="Permalink to this definition">¶</a></dt>
 <dd><p>Convert data from two-column anomalous format to one-column
 format. Intensities, structure factor amplitudes, or other data
 are converted from separate columns corresponding to a single
@@ -793,7 +822,7 @@ Friedel-minus reflection (Defaults to columns suffixed with “(-)”)</p></li>
 
 <dl class="py method">
 <dt id="reciprocalspaceship.DataSet.to_gemmi">
-<code class="sig-name descname">to_gemmi</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">skip_problem_mtztypes</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/Hekstra-Lab/reciprocalspaceship/blob/master/reciprocalspaceship/dataset.py#L240-L262"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#reciprocalspaceship.DataSet.to_gemmi" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">to_gemmi</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">skip_problem_mtztypes</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/Hekstra-Lab/reciprocalspaceship/blob/master/reciprocalspaceship/dataset.py#L241-L263"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#reciprocalspaceship.DataSet.to_gemmi" title="Permalink to this definition">¶</a></dt>
 <dd><p>Creates gemmi.Mtz object from DataSet object.</p>
 <p>If <code class="docutils literal notranslate"><span class="pre">dataset.merged</span> <span class="pre">==</span> <span class="pre">False</span></code>, the reflections will be mapped to the
 reciprocal space ASU, and a M/ISYM column will be constructed.</p>
@@ -812,8 +841,33 @@ MTZ datatypes</p>
 </dd></dl>
 
 <dl class="py method">
+<dt id="reciprocalspaceship.DataSet.to_structurefactor">
+<code class="sig-name descname">to_structurefactor</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">sf_key</span></em>, <em class="sig-param"><span class="n">phase_key</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/Hekstra-Lab/reciprocalspaceship/blob/master/reciprocalspaceship/dataset.py#L265-L287"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#reciprocalspaceship.DataSet.to_structurefactor" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert structure factor amplitudes and phases to complex structure
+factors</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>sf_key</strong> (<em>str</em>) – Column label for structure factor amplitudes</p></li>
+<li><p><strong>phase_key</strong> (<em>str</em>) – Column label for phases</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><em>rs.DataSeries</em> – Complex structure factors</p>
+</dd>
+</dl>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<dl class="simple">
+<dt><a class="reference internal" href="#reciprocalspaceship.DataSet.from_structurefactor" title="reciprocalspaceship.DataSet.from_structurefactor"><code class="xref py py-obj docutils literal notranslate"><span class="pre">DataSet.from_structurefactor</span></code></a></dt><dd><p>Convert complex structure factor to amplitude and phase</p>
+</dd>
+</dl>
+</div>
+</dd></dl>
+
+<dl class="py method">
 <dt id="reciprocalspaceship.DataSet.unstack_anomalous">
-<code class="sig-name descname">unstack_anomalous</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">columns</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">suffixes</span><span class="o">=</span><span class="default_value">('(+)', '(-)')</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/Hekstra-Lab/reciprocalspaceship/blob/master/reciprocalspaceship/dataset.py#L719-L800"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#reciprocalspaceship.DataSet.unstack_anomalous" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">unstack_anomalous</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">columns</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">suffixes</span><span class="o">=</span><span class="default_value">('(+)', '(-)')</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/Hekstra-Lab/reciprocalspaceship/blob/master/reciprocalspaceship/dataset.py#L766-L847"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#reciprocalspaceship.DataSet.unstack_anomalous" title="Permalink to this definition">¶</a></dt>
 <dd><p>Convert data from one-column format to two-column anomalous
 format. Provided column labels are converted from separate rows
 indexed by their Friedel-plus or Friedel-minus Miller index to
@@ -856,7 +910,7 @@ columns</p></li>
 
 <dl class="py method">
 <dt id="reciprocalspaceship.DataSet.write_mtz">
-<code class="sig-name descname">write_mtz</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">mtzfile</span></em>, <em class="sig-param"><span class="n">skip_problem_mtztypes</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/Hekstra-Lab/reciprocalspaceship/blob/master/reciprocalspaceship/dataset.py#L374-L394"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#reciprocalspaceship.DataSet.write_mtz" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">write_mtz</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">mtzfile</span></em>, <em class="sig-param"><span class="n">skip_problem_mtztypes</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/Hekstra-Lab/reciprocalspaceship/blob/master/reciprocalspaceship/dataset.py#L421-L441"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#reciprocalspaceship.DataSet.write_mtz" title="Permalink to this definition">¶</a></dt>
 <dd><p>Write DataSet to MTZ file.</p>
 <p>If <code class="docutils literal notranslate"><span class="pre">DataSet.merged</span> <span class="pre">==</span> <span class="pre">False</span></code>, the reflections will be mapped to the
 reciprocal space ASU, and a M/ISYM column will be constructed.</p>

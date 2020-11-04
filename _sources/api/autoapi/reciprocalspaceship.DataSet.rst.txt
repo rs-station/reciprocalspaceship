@@ -52,6 +52,7 @@
        ~DataSet.compute_dHKL
        ~DataSet.compute_multiplicity
        ~DataSet.from_gemmi
+       ~DataSet.from_structurefactor
        ~DataSet.get_hkls
        ~DataSet.get_m_isym_keys
        ~DataSet.get_phase_keys
@@ -67,6 +68,7 @@
        ~DataSet.set_index
        ~DataSet.stack_anomalous
        ~DataSet.to_gemmi
+       ~DataSet.to_structurefactor
        ~DataSet.unstack_anomalous
        ~DataSet.write_mtz
    
