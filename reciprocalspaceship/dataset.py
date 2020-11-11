@@ -1,4 +1,5 @@
 import pandas as pd
+from pandas.api.types import is_complex_dtype
 import numpy as np
 import gemmi
 import reciprocalspaceship as rs
@@ -484,7 +485,13 @@ class DataSet(pd.DataFrame):
             F = self
         else:
             F = self.copy()
-            
+
+        # Handle phase flips associated with Friedel operator
+        if symop.det_rot() < 0:
+            phic = -1
+        else:
+            phic = 1
+
         # Apply symop to generate new HKL indices and phase shifts
         H = F.get_hkls()
         hkl = apply_to_hkl(H, symop)
@@ -498,8 +505,9 @@ class DataSet(pd.DataFrame):
         # Shift phases according to symop
         for key in F.get_phase_keys():
             F[key] += phase_shifts
+            F[key] *= phic
             F[key] = utils.canonicalize_phases(F[key], deg=True)
-            
+
         return F.__finalize__(self)
 
     def get_hkls(self):
@@ -1051,6 +1059,22 @@ class DataSet(pd.DataFrame):
         p1.set_index(["H", "K", "L"], inplace=True)
         p1.drop(columns="M/ISYM", inplace=True)
         return p1
+
+    def expand_anomalous(self):
+        """
+        Expands data by applying Friedel operator (-x, -y, -z). The
+        necessary phase shifts are made for columns of complex
+        dtypes or PhaseDtypes. 
+        
+        Returns
+        -------
+        DataSet
+        """
+        friedel = self.apply_symop("-x,-y,-z")
+        for key in friedel.columns:
+            if is_complex_dtype(friedel.dtypes[key]):
+                friedel[key] = np.conjugate(friedel[key])
+        return self.append(friedel)
     
     def canonicalize_phases(self, inplace=False):
         """
