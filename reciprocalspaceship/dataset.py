@@ -1,4 +1,5 @@
 import pandas as pd
+from pandas.api.types import is_complex_dtype
 import numpy as np
 import gemmi
 import reciprocalspaceship as rs
@@ -484,6 +485,12 @@ class DataSet(pd.DataFrame):
             F = self
         else:
             F = self.copy()
+
+        # Handle phase flips associated with Friedel operator
+        if symop.det_rot() < 0:
+            phic = -1
+        else:
+            phic = 1
             
         # Apply symop to generate new HKL indices and phase shifts
         H = F.get_hkls()
@@ -498,6 +505,7 @@ class DataSet(pd.DataFrame):
         # Shift phases according to symop
         for key in F.get_phase_keys():
             F[key] += phase_shifts
+            F[key] *= phic
             F[key] = utils.canonicalize_phases(F[key], deg=True)
             
         return F.__finalize__(self)
@@ -1051,6 +1059,22 @@ class DataSet(pd.DataFrame):
         p1.set_index(["H", "K", "L"], inplace=True)
         p1.drop(columns="M/ISYM", inplace=True)
         return p1
+
+    def expand_anomalous(self):
+        """
+        Expands data by applying Friedel operator (-x, -y, -z). The
+        necessary phase shifts are made for columns of complex
+        dtypes or PhaseDtypes. 
+        
+        Returns
+        -------
+        DataSet
+        """
+        friedel = self.apply_symop("-x,-y,-z")
+        for key in friedel.columns:
+            if is_complex_dtype(friedel.dtypes[key]):
+                friedel[key] = np.conjugate(friedel[key])
+        return self.append(friedel)
     
     def canonicalize_phases(self, inplace=False):
         """
@@ -1076,3 +1100,45 @@ class DataSet(pd.DataFrame):
             dataset[k] = utils.canonicalize_phases(dataset[k])
 
         return dataset
+
+    def to_reciprocalgrid(self, key, gridsize, friedels_law=True):
+        """
+        Set up reciprocal grid with values from column, ``key``, indexed by
+        Miller indices. A 3D numpy array will be initialized with the
+        specified gridsize. Any missing Miller indices are initialized to
+        zero.
+
+        Notes
+        -----
+        - The data being arranged on a reciprocal grid must be compatible
+          with a numpy datatype.
+        - If the data is complex and ``friedels_law=True``, the complex
+          conjugate will be used to populate Friedel pairs. The only scenario
+          in which to use ``friedels_law=False`` would be if Friedel pairs
+          have already been stacked to go from two-column to one-column
+          anomalous data. 
+        
+        Parameters
+        ----------
+        key : str
+            Column label for value to arrange on reciprocal grid
+        gridsize : array-like (len==3)
+            Dimensions for 3D reciprocal grid.
+        friedels_law : bool
+            Whether to expand data from P1 ASU to P1 unit cell when constructing
+            reciprocal grid. If False, Friedel pairs must be handled by
+            the user
+
+        Returns
+        -------
+        numpy.ndarray
+        """
+        p1 = self.expand_to_p1()
+        if friedels_law:
+            p1 = p1.expand_anomalous()
+        p1.sort_index(inplace=True)
+        data = p1[key].to_numpy()
+        H = p1.get_hkls()
+        grid = np.zeros(gridsize, dtype=data.dtype)
+        grid[H[:, 0], H[:, 1], H[:, 2]] = data
+        return grid
