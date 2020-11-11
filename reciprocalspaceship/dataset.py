@@ -491,7 +491,7 @@ class DataSet(pd.DataFrame):
             phic = -1
         else:
             phic = 1
-            
+
         # Apply symop to generate new HKL indices and phase shifts
         H = F.get_hkls()
         hkl = apply_to_hkl(H, symop)
@@ -507,7 +507,7 @@ class DataSet(pd.DataFrame):
             F[key] += phase_shifts
             F[key] *= phic
             F[key] = utils.canonicalize_phases(F[key], deg=True)
-            
+
         return F.__finalize__(self)
 
     def get_hkls(self):
