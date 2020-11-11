@@ -51,6 +51,7 @@
        ~DataSet.canonicalize_phases
        ~DataSet.compute_dHKL
        ~DataSet.compute_multiplicity
+       ~DataSet.expand_anomalous
        ~DataSet.expand_to_p1
        ~DataSet.from_gemmi
        ~DataSet.from_structurefactor
