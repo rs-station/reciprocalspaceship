@@ -453,6 +453,18 @@ class DataSet(pd.DataFrame):
         keys = [ k for k in self if isinstance(self.dtypes[k], rs.PhaseDtype) ]
         return keys
 
+    def get_complex_keys(self):
+        """
+        Return columns labels for data with complex dtype.
+
+        Returns
+        -------
+        keys : list of strings
+            list of column labels with complex dtype
+        """
+        keys = [ k for k in self if is_complex_dtype(self.dtypes[k]) ]
+        return keys
+
     def get_m_isym_keys(self):
         """
         Return column labels for data with M/ISYM dtype.
@@ -495,7 +507,7 @@ class DataSet(pd.DataFrame):
         # Apply symop to generate new HKL indices and phase shifts
         H = F.get_hkls()
         hkl = apply_to_hkl(H, symop)
-        phase_shifts = np.rad2deg(phase_shift(H, symop))
+        phase_shifts = phase_shift(H, symop)
             
         F.reset_index(inplace=True)
         F[['H', 'K', 'L']] = hkl
@@ -504,10 +516,14 @@ class DataSet(pd.DataFrame):
 
         # Shift phases according to symop
         for key in F.get_phase_keys():
-            F[key] += phase_shifts
+            F[key] += np.rad2deg(phase_shifts)
             F[key] *= phic
             F[key] = utils.canonicalize_phases(F[key], deg=True)
-
+        for key in F.get_complex_keys():
+            F[key] *= np.exp(1j*phase_shifts)
+            if symop.det_rot() < 0:
+                F[key] = np.conjugate(F[key])
+        
         return F.__finalize__(self)
 
     def get_hkls(self):
@@ -1053,11 +1069,11 @@ class DataSet(pd.DataFrame):
         groupops = self.spacegroup.operations()
         p1 = rs.concat([ self.apply_symop(op) for op in groupops ])
         p1.spacegroup = gemmi.SpaceGroup(1)
-        p1.hkl_to_asu(inplace=True)
+        # p1.hkl_to_asu(inplace=True)
         p1.reset_index(inplace=True)
         p1.drop_duplicates(subset=["H", "K", "L"], inplace=True)
         p1.set_index(["H", "K", "L"], inplace=True)
-        p1.drop(columns="M/ISYM", inplace=True)
+        # p1.drop(columns="M/ISYM", inplace=True)
         return p1
 
     def expand_anomalous(self):
@@ -1071,9 +1087,6 @@ class DataSet(pd.DataFrame):
         DataSet
         """
         friedel = self.apply_symop("-x,-y,-z")
-        for key in friedel.columns:
-            if is_complex_dtype(friedel.dtypes[key]):
-                friedel[key] = np.conjugate(friedel[key])
         return self.append(friedel)
     
     def canonicalize_phases(self, inplace=False):
