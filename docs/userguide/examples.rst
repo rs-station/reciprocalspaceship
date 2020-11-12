@@ -21,7 +21,7 @@ some use cases.
 .. toctree::
    :maxdepth: 1
 
-   1_basics.ipynb
-   2_mergingstats.ipynb
-   3_anomalousdifference.ipynb
-   4_timeresolvedPYP.ipynb
+   ../examples/1_basics.ipynb
+   ../examples/2_mergingstats.ipynb
+   ../examples/3_anomalousdifference.ipynb
+   ../examples/4_timeresolvedPYP.ipynb

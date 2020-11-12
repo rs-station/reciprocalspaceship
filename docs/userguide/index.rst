@@ -13,5 +13,5 @@ of the essential functionality for a new user to get started.
    installation
    ../examples/0_quickstart.ipynb
    mtzdtypes.ipynb
-   ../examples/examples
+   examples
 
