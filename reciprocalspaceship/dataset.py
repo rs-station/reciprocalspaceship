@@ -453,6 +453,18 @@ class DataSet(pd.DataFrame):
         keys = [ k for k in self if isinstance(self.dtypes[k], rs.PhaseDtype) ]
         return keys
 
+    def get_complex_keys(self):
+        """
+        Return columns labels for data with complex dtype.
+
+        Returns
+        -------
+        keys : list of strings
+            list of column labels with complex dtype
+        """
+        keys = [ k for k in self if is_complex_dtype(self.dtypes[k]) ]
+        return keys
+
     def get_m_isym_keys(self):
         """
         Return column labels for data with M/ISYM dtype.
@@ -495,7 +507,7 @@ class DataSet(pd.DataFrame):
         # Apply symop to generate new HKL indices and phase shifts
         H = F.get_hkls()
         hkl = apply_to_hkl(H, symop)
-        phase_shifts = np.rad2deg(phase_shift(H, symop))
+        phase_shifts = phase_shift(H, symop)
             
         F.reset_index(inplace=True)
         F[['H', 'K', 'L']] = hkl
@@ -504,10 +516,14 @@ class DataSet(pd.DataFrame):
 
         # Shift phases according to symop
         for key in F.get_phase_keys():
-            F[key] += phase_shifts
+            F[key] += np.rad2deg(phase_shifts)
             F[key] *= phic
             F[key] = utils.canonicalize_phases(F[key], deg=True)
-
+        for key in F.get_complex_keys():
+            F[key] *= np.exp(1j*phase_shifts)
+            if symop.det_rot() < 0:
+                F[key] = np.conjugate(F[key])
+        
         return F.__finalize__(self)
 
     def get_hkls(self):
@@ -1053,11 +1069,9 @@ class DataSet(pd.DataFrame):
         groupops = self.spacegroup.operations()
         p1 = rs.concat([ self.apply_symop(op) for op in groupops ])
         p1.spacegroup = gemmi.SpaceGroup(1)
-        p1.hkl_to_asu(inplace=True)
         p1.reset_index(inplace=True)
         p1.drop_duplicates(subset=["H", "K", "L"], inplace=True)
         p1.set_index(["H", "K", "L"], inplace=True)
-        p1.drop(columns="M/ISYM", inplace=True)
         return p1
 
     def expand_anomalous(self):
@@ -1071,9 +1085,6 @@ class DataSet(pd.DataFrame):
         DataSet
         """
         friedel = self.apply_symop("-x,-y,-z")
-        for key in friedel.columns:
-            if is_complex_dtype(friedel.dtypes[key]):
-                friedel[key] = np.conjugate(friedel[key])
         return self.append(friedel)
     
     def canonicalize_phases(self, inplace=False):
@@ -1100,3 +1111,45 @@ class DataSet(pd.DataFrame):
             dataset[k] = utils.canonicalize_phases(dataset[k])
 
         return dataset
+
+    def to_reciprocalgrid(self, key, gridsize, friedels_law=True):
+        """
+        Set up reciprocal grid with values from column, ``key``, indexed by
+        Miller indices. A 3D numpy array will be initialized with the
+        specified gridsize. Any missing Miller indices are initialized to
+        zero.
+
+        Notes
+        -----
+        - The data being arranged on a reciprocal grid must be compatible
+          with a numpy datatype.
+        - If the data is complex and ``friedels_law=True``, the complex
+          conjugate will be used to populate Friedel pairs. The only scenario
+          in which to use ``friedels_law=False`` would be if Friedel pairs
+          have already been stacked to go from two-column to one-column
+          anomalous data. 
+        
+        Parameters
+        ----------
+        key : str
+            Column label for value to arrange on reciprocal grid
+        gridsize : array-like (len==3)
+            Dimensions for 3D reciprocal grid.
+        friedels_law : bool
+            Whether to expand data from P1 ASU to P1 unit cell when constructing
+            reciprocal grid. If False, Friedel pairs must be handled by
+            the user
+
+        Returns
+        -------
+        numpy.ndarray
+        """
+        p1 = self.expand_to_p1()
+        if friedels_law:
+            p1 = p1.expand_anomalous()
+        p1.sort_index(inplace=True)
+        data = p1[key].to_numpy()
+        H = p1.get_hkls()
+        grid = np.zeros(gridsize, dtype=data.dtype)
+        grid[H[:, 0], H[:, 1], H[:, 2]] = data
+        return grid
