@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Installation &mdash; reciprocalspaceship 0.8.9 documentation</title>
+  <title>Examples &mdash; reciprocalspaceship 0.8.9 documentation</title>
   
 
   
@@ -45,8 +45,8 @@
     
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Quickstart" href="../examples/0_quickstart.html" />
-    <link rel="prev" title="Overview and Goals" href="overview.html" /> 
+    <link rel="next" title="Basics" href="../examples/1_basics.html" />
+    <link rel="prev" title="MTZ Data Types" href="mtzdtypes.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -97,10 +97,16 @@
               <ul class="current">
 <li class="toctree-l1 current"><a class="reference internal" href="index.html">User Guide</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="overview.html">Overview and Goals</a></li>
-<li class="toctree-l2 current"><a class="current reference internal" href="#">Installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="installation.html">Installation</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../examples/0_quickstart.html">Quickstart</a></li>
 <li class="toctree-l2"><a class="reference internal" href="mtzdtypes.html">MTZ Data Types</a></li>
-<li class="toctree-l2"><a class="reference internal" href="examples.html">Examples</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Examples</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../examples/1_basics.html">Basics</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../examples/2_mergingstats.html">HEWL S-SAD Merging Statistics</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../examples/3_anomalousdifference.html">Anomalous Difference Map</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../examples/4_timeresolvedPYP.html">Time-Resolved Difference Map</a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../api/index.html">API Reference</a></li>
@@ -153,13 +159,13 @@
         
           <li><a href="index.html">User Guide</a> &raquo;</li>
         
-      <li>Installation</li>
+      <li>Examples</li>
     
     
       <li class="wy-breadcrumbs-aside">
         
             
-            <a href="../_sources/userguide/installation.rst.txt" rel="nofollow"> View page source</a>
+            <a href="../_sources/userguide/examples.rst.txt" rel="nofollow"> View page source</a>
           
         
       </li>
@@ -196,17 +202,29 @@
     text-align: unset;
 }
 </style>
-<div class="section" id="installation">
-<span id="id1"></span><h1>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h1>
-<p>In order to install the latest release of <code class="docutils literal notranslate"><span class="pre">reciprocalspaceship</span></code>, please use <code class="docutils literal notranslate"><span class="pre">pip</span></code>:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="n">reciprocalspaceship</span>
-</pre></div>
+<div class="section" id="examples">
+<span id="id1"></span><h1>Examples<a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h1>
+<p><code class="docutils literal notranslate"><span class="pre">reciprocalspaceship</span></code> facilitates working with reflection data in Python. It provides
+IO methods for reading/writing MTZ files, and a <code class="docutils literal notranslate"><span class="pre">pandas</span></code>-style interface for inspecting
+data and prototyping new analysis methods.</p>
+<p>Here are a few examples to help you get started with <code class="docutils literal notranslate"><span class="pre">reciprocalspaceship</span></code> and highlight
+some use cases.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Each of these examples is contained within a Jupyter notebook. Feel free to view the
+examples in the browser by following the links below. These notebooks can also be viewed
+interactively on <a class="reference external" href="https://mybinder.org/v2/gh/Hekstra-Lab/reciprocalspaceship/master?filepath=docs%2Fexamples">binder</a>
+or by downloading the notebook files from the
+<a class="reference external" href="https://github.com/Hekstra-Lab/reciprocalspaceship/tree/master/docs/examples">Examples Directory</a>
+and starting a notebook server.</p>
 </div>
-<p>It is also always possible to install the library by cloning the repository from GitHub:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">git</span> <span class="n">clone</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">github</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">Hekstra</span><span class="o">-</span><span class="n">Lab</span><span class="o">/</span><span class="n">reciprocalspaceship</span>
-<span class="n">cd</span> <span class="n">reciprocalspaceship</span>
-<span class="n">python</span> <span class="n">setup</span><span class="o">.</span><span class="n">py</span> <span class="n">install</span>
-</pre></div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../examples/1_basics.html">Basics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../examples/2_mergingstats.html">HEWL S-SAD Merging Statistics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../examples/3_anomalousdifference.html">Anomalous Difference Map</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../examples/4_timeresolvedPYP.html">Time-Resolved Difference Map</a></li>
+</ul>
 </div>
 </div>
 
@@ -218,10 +236,10 @@
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="../examples/0_quickstart.html" class="btn btn-neutral float-right" title="Quickstart" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="../examples/1_basics.html" class="btn btn-neutral float-right" title="Basics" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="overview.html" class="btn btn-neutral float-left" title="Overview and Goals" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="mtzdtypes.html" class="btn btn-neutral float-left" title="MTZ Data Types" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
