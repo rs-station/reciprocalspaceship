@@ -55,6 +55,7 @@
        ~DataSet.expand_to_p1
        ~DataSet.from_gemmi
        ~DataSet.from_structurefactor
+       ~DataSet.get_complex_keys
        ~DataSet.get_hkls
        ~DataSet.get_m_isym_keys
        ~DataSet.get_phase_keys
@@ -70,6 +71,7 @@
        ~DataSet.set_index
        ~DataSet.stack_anomalous
        ~DataSet.to_gemmi
+       ~DataSet.to_reciprocalgrid
        ~DataSet.to_structurefactor
        ~DataSet.unstack_anomalous
        ~DataSet.write_mtz
