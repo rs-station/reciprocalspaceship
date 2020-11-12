@@ -1069,11 +1069,9 @@ class DataSet(pd.DataFrame):
         groupops = self.spacegroup.operations()
         p1 = rs.concat([ self.apply_symop(op) for op in groupops ])
         p1.spacegroup = gemmi.SpaceGroup(1)
-        # p1.hkl_to_asu(inplace=True)
         p1.reset_index(inplace=True)
         p1.drop_duplicates(subset=["H", "K", "L"], inplace=True)
         p1.set_index(["H", "K", "L"], inplace=True)
-        # p1.drop(columns="M/ISYM", inplace=True)
         return p1
 
     def expand_anomalous(self):
