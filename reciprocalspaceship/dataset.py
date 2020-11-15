@@ -17,6 +17,52 @@ from reciprocalspaceship.utils import (
     compute_structurefactor_multiplicity,
     bin_by_percentile
 )
+from functools import wraps
+from inspect import getcallargs
+
+
+def inplacemethod(f):
+    """ 
+    A decorator that applies the inplace argument. Base function must have a Bool param called "inplace".
+    The position of `inplace` doesn't matter.
+    """
+    @wraps(f)
+    def wrapped(self, *args, **kwargs):
+        locvars = getcallargs(f, self, *args, **kwargs)
+        if 'inplace' in locvars:
+            if locvars['inplace']:
+                return f(self, *args, **kwargs)
+            else:
+                return f(self.copy(), *args, **kwargs)
+        else:
+            print(locvars)
+            raise KeyError(f'"inplace" not found in local variables of @inplacemethod decorated function {f} '
+                             "Edit your method definition to include `inplace=Bool`. "
+                             )
+    return wrapped
+
+def with_range_index(f):
+    """ A decorator that presents the dataset with a range index and makes sure the method preserves the original index """
+    @wraps(f)
+    def wrapped(ds, *args, **kwargs):
+        locvars = getcallargs(f, ds, *args, **kwargs)
+        inplace = locvars.get('inplace', False)
+        if inplace:
+            ds = ds 
+        else:
+            ds = ds.copy()
+
+        names = ds.index.names
+        if names != [None]:
+            ds.reset_index(inplace=True)
+        ds = f(ds, *args, **kwargs)
+        if names == [None] and ds.index.names != [None]:
+            ds.reset_index(inplace=True)
+        elif names != [None] and ds.index.names == [None]:
+            ds.reset_index(inplace=True, drop=True)
+            ds.set_index(names, inplace=True)
+        return ds.__finalize__(ds)
+    return wrapped
 
 class DataSet(pd.DataFrame):
     """
@@ -476,7 +522,8 @@ class DataSet(pd.DataFrame):
         """
         keys = [ k for k in self if isinstance(self.dtypes[k], rs.M_IsymDtype) ]
         return keys
-    
+
+    @with_range_index
     def apply_symop(self, symop, inplace=False):
         """
         Apply symmetry operation to all reflections in DataSet object. 
@@ -493,10 +540,7 @@ class DataSet(pd.DataFrame):
         elif not isinstance(symop, gemmi.Op):
             raise ValueError(f"Provided symop is not of type gemmi.Op")
 
-        if inplace:
-            F = self
-        else:
-            F = self.copy()
+        dataset = self
 
         # Handle phase flips associated with Friedel operator
         if symop.det_rot() < 0:
@@ -505,26 +549,24 @@ class DataSet(pd.DataFrame):
             phic = 1
 
         # Apply symop to generate new HKL indices and phase shifts
-        H = F.get_hkls()
+        H = dataset.get_hkls()
         hkl = apply_to_hkl(H, symop)
         phase_shifts = phase_shift(H, symop)
             
-        F.reset_index(inplace=True)
-        F[['H', 'K', 'L']] = hkl
-        F[['H', 'K', 'L']] = F[['H', 'K', 'L']].astype(rs.HKLIndexDtype())
-        F.set_index(['H', 'K', 'L'], inplace=True)
+        dataset[['H', 'K', 'L']] = hkl
+        dataset[['H', 'K', 'L']] = dataset[['H', 'K', 'L']].astype(rs.HKLIndexDtype())
 
         # Shift phases according to symop
-        for key in F.get_phase_keys():
-            F[key] += np.rad2deg(phase_shifts)
-            F[key] *= phic
-            F[key] = utils.canonicalize_phases(F[key], deg=True)
-        for key in F.get_complex_keys():
-            F[key] *= np.exp(1j*phase_shifts)
+        for key in dataset.get_phase_keys():
+            dataset[key] += np.rad2deg(phase_shifts)
+            dataset[key] *= phic
+            dataset[key] = utils.canonicalize_phases(dataset[key], deg=True)
+        for key in dataset.get_complex_keys():
+            dataset[key] *= np.exp(1j*phase_shifts)
             if symop.det_rot() < 0:
-                F[key] = np.conjugate(F[key])
+                dataset[key] = np.conjugate(dataset[key])
         
-        return F.__finalize__(self)
+        return dataset
 
     def get_hkls(self):
         """
@@ -538,6 +580,7 @@ class DataSet(pd.DataFrame):
         hkl = self.reset_index()[['H', 'K', 'L']].to_numpy(dtype=np.int32)
         return hkl
 
+    @inplacemethod
     def label_centrics(self, inplace=False):
         """
         Label centric reflections in DataSet. A new column of
@@ -548,14 +591,10 @@ class DataSet(pd.DataFrame):
         inplace : bool
             Whether to add the column in place or to return a copy
         """
-        if inplace:
-            dataset = self
-        else:
-            dataset = self.copy()
+        self['CENTRIC'] = is_centric(self.get_hkls(), self.spacegroup)
+        return self
 
-        dataset['CENTRIC'] = is_centric(dataset.get_hkls(), dataset.spacegroup)
-        return dataset
-
+    @inplacemethod
     def label_absences(self, inplace=False):
         """
         Label systematically absent reflections in DataSet. A new column 
@@ -566,14 +605,10 @@ class DataSet(pd.DataFrame):
         inplace : bool
             Whether to add the column in place or to return a copy
         """
-        if inplace:
-            dataset = self
-        else:
-            dataset = self.copy()
+        self['ABSENT'] = is_absent(self.get_hkls(), self.spacegroup)
+        return self
 
-        dataset['ABSENT'] = is_absent(dataset.get_hkls(), dataset.spacegroup)
-        return dataset
-
+    @inplacemethod
     def infer_mtz_dtypes(self, inplace=False, index=True):
         """
         Infers MTZ dtypes from column names and underlying data. This 
@@ -599,25 +634,21 @@ class DataSet(pd.DataFrame):
         --------
         DataSeries.infer_mtz_dtype : Infer MTZ dtype for DataSeries
         """
-        if inplace:
-            dataset = self
-        else:
-            dataset = self.copy()
-
         # See GH#2: Handle unnamed Index objects such as RangeIndex
         if index:
-            index_keys = list(filter(None, dataset.index.names))
+            index_keys = list(filter(None, self.index.names))
             if index_keys:
-                dataset.reset_index(inplace=True, level=index_keys)
+                self.reset_index(inplace=True, level=index_keys)
 
-        for c in dataset:
-            dataset[c] = dataset[c].infer_mtz_dtype()
+        for c in self:
+            self[c] = self[c].infer_mtz_dtype()
 
         if index and index_keys:
-            dataset.set_index(index_keys, inplace=True)
+            self.set_index(index_keys, inplace=True)
 
-        return dataset
+        return self
 
+    @inplacemethod
     def compute_dHKL(self, inplace=False):
         """
         Compute the real space lattice plane spacing, d, associated with
@@ -628,15 +659,11 @@ class DataSet(pd.DataFrame):
         inplace : bool
             Whether to add the column in place or return a copy
         """
-        if inplace:
-            dataset = self
-        else:
-            dataset = self.copy()
-
         dHKL = compute_dHKL(self.get_hkls(), self.cell)
-        dataset['dHKL'] = rs.DataSeries(dHKL, dtype='R', index=dataset.index)
-        return dataset
+        self['dHKL'] = rs.DataSeries(dHKL, dtype='R', index=self.index)
+        return self
 
+    @inplacemethod
     def compute_multiplicity(self, inplace=False, include_centering=True):
         """
         Compute the multiplicity of reflections in DataSet. A new column of
@@ -650,15 +677,11 @@ class DataSet(pd.DataFrame):
             Whether to include centering operations in the multiplicity calculation.
             The default is to include them.
         """
-        if inplace:
-            dataset = self
-        else:
-            dataset = self.copy()
-
         epsilon = compute_structurefactor_multiplicity(self.get_hkls(), self.spacegroup, include_centering)
-        dataset['EPSILON'] = rs.DataSeries(epsilon, dtype='I', index=dataset.index)
-        return dataset
+        self['EPSILON'] = rs.DataSeries(epsilon, dtype='I', index=self.index)
+        return self
 
+    @inplacemethod
     def assign_resolution_bins(self, bins=20, inplace=False, return_labels=True):
         """
         Assign reflections in DataSet to resolution bins.
@@ -677,19 +700,15 @@ class DataSet(pd.DataFrame):
         -------
         (DataSet, list) or DataSet
         """
-        if inplace:
-            dataset = self
-        else:
-            dataset = self.copy()
-        dHKL = dataset.compute_dHKL()["dHKL"]
+        dHKL = self.compute_dHKL()["dHKL"]
 
         assignments, labels = bin_by_percentile(dHKL, bins=bins, ascending=False)
-        dataset["bin"] = rs.DataSeries(assignments, dtype="I", index=dataset.index)
+        self["bin"] = rs.DataSeries(assignments, dtype="I", index=self.index)
 
         if return_labels:
-            return dataset, labels
+            return self, labels
         else:
-            return dataset
+            return self
         
     def stack_anomalous(self, plus_labels=None, minus_labels=None):
         """
@@ -912,6 +931,7 @@ class DataSet(pd.DataFrame):
         
         return True
 
+    @with_range_index
     def hkl_to_asu(self, inplace=False):
         """
         Map HKL indices to the reciprocal space asymmetric unit. If phases
@@ -936,15 +956,7 @@ class DataSet(pd.DataFrame):
         --------
         DataSet.hkl_to_observed : Opposite of DataSet.hkl_to_asu()
         """
-        if inplace:
-            dataset = self
-        else:
-            dataset = self.copy()
-
-        index_keys = None
-        if "H" in dataset.index.names or "K" in dataset.index.names or "L" in dataset.index.names:
-            index_keys = dataset.index.names
-            dataset.reset_index(inplace=True)
+        dataset = self
 
         # Compute new HKLs and phase shifts
         hkls = dataset.get_hkls()
@@ -958,9 +970,6 @@ class DataSet(pd.DataFrame):
 
         dataset[["H", "K", "L"]] = asu_hkls[inverse]
         dataset[["H", "K", "L"]] = dataset[["H", "K", "L"]].astype("HKL")
-
-        if index_keys is not None:
-            dataset.set_index(index_keys, inplace=True)
 
         # Apply phase shift
         for k in dataset.get_phase_keys():
@@ -977,6 +986,7 @@ class DataSet(pd.DataFrame):
 
         return dataset
 
+    @with_range_index
     def hkl_to_observed(self, m_isym=None, inplace=False):
         """
         Map HKL indices to their observed index using an ``M/ISYM`` column. 
@@ -1008,51 +1018,43 @@ class DataSet(pd.DataFrame):
         --------
         DataSet.hkl_to_asu : Opposite of DataSet.hkl_to_observed()
         """ 
-        if inplace:
-            dataset = self
-        else:
-            dataset = self.copy()
-
         # Validate input
         if m_isym is None:
-            m_isym = dataset.get_m_isym_keys()
+            m_isym = self.get_m_isym_keys()
             if len(m_isym) == 1:
                 m_isym = m_isym[0]
             else:
                 raise ValueError(f"Method requires a single M/ISYM column -- found: {m_isym}")
         elif not isinstance(m_isym, str):
             raise ValueError("Provided M/ISYM column label should be type str")
-        elif not isinstance(dataset.dtypes[m_isym], rs.M_IsymDtype):
+        elif not isinstance(self.dtypes[m_isym], rs.M_IsymDtype):
             raise ValueError(f"Provided M/ISYM column label is of wrong dtype")
 
         # GH#3: Separate combined M/ISYM into M and ISYM        
-        isym = (dataset[m_isym] % 256).to_numpy(dtype=np.int32)
-        if not dataset.merged:
-            dataset["PARTIAL"] = (dataset[m_isym]/256).astype(int) != 0
-        dataset.drop(columns=m_isym, inplace=True)
+        isym = (self[m_isym] % 256).to_numpy(dtype=np.int32)
+        if not self.merged:
+            self["PARTIAL"] = (self[m_isym]/256).astype(int) != 0
+        self.drop(columns=m_isym, inplace=True)
         
         # Compute new HKLs and phase shifts
-        hkls = dataset.get_hkls()
+        hkls = self.get_hkls()
         hkls_isym = np.concatenate([hkls, isym.reshape(-1, 1)], axis=1)
         compressed, inverse = np.unique(hkls_isym, axis=0, return_inverse=True)
         observed_hkls, phi_coeff, phi_shift = hkl_to_observed(
             compressed[:, :3],       # compressed HKLs
             compressed[:, 3],        # compressed ISYM
-            dataset.spacegroup,
+            self.spacegroup,
             return_phase_shifts=True
         )
-        index_keys = dataset.index.names
-        dataset.reset_index(inplace=True)
-        dataset[["H", "K", "L"]] = observed_hkls[inverse]
-        dataset[["H", "K", "L"]] = dataset[["H", "K", "L"]].astype("HKL")
-        dataset.set_index(index_keys, inplace=True)
+        self[["H", "K", "L"]] = observed_hkls[inverse]
+        self[["H", "K", "L"]] = self[["H", "K", "L"]].astype("HKL")
 
         # Apply phase shift
-        for k in dataset.get_phase_keys():
-            dataset[k] = phi_coeff[inverse] * (dataset[k] + phi_shift[inverse])
-        dataset.canonicalize_phases(inplace=True)
+        for k in self.get_phase_keys():
+            self[k] = phi_coeff[inverse] * (self[k] + phi_shift[inverse])
+        self.canonicalize_phases(inplace=True)
         
-        return dataset
+        return self
 
     def expand_to_p1(self):
         """
@@ -1087,6 +1089,7 @@ class DataSet(pd.DataFrame):
         friedel = self.apply_symop("-x,-y,-z")
         return self.append(friedel)
     
+    @inplacemethod
     def canonicalize_phases(self, inplace=False):
         """
         Canonicalize columns with phase data to fall in the interval between
@@ -1102,15 +1105,10 @@ class DataSet(pd.DataFrame):
         -------
         DataSet
         """
-        if inplace:
-            dataset = self
-        else:
-            dataset = self.copy()
+        for k in self.get_phase_keys():
+            self[k] = utils.canonicalize_phases(self[k])
 
-        for k in dataset.get_phase_keys():
-            dataset[k] = utils.canonicalize_phases(dataset[k])
-
-        return dataset
+        return self
 
     def to_reciprocalgrid(self, key, gridsize, friedels_law=True):
         """
