@@ -42,26 +42,16 @@ def inplace(f):
                              )
     return wrapped
 
-def _index_from_names(names, ds):
-    if names == [None] and ds.index.names != [None]:
-        ds.reset_index(inplace=True)
-    elif names != [None] and ds.index.names == [None]:
-        ds.set_index(names, inplace=True)
-    elif names != ds.index.names:
-        ds.reset_index(inplace=True)
-        ds.set_index(names, inplace=True)
-    return ds
-
 def range_indexed(f):
-    """ A decorator that presents the dataset with a range index and makes sure the method preserves the original index """
+    """ A decorator that presents the dataset with a range index and makes sure the method preserves the original index columns if any """
     @wraps(f)
     def wrapped(ds, *args, **kwargs):
         names = ds.index.names
-        ds = _index_from_names([None], ds)
+        ds = ds._index_from_names([None], inplace=True)
         result = f(ds, *args, **kwargs)
-        result = _index_from_names(names, ds)
+        result = ds._index_from_names(names, inplace=True)
         if result is not ds:
-            ds = _index_from_names(names, ds)
+            ds = ds._index_from_names(names, inplace=True)
         return result.__finalize__(ds)
     return wrapped
 
@@ -151,7 +141,19 @@ class DataSet(pd.DataFrame):
 
     #-------------------------------------------------------------------
     # Methods
-    
+
+    @inplace
+    def _index_from_names(self, names, inplace=False):
+        """ Helper method for dectorators """
+        if names == [None] and self.index.names != [None]:
+            self.reset_index(inplace=True)
+        elif names != [None] and self.index.names == [None]:
+            self.set_index(names, inplace=True)
+        elif names != self.index.names:
+            self.reset_index(inplace=True)
+            self.set_index(names, inplace=True)
+        return self
+
     def set_index(self, keys, drop=True, append=False, inplace=False, verify_integrity=False):
         """
         Set the DataSet index using existing columns.
