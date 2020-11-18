@@ -12,6 +12,9 @@ from .io import read_mtz, read_precognition
 from .dtypes import summarize_mtz_dtypes
 from .concat import concat
 
+# Import algorithms submodule
+from reciprocalspaceship import algorithms
+
 # Add support for MTZ data types:
 # see http://www.ccp4.ac.uk/html/f2mtz.html
 from .dtypes import (
