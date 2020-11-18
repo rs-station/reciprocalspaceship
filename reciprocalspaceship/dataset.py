@@ -18,50 +18,51 @@ from reciprocalspaceship.utils import (
     bin_by_percentile
 )
 from functools import wraps
-from inspect import getcallargs
+from inspect import signature
 
 
-def inplacemethod(f):
+def inplace(f):
     """ 
     A decorator that applies the inplace argument. Base function must have a Bool param called "inplace".
     The position of `inplace` doesn't matter.
     """
     @wraps(f)
-    def wrapped(self, *args, **kwargs):
-        locvars = getcallargs(f, self, *args, **kwargs)
-        if 'inplace' in locvars:
-            if locvars['inplace']:
-                return f(self, *args, **kwargs)
+    def wrapped(ds, *args, **kwargs):
+        sig = signature(f)
+        bargs = sig.bind(ds, *args, **kwargs)
+        bargs.apply_defaults()
+        if 'inplace' in bargs.arguments:
+            if bargs.arguments['inplace']:
+                return f(ds, *args, **kwargs)
             else:
-                return f(self.copy(), *args, **kwargs)
+                return f(ds.copy(), *args, **kwargs)
         else:
-            print(locvars)
             raise KeyError(f'"inplace" not found in local variables of @inplacemethod decorated function {f} '
                              "Edit your method definition to include `inplace=Bool`. "
                              )
     return wrapped
 
-def with_range_index(f):
+def _index_from_names(names, ds):
+    if names == [None] and ds.index.names != [None]:
+        ds.reset_index(inplace=True)
+    elif names != [None] and ds.index.names == [None]:
+        ds.set_index(names, inplace=True)
+    elif names != ds.index.names:
+        ds.reset_index(inplace=True)
+        ds.set_index(names, inplace=True)
+    return ds
+
+def range_indexed(f):
     """ A decorator that presents the dataset with a range index and makes sure the method preserves the original index """
     @wraps(f)
     def wrapped(ds, *args, **kwargs):
-        locvars = getcallargs(f, ds, *args, **kwargs)
-        inplace = locvars.get('inplace', False)
-        if inplace:
-            ds = ds 
-        else:
-            ds = ds.copy()
-
         names = ds.index.names
-        if names != [None]:
-            ds.reset_index(inplace=True)
-        ds = f(ds, *args, **kwargs)
-        if names == [None] and ds.index.names != [None]:
-            ds.reset_index(inplace=True)
-        elif names != [None] and ds.index.names == [None]:
-            ds.reset_index(inplace=True, drop=True)
-            ds.set_index(names, inplace=True)
-        return ds.__finalize__(ds)
+        ds = _index_from_names([None], ds)
+        result = f(ds, *args, **kwargs)
+        result = _index_from_names(names, ds)
+        if result is not ds:
+            ds = _index_from_names(names, ds)
+        return result.__finalize__(ds)
     return wrapped
 
 class DataSet(pd.DataFrame):
@@ -523,7 +524,8 @@ class DataSet(pd.DataFrame):
         keys = [ k for k in self if isinstance(self.dtypes[k], rs.M_IsymDtype) ]
         return keys
 
-    @with_range_index
+    @inplace
+    @range_indexed
     def apply_symop(self, symop, inplace=False):
         """
         Apply symmetry operation to all reflections in DataSet object. 
@@ -580,7 +582,7 @@ class DataSet(pd.DataFrame):
         hkl = self.reset_index()[['H', 'K', 'L']].to_numpy(dtype=np.int32)
         return hkl
 
-    @inplacemethod
+    @inplace
     def label_centrics(self, inplace=False):
         """
         Label centric reflections in DataSet. A new column of
@@ -594,7 +596,7 @@ class DataSet(pd.DataFrame):
         self['CENTRIC'] = is_centric(self.get_hkls(), self.spacegroup)
         return self
 
-    @inplacemethod
+    @inplace
     def label_absences(self, inplace=False):
         """
         Label systematically absent reflections in DataSet. A new column 
@@ -608,7 +610,7 @@ class DataSet(pd.DataFrame):
         self['ABSENT'] = is_absent(self.get_hkls(), self.spacegroup)
         return self
 
-    @inplacemethod
+    @inplace
     def infer_mtz_dtypes(self, inplace=False, index=True):
         """
         Infers MTZ dtypes from column names and underlying data. This 
@@ -648,7 +650,7 @@ class DataSet(pd.DataFrame):
 
         return self
 
-    @inplacemethod
+    @inplace
     def compute_dHKL(self, inplace=False):
         """
         Compute the real space lattice plane spacing, d, associated with
@@ -663,7 +665,7 @@ class DataSet(pd.DataFrame):
         self['dHKL'] = rs.DataSeries(dHKL, dtype='R', index=self.index)
         return self
 
-    @inplacemethod
+    @inplace
     def compute_multiplicity(self, inplace=False, include_centering=True):
         """
         Compute the multiplicity of reflections in DataSet. A new column of
@@ -681,7 +683,7 @@ class DataSet(pd.DataFrame):
         self['EPSILON'] = rs.DataSeries(epsilon, dtype='I', index=self.index)
         return self
 
-    @inplacemethod
+    @inplace
     def assign_resolution_bins(self, bins=20, inplace=False, return_labels=True):
         """
         Assign reflections in DataSet to resolution bins.
@@ -931,7 +933,8 @@ class DataSet(pd.DataFrame):
         
         return True
 
-    @with_range_index
+    @inplace
+    @range_indexed
     def hkl_to_asu(self, inplace=False):
         """
         Map HKL indices to the reciprocal space asymmetric unit. If phases
@@ -986,7 +989,8 @@ class DataSet(pd.DataFrame):
 
         return dataset
 
-    @with_range_index
+    @inplace
+    @range_indexed
     def hkl_to_observed(self, m_isym=None, inplace=False):
         """
         Map HKL indices to their observed index using an ``M/ISYM`` column. 
@@ -1089,7 +1093,7 @@ class DataSet(pd.DataFrame):
         friedel = self.apply_symop("-x,-y,-z")
         return self.append(friedel)
     
-    @inplacemethod
+    @inplace
     def canonicalize_phases(self, inplace=False):
         """
         Canonicalize columns with phase data to fall in the interval between
