@@ -119,8 +119,14 @@ class DataSet(pd.DataFrame):
 
     @spacegroup.setter
     def spacegroup(self, val):
-        self._spacegroup = val
-    
+        # GH#18: Type-checking for supported input types
+        if isinstance(val, gemmi.SpaceGroup) or (val is None):
+            self._spacegroup = val
+        elif isinstance(val, (str, int)):
+            self._spacegroup = gemmi.SpaceGroup(val)
+        else:
+            raise ValueError(f"Cannot construct gemmi.SpaceGroup from value: {val}")
+            
     @property
     def cell(self):
         """Unit cell parameters (a, b, c, alpha, beta, gamma)"""

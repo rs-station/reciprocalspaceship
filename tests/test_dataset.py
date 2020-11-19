@@ -38,6 +38,19 @@ def test_constructor_dataset(data_fmodel, spacegroup, cell, merged):
         assert result.cell == data_fmodel.cell
 
 
+@pytest.mark.parametrize("spacegroup", [None, 1, 5, 19, "P 21 21 21", "R 3:h", "R 3:blah", 1.2])
+def test_spacegroup(data_fmodel, spacegroup):
+    if spacegroup != 1.2 and spacegroup != "R 3:blah":
+        data_fmodel.spacegroup = spacegroup
+        if isinstance(spacegroup, (str, int)):
+            assert data_fmodel.spacegroup.xhm() == gemmi.SpaceGroup(spacegroup).xhm()
+        else:
+            assert data_fmodel.spacegroup == spacegroup
+    else:
+        with pytest.raises(ValueError):
+            data_fmodel.spacegroup = spacegroup
+
+
 @pytest.mark.parametrize("spacegroup", [None, gemmi.SpaceGroup(1)])
 @pytest.mark.parametrize("cell", [None, gemmi.UnitCell(1, 1, 1, 90, 90, 90)])
 def test_constructor_gemmi(data_gemmi, spacegroup, cell):
