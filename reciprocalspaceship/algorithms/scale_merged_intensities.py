@@ -1,5 +1,5 @@
 import numpy as np
-from scipy.special import ndtr
+from scipy.special import ndtr,log_ndtr
 from reciprocalspaceship.utils import compute_structurefactor_multiplicity
 
 def _acentric_posterior(Iobs, SigIobs, Sigma):
@@ -20,18 +20,24 @@ def _acentric_posterior(Iobs, SigIobs, Sigma):
     SigIobs = np.array(SigIobs, dtype=np.float64)
     Sigma = np.array(Sigma, dtype=np.float64)
 
-    def phi(x):
-        return np.exp(-0.5*x**2)/np.sqrt(2*np.pi)
-
-    eps = 0.
+    def log_phi(x):
+        #return np.exp(-0.5*x**2)/np.sqrt(2*np.pi)
+        return -0.5*x**2 - np.log(np.sqrt(2*np.pi))
 
     a = 0.
     s = SigIobs
     u = (Iobs - s**2/Sigma)
     alpha = (a-u)/s
-    Z = 1. - ndtr(alpha)
-    mean = u + s * phi(alpha)/Z
-    variance = s**2 * (1 + alpha*phi(alpha)/Z - (phi(alpha)/Z)**2 )
+    #Z = 1. - ndtr(alpha)
+    log_Z = log_ndtr(-alpha) #<--this is the same thing, I promise
+    #mean = u + s * phi(alpha)/Z
+    mean = u + np.exp(np.log(s) + log_phi(alpha) - log_Z)
+    variance = s**2 * (1 + \
+        #alpha*phi(alpha)/Z - \
+        alpha * np.exp(log_phi(alpha) - log_Z) - \
+        #(phi(alpha)/Z)**2 
+        np.exp(2. * log_phi(alpha) - 2. * log_Z)
+    )
     return mean, np.sqrt(variance)
 
 def _centric_posterior_quad(Iobs, SigIobs, Sigma, npoints=100):
@@ -289,6 +295,7 @@ if __name__=="__main__": # pragma: no cover
     import reciprocalspaceship as rs
     from sys import argv
     ds = rs.read_mtz(argv[1]).dropna()
-    ds = scale_merged_intensities(ds, "I-obs", "SIGI-obs", return_intensities=True)
+    ds = ds.stack_anomalous()
+    ds = scale_merged_intensities(ds, "IMEAN", "SIGIMEAN")
     from IPython import embed
     embed(colors='Linux')
