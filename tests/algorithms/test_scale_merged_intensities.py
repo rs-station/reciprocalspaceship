@@ -29,7 +29,7 @@ def test_posteriors_fw1978(data_fw1978_input, data_fw1978_output):
     if "J" in data_fw1978_output.columns[0]:
         refI = data_fw1978_output.iloc[:, 0].to_numpy()
         refSigI = data_fw1978_output.iloc[:, 1].to_numpy()
-        assert np.allclose(mean, refI, rtol=0.09)
+        assert np.allclose(mean, refI, rtol=0.05)
         assert np.allclose(stddev, refSigI, rtol=0.01)
         
     # Compare structure factor amplitudes
