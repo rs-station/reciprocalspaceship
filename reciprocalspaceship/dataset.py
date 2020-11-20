@@ -134,8 +134,15 @@ class DataSet(pd.DataFrame):
 
     @cell.setter
     def cell(self, val):
-        self._cell = val
-
+        # GH#18: Type-checking for supported input types
+        if isinstance(val, gemmi.UnitCell) or (val is None):
+            self._cell = val
+        elif isinstance(val, (list, tuple, np.ndarray)) and len(val) == 6:
+            self._cell = gemmi.UnitCell(*val)
+        else:
+            raise ValueError(f"Cannot construct gemmi.UnitCell from value: {val}")
+            
+            
     @property
     def merged(self):
         """Whether DataSet contains merged reflection data (boolean)"""

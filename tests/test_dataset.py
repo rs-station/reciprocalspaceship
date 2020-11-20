@@ -51,6 +51,35 @@ def test_spacegroup(data_fmodel, spacegroup):
             data_fmodel.spacegroup = spacegroup
 
 
+@pytest.mark.parametrize("cell", [None,
+                                  gemmi.UnitCell(10, 20, 30, 40, 50, 60),
+                                  [10, 20, 30, 40, 50, 60],
+                                  (10, 20, 30, 40, 50, 60),
+                                  np.array([10, 20, 30, 40, 50, 60]),
+                                  [10, 20, 30],
+                                  []
+])
+def test_cell(data_fmodel, cell):
+    if cell is None:
+        data_fmodel.cell = cell
+        assert data_fmodel.cell is None
+    elif not isinstance(cell, np.ndarray) and (cell == [] or cell == [10, 20, 30]):
+        with pytest.raises(ValueError):
+            data_fmodel.cell = cell
+    else:
+        data_fmodel.cell = cell
+        if isinstance(cell, gemmi.UnitCell):
+            expected = cell
+        else:
+            expected = gemmi.UnitCell(*cell)
+        assert expected.a == data_fmodel.cell.a
+        assert expected.b == data_fmodel.cell.b
+        assert expected.c == data_fmodel.cell.c
+        assert expected.alpha == data_fmodel.cell.alpha
+        assert expected.beta == data_fmodel.cell.beta
+        assert expected.gamma == data_fmodel.cell.gamma
+
+
 @pytest.mark.parametrize("spacegroup", [None, gemmi.SpaceGroup(1)])
 @pytest.mark.parametrize("cell", [None, gemmi.UnitCell(1, 1, 1, 90, 90, 90)])
 def test_constructor_gemmi(data_gemmi, spacegroup, cell):
