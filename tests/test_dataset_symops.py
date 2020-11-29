@@ -5,7 +5,8 @@ import reciprocalspaceship as rs
 
 @pytest.mark.parametrize("inplace", [True, False])
 @pytest.mark.parametrize("reset_index", [True, False])
-def test_hkl_to_asu(mtz_by_spacegroup, inplace, reset_index):
+@pytest.mark.parametrize("anomalous", [True, False])
+def test_hkl_to_asu(mtz_by_spacegroup, inplace, reset_index, anomalous):
     """Test DataSet.hkl_to_asu() for common spacegroups"""
     x = rs.read_mtz(mtz_by_spacegroup)
     y = rs.read_mtz(mtz_by_spacegroup[:-4] + '_p1.mtz')
@@ -14,11 +15,17 @@ def test_hkl_to_asu(mtz_by_spacegroup, inplace, reset_index):
     if reset_index:
         y.reset_index(inplace=True)
 
-    yasu = y.hkl_to_asu(inplace=inplace)
+    yasu = y.hkl_to_asu(inplace=inplace, anomalous=anomalous)
 
     if reset_index:
         yasu.set_index(['H', 'K', 'L'], inplace=True)
 
+    if anomalous:
+        yasu.reset_index(inplace=True)
+        friedel_minus = yasu['M/ISYM']%2 == 0
+        yasu[friedel_minus] = yasu[friedel_minus].apply_symop("-x,-y,-z")
+        yasu.set_index(['H', 'K', 'L'], inplace=True)
+        
     assert len(x.index.difference(yasu.index)) == 0
     assert len(yasu.index.difference(x.index)) == 0
 
