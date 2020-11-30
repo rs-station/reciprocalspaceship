@@ -22,9 +22,9 @@ def test_concat(data_fmodel, check_isomorphous, sg, ignore_index):
         assert isinstance(result, rs.DataSet)
         assert len(result) == len(data_fmodel)*2
         if ignore_index:
-            assert result._cache_index_dtypes == {}
+            assert result._index_dtypes_cache == {}
         for attr in data_fmodel._metadata:
-            if attr ==  "_cache_index_dtypes":
+            if attr ==  "_index_dtypes_cache":
                 continue
             assert result.__getattr__(attr) == data_fmodel.__getattr__(attr)
 
@@ -46,9 +46,9 @@ def test_append(data_fmodel, check_isomorphous, sg, ignore_index):
         assert isinstance(result, rs.DataSet)
         assert len(result) == len(data_fmodel)*2
         if ignore_index:
-            assert result._cache_index_dtypes == {}
+            assert result._index_dtypes_cache == {}
         for attr in data_fmodel._metadata:
-            if attr ==  "_cache_index_dtypes":
+            if attr ==  "_index_dtypes_cache":
                 continue
             assert result.__getattr__(attr) == data_fmodel.__getattr__(attr)
 
@@ -72,9 +72,9 @@ def test_append_list(data_fmodel, check_isomorphous, sg, ignore_index):
         assert isinstance(result, rs.DataSet)
         assert len(result) == len(data_fmodel)*4
         if ignore_index:
-            assert result._cache_index_dtypes == {}
+            assert result._index_dtypes_cache == {}
         for attr in data_fmodel._metadata:
-            if attr ==  "_cache_index_dtypes":
+            if attr ==  "_index_dtypes_cache":
                 continue
             assert result.__getattr__(attr) == data_fmodel.__getattr__(attr)
 
