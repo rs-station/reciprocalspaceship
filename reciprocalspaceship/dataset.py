@@ -952,7 +952,7 @@ class DataSet(pd.DataFrame):
 
     @inplace
     @range_indexed
-    def hkl_to_asu(self, inplace=False):
+    def hkl_to_asu(self, inplace=False, anomalous=False):
         """
         Map HKL indices to the reciprocal space asymmetric unit. If phases
         are included in the DataSet, they will be changed according to the
@@ -967,6 +967,9 @@ class DataSet(pd.DataFrame):
         ----------
         inplace : bool
             Whether to modify the DataSet in place or return a copy
+        anomalous : bool
+            If True, reflections will be mapped to the +/- ASU. If False,
+            reflections are only mapped to the Friedel-plus ASU. 
 
         Returns
         -------
@@ -987,7 +990,6 @@ class DataSet(pd.DataFrame):
             return_phase_shifts=True
         )
 
-
         dataset[["H", "K", "L"]] = asu_hkls[inverse]
         dataset[["H", "K", "L"]] = dataset[["H", "K", "L"]].astype("HKL")
 
@@ -1004,6 +1006,11 @@ class DataSet(pd.DataFrame):
         else:
             dataset['M/ISYM'] = DataSeries(isym[inverse], dtype="M/ISYM", index=dataset.index)
 
+        # GH#16: Handle anomalous flag to separate Friedel pairs
+        if anomalous:
+            friedel_minus = dataset['M/ISYM']%2 == 0
+            dataset[friedel_minus] = dataset[friedel_minus].apply_symop("-x,-y,-z")
+            
         return dataset
 
     @inplace
