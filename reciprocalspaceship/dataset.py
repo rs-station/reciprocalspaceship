@@ -67,14 +67,14 @@ class DataSet(pd.DataFrame):
     
     .. _Pandas.DataFrame documentation: https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.html
     """
-    _metadata = ['_spacegroup', '_cell', '_cache_index_dtypes', '_merged']
+    _metadata = ['_spacegroup', '_cell', '_index_dtypes_cache', '_merged']
 
     #-------------------------------------------------------------------
     # __init__ method
     
     def __init__(self, data=None, index=None, columns=None, dtype=None,
                  copy=False, spacegroup=None, cell=None, merged=None):
-        self._cache_index_dtypes = {}
+        self._index_dtypes_cache = {}
         self._spacegroup = None
         self._cell = None
         self._merged = None
@@ -207,11 +207,11 @@ class DataSet(pd.DataFrame):
         # Copy dtypes of keys to cache
         for key in keys:
             if isinstance(key, str):
-                self._cache_index_dtypes[key] = self[key].dtype.name
+                self._index_dtypes_cache[key] = self[key].dtype.name
             elif isinstance(key, (np.ndarray, pd.Index, pd.Series)):
-                self._cache_index_dtypes = key.dtype.name
+                self._index_dtypes_cache = key.dtype.name
             elif isinstance(key, list):
-                self._cache_index_dtypes = type(key[0])
+                self._index_dtypes_cache = type(key[0])
             else:
                 raise ValueError(f"{key} is not an instance of type str, np.ndarray, pd.Index, pd.Series, or list")
             
@@ -253,16 +253,16 @@ class DataSet(pd.DataFrame):
         # GH#6: Handle level argument to reset_index
         columns = level
         if level is None:
-            columns = list(self._cache_index_dtypes.keys())
+            columns = list(self._index_dtypes_cache.keys())
         
         def _handle_cached_dtypes(dataset, columns, drop):
-            """Use _cache_index_dtypes to restore dtypes"""
+            """Use _index_dtypes_cache to restore dtypes"""
             if drop:
                 for key in columns:
-                    dataset._cache_index_dtypes.pop(key)
+                    dataset._index_dtypes_cache.pop(key)
             else:
                 for key in columns:
-                    dtype = dataset._cache_index_dtypes.pop(key)
+                    dtype = dataset._index_dtypes_cache.pop(key)
                     dataset[key] = dataset[key].astype(dtype)
             return dataset
         
@@ -272,7 +272,7 @@ class DataSet(pd.DataFrame):
             return
         else:
             dataset = super().reset_index(level, drop, inplace, col_level, col_fill)
-            dataset._cache_index_dtypes = dataset._cache_index_dtypes.copy()
+            dataset._index_dtypes_cache = dataset._index_dtypes_cache.copy()
             dataset = _handle_cached_dtypes(dataset, columns, drop)
             return dataset
 
@@ -406,11 +406,11 @@ class DataSet(pd.DataFrame):
                     raise ValueError("`other` DataSet is not isomorphous")
         result = super().append(*args, **kwargs)
 
-        # If `ignore_index=True`, the _cache_index_dtypes attribute should
+        # If `ignore_index=True`, the _index_dtypes_cache attribute should
         # be reset.
-        if isinstance(result.index, pd.RangeIndex) and self._cache_index_dtypes != {}:
+        if isinstance(result.index, pd.RangeIndex) and self._index_dtypes_cache != {}:
             result.__finalize__(self)
-            result._cache_index_dtypes = {}
+            result._index_dtypes_cache = {}
             return result
         
         return result.__finalize__(self)

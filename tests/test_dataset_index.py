@@ -29,7 +29,7 @@ def test_reset_index(data_fmodel, level, drop, inplace):
                 assert c not in data_fmodel.columns
             else:
                 assert c in data_fmodel.columns
-        assert cache == list(data_fmodel._cache_index_dtypes.keys())
+        assert cache == list(data_fmodel._index_dtypes_cache.keys())
         
     else:
         assert id(result) != id(data_fmodel)
@@ -42,5 +42,5 @@ def test_reset_index(data_fmodel, level, drop, inplace):
             else:
                 assert c in result.columns
                 assert c not in data_fmodel.columns
-        assert cache == list(result._cache_index_dtypes.keys())
-        assert cache != list(data_fmodel._cache_index_dtypes.keys())
+        assert cache == list(result._index_dtypes_cache.keys())
+        assert cache != list(data_fmodel._index_dtypes_cache.keys())
