@@ -203,15 +203,15 @@ class DataSet(pd.DataFrame):
         """
         if not isinstance(keys, list):
             keys = [keys]
-        
+
         # Copy dtypes of keys to cache
         for key in keys:
             if isinstance(key, str):
                 self._index_dtypes[key] = self[key].dtype.name
-            elif isinstance(key, (np.ndarray, pd.Index, pd.Series)):
-                self._index_dtypes = key.dtype.name
-            elif isinstance(key, list):
-                self._index_dtypes = type(key[0])
+            elif isinstance(key, (pd.Index, pd.Series)):
+                self._index_dtypes[key.name] = key.dtype.name
+            elif isinstance(key, (np.ndarray, list)):
+                continue
             else:
                 raise ValueError(f"{key} is not an instance of type str, np.ndarray, pd.Index, pd.Series, or list")
             
@@ -253,17 +253,19 @@ class DataSet(pd.DataFrame):
         # GH#6: Handle level argument to reset_index
         columns = level
         if level is None:
-            columns = list(self._index_dtypes.keys())
+            columns = list(self.index.names)
         
         def _handle_cached_dtypes(dataset, columns, drop):
             """Use _index_dtypes to restore dtypes"""
             if drop:
                 for key in columns:
-                    dataset._index_dtypes.pop(key)
+                    if key in dataset._index_dtypes:
+                        dataset._index_dtypes.pop(key)
             else:
                 for key in columns:
-                    dtype = dataset._index_dtypes.pop(key)
-                    dataset[key] = dataset[key].astype(dtype)
+                    if key in dataset._index_dtypes:
+                        dtype = dataset._index_dtypes.pop(key)
+                        dataset[key] = dataset[key].astype(dtype)
             return dataset
         
         if inplace:
