@@ -37,11 +37,11 @@ def concat(*args, check_isomorphous=True, **kwargs):
         
     result = pd.concat(*args, **kwargs)
 
-    # If `ignore_index=True`, the _index_dtypes_cache attribute should
+    # If `ignore_index=True`, the _index_dtypes attribute should
     # be reset.
-    if isinstance(result.index, pd.RangeIndex) and first._index_dtypes_cache != {}:
+    if isinstance(result.index, pd.RangeIndex) and first._index_dtypes != {}:
         result.__finalize__(first)
-        result._index_dtypes_cache = {}
+        result._index_dtypes = {}
         return result
     
     return result.__finalize__(first)
