@@ -45,7 +45,7 @@ def test_stack_anomalous(data_merged, labels):
             check_ValueError(data_merged, plus_labels, minus_labels)
             return
 
-    result = data_merged.stack_anomalous(plus_labels, minus_labels)
+    result = data_merged.stack_anomalous(labels[0], labels[1])
     centrics = data_merged.label_centrics()["CENTRIC"]
     assert len(result.columns) == (len(data_merged.columns)-len(plus_labels))
     assert len(result) == (2*(~centrics).sum()) + centrics.sum()
