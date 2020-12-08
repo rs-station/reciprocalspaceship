@@ -845,7 +845,7 @@ class DataSet(pd.DataFrame):
         columns : str or list-like
             Column label or list of column labels of data that should be 
             associated with Friedel pairs. If None, all columns are 
-            converted are converted to the two-column anomalous format.
+            converted to the two-column anomalous format.
         suffixes : tuple or list  of str
             Suffixes to append to Friedel-plus and Friedel-minus data 
             columns
@@ -865,27 +865,29 @@ class DataSet(pd.DataFrame):
         if columns is None:
             columns = self.columns.to_list()
         elif isinstance(columns, str):
-            columns =  [columns]
+            columns = [columns]
         elif not isinstance(columns, (list, tuple)):
             raise ValueError(f"Expected columns to be str, list or tuple. "
                              f"Provided value is type {type(columns)}")
-            
+        
         if not (isinstance(suffixes, (list, tuple)) and len(suffixes) == 2):
             raise ValueError(f"Expected suffixes to be tuple or list of len() of 2")
 
         # Separate DataSet into Friedel(+) and Friedel(-)
+        columns = set(columns).union(set(["H", "K", "L"]))
         dataset = self.hkl_to_asu()
         if "PARTIAL" in columns: columns.remove("PARTIAL")
         for column in columns:
             dataset[column] = dataset[column].to_friedel_dtype()
         dataset_plus  = dataset.loc[dataset["M/ISYM"]%2 == 1].copy()
         dataset_minus = dataset.loc[dataset["M/ISYM"]%2 == 0].copy()
-        dataset_minus = dataset_minus.loc[:, list(columns)+["H", "K", "L"]]
+        dataset_minus = dataset_minus.loc[:, columns]
         result = dataset_plus.merge(dataset_minus, how="outer",
                                     on=["H", "K", "L"],
                                     suffixes=suffixes)
 
         # Handle centric reflections
+        columns = columns.difference(set(["H", "K", "L"]))
         plus_columns  = [ c + suffixes[0] for c in columns ]
         minus_columns = [ c + suffixes[1] for c in columns ]        
         centrics = result.label_centrics()["CENTRIC"]

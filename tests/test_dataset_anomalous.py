@@ -76,7 +76,7 @@ def test_unstack_anomalous(data_merged, columns, suffixes):
     """Test behavior of DataSet.unstack_anomalous()"""
 
     data_merged = data_merged.stack_anomalous()
-
+    newcolumns = columns
         
     def check_ValueError(data, columns, suffixes):
         with pytest.raises(ValueError):
@@ -85,9 +85,9 @@ def test_unstack_anomalous(data_merged, columns, suffixes):
     
     # Test input validation
     if columns is None:
-        columns = data_merged.columns.to_list()
+        newcolumns = data_merged.columns.to_list()
     elif isinstance(columns, str):
-        columns = [columns]
+        newcolumns = [columns]
     elif not isinstance(columns, (list, tuple)):
         check_ValueError(data_merged, columns, suffixes)
         return
@@ -97,7 +97,7 @@ def test_unstack_anomalous(data_merged, columns, suffixes):
 
     result = data_merged.unstack_anomalous(columns, suffixes)
     centrics = data_merged.label_centrics()["CENTRIC"]
-    assert len(result.columns) == (len(data_merged.columns)+len(columns))
+    assert len(result.columns) == (len(data_merged.columns)+len(newcolumns))
     assert in_asu(result.get_hkls(), result.spacegroup).all()
     assert len(result) == ((~centrics).sum()/2) + centrics.sum()
     assert result.spacegroup.xhm() == data_merged.spacegroup.xhm()
