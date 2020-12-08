@@ -20,11 +20,12 @@ from reciprocalspaceship.utils import (
 from functools import wraps
 from inspect import signature
 
-
 def inplace(f):
     """ 
-    A decorator that applies the inplace argument. Base function must have a Bool param called "inplace".
-    The position of `inplace` doesn't matter.
+    A decorator that applies the inplace argument. 
+
+    Base function must have a bool param called "inplace" in  the call 
+    signature. The position of `inplace` argument doesn't matter.
     """
     @wraps(f)
     def wrapped(ds, *args, **kwargs):
@@ -43,15 +44,19 @@ def inplace(f):
     return wrapped
 
 def range_indexed(f):
-    """ A decorator that presents the dataset with a range index and makes sure the method preserves the original index columns if any """
+    """
+    A decorator that presents the calling dataset with a range index.
+
+    This decorator facilitates writing methods that are agnostic to the 
+    true indices in a DataSet. Original index columns are preserved through 
+    wrapped function calls.
+    """
     @wraps(f)
     def wrapped(ds, *args, **kwargs):
         names = ds.index.names
         ds = ds._index_from_names([None], inplace=True)
         result = f(ds, *args, **kwargs)
-        result = ds._index_from_names(names, inplace=True)
-        if result is not ds:
-            ds = ds._index_from_names(names, inplace=True)
+        result = result._index_from_names(names, inplace=True)
         return result.__finalize__(ds)
     return wrapped
 
@@ -157,7 +162,7 @@ class DataSet(pd.DataFrame):
 
     @inplace
     def _index_from_names(self, names, inplace=False):
-        """ Helper method for dectorators """
+        """Helper method for decorators"""
         if names == [None] and self.index.names != [None]:
             self.reset_index(inplace=True)
         elif names != [None] and self.index.names == [None]:
