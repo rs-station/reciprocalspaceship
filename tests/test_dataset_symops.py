@@ -20,25 +20,35 @@ def test_hkl_to_asu(mtz_by_spacegroup, inplace, reset_index, anomalous):
     if reset_index:
         yasu.set_index(['H', 'K', 'L'], inplace=True)
 
+    # Confirm centric reflections are always in +ASU
+    expected_centric = x.loc[x.label_centrics()["CENTRIC"]]
+    result_centric   = yasu.loc[yasu.label_centrics()["CENTRIC"]]
+    assert len(expected_centric.index.difference(result_centric.index)) == 0
+    assert len(result_centric.index.difference(expected_centric.index)) == 0    
+
+    # If anomalous=True, confirm acentric reflections were in +/- ASU
     if anomalous:
         yasu.reset_index(inplace=True)
+        acentric = ~yasu.label_centrics()["CENTRIC"]
         friedel_minus = yasu['M/ISYM']%2 == 0
-        yasu[friedel_minus] = yasu[friedel_minus].apply_symop("-x,-y,-z")
+        yasu[friedel_minus & acentric] = yasu[friedel_minus & acentric].apply_symop("-x,-y,-z")
         yasu.set_index(['H', 'K', 'L'], inplace=True)
-        
-    assert len(x.index.difference(yasu.index)) == 0
     assert len(yasu.index.difference(x.index)) == 0
+    assert len(x.index.difference(yasu.index)) == 0
 
+    # Confirm structure factor amplitudes are always unchanged
     Fx    = x.loc[yasu.index, 'FMODEL'].values.astype(float) 
     Fyasu = yasu['FMODEL'].values.astype(float) 
     assert np.allclose(Fx, Fyasu)
 
+    # Confirm phase changes are applied
     Phx    = x.loc[yasu.index, 'PHIFMODEL'].values.astype(float) 
     Phyasu = yasu['PHIFMODEL'].values.astype(float) 
     Sx    = Fx*np.exp(1j*np.deg2rad(Phx))
     Syasu = Fyasu*np.exp(1j*np.deg2rad(Phyasu))
     assert np.allclose(Sx, Syasu, rtol=1e-3)
 
+    # Confirm inplace
     if inplace:
         assert id(yasu) == id(y)
     else:
