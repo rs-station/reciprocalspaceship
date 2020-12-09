@@ -958,8 +958,8 @@ class DataSet(pd.DataFrame):
         inplace : bool
             Whether to modify the DataSet in place or return a copy
         anomalous : bool
-            If True, reflections will be mapped to the +/- ASU. If False,
-            reflections are only mapped to the Friedel-plus ASU. 
+            If True, acentric reflections will be mapped to the +/- ASU. 
+            If False, all reflections are mapped to the Friedel-plus ASU. 
 
         Returns
         -------
@@ -997,9 +997,11 @@ class DataSet(pd.DataFrame):
             dataset['M/ISYM'] = DataSeries(isym[inverse], dtype="M/ISYM", index=dataset.index)
 
         # GH#16: Handle anomalous flag to separate Friedel pairs
+        # GH#25: Centrics should not be considered Friedel pairs
         if anomalous:
+            acentric = ~dataset.label_centrics()["CENTRIC"]
             friedel_minus = dataset['M/ISYM']%2 == 0
-            dataset[friedel_minus] = dataset[friedel_minus].apply_symop("-x,-y,-z")
+            dataset[friedel_minus & acentric] = dataset[friedel_minus & acentric].apply_symop("-x,-y,-z")
             
         return dataset
 
