@@ -958,8 +958,8 @@ class DataSet(pd.DataFrame):
         inplace : bool
             Whether to modify the DataSet in place or return a copy
         anomalous : bool
-            If True, reflections will be mapped to the +/- ASU. If False,
-            reflections are only mapped to the Friedel-plus ASU. 
+            If True, acentric reflections will be mapped to the +/- ASU. 
+            If False, all reflections are mapped to the Friedel-plus ASU. 
 
         Returns
         -------
