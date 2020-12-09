@@ -173,7 +173,7 @@
    "cell_type": "markdown",
    "metadata": {},
    "source": [
-    "Internally, these are all stored as `numpy` arrays of 32-bit ints or floats. This is because MTZ files only take 32-bit values. It is worth keeping in mind that other data types can be stored in an `rs.DataSet` column or `rs.DataSeries`; however, they only MTZ dtypes can be written out to an MTZ file. "
+    "Internally, these are all stored as `numpy` arrays of 32-bit ints or floats. This is because MTZ files only take 32-bit values. It is worth keeping in mind that other data types can be stored in an `rs.DataSet` column or `rs.DataSeries`; however, only MTZ dtypes can be written out to an MTZ file. "
    ]
   },
   {
@@ -674,7 +674,7 @@
    "name": "python",
    "nbconvert_exporter": "python",
    "pygments_lexer": "ipython3",
-   "version": "3.7.7"
+   "version": "3.8.5"
   }
  },
  "nbformat": 4,
