@@ -104,9 +104,11 @@
 <li class="toctree-l3"><a class="reference internal" href="1_basics.html">Basics</a></li>
 <li class="toctree-l3 current"><a class="current reference internal" href="#">HEWL S-SAD Merging Statistics</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#Load-scaled,-unmerged-data">Load scaled, unmerged data</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#Helper-functions-for-merging">Helper functions for merging</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#Merging-with-Inverse-Variance-Weights">Merging with Inverse-Variance Weights</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#Merging-with-2-fold-Cross-Validation">Merging with 2-fold Cross-Validation</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#Merge-HEWL-data">Merge HEWL data</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#Compute-CC_{1/2}-and-CC_{anom}">Compute <span class="math notranslate nohighlight">\(CC_{1/2}\)</span> and <span class="math notranslate nohighlight">\(CC_{anom}\)</span></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#Summary">Summary</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="3_anomalousdifference.html">Anomalous Difference Map</a></li>
@@ -468,8 +470,8 @@ div.rendered_html tbody tr:hover {
 <h1>HEWL S-SAD Merging Statistics<a class="headerlink" href="#HEWL-S-SAD-Merging-Statistics" title="Permalink to this headline">¶</a></h1>
 <p>Merging statistics are a useful means to assess data quality in crystallography. However, each statistic has inherent shortcomings. For example, R-merge will appear inflated if the multiplicity is high, and the Pearson correlation coefficients used for <span class="math notranslate nohighlight">\(CC_{1/2}\)</span> are very sensitive to outliers.</p>
 <p>Most scaling and merging programs output multiple merging statistics to get around these shortcomings. However, one can imagine that it could also be useful to customize certain parameters, such as how many resolution bins are used. Or, perhaps a better statistic will be developed that is worth implementing.</p>
-<p>In this notebook, <code class="docutils literal notranslate"><span class="pre">reciprocalspaceship</span></code> is used to compute half dataset correlation coefficients (<span class="math notranslate nohighlight">\(CC_{1/2}\)</span> and <span class="math notranslate nohighlight">\(CC_{anom}\)</span>) for a dataset collected from a tetragonal hen egg-white lysozyme (HEWL) crystal at 6550 eV. These data are unmerged, but were scaled in AIMLESS. They contain sufficient sulfur anomalous signal to determine a solution by the SAD method. This illustrates the use of <code class="docutils literal notranslate"><span class="pre">rs</span></code> to create a custom analysis, and could be useful as a template for other exploratory
-crystallographic data analyses. As an example, we will compare half dataset correlations computed using both Pearson and Spearman correlation coefficients.</p>
+<p>In this notebook, <code class="docutils literal notranslate"><span class="pre">reciprocalspaceship</span></code> is used to compute half-dataset correlation coefficients (<span class="math notranslate nohighlight">\(CC_{1/2}\)</span> and <span class="math notranslate nohighlight">\(CC_{anom}\)</span>) for a dataset collected from a tetragonal hen egg-white lysozyme (HEWL) crystal at 6550 eV. These data are unmerged, but were scaled in AIMLESS. They contain sufficient sulfur anomalous signal to determine a solution by the SAD method. This illustrates the use of <code class="docutils literal notranslate"><span class="pre">rs</span></code> to implement a merging routine, create a custom analysis, and could be useful as a
+template for other exploratory crystallographic data analyses. As an example, we will compare half-dataset correlations computed using both Pearson and Spearman correlation coefficients.</p>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
 </pre></div>
@@ -477,9 +479,9 @@ crystallographic data analyses. As an example, we will compare half dataset corr
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
 <span></span><span class="o">%</span><span class="k">matplotlib</span> inline
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">seaborn</span> <span class="k">as</span> <span class="nn">sns</span>
+<span class="n">sns</span><span class="o">.</span><span class="n">set_context</span><span class="p">(</span><span class="s2">&quot;notebook&quot;</span><span class="p">,</span> <span class="n">font_scale</span><span class="o">=</span><span class="mf">1.3</span><span class="p">)</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">from</span> <span class="nn">scipy</span> <span class="kn">import</span> <span class="n">stats</span>
-
 </pre></div>
 </div>
 </div>
@@ -506,12 +508,13 @@ crystallographic data analyses. As an example, we will compare half dataset corr
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-0.8.9
+0.9.2
 </pre></div></div>
 </div>
 <hr class="docutils" />
 <div class="section" id="Load-scaled,-unmerged-data">
 <h2>Load scaled, unmerged data<a class="headerlink" href="#Load-scaled,-unmerged-data" title="Permalink to this headline">¶</a></h2>
+<p>This data has been scaled in AIMLESS. The data includes the image number and the scaled <strong>I</strong> and <strong>SIGI</strong> values.</p>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
 </pre></div>
@@ -574,38 +577,38 @@ crystallographic data analyses. As an example, we will compare half dataset corr
     <tr>
       <th rowspan="5" valign="top">0</th>
       <th rowspan="5" valign="top">0</th>
-      <th>1</th>
-      <td>145</td>
-      <td>1.8575767</td>
-      <td>0.22305174</td>
+      <th>4</th>
+      <td>137</td>
+      <td>696.5212</td>
+      <td>87.83294</td>
       <td>False</td>
     </tr>
     <tr>
-      <th>1</th>
-      <td>865</td>
-      <td>2.2683158</td>
-      <td>0.17914094</td>
+      <th>4</th>
+      <td>520</td>
+      <td>710.6812</td>
+      <td>88.107025</td>
       <td>False</td>
     </tr>
     <tr>
-      <th>1</th>
-      <td>1231</td>
-      <td>1.4042842</td>
-      <td>0.22381113</td>
+      <th>4</th>
+      <td>856</td>
+      <td>672.05634</td>
+      <td>87.75671</td>
       <td>False</td>
     </tr>
     <tr>
-      <th>1</th>
-      <td>2145</td>
-      <td>1.6752408</td>
-      <td>0.20016733</td>
+      <th>4</th>
+      <td>1239</td>
+      <td>642.47485</td>
+      <td>87.90302</td>
       <td>False</td>
     </tr>
     <tr>
-      <th>1</th>
-      <td>3231</td>
-      <td>1.2280092</td>
-      <td>0.21494065</td>
+      <th>4</th>
+      <td>2160</td>
+      <td>655.71783</td>
+      <td>87.74394</td>
       <td>False</td>
     </tr>
   </tbody>
@@ -626,14 +629,14 @@ crystallographic data analyses. As an example, we will compare half dataset corr
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-Number of observed reflections: 822299
+Number of observed reflections: 816804
 </pre></div></div>
 </div>
 </div>
 <hr class="docutils" />
-<div class="section" id="Helper-functions-for-merging">
-<h2>Helper functions for merging<a class="headerlink" href="#Helper-functions-for-merging" title="Permalink to this headline">¶</a></h2>
-<p>Since the input data are unmerged, we will implement the inverse-variance weighting scheme used by AIMLESS to merge the observations. The weighted average is a better estimator of the true mean than the raw average.</p>
+<div class="section" id="Merging-with-Inverse-Variance-Weights">
+<h2>Merging with Inverse-Variance Weights<a class="headerlink" href="#Merging-with-Inverse-Variance-Weights" title="Permalink to this headline">¶</a></h2>
+<p>Since the input data are unmerged, we will implement the inverse-variance weighting scheme used by AIMLESS to merge the observations. The weighted average is a better estimator of the true mean than the raw average, and this weighting scheme corresponds to the maximum likelihood estimator of the true mean if we assume that the observations are normally-distributed about the true mean.</p>
 <p>The merged intensity for each reflection, <span class="math notranslate nohighlight">\(I_h\)</span>, can be determined from the observed intensities, <span class="math notranslate nohighlight">\(I_{h,i}\)</span>, and error estimates, <span class="math notranslate nohighlight">\(\sigma_{h,i}\)</span>, as follows:</p>
 <p><span class="math">\begin{equation}
 I_h = \frac{\sum_{i}w_{h,i} I_{h,i}}{\sum_{i} w_{h,i}}
@@ -642,15 +645,399 @@ I_h = \frac{\sum_{i}w_{h,i} I_{h,i}}{\sum_{i} w_{h,i}}
 <p><span class="math">\begin{equation}
 w_{h,i} = \frac{1}{(\sigma_{h,i})^2}
 \end{equation}</span></p>
-<p>We will randomly split the observations into half-datasets by image number, and we will calculate:</p>
-<ul class="simple">
-<li><p><strong>IMEAN</strong> : the averge intensity of both Friedel mates, <span class="math notranslate nohighlight">\(I_h\)</span> and <span class="math notranslate nohighlight">\(I_{-h}\)</span></p></li>
-<li><p><strong>I(+)</strong> : the average intensity of <span class="math notranslate nohighlight">\(I_h\)</span></p></li>
-<li><p><strong>I(-)</strong> : the average intensity of <span class="math notranslate nohighlight">\(I_{-h}\)</span></p></li>
-</ul>
-<p>for each unique Friedel pair in each half-dataset. We will compare these values across half-datasets in order to compute correlation coefficients by resolution bin, and we will resample the half-datasets multiple times in order to get a sense of the distribution of the correlation coefficients within each resolution bin.</p>
+<p>The updated estimate of the uncertainty, <span class="math notranslate nohighlight">\(\sigma_{h}\)</span>, is given by:</p>
+<p><span class="math">\begin{equation}
+\sigma_{h} = \sqrt{\frac{1}{\sum_{i} w_{h,i}}}
+\end{equation}</span></p>
+<p>Let’s start by implementing the above equations in a function that will compute the merged <span class="math notranslate nohighlight">\(I_h\)</span> and <span class="math notranslate nohighlight">\(\sigma_h\)</span>. We will use the <a class="reference external" href="https://pandas.pydata.org/pandas-docs/stable/user_guide/groupby.html">Pandas groupby</a> methods to apply this function across the unique Miller indices in the <code class="docutils literal notranslate"><span class="pre">DataSet</span></code>. If we group Friedel pairs together, we will refer to the quantity as <strong>IMEAN</strong>, and if we keep the Friedel pairs separate we will refer to the quantities as <strong>I(+)</strong> and <strong>I(-)</strong>.</p>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="k">def</span> <span class="nf">merge</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">anomalous</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Merge dataset using inverse-variance weights.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    dataset : rs.DataSet</span>
+<span class="sd">        DataSet to be merged containing scaled I and SIGI</span>
+<span class="sd">    anomalous : bool</span>
+<span class="sd">        If True, I(+) and I(-) will be reported. If False,</span>
+<span class="sd">        IMEAN will be reported</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    rs.DataSet</span>
+<span class="sd">        Merged DataSet object</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">ds</span> <span class="o">=</span> <span class="n">dataset</span><span class="o">.</span><span class="n">hkl_to_asu</span><span class="p">(</span><span class="n">anomalous</span><span class="o">=</span><span class="n">anomalous</span><span class="p">)</span>
+    <span class="n">ds</span><span class="p">[</span><span class="s2">&quot;w&quot;</span><span class="p">]</span>  <span class="o">=</span> <span class="n">ds</span><span class="p">[</span><span class="s1">&#39;SIGI&#39;</span><span class="p">]</span><span class="o">**-</span><span class="mi">2</span>
+    <span class="n">ds</span><span class="p">[</span><span class="s2">&quot;wI&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">ds</span><span class="p">[</span><span class="s2">&quot;I&quot;</span><span class="p">]</span> <span class="o">*</span> <span class="n">ds</span><span class="p">[</span><span class="s2">&quot;w&quot;</span><span class="p">]</span>
+    <span class="n">g</span> <span class="o">=</span> <span class="n">ds</span><span class="o">.</span><span class="n">groupby</span><span class="p">([</span><span class="s2">&quot;H&quot;</span><span class="p">,</span> <span class="s2">&quot;K&quot;</span><span class="p">,</span> <span class="s2">&quot;L&quot;</span><span class="p">])</span>
+
+    <span class="n">result</span> <span class="o">=</span> <span class="n">g</span><span class="p">[[</span><span class="s2">&quot;w&quot;</span><span class="p">,</span> <span class="s2">&quot;wI&quot;</span><span class="p">]]</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+    <span class="n">result</span><span class="p">[</span><span class="s2">&quot;I&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">result</span><span class="p">[</span><span class="s2">&quot;wI&quot;</span><span class="p">]</span> <span class="o">/</span> <span class="n">result</span><span class="p">[</span><span class="s2">&quot;w&quot;</span><span class="p">]</span>
+    <span class="n">result</span><span class="p">[</span><span class="s2">&quot;SIGI&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">1</span> <span class="o">/</span> <span class="n">result</span><span class="p">[</span><span class="s2">&quot;w&quot;</span><span class="p">])</span>
+    <span class="n">result</span><span class="o">.</span><span class="n">merged</span> <span class="o">=</span> <span class="kc">True</span>
+
+    <span class="k">if</span> <span class="n">anomalous</span><span class="p">:</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">result</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span> <span class="p">[</span><span class="s2">&quot;I&quot;</span><span class="p">,</span> <span class="s2">&quot;SIGI&quot;</span><span class="p">]]</span><span class="o">.</span><span class="n">unstack_anomalous</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">result</span><span class="p">[[</span><span class="s2">&quot;I(+)&quot;</span><span class="p">,</span> <span class="s2">&quot;SIGI(+)&quot;</span><span class="p">,</span> <span class="s2">&quot;I(-)&quot;</span><span class="p">,</span> <span class="s2">&quot;SIGI(-)&quot;</span><span class="p">]]</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">result</span><span class="p">[[</span><span class="s2">&quot;I&quot;</span><span class="p">,</span> <span class="s2">&quot;SIGI&quot;</span><span class="p">]]</span>
+</pre></div>
+</div>
+</div>
+<p>Using <code class="docutils literal notranslate"><span class="pre">anomalous=False</span></code>, this function can be used to compute <strong>IMEAN</strong> and <strong>SIGIMEAN</strong> by including both Friedel pairs:</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">result1</span> <span class="o">=</span> <span class="n">merge</span><span class="p">(</span><span class="n">hewl</span><span class="p">,</span> <span class="n">anomalous</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">result1</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th></th>
+      <th></th>
+      <th>I</th>
+      <th>SIGI</th>
+    </tr>
+    <tr>
+      <th>H</th>
+      <th>K</th>
+      <th>L</th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>15</th>
+      <th>13</th>
+      <th>17</th>
+      <td>9.901793</td>
+      <td>1.084705</td>
+    </tr>
+    <tr>
+      <th>30</th>
+      <th>20</th>
+      <th>0</th>
+      <td>532.1264</td>
+      <td>25.592989</td>
+    </tr>
+    <tr>
+      <th>20</th>
+      <th>13</th>
+      <th>9</th>
+      <td>282.86536</td>
+      <td>3.382065</td>
+    </tr>
+    <tr>
+      <th>24</th>
+      <th>13</th>
+      <th>11</th>
+      <td>110.44999</td>
+      <td>2.107947</td>
+    </tr>
+    <tr>
+      <th>23</th>
+      <th>15</th>
+      <th>1</th>
+      <td>413.71066</td>
+      <td>5.939175</td>
+    </tr>
+  </tbody>
+</table>
+</div></div>
+</div>
+<p>Using <code class="docutils literal notranslate"><span class="pre">anomalous=True</span></code>, this function can be used to compute <strong>I(+)</strong>, <strong>SIGI(+)</strong>, <strong>I(-)</strong>, and <strong>SIGI(-)</strong> by separating Friedel pairs:</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">result2</span> <span class="o">=</span> <span class="n">merge</span><span class="p">(</span><span class="n">hewl</span><span class="p">,</span> <span class="n">anomalous</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">result2</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th></th>
+      <th></th>
+      <th>I(+)</th>
+      <th>SIGI(+)</th>
+      <th>I(-)</th>
+      <th>SIGI(-)</th>
+    </tr>
+    <tr>
+      <th>H</th>
+      <th>K</th>
+      <th>L</th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>30</th>
+      <th>19</th>
+      <th>5</th>
+      <td>214.14368</td>
+      <td>5.669856</td>
+      <td>227.93652</td>
+      <td>5.321779</td>
+    </tr>
+    <tr>
+      <th>36</th>
+      <th>10</th>
+      <th>3</th>
+      <td>303.7916</td>
+      <td>9.099753</td>
+      <td>287.29083</td>
+      <td>7.715621</td>
+    </tr>
+    <tr>
+      <th>31</th>
+      <th>8</th>
+      <th>0</th>
+      <td>49.594536</td>
+      <td>1.023669</td>
+      <td>49.594536</td>
+      <td>1.023669</td>
+    </tr>
+    <tr>
+      <th>18</th>
+      <th>4</th>
+      <th>11</th>
+      <td>1108.2372</td>
+      <td>18.975866</td>
+      <td>1118.1456</td>
+      <td>21.075169</td>
+    </tr>
+    <tr>
+      <th>30</th>
+      <th>18</th>
+      <th>3</th>
+      <td>204.25981</td>
+      <td>5.025567</td>
+      <td>192.05464</td>
+      <td>5.023432</td>
+    </tr>
+  </tbody>
+</table>
+</div></div>
+</div>
+<p>A variant of the above function is implemented in <code class="docutils literal notranslate"><span class="pre">rs.algorithms</span></code>, and we will use that implementation in the next section for computing merging statistics. This function computes <strong>IMEAN</strong>, <strong>I(+)</strong>, <strong>I(-)</strong>, and associated uncertainties for each unique Miller index.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">result3</span> <span class="o">=</span> <span class="n">rs</span><span class="o">.</span><span class="n">algorithms</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">hewl</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">result3</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th></th>
+      <th></th>
+      <th>IMEAN</th>
+      <th>SIGIMEAN</th>
+      <th>I(+)</th>
+      <th>SIGI(+)</th>
+      <th>I(-)</th>
+      <th>SIGI(-)</th>
+      <th>N(+)</th>
+      <th>N(-)</th>
+    </tr>
+    <tr>
+      <th>H</th>
+      <th>K</th>
+      <th>L</th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>35</th>
+      <th>8</th>
+      <th>2</th>
+      <td>280.71973</td>
+      <td>4.633233</td>
+      <td>274.86194</td>
+      <td>6.7137227</td>
+      <td>286.0464</td>
+      <td>6.4021378</td>
+      <td>32</td>
+      <td>36</td>
+    </tr>
+    <tr>
+      <th>20</th>
+      <th>5</th>
+      <th>18</th>
+      <td>23.973345</td>
+      <td>1.2019373</td>
+      <td>24.840725</td>
+      <td>1.7172365</td>
+      <td>23.140327</td>
+      <td>1.6828763</td>
+      <td>32</td>
+      <td>32</td>
+    </tr>
+    <tr>
+      <th>22</th>
+      <th>13</th>
+      <th>5</th>
+      <td>120.70732</td>
+      <td>1.5874561</td>
+      <td>118.58768</td>
+      <td>2.2071195</td>
+      <td>122.979004</td>
+      <td>2.2849045</td>
+      <td>56</td>
+      <td>52</td>
+    </tr>
+    <tr>
+      <th>31</th>
+      <th>17</th>
+      <th>7</th>
+      <td>884.2669</td>
+      <td>14.877254</td>
+      <td>885.66364</td>
+      <td>21.056253</td>
+      <td>882.8747</td>
+      <td>21.023014</td>
+      <td>32</td>
+      <td>32</td>
+    </tr>
+    <tr>
+      <th>19</th>
+      <th>8</th>
+      <th>8</th>
+      <td>1436.745</td>
+      <td>18.876888</td>
+      <td>1430.5896</td>
+      <td>26.704302</td>
+      <td>1442.8926</td>
+      <td>26.687607</td>
+      <td>52</td>
+      <td>52</td>
+    </tr>
+  </tbody>
+</table>
+</div></div>
+</div>
+</div>
+<hr class="docutils" />
+<div class="section" id="Merging-with-2-fold-Cross-Validation">
+<h2>Merging with 2-fold Cross-Validation<a class="headerlink" href="#Merging-with-2-fold-Cross-Validation" title="Permalink to this headline">¶</a></h2>
+<p>To compute correlation coefficients we will repeatedly split our data into half-datasets. We will do this by randomly splitting the data using the image number. These half-datasets will be merged independently and used to determine uncertainties in the correlation coefficients. We will first write a method to randomly split our data, and then we will then write a method that automates the sampling and merging of multiple half-datasets.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -662,51 +1049,28 @@ w_{h,i} = \frac{1}{(\sigma_{h,i})^2}
     <span class="n">half1</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">data</span><span class="o">.</span><span class="n">BATCH</span><span class="o">.</span><span class="n">isin</span><span class="p">(</span><span class="n">halfbatch1</span><span class="p">)]</span>
     <span class="n">half2</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">data</span><span class="o">.</span><span class="n">BATCH</span><span class="o">.</span><span class="n">isin</span><span class="p">(</span><span class="n">halfbatch2</span><span class="p">)]</span>
     <span class="k">return</span> <span class="n">half1</span><span class="p">,</span> <span class="n">half2</span>
-
-<span class="k">def</span> <span class="nf">merge</span><span class="p">(</span><span class="n">halfdataset</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Merge half-dataset to get IMEAN, I(+), and I(-)&quot;&quot;&quot;</span>
-    <span class="n">temp</span> <span class="o">=</span> <span class="n">halfdataset</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
-    <span class="n">temp</span><span class="p">[</span><span class="s2">&quot;invvar&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">temp</span><span class="o">.</span><span class="n">SIGI</span><span class="o">**-</span><span class="mi">2</span>
-    <span class="n">temp</span><span class="p">[</span><span class="s2">&quot;weighted&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">temp</span><span class="o">.</span><span class="n">I</span> <span class="o">*</span> <span class="n">temp</span><span class="o">.</span><span class="n">invvar</span>
-    <span class="n">tempresult</span> <span class="o">=</span> <span class="n">temp</span><span class="o">.</span><span class="n">groupby</span><span class="p">([</span><span class="s2">&quot;H&quot;</span><span class="p">,</span> <span class="s2">&quot;K&quot;</span><span class="p">,</span> <span class="s2">&quot;L&quot;</span><span class="p">,</span> <span class="s2">&quot;Friedel(+)&quot;</span><span class="p">])</span><span class="o">.</span><span class="n">agg</span><span class="p">({</span><span class="s1">&#39;weighted&#39;</span><span class="p">:</span><span class="s1">&#39;sum&#39;</span><span class="p">,</span> <span class="s1">&#39;invvar&#39;</span><span class="p">:</span><span class="s1">&#39;sum&#39;</span><span class="p">})</span>
-    <span class="n">tempresult</span><span class="p">[</span><span class="s2">&quot;I&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">tempresult</span><span class="o">.</span><span class="n">weighted</span><span class="o">/</span><span class="n">tempresult</span><span class="o">.</span><span class="n">invvar</span>
-    <span class="n">tempresult</span> <span class="o">=</span> <span class="n">tempresult</span><span class="o">.</span><span class="n">unstack</span><span class="p">()</span>
-    <span class="n">result</span> <span class="o">=</span> <span class="n">rs</span><span class="o">.</span><span class="n">DataSet</span><span class="p">({</span>
-        <span class="s2">&quot;IMEAN&quot;</span><span class="p">:</span> <span class="p">(</span><span class="n">tempresult</span><span class="p">[</span><span class="s2">&quot;weighted&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">/</span><span class="n">tempresult</span><span class="p">[</span><span class="s2">&quot;invvar&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">))</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s2">&quot;J&quot;</span><span class="p">),</span>
-        <span class="s2">&quot;I(+)&quot;</span><span class="p">:</span> <span class="n">tempresult</span><span class="p">[</span><span class="s2">&quot;I&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">],</span>
-        <span class="s2">&quot;I(-)&quot;</span><span class="p">:</span> <span class="n">tempresult</span><span class="p">[</span><span class="s2">&quot;I&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">]</span>
-    <span class="p">})</span>
-    <span class="k">return</span> <span class="n">result</span><span class="o">.</span><span class="n">dropna</span><span class="p">()</span><span class="o">.</span><span class="n">__finalize__</span><span class="p">(</span><span class="n">halfdataset</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
-<p>Finally, here are the functions necessary to merge all of the observed reflections in the dataset:</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="k">def</span> <span class="nf">classify_friedel_pairs</span><span class="p">(</span><span class="n">data</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Classify whether observed reflections are Friedel(+) or Friedel(-)&quot;&quot;&quot;</span>
-    <span class="n">data</span><span class="o">.</span><span class="n">hkl_to_asu</span><span class="p">(</span><span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-    <span class="n">data</span><span class="p">[</span><span class="s2">&quot;Friedel(+)&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">rs</span><span class="o">.</span><span class="n">DataSeries</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;M/ISYM&quot;</span><span class="p">]</span><span class="o">%</span><span class="k">2</span> == 1, dtype=bool)
-    <span class="k">return</span> <span class="n">data</span>
-
-<span class="k">def</span> <span class="nf">merge_dataset</span><span class="p">(</span><span class="n">mtz</span><span class="p">,</span> <span class="n">nsamples</span><span class="p">):</span>
+<span></span><span class="k">def</span> <span class="nf">merge_dataset</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">nsamples</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Merge DataSet using inverse-variance weighting scheme. This represents the</span>
-<span class="sd">    maximum-likelihood estimatortor of the mean of the observed intensities assuming</span>
+<span class="sd">    maximum-likelihood estimator of the mean of the observed intensities assuming</span>
 <span class="sd">    they are independent and normally distributed with the same mean.</span>
 
 <span class="sd">    Sample means across half-datasets can be used to compute the merging statistics CC1/2 and CCanom.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">mtz</span> <span class="o">=</span> <span class="n">mtz</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
-    <span class="n">unmerged</span> <span class="o">=</span> <span class="n">classify_friedel_pairs</span><span class="p">(</span><span class="n">mtz</span><span class="p">)</span>
+    <span class="n">dataset</span> <span class="o">=</span> <span class="n">dataset</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
     <span class="n">samples</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nsamples</span><span class="p">):</span>
-        <span class="n">half1</span><span class="p">,</span> <span class="n">half2</span> <span class="o">=</span> <span class="n">sample_halfdatasets</span><span class="p">(</span><span class="n">unmerged</span><span class="p">)</span>
-        <span class="n">mergedhalf1</span> <span class="o">=</span> <span class="n">merge</span><span class="p">(</span><span class="n">half1</span><span class="p">)</span>
-        <span class="n">mergedhalf2</span> <span class="o">=</span> <span class="n">merge</span><span class="p">(</span><span class="n">half2</span><span class="p">)</span>
+        <span class="n">half1</span><span class="p">,</span> <span class="n">half2</span> <span class="o">=</span> <span class="n">sample_halfdatasets</span><span class="p">(</span><span class="n">dataset</span><span class="p">)</span>
+        <span class="n">mergedhalf1</span> <span class="o">=</span> <span class="n">rs</span><span class="o">.</span><span class="n">algorithms</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">half1</span><span class="p">)</span>
+        <span class="n">mergedhalf2</span> <span class="o">=</span> <span class="n">rs</span><span class="o">.</span><span class="n">algorithms</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">half2</span><span class="p">)</span>
         <span class="n">result</span> <span class="o">=</span> <span class="n">mergedhalf1</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">mergedhalf2</span><span class="p">,</span> <span class="n">left_index</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">right_index</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">suffixes</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
         <span class="n">result</span><span class="p">[</span><span class="s2">&quot;sample&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">n</span>
         <span class="n">samples</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
@@ -720,7 +1084,7 @@ w_{h,i} = \frac{1}{(\sigma_{h,i})^2}
 <h2>Merge HEWL data<a class="headerlink" href="#Merge-HEWL-data" title="Permalink to this headline">¶</a></h2>
 <p>We will now merge the HEWL data, repeatedly sampling across half-datasets in order to assess the distribution of correlation coefficients.</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -729,7 +1093,7 @@ w_{h,i} = \frac{1}{(\sigma_{h,i})^2}
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -738,7 +1102,7 @@ w_{h,i} = \frac{1}{(\sigma_{h,i})^2}
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
 </pre></div>
 </div>
 <div class="output_area rendered_html docutils container">
@@ -763,11 +1127,21 @@ w_{h,i} = \frac{1}{(\sigma_{h,i})^2}
       <th></th>
       <th></th>
       <th>IMEAN1</th>
+      <th>SIGIMEAN1</th>
       <th>I(+)1</th>
+      <th>SIGI(+)1</th>
       <th>I(-)1</th>
+      <th>SIGI(-)1</th>
+      <th>N(+)1</th>
+      <th>N(-)1</th>
       <th>IMEAN2</th>
+      <th>SIGIMEAN2</th>
       <th>I(+)2</th>
+      <th>SIGI(+)2</th>
       <th>I(-)2</th>
+      <th>SIGI(-)2</th>
+      <th>N(+)2</th>
+      <th>N(-)2</th>
       <th>sample</th>
     </tr>
     <tr>
@@ -781,59 +1155,119 @@ w_{h,i} = \frac{1}{(\sigma_{h,i})^2}
       <th></th>
       <th></th>
       <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
     </tr>
   </thead>
   <tbody>
     <tr>
       <th rowspan="5" valign="top">0</th>
       <th rowspan="5" valign="top">0</th>
-      <th>1</th>
-      <td>1.471577</td>
-      <td>1.7099401</td>
-      <td>1.3278339</td>
-      <td>1.6083632</td>
-      <td>1.8575767</td>
-      <td>1.5566863</td>
+      <th>4</th>
+      <td>653.37506</td>
+      <td>35.868774</td>
+      <td>653.37506</td>
+      <td>35.86877</td>
+      <td>653.37506</td>
+      <td>35.86877</td>
+      <td>6</td>
+      <td>6</td>
+      <td>666.0466</td>
+      <td>27.759663</td>
+      <td>666.0466</td>
+      <td>27.75966</td>
+      <td>666.0466</td>
+      <td>27.75966</td>
+      <td>10</td>
+      <td>10</td>
       <td>0</td>
     </tr>
     <tr>
-      <th>1</th>
-      <td>1.5389882</td>
-      <td>1.8470476</td>
-      <td>1.4167432</td>
-      <td>1.4528136</td>
-      <td>1.5311382</td>
-      <td>1.4042016</td>
+      <th>4</th>
+      <td>658.2116</td>
+      <td>26.48474</td>
+      <td>658.2116</td>
+      <td>26.48474</td>
+      <td>658.2116</td>
+      <td>26.48474</td>
+      <td>11</td>
+      <td>11</td>
+      <td>668.0805</td>
+      <td>39.243835</td>
+      <td>668.0805</td>
+      <td>39.243835</td>
+      <td>668.0805</td>
+      <td>39.243835</td>
+      <td>5</td>
+      <td>5</td>
       <td>1</td>
     </tr>
     <tr>
-      <th>1</th>
-      <td>1.5583609</td>
-      <td>1.5850568</td>
-      <td>1.53037</td>
-      <td>1.4906383</td>
-      <td>1.9309214</td>
-      <td>1.3754267</td>
+      <th>4</th>
+      <td>644.7756</td>
+      <td>35.824974</td>
+      <td>644.7756</td>
+      <td>35.824974</td>
+      <td>644.7756</td>
+      <td>35.824974</td>
+      <td>6</td>
+      <td>6</td>
+      <td>671.236</td>
+      <td>27.780022</td>
+      <td>671.236</td>
+      <td>27.780024</td>
+      <td>671.236</td>
+      <td>27.780024</td>
+      <td>10</td>
+      <td>10</td>
       <td>2</td>
     </tr>
     <tr>
-      <th>1</th>
-      <td>1.4440039</td>
-      <td>1.6484134</td>
-      <td>1.3593869</td>
-      <td>1.6146193</td>
-      <td>1.841894</td>
-      <td>1.4968622</td>
+      <th>4</th>
+      <td>670.15765</td>
+      <td>27.77585</td>
+      <td>670.15765</td>
+      <td>27.77585</td>
+      <td>670.15765</td>
+      <td>27.77585</td>
+      <td>10</td>
+      <td>10</td>
+      <td>646.55707</td>
+      <td>35.833927</td>
+      <td>646.55707</td>
+      <td>35.833927</td>
+      <td>646.55707</td>
+      <td>35.833927</td>
+      <td>6</td>
+      <td>6</td>
       <td>3</td>
     </tr>
     <tr>
-      <th>1</th>
-      <td>1.3491715</td>
-      <td>1.4042842</td>
-      <td>1.3407339</td>
-      <td>1.6235417</td>
-      <td>1.8026135</td>
-      <td>1.48726</td>
+      <th>4</th>
+      <td>668.8312</td>
+      <td>25.352604</td>
+      <td>668.8312</td>
+      <td>25.352604</td>
+      <td>668.8312</td>
+      <td>25.352604</td>
+      <td>12</td>
+      <td>12</td>
+      <td>638.73004</td>
+      <td>43.888813</td>
+      <td>638.73004</td>
+      <td>43.888813</td>
+      <td>638.73004</td>
+      <td>43.888813</td>
+      <td>4</td>
+      <td>4</td>
       <td>4</td>
     </tr>
     <tr>
@@ -847,71 +1281,131 @@ w_{h,i} = \frac{1}{(\sigma_{h,i})^2}
       <td>...</td>
       <td>...</td>
       <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
     </tr>
     <tr>
       <th rowspan="5" valign="top">45</th>
       <th rowspan="5" valign="top">10</th>
-      <th>1</th>
-      <td>5.9161806</td>
-      <td>7.6295433</td>
-      <td>4.728407</td>
-      <td>6.6214385</td>
-      <td>6.951154</td>
-      <td>6.088281</td>
+      <th>2</th>
+      <td>15.318142</td>
+      <td>3.9687188</td>
+      <td>15.318142</td>
+      <td>3.9687188</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>3</td>
+      <td>0</td>
+      <td>30.170218</td>
+      <td>7.3511124</td>
+      <td>30.170218</td>
+      <td>7.3511124</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>1</td>
+      <td>0</td>
       <td>9</td>
     </tr>
     <tr>
-      <th>1</th>
-      <td>5.606877</td>
-      <td>5.717536</td>
-      <td>5.4856105</td>
-      <td>9.365798</td>
-      <td>11.071259</td>
-      <td>5.853459</td>
+      <th>2</th>
+      <td>24.119883</td>
+      <td>4.656634</td>
+      <td>24.119883</td>
+      <td>4.656634</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>2</td>
+      <td>0</td>
+      <td>11.665072</td>
+      <td>5.2794247</td>
+      <td>11.665072</td>
+      <td>5.2794247</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>2</td>
+      <td>0</td>
       <td>10</td>
     </tr>
     <tr>
-      <th>1</th>
-      <td>5.9571977</td>
-      <td>5.6664567</td>
-      <td>6.2042103</td>
-      <td>7.0509</td>
-      <td>8.461554</td>
-      <td>3.8962657</td>
-      <td>11</td>
-    </tr>
-    <tr>
-      <th>1</th>
-      <td>4.340049</td>
-      <td>4.005453</td>
-      <td>4.5880957</td>
-      <td>7.4898357</td>
-      <td>8.209808</td>
-      <td>6.3028135</td>
+      <th>2</th>
+      <td>11.665072</td>
+      <td>5.2794247</td>
+      <td>11.665072</td>
+      <td>5.2794247</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>2</td>
+      <td>0</td>
+      <td>24.119883</td>
+      <td>4.656634</td>
+      <td>24.119883</td>
+      <td>4.656634</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>2</td>
+      <td>0</td>
       <td>12</td>
     </tr>
     <tr>
-      <th>1</th>
-      <td>6.758027</td>
-      <td>9.478301</td>
-      <td>4.3816113</td>
-      <td>5.9390526</td>
-      <td>4.895612</td>
-      <td>8.095466</td>
+      <th>2</th>
+      <td>18.59031</td>
+      <td>8.728156</td>
+      <td>18.59031</td>
+      <td>8.728156</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>1</td>
+      <td>0</td>
+      <td>18.685297</td>
+      <td>3.8105915</td>
+      <td>18.685297</td>
+      <td>3.8105915</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>3</td>
+      <td>0</td>
       <td>13</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>7.669444</td>
+      <td>6.6297607</td>
+      <td>7.669444</td>
+      <td>6.6297607</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>1</td>
+      <td>0</td>
+      <td>22.89468</td>
+      <td>4.1084785</td>
+      <td>22.89468</td>
+      <td>4.1084785</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>3</td>
+      <td>0</td>
+      <td>14</td>
     </tr>
   </tbody>
 </table>
-<p>183109 rows × 7 columns</p>
+<p>187288 rows × 17 columns</p>
 </div></div>
 </div>
 </div>
 <hr class="docutils" />
 <div class="section" id="Compute-CC_{1/2}-and-CC_{anom}">
 <h2>Compute <span class="math notranslate nohighlight">\(CC_{1/2}\)</span> and <span class="math notranslate nohighlight">\(CC_{anom}\)</span><a class="headerlink" href="#Compute-CC_{1/2}-and-CC_{anom}" title="Permalink to this headline">¶</a></h2>
-<p>We will first assign each reflection to a resolution bin, and then we will compute the correlation coefficients</p>
+<p>We will first assign each reflection to a resolution bin and then we will compute the correlation coefficients</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -920,47 +1414,127 @@ w_{h,i} = \frac{1}{(\sigma_{h,i})^2}
 </div>
 </div>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[19]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="k">def</span> <span class="nf">cc</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">col1</span><span class="p">,</span> <span class="n">col2</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;pearson&quot;</span><span class="p">,):</span>
-    <span class="k">if</span> <span class="n">method</span> <span class="o">==</span> <span class="s2">&quot;pearson&quot;</span><span class="p">:</span>
-        <span class="n">cc</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">corrcoef</span><span class="p">(</span><span class="n">dataset</span><span class="p">[</span><span class="n">col1</span><span class="p">],</span> <span class="n">dataset</span><span class="p">[</span><span class="n">col2</span><span class="p">])</span>
-        <span class="k">return</span> <span class="n">cc</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span>
-    <span class="k">elif</span> <span class="n">method</span> <span class="o">==</span> <span class="s2">&quot;spearman&quot;</span><span class="p">:</span>
-        <span class="n">cc</span> <span class="o">=</span> <span class="n">stats</span><span class="o">.</span><span class="n">spearmanr</span><span class="p">(</span><span class="n">dataset</span><span class="p">[</span><span class="n">col1</span><span class="p">],</span> <span class="n">dataset</span><span class="p">[</span><span class="n">col2</span><span class="p">])</span>
-        <span class="k">return</span> <span class="n">cc</span><span class="o">.</span><span class="n">correlation</span>
-</pre></div>
-</div>
-</div>
-<div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
-</pre></div>
-</div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">results_p</span> <span class="o">=</span> <span class="n">merged</span><span class="o">.</span><span class="n">groupby</span><span class="p">([</span><span class="s2">&quot;sample&quot;</span><span class="p">,</span> <span class="s2">&quot;bin&quot;</span><span class="p">])</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">cc</span><span class="p">,</span> <span class="s2">&quot;IMEAN1&quot;</span><span class="p">,</span> <span class="s2">&quot;IMEAN2&quot;</span><span class="p">,</span> <span class="s2">&quot;pearson&quot;</span><span class="p">)</span>
-<span class="n">results_p</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;CC1/2&quot;</span>
-<span class="n">finalp</span> <span class="o">=</span> <span class="n">results_p</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s2">&quot;bin&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">agg</span><span class="p">([</span><span class="s2">&quot;mean&quot;</span><span class="p">,</span> <span class="s2">&quot;std&quot;</span><span class="p">])</span>
-
-<span class="n">results_s</span> <span class="o">=</span> <span class="n">merged</span><span class="o">.</span><span class="n">groupby</span><span class="p">([</span><span class="s2">&quot;sample&quot;</span><span class="p">,</span> <span class="s2">&quot;bin&quot;</span><span class="p">])</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">cc</span><span class="p">,</span> <span class="s2">&quot;IMEAN1&quot;</span><span class="p">,</span> <span class="s2">&quot;IMEAN2&quot;</span><span class="p">,</span> <span class="s2">&quot;spearman&quot;</span><span class="p">)</span>
-<span class="n">results_s</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;CC1/2&quot;</span>
-<span class="n">finals</span> <span class="o">=</span> <span class="n">results_s</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s2">&quot;bin&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">agg</span><span class="p">([</span><span class="s2">&quot;mean&quot;</span><span class="p">,</span> <span class="s2">&quot;std&quot;</span><span class="p">])</span>
+<span></span><span class="n">groupby1</span> <span class="o">=</span> <span class="n">merged</span><span class="o">.</span><span class="n">groupby</span><span class="p">([</span><span class="s2">&quot;sample&quot;</span><span class="p">,</span> <span class="s2">&quot;bin&quot;</span><span class="p">])[[</span><span class="s2">&quot;IMEAN1&quot;</span><span class="p">,</span> <span class="s2">&quot;IMEAN2&quot;</span><span class="p">]]</span>
+<span class="n">pearson1</span> <span class="o">=</span> <span class="n">groupby1</span><span class="o">.</span><span class="n">corr</span><span class="p">(</span><span class="n">method</span><span class="o">=</span><span class="s2">&quot;pearson&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">unstack</span><span class="p">()</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span> <span class="p">(</span><span class="s2">&quot;IMEAN1&quot;</span><span class="p">,</span> <span class="s2">&quot;IMEAN2&quot;</span><span class="p">)]</span>
+<span class="n">pearson1</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;Pearson&quot;</span>
+<span class="n">spearman1</span> <span class="o">=</span> <span class="n">groupby1</span><span class="o">.</span><span class="n">corr</span><span class="p">(</span><span class="n">method</span><span class="o">=</span><span class="s2">&quot;spearman&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">unstack</span><span class="p">()</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span> <span class="p">(</span><span class="s2">&quot;IMEAN1&quot;</span><span class="p">,</span> <span class="s2">&quot;IMEAN2&quot;</span><span class="p">)]</span>
+<span class="n">spearman1</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;Spearman&quot;</span>
+<span class="n">results1</span> <span class="o">=</span> <span class="n">rs</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">pearson1</span><span class="p">,</span> <span class="n">spearman1</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">results1</span> <span class="o">=</span> <span class="n">results1</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s2">&quot;bin&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">agg</span><span class="p">([</span><span class="s2">&quot;mean&quot;</span><span class="p">,</span> <span class="s2">&quot;std&quot;</span><span class="p">])</span>
 </pre></div>
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[20]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">errorbar</span><span class="p">(</span><span class="n">finalp</span><span class="o">.</span><span class="n">index</span><span class="p">,</span> <span class="n">finalp</span><span class="p">[</span><span class="s2">&quot;mean&quot;</span><span class="p">],</span> <span class="n">yerr</span><span class="o">=</span><span class="n">finalp</span><span class="p">[</span><span class="s2">&quot;std&quot;</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="sa">r</span><span class="s2">&quot;$CC_{1/2}$ (Pearson)&quot;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">errorbar</span><span class="p">(</span><span class="n">finals</span><span class="o">.</span><span class="n">index</span><span class="p">,</span> <span class="n">finals</span><span class="p">[</span><span class="s2">&quot;mean&quot;</span><span class="p">],</span> <span class="n">yerr</span><span class="o">=</span><span class="n">finals</span><span class="p">[</span><span class="s2">&quot;std&quot;</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="sa">r</span><span class="s2">&quot;$CC_{1/2}$ (Spearman)&quot;</span><span class="p">)</span>
+<span></span><span class="n">results1</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[20]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
 
-<span class="n">plt</span><span class="o">.</span><span class="n">xticks</span><span class="p">(</span><span class="n">finalp</span><span class="o">.</span><span class="n">index</span><span class="p">,</span> <span class="n">labels</span><span class="p">,</span> <span class="n">rotation</span><span class="o">=</span><span class="mi">45</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;Correlation Coefficient&quot;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;Resolution Bin&quot;</span><span class="p">)</span>
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead tr th {
+        text-align: left;
+    }
+
+    .dataframe thead tr:last-of-type th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr>
+      <th></th>
+      <th colspan="2" halign="left">Pearson</th>
+      <th colspan="2" halign="left">Spearman</th>
+    </tr>
+    <tr>
+      <th></th>
+      <th>mean</th>
+      <th>std</th>
+      <th>mean</th>
+      <th>std</th>
+    </tr>
+    <tr>
+      <th>bin</th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>0.997022</td>
+      <td>0.000454</td>
+      <td>0.998628</td>
+      <td>0.000141</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>0.997647</td>
+      <td>0.000331</td>
+      <td>0.999001</td>
+      <td>0.000135</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>0.998144</td>
+      <td>0.000435</td>
+      <td>0.999532</td>
+      <td>0.000039</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>0.999188</td>
+      <td>0.000219</td>
+      <td>0.999657</td>
+      <td>0.000039</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>0.999198</td>
+      <td>0.000093</td>
+      <td>0.999626</td>
+      <td>0.000030</td>
+    </tr>
+  </tbody>
+</table>
+</div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[34]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">4</span><span class="p">))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">errorbar</span><span class="p">(</span><span class="n">results1</span><span class="o">.</span><span class="n">index</span><span class="p">,</span> <span class="n">results1</span><span class="p">[(</span><span class="s2">&quot;Pearson&quot;</span><span class="p">,</span> <span class="s2">&quot;mean&quot;</span><span class="p">)],</span>
+             <span class="n">yerr</span><span class="o">=</span><span class="n">results1</span><span class="p">[(</span><span class="s2">&quot;Pearson&quot;</span><span class="p">,</span> <span class="s2">&quot;std&quot;</span><span class="p">)],</span> <span class="n">label</span><span class="o">=</span><span class="sa">r</span><span class="s2">&quot;$CC_{1/2}$ (Pearson)&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">errorbar</span><span class="p">(</span><span class="n">results1</span><span class="o">.</span><span class="n">index</span><span class="p">,</span> <span class="n">results1</span><span class="p">[(</span><span class="s2">&quot;Spearman&quot;</span><span class="p">,</span> <span class="s2">&quot;mean&quot;</span><span class="p">)],</span>
+             <span class="n">yerr</span><span class="o">=</span><span class="n">results1</span><span class="p">[(</span><span class="s2">&quot;Spearman&quot;</span><span class="p">,</span> <span class="s2">&quot;std&quot;</span><span class="p">)],</span> <span class="n">label</span><span class="o">=</span><span class="sa">r</span><span class="s2">&quot;$CC_{1/2}$ (Spearman)&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xticks</span><span class="p">(</span><span class="n">results1</span><span class="o">.</span><span class="n">index</span><span class="p">,</span> <span class="n">labels</span><span class="p">,</span> <span class="n">rotation</span><span class="o">=</span><span class="mi">45</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;Correlation Coefficient&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;Resolution Bin ($\AA$)&quot;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s1">&#39;center left&#39;</span><span class="p">,</span> <span class="n">bbox_to_anchor</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">))</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
@@ -970,35 +1544,136 @@ w_{h,i} = \frac{1}{(\sigma_{h,i})^2}
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../_images/examples_2_mergingstats_19_0.png" src="../_images/examples_2_mergingstats_19_0.png" />
+<img alt="../_images/examples_2_mergingstats_29_0.png" src="../_images/examples_2_mergingstats_29_0.png" />
 </div>
 </div>
 <p>It is important to note the scale on the y-axis – this dataset is edge-limited, and as such the <span class="math notranslate nohighlight">\(CC_{1/2}\)</span> is very high across all resolution bins. The Spearman CC appears higher across all resolution bins except at high resolution, and overall has a lower standard deviation among samples. This is consistent with our expectation that Spearman CCs are a more robust estimator of correlation than Pearson CCs.</p>
-<p>The following cell repeats this procedure for the anomalous correlations.</p>
-<div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
+<p>Let’s now repeat this for the anomalous data, computing <span class="math notranslate nohighlight">\(CC_{anom}\)</span>:</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[22]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
 <span></span><span class="n">merged</span><span class="p">[</span><span class="s2">&quot;ANOM1&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">merged</span><span class="p">[</span><span class="s2">&quot;I(+)1&quot;</span><span class="p">]</span> <span class="o">-</span> <span class="n">merged</span><span class="p">[</span><span class="s2">&quot;I(-)1&quot;</span><span class="p">]</span>
 <span class="n">merged</span><span class="p">[</span><span class="s2">&quot;ANOM2&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">merged</span><span class="p">[</span><span class="s2">&quot;I(+)2&quot;</span><span class="p">]</span> <span class="o">-</span> <span class="n">merged</span><span class="p">[</span><span class="s2">&quot;I(-)2&quot;</span><span class="p">]</span>
 
-<span class="n">results_pa</span> <span class="o">=</span> <span class="n">merged</span><span class="o">.</span><span class="n">groupby</span><span class="p">([</span><span class="s2">&quot;sample&quot;</span><span class="p">,</span> <span class="s2">&quot;bin&quot;</span><span class="p">])</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">cc</span><span class="p">,</span> <span class="s2">&quot;ANOM1&quot;</span><span class="p">,</span> <span class="s2">&quot;ANOM2&quot;</span><span class="p">,</span> <span class="s2">&quot;pearson&quot;</span><span class="p">)</span>
-<span class="n">results_pa</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;CC1/2&quot;</span>
-<span class="n">finalpa</span> <span class="o">=</span> <span class="n">results_pa</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s2">&quot;bin&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">agg</span><span class="p">([</span><span class="s2">&quot;mean&quot;</span><span class="p">,</span> <span class="s2">&quot;std&quot;</span><span class="p">])</span>
+<span class="n">groupby2</span> <span class="o">=</span> <span class="n">merged</span><span class="o">.</span><span class="n">groupby</span><span class="p">([</span><span class="s2">&quot;sample&quot;</span><span class="p">,</span> <span class="s2">&quot;bin&quot;</span><span class="p">])[[</span><span class="s2">&quot;ANOM1&quot;</span><span class="p">,</span> <span class="s2">&quot;ANOM2&quot;</span><span class="p">]]</span>
+<span class="n">pearson2</span> <span class="o">=</span> <span class="n">groupby2</span><span class="o">.</span><span class="n">corr</span><span class="p">(</span><span class="n">method</span><span class="o">=</span><span class="s2">&quot;pearson&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">unstack</span><span class="p">()</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span> <span class="p">(</span><span class="s2">&quot;ANOM1&quot;</span><span class="p">,</span> <span class="s2">&quot;ANOM2&quot;</span><span class="p">)]</span>
+<span class="n">pearson2</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;Pearson&quot;</span>
+<span class="n">spearman2</span> <span class="o">=</span> <span class="n">groupby2</span><span class="o">.</span><span class="n">corr</span><span class="p">(</span><span class="n">method</span><span class="o">=</span><span class="s2">&quot;spearman&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">unstack</span><span class="p">()</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span> <span class="p">(</span><span class="s2">&quot;ANOM1&quot;</span><span class="p">,</span> <span class="s2">&quot;ANOM2&quot;</span><span class="p">)]</span>
+<span class="n">spearman2</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;Spearman&quot;</span>
+<span class="n">results2</span> <span class="o">=</span> <span class="n">rs</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">pearson2</span><span class="p">,</span> <span class="n">spearman2</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">results2</span> <span class="o">=</span> <span class="n">results2</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s2">&quot;bin&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">agg</span><span class="p">([</span><span class="s2">&quot;mean&quot;</span><span class="p">,</span> <span class="s2">&quot;std&quot;</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[23]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">results2</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[23]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
 
-<span class="n">results_sa</span> <span class="o">=</span> <span class="n">merged</span><span class="o">.</span><span class="n">groupby</span><span class="p">([</span><span class="s2">&quot;sample&quot;</span><span class="p">,</span> <span class="s2">&quot;bin&quot;</span><span class="p">])</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">cc</span><span class="p">,</span> <span class="s2">&quot;ANOM1&quot;</span><span class="p">,</span> <span class="s2">&quot;ANOM2&quot;</span><span class="p">,</span> <span class="s2">&quot;spearman&quot;</span><span class="p">)</span>
-<span class="n">results_sa</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;CC1/2&quot;</span>
-<span class="n">finalsa</span> <span class="o">=</span> <span class="n">results_sa</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s2">&quot;bin&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">agg</span><span class="p">([</span><span class="s2">&quot;mean&quot;</span><span class="p">,</span> <span class="s2">&quot;std&quot;</span><span class="p">])</span>
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
 
+    .dataframe thead tr th {
+        text-align: left;
+    }
 
-<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">errorbar</span><span class="p">(</span><span class="n">finalpa</span><span class="o">.</span><span class="n">index</span><span class="p">,</span> <span class="n">finalpa</span><span class="p">[</span><span class="s2">&quot;mean&quot;</span><span class="p">],</span> <span class="n">yerr</span><span class="o">=</span><span class="n">finalpa</span><span class="p">[</span><span class="s2">&quot;std&quot;</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="sa">r</span><span class="s2">&quot;$CC_</span><span class="si">{anom}</span><span class="s2">$ (Pearson)&quot;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">errorbar</span><span class="p">(</span><span class="n">finalsa</span><span class="o">.</span><span class="n">index</span><span class="p">,</span> <span class="n">finalsa</span><span class="p">[</span><span class="s2">&quot;mean&quot;</span><span class="p">],</span> <span class="n">yerr</span><span class="o">=</span><span class="n">finalsa</span><span class="p">[</span><span class="s2">&quot;std&quot;</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="sa">r</span><span class="s2">&quot;$CC_</span><span class="si">{anom}</span><span class="s2">$ (Spearman)&quot;</span><span class="p">)</span>
-
-<span class="n">plt</span><span class="o">.</span><span class="n">xticks</span><span class="p">(</span><span class="n">finalpa</span><span class="o">.</span><span class="n">index</span><span class="p">,</span> <span class="n">labels</span><span class="p">,</span> <span class="n">rotation</span><span class="o">=</span><span class="mi">45</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;Correlation Coefficient&quot;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;Resolution Bin&quot;</span><span class="p">)</span>
+    .dataframe thead tr:last-of-type th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr>
+      <th></th>
+      <th colspan="2" halign="left">Pearson</th>
+      <th colspan="2" halign="left">Spearman</th>
+    </tr>
+    <tr>
+      <th></th>
+      <th>mean</th>
+      <th>std</th>
+      <th>mean</th>
+      <th>std</th>
+    </tr>
+    <tr>
+      <th>bin</th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>0.403517</td>
+      <td>0.068201</td>
+      <td>0.494861</td>
+      <td>0.033880</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>0.292030</td>
+      <td>0.081911</td>
+      <td>0.413485</td>
+      <td>0.033760</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>0.304523</td>
+      <td>0.052493</td>
+      <td>0.363430</td>
+      <td>0.039869</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>0.377034</td>
+      <td>0.057670</td>
+      <td>0.427256</td>
+      <td>0.030954</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>0.488685</td>
+      <td>0.070847</td>
+      <td>0.539804</td>
+      <td>0.018448</td>
+    </tr>
+  </tbody>
+</table>
+</div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[35]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">4</span><span class="p">))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">errorbar</span><span class="p">(</span><span class="n">results2</span><span class="o">.</span><span class="n">index</span><span class="p">,</span> <span class="n">results2</span><span class="p">[(</span><span class="s2">&quot;Pearson&quot;</span><span class="p">,</span> <span class="s2">&quot;mean&quot;</span><span class="p">)],</span>
+             <span class="n">yerr</span><span class="o">=</span><span class="n">results2</span><span class="p">[(</span><span class="s2">&quot;Pearson&quot;</span><span class="p">,</span> <span class="s2">&quot;std&quot;</span><span class="p">)],</span> <span class="n">label</span><span class="o">=</span><span class="sa">r</span><span class="s2">&quot;$CC_</span><span class="si">{anom}</span><span class="s2">$ (Pearson)&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">errorbar</span><span class="p">(</span><span class="n">results2</span><span class="o">.</span><span class="n">index</span><span class="p">,</span> <span class="n">results2</span><span class="p">[(</span><span class="s2">&quot;Spearman&quot;</span><span class="p">,</span> <span class="s2">&quot;mean&quot;</span><span class="p">)],</span>
+             <span class="n">yerr</span><span class="o">=</span><span class="n">results2</span><span class="p">[(</span><span class="s2">&quot;Spearman&quot;</span><span class="p">,</span> <span class="s2">&quot;std&quot;</span><span class="p">)],</span> <span class="n">label</span><span class="o">=</span><span class="sa">r</span><span class="s2">&quot;$CC_</span><span class="si">{anom}</span><span class="s2">$ (Spearman)&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xticks</span><span class="p">(</span><span class="n">results2</span><span class="o">.</span><span class="n">index</span><span class="p">,</span> <span class="n">labels</span><span class="p">,</span> <span class="n">rotation</span><span class="o">=</span><span class="mi">45</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;Correlation Coefficient&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;Resolution Bin ($\AA$)&quot;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s1">&#39;center left&#39;</span><span class="p">,</span> <span class="n">bbox_to_anchor</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">))</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
@@ -1008,10 +1683,47 @@ w_{h,i} = \frac{1}{(\sigma_{h,i})^2}
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../_images/examples_2_mergingstats_21_0.png" src="../_images/examples_2_mergingstats_21_0.png" />
+<img alt="../_images/examples_2_mergingstats_33_0.png" src="../_images/examples_2_mergingstats_33_0.png" />
 </div>
 </div>
-<p>There is significant anomalous signal across all but the highest resolution bin. The comparison between Pearson and Spearman correlation coefficients shows that the Pearson CC is greatly influenced by outliers in the <span class="math notranslate nohighlight">\(2.25Å-2.18Å\)</span> and <span class="math notranslate nohighlight">\(2.00Å-1.96Å\)</span> resolution bins.</p>
+<p>There is significant anomalous signal across all but the highest resolution bins. The Spearman CCs have smaller error bars than the corresponding Pearson CCs and the Spearman CCs are also higher in most bins. These differences highlight the influence of outlier measurements on the different correlation coefficients.</p>
+</div>
+<hr class="docutils" />
+<div class="section" id="Summary">
+<h2>Summary<a class="headerlink" href="#Summary" title="Permalink to this headline">¶</a></h2>
+<p>We have used <code class="docutils literal notranslate"><span class="pre">reciprocalspaceship</span></code> to merge a dataset using inverse-variance weights. As part of this analysis, we performed repeated 2-fold cross-validation to compute Pearson and Spearman correlation coefficients and associated uncertainties. This relatively simple procedure to obtain uncertainty estimates for correlation coefficients is seldom done when analyzing merging quality. However, we can see that the standard deviation for computed correlation coefficients can be as high as
+<span class="math notranslate nohighlight">\(\pm0.1\)</span> for quantities such as <span class="math notranslate nohighlight">\(CC_{anom}\)</span>. This is worth keeping in mind when analyzing SAD experiments because this dataset is very high quality (edge-limited) when one considers the <span class="math notranslate nohighlight">\(CC_{1/2}\)</span>. Putting these two correlation coefficients on the same axes emphasizes this point:</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[33]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">9</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">errorbar</span><span class="p">(</span><span class="n">results1</span><span class="o">.</span><span class="n">index</span><span class="p">,</span> <span class="n">results1</span><span class="p">[(</span><span class="s2">&quot;Pearson&quot;</span><span class="p">,</span> <span class="s2">&quot;mean&quot;</span><span class="p">)],</span>
+             <span class="n">yerr</span><span class="o">=</span><span class="n">results1</span><span class="p">[(</span><span class="s2">&quot;Pearson&quot;</span><span class="p">,</span> <span class="s2">&quot;std&quot;</span><span class="p">)],</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="sa">r</span><span class="s2">&quot;$CC_{1/2}$ (Pearson)&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">errorbar</span><span class="p">(</span><span class="n">results1</span><span class="o">.</span><span class="n">index</span><span class="p">,</span> <span class="n">results1</span><span class="p">[(</span><span class="s2">&quot;Spearman&quot;</span><span class="p">,</span> <span class="s2">&quot;mean&quot;</span><span class="p">)],</span>
+             <span class="n">yerr</span><span class="o">=</span><span class="n">results1</span><span class="p">[(</span><span class="s2">&quot;Spearman&quot;</span><span class="p">,</span> <span class="s2">&quot;std&quot;</span><span class="p">)],</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;gray&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="sa">r</span><span class="s2">&quot;$CC_{1/2}$ (Spearman)&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">errorbar</span><span class="p">(</span><span class="n">results2</span><span class="o">.</span><span class="n">index</span><span class="p">,</span> <span class="n">results2</span><span class="p">[(</span><span class="s2">&quot;Pearson&quot;</span><span class="p">,</span> <span class="s2">&quot;mean&quot;</span><span class="p">)],</span>
+             <span class="n">yerr</span><span class="o">=</span><span class="n">results2</span><span class="p">[(</span><span class="s2">&quot;Pearson&quot;</span><span class="p">,</span> <span class="s2">&quot;std&quot;</span><span class="p">)],</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s2">&quot;--&quot;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="sa">r</span><span class="s2">&quot;$CC_</span><span class="si">{anom}</span><span class="s2">$ (Pearson)&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">errorbar</span><span class="p">(</span><span class="n">results2</span><span class="o">.</span><span class="n">index</span><span class="p">,</span> <span class="n">results2</span><span class="p">[(</span><span class="s2">&quot;Spearman&quot;</span><span class="p">,</span> <span class="s2">&quot;mean&quot;</span><span class="p">)],</span>
+             <span class="n">yerr</span><span class="o">=</span><span class="n">results2</span><span class="p">[(</span><span class="s2">&quot;Spearman&quot;</span><span class="p">,</span> <span class="s2">&quot;std&quot;</span><span class="p">)],</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;gray&#39;</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s2">&quot;--&quot;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="sa">r</span><span class="s2">&quot;$CC_</span><span class="si">{anom}</span><span class="s2">$ (Spearman)&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xticks</span><span class="p">(</span><span class="n">results2</span><span class="o">.</span><span class="n">index</span><span class="p">,</span> <span class="n">labels</span><span class="p">,</span> <span class="n">rotation</span><span class="o">=</span><span class="mi">45</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;Correlation Coefficient&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;Resolution Bin ($\AA$)&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s1">&#39;center left&#39;</span><span class="p">,</span> <span class="n">bbox_to_anchor</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;--&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/examples_2_mergingstats_36_0.png" src="../_images/examples_2_mergingstats_36_0.png" />
+</div>
+</div>
+<p>Even a simple change to the procedure for computing merging statistics, such as substituting a Spearman correlation coefficient for a Pearson one, can alter the apparent quality of a dataset. By lowering the barrier to implementing new analyses, we hope that <code class="docutils literal notranslate"><span class="pre">reciprocalspaceship</span></code> can encourage the development of more robust indicators of crystallographic data quality.</p>
 </div>
 </div>
 

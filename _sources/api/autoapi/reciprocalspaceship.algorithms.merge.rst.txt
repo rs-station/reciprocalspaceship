@@ -1,0 +1,6 @@
+﻿reciprocalspaceship.algorithms.merge
+====================================
+
+.. currentmodule:: reciprocalspaceship.algorithms
+
+.. autofunction:: merge

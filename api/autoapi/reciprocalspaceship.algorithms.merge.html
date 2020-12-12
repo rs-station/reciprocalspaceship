@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>reciprocalspaceship.read_precognition &mdash; reciprocalspaceship 0.9.2 documentation</title>
+  <title>reciprocalspaceship.algorithms.merge &mdash; reciprocalspaceship 0.9.2 documentation</title>
   
 
   
@@ -45,8 +45,8 @@
     
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="reciprocalspaceship.algorithms.merge" href="reciprocalspaceship.algorithms.merge.html" />
-    <link rel="prev" title="reciprocalspaceship.read_mtz" href="reciprocalspaceship.read_mtz.html" /> 
+    <link rel="next" title="reciprocalspaceship.algorithms.scale_merged_intensities" href="reciprocalspaceship.algorithms.scale_merged_intensities.html" />
+    <link rel="prev" title="reciprocalspaceship.read_precognition" href="reciprocalspaceship.read_precognition.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -98,12 +98,12 @@
 <li class="toctree-l1"><a class="reference internal" href="../../userguide/index.html">User Guide</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="../index.html">API Reference</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="../index.html#reflection-data">Reflection Data</a></li>
-<li class="toctree-l2 current"><a class="reference internal" href="../index.html#input-output">Input/Output</a><ul class="current">
-<li class="toctree-l3"><a class="reference internal" href="reciprocalspaceship.read_mtz.html">reciprocalspaceship.read_mtz</a></li>
-<li class="toctree-l3 current"><a class="current reference internal" href="#">reciprocalspaceship.read_precognition</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../index.html#input-output">Input/Output</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../index.html#algorithms">Algorithms</a><ul class="current">
+<li class="toctree-l3 current"><a class="current reference internal" href="#">reciprocalspaceship.algorithms.merge</a></li>
+<li class="toctree-l3"><a class="reference internal" href="reciprocalspaceship.algorithms.scale_merged_intensities.html">reciprocalspaceship.algorithms.scale_merged_intensities</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="../index.html#algorithms">Algorithms</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../index.html#helpful-functions">Helpful Functions</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../index.html#commandline-tools">Commandline Tools</a></li>
 </ul>
@@ -157,13 +157,13 @@
         
           <li><a href="../index.html">API Reference</a> &raquo;</li>
         
-      <li>reciprocalspaceship.read_precognition</li>
+      <li>reciprocalspaceship.algorithms.merge</li>
     
     
       <li class="wy-breadcrumbs-aside">
         
             
-            <a href="../../_sources/api/autoapi/reciprocalspaceship.read_precognition.rst.txt" rel="nofollow"> View page source</a>
+            <a href="../../_sources/api/autoapi/reciprocalspaceship.algorithms.merge.rst.txt" rel="nofollow"> View page source</a>
           
         
       </li>
@@ -200,28 +200,23 @@
     text-align: unset;
 }
 </style>
-<div class="section" id="reciprocalspaceship-read-precognition">
-<h1>reciprocalspaceship.read_precognition<a class="headerlink" href="#reciprocalspaceship-read-precognition" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="reciprocalspaceship-algorithms-merge">
+<h1>reciprocalspaceship.algorithms.merge<a class="headerlink" href="#reciprocalspaceship-algorithms-merge" title="Permalink to this headline">¶</a></h1>
 <dl class="py function">
-<dt id="reciprocalspaceship.read_precognition">
-<code class="sig-prename descclassname">reciprocalspaceship.</code><code class="sig-name descname">read_precognition</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">hklfile</span></em>, <em class="sig-param"><span class="n">a</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">b</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">c</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">alpha</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">beta</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">gamma</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">sg</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">logfile</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/Hekstra-Lab/reciprocalspaceship/blob/master/reciprocalspaceship/io/precognition.py#L5-L86"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#reciprocalspaceship.read_precognition" title="Permalink to this definition">¶</a></dt>
-<dd><p>Initialize attributes and populate the DataSet object with data from
-a HKL file of reflections. This is the output format used by
-Precognition when processing Laue diffraction data.</p>
+<dt id="reciprocalspaceship.algorithms.merge">
+<code class="sig-prename descclassname">reciprocalspaceship.algorithms.</code><code class="sig-name descname">merge</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">dataset</span></em>, <em class="sig-param"><span class="n">intensity_key</span><span class="o">=</span><span class="default_value">'I'</span></em>, <em class="sig-param"><span class="n">sigma_key</span><span class="o">=</span><span class="default_value">'SIGI'</span></em>, <em class="sig-param"><span class="n">sort</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/Hekstra-Lab/reciprocalspaceship/blob/master/reciprocalspaceship/algorithms/merge.py#L3-L55"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#reciprocalspaceship.algorithms.merge" title="Permalink to this definition">¶</a></dt>
+<dd><p>Merge dataset using inverse-variance weights.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>hklfile</strong> (<em>str or file</em>) – name of an hkl file or a file object</p></li>
-<li><p><strong>a</strong> (<em>float</em>) – edge length, a, of the unit cell</p></li>
-<li><p><strong>b</strong> (<em>float</em>) – edge length, b, of the unit cell</p></li>
-<li><p><strong>c</strong> (<em>float</em>) – edge length, c, of the unit cell</p></li>
-<li><p><strong>alpha</strong> (<em>float</em>) – interaxial angle, alpha, of the unit cell</p></li>
-<li><p><strong>beta</strong> (<em>float</em>) – interaxial angle, beta, of the unit cell</p></li>
-<li><p><strong>gamma</strong> (<em>float</em>) – interaxial angle, gamma, of the unit cell</p></li>
-<li><p><strong>sg</strong> (<em>str or int</em>) – If int, this should specify the space group number. If str,
-this should be a space group symbol</p></li>
-<li><p><strong>logfile</strong> (<em>str or file</em>) – name of a log file to parse to get cell parameters and sg</p></li>
+<li><p><strong>dataset</strong> (<em>rs.DataSet</em>) – Unmerged DataSet containing scaled intensities and uncertainties</p></li>
+<li><p><strong>intensity_key</strong> (<em>str</em>) – Column name for intensities</p></li>
+<li><p><strong>sigma_key</strong> (<em>str</em>) – Column name for uncertainties</p></li>
+<li><p><strong>sort</strong> (<em>bool</em>) – If True, index of returned DataSet will be sorted</p></li>
 </ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><em>rs.DataSet</em> – Merged DataSet object</p>
 </dd>
 </dl>
 </dd></dl>
@@ -236,10 +231,10 @@ this should be a space group symbol</p></li>
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="reciprocalspaceship.algorithms.merge.html" class="btn btn-neutral float-right" title="reciprocalspaceship.algorithms.merge" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="reciprocalspaceship.algorithms.scale_merged_intensities.html" class="btn btn-neutral float-right" title="reciprocalspaceship.algorithms.scale_merged_intensities" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="reciprocalspaceship.read_mtz.html" class="btn btn-neutral float-left" title="reciprocalspaceship.read_mtz" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="reciprocalspaceship.read_precognition.html" class="btn btn-neutral float-left" title="reciprocalspaceship.read_precognition" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
