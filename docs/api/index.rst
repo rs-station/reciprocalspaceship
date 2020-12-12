@@ -50,8 +50,9 @@ Algorithms for processing reflection data stored in ``rs.DataSet`` objects.
    :toctree: autoapi
    :nosignatures:
 
+   ~reciprocalspaceship.algorithms.merge
    ~reciprocalspaceship.algorithms.scale_merged_intensities
-
+   
 Helpful Functions
 -----------------
 

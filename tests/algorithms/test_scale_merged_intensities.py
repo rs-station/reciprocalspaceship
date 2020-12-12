@@ -98,21 +98,21 @@ def test_centric_posterior(data_fw1978_input):
 @pytest.mark.parametrize("output_columns", [None,
                                             ("FW1", "FW2", "FW3", "FW4")])
 @pytest.mark.parametrize("mean_intensity_method", ["isotropic", "anisotropic"])
-def test_scale_merged_intensities_validdata(data_merged, inplace, output_columns,
+def test_scale_merged_intensities_validdata(hewl_merged, inplace, output_columns,
                                             mean_intensity_method):
     """
     Confirm scale_merged_intensities() returns all positive values
     """
-    scaled = scale_merged_intensities(data_merged, "IMEAN", "SIGIMEAN",
+    scaled = scale_merged_intensities(hewl_merged, "IMEAN", "SIGIMEAN",
                                       output_columns=output_columns,
                                       inplace=inplace,
                                       mean_intensity_method=mean_intensity_method)
 
     # Confirm inplace returns same object if true
     if inplace:
-        assert id(scaled) == id(data_merged)
+        assert id(scaled) == id(hewl_merged)
     else:
-        assert id(scaled) != id(data_merged)
+        assert id(scaled) != id(hewl_merged)
 
     defaults = ("FW-I", "FW-SIGI", "FW-F", "FW-SIGF")
     if output_columns:
@@ -133,12 +133,12 @@ def test_scale_merged_intensities_validdata(data_merged, inplace, output_columns
     assert (scaled[o4].to_numpy() >= 0).all()
 
 @pytest.mark.parametrize("mean_intensity_method", ["isotropic", "anisotropic"])
-def test_scale_merged_intensities_phenix(data_merged, ref_hewl, mean_intensity_method):
+def test_scale_merged_intensities_phenix(hewl_merged, ref_hewl, mean_intensity_method):
     """
     Compare phenix.french_wilson to scale_merged_intensities(). Current
     test criteria are that >95% of F and SigF are within 1%.
     """
-    mtz = data_merged.dropna()
+    mtz = hewl_merged.dropna()
     scaled = scale_merged_intensities(mtz, "IMEAN", "SIGIMEAN",
                                       mean_intensity_method=mean_intensity_method)
 

@@ -18,6 +18,26 @@ def data_hewl_all(data_merged, request):
         return data_merged
 
 @pytest.fixture
+def hewl_merged():
+    """
+    Load HEWL SSAD data from APS 24IDC, scaled and merged in AIMLESS
+    """
+    datapath = ["..", "data", "algorithms", "HEWL_SSAD_24IDC.mtz"]
+    inFN = abspath(join(dirname(__file__), *datapath))
+    mtz = rs.read_mtz(inFN)
+    return mtz
+
+@pytest.fixture
+def hewl_unmerged():
+    """
+    Load HEWL SSAD data from APS 24IDC, scaled unmerged data from AIMLESS
+    """
+    datapath = ["..", "data", "algorithms", "HEWL_unmerged.mtz"]
+    inFN = abspath(join(dirname(__file__), *datapath))
+    mtz = rs.read_mtz(inFN)
+    return mtz
+
+@pytest.fixture
 def ref_hewl():
     """
     Load phenix.french_wilson output for data_hewl
