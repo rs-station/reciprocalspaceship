@@ -72,7 +72,7 @@
   <script>
     /*Make Viewer and load model+map*/
     V = new UM.Viewer({viewer: "viewer", hud: "hud", help: "help"});
-    V.load_pdb("https://hekstra-lab.github.io/reciprocalspaceship/data/anomdiff/1VAT.pdb");
+    V.load_pdb("https://hekstra-lab.github.io/reciprocalspaceship/data/anomdiff/HEWL_refined.pdb");
     GemmiMtz().then(function(Module) {
 	UM.load_maps_from_mtz(Module, V, "https://hekstra-lab.github.io/reciprocalspaceship/data/anomdiff/anomdiff.mtz", ['ANOM', 'PHANOM']);
     });;
