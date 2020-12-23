@@ -1,5 +1,57 @@
 import numpy as np
 import gemmi
+from reciprocalspaceship.utils import canonicalize_phases
+
+
+def centric_phase_residual(H, phases, spacegroup, deg=True):
+    """
+    Compute phase residuals of centric reflections to their expected
+    values.
+    Parameters
+    ----------
+    H : array
+        nx3 array of miller indices. 
+    phases : array
+        lengh n array of phases.
+    spacegroup : gemmi.SpaceGroup
+        gemmi.SpaceGroup instance
+    deg : bool (optional)
+        phases are in degrees. 
+    
+    Returns
+    -------
+    residuals : array
+        array of phase residuals for centric reflections
+    """ 
+
+    phi = phases
+    if not deg:
+        phi = np.rad2deg(phases)
+
+    sym_ops = list(spacegroup.operations())
+    counted = np.zeros_like(phases) # prevent double-counting reflections
+    residuals = list()
+
+    for num,op in enumerate(sym_ops[1:]):
+        # find indices of centric reflections
+        op = np.array(op.float_seitz())
+        R,T = op[:3,:3], op[:-1,3]
+        delta = -1*H - np.matmul(H,R)
+        indices = np.where(~delta.any(axis=1))[0]
+        indices = indices[np.where(counted[indices] == 0)]
+
+        # compute residuals to expected values
+        HT = np.matmul(H[indices],T)
+        exp1 = np.abs(canonicalize_phases(phi[indices] - canonicalize_phases(180 * HT)))
+        exp2 = np.abs(canonicalize_phases(phi[indices] - canonicalize_phases(180 * (HT + 1))))
+        residuals.extend(np.min(np.array([exp1, exp2]), axis=0))
+        counted[indices] += 1
+    
+    residuals = np.array(residuals)    
+    if not deg:
+        residuals = np.deg2rad(residuals)
+        
+    return residuals
 
 
 #All credit to apeck12 for the following helpful function!
@@ -130,9 +182,13 @@ if __name__=="__main__":
     H = np.random.randint(0, 30, [n, 3])
     ref = 360. * (np.random.random(n) - 0.5)
     spacegroup = gemmi.SpaceGroup(173)
+    ref[spacegroup.operations().centric_flag_array(H)] = 180
     t = np.array([0., 0., 1/13])
     phases = translate(H, ref, t)
     test = align_phases(H, phases, ref, spacegroup)
+    test_residuals = centric_phase_residual(H, test, spacegroup)
+    print(f"Mean phase residual for centric reflections: {np.mean(test_residuals)} degrees")
+
     from matplotlib import pyplot as plt
     plt.plot(ref, phases, 'k.', label='Shifted')
     plt.plot(ref, test, 'r.', label='Aligned')
