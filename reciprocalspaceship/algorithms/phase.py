@@ -1,30 +1,6 @@
 import numpy as np
 import gemmi
-
-
-def wraptopi(phases):
-    """
-    Wrap array of input phases to lie in domain [-180,180).
-    Parameters
-    ----------
-    phases : array
-        length n array of phases in degrees
-    Returns
-    -------
-    phases : array
-        phases wrapped to domain [-180,180).
-    """ 
-    n1 = (-180.0 - phases) / 360.0
-    n2 = (180.0 - phases) / -360.0
-    
-    dn1 = (n1 + 1).astype(int) * 360.0
-    dn2 = (n2 + 1).astype(int) * 360.0
-    
-    phases[phases < -180.0] += dn1[phases < -180.0]
-    phases[phases > 180.0] -= dn2[phases > 180.0]
-    phases[phases == 180.0] = -180.0
-
-    return phases
+from reciprocalspaceship.utils import canonicalize_phases
 
 
 def centric_phase_residual(H, phases, spacegroup, deg=True):
@@ -66,8 +42,8 @@ def centric_phase_residual(H, phases, spacegroup, deg=True):
 
         # compute residuals to expected values
         HT = np.matmul(H[indices],T)
-        exp1 = np.abs(wraptopi(phi[indices] - wraptopi(180 * HT)))
-        exp2 = np.abs(wraptopi(phi[indices] - wraptopi(180 * (HT + 1))))
+        exp1 = np.abs(canonicalize_phases(phi[indices] - canonicalize_phases(180 * HT)))
+        exp2 = np.abs(canonicalize_phases(phi[indices] - canonicalize_phases(180 * (HT + 1))))
         residuals.extend(np.min(np.array([exp1, exp2]), axis=0))
         counted[indices] += 1
     
