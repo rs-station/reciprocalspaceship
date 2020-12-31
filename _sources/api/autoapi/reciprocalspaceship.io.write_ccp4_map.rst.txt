@@ -1,0 +1,6 @@
+﻿reciprocalspaceship.io.write\_ccp4\_map
+=======================================
+
+.. currentmodule:: reciprocalspaceship.io
+
+.. autofunction:: write_ccp4_map

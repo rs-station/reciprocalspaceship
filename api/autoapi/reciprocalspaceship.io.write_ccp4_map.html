@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>reciprocalspaceship.read_mtz &mdash; reciprocalspaceship 0.9.2 documentation</title>
+  <title>reciprocalspaceship.io.write_ccp4_map &mdash; reciprocalspaceship 0.9.2 documentation</title>
   
 
   
@@ -44,8 +44,8 @@
     
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="reciprocalspaceship.read_precognition" href="reciprocalspaceship.read_precognition.html" />
-    <link rel="prev" title="DataSeries" href="reciprocalspaceship.DataSeries.html" /> 
+    <link rel="next" title="reciprocalspaceship.algorithms.merge" href="reciprocalspaceship.algorithms.merge.html" />
+    <link rel="prev" title="reciprocalspaceship.read_precognition" href="reciprocalspaceship.read_precognition.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -98,9 +98,9 @@
 <li class="toctree-l1 current"><a class="reference internal" href="../index.html">API Reference</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="../index.html#reflection-data">Reflection Data</a></li>
 <li class="toctree-l2 current"><a class="reference internal" href="../index.html#input-output">Input/Output</a><ul class="current">
-<li class="toctree-l3 current"><a class="current reference internal" href="#">reciprocalspaceship.read_mtz</a></li>
+<li class="toctree-l3"><a class="reference internal" href="reciprocalspaceship.read_mtz.html">reciprocalspaceship.read_mtz</a></li>
 <li class="toctree-l3"><a class="reference internal" href="reciprocalspaceship.read_precognition.html">reciprocalspaceship.read_precognition</a></li>
-<li class="toctree-l3"><a class="reference internal" href="reciprocalspaceship.io.write_ccp4_map.html">reciprocalspaceship.io.write_ccp4_map</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">reciprocalspaceship.io.write_ccp4_map</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../index.html#algorithms">Algorithms</a></li>
@@ -157,13 +157,13 @@
         
           <li><a href="../index.html">API Reference</a> &raquo;</li>
         
-      <li>reciprocalspaceship.read_mtz</li>
+      <li>reciprocalspaceship.io.write_ccp4_map</li>
     
     
       <li class="wy-breadcrumbs-aside">
         
             
-            <a href="../../_sources/api/autoapi/reciprocalspaceship.read_mtz.rst.txt" rel="nofollow"> View page source</a>
+            <a href="../../_sources/api/autoapi/reciprocalspaceship.io.write_ccp4_map.rst.txt" rel="nofollow"> View page source</a>
           
         
       </li>
@@ -200,26 +200,20 @@
     text-align: unset;
 }
 </style>
-<div class="section" id="reciprocalspaceship-read-mtz">
-<h1>reciprocalspaceship.read_mtz<a class="headerlink" href="#reciprocalspaceship-read-mtz" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="reciprocalspaceship-io-write-ccp4-map">
+<h1>reciprocalspaceship.io.write_ccp4_map<a class="headerlink" href="#reciprocalspaceship-io-write-ccp4-map" title="Permalink to this headline">¶</a></h1>
 <dl class="py function">
-<dt id="reciprocalspaceship.read_mtz">
-<code class="sig-prename descclassname">reciprocalspaceship.</code><code class="sig-name descname">read_mtz</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">mtzfile</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/Hekstra-Lab/reciprocalspaceship/blob/master/reciprocalspaceship/io/mtz.py#L116-L140"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#reciprocalspaceship.read_mtz" title="Permalink to this definition">¶</a></dt>
-<dd><p>Populate the dataset object with data from an MTZ reflection file.</p>
-<p>If the gemmi.Mtz object contains an M/ISYM column and contains duplicated
-Miller indices, an unmerged DataSet will be constructed. The Miller indices
-will be mapped to their observed values, and a partiality flag will be
-extracted and stored as a boolean column with the label, <code class="docutils literal notranslate"><span class="pre">PARTIAL</span></code>.
-Otherwise, a merged DataSet will be constructed.</p>
-<p>If columns are found with the <code class="docutils literal notranslate"><span class="pre">MTZInt</span></code> dtype and are labeled <code class="docutils literal notranslate"><span class="pre">PARTIAL</span></code>
-or <code class="docutils literal notranslate"><span class="pre">CENTRIC</span></code>, these will be interpreted as boolean flags used to
-label partial or centric reflections, respectively.</p>
+<dt id="reciprocalspaceship.io.write_ccp4_map">
+<code class="sig-prename descclassname">reciprocalspaceship.io.</code><code class="sig-name descname">write_ccp4_map</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">realmap</span></em>, <em class="sig-param"><span class="n">mapfile</span></em>, <em class="sig-param"><span class="n">cell</span></em>, <em class="sig-param"><span class="n">spacegroup</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/Hekstra-Lab/reciprocalspaceship/blob/master/reciprocalspaceship/io/ccp4map.py#L4-L35"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#reciprocalspaceship.io.write_ccp4_map" title="Permalink to this definition">¶</a></dt>
+<dd><p>Write CCP4 map file from NumPy array of real-space density.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>mtzfile</strong> (<em>str or file</em>) – name of an mtz file or a file object</p>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p><em>DataSet</em></p>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>realmap</strong> (<em>np.ndarray</em>) – 3D NumPy array of real-space, voxelized electron density</p></li>
+<li><p><strong>mapfile</strong> (<em>str</em>) – Filename to which map will be written</p></li>
+<li><p><strong>cell</strong> (<em>gemmi.UnitCell</em>) – Unit cell parameters to use in map file</p></li>
+<li><p><strong>spacegroup</strong> (<em>gemmi.SpaceGroup</em>) – Spacegroup to use in map file</p></li>
+</ul>
 </dd>
 </dl>
 </dd></dl>
@@ -234,10 +228,10 @@ label partial or centric reflections, respectively.</p>
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="reciprocalspaceship.read_precognition.html" class="btn btn-neutral float-right" title="reciprocalspaceship.read_precognition" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="reciprocalspaceship.algorithms.merge.html" class="btn btn-neutral float-right" title="reciprocalspaceship.algorithms.merge" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="reciprocalspaceship.DataSeries.html" class="btn btn-neutral float-left" title="DataSeries" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="reciprocalspaceship.read_precognition.html" class="btn btn-neutral float-left" title="reciprocalspaceship.read_precognition" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
