@@ -30,6 +30,6 @@ def write_ccp4_map(realmap, mapfile, cell, spacegroup):
     ccp4 = gemmi.Ccp4Map()
     ccp4.grid = grid
     ccp4.update_ccp4_header(2, True)
-    ccp4.write_ccp4_map(mapout)
+    ccp4.write_ccp4_map(mapfile)
     
     return
