@@ -57,6 +57,7 @@ def range_indexed(f):
         ds = ds._index_from_names([None], inplace=True)
         result = f(ds, *args, **kwargs)
         result = result._index_from_names(names, inplace=True)
+        ds = ds._index_from_names(names, inplace=True)
         return result.__finalize__(ds)
     return wrapped
 
@@ -742,20 +743,17 @@ class DataSet(pd.DataFrame):
         Miller index to the same data column at different rows indexed 
         by the Friedel-plus or Friedel-minus Miller index. 
 
-        If ``DataSet.merged == True``, this method will return a DataSet
-        with twice as many rows as the original --  one row for each Friedel
-        pair. If ``DataSet.merged == False``, this method will return a 
-        DataSet with the same number of rows as the original. 
-
+        This method will return a DataSet with, at most, twice as many rows as the 
+        original --  one row for each Friedel pair. In most cases, the resulting 
+        DataSet will be smaller, because centric reflections will not be stacked. 
         For a merged DataSet, this has the effect of mapping reflections 
         from the positive reciprocal space ASU to the positive and negative 
         reciprocal space ASU, for Friedel-plus and Friedel-minus reflections, 
-        respectively. For an unmerged DataSet, Bijvoet reflections are mapped
-        from the positive reciprocal space ASU to their observed Miller 
-        indices. 
+        respectively. 
 
         Notes
         -----
+        - A ValueError is raised if invoked with an unmerged DataSet
         - It is assumed that Friedel-plus column labels are suffixed with (+),
           and that Friedel-minus column labels are suffixed with (-)
         - Corresponding column labels are expected to be given in the same order
@@ -777,11 +775,15 @@ class DataSet(pd.DataFrame):
         --------
         DataSet.unstack_anomalous : Opposite of stack_anomalous
         """
+        if not self.merged:
+            raise ValueError("DataSet.stack_anomalous() cannot be called with unmerged data")
+
+        # Default behavior: Use labels suffixed with "(+)" or "(-)"
         if (plus_labels is None and minus_labels is None):
             plus_labels  = [ l for l in self.columns if "(+)" in l ]
             minus_labels = [ l for l in self.columns if "(-)" in l ]
         
-        # Check input data
+        # Validate column labels
         if isinstance(plus_labels, str) and isinstance(minus_labels, str):
             plus_labels = [plus_labels]
             minus_labels =[minus_labels]
@@ -802,34 +804,25 @@ class DataSet(pd.DataFrame):
                                  f"{minus_labels} are not the same dtype: "
                                  f"{self[plus].dtype} and {self[minus].dtype}")
 
+        # Map Friedel reflections to +/- ASU
+        centrics = self.label_centrics()["CENTRIC"]
+        dataset_plus = self.drop(columns=minus_labels)
+        dataset_minus = self.loc[~centrics].drop(columns=plus_labels)
+        dataset_minus.apply_symop(gemmi.Op("-x,-y,-z"), inplace=True)
+
+        # Rename columns and update dtypes
         new_labels = [ l.rstrip("(+)") for l in plus_labels ]
         column_mapping_plus  = dict(zip(plus_labels, new_labels))
         column_mapping_minus = dict(zip(minus_labels, new_labels))
-
-        # Handle merged DataSet case
-        if self.merged:
-            dataset_plus = self.copy()
-            dataset_plus.drop(columns=minus_labels, inplace=True)
-            dataset_minus = self.copy().drop(columns=plus_labels)
-            dataset_minus.apply_symop(gemmi.Op("-x,-y,-z"), inplace=True)
-            
-        # Handle unmerged DataSet case
-        else:
-            dataset_plus = self.loc[self[minus_labels].isna().agg("all", axis=1)].copy()
-            dataset_minus = self.loc[self[plus_labels].isna().agg("all", axis=1)].copy()
-            dataset_plus.drop(columns=minus_labels, inplace=True)
-            dataset_minus.drop(columns=plus_labels, inplace=True)
-            dataset_plus.hkl_to_observed(inplace=True)
-            dataset_minus.hkl_to_observed(inplace=True)
-
         dataset_plus.rename(columns=column_mapping_plus, inplace=True)
         dataset_minus.rename(columns=column_mapping_minus, inplace=True)
         F = dataset_plus.append(dataset_minus)
         for label in new_labels:
             F[label] = F[label].from_friedel_dtype()
             
-        return F.__finalize__(self)
+        return F
 
+    @range_indexed
     def unstack_anomalous(self, columns=None, suffixes=("(+)", "(-)")):
         """
         Convert data from one-column format to two-column anomalous
@@ -837,27 +830,22 @@ class DataSet(pd.DataFrame):
         indexed by their Friedel-plus or Friedel-minus Miller index to 
         different columns indexed at the Friedel-plus HKL.
 
-        If ``DataSet.merged == True``, this method will return a DataSet
-        with half as many rows as the original --  one row with both Friedel
-        pairs. If ``DataSet.merged == False``, this method will return a 
-        DataSet with the same number of rows as the original. 
+        This method will return a smaller DataSet than the original -- 
+        Friedel pairs will both be indexed at the Friedel-plus index. This 
+        has the effect of mapping reflections to the positive reciprocal 
+        space ASU, including data for both Friedel pairs at the Friedel-plus 
+        Miller index.
 
-        For a merged DataSet, this has the effect of mapping reflections 
-        to the positive reciprocal space ASU, including data for both Friedel 
-        pairs at the Friedel-plus Miller index. For an unmerged DataSet, 
-        all Bijvoet reflections are mapped to the Miller index of the positive 
-        reciprocal space ASU; however, the reflection data is kept in distinct
-        rows with the anomalous data in columns suffixed according to whether
-        the underlying reflection is Friedel-plus or Friedel-minus. A M/ISYM
-        column is added to an unmerged DataSet to allow reflections to be
-        mapped back to their observed Miller index. 
+        Notes
+        -----
+        - A ValueError is raised if invoked with an unmerged DataSet
 
         Parameters
         ----------
         columns : str or list-like
             Column label or list of column labels of data that should be 
             associated with Friedel pairs. If None, all columns are 
-            converted are converted to the two-column anomalous format.
+            converted to the two-column anomalous format.
         suffixes : tuple or list  of str
             Suffixes to append to Friedel-plus and Friedel-minus data 
             columns
@@ -870,48 +858,45 @@ class DataSet(pd.DataFrame):
         --------
         DataSet.stack_anomalous : Opposite of unstack_anomalous
         """
+        if not self.merged:
+            raise ValueError("DataSet.unstack_anomalous() cannot be called with unmerged data")
+
         # Validate input
         if columns is None:
             columns = self.columns.to_list()
         elif isinstance(columns, str):
-            columns =  [columns]
+            columns = [columns]
         elif not isinstance(columns, (list, tuple)):
             raise ValueError(f"Expected columns to be str, list or tuple. "
                              f"Provided value is type {type(columns)}")
-            
+        
         if not (isinstance(suffixes, (list, tuple)) and len(suffixes) == 2):
             raise ValueError(f"Expected suffixes to be tuple or list of len() of 2")
 
         # Separate DataSet into Friedel(+) and Friedel(-)
+        columns = set(columns).union(set(["H", "K", "L"]))
         dataset = self.hkl_to_asu()
         if "PARTIAL" in columns: columns.remove("PARTIAL")
         for column in columns:
             dataset[column] = dataset[column].to_friedel_dtype()
         dataset_plus  = dataset.loc[dataset["M/ISYM"]%2 == 1].copy()
         dataset_minus = dataset.loc[dataset["M/ISYM"]%2 == 0].copy()
+        dataset_minus = dataset_minus.loc[:, columns]
+        result = dataset_plus.merge(dataset_minus, how="outer",
+                                    on=["H", "K", "L"],
+                                    suffixes=suffixes)
 
-        # Handle merged DataSet
-        if self.merged:
-            dataset_minus = dataset_minus.loc[:, columns]
-            result = dataset_plus.merge(dataset_minus, how="outer",
-                                        left_index=True, right_index=True,
-                                        suffixes=suffixes)
-
-        # Handle unmerged DataSet
-        else:
-            cplus  = [ c+suffixes[0] for c in columns ]
-            cminus = [ c+suffixes[1] for c in columns ]
-            dataset_plus.rename(columns=dict(zip(columns, cplus)), inplace=True)
-            dataset_minus.rename(columns=dict(zip(columns, cminus)), inplace=True)
-            result = dataset_plus.append(dataset_minus)
-            # Fix dtypes -- NA values can cause upcast to object dtype
-            result[cplus] = result[cplus].astype(dataset_plus[cplus].dtypes.to_dict())
-            result[cminus] = result[cminus].astype(dataset_minus[cminus].dtypes.to_dict())
-
+        # Handle centric reflections
+        columns = columns.difference(set(["H", "K", "L"]))
+        plus_columns  = [ c + suffixes[0] for c in columns ]
+        minus_columns = [ c + suffixes[1] for c in columns ]        
+        centrics = result.label_centrics()["CENTRIC"]
+        result.loc[centrics, minus_columns] = result.loc[centrics, plus_columns].values
+        
         if "M/ISYM" not in self.columns and self.merged:
             result.drop(columns="M/ISYM", inplace=True)
             
-        return result.__finalize__(self)
+        return result
         
     def is_isomorphous(self, other, cell_threshold=0.05):
         """
@@ -973,8 +958,8 @@ class DataSet(pd.DataFrame):
         inplace : bool
             Whether to modify the DataSet in place or return a copy
         anomalous : bool
-            If True, reflections will be mapped to the +/- ASU. If False,
-            reflections are only mapped to the Friedel-plus ASU. 
+            If True, acentric reflections will be mapped to the +/- ASU. 
+            If False, all reflections are mapped to the Friedel-plus ASU. 
 
         Returns
         -------
@@ -1012,9 +997,11 @@ class DataSet(pd.DataFrame):
             dataset['M/ISYM'] = DataSeries(isym[inverse], dtype="M/ISYM", index=dataset.index)
 
         # GH#16: Handle anomalous flag to separate Friedel pairs
+        # GH#25: Centrics should not be considered Friedel pairs
         if anomalous:
+            acentric = ~dataset.label_centrics()["CENTRIC"]
             friedel_minus = dataset['M/ISYM']%2 == 0
-            dataset[friedel_minus] = dataset[friedel_minus].apply_symop("-x,-y,-z")
+            dataset[friedel_minus & acentric] = dataset[friedel_minus & acentric].apply_symop("-x,-y,-z")
             
         return dataset
 
