@@ -513,7 +513,7 @@ template for other exploratory crystallographic data analyses. As an example, we
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-0.9.2
+0.9.3
 </pre></div></div>
 </div>
 <hr class="docutils" />
@@ -685,13 +685,13 @@ w_{h,i} = \frac{1}{(\sigma_{h,i})^2}
     <span class="n">result</span> <span class="o">=</span> <span class="n">g</span><span class="p">[[</span><span class="s2">&quot;w&quot;</span><span class="p">,</span> <span class="s2">&quot;wI&quot;</span><span class="p">]]</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
     <span class="n">result</span><span class="p">[</span><span class="s2">&quot;I&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">result</span><span class="p">[</span><span class="s2">&quot;wI&quot;</span><span class="p">]</span> <span class="o">/</span> <span class="n">result</span><span class="p">[</span><span class="s2">&quot;w&quot;</span><span class="p">]</span>
     <span class="n">result</span><span class="p">[</span><span class="s2">&quot;SIGI&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">1</span> <span class="o">/</span> <span class="n">result</span><span class="p">[</span><span class="s2">&quot;w&quot;</span><span class="p">])</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="n">result</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span> <span class="p">[</span><span class="s2">&quot;I&quot;</span><span class="p">,</span> <span class="s2">&quot;SIGI&quot;</span><span class="p">]]</span>
     <span class="n">result</span><span class="o">.</span><span class="n">merged</span> <span class="o">=</span> <span class="kc">True</span>
 
     <span class="k">if</span> <span class="n">anomalous</span><span class="p">:</span>
-        <span class="n">result</span> <span class="o">=</span> <span class="n">result</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span> <span class="p">[</span><span class="s2">&quot;I&quot;</span><span class="p">,</span> <span class="s2">&quot;SIGI&quot;</span><span class="p">]]</span><span class="o">.</span><span class="n">unstack_anomalous</span><span class="p">()</span>
-        <span class="k">return</span> <span class="n">result</span><span class="p">[[</span><span class="s2">&quot;I(+)&quot;</span><span class="p">,</span> <span class="s2">&quot;SIGI(+)&quot;</span><span class="p">,</span> <span class="s2">&quot;I(-)&quot;</span><span class="p">,</span> <span class="s2">&quot;SIGI(-)&quot;</span><span class="p">]]</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">result</span><span class="p">[[</span><span class="s2">&quot;I&quot;</span><span class="p">,</span> <span class="s2">&quot;SIGI&quot;</span><span class="p">]]</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">result</span><span class="o">.</span><span class="n">unstack_anomalous</span><span class="p">()</span>
+
+    <span class="k">return</span> <span class="n">result</span>
 </pre></div>
 </div>
 </div>
@@ -752,39 +752,39 @@ w_{h,i} = \frac{1}{(\sigma_{h,i})^2}
   </thead>
   <tbody>
     <tr>
-      <th>13</th>
-      <th>10</th>
+      <th>7</th>
+      <th>7</th>
       <th>12</th>
-      <td>174.22159</td>
-      <td>2.388022</td>
+      <td>570.1099</td>
+      <td>9.751652</td>
     </tr>
     <tr>
-      <th>20</th>
-      <th>10</th>
-      <th>8</th>
-      <td>1352.4792</td>
-      <td>17.244823</td>
-    </tr>
-    <tr>
-      <th>9</th>
+      <th>30</th>
       <th>5</th>
-      <th>20</th>
-      <td>7.988102</td>
-      <td>1.196299</td>
+      <th>6</th>
+      <td>75.88869</td>
+      <td>1.169677</td>
     </tr>
     <tr>
-      <th>32</th>
-      <th>19</th>
-      <th>11</th>
-      <td>3.3972957</td>
-      <td>1.579440</td>
+      <th>22</th>
+      <th>13</th>
+      <th>6</th>
+      <td>864.7782</td>
+      <td>11.466976</td>
     </tr>
     <tr>
-      <th>38</th>
+      <th>37</th>
       <th>10</th>
-      <th>1</th>
-      <td>30.371796</td>
-      <td>0.958733</td>
+      <th>9</th>
+      <td>115.01066</td>
+      <td>3.427840</td>
+    </tr>
+    <tr>
+      <th>28</th>
+      <th>23</th>
+      <th>10</th>
+      <td>130.84589</td>
+      <td>4.062110</td>
     </tr>
   </tbody>
 </table>
@@ -851,49 +851,49 @@ w_{h,i} = \frac{1}{(\sigma_{h,i})^2}
   </thead>
   <tbody>
     <tr>
-      <th>38</th>
-      <th>19</th>
-      <th>7</th>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>64.835556</td>
-      <td>6.811998</td>
-    </tr>
-    <tr>
-      <th>7</th>
-      <th>2</th>
-      <th>16</th>
-      <td>85.69442</td>
-      <td>2.736840</td>
-      <td>78.26207</td>
-      <td>2.665494</td>
-    </tr>
-    <tr>
-      <th>8</th>
-      <th>3</th>
-      <th>1</th>
-      <td>770.42834</td>
-      <td>13.422698</td>
-      <td>793.31995</td>
-      <td>13.425797</td>
-    </tr>
-    <tr>
-      <th>19</th>
-      <th>6</th>
-      <th>1</th>
-      <td>2318.9932</td>
-      <td>46.221165</td>
-      <td>2285.062</td>
-      <td>48.489063</td>
-    </tr>
-    <tr>
-      <th>12</th>
+      <th>28</th>
       <th>1</th>
       <th>15</th>
-      <td>83.54143</td>
-      <td>2.990145</td>
-      <td>99.577194</td>
-      <td>3.031429</td>
+      <td>26.701677</td>
+      <td>1.871244</td>
+      <td>24.092325</td>
+      <td>1.795348</td>
+    </tr>
+    <tr>
+      <th>13</th>
+      <th>7</th>
+      <th>2</th>
+      <td>1099.087</td>
+      <td>19.319998</td>
+      <td>1114.2046</td>
+      <td>19.319071</td>
+    </tr>
+    <tr>
+      <th>18</th>
+      <th>17</th>
+      <th>16</th>
+      <td>252.61542</td>
+      <td>9.112216</td>
+      <td>266.34723</td>
+      <td>9.779539</td>
+    </tr>
+    <tr>
+      <th>30</th>
+      <th>0</th>
+      <th>3</th>
+      <td>192.02711</td>
+      <td>3.330739</td>
+      <td>192.02711</td>
+      <td>3.330739</td>
+    </tr>
+    <tr>
+      <th>27</th>
+      <th>11</th>
+      <th>10</th>
+      <td>166.30553</td>
+      <td>4.171731</td>
+      <td>176.25522</td>
+      <td>4.213492</td>
     </tr>
   </tbody>
 </table>
@@ -968,69 +968,69 @@ w_{h,i} = \frac{1}{(\sigma_{h,i})^2}
   </thead>
   <tbody>
     <tr>
-      <th>30</th>
-      <th>17</th>
-      <th>8</th>
-      <td>38.011562</td>
-      <td>1.0581261</td>
-      <td>33.447296</td>
-      <td>1.4636625</td>
-      <td>43.00854</td>
-      <td>1.5314722</td>
-      <td>32</td>
-      <td>32</td>
-    </tr>
-    <tr>
+      <th>20</th>
       <th>18</th>
-      <th>2</th>
-      <th>2</th>
-      <td>2840.8442</td>
-      <td>34.02207</td>
-      <td>2887.266</td>
-      <td>46.590458</td>
-      <td>2787.8088</td>
-      <td>49.798557</td>
-      <td>64</td>
-      <td>56</td>
+      <th>13</th>
+      <td>152.48227</td>
+      <td>2.566335</td>
+      <td>149.86122</td>
+      <td>3.6247792</td>
+      <td>155.11656</td>
+      <td>3.6339293</td>
+      <td>40</td>
+      <td>40</td>
     </tr>
     <tr>
-      <th>23</th>
-      <th>22</th>
-      <th>9</th>
-      <td>1349.8007</td>
-      <td>22.878157</td>
-      <td>1359.3385</td>
-      <td>32.35982</td>
-      <td>1340.2689</td>
-      <td>32.34938</td>
-      <td>32</td>
-      <td>32</td>
-    </tr>
-    <tr>
-      <th>37</th>
-      <th>12</th>
-      <th>3</th>
-      <td>84.88724</td>
-      <td>2.0992541</td>
-      <td>90.19796</td>
-      <td>3.2684405</td>
-      <td>81.158066</td>
-      <td>2.7388601</td>
-      <td>17</td>
-      <td>22</td>
-    </tr>
-    <tr>
-      <th>5</th>
+      <th>28</th>
+      <th>14</th>
       <th>4</th>
-      <th>2</th>
-      <td>2357.78</td>
-      <td>24.991978</td>
-      <td>2410.6582</td>
-      <td>35.206055</td>
-      <td>2304.065</td>
-      <td>35.483566</td>
-      <td>63</td>
-      <td>62</td>
+      <td>564.2687</td>
+      <td>9.191932</td>
+      <td>569.98047</td>
+      <td>13.016064</td>
+      <td>558.58606</td>
+      <td>12.98271</td>
+      <td>35</td>
+      <td>35</td>
+    </tr>
+    <tr>
+      <th>42</th>
+      <th>17</th>
+      <th>1</th>
+      <td>10.480692</td>
+      <td>2.265493</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>10.480692</td>
+      <td>2.265493</td>
+      <td>0</td>
+      <td>4</td>
+    </tr>
+    <tr>
+      <th>29</th>
+      <th>4</th>
+      <th>16</th>
+      <td>163.00961</td>
+      <td>5.2304244</td>
+      <td>158.27818</td>
+      <td>8.418301</td>
+      <td>165.98451</td>
+      <td>6.675205</td>
+      <td>12</td>
+      <td>16</td>
+    </tr>
+    <tr>
+      <th>31</th>
+      <th>13</th>
+      <th>15</th>
+      <td>20.073765</td>
+      <td>4.225071</td>
+      <td>20.073765</td>
+      <td>4.225071</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>4</td>
+      <td>0</td>
     </tr>
   </tbody>
 </table>
@@ -1178,102 +1178,102 @@ w_{h,i} = \frac{1}{(\sigma_{h,i})^2}
       <th rowspan="5" valign="top">0</th>
       <th rowspan="5" valign="top">0</th>
       <th>4</th>
-      <td>650.08997</td>
-      <td>35.83128</td>
-      <td>650.08997</td>
-      <td>35.83128</td>
-      <td>650.08997</td>
-      <td>35.83128</td>
-      <td>6</td>
-      <td>6</td>
-      <td>668.0366</td>
-      <td>27.777082</td>
-      <td>668.0366</td>
-      <td>27.777082</td>
-      <td>668.0366</td>
-      <td>27.777082</td>
-      <td>10</td>
-      <td>10</td>
+      <td>666.7636</td>
+      <td>31.043478</td>
+      <td>666.7636</td>
+      <td>31.043478</td>
+      <td>666.7636</td>
+      <td>31.043478</td>
+      <td>8</td>
+      <td>8</td>
+      <td>655.83417</td>
+      <td>31.049263</td>
+      <td>655.83417</td>
+      <td>31.049263</td>
+      <td>655.83417</td>
+      <td>31.049263</td>
+      <td>8</td>
+      <td>8</td>
       <td>0</td>
     </tr>
     <tr>
       <th>4</th>
-      <td>654.7561</td>
-      <td>27.772524</td>
-      <td>654.7561</td>
-      <td>27.772524</td>
-      <td>654.7561</td>
-      <td>27.772524</td>
-      <td>10</td>
-      <td>10</td>
-      <td>672.19836</td>
-      <td>35.84108</td>
-      <td>672.19836</td>
-      <td>35.841076</td>
-      <td>672.19836</td>
-      <td>35.841076</td>
+      <td>662.17914</td>
+      <td>35.84121</td>
+      <td>662.17914</td>
+      <td>35.84121</td>
+      <td>662.17914</td>
+      <td>35.84121</td>
       <td>6</td>
       <td>6</td>
+      <td>660.772</td>
+      <td>27.77246</td>
+      <td>660.772</td>
+      <td>27.772463</td>
+      <td>660.772</td>
+      <td>27.772463</td>
+      <td>10</td>
+      <td>10</td>
       <td>1</td>
     </tr>
     <tr>
       <th>4</th>
-      <td>656.7257</td>
-      <td>26.463552</td>
-      <td>656.7257</td>
-      <td>26.46355</td>
-      <td>656.7257</td>
-      <td>26.46355</td>
-      <td>11</td>
-      <td>11</td>
-      <td>671.3946</td>
-      <td>39.313034</td>
-      <td>671.3946</td>
-      <td>39.313034</td>
-      <td>671.3946</td>
-      <td>39.313034</td>
-      <td>5</td>
-      <td>5</td>
+      <td>658.76013</td>
+      <td>31.049088</td>
+      <td>658.76013</td>
+      <td>31.049088</td>
+      <td>658.76013</td>
+      <td>31.049088</td>
+      <td>8</td>
+      <td>8</td>
+      <td>663.83887</td>
+      <td>31.043655</td>
+      <td>663.83887</td>
+      <td>31.043655</td>
+      <td>663.83887</td>
+      <td>31.043655</td>
+      <td>8</td>
+      <td>8</td>
       <td>2</td>
     </tr>
     <tr>
       <th>4</th>
-      <td>657.65466</td>
-      <td>29.272488</td>
-      <td>657.65466</td>
-      <td>29.272488</td>
-      <td>657.65466</td>
-      <td>29.272488</td>
+      <td>672.96674</td>
+      <td>29.275146</td>
+      <td>672.96674</td>
+      <td>29.275146</td>
+      <td>672.96674</td>
+      <td>29.275146</td>
       <td>9</td>
       <td>9</td>
-      <td>665.9854</td>
-      <td>33.187504</td>
-      <td>665.9854</td>
-      <td>33.187504</td>
-      <td>665.9854</td>
-      <td>33.187504</td>
+      <td>646.3099</td>
+      <td>33.18363</td>
+      <td>646.3099</td>
+      <td>33.18363</td>
+      <td>646.3099</td>
+      <td>33.18363</td>
       <td>7</td>
       <td>7</td>
       <td>3</td>
     </tr>
     <tr>
       <th>4</th>
-      <td>650.47797</td>
-      <td>35.85087</td>
-      <td>650.47797</td>
-      <td>35.85087</td>
-      <td>650.47797</td>
-      <td>35.85087</td>
-      <td>6</td>
-      <td>6</td>
-      <td>667.7921</td>
-      <td>27.767971</td>
-      <td>667.7921</td>
-      <td>27.76797</td>
-      <td>667.7921</td>
-      <td>27.76797</td>
-      <td>10</td>
-      <td>10</td>
+      <td>662.3825</td>
+      <td>33.18871</td>
+      <td>662.3825</td>
+      <td>33.188713</td>
+      <td>662.3825</td>
+      <td>33.188713</td>
+      <td>7</td>
+      <td>7</td>
+      <td>660.45776</td>
+      <td>29.27166</td>
+      <td>660.45776</td>
+      <td>29.271658</td>
+      <td>660.45776</td>
+      <td>29.271658</td>
+      <td>9</td>
+      <td>9</td>
       <td>4</td>
     </tr>
     <tr>
@@ -1302,98 +1302,98 @@ w_{h,i} = \frac{1}{(\sigma_{h,i})^2}
       <th rowspan="5" valign="top">45</th>
       <th rowspan="5" valign="top">10</th>
       <th>2</th>
-      <td>18.685297</td>
-      <td>3.8105915</td>
-      <td>18.685297</td>
-      <td>3.8105915</td>
+      <td>11.665072</td>
+      <td>5.2794247</td>
+      <td>11.665072</td>
+      <td>5.2794247</td>
       <td>NaN</td>
       <td>NaN</td>
-      <td>3</td>
+      <td>2</td>
       <td>0</td>
-      <td>18.59031</td>
-      <td>8.728156</td>
-      <td>18.59031</td>
-      <td>8.728156</td>
+      <td>24.119883</td>
+      <td>4.656634</td>
+      <td>24.119883</td>
+      <td>4.656634</td>
       <td>NaN</td>
       <td>NaN</td>
-      <td>1</td>
+      <td>2</td>
+      <td>0</td>
+      <td>9</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>17.761972</td>
+      <td>4.9232774</td>
+      <td>17.761972</td>
+      <td>4.9232774</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>2</td>
+      <td>0</td>
+      <td>19.589767</td>
+      <td>4.9545083</td>
+      <td>19.589767</td>
+      <td>4.9545083</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>2</td>
       <td>0</td>
       <td>10</td>
     </tr>
     <tr>
       <th>2</th>
-      <td>14.465271</td>
-      <td>4.4560146</td>
-      <td>14.465271</td>
-      <td>4.4560146</td>
+      <td>30.170218</td>
+      <td>7.3511124</td>
+      <td>30.170218</td>
+      <td>7.3511124</td>
       <td>NaN</td>
       <td>NaN</td>
-      <td>2</td>
+      <td>1</td>
       <td>0</td>
-      <td>25.364758</td>
-      <td>5.6226034</td>
-      <td>25.364758</td>
-      <td>5.6226034</td>
+      <td>15.318142</td>
+      <td>3.9687188</td>
+      <td>15.318142</td>
+      <td>3.9687188</td>
       <td>NaN</td>
       <td>NaN</td>
-      <td>2</td>
+      <td>3</td>
       <td>0</td>
       <td>11</td>
     </tr>
     <tr>
       <th>2</th>
-      <td>15.318142</td>
-      <td>3.9687188</td>
-      <td>15.318142</td>
-      <td>3.9687188</td>
+      <td>11.665072</td>
+      <td>5.2794247</td>
+      <td>11.665072</td>
+      <td>5.2794247</td>
       <td>NaN</td>
       <td>NaN</td>
-      <td>3</td>
+      <td>2</td>
       <td>0</td>
-      <td>30.170218</td>
-      <td>7.3511124</td>
-      <td>30.170218</td>
-      <td>7.3511124</td>
+      <td>24.119883</td>
+      <td>4.656634</td>
+      <td>24.119883</td>
+      <td>4.656634</td>
       <td>NaN</td>
       <td>NaN</td>
-      <td>1</td>
-      <td>0</td>
-      <td>12</td>
-    </tr>
-    <tr>
-      <th>2</th>
-      <td>17.961912</td>
-      <td>4.288131</td>
-      <td>17.961912</td>
-      <td>4.288131</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>3</td>
-      <td>0</td>
-      <td>20.064919</td>
-      <td>6.0180674</td>
-      <td>20.064919</td>
-      <td>6.0180674</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>1</td>
+      <td>2</td>
       <td>0</td>
       <td>13</td>
     </tr>
     <tr>
       <th>2</th>
-      <td>17.961912</td>
-      <td>4.288131</td>
-      <td>17.961912</td>
-      <td>4.288131</td>
+      <td>15.318142</td>
+      <td>3.9687188</td>
+      <td>15.318142</td>
+      <td>3.9687188</td>
       <td>NaN</td>
       <td>NaN</td>
       <td>3</td>
       <td>0</td>
-      <td>20.064919</td>
-      <td>6.0180674</td>
-      <td>20.064919</td>
-      <td>6.0180674</td>
+      <td>30.170218</td>
+      <td>7.3511124</td>
+      <td>30.170218</td>
+      <td>7.3511124</td>
       <td>NaN</td>
       <td>NaN</td>
       <td>1</td>
@@ -1402,7 +1402,7 @@ w_{h,i} = \frac{1}{(\sigma_{h,i})^2}
     </tr>
   </tbody>
 </table>
-<p>187294 rows × 17 columns</p>
+<p>187328 rows × 17 columns</p>
 </div></div>
 </div>
 </div>
@@ -1491,38 +1491,38 @@ w_{h,i} = \frac{1}{(\sigma_{h,i})^2}
   <tbody>
     <tr>
       <th>0</th>
-      <td>0.997331</td>
-      <td>0.000265</td>
-      <td>0.998846</td>
-      <td>0.000120</td>
+      <td>0.997387</td>
+      <td>0.000403</td>
+      <td>0.998917</td>
+      <td>0.000100</td>
     </tr>
     <tr>
       <th>1</th>
-      <td>0.997829</td>
-      <td>0.000387</td>
-      <td>0.999380</td>
-      <td>0.000040</td>
+      <td>0.997721</td>
+      <td>0.000452</td>
+      <td>0.999355</td>
+      <td>0.000052</td>
     </tr>
     <tr>
       <th>2</th>
-      <td>0.998962</td>
-      <td>0.000215</td>
-      <td>0.999655</td>
-      <td>0.000035</td>
+      <td>0.999006</td>
+      <td>0.000224</td>
+      <td>0.999675</td>
+      <td>0.000021</td>
     </tr>
     <tr>
       <th>3</th>
-      <td>0.999333</td>
-      <td>0.000077</td>
-      <td>0.999660</td>
-      <td>0.000026</td>
+      <td>0.999252</td>
+      <td>0.000103</td>
+      <td>0.999662</td>
+      <td>0.000012</td>
     </tr>
     <tr>
       <th>4</th>
-      <td>0.999273</td>
-      <td>0.000130</td>
-      <td>0.999677</td>
-      <td>0.000014</td>
+      <td>0.999396</td>
+      <td>0.000113</td>
+      <td>0.999683</td>
+      <td>0.000025</td>
     </tr>
   </tbody>
 </table>
@@ -1631,38 +1631,38 @@ w_{h,i} = \frac{1}{(\sigma_{h,i})^2}
   <tbody>
     <tr>
       <th>0</th>
-      <td>0.409787</td>
-      <td>0.056366</td>
-      <td>0.508455</td>
-      <td>0.034468</td>
+      <td>0.396254</td>
+      <td>0.056046</td>
+      <td>0.512770</td>
+      <td>0.027408</td>
     </tr>
     <tr>
       <th>1</th>
-      <td>0.221702</td>
-      <td>0.057164</td>
-      <td>0.330716</td>
-      <td>0.024440</td>
+      <td>0.221362</td>
+      <td>0.073597</td>
+      <td>0.343052</td>
+      <td>0.031707</td>
     </tr>
     <tr>
       <th>2</th>
-      <td>0.376611</td>
-      <td>0.064563</td>
-      <td>0.448722</td>
-      <td>0.020665</td>
+      <td>0.361811</td>
+      <td>0.071778</td>
+      <td>0.446526</td>
+      <td>0.021681</td>
     </tr>
     <tr>
       <th>3</th>
-      <td>0.492532</td>
-      <td>0.065789</td>
-      <td>0.556624</td>
-      <td>0.024312</td>
+      <td>0.471032</td>
+      <td>0.040934</td>
+      <td>0.540475</td>
+      <td>0.019537</td>
     </tr>
     <tr>
       <th>4</th>
-      <td>0.589641</td>
-      <td>0.020735</td>
-      <td>0.605885</td>
-      <td>0.019219</td>
+      <td>0.583090</td>
+      <td>0.039803</td>
+      <td>0.603085</td>
+      <td>0.025755</td>
     </tr>
   </tbody>
 </table>

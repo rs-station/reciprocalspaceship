@@ -471,14 +471,23 @@ div.rendered_html tbody tr:hover {
 </div><div class="section" id="Basics">
 <h1>Basics<a class="headerlink" href="#Basics" title="Permalink to this headline">¶</a></h1>
 <p><code class="docutils literal notranslate"><span class="pre">reciprocalspaceship</span></code> provides methods for reading and writing MTZ files, and can be easily used to join reflection data by Miller indices. We will demonstrate these uses by loading diffraction data of tetragonal hen egg-white lysozyme (HEWL).</p>
-<div class="nbinput nblast docutils container">
+<div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
 <span></span><span class="kn">import</span> <span class="nn">reciprocalspaceship</span> <span class="k">as</span> <span class="nn">rs</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">rs</span><span class="o">.</span><span class="n">__version__</span><span class="p">)</span>
 </pre></div>
 </div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+0.9.3
+</pre></div></div>
 </div>
 <p>This diffraction data was collected at the Sector 24-ID-C beamline at <a class="reference external" href="https://lilith.nec.aps.anl.gov/">NE-CAT</a> at APS. Diffraction images were collected at ambient room temperature (295K), and low energy (6550 eV) in order to collect native sulfur anomalous diffraction for experimental phasing. The diffraction images were processed in <a class="reference external" href="https://dials.github.io/">DIALS</a> for indexing, geometry refinement, and spot integration, and scaling and merging was done in
 <a class="reference external" href="http://www.ccp4.ac.uk/html/aimless.html">AIMLESS</a>. This data reduction yielded an MTZ file that is included in the <code class="docutils literal notranslate"><span class="pre">data/</span></code> subdirectory. Here, we will load the MTZ file and inspect its contents.</p>
@@ -567,66 +576,68 @@ div.rendered_html tbody tr:hover {
   </thead>
   <tbody>
     <tr>
-      <th rowspan="5" valign="top">0</th>
-      <th rowspan="5" valign="top">0</th>
+      <th rowspan="4" valign="top">0</th>
+      <th rowspan="4" valign="top">0</th>
       <th>4</th>
       <td>14</td>
-      <td>671.0396</td>
-      <td>22.205784</td>
-      <td>671.0396</td>
-      <td>22.205784</td>
-      <td>671.0396</td>
-      <td>22.205784</td>
+      <td>661.29987</td>
+      <td>21.953098</td>
+      <td>661.29987</td>
+      <td>21.953098</td>
+      <td>661.29987</td>
+      <td>21.953098</td>
       <td>16</td>
       <td>16</td>
     </tr>
     <tr>
       <th>8</th>
       <td>4</td>
-      <td>3273.7385</td>
-      <td>107.59589</td>
-      <td>3273.7385</td>
-      <td>107.59589</td>
-      <td>3273.7385</td>
-      <td>107.59589</td>
+      <td>3229.649</td>
+      <td>105.980934</td>
+      <td>3229.649</td>
+      <td>105.980934</td>
+      <td>3229.649</td>
+      <td>105.980934</td>
       <td>16</td>
       <td>16</td>
     </tr>
     <tr>
       <th>12</th>
       <td>6</td>
-      <td>1367.5679</td>
-      <td>43.352566</td>
-      <td>1367.5679</td>
-      <td>43.352566</td>
-      <td>1367.5679</td>
-      <td>43.352566</td>
+      <td>1361.8672</td>
+      <td>43.06085</td>
+      <td>1361.8672</td>
+      <td>43.06085</td>
+      <td>1361.8672</td>
+      <td>43.06085</td>
       <td>16</td>
       <td>16</td>
     </tr>
     <tr>
       <th>16</th>
       <td>19</td>
-      <td>4158.55</td>
-      <td>198.88382</td>
-      <td>4158.55</td>
-      <td>198.88382</td>
-      <td>4158.55</td>
-      <td>198.88382</td>
+      <td>4124.393</td>
+      <td>196.89108</td>
+      <td>4124.393</td>
+      <td>196.89108</td>
+      <td>4124.393</td>
+      <td>196.89108</td>
       <td>8</td>
       <td>8</td>
     </tr>
     <tr>
-      <th>20</th>
-      <td>8</td>
-      <td>2.4992087</td>
-      <td>5.7103205</td>
-      <td>2.4992087</td>
-      <td>5.7103205</td>
-      <td>2.4992087</td>
-      <td>5.7103205</td>
-      <td>1</td>
-      <td>1</td>
+      <th>1</th>
+      <th>0</th>
+      <th>1</th>
+      <td>16</td>
+      <td>559.33685</td>
+      <td>8.6263</td>
+      <td>559.33685</td>
+      <td>8.6263</td>
+      <td>559.33685</td>
+      <td>8.6263</td>
+      <td>64</td>
+      <td>64</td>
     </tr>
   </tbody>
 </table>
@@ -646,7 +657,7 @@ div.rendered_html tbody tr:hover {
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-Number of reflections: 12563
+Number of reflections: 12542
 </pre></div></div>
 </div>
 <p>Internally, each of these data columns is stored using a custom <code class="docutils literal notranslate"><span class="pre">dtype</span></code> that was added to the conventional <code class="docutils literal notranslate"><span class="pre">pandas</span></code> and <code class="docutils literal notranslate"><span class="pre">numpy</span></code> datatypes. This enables <code class="docutils literal notranslate"><span class="pre">DataSet</span></code> reflection tables to be written back to MTZ files. There is a <code class="docutils literal notranslate"><span class="pre">dtype</span></code> for each of the possible datatypes listed in the <a class="reference external" href="http://www.ccp4.ac.uk/html/f2mtz.html#CTYPOUT">MTZ file specification</a>.</p>
@@ -711,7 +722,7 @@ dtype: object
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-&lt;gemmi.UnitCell(79.3435, 79.3435, 37.8098, 90, 90, 90)&gt;
+&lt;gemmi.UnitCell(79.3439, 79.3439, 37.8099, 90, 90, 90)&gt;
 </pre></div></div>
 </div>
 </div>
