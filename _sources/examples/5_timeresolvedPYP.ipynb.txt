@@ -358,7 +358,7 @@
       "text/html": [
        "<center>\n",
        "    <iframe src=\"https://hekstra-lab.github.io/reciprocalspaceship/data/pypdiff/comparison.html#xyz=14.870,0.383,-18.885&eye=85.6,69.5,-33.7&zoom=60\", width=600, height=300></iframe>\n",
-       "    <br>Time-resolved difference map of PYP photocycle with and without weights. The dark state structure is shown in \n",
+       "    <br>Time-resolved difference map of PYP photocycle with and without weights. The dark state structure is shown in red, and the pB intermediate state of the chromophore is shown in green.\n",
        "</center>\n"
       ],
       "text/plain": [
@@ -373,7 +373,7 @@
     "%%html\n",
     "<center>\n",
     "    <iframe src=\"https://hekstra-lab.github.io/reciprocalspaceship/data/pypdiff/comparison.html#xyz=14.870,0.383,-18.885&eye=85.6,69.5,-33.7&zoom=60\", width=600, height=300></iframe>\n",
-    "    <br>Time-resolved difference map of PYP photocycle with and without weights. The dark state structure is shown in \n",
+    "    <br>Time-resolved difference map of PYP photocycle with and without weights. The dark state structure is shown in red, and the pB intermediate state of the chromophore is shown in green.\n",
     "</center>"
    ]
   }
