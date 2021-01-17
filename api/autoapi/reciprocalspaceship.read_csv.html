@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>reciprocalspaceship.read_precognition &mdash; reciprocalspaceship 0.9.3 documentation</title>
+  <title>reciprocalspaceship.read_csv &mdash; reciprocalspaceship 0.9.3 documentation</title>
   
 
   
@@ -47,8 +47,8 @@
     
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="reciprocalspaceship.io.write_ccp4_map" href="reciprocalspaceship.io.write_ccp4_map.html" />
-    <link rel="prev" title="reciprocalspaceship.read_csv" href="reciprocalspaceship.read_csv.html" /> 
+    <link rel="next" title="reciprocalspaceship.read_precognition" href="reciprocalspaceship.read_precognition.html" />
+    <link rel="prev" title="reciprocalspaceship.read_mtz" href="reciprocalspaceship.read_mtz.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -102,8 +102,8 @@
 <li class="toctree-l2"><a class="reference internal" href="../index.html#reflection-data">Reflection Data</a></li>
 <li class="toctree-l2 current"><a class="reference internal" href="../index.html#input-output">Input/Output</a><ul class="current">
 <li class="toctree-l3"><a class="reference internal" href="reciprocalspaceship.read_mtz.html">reciprocalspaceship.read_mtz</a></li>
-<li class="toctree-l3"><a class="reference internal" href="reciprocalspaceship.read_csv.html">reciprocalspaceship.read_csv</a></li>
-<li class="toctree-l3 current"><a class="current reference internal" href="#">reciprocalspaceship.read_precognition</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">reciprocalspaceship.read_csv</a></li>
+<li class="toctree-l3"><a class="reference internal" href="reciprocalspaceship.read_precognition.html">reciprocalspaceship.read_precognition</a></li>
 <li class="toctree-l3"><a class="reference internal" href="reciprocalspaceship.io.write_ccp4_map.html">reciprocalspaceship.io.write_ccp4_map</a></li>
 </ul>
 </li>
@@ -163,13 +163,13 @@
         
           <li><a href="../index.html">API Reference</a> &raquo;</li>
         
-      <li>reciprocalspaceship.read_precognition</li>
+      <li>reciprocalspaceship.read_csv</li>
     
     
       <li class="wy-breadcrumbs-aside">
         
           
-            <a href="../../_sources/api/autoapi/reciprocalspaceship.read_precognition.rst.txt" rel="nofollow"> View page source</a>
+            <a href="../../_sources/api/autoapi/reciprocalspaceship.read_csv.rst.txt" rel="nofollow"> View page source</a>
           
         
       </li>
@@ -206,28 +206,26 @@
     text-align: unset;
 }
 </style>
-<div class="section" id="reciprocalspaceship-read-precognition">
-<h1>reciprocalspaceship.read_precognition<a class="headerlink" href="#reciprocalspaceship-read-precognition" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="reciprocalspaceship-read-csv">
+<h1>reciprocalspaceship.read_csv<a class="headerlink" href="#reciprocalspaceship-read-csv" title="Permalink to this headline">¶</a></h1>
 <dl class="py function">
-<dt id="reciprocalspaceship.read_precognition">
-<code class="sig-prename descclassname">reciprocalspaceship.</code><code class="sig-name descname">read_precognition</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">hklfile</span></em>, <em class="sig-param"><span class="n">a</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">b</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">c</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">alpha</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">beta</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">gamma</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">sg</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">logfile</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/Hekstra-Lab/reciprocalspaceship/blob/master/reciprocalspaceship/io/precognition.py#L5-L90"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#reciprocalspaceship.read_precognition" title="Permalink to this definition">¶</a></dt>
-<dd><p>Initialize attributes and populate the DataSet object with data from
-a HKL file of reflections. This is the output format used by
-Precognition when processing Laue diffraction data.</p>
+<dt id="reciprocalspaceship.read_csv">
+<code class="sig-prename descclassname">reciprocalspaceship.</code><code class="sig-name descname">read_csv</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">csvfile</span></em>, <em class="sig-param"><span class="n">spacegroup</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">cell</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">merged</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">infer_mtz_dtypes</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="o">*</span><span class="n">args</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/Hekstra-Lab/reciprocalspaceship/blob/master/reciprocalspaceship/io/csv.py#L4-L33"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#reciprocalspaceship.read_csv" title="Permalink to this definition">¶</a></dt>
+<dd><p>Read a comma-separated values (csv) file into a DataSet.</p>
+<p>This method also supports the arguments to <a class="reference external" href="https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.read_csv.html">pandas.read_csv</a>. See their documentation
+for more details.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>hklfile</strong> (<em>str or file</em>) – name of an hkl file or a file object</p></li>
-<li><p><strong>a</strong> (<em>float</em>) – edge length, a, of the unit cell</p></li>
-<li><p><strong>b</strong> (<em>float</em>) – edge length, b, of the unit cell</p></li>
-<li><p><strong>c</strong> (<em>float</em>) – edge length, c, of the unit cell</p></li>
-<li><p><strong>alpha</strong> (<em>float</em>) – interaxial angle, alpha, of the unit cell</p></li>
-<li><p><strong>beta</strong> (<em>float</em>) – interaxial angle, beta, of the unit cell</p></li>
-<li><p><strong>gamma</strong> (<em>float</em>) – interaxial angle, gamma, of the unit cell</p></li>
-<li><p><strong>sg</strong> (<em>str or int</em>) – If int, this should specify the space group number. If str,
-this should be a space group symbol</p></li>
-<li><p><strong>logfile</strong> (<em>str or file</em>) – name of a log file to parse to get cell parameters and sg</p></li>
+<li><p><strong>csvfile</strong> (<em>str, path object, or file-like object</em>) – File to read as CSV file</p></li>
+<li><p><strong>spacegroup</strong> (<em>gemmi.SpaceGroup, int, or str</em>) – Spacegroup with which to initialize DataSet</p></li>
+<li><p><strong>cell</strong> (<em>gemmi.UnitCell, tuple, list, or array-like</em>) – Cell parameters with which to initialize DataSet</p></li>
+<li><p><strong>merged</strong> (<em>bool</em>) – Whether DataSet contains merged reflection data</p></li>
+<li><p><strong>infer_mtz_dtypes</strong> (<em>bool</em>) – Whether to infer MTZ dtypes based on column names</p></li>
 </ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><em>rs.DataSet</em></p>
 </dd>
 </dl>
 </dd></dl>
@@ -240,8 +238,8 @@ this should be a space group symbol</p></li>
           </div>
           <footer>
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-        <a href="reciprocalspaceship.io.write_ccp4_map.html" class="btn btn-neutral float-right" title="reciprocalspaceship.io.write_ccp4_map" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
-        <a href="reciprocalspaceship.read_csv.html" class="btn btn-neutral float-left" title="reciprocalspaceship.read_csv" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="reciprocalspaceship.read_precognition.html" class="btn btn-neutral float-right" title="reciprocalspaceship.read_precognition" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="reciprocalspaceship.read_mtz.html" class="btn btn-neutral float-left" title="reciprocalspaceship.read_mtz" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
     </div>
 
   <hr/>

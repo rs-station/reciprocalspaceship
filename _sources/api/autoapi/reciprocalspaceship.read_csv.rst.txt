@@ -1,0 +1,6 @@
+﻿reciprocalspaceship.read\_csv
+=============================
+
+.. currentmodule:: reciprocalspaceship
+
+.. autofunction:: read_csv
