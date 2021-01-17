@@ -1,8 +1,17 @@
 import unittest
+import pytest
 from os.path import dirname, abspath, join
 from os import remove
 import gemmi
 import reciprocalspaceship as rs
+
+def test_read_precognition_mtz(IOtest_mtz):
+    """
+    rs.read_precognition should raise ValueError when given file without
+    .ii or .hkl suffix.
+    """
+    with pytest.raises(ValueError):
+        rs.read_precognition(IOtest_mtz)
 
 class TestPrecognition(unittest.TestCase):
 

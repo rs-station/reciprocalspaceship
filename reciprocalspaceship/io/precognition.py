@@ -70,6 +70,10 @@ def read_precognition(hklfile,a=None, b=None, c=None, alpha=None,
             a, b, c = map(float, lengths)
             angles  = lines[block-18].split()[-3:]
             alpha, beta, gamma = map(float, angles)
+
+    # GH#32: Limit use to supported file formats
+    else:
+        raise ValueError("rs.read_precognition() only supports .ii and .hkl files")
             
     dataset = DataSet()
     for (k,v), mtztype in zip(F.items(), mtztypes):
