@@ -13,8 +13,8 @@ def test_constructor_empty():
     assert result.cell is None
 
 
-@pytest.mark.parametrize("spacegroup", [None, gemmi.SpaceGroup(1)])
-@pytest.mark.parametrize("cell", [None, gemmi.UnitCell(1, 1, 1, 90, 90, 90)])
+@pytest.mark.parametrize("spacegroup", [None, gemmi.SpaceGroup(1), "P 1"])
+@pytest.mark.parametrize("cell", [None, gemmi.UnitCell(1, 1, 1, 90, 90, 90), (1, 1, 1,  90, 90, 90)])
 @pytest.mark.parametrize("merged", [None, True, False])
 def test_constructor_dataset(data_fmodel, spacegroup, cell, merged):
     """Test DataSet.__init__() when called with a DataSet"""
@@ -28,12 +28,17 @@ def test_constructor_dataset(data_fmodel, spacegroup, cell, merged):
         
     # Ensure provided values take precedence
     if spacegroup:
-        assert result.spacegroup == spacegroup
+        assert result.spacegroup.xhm() == "P 1"
+        assert isinstance(result.spacegroup, gemmi.SpaceGroup)
     else:
         assert result.spacegroup == data_fmodel.spacegroup
 
     if cell:
-        assert result.cell == cell
+        if isinstance(cell, gemmi.UnitCell):
+            assert result.cell == cell
+        else:
+            assert result.cell.a == cell[0]
+        assert isinstance(result.cell, gemmi.UnitCell)
     else:
         assert result.cell == data_fmodel.cell
 

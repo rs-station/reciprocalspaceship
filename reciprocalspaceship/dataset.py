@@ -96,11 +96,11 @@ class DataSet(pd.DataFrame):
 
         # Provided values for DataSet attributes take precedence
         if spacegroup:
-            self._spacegroup = spacegroup
+            self.spacegroup = spacegroup
         if cell:
-            self._cell = cell
+            self.cell = cell
         if merged is not None:
-            self._merged = merged
+            self.merged = merged
             
         # Build DataSet using DataFrame.__init__()
         super().__init__(data=data, index=index, columns=columns,
