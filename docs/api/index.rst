@@ -38,6 +38,7 @@ Supported crystallographic file formats for data I/O. Write functions for reflec
    :nosignatures:
 
    ~reciprocalspaceship.read_mtz
+   ~reciprocalspaceship.read_csv
    ~reciprocalspaceship.read_precognition
    ~reciprocalspaceship.io.write_ccp4_map
 
