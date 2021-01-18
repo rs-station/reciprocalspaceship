@@ -1,4 +1,3 @@
-import operator
 import numpy as np
 from pandas.core import nanops
 from pandas.core.indexers import check_array_indexer
@@ -13,7 +12,6 @@ from pandas.api.extensions import (
 from pandas.core.arrays.integer import IntegerArray, coerce_to_array
 from pandas.core.tools.numeric import to_numeric
 from pandas.util._decorators import cache_readonly
-from pandas.core.dtypes.cast import astype_nansafe
 import pandas as pd
 
 class MTZDtype(ExtensionDtype):
@@ -260,17 +258,6 @@ class NumpyExtensionArray(ExtensionArray, ExtensionScalarOpsMixin):
     @staticmethod
     def _box_scalar(scalar):
         return scalar
-
-    def astype(self, dtype, copy=True):
-        from pandas.core.arrays.string_ import StringDtype
-        
-        if isinstance(dtype, MTZDtype):
-            data = self._coerce_to_ndarray(dtype=dtype.type)
-        elif isinstance(dtype, StringDtype):
-            return dtype.construct_array_type()._from_sequence(self, copy=False)
-        else:
-            data = self._coerce_to_ndarray(dtype=dtype)
-        return astype_nansafe(data, dtype, copy=None)
     
     @classmethod
     def _concat_same_type(cls, to_concat):
@@ -278,9 +265,6 @@ class NumpyExtensionArray(ExtensionArray, ExtensionScalarOpsMixin):
 
     def tolist(self):
         return self.data.tolist()
-
-    def argsort(self, axis=-1, kind='quicksort', order=None):
-        return self.data.argsort()
 
     def unique(self):
         _, indices = np.unique(self.data, return_index=True)
