@@ -1,4 +1,3 @@
-import operator
 import numpy as np
 from pandas.core import nanops
 from pandas.core.indexers import check_array_indexer
@@ -14,6 +13,7 @@ from pandas.core.arrays.integer import IntegerArray, coerce_to_array
 from pandas.core.tools.numeric import to_numeric
 from pandas.util._decorators import cache_readonly
 from pandas.core.dtypes.cast import astype_nansafe
+from pandas.core.dtypes.common import is_dtype_equal
 import pandas as pd
 
 class MTZDtype(ExtensionDtype):
@@ -262,25 +262,42 @@ class NumpyExtensionArray(ExtensionArray, ExtensionScalarOpsMixin):
         return scalar
 
     def astype(self, dtype, copy=True):
-        from pandas.core.arrays.string_ import StringDtype
-        
+        """
+        Cast to a NumPy array with 'dtype'. Handles special case with 
+        MTZDtypes.
+
+        Parameters
+        ----------
+        dtype : str or dtype
+            Typecode or data-type to which the array is cast.
+        copy : bool, default True
+            Whether to copy the data, even if not necessary. If False,
+            a copy is made only if the old dtype does not match the
+            new dtype.
+
+        Returns
+        -------
+        array : ndarray
+            NumPy ndarray with 'dtype' for its dtype.
+        """
+        # Cannot defer to ExtensionArray.astype() due to call to coercion
+        # to dtype("float32")
         if isinstance(dtype, MTZDtype):
-            data = self._coerce_to_ndarray(dtype=dtype.type)
-        elif isinstance(dtype, StringDtype):
-            return dtype.construct_array_type()._from_sequence(self, copy=False)
-        else:
-            data = self._coerce_to_ndarray(dtype=dtype)
-        return astype_nansafe(data, dtype, copy=None)
-    
+            if is_dtype_equal(dtype, self.dtype):
+                if not copy:
+                    return self
+                else:
+                    return self.copy()
+            else:
+                return dtype.construct_array_type()._from_sequence(self, copy=False)
+        return super().astype(dtype, copy=copy)
+        
     @classmethod
     def _concat_same_type(cls, to_concat):
         return cls(np.concatenate([array.data for array in to_concat]))
 
     def tolist(self):
         return self.data.tolist()
-
-    def argsort(self, axis=-1, kind='quicksort', order=None):
-        return self.data.argsort()
 
     def unique(self):
         _, indices = np.unique(self.data, return_index=True)

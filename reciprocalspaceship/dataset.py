@@ -84,17 +84,21 @@ class DataSet(pd.DataFrame):
         self._spacegroup = None
         self._cell = None
         self._merged = None
-        
-        if isinstance(data, DataSet):
-            self.__finalize__(data)
 
-        elif isinstance(data, gemmi.Mtz):
+        # Construct DataSet from gemmi.Mtz object
+        if isinstance(data, gemmi.Mtz):
             from reciprocalspaceship import io
             dataset = io.from_gemmi(data)
-            self.__finalize__(dataset)
             data = dataset
 
-        # Provided values for DataSet attributes take precedence
+        super().__init__(data=data, index=index, columns=columns,
+                         dtype=dtype, copy=copy)
+
+        # Copy over _metadata if present in provided data
+        if isinstance(data, DataSet):
+            self.__finalize__(data)
+            
+        # Provided values for DataSet _metadata take precedence
         if spacegroup:
             self.spacegroup = spacegroup
         if cell:
@@ -102,9 +106,6 @@ class DataSet(pd.DataFrame):
         if merged is not None:
             self.merged = merged
             
-        # Build DataSet using DataFrame.__init__()
-        super().__init__(data=data, index=index, columns=columns,
-                         dtype=dtype, copy=copy)
         return
 
     #-------------------------------------------------------------------
