@@ -23,6 +23,6 @@ some use cases.
 
    ../examples/1_basics.ipynb
    ../examples/2_mergingstats.ipynb
-   ../examples/3_anomalousdifference.ipynb
-   ../examples/4_anomaloussites.ipynb
-   ../examples/5_timeresolvedPYP.ipynb
+   ../examples/4_anomalousmap.ipynb
+   ../examples/5_anomaloussites.ipynb
+   ../examples/6_timeresolvedPYP.ipynb
