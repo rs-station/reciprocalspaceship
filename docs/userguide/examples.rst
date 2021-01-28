@@ -23,6 +23,7 @@ some use cases.
 
    ../examples/1_basics.ipynb
    ../examples/2_mergingstats.ipynb
+   ../examples/3_mergingerrormodel.ipynb
    ../examples/4_anomalousmap.ipynb
    ../examples/5_anomaloussites.ipynb
    ../examples/6_timeresolvedPYP.ipynb
