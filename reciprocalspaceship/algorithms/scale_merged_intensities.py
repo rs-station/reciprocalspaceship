@@ -1,6 +1,5 @@
 import numpy as np
 import reciprocalspaceship as rs
-from reciprocalspaceship.utils import compute_structurefactor_multiplicity
 from scipy.special import logsumexp
 from scipy.stats import gamma,norm
 
@@ -295,7 +294,7 @@ def scale_merged_intensities(ds, intensity_key, sigma_key, output_columns=None,
         output_columns = ["FW-I", "FW-SIGI", "FW-F", "FW-SIGF"]
     outputI, outputSigI, outputF, outputSigF = output_columns
 
-    multiplicity = compute_structurefactor_multiplicity(ds.get_hkls(), ds.spacegroup)
+    multiplicity = ds.compute_multiplicity().EPSILON.to_numpy()
     # Input data for posterior calculations
     I, Sig = ds[intensity_key].to_numpy(), ds[sigma_key].to_numpy()
     if mean_intensity_method == "isotropic":
