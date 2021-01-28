@@ -106,6 +106,7 @@
 <li class="toctree-l3"><a class="reference internal" href="1_basics.html">Basics</a></li>
 <li class="toctree-l3"><a class="reference internal" href="2_mergingstats.html">HEWL S-SAD Merging Statistics</a></li>
 <li class="toctree-l3 current"><a class="current reference internal" href="#">Merging with a Robust Error Model</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#Normal-Error-Model">Normal Error Model</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#Generalized-Merging-with-Flexible-Error-Model">Generalized Merging with Flexible Error Model</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#Assess-Student’s-t-Distributed-Error-Model">Assess Student’s <em>t</em>-Distributed Error Model</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#Summary">Summary</a></li>
@@ -473,7 +474,7 @@ div.rendered_html tbody tr:hover {
 <h1>Merging with a Robust Error Model<a class="headerlink" href="#Merging-with-a-Robust-Error-Model" title="Permalink to this headline">¶</a></h1>
 <p>In the previous example, we computed the common merging statistics <span class="math notranslate nohighlight">\(CC_{1/2}\)</span> and <span class="math notranslate nohighlight">\(CC_{anom}\)</span> to explore a dataset with significant anomalous signal from native sulfur atoms. One assumption that we made while merging is that the scaled reflection observations are normally distributed about the mean. This assumption is consistent with the merging strategy used by <a class="reference external" href="https://doi.org/10.1107/S0907444913000061">AIMLESS</a>, which was used to scale the data in the first place. In this
 example, we will explore whether the scaled reflection observations are normally distributed, and whether we can improve the anomalous signal (<span class="math notranslate nohighlight">\(CC_{anom}\)</span>) by using a different error model.</p>
-<p><em>Note: See</em><a class="reference external" href="https://pytorch.org/">pytorch.org</a><em>for customizable PyTorch installation instructions.</em></p>
+<p><em>Note:</em> See <a class="reference external" href="https://pytorch.org/">pytorch.org</a> for customizable PyTorch installation instructions.</p>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
 </pre></div>
@@ -515,7 +516,8 @@ example, we will explore whether the scaled reflection observations are normally
 </pre></div></div>
 </div>
 <hr class="docutils" />
-<p>### Normal Error Model</p>
+<div class="section" id="Normal-Error-Model">
+<h2>Normal Error Model<a class="headerlink" href="#Normal-Error-Model" title="Permalink to this headline">¶</a></h2>
 <p>It is common in merging to assume that scaled intensities are normally distributed about the true mean. We can assess the validity of this assumption by looking at the residuals between scaled intensities and the maximum likelihood esimate of their true intensity.</p>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
@@ -578,6 +580,7 @@ example, we will explore whether the scaled reflection observations are normally
 </div>
 </div>
 <p>These residuals are not symmetric about <span class="math notranslate nohighlight">\(0\)</span>, which would have been expected for truly normally distributed data. In addition, the tails are much “heavier” than for a normal distribution. This suggests that it may be possible to do a better job merging these scaled observations by using a different error model that is more robust to outliers.</p>
+</div>
 <hr class="docutils" />
 <div class="section" id="Generalized-Merging-with-Flexible-Error-Model">
 <h2>Generalized Merging with Flexible Error Model<a class="headerlink" href="#Generalized-Merging-with-Flexible-Error-Model" title="Permalink to this headline">¶</a></h2>
@@ -1022,8 +1025,8 @@ model</a> with <code class="docutils literal notranslate"><span class="pre">df=4
 <hr class="docutils" />
 <div class="section" id="Summary">
 <h2>Summary<a class="headerlink" href="#Summary" title="Permalink to this headline">¶</a></h2>
-<p>This dataset was scaled and merged in AIMLESS, which involves rounds of outlier rejection and implicitly assumes that the intensities are normally distributed about the true mean. In the <a class="reference external" href="#normalassumption">first section</a>, we observed that the residuals from merging are not normally distributed, suggesting that the normal error model may have been suboptimal. We implemented a more general maximum likelihood-based approach for merging data using different probability distributions and used it
-to evaluate the performance of Student’s <em>t</em>-distributed error models. This seemed like a reasonable starting point because it is often more robust to outliers than a normal distribution.</p>
+<p>This dataset was scaled and merged in AIMLESS, which involves rounds of outlier rejection and implicitly assumes that the intensities are normally distributed about the true mean. In the <a class="reference internal" href="#Normal-Error-Model"><span class="std std-ref">first section</span></a>, we observed that the residuals from merging are not normally distributed, suggesting that the normal error model may have been suboptimal. We implemented a more general maximum likelihood-based approach for merging data using different probability
+distributions and used it to evaluate the performance of Student’s <em>t</em>-distributed error models. This seemed like a reasonable starting point because it is often more robust to outliers than a normal distribution.</p>
 <p>Using repeated 2-fold cross-validation, we saw that a Student’s <em>t</em>-distribution with a low degree of freedom (<span class="math notranslate nohighlight">\(\nu=4\)</span>) outperforms the normally distributed error model when assessed using <span class="math notranslate nohighlight">\(CC_{anom}\)</span>. Furthermore, the performance seems to approach that of the normal distribution when the degree of freedom is increased, which is expected since the <em>t</em>-distribution approaches a normal disitrbution as <span class="math notranslate nohighlight">\(\nu\to\infty\)</span>.</p>
 <p>Although this dataset is quite high quality and was used to phase and refine a model from the <a class="reference external" href="http://doi.org/10.2210/pdb7L84/pdb">native sulfur SAD signal</a>, it still shows that there can be an incremental improvement in <span class="math notranslate nohighlight">\(CC_{anom}\)</span> from revisiting assumptions regarding error models during merging. This model is implemented in ~40 lines of code using <code class="docutils literal notranslate"><span class="pre">PyTorch</span></code>, and can be quickly applied to any dataset of interest. By lowering the barrier to implementing such models,
 <code class="docutils literal notranslate"><span class="pre">reciprocalspaceship</span></code> makes it easy to try new analyses and to revisit some of the assumptions made in crystallographic data reduction.</p>
