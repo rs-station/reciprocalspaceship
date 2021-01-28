@@ -303,7 +303,6 @@ def scale_merged_intensities(ds, intensity_key, sigma_key, output_columns=None,
         Sigma = mean_intensity_by_resolution(I/multiplicity, dHKL, bins)*multiplicity
     elif mean_intensity_method == "anisotropic":
         Sigma = mean_intensity_by_miller_index(I/multiplicity, ds.get_hkls(), bw)*multiplicity
-    Sigma = Sigma * multiplicity
 
     # Initialize outputs
     ds[outputI] = 0.
