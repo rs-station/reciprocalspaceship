@@ -1,2 +1,3 @@
 # Add binder requirements that are not dependencies
-conda install -c conda-forge matplotlib seaborn -y
+conda install -c conda-forge matplotlib seaborn tqdm scikit-image -y
+conda install pytorch -c pytorch
