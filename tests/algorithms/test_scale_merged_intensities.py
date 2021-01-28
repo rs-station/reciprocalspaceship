@@ -7,7 +7,7 @@ import reciprocalspaceship as rs
 from reciprocalspaceship.algorithms import scale_merged_intensities
 from reciprocalspaceship.algorithms.scale_merged_intensities import (
     _acentric_posterior,
-    _centric_posterior_quad
+    _centric_posterior
 )
 
 def test_posteriors_fw1978(data_fw1978_input, data_fw1978_output):
@@ -21,25 +21,23 @@ def test_posteriors_fw1978(data_fw1978_input, data_fw1978_output):
     Sigma = data_fw1978_input["Sigma"]
 
     if "Acentric" in data_fw1978_output.columns[0]:
-        mean, stddev = _acentric_posterior(I, SigI, Sigma)
+        mean, stddev, mean_f, stddev_f = _acentric_posterior(I, SigI, Sigma)
     elif "Centric" in data_fw1978_output.columns[0]:
-        mean, stddev = _centric_posterior_quad(I, SigI, Sigma)
+        mean, stddev, mean_f, stddev_f = _centric_posterior(I, SigI, Sigma)
 
     # Compare intensities
     if "J" in data_fw1978_output.columns[0]:
         refI = data_fw1978_output.iloc[:, 0].to_numpy()
         refSigI = data_fw1978_output.iloc[:, 1].to_numpy()
-        assert np.allclose(mean, refI, rtol=0.05)
-        assert np.allclose(stddev, refSigI, rtol=0.01)
+        assert np.allclose(mean, refI, rtol=0.03)
+        assert np.allclose(stddev, refSigI, rtol=0.03)
         
     # Compare structure factor amplitudes
     else:
-        mean = np.sqrt(mean)
-        stddev = stddev/(2*mean)
         refF = data_fw1978_output.iloc[:, 0].to_numpy()
         refSigF =  data_fw1978_output.iloc[:, 1].to_numpy()
-        assert np.allclose(mean, refF, rtol=0.3)
-        assert np.allclose(stddev, refSigF, rtol=0.2)
+        assert np.allclose(mean_f, refF, rtol=0.03)
+        assert np.allclose(stddev_f, refSigF, rtol=0.05)
 
 def test_centric_posterior(data_fw1978_input):
     """
@@ -89,10 +87,10 @@ def test_centric_posterior(data_fw1978_input):
 
         return mean,np.sqrt(variance)
 
-    mean, stddev = _centric_posterior_quad(I, SigI, Sigma)
+    mean, stddev, mean_f, stddev_f = _centric_posterior(I, SigI, Sigma)
     mean_scipy, stddev_scipy = _centric_posterior_scipy(I, SigI, Sigma)
-    assert np.allclose(mean, mean_scipy, rtol=0.08)
-    assert np.allclose(stddev, stddev_scipy, rtol=0.01)
+    assert np.allclose(mean, mean_scipy, rtol=0.1)
+    assert np.allclose(stddev, stddev_scipy, rtol=0.05)
     
 @pytest.mark.parametrize("inplace", [True, False])
 @pytest.mark.parametrize("output_columns", [None,
