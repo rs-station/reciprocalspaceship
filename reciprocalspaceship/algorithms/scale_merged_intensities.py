@@ -1,11 +1,13 @@
 import numpy as np
-from scipy.special import ndtr,log_ndtr
+import reciprocalspaceship as rs
 from reciprocalspaceship.utils import compute_structurefactor_multiplicity
+from scipy.special import logsumexp
+from scipy.stats import gamma,norm
 
-def _acentric_posterior(Iobs, SigIobs, Sigma):
+def _french_wilson_posterior_quad(Iobs, SigIobs, Sigma, centric, npoints=200):
     """
-    Compute the mean and std deviation of the truncated normal 
-    French-Wiilson posterior.
+    Compute the mean and std deviation of the French-Wilson posterior using 
+    Gauss-Legendre quadrature. 
 
     Parameters
     ----------
@@ -15,70 +17,114 @@ def _acentric_posterior(Iobs, SigIobs, Sigma):
         Observed merged refl std deviation
     Sigma : np.ndarray (float)
         Average intensity in the resolution bin corresponding to Iobs, SigIobs
+    centric : np.ndarray (bool)
+        Array where `True` corresponds to centric reflections and `False` acentric. 
+    npoints : int
+        Number of grid points at which to evaluate the integrand. See the `deg` 
+        parameter in the numpy 
+        `documentation <https://numpy.org/doc/stable/reference/generated/numpy.polynomial.legendre.leggauss.html`_
+        for more details.
+
+    Returns
+    -------
+    mean_I : np.ndarray (float)
+        Mean posterior intensity
+    std_I : np.ndarray (float)
+        Standard deviation of posterior intensity
+    mean_F : np.ndarray (float)
+        Mean posterior structure factor amplitude
+    std_F :np.ndarray (float)
+        Standard deviation of posterior structure factor amplitude
     """
     Iobs = np.array(Iobs, dtype=np.float64)
     SigIobs = np.array(SigIobs, dtype=np.float64)
     Sigma = np.array(Sigma, dtype=np.float64)
 
-    def log_phi(x):
-        #return np.exp(-0.5*x**2)/np.sqrt(2*np.pi)
-        return -0.5*x**2 - np.log(np.sqrt(2*np.pi))
+    Jmin = np.maximum(Iobs - 20.*SigIobs, 0.)
+    Jmax = Iobs + 20.*SigIobs
+    grid,weights = np.polynomial.legendre.leggauss(npoints)
 
-    a = 0.
-    s = SigIobs
-    u = (Iobs - s**2/Sigma)
-    alpha = (a-u)/s
-    #Z = 1. - ndtr(alpha)
-    log_Z = log_ndtr(-alpha) #<--this is the same thing, I promise
-    #mean = u + s * phi(alpha)/Z
-    mean = u + np.exp(np.log(s) + log_phi(alpha) - log_Z)
-    variance = s**2 * (1 + \
-        #alpha*phi(alpha)/Z - \
-        alpha * np.exp(log_phi(alpha) - log_Z) - \
-        #(phi(alpha)/Z)**2 
-        np.exp(2. * log_phi(alpha) - 2. * log_Z)
-    )
-    return mean, np.sqrt(variance)
+    J = (Jmax - Jmin)[:,None] * grid / 2. + (Jmax + Jmin)[:,None] / 2.
+    log_prefactor = np.log(Jmax - Jmin) - np.log(2.)
 
-def _centric_posterior_quad(Iobs, SigIobs, Sigma, npoints=100):
+    logweights = np.log(weights)[None,:] 
+    logJ = np.log(J)
+    a = np.where(centric, 0.5, 1.)
+    scale = np.where(centric, 2.*Sigma, Sigma)
+    logP = gamma.logpdf(J, np.expand_dims(a, axis=-1), scale=scale[:,None])
+    logL = norm.logpdf(J, loc=Iobs[:,None], scale=SigIobs[:,None])
+    logZ = log_prefactor + logsumexp(logweights + logP + logL, axis=1)
+    log_mean = log_prefactor + logsumexp(logweights + logJ + logP + logL - logZ[:,None], axis=1)
+    mean = np.exp(log_mean)
+    variance = np.exp(log_prefactor + logsumexp(logweights+2.*logJ+logP + logL - logZ[:,None], axis=1)) - mean**2
+
+    logF = 0.5*logJ
+    log_mean_F = log_prefactor + logsumexp(logweights + logF + logP + logL - logZ[:,None], axis=1)
+    mean_F = np.exp(log_mean_F)
+    variance_F = np.exp(log_prefactor + logsumexp(logweights+2.*logF+logP + logL - logZ[:,None], axis=1)) - mean_F**2
+    return mean, np.sqrt(variance), mean_F, np.sqrt(variance_F)
+
+def _acentric_posterior(Iobs, SigIobs, Sigma, npoints=200):
     """
-    Use Gaussian-Legendre quadrature to estimate posterior intensities 
-    under a Wilson prior.
+    Compute the mean and std deviation of the acentric French-Wilson posterior.
 
     Parameters
     ----------
-    Iobs : array (float)
+    Iobs : np.ndarray (float)
         Observed merged refl intensities
-    SigIobs : array (float)
+    SigIobs : np.ndarray (float)
         Observed merged refl std deviation
-    Sigma : array (float)
+    Sigma : np.ndarray (float)
         Average intensity in the resolution bin corresponding to Iobs, SigIobs
     npoints : int
-        Number of sample points and weights (must be >= 1)
+        Number of grid points at which to evaluate the integrand. See the `deg` 
+        parameter in the numpy 
+        `documentation <https://numpy.org/doc/stable/reference/generated/numpy.polynomial.legendre.leggauss.html`_
+        for more details.
+
+    Returns
+    -------
+    mean_I : np.ndarray (float)
+        Mean posterior intensity
+    std_I : np.ndarray (float)
+        Standard deviation of posterior intensity
+    mean_F : np.ndarray (float)
+        Mean posterior structure factor amplitude
+    std_F :np.ndarray (float)
+        Standard deviation of posterior structure factor amplitude
     """
-    Iobs = np.array(Iobs, dtype=np.float64)
-    SigIobs = np.array(SigIobs, dtype=np.float64)
-    Sigma = np.array(Sigma, dtype=np.float64)
+    return _french_wilson_posterior_quad(Iobs, SigIobs, Sigma, False, npoints)
 
-    loc = Iobs-SigIobs**2/2/Sigma
-    scale = SigIobs
-    upper = np.abs(Iobs) + 10.*SigIobs
-    lower = 0.
-    upper = upper[:,None]
+def _centric_posterior(Iobs, SigIobs, Sigma, npoints=200):
+    """
+    Compute the mean and std deviation of the centric French-Wilson posterior.
 
-    grid,weights = np.polynomial.legendre.leggauss(npoints)
-    weights = weights[None,:]
-    grid = grid[None,:]
-    J = (upper - lower)*grid/2. + (upper + lower) / 2.
-    prefactor = (upper - lower)/2.
-    scale = scale[:,None]
-    loc = loc[:,None]
+    Parameters
+    ----------
+    Iobs : np.ndarray (float)
+        Observed merged refl intensities
+    SigIobs : np.ndarray (float)
+        Observed merged refl std deviation
+    Sigma : np.ndarray (float)
+        Average intensity in the resolution bin corresponding to Iobs, SigIobs
+    npoints : int
+        Number of grid points at which to evaluate the integrand. See the `deg` 
+        parameter in the numpy 
+        `documentation <https://numpy.org/doc/stable/reference/generated/numpy.polynomial.legendre.leggauss.html`_
+        for more details.
 
-    P = np.power(J, -0.5)*np.exp(-0.5*((J-loc)/scale)**2)
-    Z = np.sum(prefactor*weights*P, axis=1)[:,None]
-    mean = np.sum(prefactor*weights*J*P/Z, axis=1)
-    variance = np.sum(prefactor*weights*J*J*P/Z, axis=1) - mean**2
-    return mean,np.sqrt(variance)
+    Returns
+    -------
+    mean_I : np.ndarray (float)
+        Mean posterior intensity
+    std_I : np.ndarray (float)
+        Standard deviation of posterior intensity
+    mean_F : np.ndarray (float)
+        Mean posterior structure factor amplitude
+    std_F :np.ndarray (float)
+        Standard deviation of posterior structure factor amplitude
+    """
+    return _french_wilson_posterior_quad(Iobs, SigIobs, Sigma, True, npoints)
 
 def mean_intensity_by_miller_index(I, H, bandwidth):
     """
@@ -245,49 +291,36 @@ def scale_merged_intensities(ds, intensity_key, sigma_key, output_columns=None,
     if 'CENTRIC' not in ds:
         ds.label_centrics(inplace=True)
 
-    if output_columns:
-        outputI, outputSigI, outputF, outputSigF = output_columns
-    else:
-        columns = ["FW-I", "FW-SIGI", "FW-F", "FW-SIGF"]
-        outputI, outputSigI, outputF, outputSigF = columns
-        
+    if output_columns is None:
+        output_columns = ["FW-I", "FW-SIGI", "FW-F", "FW-SIGF"]
+    outputI, outputSigI, outputF, outputSigF = output_columns
+
+    multiplicity = compute_structurefactor_multiplicity(ds.get_hkls(), ds.spacegroup)
     # Input data for posterior calculations
     I, Sig = ds[intensity_key].to_numpy(), ds[sigma_key].to_numpy()
     if mean_intensity_method == "isotropic":
         dHKL = ds['dHKL'].to_numpy(dtype=np.float64)
-        Sigma = mean_intensity_by_resolution(I, dHKL, bins)
+        Sigma = mean_intensity_by_resolution(I/multiplicity, dHKL, bins)*multiplicity
     elif mean_intensity_method == "anisotropic":
-        Sigma = mean_intensity_by_miller_index(I, ds.get_hkls(), bw)
-    multiplicity = compute_structurefactor_multiplicity(ds.get_hkls(), ds.spacegroup)
+        Sigma = mean_intensity_by_miller_index(I/multiplicity, ds.get_hkls(), bw)*multiplicity
     Sigma = Sigma * multiplicity
 
     # Initialize outputs
     ds[outputI] = 0.
     ds[outputSigI] = 0.
-
-    # We will get posterior centric intensities from integration
-    mean, std = _centric_posterior_quad(
-	ds.loc[ds.CENTRIC, intensity_key].to_numpy(),
-	ds.loc[ds.CENTRIC, sigma_key].to_numpy(),
-	Sigma[ds.CENTRIC]
-    )
-    ds.loc[ds.CENTRIC, outputI] = mean
-    ds.loc[ds.CENTRIC, outputSigI] = std
     
-    # We will get posterior acentric intensities from analytical expressions
-    mean, std = _acentric_posterior(
-	ds.loc[~ds.CENTRIC, intensity_key].to_numpy(),
-	ds.loc[~ds.CENTRIC, sigma_key].to_numpy(),
-	Sigma[~ds.CENTRIC]
+    mean_I, std_I, mean_F, std_F = _french_wilson_posterior_quad(
+	ds[intensity_key].to_numpy(),
+	ds[sigma_key].to_numpy(),
+	Sigma,
+        ds.CENTRIC.to_numpy()
     )
-    ds.loc[~ds.CENTRIC, outputI] = mean
-    ds.loc[~ds.CENTRIC, outputSigI] = std
 
     # Convert dtypes of columns to MTZDtypes
-    ds[outputI] = ds[outputI].astype("Intensity")
-    ds[outputSigI] = ds[outputSigI].astype("Stddev")
-    ds[outputF] = np.sqrt(ds[outputI]).astype("SFAmplitude")
-    ds[outputSigF] = (ds[outputSigI]/(2*ds[outputF])).astype("Stddev")
+    ds[outputI] = rs.DataSeries(mean_I, index=ds.index, dtype="Intensity")
+    ds[outputSigI] = rs.DataSeries(std_I, index=ds.index, dtype="Stddev")
+    ds[outputF] = rs.DataSeries(mean_F, index=ds.index, dtype="SFAmplitude")
+    ds[outputSigF] = rs.DataSeries(std_F, index=ds.index, dtype="Stddev")
 
     return ds
 
