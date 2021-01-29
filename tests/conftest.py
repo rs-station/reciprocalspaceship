@@ -62,6 +62,23 @@ def data_gemmi():
     return load_dataset(datapath, as_gemmi=True)
 
 @pytest.fixture
+def data_fw_cctbx():
+    """
+    Load French-Wilson test data from cctbx
+    """
+    datapath = ["data", "french_wilson", "fw_test_data.csv"]
+    inFN = abspath(join(dirname(__file__), *datapath))
+    return pd.read_csv(inFN)
+
+@pytest.fixture
+def data_merged():
+    """
+    Load HEWL diffraction data from APS 24-ID-C
+    """
+    datapath = ["data", "data_merged.mtz"]
+    return load_dataset(datapath)
+
+@pytest.fixture
 def data_fmodel():
     """
     Load fmodel results for 9LYZ.mtz
