@@ -149,7 +149,6 @@ class DataSet(pd.DataFrame):
         else:
             raise ValueError(f"Cannot construct gemmi.UnitCell from value: {val}")
             
-            
     @property
     def merged(self):
         """Whether DataSet contains merged reflection data (boolean)"""
@@ -159,6 +158,20 @@ class DataSet(pd.DataFrame):
     def merged(self, val):
         self._merged = val
 
+    @property
+    def centrics(self):
+        """Access centric reflections in DataSet"""
+        if 'CENTRIC' in self:
+            return self.loc[self.CENTRIC]
+        return self.loc[self.label_centrics().CENTRIC]
+
+    @property
+    def acentrics(self):
+        """Access acentric reflections in DataSet"""
+        if 'CENTRIC' in self:
+            return self.loc[~self.CENTRIC]
+        return self.loc[~self.label_centrics().CENTRIC]
+    
     #-------------------------------------------------------------------
     # Methods
 
