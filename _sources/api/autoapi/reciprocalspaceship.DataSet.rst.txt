@@ -13,10 +13,14 @@
    .. autosummary::
    
    
+      ~DataSet.acentrics
+   
    
    
    
       ~DataSet.cell
+   
+      ~DataSet.centrics
    
    
    
