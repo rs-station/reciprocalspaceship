@@ -203,16 +203,17 @@ def test_label_centrics(data_fmodel, inplace, no_sg):
         assert "CENTRIC" in result
         assert result["CENTRIC"].dtype.name == "bool"
 
+
 @pytest.mark.parametrize("inplace", [True, False])
 @pytest.mark.parametrize("no_sg", [True, False])
-def test_label_absences(data_fmodel, inplace, no_sg):
-    """Test DataSet.label_absences()"""
+def test_label_centrics(data_fmodel, inplace, no_sg):
+    """Test DataSet.label_centrics()"""
     if no_sg:
         data_fmodel.spacegroup = None
         with pytest.raises(ValueError):
-            result = data_fmodel.label_absences(inplace=inplace)
+            result = data_fmodel.label_centrics(inplace=inplace)
     else:
-        result = data_fmodel.label_absences(inplace=inplace)
+        result = data_fmodel.label_centrics(inplace=inplace)
 
         # Test inplace
         if inplace:
@@ -221,8 +222,42 @@ def test_label_absences(data_fmodel, inplace, no_sg):
             assert id(result) != id(data_fmodel)
             
         # Test centric column
-        assert "ABSENT" in result
-        assert result["ABSENT"].dtype.name == "bool"
+        assert "CENTRIC" in result
+        assert result["CENTRIC"].dtype.name == "bool"
+
+
+@pytest.mark.parametrize("cache", [True, False])
+def test_centrics(mtz_by_spacegroup, cache):
+    """Test DataSet.centrics against DataSet.label_centrics"""
+    ds =  rs.read_mtz(mtz_by_spacegroup)
+    if cache:
+        ds.label_centrics(inplace=True)
+        expected = ds.loc[ds.CENTRIC]
+        result = ds.centrics
+        assert "CENTRIC" in result
+    else:
+        expected = ds.loc[ds.label_centrics()["CENTRIC"]]
+        result = ds.centrics
+        assert "CENTRIC" not in result
+
+    assert_frame_equal(result, expected)
+
+
+@pytest.mark.parametrize("cache", [True, False])
+def test_acentrics(mtz_by_spacegroup, cache):
+    """Test DataSet.acentrics against DataSet.label_centrics"""
+    ds =  rs.read_mtz(mtz_by_spacegroup)
+    if cache:
+        ds.label_centrics(inplace=True)
+        expected = ds.loc[~ds.CENTRIC]
+        result = ds.acentrics
+        assert "CENTRIC" in result
+    else:
+        expected = ds.loc[~ds.label_centrics()["CENTRIC"]]
+        result = ds.acentrics
+        assert "CENTRIC" not in result
+
+    assert_frame_equal(result, expected)
 
 
 @pytest.mark.parametrize("inplace", [True, False])
