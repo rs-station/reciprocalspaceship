@@ -206,14 +206,14 @@ def test_label_centrics(data_fmodel, inplace, no_sg):
 
 @pytest.mark.parametrize("inplace", [True, False])
 @pytest.mark.parametrize("no_sg", [True, False])
-def test_label_centrics(data_fmodel, inplace, no_sg):
-    """Test DataSet.label_centrics()"""
+def test_label_absences(data_fmodel, inplace, no_sg):
+    """Test DataSet.label_absences()"""
     if no_sg:
         data_fmodel.spacegroup = None
         with pytest.raises(ValueError):
-            result = data_fmodel.label_centrics(inplace=inplace)
+            result = data_fmodel.label_absences(inplace=inplace)
     else:
-        result = data_fmodel.label_centrics(inplace=inplace)
+        result = data_fmodel.label_absences(inplace=inplace)
 
         # Test inplace
         if inplace:
@@ -222,8 +222,8 @@ def test_label_centrics(data_fmodel, inplace, no_sg):
             assert id(result) != id(data_fmodel)
             
         # Test centric column
-        assert "CENTRIC" in result
-        assert result["CENTRIC"].dtype.name == "bool"
+        assert "ABSENT" in result
+        assert result["ABSENT"].dtype.name == "bool"
 
 
 @pytest.mark.parametrize("cache", [True, False])
