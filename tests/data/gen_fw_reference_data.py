@@ -33,7 +33,7 @@ for args in zip(I, SigI, Sigma):
 data = np.vstack(data)
 _df = pd.DataFrame(data = data, columns=('I', 'SigI', 'Sigma', 'FW-I', 'FW-SigI', 'FW-F', 'FW-SigF'))
 _df['CENTRIC'] = True
-
 df = df.append(_df)
-df.to_csv(outFN)
+
+df.to_csv(outFN, index=False)
 
