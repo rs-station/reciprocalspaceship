@@ -103,3 +103,12 @@ def data_fw1978_output(request):
     elif request.param == "acentric structurefactors":
         return data_fw1978_structurefactors(centric=False)
 
+@pytest.fixture
+def data_fw_cctbx():
+    """
+    Load French-Wilson test data from cctbx
+    """
+    datapath = ["..", "data", "french_wilson", "fw_test_data.csv"]
+    inFN = abspath(join(dirname(__file__), *datapath))
+    return pd.read_csv(inFN)
+
