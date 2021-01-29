@@ -39,8 +39,9 @@ def _french_wilson_posterior_quad(Iobs, SigIobs, Sigma, centric, npoints=200):
     SigIobs = np.array(SigIobs, dtype=np.float64)
     Sigma = np.array(Sigma, dtype=np.float64)
 
-    Jmin = np.maximum(Iobs - 20.*SigIobs, 0.)
-    Jmax = Iobs + 20.*SigIobs
+    half_window_size = 20.
+    Jmin = np.maximum(Iobs - half_window_size*SigIobs, 0.)
+    Jmax = Jmin + 2.*half_window_size*SigIobs
     grid,weights = np.polynomial.legendre.leggauss(npoints)
 
     J = (Jmax - Jmin)[:,None] * grid / 2. + (Jmax + Jmin)[:,None] / 2.
@@ -62,68 +63,6 @@ def _french_wilson_posterior_quad(Iobs, SigIobs, Sigma, centric, npoints=200):
     mean_F = np.exp(log_mean_F)
     variance_F = np.exp(log_prefactor + logsumexp(logweights+2.*logF+logP + logL - logZ[:,None], axis=1)) - mean_F**2
     return mean, np.sqrt(variance), mean_F, np.sqrt(variance_F)
-
-def _acentric_posterior(Iobs, SigIobs, Sigma, npoints=200):
-    """
-    Compute the mean and std deviation of the acentric French-Wilson posterior.
-
-    Parameters
-    ----------
-    Iobs : np.ndarray (float)
-        Observed merged refl intensities
-    SigIobs : np.ndarray (float)
-        Observed merged refl std deviation
-    Sigma : np.ndarray (float)
-        Average intensity in the resolution bin corresponding to Iobs, SigIobs
-    npoints : int
-        Number of grid points at which to evaluate the integrand. See the `deg` 
-        parameter in the numpy 
-        `documentation <https://numpy.org/doc/stable/reference/generated/numpy.polynomial.legendre.leggauss.html`_
-        for more details.
-
-    Returns
-    -------
-    mean_I : np.ndarray (float)
-        Mean posterior intensity
-    std_I : np.ndarray (float)
-        Standard deviation of posterior intensity
-    mean_F : np.ndarray (float)
-        Mean posterior structure factor amplitude
-    std_F :np.ndarray (float)
-        Standard deviation of posterior structure factor amplitude
-    """
-    return _french_wilson_posterior_quad(Iobs, SigIobs, Sigma, False, npoints)
-
-def _centric_posterior(Iobs, SigIobs, Sigma, npoints=200):
-    """
-    Compute the mean and std deviation of the centric French-Wilson posterior.
-
-    Parameters
-    ----------
-    Iobs : np.ndarray (float)
-        Observed merged refl intensities
-    SigIobs : np.ndarray (float)
-        Observed merged refl std deviation
-    Sigma : np.ndarray (float)
-        Average intensity in the resolution bin corresponding to Iobs, SigIobs
-    npoints : int
-        Number of grid points at which to evaluate the integrand. See the `deg` 
-        parameter in the numpy 
-        `documentation <https://numpy.org/doc/stable/reference/generated/numpy.polynomial.legendre.leggauss.html`_
-        for more details.
-
-    Returns
-    -------
-    mean_I : np.ndarray (float)
-        Mean posterior intensity
-    std_I : np.ndarray (float)
-        Standard deviation of posterior intensity
-    mean_F : np.ndarray (float)
-        Mean posterior structure factor amplitude
-    std_F :np.ndarray (float)
-        Standard deviation of posterior structure factor amplitude
-    """
-    return _french_wilson_posterior_quad(Iobs, SigIobs, Sigma, True, npoints)
 
 def mean_intensity_by_miller_index(I, H, bandwidth):
     """

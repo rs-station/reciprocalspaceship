@@ -5,10 +5,13 @@ import pandas as pd
 
 import reciprocalspaceship as rs
 from reciprocalspaceship.algorithms import scale_merged_intensities
-from reciprocalspaceship.algorithms.scale_merged_intensities import (
-    _acentric_posterior,
-    _centric_posterior
-)
+from reciprocalspaceship.algorithms.scale_merged_intensities import _french_wilson_posterior_quad
+
+def _acentric_posterior(Iobs, SigIobs, Sigma, npoints=200):
+    return _french_wilson_posterior_quad(Iobs, SigIobs, Sigma, False, npoints)
+
+def _centric_posterior(Iobs, SigIobs, Sigma, npoints=200):
+    return _french_wilson_posterior_quad(Iobs, SigIobs, Sigma, True, npoints)
 
 def test_posteriors_fw1978(data_fw1978_input, data_fw1978_output):
     """
@@ -29,14 +32,14 @@ def test_posteriors_fw1978(data_fw1978_input, data_fw1978_output):
     if "J" in data_fw1978_output.columns[0]:
         refI = data_fw1978_output.iloc[:, 0].to_numpy()
         refSigI = data_fw1978_output.iloc[:, 1].to_numpy()
-        assert np.allclose(mean, refI, rtol=0.03)
-        assert np.allclose(stddev, refSigI, rtol=0.03)
+        assert np.allclose(mean, refI, rtol=0.05)
+        assert np.allclose(stddev, refSigI, rtol=0.05)
         
     # Compare structure factor amplitudes
     else:
         refF = data_fw1978_output.iloc[:, 0].to_numpy()
         refSigF =  data_fw1978_output.iloc[:, 1].to_numpy()
-        assert np.allclose(mean_f, refF, rtol=0.03)
+        assert np.allclose(mean_f, refF, rtol=0.05)
         assert np.allclose(stddev_f, refSigF, rtol=0.05)
 
 def test_centric_posterior(data_fw1978_input):
@@ -134,7 +137,7 @@ def test_scale_merged_intensities_validdata(hewl_merged, inplace, output_columns
 def test_scale_merged_intensities_phenix(hewl_merged, ref_hewl, mean_intensity_method):
     """
     Compare phenix.french_wilson to scale_merged_intensities(). Current
-    test criteria are that >95% of F and SigF are within 1%.
+    test criteria are that >95% of I, SigI, F, and SigF are within 2%.
     """
     mtz = hewl_merged.dropna()
     scaled = scale_merged_intensities(mtz, "IMEAN", "SIGIMEAN",
@@ -151,9 +154,20 @@ def test_scale_merged_intensities_phenix(hewl_merged, ref_hewl, mean_intensity_m
     rsSigF = scaled["FW-SIGF"].to_numpy()
     refF = ref_hewl["F"].to_numpy()
     refSigF = ref_hewl["SIGF"].to_numpy()    
+
+    rsI = scaled["FW-I"].to_numpy()
+    rsSigI = scaled["FW-SIGI"].to_numpy()
+    refI = ref_hewl["I"].to_numpy()
+    refSigI = ref_hewl["SIGI"].to_numpy()    
     
-    assert (np.isclose(rsF, refF, rtol=0.01).sum()/len(scaled)) >= 0.95
-    assert (np.isclose(rsSigF, refSigF, rtol=0.01).sum()/len(scaled)) >= 0.95
+    assert (np.isclose(rsI, refI, rtol=0.02).sum()/len(scaled)) >= 0.95
+    assert (np.isclose(rsSigI, refSigI, rtol=0.02).sum()/len(scaled)) >= 0.95
+
+    assert (np.isclose(rsF, refF, rtol=0.02).sum()/len(scaled)) >= 0.95
+    assert (np.isclose(rsSigF, refSigF, rtol=0.02).sum()/len(scaled)) >= 0.95
+
+
+
 
 @pytest.mark.parametrize("dropna", [True, False])
 def test_scale_merged_intensities_dropna(data_hewl_all, dropna):
