@@ -49,6 +49,13 @@ plt.xlabel('Percent Error (J)')
 plt.savefig("J_hist.png")
 
 plt.figure()
+plt.hist((100.*(rs_F - F)/F)[~Centric], 100, color='k', label='Acentric', alpha=0.4)
+plt.hist((100.*(rs_F - F)/F)[Centric], 100, color='r', label='Centric', alpha=0.4)
+plt.legend()
+plt.xlabel('Percent Error (F)')
+plt.savefig("F_hist.png")
+
+plt.figure()
 plt.hist((100.*(rs_SigF - SigF)/SigF)[~Centric], 100, color='k', label='Acentric', alpha=0.4)
 plt.hist((100.*(rs_SigF - SigF)/SigF)[Centric], 100, color='r', label='Centric', alpha=0.4)
 plt.legend()
