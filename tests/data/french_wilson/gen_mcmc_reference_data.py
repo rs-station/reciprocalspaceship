@@ -8,9 +8,9 @@ import pandas as pd
 
 inFN = "fw_test_data.csv"
 outFN = "fw_mcmc_data.csv"
-nproc=4
+nproc=7
 chain_length = 30_000
-burnin = 10_000
+burnin = 15_000
 
 df = pd.read_csv(inFN)
 I,SigI,Sigma,J,SigJ,F,SigF,Centric = df.to_numpy(np.float64).T
@@ -38,4 +38,4 @@ df['FW-SigI'] = mc_SigJ
 df['FW-F'] = mc_F
 df['FW-SigF'] = mc_SigF
 
-df.to_csv(outFN)
+df.to_csv(outFN, index=False)
