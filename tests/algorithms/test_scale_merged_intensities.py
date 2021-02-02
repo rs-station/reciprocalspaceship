@@ -189,4 +189,32 @@ def test_scale_merged_intensities_dropna(data_hewl_all, dropna):
         assert (scaled["FW-I"].to_numpy() >= 0.).all()
             
 
-    
+@pytest.mark.parametrize("ref_method", ['mcmc', 'cctbx', 'mcmc vs cctbx'])
+def test_fw_posterior_quad(ref_method, data_fw_cctbx, data_fw_mcmc):
+    """
+    Test the _french_wilson_posterior_quad function directly against cctbx output.
+    The cctbx implementations can be found
+     - `acentric <https://github.com/cctbx/cctbx_project/blob/8db5aedd7d0897bcea82b9c8dc2d21976437435f/cctbx/french_wilson.py#L92>`_
+     - `centric <https://github.com/cctbx/cctbx_project/blob/8db5aedd7d0897bcea82b9c8dc2d21976437435f/cctbx/french_wilson.py#L128>`_
+    """
+    if ref_method == 'cctbx':
+        I,SigI,Sigma,J,SigJ,F,SigF,Centric = data_fw_cctbx.to_numpy(np.float64).T
+        Centric = Centric.astype(np.bool)
+        rtol = 0.06
+        rs_J,rs_SigJ,rs_F,rs_SigF = _french_wilson_posterior_quad(I, SigI, Sigma, Centric)
+    elif ref_method == 'mcmc':
+        I,SigI,Sigma,J,SigJ,F,SigF,Centric = data_fw_mcmc.to_numpy(np.float64).T
+        Centric = Centric.astype(np.bool)
+        rtol = 0.025
+        rs_J,rs_SigJ,rs_F,rs_SigF = _french_wilson_posterior_quad(I, SigI, Sigma, Centric)
+    elif ref_method == 'mcmc vs cctbx':
+        I,SigI,Sigma,J,SigJ,F,SigF,Centric = data_fw_mcmc.to_numpy(np.float64).T
+        Centric = Centric.astype(np.bool)
+        _,_,_,rs_J,rs_SigJ,rs_F,rs_SigF,_ = data_fw_cctbx.to_numpy(np.float64).T
+        rtol = 0.06
+
+    assert np.allclose(rs_J, J, rtol=rtol)
+    assert np.allclose(rs_SigJ, SigJ, rtol=rtol)
+    assert np.allclose(rs_F, F, rtol=rtol)
+    assert np.allclose(rs_SigF, SigF, rtol=rtol)
+

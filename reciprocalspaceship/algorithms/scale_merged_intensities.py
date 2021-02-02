@@ -3,10 +3,11 @@ import reciprocalspaceship as rs
 from scipy.special import logsumexp
 from scipy.stats import gamma,norm
 
-def _french_wilson_posterior_quad(Iobs, SigIobs, Sigma, centric, npoints=200):
+
+def _french_wilson_posterior_quad(Iobs, SigIobs, Sigma, centric, npoints=100):
     """
     Compute the mean and std deviation of the French-Wilson posterior using 
-    Gauss-Legendre quadrature. 
+    Chebyshev-Gauss quadrature. 
 
     Parameters
     ----------
@@ -39,29 +40,45 @@ def _french_wilson_posterior_quad(Iobs, SigIobs, Sigma, centric, npoints=200):
     SigIobs = np.array(SigIobs, dtype=np.float64)
     Sigma = np.array(Sigma, dtype=np.float64)
 
-    half_window_size = 20.
-    Jmin = np.maximum(Iobs - half_window_size*SigIobs, 0.)
-    Jmax = Jmin + 2.*half_window_size*SigIobs
-    grid,weights = np.polynomial.legendre.leggauss(npoints)
+    #Integration window based on the normal, likelihood distribution
+    window_size = 20. #In standard devs
+    Jmin = Iobs - window_size*SigIobs/2.
+    Jmin = np.maximum(0., Jmin)
+    Jmax = Jmin + window_size*SigIobs
 
-    J = (Jmax - Jmin)[:,None] * grid / 2. + (Jmax + Jmin)[:,None] / 2.
-    log_prefactor = np.log(Jmax - Jmin) - np.log(2.)
-
-    logweights = np.log(weights)[None,:] 
-    logJ = np.log(J)
+    #Prior distribution paramters
     a = np.where(centric, 0.5, 1.)
     scale = np.where(centric, 2.*Sigma, Sigma)
+
+    #Quadrature grid points
+    grid,weights = np.polynomial.chebyshev.chebgauss(npoints)
+
+    #Change of variables for generalizing chebgauss
+    # Equivalent to: logweights = log(sqrt(1-grid**2.)*w)
+    logweights = (0.5*(np.log(1-grid) + np.log(1+grid)) + np.log(weights))[None,:] 
+    J = (Jmax - Jmin)[:,None] * grid / 2. + (Jmax + Jmin)[:,None] / 2.
+    logJ = np.nan_to_num(np.log(J), -np.inf)
+    log_prefactor = np.log(Jmax - Jmin) - np.log(2.0)
+
+    #Log prior (Wilson's prior for intensities)
     logP = gamma.logpdf(J, np.expand_dims(a, axis=-1), scale=scale[:,None])
+    
+    #Log likelihood (Normal about Iobs)
     logL = norm.logpdf(J, loc=Iobs[:,None], scale=SigIobs[:,None])
-    logZ = log_prefactor + logsumexp(logweights + logP + logL, axis=1)
+
+    #Compute partition function
+    logZ = log_prefactor + logsumexp(logweights + logP + logL, axis=1) 
+
+    #Compute expected value and variance of intensity
     log_mean = log_prefactor + logsumexp(logweights + logJ + logP + logL - logZ[:,None], axis=1)
     mean = np.exp(log_mean)
     variance = np.exp(log_prefactor + logsumexp(logweights+2.*logJ+logP + logL - logZ[:,None], axis=1)) - mean**2
 
-    logF = 0.5*logJ
+    #Compute expected value and variance of structure factor amplitude
+    logF = 0.5*logJ #Change variables
     log_mean_F = log_prefactor + logsumexp(logweights + logF + logP + logL - logZ[:,None], axis=1)
     mean_F = np.exp(log_mean_F)
-    variance_F = np.exp(log_prefactor + logsumexp(logweights+2.*logF+logP + logL - logZ[:,None], axis=1)) - mean_F**2
+    variance_F = mean - mean_F**2
     return mean, np.sqrt(variance), mean_F, np.sqrt(variance_F)
 
 def mean_intensity_by_miller_index(I, H, bandwidth):
