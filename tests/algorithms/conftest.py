@@ -112,3 +112,13 @@ def data_fw_cctbx():
     inFN = abspath(join(dirname(__file__), *datapath))
     return pd.read_csv(inFN)
 
+@pytest.fixture
+def data_fw_mcmc():
+    """
+    Load French-Wilson test data from PyMC3
+    """
+    datapath = ["..", "data", "french_wilson", "fw_mcmc_data.csv"]
+    inFN = abspath(join(dirname(__file__), *datapath))
+    return pd.read_csv(inFN)
+
+

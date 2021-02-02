@@ -8,6 +8,9 @@ import pandas as pd
 
 inFN = "fw_test_data.csv"
 outFN = "fw_mcmc_data.csv"
+nproc=4
+chain_length = 30_000
+burnin = 10_000
 
 df = pd.read_csv(inFN)
 I,SigI,Sigma,J,SigJ,F,SigF,Centric = df.to_numpy(np.float64).T
@@ -21,7 +24,7 @@ scale = 1./np.where(Centric, 2.*Sigma, Sigma)
 with pm.Model() as model:
     Wilson = pm.distributions.Gamma('Wilson', a, scale, shape=len(a))
     likelihood = pm.distributions.Normal('Likelihood', mu=Wilson, sigma=SigI, observed=I)
-    trace = pm.sample(3000, cores=7)
+    trace = pm.sample(draws=chain_length, tune=burnin, cores=nproc)
 
 samples = trace.get_values('Wilson')
 mc_J = samples.mean(0)
