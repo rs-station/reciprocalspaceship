@@ -512,7 +512,7 @@ example, we will explore whether the scaled reflection observations are normally
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-0.9.3
+0.9.4
 </pre></div></div>
 </div>
 <hr class="docutils" />
@@ -690,7 +690,7 @@ model</a> with <code class="docutils literal notranslate"><span class="pre">df=4
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-100%|██████████| 300/300 [00:23&lt;00:00, 12.94it/s]
+100%|██████████| 300/300 [00:15&lt;00:00, 19.46it/s]
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
@@ -736,8 +736,8 @@ model</a> with <code class="docutils literal notranslate"><span class="pre">df=4
       <th></th>
       <th>I(+)</th>
       <th>SIGI(+)</th>
-      <th>I(-)</th>
       <th>SIGI(-)</th>
+      <th>I(-)</th>
     </tr>
     <tr>
       <th>H</th>
@@ -751,49 +751,49 @@ model</a> with <code class="docutils literal notranslate"><span class="pre">df=4
   </thead>
   <tbody>
     <tr>
-      <th>9</th>
-      <th>7</th>
-      <th>15</th>
-      <td>355.36105</td>
-      <td>8.220111</td>
-      <td>350.05948</td>
-      <td>8.77796</td>
-    </tr>
-    <tr>
       <th>32</th>
-      <th>8</th>
+      <th>26</th>
+      <th>6</th>
+      <td>17.705305</td>
+      <td>1.647103</td>
+      <td>1.5122834</td>
+      <td>18.876564</td>
+    </tr>
+    <tr>
+      <th>17</th>
+      <th>12</th>
+      <th>10</th>
+      <td>176.77727</td>
+      <td>3.4686692</td>
+      <td>3.4832904</td>
+      <td>180.39647</td>
+    </tr>
+    <tr>
+      <th>23</th>
+      <th>22</th>
+      <th>5</th>
+      <td>365.54764</td>
+      <td>9.946246</td>
+      <td>9.125224</td>
+      <td>359.3371</td>
+    </tr>
+    <tr>
+      <th>31</th>
+      <th>7</th>
+      <th>16</th>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>4.394654</td>
+      <td>32.275024</td>
+    </tr>
+    <tr>
+      <th>20</th>
       <th>14</th>
-      <td>21.820961</td>
-      <td>2.754297</td>
-      <td>28.706745</td>
-      <td>2.7758305</td>
-    </tr>
-    <tr>
-      <th>14</th>
-      <th>13</th>
-      <th>1</th>
-      <td>351.23663</td>
-      <td>11.658511</td>
-      <td>386.54523</td>
-      <td>13.0881605</td>
-    </tr>
-    <tr>
-      <th>13</th>
-      <th>8</th>
-      <th>3</th>
-      <td>30.661455</td>
-      <td>0.6539059</td>
-      <td>26.25037</td>
-      <td>0.5569015</td>
-    </tr>
-    <tr>
-      <th>21</th>
-      <th>8</th>
-      <th>9</th>
-      <td>319.22784</td>
-      <td>6.184563</td>
-      <td>309.9163</td>
-      <td>5.8980722</td>
+      <th>4</th>
+      <td>26.905684</td>
+      <td>1.0868621</td>
+      <td>0.9195947</td>
+      <td>24.350418</td>
     </tr>
   </tbody>
 </table>
@@ -829,7 +829,7 @@ model</a> with <code class="docutils literal notranslate"><span class="pre">df=4
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-100%|██████████| 300/300 [00:07&lt;00:00, 39.44it/s]
+100%|██████████| 300/300 [00:05&lt;00:00, 52.67it/s]
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
@@ -908,17 +908,17 @@ model</a> with <code class="docutils literal notranslate"><span class="pre">df=4
 </pre></div>
 </div>
 </div>
-<p><em>Note:</em> Using these settings, the following will take 15-30 min to complete. It is possible to run into occasional numerical instabilities when computing the Hessian for <code class="docutils literal notranslate"><span class="pre">df=4.0</span></code>, but these will only impact <span class="math notranslate nohighlight">\(\sigma_I^{ML}\)</span> estimates which are not used here.</p>
+<p><em>Note:</em> Using these settings, the following will take ~15 min to complete. For the pre-print, this was run with <code class="docutils literal notranslate"><span class="pre">nsamples=15</span></code>. It is possible to run into occasional numerical instabilities when computing the Hessian for <code class="docutils literal notranslate"><span class="pre">df=4.0</span></code>, but these will only impact <span class="math notranslate nohighlight">\(\sigma_I^{ML}\)</span> estimates which are not used here.</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">merged_df4</span> <span class="o">=</span> <span class="n">merge_dataset</span><span class="p">(</span><span class="n">ds</span><span class="p">,</span> <span class="mi">15</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">distributions</span><span class="o">.</span><span class="n">StudentT</span><span class="p">,</span> <span class="mf">4.0</span><span class="p">)</span>
-<span class="n">merged_df8</span> <span class="o">=</span> <span class="n">merge_dataset</span><span class="p">(</span><span class="n">ds</span><span class="p">,</span> <span class="mi">15</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">distributions</span><span class="o">.</span><span class="n">StudentT</span><span class="p">,</span> <span class="mf">8.0</span><span class="p">)</span>
-<span class="n">merged_df16</span> <span class="o">=</span> <span class="n">merge_dataset</span><span class="p">(</span><span class="n">ds</span><span class="p">,</span> <span class="mi">15</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">distributions</span><span class="o">.</span><span class="n">StudentT</span><span class="p">,</span> <span class="mf">16.0</span><span class="p">)</span>
-<span class="n">merged_df32</span> <span class="o">=</span> <span class="n">merge_dataset</span><span class="p">(</span><span class="n">ds</span><span class="p">,</span> <span class="mi">15</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">distributions</span><span class="o">.</span><span class="n">StudentT</span><span class="p">,</span> <span class="mf">32.0</span><span class="p">)</span>
-<span class="n">merged_df64</span> <span class="o">=</span> <span class="n">merge_dataset</span><span class="p">(</span><span class="n">ds</span><span class="p">,</span> <span class="mi">15</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">distributions</span><span class="o">.</span><span class="n">StudentT</span><span class="p">,</span> <span class="mf">64.0</span><span class="p">)</span>
+<span></span><span class="n">merged_df4</span> <span class="o">=</span> <span class="n">merge_dataset</span><span class="p">(</span><span class="n">ds</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">distributions</span><span class="o">.</span><span class="n">StudentT</span><span class="p">,</span> <span class="mf">4.0</span><span class="p">)</span>
+<span class="n">merged_df8</span> <span class="o">=</span> <span class="n">merge_dataset</span><span class="p">(</span><span class="n">ds</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">distributions</span><span class="o">.</span><span class="n">StudentT</span><span class="p">,</span> <span class="mf">8.0</span><span class="p">)</span>
+<span class="n">merged_df16</span> <span class="o">=</span> <span class="n">merge_dataset</span><span class="p">(</span><span class="n">ds</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">distributions</span><span class="o">.</span><span class="n">StudentT</span><span class="p">,</span> <span class="mf">16.0</span><span class="p">)</span>
+<span class="n">merged_df32</span> <span class="o">=</span> <span class="n">merge_dataset</span><span class="p">(</span><span class="n">ds</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">distributions</span><span class="o">.</span><span class="n">StudentT</span><span class="p">,</span> <span class="mf">32.0</span><span class="p">)</span>
+<span class="n">merged_df64</span> <span class="o">=</span> <span class="n">merge_dataset</span><span class="p">(</span><span class="n">ds</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">distributions</span><span class="o">.</span><span class="n">StudentT</span><span class="p">,</span> <span class="mf">64.0</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -927,11 +927,11 @@ model</a> with <code class="docutils literal notranslate"><span class="pre">df=4
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-100%|██████████| 15/15 [05:42&lt;00:00, 22.86s/it]
-100%|██████████| 15/15 [06:04&lt;00:00, 24.30s/it]
-100%|██████████| 15/15 [06:44&lt;00:00, 26.94s/it]
-100%|██████████| 15/15 [06:54&lt;00:00, 27.64s/it]
-100%|██████████| 15/15 [06:55&lt;00:00, 27.68s/it]
+100%|██████████| 5/5 [01:42&lt;00:00, 20.46s/it]
+100%|██████████| 5/5 [01:53&lt;00:00, 22.64s/it]
+100%|██████████| 5/5 [01:44&lt;00:00, 20.83s/it]
+100%|██████████| 5/5 [01:42&lt;00:00, 20.43s/it]
+100%|██████████| 5/5 [01:42&lt;00:00, 20.43s/it]
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
@@ -939,7 +939,7 @@ model</a> with <code class="docutils literal notranslate"><span class="pre">df=4
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">merged_dfinf</span> <span class="o">=</span> <span class="n">merge_dataset_normal</span><span class="p">(</span><span class="n">ds</span><span class="p">,</span> <span class="mi">15</span><span class="p">)</span>
+<span></span><span class="n">merged_dfinf</span> <span class="o">=</span> <span class="n">merge_dataset_normal</span><span class="p">(</span><span class="n">ds</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -948,7 +948,7 @@ model</a> with <code class="docutils literal notranslate"><span class="pre">df=4
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-100%|██████████| 15/15 [01:49&lt;00:00,  7.29s/it]
+100%|██████████| 5/5 [00:29&lt;00:00,  5.91s/it]
 </pre></div></div>
 </div>
 <p>Now that we have merged the data using Student’s <em>t</em>-distributions and a normal distribution as the error model, we can compute <span class="math notranslate nohighlight">\(CC_{anom}\)</span> and plot the results by resolution bin.</p>
@@ -960,10 +960,9 @@ model</a> with <code class="docutils literal notranslate"><span class="pre">df=4
 <span></span><span class="k">def</span> <span class="nf">computeCC</span><span class="p">(</span><span class="n">merged</span><span class="p">,</span> <span class="n">bins</span><span class="o">=</span><span class="mi">12</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Compute CCanom for input data&quot;&quot;&quot;</span>
     <span class="n">merged</span><span class="p">,</span> <span class="n">labels</span> <span class="o">=</span> <span class="n">merged</span><span class="o">.</span><span class="n">assign_resolution_bins</span><span class="p">(</span><span class="n">bins</span><span class="o">=</span><span class="n">bins</span><span class="p">)</span>
-    <span class="n">merged</span> <span class="o">=</span> <span class="n">merged</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="o">~</span><span class="n">merged</span><span class="o">.</span><span class="n">label_centrics</span><span class="p">()</span><span class="o">.</span><span class="n">CENTRIC</span><span class="p">]</span>
     <span class="n">merged</span><span class="p">[</span><span class="s2">&quot;ANOM1&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">merged</span><span class="p">[</span><span class="s2">&quot;I(+)1&quot;</span><span class="p">]</span> <span class="o">-</span> <span class="n">merged</span><span class="p">[</span><span class="s2">&quot;I(-)1&quot;</span><span class="p">]</span>
     <span class="n">merged</span><span class="p">[</span><span class="s2">&quot;ANOM2&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">merged</span><span class="p">[</span><span class="s2">&quot;I(+)2&quot;</span><span class="p">]</span> <span class="o">-</span> <span class="n">merged</span><span class="p">[</span><span class="s2">&quot;I(-)2&quot;</span><span class="p">]</span>
-    <span class="n">groupby</span> <span class="o">=</span> <span class="n">merged</span><span class="o">.</span><span class="n">groupby</span><span class="p">([</span><span class="s2">&quot;sample&quot;</span><span class="p">,</span> <span class="s2">&quot;bin&quot;</span><span class="p">])[[</span><span class="s2">&quot;ANOM1&quot;</span><span class="p">,</span> <span class="s2">&quot;ANOM2&quot;</span><span class="p">]]</span>
+    <span class="n">groupby</span> <span class="o">=</span> <span class="n">merged</span><span class="o">.</span><span class="n">acentrics</span><span class="o">.</span><span class="n">groupby</span><span class="p">([</span><span class="s2">&quot;sample&quot;</span><span class="p">,</span> <span class="s2">&quot;bin&quot;</span><span class="p">])[[</span><span class="s2">&quot;ANOM1&quot;</span><span class="p">,</span> <span class="s2">&quot;ANOM2&quot;</span><span class="p">]]</span>
     <span class="n">spearman</span> <span class="o">=</span> <span class="n">groupby</span><span class="o">.</span><span class="n">corr</span><span class="p">(</span><span class="n">method</span><span class="o">=</span><span class="s2">&quot;spearman&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">unstack</span><span class="p">()</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span> <span class="p">(</span><span class="s2">&quot;ANOM1&quot;</span><span class="p">,</span> <span class="s2">&quot;ANOM2&quot;</span><span class="p">)]</span>
     <span class="n">results</span> <span class="o">=</span> <span class="n">spearman</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s2">&quot;bin&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">agg</span><span class="p">([</span><span class="s2">&quot;mean&quot;</span><span class="p">,</span> <span class="s2">&quot;std&quot;</span><span class="p">])</span>
     <span class="k">return</span> <span class="n">results</span><span class="p">,</span> <span class="n">labels</span>

@@ -479,6 +479,9 @@ div.rendered_html tbody tr:hover {
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
 <span></span><span class="kn">import</span> <span class="nn">reciprocalspaceship</span> <span class="k">as</span> <span class="nn">rs</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">seaborn</span> <span class="k">as</span> <span class="nn">sns</span>
+<span class="n">sns</span><span class="o">.</span><span class="n">set_context</span><span class="p">(</span><span class="s2">&quot;notebook&quot;</span><span class="p">,</span> <span class="n">font_scale</span><span class="o">=</span><span class="mf">1.3</span><span class="p">)</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 </pre></div>
 </div>
@@ -497,7 +500,7 @@ div.rendered_html tbody tr:hover {
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-0.9.3
+0.9.4
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
@@ -814,10 +817,10 @@ Number of reflections: 12542
       <td>4</td>
       <td>1.7194303</td>
       <td>False</td>
-      <td>6.1472316</td>
-      <td>2.7738636</td>
-      <td>2.479361</td>
-      <td>0.5593908</td>
+      <td>6.1471047</td>
+      <td>2.7739754</td>
+      <td>2.4032679</td>
+      <td>0.6094333</td>
     </tr>
     <tr>
       <th rowspan="2" valign="top">-9</th>
@@ -829,8 +832,8 @@ Number of reflections: 12542
       <td>False</td>
       <td>26.716537</td>
       <td>3.8457258</td>
-      <td>5.168804</td>
-      <td>0.3720131</td>
+      <td>5.1551414</td>
+      <td>0.37557602</td>
     </tr>
     <tr>
       <th>-1</th>
@@ -839,10 +842,10 @@ Number of reflections: 12542
       <td>4</td>
       <td>1.727153</td>
       <td>False</td>
-      <td>3.5478833</td>
-      <td>2.1483686</td>
-      <td>1.8835826</td>
-      <td>0.5702879</td>
+      <td>3.5474997</td>
+      <td>2.1485696</td>
+      <td>1.7800175</td>
+      <td>0.6156602</td>
     </tr>
     <tr>
       <th rowspan="2" valign="top">-8</th>
@@ -852,10 +855,10 @@ Number of reflections: 12542
       <td>4</td>
       <td>1.7197415</td>
       <td>False</td>
-      <td>1.8476701</td>
-      <td>1.477377</td>
-      <td>1.3592902</td>
-      <td>0.54343694</td>
+      <td>1.8468517</td>
+      <td>1.4775624</td>
+      <td>1.2411455</td>
+      <td>0.5535428</td>
     </tr>
     <tr>
       <th>-2</th>
@@ -864,17 +867,55 @@ Number of reflections: 12542
       <td>4</td>
       <td>1.7287054</td>
       <td>False</td>
-      <td>11.893287</td>
-      <td>3.0259483</td>
-      <td>3.4486644</td>
-      <td>0.43871307</td>
+      <td>11.893286</td>
+      <td>3.02595</td>
+      <td>3.4186602</td>
+      <td>0.45392564</td>
     </tr>
   </tbody>
 </table>
 </div></div>
 </div>
-<div class="nbinput nblast docutils container">
+<p>French-Wilson scaling leaves large intensities relatively unchanged, but rescales negative and small intensities to be positive by imposing Wilson’s distribution as a prior:</p>
+<div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="mi">3</span><span class="p">,</span> <span class="mi">10000</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span>
+<span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">gca</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="s1">&#39;--r&#39;</span><span class="p">,</span> <span class="n">scalex</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">scaley</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">scaled</span><span class="p">[</span><span class="s2">&quot;I&quot;</span><span class="p">],</span> <span class="n">scaled</span><span class="p">[</span><span class="s2">&quot;FW-I&quot;</span><span class="p">],</span> <span class="s2">&quot;k.&quot;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.25</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">plt</span><span class="o">.</span><span class="n">xlim</span><span class="p">(),</span> <span class="n">plt</span><span class="o">.</span><span class="n">xlim</span><span class="p">(),</span> <span class="s1">&#39;--r&#39;</span><span class="p">,</span> <span class="n">scalex</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">scaley</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;Merged Intensity (AIMLESS)&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;Rescaled Intensity&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xscale</span><span class="p">(</span><span class="s2">&quot;log&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">yscale</span><span class="p">(</span><span class="s2">&quot;log&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlim</span><span class="p">(</span><span class="n">right</span><span class="o">=</span><span class="mf">1e4</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylim</span><span class="p">(</span><span class="n">top</span><span class="o">=</span><span class="mf">1e4</span><span class="p">)</span>
+
+<span class="c1"># Inset</span>
+<span class="n">axins</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">inset_axes</span><span class="p">([</span><span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.43</span><span class="p">,</span> <span class="mf">0.43</span><span class="p">])</span>
+<span class="n">axins</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">scaled</span><span class="p">[</span><span class="s2">&quot;I&quot;</span><span class="p">],</span> <span class="n">scaled</span><span class="p">[</span><span class="s2">&quot;FW-I&quot;</span><span class="p">],</span> <span class="s2">&quot;k.&quot;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.25</span><span class="p">)</span>
+<span class="n">axins</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="s1">&#39;--r&#39;</span><span class="p">)</span>
+<span class="n">axins</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="o">-</span><span class="mi">3</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
+<span class="n">axins</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="o">-</span><span class="mi">3</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
+<span class="n">axins</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="n">linestyle</span><span class="o">=</span><span class="s2">&quot;--&quot;</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/examples_4_anomalousmap_12_0.png" src="../_images/examples_4_anomalousmap_12_0.png" />
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -887,7 +928,7 @@ Number of reflections: 12542
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -896,7 +937,7 @@ Number of reflections: 12542
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
 </pre></div>
 </div>
 <div class="output_area rendered_html docutils container">
@@ -924,8 +965,8 @@ Number of reflections: 12542
       <th>FW-SIGF(+)</th>
       <th>N(+)</th>
       <th>FW-F(-)</th>
-      <th>N(-)</th>
       <th>FW-SIGF(-)</th>
+      <th>N(-)</th>
     </tr>
     <tr>
       <th>H</th>
@@ -944,57 +985,57 @@ Number of reflections: 12542
       <th rowspan="4" valign="top">0</th>
       <th rowspan="4" valign="top">0</th>
       <th>4</th>
-      <td>25.707218</td>
-      <td>0.42710137</td>
+      <td>25.7036</td>
+      <td>0.4273095</td>
       <td>16</td>
-      <td>25.707218</td>
+      <td>25.7036</td>
+      <td>0.4273095</td>
       <td>16</td>
-      <td>0.42710137</td>
     </tr>
     <tr>
       <th>8</th>
-      <td>56.803814</td>
-      <td>0.9331206</td>
+      <td>56.794975</td>
+      <td>0.93358195</td>
       <td>16</td>
-      <td>56.803814</td>
+      <td>56.794975</td>
+      <td>0.93358195</td>
       <td>16</td>
-      <td>0.9331206</td>
     </tr>
     <tr>
       <th>12</th>
-      <td>36.89081</td>
-      <td>0.5837723</td>
+      <td>36.885887</td>
+      <td>0.5840336</td>
       <td>16</td>
-      <td>36.89081</td>
+      <td>36.885887</td>
+      <td>0.5840336</td>
       <td>16</td>
-      <td>0.5837723</td>
     </tr>
     <tr>
       <th>16</th>
-      <td>64.092606</td>
-      <td>1.5368781</td>
+      <td>64.02966</td>
+      <td>1.5395098</td>
       <td>8</td>
-      <td>64.092606</td>
+      <td>64.02966</td>
+      <td>1.5395098</td>
       <td>8</td>
-      <td>1.5368781</td>
     </tr>
     <tr>
       <th>1</th>
       <th>0</th>
       <th>1</th>
-      <td>23.647831</td>
-      <td>0.1824018</td>
+      <td>23.647089</td>
+      <td>0.18242109</td>
       <td>64</td>
-      <td>23.647831</td>
+      <td>23.647089</td>
+      <td>0.18242109</td>
       <td>64</td>
-      <td>0.1824018</td>
     </tr>
   </tbody>
 </table>
 </div></div>
 </div>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -1007,7 +1048,7 @@ Number of reflections: 12542
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -1016,7 +1057,7 @@ Number of reflections: 12542
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
 </pre></div>
 </div>
 <div class="output_area rendered_html docutils container">
@@ -1044,8 +1085,8 @@ Number of reflections: 12542
       <th>FW-SIGF(+)</th>
       <th>N(+)</th>
       <th>FW-F(-)</th>
-      <th>N(-)</th>
       <th>FW-SIGF(-)</th>
+      <th>N(-)</th>
       <th>ANOM</th>
       <th>SigANOM</th>
     </tr>
@@ -1068,60 +1109,60 @@ Number of reflections: 12542
       <th rowspan="4" valign="top">0</th>
       <th rowspan="4" valign="top">0</th>
       <th>4</th>
-      <td>25.707218</td>
-      <td>0.42710137</td>
+      <td>25.7036</td>
+      <td>0.4273095</td>
       <td>16</td>
-      <td>25.707218</td>
+      <td>25.7036</td>
+      <td>0.4273095</td>
       <td>16</td>
-      <td>0.42710137</td>
       <td>0.0</td>
-      <td>0.60401255</td>
+      <td>0.60430694</td>
     </tr>
     <tr>
       <th>8</th>
-      <td>56.803814</td>
-      <td>0.9331206</td>
+      <td>56.794975</td>
+      <td>0.93358195</td>
       <td>16</td>
-      <td>56.803814</td>
+      <td>56.794975</td>
+      <td>0.93358195</td>
       <td>16</td>
-      <td>0.9331206</td>
       <td>0.0</td>
-      <td>1.3196318</td>
+      <td>1.3202842</td>
     </tr>
     <tr>
       <th>12</th>
-      <td>36.89081</td>
-      <td>0.5837723</td>
+      <td>36.885887</td>
+      <td>0.5840336</td>
       <td>16</td>
-      <td>36.89081</td>
+      <td>36.885887</td>
+      <td>0.5840336</td>
       <td>16</td>
-      <td>0.5837723</td>
       <td>0.0</td>
-      <td>0.8255787</td>
+      <td>0.82594824</td>
     </tr>
     <tr>
       <th>16</th>
-      <td>64.092606</td>
-      <td>1.5368781</td>
+      <td>64.02966</td>
+      <td>1.5395098</td>
       <td>8</td>
-      <td>64.092606</td>
+      <td>64.02966</td>
+      <td>1.5395098</td>
       <td>8</td>
-      <td>1.5368781</td>
       <td>0.0</td>
-      <td>2.1734738</td>
+      <td>2.1771955</td>
     </tr>
     <tr>
       <th>1</th>
       <th>0</th>
       <th>1</th>
-      <td>23.647831</td>
-      <td>0.1824018</td>
+      <td>23.647089</td>
+      <td>0.18242109</td>
       <td>64</td>
-      <td>23.647831</td>
+      <td>23.647089</td>
+      <td>0.18242109</td>
       <td>64</td>
-      <td>0.1824018</td>
       <td>0.0</td>
-      <td>0.2579551</td>
+      <td>0.25798237</td>
     </tr>
   </tbody>
 </table>
@@ -1133,7 +1174,7 @@ Number of reflections: 12542
 <h2>Phasing the Anomalous Difference Map<a class="headerlink" href="#Phasing-the-Anomalous-Difference-Map" title="Permalink to this headline">¶</a></h2>
 <p>Below, we will compute the necessary phase shifts to go from the phases of a <span class="math notranslate nohighlight">\(2 F_o - F_c\)</span> map to the phases associated with the anomalous difference structure factors. Although this model was refined to this data in PHENIX, the phases from any isomorphous structure could have been used to obtain a reasonable map.</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -1142,7 +1183,7 @@ Number of reflections: 12542
 </div>
 </div>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -1158,7 +1199,7 @@ Number of reflections: 12542
 \end{equation*}</span></p>
 <p>where <span class="math notranslate nohighlight">\(\alpha\)</span> is 90˚ when <span class="math notranslate nohighlight">\(\Delta_{\mathrm{ano}}\)</span> is negative and 270˚ when it is positive.</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -1173,7 +1214,7 @@ Number of reflections: 12542
 <h2>Viewing the Map<a class="headerlink" href="#Viewing-the-Map" title="Permalink to this headline">¶</a></h2>
 <p>Since we have structure factor amplitudes, <code class="docutils literal notranslate"><span class="pre">anom[&quot;ANOM&quot;]</span></code>, and phases, <code class="docutils literal notranslate"><span class="pre">anom[&quot;PHANOM&quot;]</span></code>, for the anomalous structure factors, we can now view the anomalous difference map. This can be done by writing out an MTZ file, and loading it into COOT, PyMOL, or any other molecular graphics package.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -1182,7 +1223,7 @@ Number of reflections: 12542
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
@@ -1191,8 +1232,8 @@ FW-F(+)       FriedelSFAmplitude
 FW-SIGF(+)       StddevFriedelSF
 N(+)                      MTZInt
 FW-F(-)       FriedelSFAmplitude
-N(-)                      MTZInt
 FW-SIGF(-)       StddevFriedelSF
+N(-)                      MTZInt
 ANOM                 SFAmplitude
 SigANOM                   Stddev
 PHANOM                     Phase
@@ -1200,7 +1241,7 @@ dtype: object
 </pre></div></div>
 </div>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -1210,14 +1251,14 @@ dtype: object
 </div>
 <p>Looking at the anomalous difference map on the refined structure, we can see positive difference density on all of the sulfurs in HEWL (shown below in purple):</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
 <span></span>%%html
 &lt;center&gt;
     &lt;iframe src=&quot;https://hekstra-lab.github.io/reciprocalspaceship/data/anomdiff/anomdiff.html#zoom=25&quot;, width=600, height=600&gt;&lt;/iframe&gt;
-    &lt;br&gt;Anomalous difference map from HEWL crystal overlayed with refined model. Map is contoured at +5&amp;sigma;.
+    &lt;br&gt;Anomalous difference map from HEWL crystal overlayed with refined model (PDB: 7L84). Map is contoured at +5&amp;sigma;.
 &lt;/center&gt;
 </pre></div>
 </div>
@@ -1228,7 +1269,7 @@ dtype: object
 <div class="output_area rendered_html docutils container">
 <center>
     <iframe src="https://hekstra-lab.github.io/reciprocalspaceship/data/anomdiff/anomdiff.html#zoom=25", width=600, height=600></iframe>
-    <br>Anomalous difference map from HEWL crystal overlayed with refined model. Map is contoured at +5&sigma;.
+    <br>Anomalous difference map from HEWL crystal overlayed with refined model (PDB: 7L84). Map is contoured at +5&sigma;.
 </center></div>
 </div>
 </div>
