@@ -13,111 +13,77 @@ def test_read_precognition_mtz(IOtest_mtz):
     with pytest.raises(ValueError):
         rs.read_precognition(IOtest_mtz)
 
-class TestPrecognition(unittest.TestCase):
 
-    def test_read_hkl(self):
+@pytest.mark.parametrize("spacegroup", [None, 96, "P 43 21 2"])
+@pytest.mark.parametrize("cell", [None, (78.97, 78.97, 38.25, 90., 90., 90.)])
+def test_read_hkl(IOtest_hkl, spacegroup, cell):
+    """
+    Test rs.read_precognition() with a .hkl file
+    """
+    result = rs.read_precognition(IOtest_hkl, spacegroup=spacegroup, cell=cell)
 
-        datadir = join(abspath(dirname(__file__)), '../data/precognition')
-        cell = [78.97, 78.97, 38.25, 90., 90., 90.]
+    # Check main DataSet features
+    assert isinstance(result, rs.DataSet)
+    assert isinstance(result["F"], rs.DataSeries)
+    assert result.columns.to_list() == ["F", "SigF"]
+    assert list(result.index.names) == ["H", "K", "L"]
+
+    # Check _metadata
+    assert result._index_dtypes == {"H": "HKL", "K": "HKL", "L": "HKL"}
+    if spacegroup:
+        assert result.spacegroup.xhm() == gemmi.SpaceGroup(spacegroup).xhm()
+    else:
+        assert result.spacegroup is None
+    if cell:
+        assert result.cell.a == cell[0]
+        assert result.cell.b == cell[1]
+        assert result.cell.c == cell[2]
+        assert result.cell.alpha == cell[3]
+        assert result.cell.beta == cell[4]
+        assert result.cell.gamma == cell[5]
+    else:
+        assert result.cell is None
+
+
+@pytest.mark.parametrize("spacegroup", [None, 19, "P 21 21 21"])
+@pytest.mark.parametrize("cell", [None, (35., 45., 99., 90., 90., 90.)])
+@pytest.mark.parametrize("log", [None, "log"])
+def test_read_hkl(IOtest_ii, IOtest_log, spacegroup, cell, log):
+    """
+    Test rs.read_precognition() with a .ii file
+    """
+    # Hacky way to parametrize a pytest fixture
+    if log == "log":
+        log = IOtest_log
         
-        # Read HKL without providing cell / spacegroup
-        hewl = rs.read_precognition(join(datadir, 'hewl.hkl'))
-        self.assertEqual(hewl.columns.to_list(), ["F", "SigF"])
-        self.assertEqual(list(hewl.index.names), ["H", "K", "L"])
-        self.assertIsInstance(hewl, rs.DataSet)
-        self.assertIsInstance(hewl["F"], rs.DataSeries)
-        self.assertIsNone(hewl.spacegroup)
-        self.assertIsNone(hewl.cell)
+    result = rs.read_precognition(IOtest_ii, spacegroup=spacegroup, cell=cell, logfile=log)
+    
+    # Check main DataSet features
+    assert isinstance(result, rs.DataSet)
+    assert isinstance(result["I"], rs.DataSeries)
+    assert len(result.columns) == 7
+    assert list(result.index.names) == ["H", "K", "L"]
 
-        # Read HKL providing spacegroup
-        hewl = rs.read_precognition(join(datadir, 'hewl.hkl'), sg=96)
-        self.assertEqual(hewl.columns.to_list(), ["F", "SigF"])
-        self.assertEqual(list(hewl.index.names), ["H", "K", "L"])
-        self.assertIsInstance(hewl, rs.DataSet)
-        self.assertIsInstance(hewl["F"], rs.DataSeries)
-        self.assertEqual(hewl.spacegroup.number, 96)
-        self.assertIsInstance(hewl.spacegroup, gemmi.SpaceGroup)
-        self.assertIsNone(hewl.cell)
+    # Check _metadata
+    assert result._index_dtypes == {"H": "HKL", "K": "HKL", "L": "HKL"}
+    if spacegroup:
+        assert result.spacegroup.xhm() == gemmi.SpaceGroup(spacegroup).xhm()
+    else:
+        assert result.spacegroup is None
+    if log:
+        assert result.cell.a == 34.4660
+        assert result.cell.b == 45.6000
+        assert result.cell.c == 99.5850
+        assert result.cell.alpha == 90.0
+        assert result.cell.beta == 90.0
+        assert result.cell.gamma == 90.0        
+    elif cell:
+        assert result.cell.a == cell[0]
+        assert result.cell.b == cell[1]
+        assert result.cell.c == cell[2]
+        assert result.cell.alpha == cell[3]
+        assert result.cell.beta == cell[4]
+        assert result.cell.gamma == cell[5]
+    else:
+        assert result.cell is None
 
-        # Read HKL providing cell
-        hewl = rs.read_precognition(join(datadir, 'hewl.hkl'), *cell)
-        self.assertEqual(hewl.columns.to_list(), ["F", "SigF"])
-        self.assertEqual(list(hewl.index.names), ["H", "K", "L"])
-        self.assertIsInstance(hewl, rs.DataSet)
-        self.assertIsInstance(hewl["F"], rs.DataSeries)
-        self.assertIsNone(hewl.spacegroup)
-        self.assertIsInstance(hewl.cell, gemmi.UnitCell)
-
-        # Read HKL providing cell and spacegroup
-        hewl = rs.read_precognition(join(datadir, 'hewl.hkl'), *cell, sg=96)
-        self.assertEqual(hewl.columns.to_list(), ["F", "SigF"])
-        self.assertEqual(list(hewl.index.names), ["H", "K", "L"])
-        self.assertIsInstance(hewl, rs.DataSet)
-        self.assertIsInstance(hewl["F"], rs.DataSeries)
-        self.assertEqual(hewl.spacegroup.number, 96)
-        self.assertIsInstance(hewl.spacegroup, gemmi.SpaceGroup)
-        self.assertIsInstance(hewl.cell, gemmi.UnitCell)
-        
-        return
-
-    def test_read_ii(self):
-
-        datadir = join(abspath(dirname(__file__)), '../data/precognition')
-        cell = [35., 45., 99., 90., 90., 90.]
-        
-        # Read II without providing cell / spacegroup
-        dhfr = rs.read_precognition(join(datadir, 'e074a_off1_001.mccd.ii'))
-        self.assertEqual(len(dhfr.columns), 7)
-        self.assertEqual(list(dhfr.index.names), ["H", "K", "L"])
-        self.assertIsInstance(dhfr, rs.DataSet)
-        self.assertIsInstance(dhfr["I"], rs.DataSeries)
-        self.assertIsNone(dhfr.spacegroup)
-        self.assertIsNone(dhfr.cell)
-
-        # Read II providing spacegroup
-        dhfr = rs.read_precognition(join(datadir, 'e074a_off1_001.mccd.ii'), sg=19)
-        self.assertEqual(len(dhfr.columns), 7)
-        self.assertEqual(list(dhfr.index.names), ["H", "K", "L"])
-        self.assertIsInstance(dhfr, rs.DataSet)
-        self.assertIsInstance(dhfr["I"], rs.DataSeries)
-        self.assertEqual(dhfr.spacegroup.number, 19)
-        self.assertIsInstance(dhfr.spacegroup, gemmi.SpaceGroup)
-        self.assertIsNone(dhfr.cell)
-
-        # Read II providing cell
-        dhfr = rs.read_precognition(join(datadir, 'e074a_off1_001.mccd.ii'), *cell)
-        self.assertEqual(len(dhfr.columns), 7)
-        self.assertEqual(list(dhfr.index.names), ["H", "K", "L"])
-        self.assertIsInstance(dhfr, rs.DataSet)
-        self.assertIsInstance(dhfr["I"], rs.DataSeries)
-        self.assertIsNone(dhfr.spacegroup)
-        self.assertIsInstance(dhfr.cell, gemmi.UnitCell)
-
-        # Read II providing cell and spacegroup
-        dhfr = rs.read_precognition(join(datadir, 'e074a_off1_001.mccd.ii'), *cell, sg=19)
-        self.assertEqual(len(dhfr.columns), 7)
-        self.assertEqual(list(dhfr.index.names), ["H", "K", "L"])
-        self.assertIsInstance(dhfr, rs.DataSet)
-        self.assertIsInstance(dhfr["I"], rs.DataSeries)
-        self.assertEqual(dhfr.spacegroup.number, 19)
-        self.assertIsInstance(dhfr.spacegroup, gemmi.SpaceGroup)
-        self.assertIsInstance(dhfr.cell, gemmi.UnitCell)
-
-        # Read II providing logfile
-        dhfr = rs.read_precognition(join(datadir, 'e074a_off1_001.mccd.ii'),
-                                    logfile=join(datadir, 'integration.log'))
-        self.assertEqual(len(dhfr.columns), 7)
-        self.assertEqual(list(dhfr.index.names), ["H", "K", "L"])
-        self.assertIsInstance(dhfr, rs.DataSet)
-        self.assertIsInstance(dhfr["I"], rs.DataSeries)
-        self.assertEqual(dhfr.spacegroup.number, 19)
-        self.assertIsInstance(dhfr.spacegroup, gemmi.SpaceGroup)
-        self.assertIsInstance(dhfr.cell, gemmi.UnitCell)
-        self.assertEqual(dhfr.cell.a, 34.4660)
-        self.assertEqual(dhfr.cell.b, 45.6000)
-        self.assertEqual(dhfr.cell.c, 99.5850)
-        self.assertEqual(dhfr.cell.alpha, 90.0)
-        self.assertEqual(dhfr.cell.beta, 90.0)
-        self.assertEqual(dhfr.cell.gamma, 90.0)
-        
-        return
