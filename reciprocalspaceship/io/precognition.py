@@ -2,7 +2,7 @@ import pandas as pd
 import gemmi
 from reciprocalspaceship import DataSet
 
-def read_precognition(hklfile,a=None, b=None, c=None, alpha=None,
+def read_precognition(hklfile, a=None, b=None, c=None, alpha=None,
                       beta=None, gamma=None, sg=None, logfile=None):
     """
     Initialize attributes and populate the DataSet object with data from
@@ -35,14 +35,14 @@ def read_precognition(hklfile,a=None, b=None, c=None, alpha=None,
     if hklfile.endswith(".hkl"):
         usecols = [0, 1, 2, 3, 4, 5, 6]
         F = pd.read_csv(hklfile, header=None, delim_whitespace=True,
-                        names=["H", "K", "L", "F+", "SigF+", "F-", "SigF-"],
+                        names=["H", "K", "L", "F(+)", "SigF(+)", "F(-)", "SigF(-)"],
                         usecols=usecols)
         mtztypes = ["H", "H", "H", "G", "L", "G", "L"]
 
         # Check if any anomalous data is actually included
-        if len(F["F-"].unique()) == 1: 
-            F = F[["H", "K", "L", "F+", "SigF+"]]
-            F.rename(columns={"F+":"F", "SigF+":"SigF"}, inplace=True)
+        if len(F["F(-)"].unique()) == 1: 
+            F = F[["H", "K", "L", "F(+)", "SigF(+)"]]
+            F.rename(columns={"F(+)":"F", "SigF(+)":"SigF"}, inplace=True)
             mtztypes = ["H", "H", "H", "F", "Q"]
 
     elif hklfile.endswith(".ii"):
@@ -75,10 +75,8 @@ def read_precognition(hklfile,a=None, b=None, c=None, alpha=None,
     else:
         raise ValueError("rs.read_precognition() only supports .ii and .hkl files")
             
-    dataset = DataSet()
-    for (k,v), mtztype in zip(F.items(), mtztypes):
-        dataset[k] = v
-        dataset[k] = dataset[k].astype(mtztype)
+    dataset = DataSet(F)
+    dataset = dataset.astype(dict(zip(dataset.columns, mtztypes)))
     dataset.set_index(["H", "K", "L"], inplace=True)
 
     # Set DataSet attributes
