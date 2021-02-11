@@ -2,8 +2,7 @@ import pandas as pd
 import gemmi
 from reciprocalspaceship import DataSet
 
-def read_precognition(hklfile,a=None, b=None, c=None, alpha=None,
-                      beta=None, gamma=None, sg=None, logfile=None):
+def read_precognition(hklfile, spacegroup=None, cell=None, logfile=None):
     """
     Initialize attributes and populate the DataSet object with data from
     a HKL file of reflections. This is the output format used by 
@@ -13,21 +12,11 @@ def read_precognition(hklfile,a=None, b=None, c=None, alpha=None,
     ----------
     hklfile : str or file
         name of an hkl file or a file object
-    a : float
-        edge length, a, of the unit cell
-    b : float
-        edge length, b, of the unit cell
-    c : float
-        edge length, c, of the unit cell
-    alpha : float
-        interaxial angle, alpha, of the unit cell
-    beta : float
-        interaxial angle, beta, of the unit cell
-    gamma : float
-        interaxial angle, gamma, of the unit cell
-    sg : str or int
+    spacegroup : str or int
         If int, this should specify the space group number. If str, 
         this should be a space group symbol
+    cell : tuple or list of floats
+        Unit cell parameters
     logfile : str or file
         name of a log file to parse to get cell parameters and sg
     """
@@ -35,14 +24,14 @@ def read_precognition(hklfile,a=None, b=None, c=None, alpha=None,
     if hklfile.endswith(".hkl"):
         usecols = [0, 1, 2, 3, 4, 5, 6]
         F = pd.read_csv(hklfile, header=None, delim_whitespace=True,
-                        names=["H", "K", "L", "F+", "SigF+", "F-", "SigF-"],
+                        names=["H", "K", "L", "F(+)", "SigF(+)", "F(-)", "SigF(-)"],
                         usecols=usecols)
         mtztypes = ["H", "H", "H", "G", "L", "G", "L"]
 
         # Check if any anomalous data is actually included
-        if len(F["F-"].unique()) == 1: 
-            F = F[["H", "K", "L", "F+", "SigF+"]]
-            F.rename(columns={"F+":"F", "SigF+":"SigF"}, inplace=True)
+        if len(F["F(-)"].unique()) == 1: 
+            F = F[["H", "K", "L", "F(+)", "SigF(+)"]]
+            F.rename(columns={"F(+)":"F", "SigF(+)":"SigF"}, inplace=True)
             mtztypes = ["H", "H", "H", "F", "Q"]
 
     elif hklfile.endswith(".ii"):
@@ -70,21 +59,20 @@ def read_precognition(hklfile,a=None, b=None, c=None, alpha=None,
             a, b, c = map(float, lengths)
             angles  = lines[block-18].split()[-3:]
             alpha, beta, gamma = map(float, angles)
+            cell = (a, b, c, alpha, beta, gamma)
 
     # GH#32: Limit use to supported file formats
     else:
         raise ValueError("rs.read_precognition() only supports .ii and .hkl files")
             
-    dataset = DataSet()
-    for (k,v), mtztype in zip(F.items(), mtztypes):
-        dataset[k] = v
-        dataset[k] = dataset[k].astype(mtztype)
+    dataset = DataSet(F)
+    dataset = dataset.astype(dict(zip(dataset.columns, mtztypes)))
     dataset.set_index(["H", "K", "L"], inplace=True)
 
     # Set DataSet attributes
-    if (a and b and c and alpha and beta and gamma):
-        dataset.cell = gemmi.UnitCell(a, b, c, alpha, beta, gamma)
-    if sg:
-        dataset.spacegroup = gemmi.SpaceGroup(sg)
+    if cell and (len(cell) == 6):
+        dataset.cell = cell
+    if spacegroup:
+        dataset.spacegroup = spacegroup
         
     return dataset

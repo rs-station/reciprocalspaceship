@@ -7,7 +7,7 @@ def IOtest_hkl():
     Path to Precognition .hkl file for I/O testing
     """
     datapath = join(abspath(dirname(__file__)), "../data/precognition")
-    return  join(datapath, "hewl.hkl")
+    return join(datapath, "hewl.hkl")
 
 @pytest.fixture
 def IOtest_ii():
@@ -15,7 +15,15 @@ def IOtest_ii():
     Path to Precognition .ii file for I/O testing
     """
     datapath = join(abspath(dirname(__file__)), "../data/precognition")
-    return  join(datapath, "e074a_off1_001.mccd.ii")
+    return join(datapath, "e074a_off1_001.mccd.ii")
+
+@pytest.fixture
+def IOtest_log():
+    """
+    Path to Precognition integration logfile for I/O testing
+    """
+    datapath = join(abspath(dirname(__file__)), "../data/precognition")
+    return join(datapath, "integration.log")
 
 @pytest.fixture
 def IOtest_mtz():
