@@ -48,7 +48,7 @@ def test_read_hkl(IOtest_hkl, spacegroup, cell):
 @pytest.mark.parametrize("spacegroup", [None, 19, "P 21 21 21"])
 @pytest.mark.parametrize("cell", [None, (35., 45., 99., 90., 90., 90.)])
 @pytest.mark.parametrize("log", [None, "log"])
-def test_read_hkl(IOtest_ii, IOtest_log, spacegroup, cell, log):
+def test_read_ii(IOtest_ii, IOtest_log, spacegroup, cell, log):
     """
     Test rs.read_precognition() with a .ii file
     """
