@@ -211,14 +211,14 @@ def read_crystfel(streamfile) -> DataSet:
     # set mtztypes as in precognition.py
     # hkl -- H
     # I, sigmaI -- J, Q
-    # BATCH -- I
+    # BATCH -- B
     # s1{x,y,z} -- R
     # ewald_offset -- R
     names = [
         'H', 'K', 'L', 'I', 'sigmaI', 'BATCH', 's1x', 's1y', 's1z',
         'ewald_offset'
     ]
-    mtztypes = ["H", "H", "H", "J", "Q", "I", "R", "R", "R", "R"]
+    mtztypes = ["H", "H", "H", "J", "Q", "B", "R", "R", "R", "R"]
     dataset = DataSet()
     for (k, v), mtztype in zip(df.items(), mtztypes):
         dataset[k] = v.astype(mtztype)
