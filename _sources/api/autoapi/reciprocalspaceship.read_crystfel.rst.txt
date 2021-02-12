@@ -1,0 +1,6 @@
+﻿reciprocalspaceship.read\_crystfel
+==================================
+
+.. currentmodule:: reciprocalspaceship
+
+.. autofunction:: read_crystfel

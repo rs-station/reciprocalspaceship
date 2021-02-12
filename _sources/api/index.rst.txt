@@ -40,6 +40,7 @@ Supported crystallographic file formats for data I/O. Write functions for reflec
    ~reciprocalspaceship.read_mtz
    ~reciprocalspaceship.read_csv
    ~reciprocalspaceship.read_precognition
+   ~reciprocalspaceship.read_crystfel
    ~reciprocalspaceship.io.write_ccp4_map
 
 Algorithms

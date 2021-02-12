@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>reciprocalspaceship.io.write_ccp4_map &mdash; reciprocalspaceship 0.9.5 documentation</title>
+  <title>reciprocalspaceship.read_crystfel &mdash; reciprocalspaceship 0.9.5 documentation</title>
   
 
   
@@ -47,8 +47,8 @@
     
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="reciprocalspaceship.algorithms.merge" href="reciprocalspaceship.algorithms.merge.html" />
-    <link rel="prev" title="reciprocalspaceship.read_crystfel" href="reciprocalspaceship.read_crystfel.html" /> 
+    <link rel="next" title="reciprocalspaceship.io.write_ccp4_map" href="reciprocalspaceship.io.write_ccp4_map.html" />
+    <link rel="prev" title="reciprocalspaceship.read_precognition" href="reciprocalspaceship.read_precognition.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -104,8 +104,8 @@
 <li class="toctree-l3"><a class="reference internal" href="reciprocalspaceship.read_mtz.html">reciprocalspaceship.read_mtz</a></li>
 <li class="toctree-l3"><a class="reference internal" href="reciprocalspaceship.read_csv.html">reciprocalspaceship.read_csv</a></li>
 <li class="toctree-l3"><a class="reference internal" href="reciprocalspaceship.read_precognition.html">reciprocalspaceship.read_precognition</a></li>
-<li class="toctree-l3"><a class="reference internal" href="reciprocalspaceship.read_crystfel.html">reciprocalspaceship.read_crystfel</a></li>
-<li class="toctree-l3 current"><a class="current reference internal" href="#">reciprocalspaceship.io.write_ccp4_map</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">reciprocalspaceship.read_crystfel</a></li>
+<li class="toctree-l3"><a class="reference internal" href="reciprocalspaceship.io.write_ccp4_map.html">reciprocalspaceship.io.write_ccp4_map</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../index.html#algorithms">Algorithms</a></li>
@@ -164,13 +164,13 @@
         
           <li><a href="../index.html">API Reference</a> &raquo;</li>
         
-      <li>reciprocalspaceship.io.write_ccp4_map</li>
+      <li>reciprocalspaceship.read_crystfel</li>
     
     
       <li class="wy-breadcrumbs-aside">
         
           
-            <a href="../../_sources/api/autoapi/reciprocalspaceship.io.write_ccp4_map.rst.txt" rel="nofollow"> View page source</a>
+            <a href="../../_sources/api/autoapi/reciprocalspaceship.read_crystfel.rst.txt" rel="nofollow"> View page source</a>
           
         
       </li>
@@ -207,20 +207,18 @@
     text-align: unset;
 }
 </style>
-<div class="section" id="reciprocalspaceship-io-write-ccp4-map">
-<h1>reciprocalspaceship.io.write_ccp4_map<a class="headerlink" href="#reciprocalspaceship-io-write-ccp4-map" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="reciprocalspaceship-read-crystfel">
+<h1>reciprocalspaceship.read_crystfel<a class="headerlink" href="#reciprocalspaceship-read-crystfel" title="Permalink to this headline">¶</a></h1>
 <dl class="py function">
-<dt id="reciprocalspaceship.io.write_ccp4_map">
-<code class="sig-prename descclassname">reciprocalspaceship.io.</code><code class="sig-name descname">write_ccp4_map</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">realmap</span></em>, <em class="sig-param"><span class="n">mapfile</span></em>, <em class="sig-param"><span class="n">cell</span></em>, <em class="sig-param"><span class="n">spacegroup</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/Hekstra-Lab/reciprocalspaceship/blob/main/reciprocalspaceship/io/ccp4map.py#L4-L35"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#reciprocalspaceship.io.write_ccp4_map" title="Permalink to this definition">¶</a></dt>
-<dd><p>Write CCP4 map file from NumPy array of real-space density.</p>
+<dt id="reciprocalspaceship.read_crystfel">
+<code class="sig-prename descclassname">reciprocalspaceship.</code><code class="sig-name descname">read_crystfel</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">streamfile</span></em><span class="sig-paren">)</span> &#x2192; reciprocalspaceship.dataset.DataSet<a class="reference external" href="https://github.com/Hekstra-Lab/reciprocalspaceship/blob/main/reciprocalspaceship/io/crystfel.py#L191-L230"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#reciprocalspaceship.read_crystfel" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize attributes and populate the DataSet object with data from a CrystFEL stream with indexed reflections. This is the output format used by CrystFEL software when processing still diffraction data.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>realmap</strong> (<em>np.ndarray</em>) – 3D NumPy array of real-space, voxelized electron density</p></li>
-<li><p><strong>mapfile</strong> (<em>str</em>) – Filename to which map will be written</p></li>
-<li><p><strong>cell</strong> (<em>gemmi.UnitCell</em>) – Unit cell parameters to use in map file</p></li>
-<li><p><strong>spacegroup</strong> (<em>gemmi.SpaceGroup</em>) – Spacegroup to use in map file</p></li>
-</ul>
+<dd class="field-odd"><p><strong>streamfile</strong> (<em>stream filename</em>) – name of a .stream file</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><em>rs.DataSet</em></p>
 </dd>
 </dl>
 </dd></dl>
@@ -233,8 +231,8 @@
           </div>
           <footer>
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-        <a href="reciprocalspaceship.algorithms.merge.html" class="btn btn-neutral float-right" title="reciprocalspaceship.algorithms.merge" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
-        <a href="reciprocalspaceship.read_crystfel.html" class="btn btn-neutral float-left" title="reciprocalspaceship.read_crystfel" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="reciprocalspaceship.io.write_ccp4_map.html" class="btn btn-neutral float-right" title="reciprocalspaceship.io.write_ccp4_map" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="reciprocalspaceship.read_precognition.html" class="btn btn-neutral float-left" title="reciprocalspaceship.read_precognition" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
     </div>
 
   <hr/>
