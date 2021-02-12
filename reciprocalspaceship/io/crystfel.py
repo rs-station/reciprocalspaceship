@@ -7,8 +7,14 @@ def _parse_stream(filename: str) -> dict:
     """
     Parses stream and returns all indexed peak positions
 
-    Arguments:
-        filename {str} -- input stream filename
+    Parameters
+    ----------
+    filename : stream filename
+        name of a .stream file 
+
+    Returns
+    --------
+    (dict, np.ndarray)
     """
 
     answ_crystals = {}
@@ -50,6 +56,33 @@ def _parse_stream(filename: str) -> dict:
 
     def eV2Angstrom(e_eV):
         return 12398. / e_eV
+
+    # add unit cell parameters parsing
+    with open(filename, 'r') as stream:
+        is_unit_cell = False
+        get_cellparam = lambda s: float(s.split()[2])
+        rv_cell_param = None
+        a, b, c, al, be, ga = [None]*6 # None's are needed since stream not always has all 6 parameters
+        for line in stream:
+            if 'Begin unit cell' in line:
+                is_unit_cell = True
+                continue
+            elif is_unit_cell:
+                if line.startswith('a ='):
+                    a = get_cellparam(line)
+                if line.startswith('b ='):
+                    b = get_cellparam(line)
+                if line.startswith('c ='):
+                    c = get_cellparam(line)
+                if line.startswith('al ='):
+                    al = get_cellparam(line)
+                if line.startswith('be ='):
+                    be = get_cellparam(line)
+                if line.startswith('ga ='):
+                    ga = get_cellparam(line)
+            elif 'End unit cell' in line:
+                rv_cell_param = np.array([a, b, c, al, be, ga])
+                break
 
     with open(filename, "r") as stream:
         is_chunk = False
@@ -97,11 +130,10 @@ def _parse_stream(filename: str) -> dict:
                 #  -63   41    9     -41.31      57.45     195.00     170.86  731.0 1350.4 p0
                 crystal_peak_number += 1
                 h, k, l, I, sigmaI, _, _, _, _, _ = [i for i in line.split()]
-                h, k, l = map(float, [h, k, l])
+                h, k, l = map(int, [h, k, l])
 
                 # calculate ewald offset and s1
                 hkl = np.array([h, k, l])
-                # print(A)
                 s1 = A @ hkl + s0
                 s1x, s1y, s1z = s1
                 ewald_offset = np.linalg.norm(s1) - lambda_inv
@@ -120,10 +152,11 @@ def _parse_stream(filename: str) -> dict:
                 }
                 if current_event is not None:
                     name = (current_filename, current_event,
-                            current_serial_number, crystal_idx, crystal_peak_number)
-                else:
-                    name = (current_filename, current_serial_number, crystal_idx,
+                            current_serial_number, crystal_idx,
                             crystal_peak_number)
+                else:
+                    name = (current_filename, current_serial_number,
+                            crystal_idx, crystal_peak_number)
                 answ_crystals[name] = record
 
             # start analyzing where we are now
@@ -151,23 +184,27 @@ def _parse_stream(filename: str) -> dict:
                 is_crystal = True
                 continue
 
-    return answ_crystals
+    return answ_crystals, rv_cell_param
 
 
-def read_crystfel(streamfile, logfile=None) -> DataSet:
+def read_crystfel(streamfile) -> DataSet:
     """
     Initialize attributes and populate the DataSet object with data from a CrystFEL stream with indexed reflections. This is the output format used by CrystFEL software when processing still diffraction data.
 
     Parameters
     ----------
-    streamfile : str of file
-        name of a .stream file or a file object
+    streamfile : stream filename
+        name of a .stream file 
+       
+    Returns
+    --------
+    rs.DataSet
     """
 
     if not streamfile.endswith('.stream'):
         raise ValueError("Stream file should end with .stream")
     # read data from stream file
-    d = _parse_stream(streamfile)
+    d, cell = _parse_stream(streamfile)
     df = pd.DataFrame.from_records(list(d.values()))
 
     # set mtztypes as in precognition.py
@@ -183,8 +220,10 @@ def read_crystfel(streamfile, logfile=None) -> DataSet:
     mtztypes = ["H", "H", "H", "J", "Q", "I", "R", "R", "R", "R"]
     dataset = DataSet()
     for (k, v), mtztype in zip(df.items(), mtztypes):
-        dataset[k] = v
-        dataset[k] = dataset[k].astype(mtztype)
+        dataset[k] = v.astype(mtztype)
     dataset.set_index(['H', 'K', 'L'], inplace=True)
+
+    dataset.merged = False  # CrystFEL stream is always unmerged
+    dataset.cell = cell
 
     return dataset

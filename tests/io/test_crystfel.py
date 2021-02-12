@@ -15,7 +15,7 @@ def test_read_crystfel_mtz(IOtest_mtz):
         rs.io.read_crystfel(IOtest_mtz)
 
 
-class TestPrecognition(unittest.TestCase):
+class TestCrystFEL(unittest.TestCase):
     def test_read_stream(self):
 
         datadir = join(abspath(dirname(__file__)), '../data/crystfel')
@@ -44,6 +44,6 @@ class TestPrecognition(unittest.TestCase):
         self.assertTrue(
             hewl['ewald_offset'].min() < 0 < hewl['ewald_offset'].max())
         self.assertEqual(len(hewl.BATCH.unique()),
-                         2111)  # grep -c 'Begin crystal' crystfel.stream
+                         3)  # grep -c 'Begin crystal' crystfel.stream
 
         return
