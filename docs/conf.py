@@ -74,10 +74,10 @@ nbsphinx_prolog = r"""
 
     <div class="admonition note">
       This page was generated from
-      <a class="reference external" href="https://github.com/Hekstra-Lab/reciprocalspaceship/blob/master/{{ docname|e }}">{{ docname|e }}</a>.
+      <a class="reference external" href="https://github.com/Hekstra-Lab/reciprocalspaceship/blob/main/{{ docname|e }}">{{ docname|e }}</a>.
       Interactive online version:
       <span style="white-space: nowrap;">
-        <a href="https://mybinder.org/v2/gh/Hekstra-Lab/reciprocalspaceship/master?filepath={{ docname|e }}?urlpath=lab">
+        <a href="https://mybinder.org/v2/gh/Hekstra-Lab/reciprocalspaceship/main?filepath={{ docname|e }}?urlpath=lab">
         <img alt="Binder badge" src="https://mybinder.org/badge_logo.svg" style="vertical-align:text-bottom"></a>.
       </span>
     </div>
@@ -104,8 +104,8 @@ templates_path = ['_templates']
 # The suffix of source filenames.
 source_suffix = '.rst'
 
-# The master toctree document.
-master_doc = 'index'
+# The main toctree document.
+main_doc = 'index'
 
 # List of patterns, relative to source directory, that match files and
 # directories to ignore when looking for source files.
@@ -176,4 +176,4 @@ def linkcode_resolve(domain, info):
 
     fn = os.path.relpath(fn, start=os.path.dirname(rs.__file__))
 
-    return f"https://github.com/Hekstra-Lab/reciprocalspaceship/blob/master/reciprocalspaceship/{fn}{linespec}"
+    return f"https://github.com/Hekstra-Lab/reciprocalspaceship/blob/main/reciprocalspaceship/{fn}{linespec}"
