@@ -80,6 +80,7 @@ def _parse_stream(filename: str) -> dict:
                     be = get_cellparam(line)
                 if line.startswith('ga ='):
                     ga = get_cellparam(line)
+                    is_unit_cell = False # gamma is the last parameters
             elif 'End unit cell' in line:
                 rv_cell_param = np.array([a, b, c, al, be, ga])
                 break
