@@ -4,7 +4,7 @@ Building Documentation
 ======================
 
 The ``reciprocalspaceship`` documentation is built using `sphinx <http://sphinx-doc.org/>`_. The documentation is automatically rebuilt upon any ``git push`` action to
-the ``master`` branch of the repo; however, it is also possible to build it locally in order to preview any changes.
+the ``main`` branch of the repo; however, it is also possible to build it locally in order to preview any changes.
 
 Dependencies
 ------------
