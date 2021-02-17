@@ -39,8 +39,6 @@
         <script src="../../_static/underscore.js"></script>
         <script src="../../_static/doctools.js"></script>
         <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
-        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
-        <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
     
     <script type="text/javascript" src="../../_static/js/theme.js"></script>
 
@@ -208,7 +206,7 @@
 <h1>DataSeries<a class="headerlink" href="#dataseries" title="Permalink to this headline">¶</a></h1>
 <dl class="py class">
 <dt id="reciprocalspaceship.DataSeries">
-<em class="property">class </em><code class="sig-prename descclassname">reciprocalspaceship.</code><code class="sig-name descname">DataSeries</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">data</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">index</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">dtype</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">name</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">copy</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">fastpath</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/Hekstra-Lab/reciprocalspaceship/blob/main/reciprocalspaceship/dataseries.py#L4-L202"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#reciprocalspaceship.DataSeries" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">reciprocalspaceship.</span></code><code class="sig-name descname"><span class="pre">DataSeries</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">index</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dtype</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">copy</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fastpath</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/Hekstra-Lab/reciprocalspaceship/blob/main/reciprocalspaceship/dataseries.py#L4-L202"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#reciprocalspaceship.DataSeries" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">pandas.core.series.Series</span></code></p>
 <p>One-dimensional ndarray with axis labels, representing a slice
 of a DataSet. DataSeries objects inherit methods from <code class="docutils literal notranslate"><span class="pre">pd.Series</span></code>,
@@ -262,7 +260,7 @@ found in the dict.</p></li>
 </table>
 <dl class="py method">
 <dt id="reciprocalspaceship.DataSeries.from_friedel_dtype">
-<code class="sig-name descname">from_friedel_dtype</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/Hekstra-Lab/reciprocalspaceship/blob/main/reciprocalspaceship/dataseries.py#L100-L152"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#reciprocalspaceship.DataSeries.from_friedel_dtype" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">from_friedel_dtype</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/Hekstra-Lab/reciprocalspaceship/blob/main/reciprocalspaceship/dataseries.py#L100-L152"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#reciprocalspaceship.DataSeries.from_friedel_dtype" title="Permalink to this definition">¶</a></dt>
 <dd><p>Convert dtype of DataSeries from the Friedel equivalent. If
 DataSeries is not a Friedel-related dtype, it is returned
 unchanged.</p>
@@ -311,7 +309,7 @@ unchanged.</p>
 
 <dl class="py method">
 <dt id="reciprocalspaceship.DataSeries.infer_mtz_dtype">
-<code class="sig-name descname">infer_mtz_dtype</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/Hekstra-Lab/reciprocalspaceship/blob/main/reciprocalspaceship/dataseries.py#L154-L202"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#reciprocalspaceship.DataSeries.infer_mtz_dtype" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">infer_mtz_dtype</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/Hekstra-Lab/reciprocalspaceship/blob/main/reciprocalspaceship/dataseries.py#L154-L202"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#reciprocalspaceship.DataSeries.infer_mtz_dtype" title="Permalink to this definition">¶</a></dt>
 <dd><p>Infer MTZ dtype from column name and underlying data.</p>
 <p>If name does not match a common MTZ column, the method will return
 an MTZInt or MTZReal depending on whether the data is composed of
@@ -362,7 +360,7 @@ already a MTZDtype, it will be returned unchanged.</p>
 
 <dl class="py method">
 <dt id="reciprocalspaceship.DataSeries.to_friedel_dtype">
-<code class="sig-name descname">to_friedel_dtype</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/Hekstra-Lab/reciprocalspaceship/blob/main/reciprocalspaceship/dataseries.py#L44-L98"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#reciprocalspaceship.DataSeries.to_friedel_dtype" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">to_friedel_dtype</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/Hekstra-Lab/reciprocalspaceship/blob/main/reciprocalspaceship/dataseries.py#L44-L98"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#reciprocalspaceship.DataSeries.to_friedel_dtype" title="Permalink to this definition">¶</a></dt>
 <dd><p>Convert dtype of DataSeries to the Friedel equivalent. If there
 is not a Friedel equivalent dtype, the DataSeries is returned
 unchanged.</p>
