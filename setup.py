@@ -57,12 +57,21 @@ setup(
     tests_require=['pytest', 'pytest-cov', 'pytest-xdist'],
     extras_require={
         'dev': [
+            # sphinx documentation
             "sphinx",
             "sphinx_rtd_theme",
             "nbsphinx",
             "sphinx-panels",
             "sphinxcontrib-autoprogram",
             "jupyter",
+
+            # example notebooks
+            "tqdm",
+            "matplotlib",
+            "seaborn",
+            "celluloid",
+            "scikit-image",
+            "torch",
         ]
     },
     entry_points={
