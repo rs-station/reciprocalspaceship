@@ -40,4 +40,8 @@ To get started with `reciprocalspaceship`, see our [quickstart guide](https://he
 
 ## Documentation
 
-For more details on the use of `reciprocalspaceship`, check out our [documentation](https://hekstra-lab.github.io/reciprocalspaceship).
+For more details on the use of `reciprocalspaceship`, check out our [documentation](https://hekstra-lab.github.io/reciprocalspaceship). 
+
+## Reference
+
+We have a pre-print describing the library on [bioRxiv](https://www.biorxiv.org/content/10.1101/2021.02.03.429617v1).
