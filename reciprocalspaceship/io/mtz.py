@@ -107,7 +107,7 @@ def to_gemmi(dataset, skip_problem_mtztypes=False):
         elif skip_problem_mtztypes:
             continue
         else:
-            raise ValueError(f"column of type {cseries.dtype} cannot be written to an MTZ file. "
+            raise ValueError(f"column {c} of type {cseries.dtype} cannot be written to an MTZ file. "
                              f"To skip columns without explicit MTZ dtypes, set skip_problem_mtztypes=True")
     mtz.set_data(temp[columns].to_numpy(dtype="float32"))
 
