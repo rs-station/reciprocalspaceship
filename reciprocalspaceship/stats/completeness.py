@@ -43,7 +43,7 @@ def compute_multiplicity(hobs, cell, spacegroup, anomalous=False, dmin=None):
 	'Count' : np.ones(len(hobs)),
     }, cell=cell, spacegroup=spacegroup).groupby(['H', 'K', 'L']).sum()
 
-    hall = generate_reciprocal_asu(cell, spacegroup, dmin, anomalous)
+    hall = rs.utils.generate_reciprocal_asu(cell, spacegroup, dmin, anomalous)
 
     ASU = rs.DataSet({                     
 	'H' : hall[:,0],             
