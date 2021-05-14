@@ -15,6 +15,9 @@ from .concat import concat
 # Import algorithms submodule
 from reciprocalspaceship import algorithms
 
+# Import stats submodule
+from reciprocalspaceship import stats
+
 # Add support for MTZ data types:
 # see http://www.ccp4.ac.uk/html/f2mtz.html
 from .dtypes import (
