@@ -23,3 +23,32 @@ def compute_dHKL(H, cell):
     A = np.array(cell.orthogonalization_matrix.tolist()).astype(np.float32)
     dhkls = 1./np.linalg.norm((hkls@np.linalg.inv(A)), 2, 1)
     return dhkls[inverse]
+
+
+def generate_reciprocal_cell(cell, dmin):
+    """
+    Generate the miller indices of the full P1 reciprocal cell. 
+
+    Parameters
+    ----------
+    cell : gemmi.UnitCell
+        A gemmi cell object.
+    dmin : float
+        Maximum resolution of the data in Å
+
+    Returns
+    -------
+    hkl : np.array(int)
+    """
+    hmax,lmax,kmax = cell.get_hkl_limits(dmin)
+    hkl = np.mgrid[
+        -hmax-1:hmax+2:1,
+        -kmax-1:kmax+2:1,
+        -lmax-1:lmax+2:1,
+    ].reshape((3, -1)).T
+    #Remove reflection 0,0,0
+    hkl = hkl[np.any(hkl != 0, axis=1)]
+    #Remove reflections outside of resolution range
+    hkl = hkl[cell.calculate_d_array(hkl) >= dmin]
+    return hkl
+
