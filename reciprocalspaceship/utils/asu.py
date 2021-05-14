@@ -1,6 +1,6 @@
 import numpy as np
 from gemmi import SpaceGroup,GroupOps
-from reciprocalspaceship.utils import apply_to_hkl, phase_shift, is_centric, generate_reciprocal_cell
+from reciprocalspaceship.utils import apply_to_hkl, phase_shift, is_centric, is_absent, generate_reciprocal_cell
 
 ccp4_hkl_asu = [
   0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,  2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,  
@@ -194,9 +194,9 @@ def generate_reciprocal_asu(cell, spacegroup, dmin, anomalous=False):
     """
     p1_hkl = generate_reciprocal_cell(cell, dmin)
     #Remove absences
-    hkl = p1_hkl[~rs.utils.is_absent(p1_hkl, spacegroup)]
+    hkl = p1_hkl[~is_absent(p1_hkl, spacegroup)]
     #Map to ASU
-    hasu,isym = rs.utils.hkl_to_asu(hkl, spacegroup)
+    hasu,isym = hkl_to_asu(hkl, spacegroup)
     if anomalous:
         fminus = isym % 2 == 0
         hasu[fminus] = -hasu[fminus]
