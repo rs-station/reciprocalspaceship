@@ -20,8 +20,8 @@ def compute_dHKL(H, cell):
     #Compress the hkls so we don't do redudant computation
     H = np.array(H, dtype=np.float32)
     hkls,inverse = np.unique(H, axis=0, return_inverse=True)
-    A = np.array(cell.orthogonalization_matrix.tolist()).astype(np.float32)
-    dhkls = 1./np.linalg.norm((hkls@np.linalg.inv(A)), 2, 1)
+    F = np.array(cell.fractionalization_matrix.tolist()).astype(np.float64)
+    dhkls = np.reciprocal(np.linalg.norm((hkls@F), 2, 1)).astype(np.float32)
     return dhkls[inverse]
 
 
