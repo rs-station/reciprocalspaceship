@@ -50,7 +50,7 @@ def compute_redundancy(hobs, cell, spacegroup, anomalous=False, dmin=None):
 	'K' : hall[:,1],             
 	'L' : hall[:,2],             
 	'Count' : np.zeros(len(hall)),
-    }, cell=cell, spacegroup=spacegroup).groupby(['H', 'K', 'L']).sum()
+    }, cell=cell, spacegroup=spacegroup).set_index(['H', 'K', 'L'])
     ASU = ASU.loc[ASU.index.difference(mult.index)]
     return mult.append(ASU)
 
