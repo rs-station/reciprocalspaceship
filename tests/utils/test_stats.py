@@ -8,7 +8,8 @@ import gemmi
     (gemmi.UnitCell(30., 30., 30., 90., 90., 120.), gemmi.SpaceGroup('R 32')),
 ])
 @pytest.mark.parametrize("anomalous", [False, True])
-def test_compute_redundancy(cell_and_spacegroup, anomalous):
+@pytest.mark.parametrize("full_asu", [False, True])
+def test_compute_redundancy(cell_and_spacegroup, anomalous, full_asu):
     """ 
     Test reciprocalspaceship.utils.compute_redundancy.
     """
@@ -17,7 +18,10 @@ def test_compute_redundancy(cell_and_spacegroup, anomalous):
     hkl = rs.utils.generate_reciprocal_asu(cell, spacegroup, dmin, anomalous=anomalous)
     mult = np.random.choice(10, size=len(hkl))
     hobs = np.repeat(hkl, mult, axis=0)
-    result = rs.utils.compute_redundancy(hobs, cell, spacegroup, anomalous)
+    hunique, counts = rs.utils.compute_redundancy(hobs, cell, spacegroup, full_asu=full_asu, anomalous=anomalous)
+    assert hunique.dtype == np.int32
+    assert counts.dtype == np.int32
     assert len(hkl) == len(mult)
-    assert np.all(result.loc[(i for i in hkl)].iloc[:,0] == mult.astype(float))
+    assert len(np.unique(hobs, axis=0)) == np.sum(counts > 0)
+    assert np.all(counts[counts>0] == mult[mult > 0])
 
