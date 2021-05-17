@@ -104,6 +104,7 @@ def test_generate_reciprocal_asu(cell_and_spacegroup, anomalous):
     dmin = 5.
     cell,spacegroup = cell_and_spacegroup
     hkl = rs.utils.generate_reciprocal_asu(cell, spacegroup, dmin, anomalous=anomalous)
+    assert hkl.dtype == np.int64
     assert np.any(~rs.utils.is_absent(hkl, spacegroup))
     assert rs.utils.compute_dHKL(hkl, cell).min() >= dmin
     _,isym = rs.utils.hkl_to_asu(hkl, spacegroup)

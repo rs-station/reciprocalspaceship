@@ -190,7 +190,8 @@ def generate_reciprocal_asu(cell, spacegroup, dmin, anomalous=False):
 
     Returns
     -------
-    hkl : np.array(int)
+    hasu : np.array (np.int64)
+        n by 3 array of miller indices in the reciprocal ASU.
     """
     p1_hkl = generate_reciprocal_cell(cell, dmin)
     #Remove absences
