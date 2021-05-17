@@ -31,15 +31,19 @@ def test_compute_dHKL(dataset_hkl, cell):
     gemmi.UnitCell(291., 423., 315., 90., 100., 90.),
     gemmi.UnitCell(30., 50., 90., 75., 80., 106.),
 ])
-def test_generate_reciprocal_cell(cell):
+@pytest.mark.parametrize("dtype", [np.float, np.int32, np.int])
+def test_generate_reciprocal_cell(cell, dtype):
     """Test rs.utils.generate_reciprocal_cell"""
     dmin = 5.0
-    hkl = generate_reciprocal_cell(cell, dmin)
+    hkl = generate_reciprocal_cell(cell, dmin, dtype)
+
+    assert hkl.dtype == dtype
 
     # Check that reflection 0,0,0 is omitted
     assert np.all(np.any(hkl != 0, axis=1))
+
     assert len(hkl) > 0
-    assert hkl.dtype == int
+    assert len(np.unique(hkl, axis=0)) == len(hkl)
     assert compute_dHKL(hkl, cell).min() >= dmin
     assert cell.calculate_d_array(hkl).min() >= dmin
-    assert np.all(hkl.min(axis=0) == -hkl.max(axis=0))
+
