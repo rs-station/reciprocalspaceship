@@ -2,7 +2,7 @@ import numpy as np
 import pandas as pd
 import reciprocalspaceship as rs
 
-def compute_multiplicity(hobs, cell, spacegroup, anomalous=False, dmin=None):
+def compute_redundancy(hobs, cell, spacegroup, anomalous=False, dmin=None):
     """
     Compute the multiplicity of all valid reflections in the reciprocal ASU.
 

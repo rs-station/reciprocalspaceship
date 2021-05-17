@@ -1,1 +1,1 @@
-from .completeness import compute_multiplicity
+from .completeness import compute_redundancy

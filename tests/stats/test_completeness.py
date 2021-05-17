@@ -9,16 +9,16 @@ import gemmi
     (gemmi.UnitCell(30., 30., 30., 90., 90., 120.), gemmi.SpaceGroup('R 32')),
 ])
 @pytest.mark.parametrize("anomalous", [False, True])
-def test_compute_multiplicity(cell_and_spacegroup, anomalous):
+def test_compute_redundancy(cell_and_spacegroup, anomalous):
     """ 
-    Test reciprocalspaceship.stats.compute_multiplicity.
+    Test reciprocalspaceship.stats.compute_redundancy.
     """
     dmin = 5.
     cell,spacegroup = cell_and_spacegroup
     hkl = rs.utils.generate_reciprocal_asu(cell, spacegroup, dmin, anomalous=anomalous)
     mult = np.random.choice(10, size=len(hkl))
     hobs = np.repeat(hkl, mult, axis=0)
-    result = stats.compute_multiplicity(hobs, cell, spacegroup, anomalous)
+    result = stats.compute_redundancy(hobs, cell, spacegroup, anomalous)
     assert len(hkl) == len(mult)
     assert np.all(result.loc[(i for i in hkl)].iloc[:,0] == mult.astype(float))
 
