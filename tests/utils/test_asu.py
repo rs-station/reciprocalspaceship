@@ -89,3 +89,29 @@ def test_hkl_to_observed(sgtbx_by_xhm):
     H_observed = rs.utils.hkl_to_observed(Hasu, isym, sg)
     assert np.array_equal(H, H_observed)
 
+@pytest.mark.parametrize("cell_and_spacegroup", [
+    (gemmi.UnitCell(10., 20., 30., 90., 90., 90.), gemmi.SpaceGroup('P 21 21 21')),
+    (gemmi.UnitCell(30., 30., 30., 90., 90., 120.), gemmi.SpaceGroup('R 32')),
+])
+@pytest.mark.parametrize("anomalous", [False, True])
+def test_generate_reciprocal_asu(cell_and_spacegroup, anomalous):
+    """ 
+    Test rs.utils.generate_reciprocal_asu. This test is _pretty_ good, but
+    a more authoritative one would generate the full P1 cell and check every
+    miller index to generate a list of refls in the asu and compare with
+    the function output. I guess that qualifies as a reasonable #TODO
+    """
+    dmin = 5.
+    cell,spacegroup = cell_and_spacegroup
+    hkl = rs.utils.generate_reciprocal_asu(cell, spacegroup, dmin, anomalous=anomalous)
+    assert hkl.dtype == np.int64
+    assert np.any(~rs.utils.is_absent(hkl, spacegroup))
+    assert rs.utils.compute_dHKL(hkl, cell).min() >= dmin
+    _,isym = rs.utils.hkl_to_asu(hkl, spacegroup)
+    if anomalous:
+        assert np.all((isym == 1) | (isym == 2))
+        hkl_no_anom = rs.utils.generate_reciprocal_asu(cell, spacegroup, dmin, anomalous=False)
+        assert len(hkl) == 2*len(hkl_no_anom)
+    else:
+        assert np.all(isym == 1)
+

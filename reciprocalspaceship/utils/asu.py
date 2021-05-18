@@ -1,6 +1,6 @@
 import numpy as np
 from gemmi import SpaceGroup,GroupOps
-from reciprocalspaceship.utils import apply_to_hkl, phase_shift, is_centric
+from reciprocalspaceship.utils import apply_to_hkl, phase_shift, is_centric, is_absent, generate_reciprocal_cell
 
 ccp4_hkl_asu = [
   0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,  2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,  
@@ -174,4 +174,35 @@ def hkl_to_observed(H, isym, sg, return_phase_shifts=False):
     if return_phase_shifts:
         return observed_H, phi_coeff, np.rad2deg(phi_shift)
     return observed_H
+
+def generate_reciprocal_asu(cell, spacegroup, dmin, anomalous=False):
+    """
+    Generate the miller indices of the reflections in the reciprocal ASU.
+
+    Parameters
+    ----------
+    cell : gemmi.UnitCell
+        A gemmi cell object.
+    spacegroup : gemmi.SpaceGroup
+        A gemmi spacegroup object.
+    dmin : float
+        Maximum resolution of the data in Å
+
+    Returns
+    -------
+    hasu : np.array (np.int64)
+        n by 3 array of miller indices in the reciprocal ASU.
+    """
+    p1_hkl = generate_reciprocal_cell(cell, dmin)
+    #Remove absences
+    hkl = p1_hkl[~is_absent(p1_hkl, spacegroup)]
+    #Map to ASU
+    hasu,isym = hkl_to_asu(hkl, spacegroup)
+    if anomalous:
+        fminus = isym % 2 == 0
+        hasu[fminus] = -hasu[fminus]
+
+    hasu  = np.unique(hasu, axis=0)
+    return hasu
+
 
