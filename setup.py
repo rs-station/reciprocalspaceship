@@ -48,7 +48,7 @@ setup(
     python_requires='>3.6',
     install_requires=[
         "gemmi >= 0.4.2",
-        "pandas >= 1.1.4",
+        "pandas >= 1.2.0",
         "numpy",
         "scipy",
         "ipython",
