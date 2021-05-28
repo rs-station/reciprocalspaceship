@@ -1,8 +1,8 @@
 from pandas.core.dtypes.dtypes import register_extension_dtype
-from .base import NumpyExtensionArray, NumpyFloat32ExtensionDtype
+from .base import MTZFloatArray, MTZFloat32Dtype
 
 @register_extension_dtype
-class WeightDtype(NumpyFloat32ExtensionDtype):
+class WeightDtype(MTZFloat32Dtype):
     """Dtype for representing weights"""
     name = 'Weight'
     mtztype = "W"
@@ -11,7 +11,7 @@ class WeightDtype(NumpyFloat32ExtensionDtype):
     def construct_array_type(cls):
         return WeightArray
 
-class WeightArray(NumpyExtensionArray):
+class WeightArray(MTZFloatArray):
     """ExtensionArray for supporting WeightDtype"""
     _dtype = WeightDtype()
     pass

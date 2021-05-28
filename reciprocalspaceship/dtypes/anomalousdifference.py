@@ -1,8 +1,8 @@
 from pandas.core.dtypes.dtypes import register_extension_dtype
-from .base import NumpyExtensionArray, NumpyFloat32ExtensionDtype
+from .base import MTZFloatArray, MTZFloat32Dtype
 
 @register_extension_dtype
-class AnomalousDifferenceDtype(NumpyFloat32ExtensionDtype):
+class AnomalousDifferenceDtype(MTZFloat32Dtype):
     """Dtype for anomalous difference data in reflection tables"""
     name = 'AnomalousDifference'
     mtztype = "D"
@@ -11,7 +11,7 @@ class AnomalousDifferenceDtype(NumpyFloat32ExtensionDtype):
     def construct_array_type(cls):
         return AnomalousDifferenceArray
 
-class AnomalousDifferenceArray(NumpyExtensionArray):
+class AnomalousDifferenceArray(MTZFloatArray):
     """ExtensionArray for supporting AnomalousDifferenceDtype"""
     _dtype = AnomalousDifferenceDtype()
     pass

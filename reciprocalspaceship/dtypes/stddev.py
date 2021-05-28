@@ -1,8 +1,8 @@
 from pandas.core.dtypes.dtypes import register_extension_dtype
-from .base import NumpyExtensionArray, NumpyFloat32ExtensionDtype
+from .base import MTZFloatArray, MTZFloat32Dtype
 
 @register_extension_dtype
-class StandardDeviationDtype(NumpyFloat32ExtensionDtype):
+class StandardDeviationDtype(MTZFloat32Dtype):
     """Dtype for standard deviation of observables: J, F, D or other"""
     name = 'Stddev'
     mtztype = "Q"
@@ -11,13 +11,13 @@ class StandardDeviationDtype(NumpyFloat32ExtensionDtype):
     def construct_array_type(cls):
         return StandardDeviationArray
 
-class StandardDeviationArray(NumpyExtensionArray):
+class StandardDeviationArray(MTZFloatArray):
     """ExtensionArray for supporting StandardDeviationDtype"""    
     _dtype = StandardDeviationDtype()
     pass
 
 @register_extension_dtype
-class StandardDeviationFriedelSFDtype(NumpyFloat32ExtensionDtype):
+class StandardDeviationFriedelSFDtype(MTZFloat32Dtype):
     """Dtype for standard deviation of F(+) or F(-)"""
     name = 'StddevFriedelSF'
     mtztype = "L"
@@ -26,13 +26,13 @@ class StandardDeviationFriedelSFDtype(NumpyFloat32ExtensionDtype):
     def construct_array_type(cls):
         return StandardDeviationFriedelSFArray
 
-class StandardDeviationFriedelSFArray(NumpyExtensionArray):
+class StandardDeviationFriedelSFArray(MTZFloatArray):
     """ExtensionArray for supporting StandardDeviationFriedelSFDtype"""
     _dtype = StandardDeviationFriedelSFDtype()
     pass
 
 @register_extension_dtype
-class StandardDeviationFriedelIDtype(NumpyFloat32ExtensionDtype):
+class StandardDeviationFriedelIDtype(MTZFloat32Dtype):
     """Dtype for standard deviation of I(+) or I(-)"""
     name = 'StddevFriedelI'
     mtztype = "M"
@@ -41,7 +41,7 @@ class StandardDeviationFriedelIDtype(NumpyFloat32ExtensionDtype):
     def construct_array_type(cls):
         return StandardDeviationFriedelIArray
 
-class StandardDeviationFriedelIArray(NumpyExtensionArray):
+class StandardDeviationFriedelIArray(MTZFloatArray):
     """ExtensionArray for supporting StandardDeviationFriedelIDtype"""
     _dtype = StandardDeviationFriedelIDtype()
     pass
