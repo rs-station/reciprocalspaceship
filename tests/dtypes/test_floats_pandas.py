@@ -47,23 +47,23 @@ def dtype(request):
 
 @pytest.fixture
 def data(dtype):
-    return array[dtype.name](np.arange(0, 100), dtype=dtype)
+    return array[dtype.name]._from_sequence(np.arange(0, 100), dtype=dtype)
 
 @pytest.fixture
 def data_for_twos(dtype):
-    return array[dtype.name](np.ones(100) * 2, dtype=dtype)
+    return array[dtype.name]._from_sequence(np.ones(100) * 2, dtype=dtype)
 
 @pytest.fixture
 def data_missing(dtype):
-    return array[dtype.name]([np.nan, 1.], dtype=dtype)
+    return array[dtype.name]._from_sequence([np.nan, 1.], dtype=dtype)
 
 @pytest.fixture
 def data_for_sorting(dtype):
-    return array[dtype.name]([1., 2., 0.], dtype=dtype)
+    return array[dtype.name]._from_sequence([1., 2., 0.], dtype=dtype)
 
 @pytest.fixture
 def data_missing_for_sorting(dtype):
-    return array[dtype.name]([1., np.nan, 0.], dtype=dtype)
+    return array[dtype.name]._from_sequence([1., np.nan, 0.], dtype=dtype)
 
 @pytest.fixture(params=['data', 'data_missing'])
 def all_data(request, data, data_missing):
@@ -79,7 +79,7 @@ def data_for_grouping(dtype):
     a = 0
     c = 2
     na = np.nan
-    return array[dtype.name]([b, b, na, na, a, a, b, c], dtype=dtype)
+    return array[dtype.name]._from_sequence([b, b, na, na, a, a, b, c], dtype=dtype)
 
 class TestCasting(base.BaseCastingTests):
     pass
@@ -123,22 +123,6 @@ class TestMethods(base.BaseMethodsTests):
         
         self.assert_series_equal(result, expected)
 
-    def test_combine_le(self, data_repeated):
-        """
-        pd.Series.combine() returns Series with original dtype when an 
-        ExtensionArray is used. This test needed to be updated to reflect
-        that behavior.
-        """
-        orig_data1, orig_data2 = data_repeated(2)
-        s1 = rs.DataSeries(orig_data1)
-        s2 = rs.DataSeries(orig_data2)
-        result = s1.combine(s2, lambda x1, x2: x1 <= x2)
-        expected = rs.DataSeries(
-            [a <= b for (a, b) in zip(list(orig_data1), list(orig_data2))],
-            dtype=s1.dtype
-        )
-        self.assert_series_equal(result, expected)
-
     def test_value_counts_with_normalize(self, data):
         # GH 33172
         data = data[:10].unique()
@@ -157,7 +141,7 @@ class TestComparisonOps(base.BaseComparisonOpsTests):
         if exc is None:
             result = op(s, other)
             # Override to do the astype to boolean
-            expected = s.combine(other, op).astype(bool)
+            expected = s.combine(other, op).astype("boolean")
             self.assert_series_equal(result, expected)
         else:
             with pytest.raises(exc):

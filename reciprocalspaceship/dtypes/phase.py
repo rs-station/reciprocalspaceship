@@ -1,8 +1,8 @@
 from pandas.core.dtypes.dtypes import register_extension_dtype
-from .base import NumpyExtensionArray, NumpyFloat32ExtensionDtype
+from .base import MTZFloatArray, MTZFloat32Dtype
 
 @register_extension_dtype
-class PhaseDtype(NumpyFloat32ExtensionDtype):
+class PhaseDtype(MTZFloat32Dtype):
     """Dtype for representing phase data in reflection tables"""
     name = 'Phase'
     mtztype = "P"
@@ -11,13 +11,13 @@ class PhaseDtype(NumpyFloat32ExtensionDtype):
     def construct_array_type(cls):
         return PhaseArray
     
-class PhaseArray(NumpyExtensionArray):
+class PhaseArray(MTZFloatArray):
     """ExtensionArray for supporting PhaseDtype"""
     _dtype = PhaseDtype()
     pass
 
 @register_extension_dtype
-class HendricksonLattmanDtype(NumpyFloat32ExtensionDtype):
+class HendricksonLattmanDtype(MTZFloat32Dtype):
     """
     Dtype for representing phase probability coefficients 
     (Hendrickson-Lattman) in reflection tables
@@ -29,7 +29,7 @@ class HendricksonLattmanDtype(NumpyFloat32ExtensionDtype):
     def construct_array_type(cls):
         return HendricksonLattmanArray
 
-class HendricksonLattmanArray(NumpyExtensionArray):
+class HendricksonLattmanArray(MTZFloatArray):
     """ExtensionArray for supporting HendricksonLattmanDtype"""
     _dtype = HendricksonLattmanDtype()
     pass

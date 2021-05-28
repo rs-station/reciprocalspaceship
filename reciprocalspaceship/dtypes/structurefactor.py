@@ -1,8 +1,8 @@
 from pandas.core.dtypes.dtypes import register_extension_dtype
-from .base import NumpyExtensionArray, NumpyFloat32ExtensionDtype
+from .base import MTZFloatArray, MTZFloat32Dtype
 
 @register_extension_dtype
-class StructureFactorAmplitudeDtype(NumpyFloat32ExtensionDtype):
+class StructureFactorAmplitudeDtype(MTZFloat32Dtype):
     """Dtype for structure factor amplitude  data"""
     name = 'SFAmplitude'
     mtztype = "F"
@@ -11,13 +11,13 @@ class StructureFactorAmplitudeDtype(NumpyFloat32ExtensionDtype):
     def construct_array_type(cls):
         return StructureFactorAmplitudeArray
 
-class StructureFactorAmplitudeArray(NumpyExtensionArray):
+class StructureFactorAmplitudeArray(MTZFloatArray):
     """ExtensionArray for supporting StructureFactorAmplitudeDtype"""
     _dtype = StructureFactorAmplitudeDtype()
     pass
 
 @register_extension_dtype
-class FriedelStructureFactorAmplitudeDtype(NumpyFloat32ExtensionDtype):
+class FriedelStructureFactorAmplitudeDtype(MTZFloat32Dtype):
     """
     Dtype for structure factor amplitude data from Friedel pairs -- 
     F(+) or F(-)
@@ -29,13 +29,13 @@ class FriedelStructureFactorAmplitudeDtype(NumpyFloat32ExtensionDtype):
     def construct_array_type(cls):
         return FriedelStructureFactorAmplitudeArray
 
-class FriedelStructureFactorAmplitudeArray(NumpyExtensionArray):
+class FriedelStructureFactorAmplitudeArray(MTZFloatArray):
     """ExtensionArray for supporting FriedelStructureFactorAmplitudeDtype"""
     _dtype = FriedelStructureFactorAmplitudeDtype()
     pass
 
 @register_extension_dtype
-class NormalizedStructureFactorAmplitudeDtype(NumpyFloat32ExtensionDtype):
+class NormalizedStructureFactorAmplitudeDtype(MTZFloat32Dtype):
     """Dtype for normalized structure factor amplitude data"""
     name = 'NormalizedSFAmplitude'
     mtztype = "E"
@@ -44,7 +44,7 @@ class NormalizedStructureFactorAmplitudeDtype(NumpyFloat32ExtensionDtype):
     def construct_array_type(cls):
         return NormalizedStructureFactorAmplitudeArray
 
-class NormalizedStructureFactorAmplitudeArray(NumpyExtensionArray):
+class NormalizedStructureFactorAmplitudeArray(MTZFloatArray):
     """ExtensionArray for supporting NormalizedStructureFactorAmplitudeDtype"""
     _dtype = NormalizedStructureFactorAmplitudeDtype()
     pass

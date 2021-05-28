@@ -1,8 +1,8 @@
 from pandas.core.dtypes.dtypes import register_extension_dtype
-from .base import NumpyExtensionArray, NumpyFloat32ExtensionDtype
+from .base import MTZFloatArray, MTZFloat32Dtype
 
 @register_extension_dtype
-class IntensityDtype(NumpyFloat32ExtensionDtype):
+class IntensityDtype(MTZFloat32Dtype):
     """Dtype for Intensity data in reflection tables"""
     name = 'Intensity'
     mtztype = "J"
@@ -11,13 +11,13 @@ class IntensityDtype(NumpyFloat32ExtensionDtype):
     def construct_array_type(cls):
         return IntensityArray
 
-class IntensityArray(NumpyExtensionArray):
+class IntensityArray(MTZFloatArray):
     """ExtensionArray for supporting IntensityDtype"""    
     _dtype = IntensityDtype()
     pass
 
 @register_extension_dtype
-class FriedelIntensityDtype(NumpyFloat32ExtensionDtype):
+class FriedelIntensityDtype(MTZFloat32Dtype):
     """Dtype for I(+) or I(-) data in reflection tables"""
     name = 'FriedelIntensity'
     mtztype = "K"
@@ -26,7 +26,7 @@ class FriedelIntensityDtype(NumpyFloat32ExtensionDtype):
     def construct_array_type(cls):
         return FriedelIntensityArray
 
-class FriedelIntensityArray(NumpyExtensionArray):
+class FriedelIntensityArray(MTZFloatArray):
     """ExtensionArray for supporting FriedelIntensityDtype"""
     _dtype = FriedelIntensityDtype()
     pass
