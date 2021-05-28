@@ -15,10 +15,12 @@ def test_numpy_dtype(dtype_floats):
     """Test NumpyFloat32ExtensionDtype.numpy_dtype"""
     assert dtype_floats[0]().numpy_dtype == dtype_floats[0]().type
 
+@pytest.mark.xfail
 def test_numpy_navalue(data_float):
     """Test NumpyExtensionArray.na_value returns np.nan"""
     assert data_float.na_value is np.nan
 
+@pytest.mark.xfail
 def test_numpy_tolist(data_float):
     """Test NumpyExtensionArray.tolist() returns list"""
     result = data_float.tolist()
