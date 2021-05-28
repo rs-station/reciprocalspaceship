@@ -25,6 +25,10 @@ def test_canonicalize_phases(phase_deg, deg):
         phase_deg = np.deg2rad(phase_deg)
         expected_phase = np.deg2rad(expected_phase)
     p = rs.utils.canonicalize_phases(phase_deg, deg)
+    if isinstance(p, rs.DataSeries):
+        p = p.to_numpy(np.float32)
+        expected_phase = expected_phase.to_numpy(np.float32)
+        
     assert np.allclose(p, expected_phase)
 
 
