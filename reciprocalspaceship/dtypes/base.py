@@ -143,7 +143,7 @@ class MTZIntegerArray(IntegerArray):
 
 class MTZFloat32Dtype(MTZDtype, pd.Float32Dtype):
     """Base ExtensionDtype class for MTZDtype backed by pd.Float32Dtype"""
-
+    
     def _get_common_dtype(self, dtypes):
         if len(set(dtypes)) == 1:
             # only itself
@@ -197,7 +197,7 @@ class MTZFloatArray(FloatingArray):
         numpy.ndarray
         """
         if na_value is lib.no_default:
-            na_value = libmissing.NA
+            na_value = np.nan
 
         if dtype is None:
             dtype = np.float32
