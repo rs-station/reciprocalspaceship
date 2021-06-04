@@ -123,10 +123,13 @@ def test_expand_anomalous(data_fmodel_P1):
     gemmi.Op("x,y+1/4,z-1/4"),
     gemmi.Op("x-3/4,y+1/4,z-1/4"),
     gemmi.Op("x-3/4,y+1/4,z-3/4"),
-    gemmi.Op("x-3/4,y+3/4,z-3/4"),    
-]) 
+    gemmi.Op("x-3/4,y+3/4,z-3/4"),
+])
 def test_apply_symop_mapshift(data_fmodel, op):
-
+    """
+    Compare the results of DataSet.apply_symop() to the structure factors
+    corresponding to a map that was shifted in real space
+    """
     ds = data_fmodel
     gridsize = (32, 32, 32)
     tran = (np.array(gridsize) * np.array(op.tran) / op.DEN).astype(int)
