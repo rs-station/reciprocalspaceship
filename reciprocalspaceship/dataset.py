@@ -597,8 +597,7 @@ class DataSet(pd.DataFrame):
 
         # Shift phases according to symop
         for key in dataset.get_phase_keys():
-            dataset[key] += np.rad2deg(phase_shifts)
-            dataset[key] *= phic
+            dataset[key] = phic * (dataset[key] - np.rad2deg(phase_shifts))
             dataset[key] = utils.canonicalize_phases(dataset[key], deg=True)
         for key in dataset.get_complex_keys():
             dataset[key] *= np.exp(1j*phase_shifts)
