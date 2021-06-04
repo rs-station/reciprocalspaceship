@@ -2,6 +2,7 @@ import pytest
 import numpy as np
 from pandas.testing  import assert_index_equal
 import reciprocalspaceship as rs
+import gemmi
 
 @pytest.mark.parametrize("inplace", [True, False])
 @pytest.mark.parametrize("reset_index", [True, False])
@@ -110,3 +111,37 @@ def test_expand_anomalous(data_fmodel_P1):
                        np.cos(np.deg2rad(-1*friedel.loc[(-1*H).tolist(), "PHIFMODEL"].to_numpy())), atol=1e-5)
     assert np.allclose(friedel.loc[H.tolist(), "sf"].to_numpy(),
                        np.conjugate(friedel.loc[(-1*H).tolist(), "sf"].to_numpy()))
+
+@pytest.mark.parametrize("op", [
+    gemmi.Op("x,y,z+1/4"),
+    gemmi.Op("x,y+1/4,z"),
+    gemmi.Op("x+1/4,y,z"),
+    gemmi.Op("x+1/4,y+1/4,z"),
+    gemmi.Op("x+1/4,y,z+1/4"),
+    gemmi.Op("x,y+1/4,z+1/4"),
+    gemmi.Op("x+1/4,y+1/4,z+1/4"),    
+    gemmi.Op("x,y+1/4,z-1/4"),
+    gemmi.Op("x-3/4,y+1/4,z-1/4"),
+    gemmi.Op("x-3/4,y+1/4,z-3/4"),
+    gemmi.Op("x-3/4,y+3/4,z-3/4"),    
+]) 
+def test_apply_symop_mapshift(data_fmodel, op):
+
+    ds = data_fmodel
+    gridsize = (32, 32, 32)
+    tran = (np.array(gridsize) * np.array(op.tran) / op.DEN).astype(int)
+
+    # Apply symop
+    result = data_fmodel.apply_symop(op)
+    result["result"] = result.to_structurefactor("FMODEL", "PHIFMODEL")
+
+    # Compute and shift map
+    ds["sf"] = ds.to_structurefactor("FMODEL", "PHIFMODEL")
+    reciprocalgrid = ds.to_reciprocalgrid("sf", gridsize=gridsize)
+    realmap = np.real(np.fft.fftn(reciprocalgrid))
+    shiftedmap = np.roll(realmap, tran, axis=(0, 1, 2))
+    back = np.fft.ifftn(shiftedmap)
+    H = ds.get_hkls()
+    ds["expected"] = back[H[:, 0], H[:, 1], H[:, 2]]
+
+    assert np.allclose(result["result"], ds["expected"])
