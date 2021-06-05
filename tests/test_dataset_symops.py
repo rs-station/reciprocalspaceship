@@ -1,8 +1,9 @@
 import pytest
 import numpy as np
-from pandas.testing  import assert_index_equal
+from pandas.testing import assert_index_equal
 import reciprocalspaceship as rs
 import gemmi
+
 
 @pytest.mark.parametrize("inplace", [True, False])
 @pytest.mark.parametrize("reset_index", [True, False])
@@ -10,7 +11,7 @@ import gemmi
 def test_hkl_to_asu(mtz_by_spacegroup, inplace, reset_index, anomalous):
     """Test DataSet.hkl_to_asu() for common spacegroups"""
     x = rs.read_mtz(mtz_by_spacegroup)
-    y = rs.read_mtz(mtz_by_spacegroup[:-4] + '_p1.mtz')
+    y = rs.read_mtz(mtz_by_spacegroup[:-4] + "_p1.mtz")
     y.spacegroup = x.spacegroup
 
     if reset_index:
@@ -19,34 +20,36 @@ def test_hkl_to_asu(mtz_by_spacegroup, inplace, reset_index, anomalous):
     yasu = y.hkl_to_asu(inplace=inplace, anomalous=anomalous)
 
     if reset_index:
-        yasu.set_index(['H', 'K', 'L'], inplace=True)
+        yasu.set_index(["H", "K", "L"], inplace=True)
 
     # Confirm centric reflections are always in +ASU
     expected_centric = x.loc[x.label_centrics()["CENTRIC"]]
-    result_centric   = yasu.loc[yasu.label_centrics()["CENTRIC"]]
+    result_centric = yasu.loc[yasu.label_centrics()["CENTRIC"]]
     assert len(expected_centric.index.difference(result_centric.index)) == 0
-    assert len(result_centric.index.difference(expected_centric.index)) == 0    
+    assert len(result_centric.index.difference(expected_centric.index)) == 0
 
     # If anomalous=True, confirm acentric reflections were in +/- ASU
     if anomalous:
         yasu.reset_index(inplace=True)
         acentric = ~yasu.label_centrics()["CENTRIC"]
-        friedel_minus = yasu['M/ISYM']%2 == 0
-        yasu[friedel_minus & acentric] = yasu[friedel_minus & acentric].apply_symop("-x,-y,-z")
-        yasu.set_index(['H', 'K', 'L'], inplace=True)
+        friedel_minus = yasu["M/ISYM"] % 2 == 0
+        yasu[friedel_minus & acentric] = yasu[friedel_minus & acentric].apply_symop(
+            "-x,-y,-z"
+        )
+        yasu.set_index(["H", "K", "L"], inplace=True)
     assert len(yasu.index.difference(x.index)) == 0
     assert len(x.index.difference(yasu.index)) == 0
 
     # Confirm structure factor amplitudes are always unchanged
-    Fx    = x.loc[yasu.index, 'FMODEL'].values.astype(float) 
-    Fyasu = yasu['FMODEL'].values.astype(float) 
+    Fx = x.loc[yasu.index, "FMODEL"].values.astype(float)
+    Fyasu = yasu["FMODEL"].values.astype(float)
     assert np.allclose(Fx, Fyasu)
 
     # Confirm phase changes are applied
-    Phx    = x.loc[yasu.index, 'PHIFMODEL'].values.astype(float) 
-    Phyasu = yasu['PHIFMODEL'].values.astype(float) 
-    Sx    = Fx*np.exp(1j*np.deg2rad(Phx))
-    Syasu = Fyasu*np.exp(1j*np.deg2rad(Phyasu))
+    Phx = x.loc[yasu.index, "PHIFMODEL"].values.astype(float)
+    Phyasu = yasu["PHIFMODEL"].values.astype(float)
+    Sx = Fx * np.exp(1j * np.deg2rad(Phx))
+    Syasu = Fyasu * np.exp(1j * np.deg2rad(Phyasu))
     assert np.allclose(Sx, Syasu, rtol=1e-3)
 
     # Confirm inplace
@@ -60,28 +63,28 @@ def test_expand_to_p1(mtz_by_spacegroup):
     """Test DataSet.expand_to_p1() for common spacegroups"""
     x = rs.read_mtz(mtz_by_spacegroup)
 
-    expected = rs.read_mtz(mtz_by_spacegroup[:-4] + '_p1.mtz')
+    expected = rs.read_mtz(mtz_by_spacegroup[:-4] + "_p1.mtz")
     expected.sort_index(inplace=True)
     result = x.expand_to_p1()
     result.sort_index(inplace=True)
 
     expected_sf = expected.to_structurefactor("FMODEL", "PHIFMODEL")
-    result_sf  = result.to_structurefactor("FMODEL", "PHIFMODEL")
-    
+    result_sf = result.to_structurefactor("FMODEL", "PHIFMODEL")
+
     assert_index_equal(result.index, expected.index)
     assert np.allclose(result_sf.to_numpy(), expected_sf.to_numpy(), rtol=1e-4)
 
 
 def test_expand_to_p1(mtz_by_spacegroup):
     """DataSet.expand_to_p1() should not affect P1 data"""
-    expected = rs.read_mtz(mtz_by_spacegroup[:-4] + '_p1.mtz')
+    expected = rs.read_mtz(mtz_by_spacegroup[:-4] + "_p1.mtz")
     result = expected.expand_to_p1()
     result.sort_index(inplace=True)
-    expected.sort_index(inplace=True)    
+    expected.sort_index(inplace=True)
 
     expected_sf = expected.to_structurefactor("FMODEL", "PHIFMODEL")
-    result_sf  = result.to_structurefactor("FMODEL", "PHIFMODEL")
-    
+    result_sf = result.to_structurefactor("FMODEL", "PHIFMODEL")
+
     assert_index_equal(result.index, expected.index)
     assert np.allclose(result_sf.to_numpy(), expected_sf.to_numpy(), rtol=1e-4)
 
@@ -94,44 +97,72 @@ def test_expand_to_p1_unmerged(data_unmerged):
 
 def test_expand_anomalous(data_fmodel_P1):
     """
-    Test DataSet.expand_anomalous() doubles reflections and applies 
+    Test DataSet.expand_anomalous() doubles reflections and applies
     phase shifts
     """
     data_fmodel_P1["sf"] = data_fmodel_P1.to_structurefactor("FMODEL", "PHIFMODEL")
     friedel = data_fmodel_P1.expand_anomalous()
 
-    assert len(friedel) == 2*len(data_fmodel_P1)
+    assert len(friedel) == 2 * len(data_fmodel_P1)
 
     H = data_fmodel_P1.get_hkls()
-    assert np.array_equal(friedel.loc[H.tolist(), "FMODEL"].to_numpy(),
-                          friedel.loc[(-1*H).tolist(), "FMODEL"].to_numpy())
-    assert np.allclose(np.sin(np.deg2rad(friedel.loc[H.tolist(), "PHIFMODEL"].to_numpy())),
-                       np.sin(np.deg2rad(-1*friedel.loc[(-1*H).tolist(), "PHIFMODEL"].to_numpy())), atol=1e-5)
-    assert np.allclose(np.cos(np.deg2rad(friedel.loc[H.tolist(), "PHIFMODEL"].to_numpy())),
-                       np.cos(np.deg2rad(-1*friedel.loc[(-1*H).tolist(), "PHIFMODEL"].to_numpy())), atol=1e-5)
-    assert np.allclose(friedel.loc[H.tolist(), "sf"].to_numpy(),
-                       np.conjugate(friedel.loc[(-1*H).tolist(), "sf"].to_numpy()))
+    assert np.array_equal(
+        friedel.loc[H.tolist(), "FMODEL"].to_numpy(),
+        friedel.loc[(-1 * H).tolist(), "FMODEL"].to_numpy(),
+    )
+    assert np.allclose(
+        np.sin(np.deg2rad(friedel.loc[H.tolist(), "PHIFMODEL"].to_numpy())),
+        np.sin(np.deg2rad(-1 * friedel.loc[(-1 * H).tolist(), "PHIFMODEL"].to_numpy())),
+        atol=1e-5,
+    )
+    assert np.allclose(
+        np.cos(np.deg2rad(friedel.loc[H.tolist(), "PHIFMODEL"].to_numpy())),
+        np.cos(np.deg2rad(-1 * friedel.loc[(-1 * H).tolist(), "PHIFMODEL"].to_numpy())),
+        atol=1e-5,
+    )
+    assert np.allclose(
+        friedel.loc[H.tolist(), "sf"].to_numpy(),
+        np.conjugate(friedel.loc[(-1 * H).tolist(), "sf"].to_numpy()),
+    )
 
-@pytest.mark.parametrize("op", [
-    gemmi.Op("x,y,z+1/4"),
-    gemmi.Op("x,y+1/4,z"),
-    gemmi.Op("x+1/4,y,z"),
-    gemmi.Op("x+1/4,y+1/4,z"),
-    gemmi.Op("x+1/4,y,z+1/4"),
-    gemmi.Op("x,y+1/4,z+1/4"),
-    gemmi.Op("x+1/4,y+1/4,z+1/4"),    
-    gemmi.Op("x,y+1/4,z-1/4"),
-    gemmi.Op("x-3/4,y+1/4,z-1/4"),
-    gemmi.Op("x-3/4,y+1/4,z-3/4"),
-    gemmi.Op("x-3/4,y+3/4,z-3/4"),
-])
+
+@pytest.mark.parametrize(
+    "op",
+    [
+        gemmi.Op("x,y,z+1/4"),
+        gemmi.Op("x,y+1/4,z"),
+        gemmi.Op("x+1/4,y,z"),
+        gemmi.Op("x+1/4,y+1/4,z"),
+        gemmi.Op("x+1/4,y,z+1/4"),
+        gemmi.Op("x,y+1/4,z+1/4"),
+        gemmi.Op("x+1/4,y+1/4,z+1/4"),
+        gemmi.Op("x,y+1/4,z-1/4"),
+        gemmi.Op("x-3/4,y+1/4,z-1/4"),
+        gemmi.Op("x-3/4,y+1/4,z-3/4"),
+        gemmi.Op("x-3/4,y+3/4,z-3/4"),
+        gemmi.Op("x,y,z+1/3"),
+        gemmi.Op("x,y+1/3,z"),
+        gemmi.Op("x+1/3,y,z"),
+        gemmi.Op("x+1/3,y+1/3,z"),
+        gemmi.Op("x,y+1/3,z+1/3"),
+        gemmi.Op("x+1/3,y+1/3,z+1/3"),
+        gemmi.Op("x+1/3,y+1/3,z+2/3"),
+        gemmi.Op("x-1/3,y+2/3,z+2/3"),
+        gemmi.Op("x-1/3,y+2/3,z+1/4"),
+        gemmi.Op("x-1/3,y+2/3,z+1/24"),
+        gemmi.Op("x-1/3,y+2/3,z+7/24"),
+        gemmi.Op("x-1/3,y+2/3,z+13/24"),
+        gemmi.Op("x-1/3,y+2/3,z+17/24"),
+        gemmi.Op("x-1/3,y+2/3,z-23/24"),
+    ],
+)
 def test_apply_symop_mapshift(data_fmodel, op):
     """
     Compare the results of DataSet.apply_symop() to the structure factors
     corresponding to a map that was shifted in real space
     """
     ds = data_fmodel
-    gridsize = (32, 32, 32)
+    gridsize = (48, 48, 48)
     tran = (np.array(gridsize) * np.array(op.tran) / op.DEN).astype(int)
 
     # Apply symop
