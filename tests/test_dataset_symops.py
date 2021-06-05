@@ -156,7 +156,8 @@ def test_expand_anomalous(data_fmodel_P1):
         gemmi.Op("x-1/3,y+2/3,z-23/24"),
     ],
 )
-def test_apply_symop_mapshift(data_fmodel, op):
+@pytest.mark.parametrize("use_complex", [True, False])
+def test_apply_symop_mapshift(data_fmodel, op, use_complex):
     """
     Compare the results of DataSet.apply_symop() to the structure factors
     corresponding to a map that was shifted in real space
@@ -166,8 +167,13 @@ def test_apply_symop_mapshift(data_fmodel, op):
     tran = (np.array(gridsize) * np.array(op.tran) / op.DEN).astype(int)
 
     # Apply symop
-    result = data_fmodel.apply_symop(op)
-    result["result"] = result.to_structurefactor("FMODEL", "PHIFMODEL")
+    if use_complex:
+        result = data_fmodel
+        result["result"] = result.to_structurefactor("FMODEL", "PHIFMODEL")
+        result = result.apply_symop(op)
+    else:
+        result = data_fmodel.apply_symop(op)
+        result["result"] = result.to_structurefactor("FMODEL", "PHIFMODEL")
 
     # Compute and shift map
     ds["sf"] = ds.to_structurefactor("FMODEL", "PHIFMODEL")
