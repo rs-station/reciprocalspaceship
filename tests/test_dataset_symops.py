@@ -157,22 +157,22 @@ def test_expand_anomalous(data_fmodel_P1):
     ],
 )
 @pytest.mark.parametrize("use_complex", [True, False])
-def test_apply_symop_mapshift(data_fmodel, op, use_complex):
+def test_apply_symop_mapshift(data_fmodel_P1, op, use_complex):
     """
     Compare the results of DataSet.apply_symop() to the structure factors
     corresponding to a map that was shifted in real space
     """
-    ds = data_fmodel
+    ds = data_fmodel_P1.copy()
     gridsize = (48, 48, 48)
     tran = (np.array(gridsize) * np.array(op.tran) / op.DEN).astype(int)
 
     # Apply symop
     if use_complex:
-        result = data_fmodel
+        result = data_fmodel_P1
         result["result"] = result.to_structurefactor("FMODEL", "PHIFMODEL")
         result = result.apply_symop(op)
     else:
-        result = data_fmodel.apply_symop(op)
+        result = data_fmodel_P1.apply_symop(op)
         result["result"] = result.to_structurefactor("FMODEL", "PHIFMODEL")
 
     # Compute and shift map
