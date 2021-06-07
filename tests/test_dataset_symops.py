@@ -75,7 +75,7 @@ def test_expand_to_p1(mtz_by_spacegroup):
     assert np.allclose(result_sf.to_numpy(), expected_sf.to_numpy(), rtol=1e-4)
 
 
-def test_expand_to_p1(mtz_by_spacegroup):
+def test_expand_to_p1_with_p1(mtz_by_spacegroup):
     """DataSet.expand_to_p1() should not affect P1 data"""
     expected = rs.read_mtz(mtz_by_spacegroup[:-4] + "_p1.mtz")
     result = expected.expand_to_p1()
