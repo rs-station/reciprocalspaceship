@@ -1000,7 +1000,7 @@ class DataSet(pd.DataFrame):
         for k in dataset.get_phase_keys():
             dataset[k] = phi_coeff[inverse] * (dataset[k] + phi_shift[inverse])
         dataset.canonicalize_phases(inplace=True)
-
+        
         # GH#3: if PARTIAL column exists, use it to construct M/ISYM
         if "PARTIAL" in dataset.columns:
             m_isym = isym[inverse] + 256*dataset["PARTIAL"].to_numpy()
@@ -1085,6 +1085,10 @@ class DataSet(pd.DataFrame):
         # Apply phase shift
         for k in self.get_phase_keys():
             self[k] = phi_coeff[inverse] * (self[k] + phi_shift[inverse])
+        for k in self.get_complex_keys():
+            self[k] *= np.exp(1j*np.deg2rad(phi_shift[inverse]))
+            friedel_mask = phi_coeff[inverse] != 1
+            self.loc[friedel_mask, k] = np.conjugate(self.loc[friedel_mask, k])
         self.canonicalize_phases(inplace=True)
         
         return self
@@ -1100,13 +1104,29 @@ class DataSet(pd.DataFrame):
         """
         if not self.merged:
             raise ValueError("This function is only applicable for merged DataSets")
+        if not in_asu(self.get_hkls(), spacegroup=self.spacegroup).all():
+            raise ValueError("This function is only  applicable for reflection data in the reciprocal ASU and anomalous data in a two-column (unstacked) format")
 
+        p1 = rs.DataSet(spacegroup=self.spacegroup, cell=self.cell)        
+
+        # Get all symops, in ascending order by ISYM
         groupops = self.spacegroup.operations()
-        p1 = rs.concat([ self.apply_symop(op) for op in groupops ])
+        allops = [ op for op in groupops for op in (op, op.negated()) ]
+
+        # Apply each symop and drop duplicates with higher ISYM
+        for isym, op in enumerate(allops, 1):
+            ds = self.copy()
+            ds.reset_index(inplace=True)
+            ds["M/ISYM"] = isym
+            ds["M/ISYM"] = ds["M/ISYM"].astype("M/ISYM")
+            p1 = p1.append(ds.hkl_to_observed(m_isym="M/ISYM"))
+            p1.drop_duplicates(subset=["H", "K", "L"], inplace=True)
+
+        # Restrict to p1 ASU
         p1.spacegroup = gemmi.SpaceGroup(1)
-        p1.reset_index(inplace=True)
-        p1.drop_duplicates(subset=["H", "K", "L"], inplace=True)
+        p1 = p1.loc[in_asu(p1.get_hkls(), spacegroup=p1.spacegroup)]
         p1.set_index(["H", "K", "L"], inplace=True)
+
         return p1
 
     def expand_anomalous(self):
@@ -1143,7 +1163,7 @@ class DataSet(pd.DataFrame):
 
         return self
 
-    def to_reciprocalgrid(self, key, gridsize, friedels_law=True):
+    def to_reciprocalgrid(self, key, gridsize, anomalous=False):
         """
         Set up reciprocal grid with values from column, ``key``, indexed by
         Miller indices. A 3D numpy array will be initialized with the
@@ -1154,11 +1174,8 @@ class DataSet(pd.DataFrame):
         -----
         - The data being arranged on a reciprocal grid must be compatible
           with a numpy datatype.
-        - If the data is complex and ``friedels_law=True``, the complex
-          conjugate will be used to populate Friedel pairs. The only scenario
-          in which to use ``friedels_law=False`` would be if Friedel pairs
-          have already been stacked to go from two-column to one-column
-          anomalous data. 
+        - The key specified with ``anomalous=True`` should correspond to the 
+          column label after calling ``stack_anomalous()``.
         
         Parameters
         ----------
@@ -1166,17 +1183,20 @@ class DataSet(pd.DataFrame):
             Column label for value to arrange on reciprocal grid
         gridsize : array-like (len==3)
             Dimensions for 3D reciprocal grid.
-        friedels_law : bool
-            Whether to expand data from P1 ASU to P1 unit cell when constructing
-            reciprocal grid. If False, Friedel pairs must be handled by
-            the user
+        anomalous : bool
+            Whether to expand the P1 Friedel+ ASU to the Friedel- reflections. 
+            If False, the Friedel+ ASU will be used to complete the P1 unit cell. 
+            If True, the Friedel- reflections should be present in a two-column 
+            anomalous format. 
 
         Returns
         -------
         numpy.ndarray
         """
         p1 = self.expand_to_p1()
-        if friedels_law:
+        if anomalous:
+            p1 = p1.stack_anomalous()
+        else:
             p1 = p1.expand_anomalous()
         p1.sort_index(inplace=True)
         data = p1[key].to_numpy()
