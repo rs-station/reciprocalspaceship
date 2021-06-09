@@ -495,14 +495,14 @@ def test_apply_symop_roundtrip(mtz_by_spacegroup):
     dataset = rs.read_mtz(mtz_by_spacegroup)
     for op in dataset.spacegroup.operations():
         applied = dataset.apply_symop(op)
-        back = applied.hkl_to_asu()
+        back = applied.apply_symop(op.inverse())
 
         assert np.array_equal(back.FMODEL.to_numpy(), dataset.FMODEL.to_numpy())
         assert np.array_equal(back.get_hkls(), dataset.get_hkls())
 
         original = rs.utils.to_structurefactor(dataset.FMODEL, dataset.PHIFMODEL)
         back = rs.utils.to_structurefactor(back.FMODEL, back.PHIFMODEL)
-        assert np.isclose(original, back, rtol=1e-3).all()
+        assert np.isclose(original, back).all()
 
 
 @pytest.mark.parametrize("inplace", [True, False])
