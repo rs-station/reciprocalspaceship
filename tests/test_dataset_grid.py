@@ -24,7 +24,7 @@ def test_to_reciprocalgrid_complex(mtz_by_spacegroup, sample_rate, p1):
     expected = np.array(gemmigrid)
     dataset["sf"] = dataset.to_structurefactor("FMODEL", "PHIFMODEL")
     result = dataset.to_reciprocalgrid("sf", gridsize)
-    assert np.allclose(result, expected, atol=1e-4)
+    assert np.allclose(result, expected, rtol=1e-4)
 
 @pytest.mark.parametrize("sample_rate", [2.5, 3, 5])
 @pytest.mark.parametrize("p1", [True, False])
