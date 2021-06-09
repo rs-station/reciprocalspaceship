@@ -61,8 +61,7 @@ def test_hkl_to_asu(mtz_by_spacegroup, inplace, reset_index, anomalous):
     assert np.allclose(result["sf"], expected.loc[result.index, "sf"])
 
 
-@pytest.mark.parametrize("anomalous", [True, False])
-def test_hklmapping_roundtrip_phase(mtz_by_spacegroup, anomalous):
+def test_hklmapping_roundtrip_phase(mtz_by_spacegroup):
     """
     Test roundtrip of DataSet.hkl_to_asu() and DataSet.hkl_to_observed() preserve
     phases
@@ -70,9 +69,10 @@ def test_hklmapping_roundtrip_phase(mtz_by_spacegroup, anomalous):
     ref = rs.read_mtz(mtz_by_spacegroup)
     expected = rs.read_mtz(mtz_by_spacegroup[:-4] + "_p1.mtz")
     expected["sf"] = expected.to_structurefactor("FMODEL", "PHIFMODEL")
-
+    expected.spacegroup = ref.spacegroup
+    
     # Roundtrip
-    temp = expected.hkl_to_asu(anomalous=anomalous)
+    temp = expected.hkl_to_asu()
     result = temp.hkl_to_observed()
 
     # Check indices
