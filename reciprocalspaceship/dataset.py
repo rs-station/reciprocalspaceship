@@ -1093,6 +1093,7 @@ class DataSet(pd.DataFrame):
         
         return self
 
+    @range_indexed
     def expand_to_p1(self):
         """
         Generates all symmetrically equivalent reflections. The spacegroup 
@@ -1116,7 +1117,6 @@ class DataSet(pd.DataFrame):
         # Apply each symop and drop duplicates with higher ISYM
         for isym, op in enumerate(allops, 1):
             ds = self.copy()
-            ds.reset_index(inplace=True)
             ds["M/ISYM"] = isym
             ds["M/ISYM"] = ds["M/ISYM"].astype("M/ISYM")
             p1 = p1.append(ds.hkl_to_observed(m_isym="M/ISYM"))
@@ -1125,7 +1125,6 @@ class DataSet(pd.DataFrame):
         # Restrict to p1 ASU
         p1.spacegroup = gemmi.SpaceGroup(1)
         p1 = p1.loc[in_asu(p1.get_hkls(), spacegroup=p1.spacegroup)]
-        p1.set_index(["H", "K", "L"], inplace=True)
 
         return p1
 
