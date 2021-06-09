@@ -13,6 +13,8 @@
   
   <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
   <link rel="stylesheet" href="../_static/panels-bootstrap.5fd3999ee7762ccc51105388f4a9d115.css" type="text/css" />
   <link rel="stylesheet" href="../_static/panels-main.c949a650a448cc0ae9fd3441c0e17fb0.css" type="text/css" />
@@ -35,12 +37,13 @@
   
     
       <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
         <script src="../_static/jquery.js"></script>
         <script src="../_static/underscore.js"></script>
         <script src="../_static/doctools.js"></script>
         <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
-        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
-        <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
+        <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+        <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "document", "processHtmlClass": "math|output_area"}}</script>
     
     <script type="text/javascript" src="../_static/js/theme.js"></script>
 
@@ -515,7 +518,7 @@ Fourier transforms and representing real-space, voxelized electron density.</p>
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-0.9.4
+0.9.9
 </pre></div></div>
 </div>
 <hr class="docutils" />
@@ -805,42 +808,42 @@ input[type=range].anim-slider {
 </style>
 
 <div class="animation">
-  <img id="_anim_imgc69b556cab884bbfb73ee5c8c7836f79">
+  <img id="_anim_img13f904a725314a4ea05f82bd442c6ab9">
   <div class="anim-controls">
-    <input id="_anim_sliderc69b556cab884bbfb73ee5c8c7836f79" type="range" class="anim-slider"
+    <input id="_anim_slider13f904a725314a4ea05f82bd442c6ab9" type="range" class="anim-slider"
            name="points" min="0" max="1" step="1" value="0"
-           oninput="animc69b556cab884bbfb73ee5c8c7836f79.set_frame(parseInt(this.value));"></input>
+           oninput="anim13f904a725314a4ea05f82bd442c6ab9.set_frame(parseInt(this.value));"></input>
     <div class="anim-buttons">
-      <button title="Decrease speed" onclick="animc69b556cab884bbfb73ee5c8c7836f79.slower()">
+      <button title="Decrease speed" onclick="anim13f904a725314a4ea05f82bd442c6ab9.slower()">
           <i class="fa fa-minus"></i></button>
-      <button title="First frame" onclick="animc69b556cab884bbfb73ee5c8c7836f79.first_frame()">
+      <button title="First frame" onclick="anim13f904a725314a4ea05f82bd442c6ab9.first_frame()">
         <i class="fa fa-fast-backward"></i></button>
-      <button title="Previous frame" onclick="animc69b556cab884bbfb73ee5c8c7836f79.previous_frame()">
+      <button title="Previous frame" onclick="anim13f904a725314a4ea05f82bd442c6ab9.previous_frame()">
           <i class="fa fa-step-backward"></i></button>
-      <button title="Play backwards" onclick="animc69b556cab884bbfb73ee5c8c7836f79.reverse_animation()">
+      <button title="Play backwards" onclick="anim13f904a725314a4ea05f82bd442c6ab9.reverse_animation()">
           <i class="fa fa-play fa-flip-horizontal"></i></button>
-      <button title="Pause" onclick="animc69b556cab884bbfb73ee5c8c7836f79.pause_animation()">
+      <button title="Pause" onclick="anim13f904a725314a4ea05f82bd442c6ab9.pause_animation()">
           <i class="fa fa-pause"></i></button>
-      <button title="Play" onclick="animc69b556cab884bbfb73ee5c8c7836f79.play_animation()">
+      <button title="Play" onclick="anim13f904a725314a4ea05f82bd442c6ab9.play_animation()">
           <i class="fa fa-play"></i></button>
-      <button title="Next frame" onclick="animc69b556cab884bbfb73ee5c8c7836f79.next_frame()">
+      <button title="Next frame" onclick="anim13f904a725314a4ea05f82bd442c6ab9.next_frame()">
           <i class="fa fa-step-forward"></i></button>
-      <button title="Last frame" onclick="animc69b556cab884bbfb73ee5c8c7836f79.last_frame()">
+      <button title="Last frame" onclick="anim13f904a725314a4ea05f82bd442c6ab9.last_frame()">
           <i class="fa fa-fast-forward"></i></button>
-      <button title="Increase speed" onclick="animc69b556cab884bbfb73ee5c8c7836f79.faster()">
+      <button title="Increase speed" onclick="anim13f904a725314a4ea05f82bd442c6ab9.faster()">
           <i class="fa fa-plus"></i></button>
     </div>
-    <form title="Repetition mode" action="#n" name="_anim_loop_selectc69b556cab884bbfb73ee5c8c7836f79"
+    <form title="Repetition mode" action="#n" name="_anim_loop_select13f904a725314a4ea05f82bd442c6ab9"
           class="anim-state">
-      <input type="radio" name="state" value="once" id="_anim_radio1_c69b556cab884bbfb73ee5c8c7836f79"
+      <input type="radio" name="state" value="once" id="_anim_radio1_13f904a725314a4ea05f82bd442c6ab9"
              >
-      <label for="_anim_radio1_c69b556cab884bbfb73ee5c8c7836f79">Once</label>
-      <input type="radio" name="state" value="loop" id="_anim_radio2_c69b556cab884bbfb73ee5c8c7836f79"
+      <label for="_anim_radio1_13f904a725314a4ea05f82bd442c6ab9">Once</label>
+      <input type="radio" name="state" value="loop" id="_anim_radio2_13f904a725314a4ea05f82bd442c6ab9"
              checked>
-      <label for="_anim_radio2_c69b556cab884bbfb73ee5c8c7836f79">Loop</label>
-      <input type="radio" name="state" value="reflect" id="_anim_radio3_c69b556cab884bbfb73ee5c8c7836f79"
+      <label for="_anim_radio2_13f904a725314a4ea05f82bd442c6ab9">Loop</label>
+      <input type="radio" name="state" value="reflect" id="_anim_radio3_13f904a725314a4ea05f82bd442c6ab9"
              >
-      <label for="_anim_radio3_c69b556cab884bbfb73ee5c8c7836f79">Reflect</label>
+      <label for="_anim_radio3_13f904a725314a4ea05f82bd442c6ab9">Reflect</label>
     </form>
   </div>
 </div>
@@ -850,9 +853,9 @@ input[type=range].anim-slider {
   /* Instantiate the Animation class. */
   /* The IDs given should match those used in the template above. */
   (function() {
-    var img_id = "_anim_imgc69b556cab884bbfb73ee5c8c7836f79";
-    var slider_id = "_anim_sliderc69b556cab884bbfb73ee5c8c7836f79";
-    var loop_select_id = "_anim_loop_selectc69b556cab884bbfb73ee5c8c7836f79";
+    var img_id = "_anim_img13f904a725314a4ea05f82bd442c6ab9";
+    var slider_id = "_anim_slider13f904a725314a4ea05f82bd442c6ab9";
+    var loop_select_id = "_anim_loop_select13f904a725314a4ea05f82bd442c6ab9";
     var frames = new Array(64);
 
   frames[0] = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAbAAAAGwCAYAAADITjAqAAAAOXRFWHRTb2Z0d2FyZQBNYXRwbG90\
@@ -13101,7 +13104,7 @@ qFMGtGm2AAAAAElFTkSuQmCC\
     /* set a timeout to make sure all the above elements are created before
        the object is initialized. */
     setTimeout(function() {
-        animc69b556cab884bbfb73ee5c8c7836f79 = new Animation(frames, img_id, slider_id, 100,
+        anim13f904a725314a4ea05f82bd442c6ab9 = new Animation(frames, img_id, slider_id, 100,
                                  loop_select_id);
     }, 0);
   })()
@@ -13212,35 +13215,35 @@ qFMGtGm2AAAAAElFTkSuQmCC\
       <td>0.619874</td>
       <td>49.589938</td>
       <td>13.587933</td>
-      <td>20.634899</td>
+      <td>20.634898</td>
     </tr>
     <tr>
       <th>1</th>
       <td>49.589938</td>
       <td>0.619874</td>
       <td>24.221967</td>
-      <td>20.634899</td>
+      <td>20.634898</td>
     </tr>
     <tr>
       <th>2</th>
       <td>29.753963</td>
       <td>78.724026</td>
       <td>5.317017</td>
-      <td>20.634899</td>
+      <td>20.634898</td>
     </tr>
     <tr>
       <th>3</th>
       <td>78.724026</td>
       <td>29.753963</td>
       <td>32.492883</td>
-      <td>20.634899</td>
+      <td>20.634898</td>
     </tr>
     <tr>
       <th>4</th>
-      <td>9.917988</td>
       <td>39.052076</td>
-      <td>23.040408</td>
-      <td>20.634899</td>
+      <td>9.917988</td>
+      <td>14.769492</td>
+      <td>20.634898</td>
     </tr>
     <tr>
       <th>...</th>
@@ -13251,37 +13254,37 @@ qFMGtGm2AAAAAElFTkSuQmCC\
     </tr>
     <tr>
       <th>75</th>
-      <td>17.356478</td>
       <td>30.373837</td>
-      <td>13.587933</td>
+      <td>17.356478</td>
+      <td>24.221967</td>
       <td>13.380321</td>
     </tr>
     <tr>
       <th>76</th>
-      <td>9.298113</td>
-      <td>57.028428</td>
-      <td>4.135458</td>
-      <td>13.380321</td>
-    </tr>
-    <tr>
-      <th>77</th>
       <td>57.028428</td>
       <td>9.298113</td>
       <td>33.674442</td>
       <td>13.380321</td>
     </tr>
     <tr>
+      <th>77</th>
+      <td>9.298113</td>
+      <td>57.028428</td>
+      <td>4.135458</td>
+      <td>13.380321</td>
+    </tr>
+    <tr>
       <th>78</th>
-      <td>22.315472</td>
       <td>70.045787</td>
-      <td>14.769492</td>
+      <td>22.315472</td>
+      <td>23.040408</td>
       <td>13.380321</td>
     </tr>
     <tr>
       <th>79</th>
-      <td>70.045787</td>
       <td>22.315472</td>
-      <td>23.040408</td>
+      <td>70.045787</td>
+      <td>14.769492</td>
       <td>13.380321</td>
     </tr>
   </tbody>

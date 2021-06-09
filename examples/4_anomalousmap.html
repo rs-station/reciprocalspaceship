@@ -13,6 +13,8 @@
   
   <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
   <link rel="stylesheet" href="../_static/panels-bootstrap.5fd3999ee7762ccc51105388f4a9d115.css" type="text/css" />
   <link rel="stylesheet" href="../_static/panels-main.c949a650a448cc0ae9fd3441c0e17fb0.css" type="text/css" />
@@ -35,12 +37,13 @@
   
     
       <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
         <script src="../_static/jquery.js"></script>
         <script src="../_static/underscore.js"></script>
         <script src="../_static/doctools.js"></script>
         <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
-        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
-        <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
+        <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+        <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "document", "processHtmlClass": "math|output_area"}}</script>
     
     <script type="text/javascript" src="../_static/js/theme.js"></script>
 
@@ -500,7 +503,7 @@ div.rendered_html tbody tr:hover {
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-0.9.4
+0.9.9
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
@@ -815,7 +818,7 @@ Number of reflections: 12542
       <td>6.185645</td>
       <td>2.932488</td>
       <td>4</td>
-      <td>1.7194303</td>
+      <td>1.7194302</td>
       <td>False</td>
       <td>6.1471047</td>
       <td>2.7739754</td>
@@ -828,7 +831,7 @@ Number of reflections: 12542
       <td>27.028767</td>
       <td>3.8457258</td>
       <td>4</td>
-      <td>1.7217723</td>
+      <td>1.7217722</td>
       <td>False</td>
       <td>26.716537</td>
       <td>3.8457258</td>
@@ -840,7 +843,7 @@ Number of reflections: 12542
       <td>3.0018542</td>
       <td>2.6649861</td>
       <td>4</td>
-      <td>1.727153</td>
+      <td>1.7271528</td>
       <td>False</td>
       <td>3.5474997</td>
       <td>2.1485696</td>
@@ -853,7 +856,7 @@ Number of reflections: 12542
       <td>-0.9806365</td>
       <td>2.7741797</td>
       <td>4</td>
-      <td>1.7197415</td>
+      <td>1.7197413</td>
       <td>False</td>
       <td>1.8468517</td>
       <td>1.4775624</td>
@@ -886,10 +889,10 @@ Number of reflections: 12542
 <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span>
 <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">gca</span><span class="p">()</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="s1">&#39;--r&#39;</span><span class="p">,</span> <span class="n">scalex</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">scaley</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">scaled</span><span class="p">[</span><span class="s2">&quot;I&quot;</span><span class="p">],</span> <span class="n">scaled</span><span class="p">[</span><span class="s2">&quot;FW-I&quot;</span><span class="p">],</span> <span class="s2">&quot;k.&quot;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.25</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">scaled</span><span class="p">[</span><span class="s2">&quot;I&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">(),</span> <span class="n">scaled</span><span class="p">[</span><span class="s2">&quot;FW-I&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">(),</span> <span class="s2">&quot;k.&quot;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.25</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">plt</span><span class="o">.</span><span class="n">xlim</span><span class="p">(),</span> <span class="n">plt</span><span class="o">.</span><span class="n">xlim</span><span class="p">(),</span> <span class="s1">&#39;--r&#39;</span><span class="p">,</span> <span class="n">scalex</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">scaley</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;Merged Intensity (AIMLESS)&quot;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;Rescaled Intensity&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;Posterior Intensity&quot;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">xscale</span><span class="p">(</span><span class="s2">&quot;log&quot;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">yscale</span><span class="p">(</span><span class="s2">&quot;log&quot;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">xlim</span><span class="p">(</span><span class="n">right</span><span class="o">=</span><span class="mf">1e4</span><span class="p">)</span>
@@ -897,7 +900,7 @@ Number of reflections: 12542
 
 <span class="c1"># Inset</span>
 <span class="n">axins</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">inset_axes</span><span class="p">([</span><span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.43</span><span class="p">,</span> <span class="mf">0.43</span><span class="p">])</span>
-<span class="n">axins</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">scaled</span><span class="p">[</span><span class="s2">&quot;I&quot;</span><span class="p">],</span> <span class="n">scaled</span><span class="p">[</span><span class="s2">&quot;FW-I&quot;</span><span class="p">],</span> <span class="s2">&quot;k.&quot;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.25</span><span class="p">)</span>
+<span class="n">axins</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">scaled</span><span class="p">[</span><span class="s2">&quot;I&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">(),</span> <span class="n">scaled</span><span class="p">[</span><span class="s2">&quot;FW-I&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">(),</span> <span class="s2">&quot;k.&quot;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.25</span><span class="p">)</span>
 <span class="n">axins</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="s1">&#39;--r&#39;</span><span class="p">)</span>
 <span class="n">axins</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="o">-</span><span class="mi">3</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
 <span class="n">axins</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="o">-</span><span class="mi">3</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>

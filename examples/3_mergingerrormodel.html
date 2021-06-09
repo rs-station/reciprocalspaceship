@@ -13,6 +13,8 @@
   
   <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
   <link rel="stylesheet" href="../_static/panels-bootstrap.5fd3999ee7762ccc51105388f4a9d115.css" type="text/css" />
   <link rel="stylesheet" href="../_static/panels-main.c949a650a448cc0ae9fd3441c0e17fb0.css" type="text/css" />
@@ -35,12 +37,13 @@
   
     
       <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
         <script src="../_static/jquery.js"></script>
         <script src="../_static/underscore.js"></script>
         <script src="../_static/doctools.js"></script>
         <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
-        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
-        <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
+        <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+        <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "document", "processHtmlClass": "math|output_area"}}</script>
     
     <script type="text/javascript" src="../_static/js/theme.js"></script>
 
@@ -512,7 +515,7 @@ example, we will explore whether the scaled reflection observations are normally
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-0.9.4
+0.9.9
 </pre></div></div>
 </div>
 <hr class="docutils" />
@@ -690,7 +693,7 @@ model</a> with <code class="docutils literal notranslate"><span class="pre">df=4
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-100%|██████████| 300/300 [00:15&lt;00:00, 19.46it/s]
+100%|██████████| 300/300 [00:15&lt;00:00, 19.10it/s]
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
@@ -751,49 +754,49 @@ model</a> with <code class="docutils literal notranslate"><span class="pre">df=4
   </thead>
   <tbody>
     <tr>
-      <th>32</th>
-      <th>26</th>
-      <th>6</th>
-      <td>17.705305</td>
-      <td>1.647103</td>
-      <td>1.5122834</td>
-      <td>18.876564</td>
-    </tr>
-    <tr>
-      <th>17</th>
-      <th>12</th>
-      <th>10</th>
-      <td>176.77727</td>
-      <td>3.4686692</td>
-      <td>3.4832904</td>
-      <td>180.39647</td>
-    </tr>
-    <tr>
-      <th>23</th>
+      <th>29</th>
       <th>22</th>
-      <th>5</th>
-      <td>365.54764</td>
-      <td>9.946246</td>
-      <td>9.125224</td>
-      <td>359.3371</td>
+      <th>10</th>
+      <td>24.814007</td>
+      <td>2.2302854</td>
+      <td>2.4028344</td>
+      <td>18.25422</td>
     </tr>
     <tr>
-      <th>31</th>
-      <th>7</th>
-      <th>16</th>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>4.394654</td>
-      <td>32.275024</td>
-    </tr>
-    <tr>
-      <th>20</th>
       <th>14</th>
-      <th>4</th>
-      <td>26.905684</td>
-      <td>1.0868621</td>
-      <td>0.9195947</td>
-      <td>24.350418</td>
+      <th>2</th>
+      <th>2</th>
+      <td>651.4589</td>
+      <td>11.476823</td>
+      <td>11.798667</td>
+      <td>674.9979</td>
+    </tr>
+    <tr>
+      <th>26</th>
+      <th>13</th>
+      <th>15</th>
+      <td>203.8359</td>
+      <td>6.8648214</td>
+      <td>7.0678773</td>
+      <td>200.09224</td>
+    </tr>
+    <tr>
+      <th>30</th>
+      <th>23</th>
+      <th>7</th>
+      <td>106.34943</td>
+      <td>3.7508175</td>
+      <td>4.130177</td>
+      <td>93.06098</td>
+    </tr>
+    <tr>
+      <th>37</th>
+      <th>2</th>
+      <th>0</th>
+      <td>1.3474302</td>
+      <td>0.59519184</td>
+      <td>0.59519184</td>
+      <td>1.3474302</td>
     </tr>
   </tbody>
 </table>
@@ -816,7 +819,7 @@ model</a> with <code class="docutils literal notranslate"><span class="pre">df=4
 <span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;Iteration&quot;</span><span class="p">)</span>
 <span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">&quot;Loss&quot;</span><span class="p">)</span>
 <span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;Loss Function&quot;</span><span class="p">)</span>
-<span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">loglog</span><span class="p">(</span><span class="n">merged_normal</span><span class="p">[</span><span class="s2">&quot;I&quot;</span><span class="p">],</span> <span class="n">result2</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">merged_normal</span><span class="o">.</span><span class="n">index</span><span class="p">,</span> <span class="s2">&quot;I&quot;</span><span class="p">],</span> <span class="s2">&quot;k.&quot;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">loglog</span><span class="p">(</span><span class="n">merged_normal</span><span class="p">[</span><span class="s2">&quot;I&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">(),</span> <span class="n">result2</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">merged_normal</span><span class="o">.</span><span class="n">index</span><span class="p">,</span> <span class="s2">&quot;I&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">(),</span> <span class="s2">&quot;k.&quot;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
 <span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;$I^</span><span class="si">{ML}</span><span class="s2">$ (AIMLESS)&quot;</span><span class="p">)</span>
 <span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;$I^</span><span class="si">{ML}</span><span class="s2">$ (PyTorch)&quot;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
@@ -829,7 +832,7 @@ model</a> with <code class="docutils literal notranslate"><span class="pre">df=4
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-100%|██████████| 300/300 [00:05&lt;00:00, 52.67it/s]
+100%|██████████| 300/300 [00:05&lt;00:00, 52.75it/s]
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
@@ -927,11 +930,11 @@ model</a> with <code class="docutils literal notranslate"><span class="pre">df=4
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-100%|██████████| 5/5 [01:42&lt;00:00, 20.46s/it]
-100%|██████████| 5/5 [01:53&lt;00:00, 22.64s/it]
-100%|██████████| 5/5 [01:44&lt;00:00, 20.83s/it]
-100%|██████████| 5/5 [01:42&lt;00:00, 20.43s/it]
-100%|██████████| 5/5 [01:42&lt;00:00, 20.43s/it]
+100%|██████████| 5/5 [01:29&lt;00:00, 17.96s/it]
+100%|██████████| 5/5 [01:30&lt;00:00, 18.15s/it]
+100%|██████████| 5/5 [01:29&lt;00:00, 17.95s/it]
+100%|██████████| 5/5 [01:29&lt;00:00, 17.93s/it]
+100%|██████████| 5/5 [01:29&lt;00:00, 17.99s/it]
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
@@ -948,7 +951,7 @@ model</a> with <code class="docutils literal notranslate"><span class="pre">df=4
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-100%|██████████| 5/5 [00:29&lt;00:00,  5.91s/it]
+100%|██████████| 5/5 [00:16&lt;00:00,  3.38s/it]
 </pre></div></div>
 </div>
 <p>Now that we have merged the data using Student’s <em>t</em>-distributions and a normal distribution as the error model, we can compute <span class="math notranslate nohighlight">\(CC_{anom}\)</span> and plot the results by resolution bin.</p>
