@@ -31,12 +31,16 @@ def test_hkl_to_asu(mtz_by_spacegroup, inplace, reset_index, anomalous):
         assert id(result) == id(p1)
     else:
         assert id(result) != id(p1)
-        
+
     # Confirm centric reflections are always in +ASU
     assert len(expected.centrics.index.difference(result.centrics.index)) == 0
     assert len(result.centrics.index.difference(expected.centrics.index)) == 0
 
-    # If anomalous=True, confirm acentric reflections were in +/- ASU
+    # If anomalous=True, acentric reflections were mapped to the Friedel-minus ASU.
+    # To test these reflections against `expected` we will map them back to the
+    # Friedel-plus ASU
+    # Note:
+    #     - `result` no longer has a unique MultiIndex after this
     if anomalous:
         result.reset_index(inplace=True)
         acentric = ~result.label_centrics()["CENTRIC"]
@@ -57,7 +61,8 @@ def test_hkl_to_asu(mtz_by_spacegroup, inplace, reset_index, anomalous):
     result_sf = result.to_structurefactor("FMODEL", "PHIFMODEL")
     assert np.allclose(result_sf, expected_sf)
 
-    # Confrim phase changes were applied to complex structure factors in DataSet
+    # Confirm phase changes were applied to complex structure factors in DataSet
+    assert np.allclose(np.abs(result["sf"]), np.abs(expected.loc[result.index, "sf"]))
     assert np.allclose(result["sf"], expected.loc[result.index, "sf"])
 
 
@@ -81,9 +86,11 @@ def test_hklmapping_roundtrip_phase(mtz_by_spacegroup):
     # Confirm phase changes are applied by comparing as complex structure factors
     expected_sf = expected.loc[result.index].to_structurefactor("FMODEL", "PHIFMODEL")
     result_sf = result.to_structurefactor("FMODEL", "PHIFMODEL")
+    assert np.allclose(np.abs(result_sf), np.abs(expected_sf))
     assert np.allclose(result_sf, expected_sf)
 
-    # Confrim phase changes were applied to complex structure factors in DataSet
+    # Confirm phase changes were applied to complex structure factors in DataSet
+    assert np.allclose(np.abs(result["sf"]), np.abs(expected.loc[result.index, "sf"]))
     assert np.allclose(result["sf"], expected.loc[result.index, "sf"])
 
 
