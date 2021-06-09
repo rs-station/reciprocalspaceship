@@ -59,7 +59,32 @@ def test_hkl_to_asu(mtz_by_spacegroup, inplace, reset_index, anomalous):
 
     # Confrim phase changes were applied to complex structure factors in DataSet
     assert np.allclose(result["sf"], expected.loc[result.index, "sf"])
-    
+
+
+def test_hklmapping_roundtrip_phase(mtz_by_spacegroup):
+    """
+    Test roundtrip of DataSet.hkl_to_asu() and DataSet.hkl_to_observed() preserve
+    phases
+    """
+    ref = rs.read_mtz(mtz_by_spacegroup)
+    expected = rs.read_mtz(mtz_by_spacegroup[:-4] + "_p1.mtz")
+    expected["sf"] = expected.to_structurefactor("FMODEL", "PHIFMODEL")
+
+    # Roundtrip
+    temp = expected.hkl_to_asu()
+    result = temp.hkl_to_observed()
+
+    # Check indices
+    assert_index_equal(result.index, expected.index)
+
+    # Confirm phase changes are applied by comparing as complex structure factors
+    expected_sf = expected.loc[result.index].to_structurefactor("FMODEL", "PHIFMODEL")
+    result_sf = result.to_structurefactor("FMODEL", "PHIFMODEL")
+    assert np.allclose(result_sf, expected_sf)
+
+    # Confrim phase changes were applied to complex structure factors in DataSet
+    assert np.allclose(result["sf"], expected.loc[result.index, "sf"])
+
 
 @pytest.mark.parametrize("use_complex", [True, False])
 def test_expand_to_p1(mtz_by_spacegroup, use_complex):
