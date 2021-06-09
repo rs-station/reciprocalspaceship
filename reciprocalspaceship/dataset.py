@@ -1162,7 +1162,7 @@ class DataSet(pd.DataFrame):
 
         return self
 
-    def to_reciprocalgrid(self, key, gridsize, anomalous=False):
+    def to_reciprocalgrid(self, key, gridsize):
         """
         Set up reciprocal grid with values from column, ``key``, indexed by
         Miller indices. A 3D numpy array will be initialized with the
@@ -1173,8 +1173,6 @@ class DataSet(pd.DataFrame):
         -----
         - The data being arranged on a reciprocal grid must be compatible
           with a numpy datatype.
-        - The key specified with ``anomalous=True`` should correspond to the 
-          column label after calling ``stack_anomalous()``.
         
         Parameters
         ----------
@@ -1182,24 +1180,21 @@ class DataSet(pd.DataFrame):
             Column label for value to arrange on reciprocal grid
         gridsize : array-like (len==3)
             Dimensions for 3D reciprocal grid.
-        anomalous : bool
-            Whether to expand the P1 Friedel+ ASU to the Friedel- reflections. 
-            If False, the Friedel+ ASU will be used to complete the P1 unit cell. 
-            If True, the Friedel- reflections should be present in a two-column 
-            anomalous format. 
 
         Returns
         -------
         numpy.ndarray
         """
+        # Set up P1 unit cell
         p1 = self.expand_to_p1()
-        if anomalous:
-            p1 = p1.stack_anomalous()
-        else:
-            p1 = p1.expand_anomalous()
-        p1.sort_index(inplace=True)
+        p1 = p1.expand_anomalous()
+
+        # Get data and indices
         data = p1[key].to_numpy()
         H = p1.get_hkls()
+
+        # Populate grid
         grid = np.zeros(gridsize, dtype=data.dtype)
         grid[H[:, 0], H[:, 1], H[:, 2]] = data
+
         return grid
