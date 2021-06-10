@@ -1000,6 +1000,11 @@ class DataSet(pd.DataFrame):
         for k in dataset.get_phase_keys():
             dataset[k] = phi_coeff[inverse] * (dataset[k] + phi_shift[inverse])
         dataset.canonicalize_phases(inplace=True)
+        # GH#15: Handle complex structure factors
+        for k in dataset.get_complex_keys():
+            self[k] *= np.exp(1j*np.deg2rad(phi_shift[inverse]))
+            friedel_mask = phi_coeff[inverse] != 1
+            self.loc[friedel_mask, k] = np.conjugate(self.loc[friedel_mask, k])
         
         # GH#3: if PARTIAL column exists, use it to construct M/ISYM
         if "PARTIAL" in dataset.columns:
@@ -1085,6 +1090,7 @@ class DataSet(pd.DataFrame):
         # Apply phase shift
         for k in self.get_phase_keys():
             self[k] = phi_coeff[inverse] * (self[k] + phi_shift[inverse])
+        # GH#15: Handle complex structure factors
         for k in self.get_complex_keys():
             self[k] *= np.exp(1j*np.deg2rad(phi_shift[inverse]))
             friedel_mask = phi_coeff[inverse] != 1
