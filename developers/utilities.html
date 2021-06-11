@@ -1,0 +1,699 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>Utility Functions &mdash; reciprocalspaceship 0.9.9 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/panels-bootstrap.5fd3999ee7762ccc51105388f4a9d115.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/panels-main.c949a650a448cc0ae9fd3441c0e17fb0.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/panels-variables.06eb56fa6e07937060861dad626602ad.css" type="text/css" />
+
+  
+  
+    <link rel="shortcut icon" href="../_static/rs-favicon_32x32.png"/>
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Running Tests" href="testing.html" />
+    <link rel="prev" title="Contributing to rs" href="contributing.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> reciprocalspaceship
+          
+
+          
+            
+            <img src="../_static/rs.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../userguide/index.html">User Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api/index.html">API Reference</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">For Developers</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="contributing.html">Contributing to <code class="docutils literal notranslate"><span class="pre">rs</span></code></a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Utility Functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="testing.html">Running Tests</a></li>
+<li class="toctree-l2"><a class="reference internal" href="documentation.html">Building Documentation</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">reciprocalspaceship</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="index.html">For Developers</a> &raquo;</li>
+        
+      <li>Utility Functions</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="../_sources/developers/utilities.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  
+<style>
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast.container,
+.nboutput.nblast.container {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast.container + .nbinput.container {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<div class="section" id="utility-functions">
+<span id="utilities"></span><h1>Utility Functions<a class="headerlink" href="#utility-functions" title="Permalink to this headline">¶</a></h1>
+<p><code class="docutils literal notranslate"><span class="pre">rs.utils</span></code> contains symmetry/spacegroup-related operations that serve as the foundation for much
+of the crystallographic support provided by <code class="docutils literal notranslate"><span class="pre">reciprocalspaceship</span></code>. These methods are not
+considered to be user-facing, but they are documented here because they may be useful for
+composing new methods or algorithms.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>In most cases, these functions are written to operate on and return <code class="docutils literal notranslate"><span class="pre">NumPy</span></code> arrays. This was
+chosen to ensure that these methods are performant, and can be largely independent of any
+interface decisions related to <code class="docutils literal notranslate"><span class="pre">rs.DataSet</span></code> or <code class="docutils literal notranslate"><span class="pre">pandas</span></code>.</p>
+</div>
+<span class="target" id="module-reciprocalspaceship.utils"></span><p><strong>Functions:</strong></p>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#reciprocalspaceship.utils.add_rfree" title="reciprocalspaceship.utils.add_rfree"><code class="xref py py-obj docutils literal notranslate"><span class="pre">add_rfree</span></code></a>(dataset[, fraction, bins, inplace])</p></td>
+<td><p>Add an r-free flag to the dataset object for refinement.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#reciprocalspaceship.utils.apply_to_hkl" title="reciprocalspaceship.utils.apply_to_hkl"><code class="xref py py-obj docutils literal notranslate"><span class="pre">apply_to_hkl</span></code></a>(H, op)</p></td>
+<td><p>Apply symmetry operator to hkls.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#reciprocalspaceship.utils.bin_by_percentile" title="reciprocalspaceship.utils.bin_by_percentile"><code class="xref py py-obj docutils literal notranslate"><span class="pre">bin_by_percentile</span></code></a>(data[, bins, ascending, …])</p></td>
+<td><p>Bin data by percentile.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#reciprocalspaceship.utils.canonicalize_phases" title="reciprocalspaceship.utils.canonicalize_phases"><code class="xref py py-obj docutils literal notranslate"><span class="pre">canonicalize_phases</span></code></a>(phases[, deg])</p></td>
+<td><p>Place phases in the interval between -180 and 180.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#reciprocalspaceship.utils.compute_dHKL" title="reciprocalspaceship.utils.compute_dHKL"><code class="xref py py-obj docutils literal notranslate"><span class="pre">compute_dHKL</span></code></a>(H, cell)</p></td>
+<td><p>Compute the real space lattice plane spacing, d, associated with miller indices and cell.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#reciprocalspaceship.utils.compute_redundancy" title="reciprocalspaceship.utils.compute_redundancy"><code class="xref py py-obj docutils literal notranslate"><span class="pre">compute_redundancy</span></code></a>(hobs, cell, spacegroup[, …])</p></td>
+<td><p>Compute the multiplicity of all valid reflections in the reciprocal ASU.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#reciprocalspaceship.utils.compute_structurefactor_multiplicity" title="reciprocalspaceship.utils.compute_structurefactor_multiplicity"><code class="xref py py-obj docutils literal notranslate"><span class="pre">compute_structurefactor_multiplicity</span></code></a>(H, sg)</p></td>
+<td><p>Compute the multiplicity of each reflection in <code class="docutils literal notranslate"><span class="pre">H</span></code>.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#reciprocalspaceship.utils.copy_rfree" title="reciprocalspaceship.utils.copy_rfree"><code class="xref py py-obj docutils literal notranslate"><span class="pre">copy_rfree</span></code></a>(dataset, dataset_with_rfree[, …])</p></td>
+<td><p>Copy the rfree flag from one dataset object to another.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#reciprocalspaceship.utils.from_structurefactor" title="reciprocalspaceship.utils.from_structurefactor"><code class="xref py py-obj docutils literal notranslate"><span class="pre">from_structurefactor</span></code></a>(sfs)</p></td>
+<td><p>Convert complex structure factors into structure factor amplitudes and phases</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#reciprocalspaceship.utils.generate_reciprocal_asu" title="reciprocalspaceship.utils.generate_reciprocal_asu"><code class="xref py py-obj docutils literal notranslate"><span class="pre">generate_reciprocal_asu</span></code></a>(cell, spacegroup, dmin)</p></td>
+<td><p>Generate the miller indices of the reflections in the reciprocal ASU.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#reciprocalspaceship.utils.generate_reciprocal_cell" title="reciprocalspaceship.utils.generate_reciprocal_cell"><code class="xref py py-obj docutils literal notranslate"><span class="pre">generate_reciprocal_cell</span></code></a>(cell, dmin[, dtype])</p></td>
+<td><p>Generate the miller indices of the full P1 reciprocal cell.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#reciprocalspaceship.utils.get_phase_restrictions" title="reciprocalspaceship.utils.get_phase_restrictions"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_phase_restrictions</span></code></a>(H, spacegroup)</p></td>
+<td><p>Return phase restrictions for Miller indices in a given space group.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#reciprocalspaceship.utils.hkl_to_asu" title="reciprocalspaceship.utils.hkl_to_asu"><code class="xref py py-obj docutils literal notranslate"><span class="pre">hkl_to_asu</span></code></a>(H, spacegroup[, return_phase_shifts])</p></td>
+<td><p>Map hkls to the asymmetric unit and optionally return shifts for the associated phases.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#reciprocalspaceship.utils.hkl_to_observed" title="reciprocalspaceship.utils.hkl_to_observed"><code class="xref py py-obj docutils literal notranslate"><span class="pre">hkl_to_observed</span></code></a>(H, isym, sg[, …])</p></td>
+<td><p>Apply symmetry operations to move miller indices in the reciprocal asymmetric unit to their originally observed locations.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#reciprocalspaceship.utils.in_asu" title="reciprocalspaceship.utils.in_asu"><code class="xref py py-obj docutils literal notranslate"><span class="pre">in_asu</span></code></a>(H, spacegroup)</p></td>
+<td><p>Check to see if Miller indices are in the asymmetric unit of a space group.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#reciprocalspaceship.utils.is_absent" title="reciprocalspaceship.utils.is_absent"><code class="xref py py-obj docutils literal notranslate"><span class="pre">is_absent</span></code></a>(H, spacegroup)</p></td>
+<td><p>Determine if Miller indices are systematically absent in a given spacegroup.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#reciprocalspaceship.utils.is_centric" title="reciprocalspaceship.utils.is_centric"><code class="xref py py-obj docutils literal notranslate"><span class="pre">is_centric</span></code></a>(H, spacegroup)</p></td>
+<td><p>Determine if Miller indices are centric in a given spacegroup</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#reciprocalspaceship.utils.phase_shift" title="reciprocalspaceship.utils.phase_shift"><code class="xref py py-obj docutils literal notranslate"><span class="pre">phase_shift</span></code></a>(H, op)</p></td>
+<td><p>Calculate phase shift for symmetry operator.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#reciprocalspaceship.utils.to_structurefactor" title="reciprocalspaceship.utils.to_structurefactor"><code class="xref py py-obj docutils literal notranslate"><span class="pre">to_structurefactor</span></code></a>(sfamps, phases)</p></td>
+<td><p>Convert structure factor amplitude and phase to complex structure factors</p></td>
+</tr>
+</tbody>
+</table>
+<dl class="py function">
+<dt class="sig sig-object py" id="reciprocalspaceship.utils.add_rfree">
+<span class="sig-prename descclassname"><span class="pre">reciprocalspaceship.utils.</span></span><span class="sig-name descname"><span class="pre">add_rfree</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataset</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fraction</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.05</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bins</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">20</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inplace</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/Hekstra-Lab/reciprocalspaceship/blob/main/reciprocalspaceship/utils/rfree.py#L5-L47"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#reciprocalspaceship.utils.add_rfree" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add an r-free flag to the dataset object for refinement.
+R-free flags are used to identify reflections which are not used in automated refinement routines.
+This is the crystallographic refinement version of cross validation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>dataset</strong> (<em>rs.DataSet</em>) – Dataset object for which to compute a random fraction.</p></li>
+<li><p><strong>fraction</strong> (<em>float, optional</em>) – Fraction of reflections to be added to the r-free. (the default is 0.05)</p></li>
+<li><p><strong>bins</strong> (<em>int, optional</em>) – Number of resolution bins to divide the free reflections over. (the default is 20)</p></li>
+<li><p><strong>inplace</strong> (<em>bool, optional</em>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>result</strong> (<em>rs.DataSet</em>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="reciprocalspaceship.utils.apply_to_hkl">
+<span class="sig-prename descclassname"><span class="pre">reciprocalspaceship.utils.</span></span><span class="sig-name descname"><span class="pre">apply_to_hkl</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">H</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">op</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/Hekstra-Lab/reciprocalspaceship/blob/main/reciprocalspaceship/utils/symop.py#L3-L19"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#reciprocalspaceship.utils.apply_to_hkl" title="Permalink to this definition">¶</a></dt>
+<dd><p>Apply symmetry operator to hkls.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>H</strong> (<em>array</em>) – n x 3 array of Miller indices</p></li>
+<li><p><strong>op</strong> (<em>gemmi.Op</em>) – gemmi symmetry operator to be applied</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>result</strong> (<em>array</em>) – n x 3 array of Miller indices after operator application</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="reciprocalspaceship.utils.bin_by_percentile">
+<span class="sig-prename descclassname"><span class="pre">reciprocalspaceship.utils.</span></span><span class="sig-name descname"><span class="pre">bin_by_percentile</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bins</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">20</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ascending</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">format_str</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'.2f'</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/Hekstra-Lab/reciprocalspaceship/blob/main/reciprocalspaceship/utils/binning.py#L3-L40"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#reciprocalspaceship.utils.bin_by_percentile" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bin data by percentile.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>data</strong> (<em>list, np.ndarray or Series-like</em>) – Data to bin by percentile</p></li>
+<li><p><strong>bins</strong> (<em>int</em>) – Number of bins</p></li>
+<li><p><strong>ascending</strong> (<em>bool</em>) – Whether to bin data by value from low to high</p></li>
+<li><p><strong>format_str</strong> (<em>str</em>) – Format string for constructing bin labels</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><em>assignments, bin_labels</em> – Bins to which data were assigned, and corresponding labels
+denoting value ranges</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="reciprocalspaceship.utils.canonicalize_phases">
+<span class="sig-prename descclassname"><span class="pre">reciprocalspaceship.utils.</span></span><span class="sig-name descname"><span class="pre">canonicalize_phases</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">phases</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">deg</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/Hekstra-Lab/reciprocalspaceship/blob/main/reciprocalspaceship/utils/phases.py#L4-L14"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#reciprocalspaceship.utils.canonicalize_phases" title="Permalink to this definition">¶</a></dt>
+<dd><p>Place phases in the interval between -180 and 180. deg == True implies
+degrees; False implies radians.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="reciprocalspaceship.utils.compute_dHKL">
+<span class="sig-prename descclassname"><span class="pre">reciprocalspaceship.utils.</span></span><span class="sig-name descname"><span class="pre">compute_dHKL</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">H</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cell</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/Hekstra-Lab/reciprocalspaceship/blob/main/reciprocalspaceship/utils/cell.py#L4-L26"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#reciprocalspaceship.utils.compute_dHKL" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute the real space lattice plane spacing, d, associated with
+miller indices and cell.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>H</strong> (<em>array</em>) – An nx3 array of numerical miller indices.</p></li>
+<li><p><strong>cell</strong> (<em>gemmi.UnitCell</em>) – The gemmi UnitCell object with the cell parameters.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>dHKL</strong> (<em>array</em>) – Array of floating point d spacings in Å.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="reciprocalspaceship.utils.compute_redundancy">
+<span class="sig-prename descclassname"><span class="pre">reciprocalspaceship.utils.</span></span><span class="sig-name descname"><span class="pre">compute_redundancy</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">hobs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cell</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">spacegroup</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">full_asu</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">anomalous</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dmin</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/Hekstra-Lab/reciprocalspaceship/blob/main/reciprocalspaceship/utils/stats.py#L5-L65"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#reciprocalspaceship.utils.compute_redundancy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute the multiplicity of all valid reflections in the reciprocal ASU.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>hobs</strong> (<em>np.array(int)</em>) – An n by 3 array of observed miller indices which are not necessarily
+in the reciprocal asymmetric unit</p></li>
+<li><p><strong>spacegroup</strong> (<em>gemmi.SpaceGroup</em>) – A gemmi SpaceGroup object.</p></li>
+<li><p><strong>cell</strong> (<em>gemmi.UnitCell</em>) – A gemmi UnitCell object.</p></li>
+<li><p><strong>full_asu</strong> (<em>bool (optional)</em>) – Include all the reflections in the calculation irrespective of whether they were
+observed.</p></li>
+<li><p><strong>anomalous</strong> (<em>bool (optional)</em>) – Whether or not the data are anomalous.</p></li>
+<li><p><strong>dmin</strong> (<em>float (optional)</em>) – If no dmin is supplied, the maximum resolution reflection will be used.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>hunique</strong> (<em>np.array (int32)</em>) – An n by 3 array of unique miller indices from hobs.</p></li>
+<li><p><strong>counts</strong> (<em>np.array (int32)</em>) – A length n array of counts for each miller index in hunique.</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="reciprocalspaceship.utils.compute_structurefactor_multiplicity">
+<span class="sig-prename descclassname"><span class="pre">reciprocalspaceship.utils.</span></span><span class="sig-name descname"><span class="pre">compute_structurefactor_multiplicity</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">H</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sg</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">include_centering</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/Hekstra-Lab/reciprocalspaceship/blob/main/reciprocalspaceship/utils/structurefactors.py#L51-L97"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#reciprocalspaceship.utils.compute_structurefactor_multiplicity" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute the multiplicity of each reflection in <code class="docutils literal notranslate"><span class="pre">H</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>H</strong> (<em>array</em>) – n x 3 array of Miller indices</p></li>
+<li><p><strong>spacegroup</strong> (<em>gemmi.SpaceGroup, gemmi.GroupOps</em>) – The space group to identify the asymmetric unit</p></li>
+<li><p><strong>include_centering</strong> (<em>bool</em>) – Whether or not to include the multiplicity inherent in the lattice centering.
+The default is True. If False, the minimum value of epsilon will be 1
+irrespective of space group.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>epsilon</strong> (<em>array</em>) – an array of length n containing the multiplicity
+of each hkl.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="reciprocalspaceship.utils.copy_rfree">
+<span class="sig-prename descclassname"><span class="pre">reciprocalspaceship.utils.</span></span><span class="sig-name descname"><span class="pre">copy_rfree</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataset</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dataset_with_rfree</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inplace</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/Hekstra-Lab/reciprocalspaceship/blob/main/reciprocalspaceship/utils/rfree.py#L49-L73"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#reciprocalspaceship.utils.copy_rfree" title="Permalink to this definition">¶</a></dt>
+<dd><p>Copy the rfree flag from one dataset object to another.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>dataset</strong> (<em>rs.DataSet</em>) – A dataset without an r-free flag or with an undesired one.</p></li>
+<li><p><strong>dataset_with_rfree</strong> (<em>rs.DataSet</em>) – A dataset with desired r-free flags.</p></li>
+<li><p><strong>inplace</strong> (<em>bool, optional</em>) – Whether to operate in place or return a copy</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>result</strong> (<em>rs.DataSet</em>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="reciprocalspaceship.utils.from_structurefactor">
+<span class="sig-prename descclassname"><span class="pre">reciprocalspaceship.utils.</span></span><span class="sig-name descname"><span class="pre">from_structurefactor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sfs</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/Hekstra-Lab/reciprocalspaceship/blob/main/reciprocalspaceship/utils/structurefactors.py#L28-L49"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#reciprocalspaceship.utils.from_structurefactor" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert complex structure factors into structure factor amplitudes
+and phases</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>sfs</strong> (<em>np.ndarray</em>) – array of complex structure factors to be converted</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>(sf, phase)</strong> (<em>tuple of DataSeries</em>) – Tuple of DataSeries for the structure factor amplitudes and
+phases corresponding to the provided complex structure factors</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="reciprocalspaceship.utils.generate_reciprocal_asu">
+<span class="sig-prename descclassname"><span class="pre">reciprocalspaceship.utils.</span></span><span class="sig-name descname"><span class="pre">generate_reciprocal_asu</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cell</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">spacegroup</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dmin</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">anomalous</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/Hekstra-Lab/reciprocalspaceship/blob/main/reciprocalspaceship/utils/asu.py#L178-L206"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#reciprocalspaceship.utils.generate_reciprocal_asu" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generate the miller indices of the reflections in the reciprocal ASU.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>cell</strong> (<em>gemmi.UnitCell</em>) – A gemmi cell object.</p></li>
+<li><p><strong>spacegroup</strong> (<em>gemmi.SpaceGroup</em>) – A gemmi spacegroup object.</p></li>
+<li><p><strong>dmin</strong> (<em>float</em>) – Maximum resolution of the data in Å</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>hasu</strong> (<em>np.array (np.int64)</em>) – n by 3 array of miller indices in the reciprocal ASU.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="reciprocalspaceship.utils.generate_reciprocal_cell">
+<span class="sig-prename descclassname"><span class="pre">reciprocalspaceship.utils.</span></span><span class="sig-name descname"><span class="pre">generate_reciprocal_cell</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">cell</span></em>, <em class="sig-param"><span class="pre">dmin</span></em>, <em class="sig-param"><span class="pre">dtype=&lt;class</span> <span class="pre">'numpy.int32'&gt;</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/Hekstra-Lab/reciprocalspaceship/blob/main/reciprocalspaceship/utils/cell.py#L29-L58"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#reciprocalspaceship.utils.generate_reciprocal_cell" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generate the miller indices of the full P1 reciprocal cell.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>cell</strong> (<em>gemmi.UnitCell</em>) – A gemmi cell object.</p></li>
+<li><p><strong>dmin</strong> (<em>float</em>) – Maximum resolution of the data in Å</p></li>
+<li><p><strong>dtype</strong> (<em>np.dtype (optional)</em>) – The data type of the returned array. The default is np.int32.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>hkl</strong> (<em>np.array(int32)</em>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="reciprocalspaceship.utils.get_phase_restrictions">
+<span class="sig-prename descclassname"><span class="pre">reciprocalspaceship.utils.</span></span><span class="sig-name descname"><span class="pre">get_phase_restrictions</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">H</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">spacegroup</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/Hekstra-Lab/reciprocalspaceship/blob/main/reciprocalspaceship/utils/phases.py#L16-L59"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#reciprocalspaceship.utils.get_phase_restrictions" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return phase restrictions for Miller indices in a given space group.</p>
+<p>If there are no phase restrictions, an empty list is returned for that
+Miller index. If a given Miller index is systematically absent an
+empty list is also returned.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>H</strong> (<em>array</em>) – n x 3 array of Miller indices</p></li>
+<li><p><strong>spacegroup</strong> (<em>gemmi.SpaceGroup</em>) – Space group for determining phase restrictions</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>restrictions</strong> (<em>list of lists</em>) – List of lists of phase restrictions for each Miller index. An empty
+list is returned for Miller indices without phase restrictions</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="reciprocalspaceship.utils.hkl_to_asu">
+<span class="sig-prename descclassname"><span class="pre">reciprocalspaceship.utils.</span></span><span class="sig-name descname"><span class="pre">hkl_to_asu</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">H</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">spacegroup</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">return_phase_shifts</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/Hekstra-Lab/reciprocalspaceship/blob/main/reciprocalspaceship/utils/asu.py#L53-L120"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#reciprocalspaceship.utils.hkl_to_asu" title="Permalink to this definition">¶</a></dt>
+<dd><p>Map hkls to the asymmetric unit and optionally return shifts for the associated phases.</p>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">H_asu</span><span class="p">,</span> <span class="n">phi_coeff</span><span class="p">,</span> <span class="n">phi_shift</span> <span class="o">=</span> <span class="n">hkl_to_asu</span><span class="p">(</span><span class="n">H</span><span class="p">,</span> <span class="n">spacegroup</span><span class="p">,</span> <span class="n">return_phase_shifts</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">phase_asu</span> <span class="o">=</span> <span class="n">phi_coeff</span> <span class="o">*</span> <span class="p">(</span><span class="n">phase</span> <span class="o">+</span> <span class="n">phi_shift</span><span class="p">)</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>H</strong> (<em>array</em>) – n x 3 array of Miller indices</p></li>
+<li><p><strong>spacegroup</strong> (<em>gemmi.SpaceGroup</em>) – The space group to identify the asymmetric unit</p></li>
+<li><p><strong>return_phase_shifts</strong> (<em>bool (optional)</em>) – If True, return the phase shift and phase multiplier to apply to each miller index</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>H_asu</strong> (<em>array</em>) – n x 3 array with the equivalent indices in the asu</p></li>
+<li><p><strong>isymm</strong> (<em>array</em>) – Length n array of the symmetry operation index for each miller index.
+This is needed to output an unmerged mtz file.</p></li>
+<li><p><strong>phi_coeff</strong> (<em>array (optional)</em>) – an array length n containing -1. or 1. for each H</p></li>
+<li><p><strong>phi_shift</strong> (<em>array (optional)</em>) – an array length n containing phase shifts in degrees</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="reciprocalspaceship.utils.hkl_to_observed">
+<span class="sig-prename descclassname"><span class="pre">reciprocalspaceship.utils.</span></span><span class="sig-name descname"><span class="pre">hkl_to_observed</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">H</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">isym</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sg</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">return_phase_shifts</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/Hekstra-Lab/reciprocalspaceship/blob/main/reciprocalspaceship/utils/asu.py#L122-L176"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#reciprocalspaceship.utils.hkl_to_observed" title="Permalink to this definition">¶</a></dt>
+<dd><p>Apply symmetry operations to move miller indices in the reciprocal asymmetric unit to their originally observed locations. Optionally, return the corresponding phase shifts.</p>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">H_obs</span><span class="p">,</span> <span class="n">phi_coeff</span><span class="p">,</span> <span class="n">phi_shift</span> <span class="o">=</span> <span class="n">hkl_to_observed</span><span class="p">(</span><span class="n">H</span><span class="p">,</span> <span class="n">isym</span><span class="p">,</span> <span class="n">spacegroup</span><span class="p">,</span> <span class="n">return_phase_shifts</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">phase_obs</span> <span class="o">=</span> <span class="n">phi_coeff</span> <span class="o">*</span> <span class="p">(</span><span class="n">phase</span> <span class="o">+</span> <span class="n">phi_shift</span><span class="p">)</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>H</strong> (<em>array</em>) – n x 3 array of Miller indices</p></li>
+<li><p><strong>isym</strong> (<em>array</em>) – integer array of isym values corresponding to the symmetry operator used to map the original miller index into the asu. see mtz spec for an explanation of this.</p></li>
+<li><p><strong>sg</strong> (<em>gemmi.SpaceGroup</em>) – The space group to identify the asymmetric unit</p></li>
+<li><p><strong>return_phase_shifts</strong> (<em>bool (optional)</em>) – If True, return the phase shift and phase multiplier to apply to each miller index</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>observed_H</strong> (<em>array</em>) – n x 3 array of the original Miller indices before they were mapped to the ASU through isym.</p></li>
+<li><p><strong>phi_coeff</strong> (<em>array (optional)</em>) – an array length n containing -1. or 1. for each H</p></li>
+<li><p><strong>phi_shift</strong> (<em>array (optional)</em>) – an array length n containing phase shifts in degrees</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="reciprocalspaceship.utils.in_asu">
+<span class="sig-prename descclassname"><span class="pre">reciprocalspaceship.utils.</span></span><span class="sig-name descname"><span class="pre">in_asu</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">H</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">spacegroup</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/Hekstra-Lab/reciprocalspaceship/blob/main/reciprocalspaceship/utils/asu.py#L29-L51"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#reciprocalspaceship.utils.in_asu" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check to see if Miller indices are in the asymmetric unit of a space group.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>H</strong> (<em>array</em>) – n x 3 array of Miller indices</p></li>
+<li><p><strong>spacegroup</strong> (<em>gemmi.SpaceGroup</em>) – The space group to identify the asymmetric unit</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>result</strong> (<em>array</em>) – Array of bools with length n.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="reciprocalspaceship.utils.is_absent">
+<span class="sig-prename descclassname"><span class="pre">reciprocalspaceship.utils.</span></span><span class="sig-name descname"><span class="pre">is_absent</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">H</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">spacegroup</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/Hekstra-Lab/reciprocalspaceship/blob/main/reciprocalspaceship/utils/structurefactors.py#L127-L153"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#reciprocalspaceship.utils.is_absent" title="Permalink to this definition">¶</a></dt>
+<dd><p>Determine if Miller indices are systematically absent in a given
+spacegroup.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>H</strong> (<em>array</em>) – n x 3 array of Miller indices</p></li>
+<li><p><strong>spacegroup</strong> (<em>gemmi.SpaceGroup, gemmi.GroupOps</em>) – The space group in which to classify systematic absences</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>absent</strong> (<em>array</em>) – Boolean array of length n. absent[i] == True if H[i] is systematically absent in sg.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="reciprocalspaceship.utils.is_centric">
+<span class="sig-prename descclassname"><span class="pre">reciprocalspaceship.utils.</span></span><span class="sig-name descname"><span class="pre">is_centric</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">H</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">spacegroup</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/Hekstra-Lab/reciprocalspaceship/blob/main/reciprocalspaceship/utils/structurefactors.py#L99-L125"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#reciprocalspaceship.utils.is_centric" title="Permalink to this definition">¶</a></dt>
+<dd><p>Determine if Miller indices are centric in a given spacegroup</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>H</strong> (<em>array</em>) – n x 3 array of Miller indices</p></li>
+<li><p><strong>spacegroup</strong> (<em>gemmi.SpaceGroup, gemmi.GroupOps</em>) – The space group in which to classify centrics</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>centric</strong> (<em>array</em>) – Boolean arreay with len(centric) == np.shape(H)[0] == n</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="reciprocalspaceship.utils.phase_shift">
+<span class="sig-prename descclassname"><span class="pre">reciprocalspaceship.utils.</span></span><span class="sig-name descname"><span class="pre">phase_shift</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">H</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">op</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/Hekstra-Lab/reciprocalspaceship/blob/main/reciprocalspaceship/utils/symop.py#L21-L37"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#reciprocalspaceship.utils.phase_shift" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate phase shift for symmetry operator.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>H</strong> (<em>array</em>) – n x 3 array of Miller indices</p></li>
+<li><p><strong>op</strong> (<em>gemmi.Op</em>) – gemmi symmetry operator to be applied</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>result</strong> (<em>array</em>) – array of phase shifts</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="reciprocalspaceship.utils.to_structurefactor">
+<span class="sig-prename descclassname"><span class="pre">reciprocalspaceship.utils.</span></span><span class="sig-name descname"><span class="pre">to_structurefactor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sfamps</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">phases</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/Hekstra-Lab/reciprocalspaceship/blob/main/reciprocalspaceship/utils/structurefactors.py#L5-L26"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#reciprocalspaceship.utils.to_structurefactor" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert structure factor amplitude and phase to complex structure
+factors</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>sfamps</strong> (<em>DataSeries or array-like</em>) – Structure factor amplitudes</p></li>
+<li><p><strong>phases</strong> (<em>DataSeries or array-like</em>) – Phases corresponding to structure factors</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>sfs</strong> (<em>np.ndarray</em>) – Array of complex-valued structure factors</p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="testing.html" class="btn btn-neutral float-right" title="Running Tests" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="contributing.html" class="btn btn-neutral float-left" title="Contributing to rs" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2020, Jack B. Greisman, Kevin M. Dalton.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
