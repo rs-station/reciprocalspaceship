@@ -64,7 +64,8 @@ setup(
             "sphinx-panels",
             "sphinxcontrib-autoprogram",
             "jupyter",
-
+            "autodocsumm",
+            
             # example notebooks
             "tqdm",
             "matplotlib",

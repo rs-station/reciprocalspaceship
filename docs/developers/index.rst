@@ -17,6 +17,7 @@ help you follow our best practices when contributing to the library.
    :maxdepth: 1
 
    contributing
+   utilities
    testing
    documentation
 
