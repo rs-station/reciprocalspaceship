@@ -50,6 +50,8 @@ def from_structurefactor(sfs):
 
 def compute_structurefactor_multiplicity(H, sg, include_centering=True):
     """
+    Compute the multiplicity of each reflection in ``H``.
+
     Parameters
     ----------
     H : array

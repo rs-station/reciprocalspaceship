@@ -18,8 +18,8 @@ def add_rfree(dataset, fraction=0.05, bins=20, inplace=False):
         Number of resolution bins to divide the free reflections over. (the default is 20)
     inplace : bool, optional
 
-    Returns:
-    --------
+    Returns
+    -------
     result : rs.DataSet
 
     """
@@ -49,6 +49,7 @@ def add_rfree(dataset, fraction=0.05, bins=20, inplace=False):
 def copy_rfree(dataset, dataset_with_rfree, inplace=False):
     """
     Copy the rfree flag from one dataset object to another.
+
     Parameters
     ----------
     dataset : rs.DataSet
@@ -56,8 +57,10 @@ def copy_rfree(dataset, dataset_with_rfree, inplace=False):
     dataset_with_rfree : rs.DataSet
         A dataset with desired r-free flags.
     inplace : bool, optional
+        Whether to operate in place or return a copy
 
-    Returns:
+    Returns
+    -------
     result : rs.DataSet
     """
     if not inplace:
