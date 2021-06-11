@@ -40,7 +40,8 @@ extensions = [
     'nbsphinx',
     "sphinx.ext.linkcode",
     "sphinx_panels",
-    "sphinxcontrib.autoprogram"
+    "sphinxcontrib.autoprogram",
+    "autodocsumm",
 ]
 
 napoleon_google_docstring = False
