@@ -207,7 +207,7 @@ def generate_reciprocal_asu(cell, spacegroup, dmin, anomalous=False):
     hasu = hkl[in_asu(hkl, spacegroup)]
     if anomalous:
         hasu_minus = -hasu[~is_centric(hasu, spacegroup)]
-        return np.concatenate([hasu, hasu_minus])
-    return hasu
+        return np.unique(np.concatenate([hasu, hasu_minus]), axis=0)
+    return np.unique(hasu, axis=0)
 
 
