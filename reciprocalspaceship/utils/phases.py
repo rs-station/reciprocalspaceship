@@ -57,10 +57,10 @@ def get_phase_restrictions(H, spacegroup):
         shifts / 2.,
         180. + shifts / 2.
     ))
-    restriction = canonicalize_phases(res)
+    restriction = canonicalize_phases(restriction)
     restriction.sort(-1)
     for i,_ in np.argwhere(hits):
-        restrictions[idx[i]] = res[i].tolist()
+        restrictions[idx[i]] = restriction[i].tolist()
 
     return restrictions
 
