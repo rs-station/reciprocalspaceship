@@ -34,27 +34,33 @@ def get_phase_restrictions(H, spacegroup):
          List of lists of phase restrictions for each Miller index. An empty
          list is returned for Miller indices without phase restrictions
     """
-    from reciprocalspaceship.utils.structurefactors import is_centric, is_absent
-    
-    restrictions = []
-    for h in H:
-        if not is_centric([h], spacegroup)[0] or is_absent([h], spacegroup)[0]:
-            restrictions.append([])
-        else:
-            friedelop = gemmi.Op("-x,-y,-z")
-            hit = False
-            for op in spacegroup.operations().sym_ops[1:]:
-                if op.apply_to_hkl(h) == friedelop.apply_to_hkl(h):
-                    shift = np.rad2deg(op.phase_shift(h))
-                    restriction = np.array([shift/2, 180+(shift/2)])
-                    restriction = canonicalize_phases(restriction)
-                    restriction.sort()
-                    restrictions.append(restriction.tolist())
-                    hit = True
-                    break
-                
-            # Handle [0, 0, 0] in P1
-            if not hit:
-                restrictions.append([])
+    from reciprocalspaceship.utils.asu import is_absent,is_centric
+    from reciprocalspaceship.utils.symop import apply_to_hkl,phase_shift
+    friedel_op = gemmi.Op("-x,-y,-z")
+    #Grabs all the non-identity symops
+    ops = spacegroup.operations().sym_ops[1:]
+    restrictions = [[]] * len(H)
+    #This is the case for P1
+    if len(ops) == 0:
+        return restrictions
+
+    #Phase restrictions only apply to centrics. We'll also ignore any absent refls
+    mask = (is_centric(H, spacegroup)) & (~is_absent(H, spacegroup))
+    idx = np.where(mask)[0]
+    h = H[mask,:]
+    hits  = np.column_stack([np.all(apply_to_hkl(h, op) == apply_to_hkl(h, friedel_op), axis=1) for op in ops])
+
+    hits[np.cumsum(hits, axis=-1) > 1] = False #Remove duplicate hits
+    shifts = np.column_stack([np.rad2deg(phase_shift(h, op)) for op in ops])
+    shifts = shifts[np.arange(len(hits)), hits.argmax(-1)]
+    restriction = np.column_stack((
+        shifts / 2.,
+        180. + shifts / 2.
+    ))
+    restriction = canonicalize_phases(restriction)
+    restriction.sort(-1)
+    for i,_ in np.argwhere(hits):
+        restrictions[idx[i]] = restriction[i].tolist()
+
     return restrictions
 
