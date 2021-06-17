@@ -177,7 +177,12 @@ def hkl_to_observed(H, isym, sg, return_phase_shifts=False):
 
 def generate_reciprocal_asu(cell, spacegroup, dmin, anomalous=False):
     """
-    Generate the miller indices of the reflections in the reciprocal ASU.
+    Generate the Miller indices of the reflections in the reciprocal ASU.
+
+    If `anomalous=True` the Miller indices of acentric reflections will be
+    included in both the Friedel-plus and Friedel-minus halves of reciprocal
+    space. Centric Miller indices will only be included in the Friedel-plus
+    reciprocal ASU.
 
     Parameters
     ----------
@@ -187,22 +192,22 @@ def generate_reciprocal_asu(cell, spacegroup, dmin, anomalous=False):
         A gemmi spacegroup object.
     dmin : float
         Maximum resolution of the data in Å
+    anomalous : bool
+        Whether to include Friedel-minus Miller indices to represent anomalous data
 
     Returns
     -------
-    hasu : np.array (np.int64)
+    hasu : np.array (np.int32)
         n by 3 array of miller indices in the reciprocal ASU.
     """
     p1_hkl = generate_reciprocal_cell(cell, dmin)
     #Remove absences
     hkl = p1_hkl[~is_absent(p1_hkl, spacegroup)]
     #Map to ASU
-    hasu,isym = hkl_to_asu(hkl, spacegroup)
+    hasu = hkl[in_asu(hkl, spacegroup)]
     if anomalous:
-        fminus = isym % 2 == 0
-        hasu[fminus] = -hasu[fminus]
-
-    hasu  = np.unique(hasu, axis=0)
-    return hasu
+        hasu_minus = -hasu[~is_centric(hasu, spacegroup)]
+        return np.unique(np.concatenate([hasu, hasu_minus]), axis=0)
+    return np.unique(hasu, axis=0)
 
 
