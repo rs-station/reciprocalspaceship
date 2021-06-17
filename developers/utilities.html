@@ -247,7 +247,7 @@ interface decisions related to <code class="docutils literal notranslate"><span 
 <td><p>Convert complex structure factors into structure factor amplitudes and phases</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#reciprocalspaceship.utils.generate_reciprocal_asu" title="reciprocalspaceship.utils.generate_reciprocal_asu"><code class="xref py py-obj docutils literal notranslate"><span class="pre">generate_reciprocal_asu</span></code></a>(cell, spacegroup, dmin)</p></td>
-<td><p>Generate the miller indices of the reflections in the reciprocal ASU.</p></td>
+<td><p>Generate the Miller indices of the reflections in the reciprocal ASU.</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="#reciprocalspaceship.utils.generate_reciprocal_cell" title="reciprocalspaceship.utils.generate_reciprocal_cell"><code class="xref py py-obj docutils literal notranslate"><span class="pre">generate_reciprocal_cell</span></code></a>(cell, dmin[, dtype])</p></td>
 <td><p>Generate the miller indices of the full P1 reciprocal cell.</p></td>
@@ -445,18 +445,23 @@ phases corresponding to the provided complex structure factors</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="reciprocalspaceship.utils.generate_reciprocal_asu">
-<span class="sig-prename descclassname"><span class="pre">reciprocalspaceship.utils.</span></span><span class="sig-name descname"><span class="pre">generate_reciprocal_asu</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cell</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">spacegroup</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dmin</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">anomalous</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/Hekstra-Lab/reciprocalspaceship/blob/main/reciprocalspaceship/utils/asu.py#L178-L206"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#reciprocalspaceship.utils.generate_reciprocal_asu" title="Permalink to this definition">¶</a></dt>
-<dd><p>Generate the miller indices of the reflections in the reciprocal ASU.</p>
+<span class="sig-prename descclassname"><span class="pre">reciprocalspaceship.utils.</span></span><span class="sig-name descname"><span class="pre">generate_reciprocal_asu</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cell</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">spacegroup</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dmin</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">anomalous</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/Hekstra-Lab/reciprocalspaceship/blob/main/reciprocalspaceship/utils/asu.py#L178-L211"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#reciprocalspaceship.utils.generate_reciprocal_asu" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generate the Miller indices of the reflections in the reciprocal ASU.</p>
+<p>If <cite>anomalous=True</cite> the Miller indices of acentric reflections will be
+included in both the Friedel-plus and Friedel-minus halves of reciprocal
+space. Centric Miller indices will only be included in the Friedel-plus
+reciprocal ASU.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>cell</strong> (<em>gemmi.UnitCell</em>) – A gemmi cell object.</p></li>
 <li><p><strong>spacegroup</strong> (<em>gemmi.SpaceGroup</em>) – A gemmi spacegroup object.</p></li>
 <li><p><strong>dmin</strong> (<em>float</em>) – Maximum resolution of the data in Å</p></li>
+<li><p><strong>anomalous</strong> (<em>bool</em>) – Whether to include Friedel-minus Miller indices to represent anomalous data</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p><strong>hasu</strong> (<em>np.array (np.int64)</em>) – n by 3 array of miller indices in the reciprocal ASU.</p>
+<dd class="field-even"><p><strong>hasu</strong> (<em>np.array (np.int32)</em>) – n by 3 array of miller indices in the reciprocal ASU.</p>
 </dd>
 </dl>
 </dd></dl>
