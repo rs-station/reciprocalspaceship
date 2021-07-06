@@ -13,4 +13,11 @@ def read_pickle(filepath_or_buffer):
     -------
     unpickled : same type as object stored in file
     """
-    return pd.read_pickle(filepath_or_buffer)
+    dataset = pd.read_pickle(filepath_or_buffer)
+
+    # Clean up datatypes for index
+    index_labels = dataset.index.names
+    dataset.reset_index(inplace=True)
+    dataset.set_index(index_labels, inplace=True)
+
+    return dataset
