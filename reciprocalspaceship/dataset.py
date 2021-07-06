@@ -347,6 +347,24 @@ class DataSet(pd.DataFrame):
         from reciprocalspaceship import io
         return io.to_gemmi(self, skip_problem_mtztypes)
 
+    def to_pickle(self, path, *args, **kwargs):
+        """
+        Pickle object to file.
+
+        For additional documentation on accepted arguments, see the                                                                                                                                     
+        `Pandas DataFrame.to_pickle() API <https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.to_pickle.html>`_.
+
+        Parameters
+        ----------
+        path : str
+            File path where the pickled object will be stored.
+
+        See Also
+        --------
+        read_pickle() : Load pickled reciprocalspaceship object from file.
+        """
+        return super().to_pickle(path, *args, **kwargs)
+    
     def to_structurefactor(self, sf_key, phase_key):
         """
         Convert structure factor amplitudes and phases to complex structure
