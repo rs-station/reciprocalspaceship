@@ -1,8 +1,9 @@
 import pandas as pd
+from reciprocalspaceship import DataSeries
 
 def read_pickle(filepath_or_buffer):
     """
-    Load pickled DataSet object from file.
+    Load pickled reciprocalspaceship object from file.
 
     Parameters
     ----------
@@ -13,11 +14,15 @@ def read_pickle(filepath_or_buffer):
     -------
     unpickled : same type as object stored in file
     """
-    dataset = pd.read_pickle(filepath_or_buffer)
+    unpickled = pd.read_pickle(filepath_or_buffer)
+
+    # Ensure DataSeries objects are not promoted to DataSet
+    if isinstance(unpickled, DataSeries):
+        return unpickled
 
     # Clean up datatypes for index
-    index_labels = dataset.index.names
-    dataset.reset_index(inplace=True)
-    dataset.set_index(index_labels, inplace=True)
+    index_labels = unpickled.index.names
+    unpickled = unpickled.reset_index()
+    unpickled = unpickled.set_index(index_labels)
 
-    return dataset
+    return unpickled
