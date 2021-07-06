@@ -1,0 +1,6 @@
+﻿reciprocalspaceship.read\_pickle
+================================
+
+.. currentmodule:: reciprocalspaceship
+
+.. autofunction:: read_pickle

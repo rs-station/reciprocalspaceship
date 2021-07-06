@@ -30,7 +30,8 @@ These two objects can be thought of as crystallographically-aware versions of ``
 Input/Output
 ------------
 
-Supported crystallographic file formats for data I/O. Write functions for reflection file formats are available as methods of ``rs.DataSet`` objects.
+Supported crystallographic file formats for data I/O. Although they are not listed below, write functions for reflection file formats
+are available as methods of ``rs.DataSet`` objects.
 
 .. currentmodule:: reciprocalspaceship
 .. autosummary::
@@ -39,6 +40,7 @@ Supported crystallographic file formats for data I/O. Write functions for reflec
 
    ~reciprocalspaceship.read_mtz
    ~reciprocalspaceship.read_csv
+   ~reciprocalspaceship.read_pickle
    ~reciprocalspaceship.read_precognition
    ~reciprocalspaceship.read_crystfel
    ~reciprocalspaceship.io.write_ccp4_map

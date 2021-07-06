@@ -108,6 +108,7 @@
 <li class="toctree-l2"><a class="reference internal" href="#input-output">Input/Output</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="autoapi/reciprocalspaceship.read_mtz.html">reciprocalspaceship.read_mtz</a></li>
 <li class="toctree-l3"><a class="reference internal" href="autoapi/reciprocalspaceship.read_csv.html">reciprocalspaceship.read_csv</a></li>
+<li class="toctree-l3"><a class="reference internal" href="autoapi/reciprocalspaceship.read_pickle.html">reciprocalspaceship.read_pickle</a></li>
 <li class="toctree-l3"><a class="reference internal" href="autoapi/reciprocalspaceship.read_precognition.html">reciprocalspaceship.read_precognition</a></li>
 <li class="toctree-l3"><a class="reference internal" href="autoapi/reciprocalspaceship.read_crystfel.html">reciprocalspaceship.read_crystfel</a></li>
 <li class="toctree-l3"><a class="reference internal" href="autoapi/reciprocalspaceship.io.write_ccp4_map.html">reciprocalspaceship.io.write_ccp4_map</a></li>
@@ -253,7 +254,8 @@ These two objects can be thought of as crystallographically-aware versions of <c
 </div>
 <div class="section" id="input-output">
 <h2>Input/Output<a class="headerlink" href="#input-output" title="Permalink to this headline">¶</a></h2>
-<p>Supported crystallographic file formats for data I/O. Write functions for reflection file formats are available as methods of <code class="docutils literal notranslate"><span class="pre">rs.DataSet</span></code> objects.</p>
+<p>Supported crystallographic file formats for data I/O. Although they are not listed below, write functions for reflection file formats
+are available as methods of <code class="docutils literal notranslate"><span class="pre">rs.DataSet</span></code> objects.</p>
 <table class="longtable docutils align-default">
 <colgroup>
 <col style="width: 10%" />
@@ -266,13 +268,16 @@ These two objects can be thought of as crystallographically-aware versions of <c
 <tr class="row-even"><td><p><a class="reference internal" href="autoapi/reciprocalspaceship.read_csv.html#reciprocalspaceship.read_csv" title="reciprocalspaceship.read_csv"><code class="xref py py-obj docutils literal notranslate"><span class="pre">read_csv</span></code></a></p></td>
 <td><p>Read a comma-separated values (csv) file into a DataSet.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="autoapi/reciprocalspaceship.read_precognition.html#reciprocalspaceship.read_precognition" title="reciprocalspaceship.read_precognition"><code class="xref py py-obj docutils literal notranslate"><span class="pre">read_precognition</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="autoapi/reciprocalspaceship.read_pickle.html#reciprocalspaceship.read_pickle" title="reciprocalspaceship.read_pickle"><code class="xref py py-obj docutils literal notranslate"><span class="pre">read_pickle</span></code></a></p></td>
+<td><p>Load pickled reciprocalspaceship object from file.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="autoapi/reciprocalspaceship.read_precognition.html#reciprocalspaceship.read_precognition" title="reciprocalspaceship.read_precognition"><code class="xref py py-obj docutils literal notranslate"><span class="pre">read_precognition</span></code></a></p></td>
 <td><p>Initialize attributes and populate the DataSet object with data from a HKL file of reflections.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="autoapi/reciprocalspaceship.read_crystfel.html#reciprocalspaceship.read_crystfel" title="reciprocalspaceship.read_crystfel"><code class="xref py py-obj docutils literal notranslate"><span class="pre">read_crystfel</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="autoapi/reciprocalspaceship.read_crystfel.html#reciprocalspaceship.read_crystfel" title="reciprocalspaceship.read_crystfel"><code class="xref py py-obj docutils literal notranslate"><span class="pre">read_crystfel</span></code></a></p></td>
 <td><p>Initialize attributes and populate the DataSet object with data from a CrystFEL stream with indexed reflections.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="autoapi/reciprocalspaceship.io.write_ccp4_map.html#reciprocalspaceship.io.write_ccp4_map" title="reciprocalspaceship.io.write_ccp4_map"><code class="xref py py-obj docutils literal notranslate"><span class="pre">write_ccp4_map</span></code></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="autoapi/reciprocalspaceship.io.write_ccp4_map.html#reciprocalspaceship.io.write_ccp4_map" title="reciprocalspaceship.io.write_ccp4_map"><code class="xref py py-obj docutils literal notranslate"><span class="pre">write_ccp4_map</span></code></a></p></td>
 <td><p>Write CCP4 map file from NumPy array of real-space density.</p></td>
 </tr>
 </tbody>
