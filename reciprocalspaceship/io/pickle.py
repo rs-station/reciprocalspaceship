@@ -13,6 +13,10 @@ def read_pickle(filepath_or_buffer):
     Returns
     -------
     unpickled : same type as object stored in file
+
+    See Also
+    --------
+    DataSet.to_pickle : Pickle object to file
     """
     unpickled = pd.read_pickle(filepath_or_buffer)
 
