@@ -351,7 +351,7 @@ class DataSet(pd.DataFrame):
         """
         Pickle object to file.
 
-        For additional documentation on accepted arguments, see the                                                                                                                                     
+        This can be useful for saving non-MTZ compatible data files for future use. For additional documentation on accepted arguments, see the
         `Pandas DataFrame.to_pickle() API <https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.to_pickle.html>`_.
 
         Parameters
