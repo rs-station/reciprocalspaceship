@@ -235,7 +235,7 @@ class DataSet(pd.DataFrame):
             else:
                 raise ValueError(f"{key} is not an instance of type str, np.ndarray, pd.Index, pd.Series, or list")
             
-        return super().set_index(keys, drop, append, inplace, verify_integrity)
+        return super().set_index(keys, drop=drop, append=append, inplace=inplace, verify_integrity=verify_integrity)
 
     def reset_index(self, level=None, drop=False, inplace=False, col_level=0, col_fill=''):
         """
@@ -289,11 +289,11 @@ class DataSet(pd.DataFrame):
             return dataset
         
         if inplace:
-            super().reset_index(level, drop, inplace, col_level, col_fill)
+            super().reset_index(level, drop=drop, inplace=inplace, col_level=col_level, col_fill=col_fill)
             _handle_cached_dtypes(self, columns, drop)
             return
         else:
-            dataset = super().reset_index(level, drop, inplace, col_level, col_fill)
+            dataset = super().reset_index(level, drop=drop, inplace=inplace, col_level=col_level, col_fill=col_fill)
             dataset._index_dtypes = dataset._index_dtypes.copy()
             dataset = _handle_cached_dtypes(dataset, columns, drop)
             return dataset
