@@ -156,43 +156,17 @@ def all_boolean_reductions(request):
     """
     return request.param
 
-array = {
-    # Integer dtypes
-    "HKL": rs.dtypes.hklindex.HKLIndexArray,
-    "MTZInt": rs.dtypes.mtzint.MTZIntArray,
-    "Batch": rs.dtypes.batch.BatchArray,
-    "M/ISYM": rs.dtypes.m_isym.M_IsymArray,
-
-    # Float32 dtypes
-    "Intensity": rs.dtypes.intensity.IntensityArray,
-    "SFAmplitude": rs.dtypes.structurefactor.StructureFactorAmplitudeArray,
-    "AnomalousDifference": rs.dtypes.anomalousdifference.AnomalousDifferenceArray,
-    "Stddev": rs.dtypes.stddev.StandardDeviationArray,
-    "FriedelSFAmplitude": rs.dtypes.structurefactor.FriedelStructureFactorAmplitudeArray,
-    "StddevFriedelSF": rs.dtypes.stddev.StandardDeviationFriedelSFArray,
-    "FriedelIntensity": rs.dtypes.intensity.FriedelIntensityArray,
-    "StddevFriedelI": rs.dtypes.stddev.StandardDeviationFriedelIArray,
-    "NormalizedSFAmplitude": rs.dtypes.structurefactor.NormalizedStructureFactorAmplitudeArray,
-    "Phase": rs.dtypes.phase.PhaseArray,
-    "Weight": rs.dtypes.weight.WeightArray,
-    "HendricksonLattman": rs.dtypes.phase.HendricksonLattmanArray,
-    "MTZReal": rs.dtypes.mtzreal.MTZRealArray
-}
-
 @pytest.fixture
 def data_int(dtype_ints):
-    return array[dtype_ints[0].name]._from_sequence(np.arange(0, 100),
-                                                    dtype=dtype_ints[0]())
+    return pd.array(np.arange(0, 100), dtype=dtype_ints[0]())
 
 @pytest.fixture
 def data_float(dtype_floats):
-    return array[dtype_floats[0].name]._from_sequence(np.arange(0, 100),
-                                                      dtype=dtype_floats[0]())
+    return pd.array(np.arange(0, 100), dtype=dtype_floats[0]())
 
 @pytest.fixture
 def data_all(dtype_all):
-    return array[dtype_all[0].name]._from_sequence(np.arange(0, 100),
-                                                   dtype=dtype_all[0]())
+    return pd.array(np.arange(0, 100), dtype=dtype_all[0]())
 
 @pytest.fixture(params=[None, lambda x: x])
 def sort_by_key(request):

@@ -9,22 +9,6 @@ import reciprocalspaceship as rs
 import pandas as pd
 from pandas.tests.extension import base
 
-array = {
-    "Intensity": rs.dtypes.intensity.IntensityArray,
-    "SFAmplitude": rs.dtypes.structurefactor.StructureFactorAmplitudeArray,
-    "AnomalousDifference": rs.dtypes.anomalousdifference.AnomalousDifferenceArray,
-    "Stddev": rs.dtypes.stddev.StandardDeviationArray,
-    "FriedelSFAmplitude": rs.dtypes.structurefactor.FriedelStructureFactorAmplitudeArray,
-    "StddevFriedelSF": rs.dtypes.stddev.StandardDeviationFriedelSFArray,
-    "FriedelIntensity": rs.dtypes.intensity.FriedelIntensityArray,
-    "StddevFriedelI": rs.dtypes.stddev.StandardDeviationFriedelIArray,
-    "NormalizedSFAmplitude": rs.dtypes.structurefactor.NormalizedStructureFactorAmplitudeArray,
-    "Phase": rs.dtypes.phase.PhaseArray,
-    "Weight": rs.dtypes.weight.WeightArray,
-    "HendricksonLattman": rs.dtypes.phase.HendricksonLattmanArray,
-    "MTZReal": rs.dtypes.mtzreal.MTZRealArray
-}
-
 @pytest.fixture(
     params=[
         rs.IntensityDtype,
@@ -47,23 +31,23 @@ def dtype(request):
 
 @pytest.fixture
 def data(dtype):
-    return array[dtype.name]._from_sequence(np.arange(0, 100), dtype=dtype)
+    return pd.array(np.arange(0, 100), dtype=dtype)
 
 @pytest.fixture
 def data_for_twos(dtype):
-    return array[dtype.name]._from_sequence(np.ones(100) * 2, dtype=dtype)
+    return pd.array(np.ones(100) * 2, dtype=dtype)
 
 @pytest.fixture
 def data_missing(dtype):
-    return array[dtype.name]._from_sequence([np.nan, 1.], dtype=dtype)
+    return pd.array([np.nan, 1.], dtype=dtype)
 
 @pytest.fixture
 def data_for_sorting(dtype):
-    return array[dtype.name]._from_sequence([1., 2., 0.], dtype=dtype)
+    return pd.array([1., 2., 0.], dtype=dtype)
 
 @pytest.fixture
 def data_missing_for_sorting(dtype):
-    return array[dtype.name]._from_sequence([1., np.nan, 0.], dtype=dtype)
+    return pd.array([1., np.nan, 0.], dtype=dtype)
 
 @pytest.fixture(params=['data', 'data_missing'])
 def all_data(request, data, data_missing):
@@ -79,7 +63,7 @@ def data_for_grouping(dtype):
     a = 0
     c = 2
     na = np.nan
-    return array[dtype.name]._from_sequence([b, b, na, na, a, a, b, c], dtype=dtype)
+    return pd.array([b, b, na, na, a, a, b, c], dtype=dtype)
 
 class TestCasting(base.BaseCastingTests):
     pass
