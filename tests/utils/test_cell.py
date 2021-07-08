@@ -31,7 +31,7 @@ def test_compute_dHKL(dataset_hkl, cell):
     gemmi.UnitCell(291., 423., 315., 90., 100., 90.),
     gemmi.UnitCell(30., 50., 90., 75., 80., 106.),
 ])
-@pytest.mark.parametrize("dtype", [np.float, np.int32, np.int])
+@pytest.mark.parametrize("dtype", [float, np.int32, int])
 def test_generate_reciprocal_cell(cell, dtype):
     """Test rs.utils.generate_reciprocal_cell"""
     dmin = 5.0
