@@ -33,7 +33,13 @@ The fastest way to install `reciprocalspaceship` is using `pip`:
 pip install reciprocalspaceship
 ```
 
-For more installation options, see our [installation guide](https://hekstra-lab.github.io/reciprocalspaceship/userguide/installation.html).
+or using `conda`:
+
+```
+conda install -c conda-forge reciprocalspaceship
+```
+
+For more installation information, see our [installation guide](https://hekstra-lab.github.io/reciprocalspaceship/userguide/installation.html).
 
 ## Quickstart
 
