@@ -124,7 +124,7 @@ def _parse_stream(filename: str) -> dict:
                 #    h    k    l          I   sigma(I)       peak background  fs/px  ss/px panel
                 #  -63   41    9     -41.31      57.45     195.00     170.86  731.0 1350.4 p0
                 crystal_peak_number += 1
-                h, k, l, I, sigmaI, _, _, _, _, _ = [i for i in line.split()]
+                h, k, l, I, sigmaI, peak, background, xdet, ydet, panel = [i for i in line.split()]
                 h, k, l = map(int, [h, k, l])
 
                 # calculate ewald offset and s1
@@ -143,7 +143,9 @@ def _parse_stream(filename: str) -> dict:
                     's1x': s1x,
                     's1y': s1y,
                     's1z': s1z,
-                    'ewald_offset': ewald_offset
+                    'ewald_offset': ewald_offset,
+                    'XDET' : float(xdet),
+                    'YDET' : float(ydet),
                 }
                 if current_event is not None:
                     name = (current_filename, current_event,
@@ -208,14 +210,23 @@ def read_crystfel(streamfile) -> DataSet:
     # BATCH -- B
     # s1{x,y,z} -- R
     # ewald_offset -- R
-    names = [
-        'H', 'K', 'L', 'I', 'sigmaI', 'BATCH', 's1x', 's1y', 's1z',
-        'ewald_offset'
-    ]
-    mtztypes = ["H", "H", "H", "J", "Q", "B", "R", "R", "R", "R"]
+    mtzdtypes = {
+        "H" : "H",
+        "K" : "H",
+        "L" : "H",
+        "I" : "J",
+        "sigmaI" : "Q",
+        "BATCH" : "B",
+        "s1x" : "R",
+        "s1y" : "R",
+        "s1z" : "R",
+        "ewald_offset" : "R",
+        "XDET" : "R",
+        "YDET" : "R",
+    }
     dataset = DataSet()
-    for (k, v), mtztype in zip(df.items(), mtztypes):
-        dataset[k] = v.astype(mtztype)
+    for k, v in df.items():
+        dataset[k] = v.astype(mtzdtypes[k])
     dataset.set_index(['H', 'K', 'L'], inplace=True)
 
     dataset.merged = False  # CrystFEL stream is always unmerged
