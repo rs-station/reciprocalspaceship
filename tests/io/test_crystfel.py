@@ -32,6 +32,8 @@ class TestCrystFEL(unittest.TestCase):
         self.assertTrue('s1y' in hewl.columns)
         self.assertTrue('s1z' in hewl.columns)
         self.assertTrue('BATCH' in hewl.columns)
+        self.assertTrue('XDET' in hewl.columns)
+        self.assertTrue('YDET' in hewl.columns)
         self.assertIsInstance(hewl, rs.DataSet)
         self.assertIsInstance(hewl["I"], rs.DataSeries)
         self.assertIsInstance(hewl["sigmaI"], rs.DataSeries)
