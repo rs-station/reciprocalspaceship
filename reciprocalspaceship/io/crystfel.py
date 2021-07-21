@@ -107,17 +107,11 @@ def _parse_stream(filename: str) -> dict:
             elif is_photon_energy(line):
                 photon_energy = float(line.split()[2])
             elif is_astar(line):
-                astar = np.array(list(map(
-                    float,
-                    line.split()[2:5]))) / 10.  # crystfel's notation uses nm-1
+                astar = np.array(line.split()[2:5], dtype='float32') / 10.  # crystfel's notation uses nm-1
             elif is_bstar(line):
-                bstar = np.array(list(map(
-                    float,
-                    line.split()[2:5]))) / 10.  # crystfel's notation uses nm-1
+                bstar = np.array(line.split()[2:5], dtype='float32') / 10.  # crystfel's notation uses nm-1
             elif is_cstar(line):
-                cstar = np.array(list(map(
-                    float,
-                    line.split()[2:5]))) / 10.  # crystfel's notation uses nm-1
+                cstar = np.array(line.split()[2:5], dtype='float32') / 10.  # crystfel's notation uses nm-1
 
                 # since it's the last line needed to construct Ewald offset,
                 # we'll pre-compute the matrices here
