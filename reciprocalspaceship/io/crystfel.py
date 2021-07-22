@@ -129,9 +129,19 @@ def _parse_stream(filename: str) -> dict:
 
                 # calculate ewald offset and s1
                 hkl = np.array([h, k, l])
-                s1 = A @ hkl + s0
+                q = A @ hkl 
+                s1 = q + s0
                 s1x, s1y, s1z = s1
-                ewald_offset = np.linalg.norm(s1) - lambda_inv
+                s1_norm = np.linalg.norm(s1)
+                ewald_offset = s1_norm - lambda_inv
+
+                # project calculated s1 onto the ewald sphere
+                s1_obs = lambda_inv * s1 / s1_norm
+
+                # Compute the angular ewald offset
+                q_obs = s1_obs - s0
+                rad = np.sign(ewald_offset) * np.arccos(np.dot(q, q_obs) / np.linalg.norm(q) / np.linalg.norm(q_obs))
+                qangle = np.rad2deg(rad)
 
                 record = {
                     "H": h,
@@ -144,6 +154,7 @@ def _parse_stream(filename: str) -> dict:
                     's1y': s1y,
                     's1z': s1z,
                     'ewald_offset': ewald_offset,
+                    'angular_ewald_offset': qangle,
                     'XDET' : float(xdet),
                     'YDET' : float(ydet),
                 }
@@ -221,6 +232,7 @@ def read_crystfel(streamfile) -> DataSet:
         "s1y" : "R",
         "s1z" : "R",
         "ewald_offset" : "R",
+        "angular_ewald_offset" : "R",
         "XDET" : "R",
         "YDET" : "R",
     }
