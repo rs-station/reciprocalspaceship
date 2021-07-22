@@ -1077,23 +1077,17 @@ class DataSet(pd.DataFrame):
         # Compute new HKLs and phase shifts
         hkls = self.get_hkls()
         hkls_isym = np.concatenate([hkls, isym.reshape(-1, 1)], axis=1)
-        compressed, inverse = np.unique(hkls_isym, axis=0, return_inverse=True)
-        observed_hkls, phi_coeff, phi_shift = hkl_to_observed(
-            compressed[:, :3],       # compressed HKLs
-            compressed[:, 3],        # compressed ISYM
-            self.spacegroup,
-            return_phase_shifts=True
-        )
-        self[["H", "K", "L"]] = observed_hkls[inverse]
+        observed_hkls, phi_coeff, phi_shift = hkl_to_observed(hkls, isym, self.spacegroup, True)
+        self[["H", "K", "L"]] = observed_hkls
         self[["H", "K", "L"]] = self[["H", "K", "L"]].astype("HKL")
 
         # Apply phase shift
         for k in self.get_phase_keys():
-            self[k] = phi_coeff[inverse] * (self[k] + phi_shift[inverse])
+            self[k] = phi_coeff * (self[k] + phi_shift)
         # GH#15: Handle complex structure factors
         for k in self.get_complex_keys():
-            self[k] *= np.exp(1j*np.deg2rad(phi_shift[inverse]))
-            friedel_mask = phi_coeff[inverse] != 1
+            self[k] *= np.exp(1j*np.deg2rad(phi_shift))
+            friedel_mask = phi_coeff != 1
             self.loc[friedel_mask, k] = np.conjugate(self.loc[friedel_mask, k])
         self.canonicalize_phases(inplace=True)
         
