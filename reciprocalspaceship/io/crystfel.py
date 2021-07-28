@@ -1,5 +1,6 @@
 import pandas as pd
 from reciprocalspaceship import DataSet
+from reciprocalspaceship.utils import angle_between
 import numpy as np
 
 
@@ -107,17 +108,11 @@ def _parse_stream(filename: str) -> dict:
             elif is_photon_energy(line):
                 photon_energy = float(line.split()[2])
             elif is_astar(line):
-                astar = np.array(list(map(
-                    float,
-                    line.split()[2:5]))) / 10.  # crystfel's notation uses nm-1
+                astar = np.array(line.split()[2:5], dtype='float32') / 10.  # crystfel's notation uses nm-1
             elif is_bstar(line):
-                bstar = np.array(list(map(
-                    float,
-                    line.split()[2:5]))) / 10.  # crystfel's notation uses nm-1
+                bstar = np.array(line.split()[2:5], dtype='float32') / 10.  # crystfel's notation uses nm-1
             elif is_cstar(line):
-                cstar = np.array(list(map(
-                    float,
-                    line.split()[2:5]))) / 10.  # crystfel's notation uses nm-1
+                cstar = np.array(line.split()[2:5], dtype='float32') / 10.  # crystfel's notation uses nm-1
 
                 # since it's the last line needed to construct Ewald offset,
                 # we'll pre-compute the matrices here
@@ -130,14 +125,23 @@ def _parse_stream(filename: str) -> dict:
                 #    h    k    l          I   sigma(I)       peak background  fs/px  ss/px panel
                 #  -63   41    9     -41.31      57.45     195.00     170.86  731.0 1350.4 p0
                 crystal_peak_number += 1
-                h, k, l, I, sigmaI, _, _, _, _, _ = [i for i in line.split()]
+                h, k, l, I, sigmaI, peak, background, xdet, ydet, panel = [i for i in line.split()]
                 h, k, l = map(int, [h, k, l])
 
                 # calculate ewald offset and s1
                 hkl = np.array([h, k, l])
-                s1 = A @ hkl + s0
+                q = A @ hkl 
+                s1 = q + s0
                 s1x, s1y, s1z = s1
-                ewald_offset = np.linalg.norm(s1) - lambda_inv
+                s1_norm = np.linalg.norm(s1)
+                ewald_offset = s1_norm - lambda_inv
+
+                # project calculated s1 onto the ewald sphere
+                s1_obs = lambda_inv * s1 / s1_norm
+
+                # Compute the angular ewald offset
+                q_obs = s1_obs - s0
+                qangle = np.sign(ewald_offset)*angle_between(q, q_obs)
 
                 record = {
                     "H": h,
@@ -149,7 +153,10 @@ def _parse_stream(filename: str) -> dict:
                     's1x': s1x,
                     's1y': s1y,
                     's1z': s1z,
-                    'ewald_offset': ewald_offset
+                    'ewald_offset': ewald_offset,
+                    'angular_ewald_offset': qangle,
+                    'XDET' : float(xdet),
+                    'YDET' : float(ydet),
                 }
                 if current_event is not None:
                     name = (current_filename, current_event,
@@ -214,14 +221,24 @@ def read_crystfel(streamfile) -> DataSet:
     # BATCH -- B
     # s1{x,y,z} -- R
     # ewald_offset -- R
-    names = [
-        'H', 'K', 'L', 'I', 'sigmaI', 'BATCH', 's1x', 's1y', 's1z',
-        'ewald_offset'
-    ]
-    mtztypes = ["H", "H", "H", "J", "Q", "B", "R", "R", "R", "R"]
+    mtzdtypes = {
+        "H" : "H",
+        "K" : "H",
+        "L" : "H",
+        "I" : "J",
+        "sigmaI" : "Q",
+        "BATCH" : "B",
+        "s1x" : "R",
+        "s1y" : "R",
+        "s1z" : "R",
+        "ewald_offset" : "R",
+        "angular_ewald_offset" : "R",
+        "XDET" : "R",
+        "YDET" : "R",
+    }
     dataset = DataSet()
-    for (k, v), mtztype in zip(df.items(), mtztypes):
-        dataset[k] = v.astype(mtztype)
+    for k, v in df.items():
+        dataset[k] = v.astype(mtzdtypes[k])
     dataset.set_index(['H', 'K', 'L'], inplace=True)
 
     dataset.merged = False  # CrystFEL stream is always unmerged
