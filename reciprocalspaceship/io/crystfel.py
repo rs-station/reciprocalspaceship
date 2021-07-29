@@ -1,5 +1,6 @@
 import pandas as pd
 from reciprocalspaceship import DataSet
+from reciprocalspaceship.utils import angle_between
 import numpy as np
 
 
@@ -140,9 +141,8 @@ def _parse_stream(filename: str) -> dict:
 
                 # Compute the angular ewald offset
                 q_obs = s1_obs - s0
-                rad = np.sign(ewald_offset) * np.arccos(np.dot(q, q_obs) / np.linalg.norm(q) / np.linalg.norm(q_obs))
-                qangle = np.rad2deg(rad)
-
+                qangle = np.sign(ewald_offset)*angle_between(q, q_obs)
+                
                 record = {
                     "H": h,
                     "K": k,

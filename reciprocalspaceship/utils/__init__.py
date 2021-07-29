@@ -36,3 +36,4 @@ from .asu import hkl_to_asu, hkl_to_observed, in_asu, generate_reciprocal_asu
 from .binning import bin_by_percentile
 from .units import ev2angstroms, angstroms2ev
 from .stats import compute_redundancy
+from .math import angle_between
