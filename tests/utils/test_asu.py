@@ -90,28 +90,36 @@ def test_hkl_to_observed(sgtbx_by_xhm):
     assert np.array_equal(H, H_observed)
 
 @pytest.mark.parametrize("cell_and_spacegroup", [
+    (gemmi.UnitCell(10., 20., 30., 90., 80., 75.), gemmi.SpaceGroup('P 1')),
+    (gemmi.UnitCell(30., 50., 80., 90., 100., 90.), gemmi.SpaceGroup('P 1 21 1')),    
     (gemmi.UnitCell(10., 20., 30., 90., 90., 90.), gemmi.SpaceGroup('P 21 21 21')),
+    (gemmi.UnitCell(89., 89., 105., 90., 90., 120.), gemmi.SpaceGroup('P 31 2 1')),
     (gemmi.UnitCell(30., 30., 30., 90., 90., 120.), gemmi.SpaceGroup('R 32')),
 ])
+@pytest.mark.parametrize("dmin", [6., 5., 4.])
 @pytest.mark.parametrize("anomalous", [False, True])
-def test_generate_reciprocal_asu(cell_and_spacegroup, anomalous):
+def test_generate_reciprocal_asu(cell_and_spacegroup, dmin, anomalous):
     """ 
-    Test rs.utils.generate_reciprocal_asu. This test is _pretty_ good, but
-    a more authoritative one would generate the full P1 cell and check every
-    miller index to generate a list of refls in the asu and compare with
-    the function output. I guess that qualifies as a reasonable #TODO
+    Test generate_reciprocal_asu(). This test confirms that all generated
+    Miller indices are in the ASU and valid given the designated criteria.
     """
-    dmin = 5.
-    cell,spacegroup = cell_and_spacegroup
+    cell, spacegroup = cell_and_spacegroup
     hkl = rs.utils.generate_reciprocal_asu(cell, spacegroup, dmin, anomalous=anomalous)
-    assert hkl.dtype == np.int64
-    assert np.any(~rs.utils.is_absent(hkl, spacegroup))
+    assert hkl.dtype == np.int32
+
+    # No systematic absences, and only generated to dmin
+    assert (~rs.utils.is_absent(hkl, spacegroup)).all()
     assert rs.utils.compute_dHKL(hkl, cell).min() >= dmin
     _,isym = rs.utils.hkl_to_asu(hkl, spacegroup)
     if anomalous:
-        assert np.all((isym == 1) | (isym == 2))
-        hkl_no_anom = rs.utils.generate_reciprocal_asu(cell, spacegroup, dmin, anomalous=False)
-        assert len(hkl) == 2*len(hkl_no_anom)
+        # If anomalous, isym can be 1 or 2. At least half of reflections must be 1
+        assert ((isym == 1) | (isym == 2)).all()
+        assert (isym  == 1).sum() >= (len(hkl)/2.)
+
+        # Should be length of centrics + 2*acentrics for Friedel+ indices
+        centrics = rs.utils.is_centric(hkl[isym == 1], spacegroup)
+        assert len(hkl) == (centrics.sum() + (2*(~centrics).sum()))
     else:
-        assert np.all(isym == 1)
+        # if anomalous=False, isym must be 1
+        assert (isym == 1).all()
 

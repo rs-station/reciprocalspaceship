@@ -235,7 +235,7 @@ class DataSet(pd.DataFrame):
             else:
                 raise ValueError(f"{key} is not an instance of type str, np.ndarray, pd.Index, pd.Series, or list")
             
-        return super().set_index(keys, drop, append, inplace, verify_integrity)
+        return super().set_index(keys, drop=drop, append=append, inplace=inplace, verify_integrity=verify_integrity)
 
     def reset_index(self, level=None, drop=False, inplace=False, col_level=0, col_fill=''):
         """
@@ -289,11 +289,11 @@ class DataSet(pd.DataFrame):
             return dataset
         
         if inplace:
-            super().reset_index(level, drop, inplace, col_level, col_fill)
+            super().reset_index(level, drop=drop, inplace=inplace, col_level=col_level, col_fill=col_fill)
             _handle_cached_dtypes(self, columns, drop)
             return
         else:
-            dataset = super().reset_index(level, drop, inplace, col_level, col_fill)
+            dataset = super().reset_index(level, drop=drop, inplace=inplace, col_level=col_level, col_fill=col_fill)
             dataset._index_dtypes = dataset._index_dtypes.copy()
             dataset = _handle_cached_dtypes(dataset, columns, drop)
             return dataset
@@ -347,6 +347,24 @@ class DataSet(pd.DataFrame):
         from reciprocalspaceship import io
         return io.to_gemmi(self, skip_problem_mtztypes)
 
+    def to_pickle(self, path, *args, **kwargs):
+        """
+        Pickle object to file.
+
+        This can be useful for saving non-MTZ compatible data files for future use. For additional documentation on accepted arguments, see the
+        `Pandas DataFrame.to_pickle() API <https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.to_pickle.html>`_.
+
+        Parameters
+        ----------
+        path : str
+            File path where the pickled object will be stored.
+
+        See Also
+        --------
+        read_pickle() : Load pickled reciprocalspaceship object from file.
+        """
+        return super().to_pickle(path, *args, **kwargs)
+    
     def to_structurefactor(self, sf_key, phase_key):
         """
         Convert structure factor amplitudes and phases to complex structure
@@ -1077,23 +1095,17 @@ class DataSet(pd.DataFrame):
         # Compute new HKLs and phase shifts
         hkls = self.get_hkls()
         hkls_isym = np.concatenate([hkls, isym.reshape(-1, 1)], axis=1)
-        compressed, inverse = np.unique(hkls_isym, axis=0, return_inverse=True)
-        observed_hkls, phi_coeff, phi_shift = hkl_to_observed(
-            compressed[:, :3],       # compressed HKLs
-            compressed[:, 3],        # compressed ISYM
-            self.spacegroup,
-            return_phase_shifts=True
-        )
-        self[["H", "K", "L"]] = observed_hkls[inverse]
+        observed_hkls, phi_coeff, phi_shift = hkl_to_observed(hkls, isym, self.spacegroup, True)
+        self[["H", "K", "L"]] = observed_hkls
         self[["H", "K", "L"]] = self[["H", "K", "L"]].astype("HKL")
 
         # Apply phase shift
         for k in self.get_phase_keys():
-            self[k] = phi_coeff[inverse] * (self[k] + phi_shift[inverse])
+            self[k] = phi_coeff * (self[k] + phi_shift)
         # GH#15: Handle complex structure factors
         for k in self.get_complex_keys():
-            self[k] *= np.exp(1j*np.deg2rad(phi_shift[inverse]))
-            friedel_mask = phi_coeff[inverse] != 1
+            self[k] *= np.exp(1j*np.deg2rad(phi_shift))
+            friedel_mask = phi_coeff != 1
             self.loc[friedel_mask, k] = np.conjugate(self.loc[friedel_mask, k])
         self.canonicalize_phases(inplace=True)
         

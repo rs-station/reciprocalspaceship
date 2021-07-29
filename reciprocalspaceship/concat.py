@@ -1,4 +1,5 @@
 import reciprocalspaceship as rs
+from itertools import tee
 import pandas as pd
 
 def concat(*args, check_isomorphous=True, **kwargs):
@@ -29,9 +30,10 @@ def concat(*args, check_isomorphous=True, **kwargs):
     DataSet.append : Concatenate DataSets
     """
     objs = kwargs.get("objs", args[0])
-    first = objs[0]
+    objs,objs_tee = tee(objs)
+    first = next(objs_tee)
     if check_isomorphous and isinstance(first, rs.DataSet):
-        for obj in objs[1:]:
+        for obj in objs:
             if not first.is_isomorphous(obj):
                 raise ValueError("Provided DataSets are not isomorphous")
         

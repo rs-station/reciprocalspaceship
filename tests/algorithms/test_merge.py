@@ -33,7 +33,7 @@ def test_merge(hewl_unmerged, hewl_merged, keys, sort):
     assert merged.merged
     assert merged.spacegroup.xhm() == hewl_merged.spacegroup.xhm()
     assert merged.cell.a == hewl_merged.cell.a
-    assert merged.index.is_lexsorted() == sort
+    assert merged.index.is_monotonic_increasing == sort
     
     # Note: AIMLESS zero-fills empty observations, whereas we use NaNs
     for key in merged.columns:

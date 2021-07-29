@@ -8,7 +8,13 @@ __version__ = getVersionNumber()
 # Top-Level API
 from .dataset import DataSet
 from .dataseries import DataSeries
-from .io import read_mtz, read_precognition, read_csv, read_crystfel
+from .io import (
+    read_mtz,
+    read_precognition,
+    read_csv,
+    read_crystfel,
+    read_pickle
+)
 from .dtypes import summarize_mtz_dtypes
 from .concat import concat
 

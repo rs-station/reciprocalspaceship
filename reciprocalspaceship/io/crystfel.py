@@ -142,7 +142,7 @@ def _parse_stream(filename: str) -> dict:
                 # Compute the angular ewald offset
                 q_obs = s1_obs - s0
                 qangle = np.sign(ewald_offset)*angle_between(q, q_obs)
-
+                
                 record = {
                     "H": h,
                     "K": k,

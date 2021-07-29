@@ -4,13 +4,6 @@ import pandas as pd
 import reciprocalspaceship as rs
 from pandas.tests.extension import base
 
-array = {
-    "HKL": rs.dtypes.hklindex.HKLIndexArray,
-    "MTZInt": rs.dtypes.mtzint.MTZIntArray,
-    "Batch": rs.dtypes.batch.BatchArray,
-    "M/ISYM": rs.dtypes.m_isym.M_IsymArray
-}
-
 @pytest.fixture(
     params=[
         rs.HKLIndexDtype,
@@ -24,23 +17,23 @@ def dtype(request):
 
 @pytest.fixture
 def data(dtype):
-    return array[dtype.name]._from_sequence(np.arange(0, 100), dtype=dtype)
+    return pd.array(np.arange(0, 100), dtype=dtype)
 
 @pytest.fixture
 def data_for_twos(dtype):
-    return array[dtype.name]._from_sequence(np.ones(100) * 2, dtype=dtype)
+    return pd.array(np.ones(100) * 2, dtype=dtype)
 
 @pytest.fixture
 def data_missing(dtype):
-    return array[dtype.name]._from_sequence([np.nan, 1.], dtype=dtype)
+    return pd.array([np.nan, 1.], dtype=dtype)
 
 @pytest.fixture
 def data_for_sorting(dtype):
-    return array[dtype.name]._from_sequence([1., 2., 0.], dtype=dtype)
+    return pd.array([1., 2., 0.], dtype=dtype)
 
 @pytest.fixture
 def data_missing_for_sorting(dtype):
-    return array[dtype.name]._from_sequence([1., np.nan, 0.], dtype=dtype)
+    return pd.array([1., np.nan, 0.], dtype=dtype)
 
 @pytest.fixture(params=['data', 'data_missing'])
 def all_data(request, data, data_missing):
@@ -56,7 +49,7 @@ def data_for_grouping(dtype):
     a = 0
     c = 2
     na = np.nan
-    return array[dtype.name]._from_sequence([b, b, na, na, a, a, b, c], dtype=dtype)
+    return pd.array([b, b, na, na, a, a, b, c], dtype=dtype)
 
 class TestCasting(base.BaseCastingTests):
     pass
