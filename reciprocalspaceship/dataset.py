@@ -678,7 +678,10 @@ class DataSet(pd.DataFrame):
         -------
         DataSet
         """
-        return self[~self.label_absences().ABSENT]
+        mask = is_absent(self.get_hkls(), self.spacegroup)
+        idx = self.index[mask]
+        self.drop(index=idx, inplace=True)
+        return self
 
     @inplace
     def infer_mtz_dtypes(self, inplace=False, index=True):
