@@ -72,6 +72,7 @@
        ~DataSet.label_absences
        ~DataSet.label_centrics
        ~DataSet.merge
+       ~DataSet.remove_absences
        ~DataSet.reset_index
        ~DataSet.set_index
        ~DataSet.stack_anomalous
