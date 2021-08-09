@@ -665,6 +665,22 @@ class DataSet(pd.DataFrame):
         return self
 
     @inplace
+    def remove_absences(self, inplace=False):
+        """
+        Remove systematically absent reflections in DataSet. 
+
+        Parameters
+        ----------
+        inplace : bool
+            Whether to add the column in place or to return a copy
+
+        Returns
+        -------
+        DataSet
+        """
+        return self[~self.label_absences().ABSENT]
+
+    @inplace
     def infer_mtz_dtypes(self, inplace=False, index=True):
         """
         Infers MTZ dtypes from column names and underlying data. This 
