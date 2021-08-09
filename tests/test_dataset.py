@@ -225,7 +225,38 @@ def test_label_absences(data_fmodel, inplace, no_sg):
         assert "ABSENT" in result
         assert result["ABSENT"].dtype.name == "bool"
 
+@pytest.mark.parametrize("inplace", [True, False])
+@pytest.mark.parametrize("hkl_index", [True, False])
+def test_remove_absences(inplace, hkl_index):
+    """Test DataSet.remove_absences()"""
+    params = (34., 45., 98., 90., 90., 90.)
+    cell = gemmi.UnitCell(*params)
+    sg_1  = gemmi.SpaceGroup(1)
+    sg_19 = gemmi.SpaceGroup(19)
+    Hall = rs.utils.generate_reciprocal_asu(cell,  sg_1, 5., anomalous=False)
+    h,k,l = Hall.T
+    absent = rs.utils.is_absent(Hall, sg_19)
+    ds = rs.DataSet({
+        'H' : h,
+        'K' : k,
+        'L' : l,
+        'I' : np.ones(len(h)),
+    }, spacegroup=sg_19, cell=cell).infer_mtz_dtypes()
+    if hkl_index:
+        ds.set_index(['H', 'K', 'L'], inplace=True)
 
+    ds_test = ds.remove_absences(inplace=inplace)
+    ds_true = ds[~ds.label_absences().ABSENT]
+
+    assert len(ds_test) == len(Hall) - absent.sum()
+    assert np.array_equal(ds_test.get_hkls(), ds_true.get_hkls())
+
+    if inplace:
+        assert id(ds_test) == id(ds)
+    else:
+        assert id(ds_test) != id(ds)
+
+        
 @pytest.mark.parametrize("cache", [True, False])
 def test_centrics(mtz_by_spacegroup, cache):
     """Test DataSet.centrics against DataSet.label_centrics"""

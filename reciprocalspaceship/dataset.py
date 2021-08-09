@@ -665,6 +665,25 @@ class DataSet(pd.DataFrame):
         return self
 
     @inplace
+    def remove_absences(self, inplace=False):
+        """
+        Remove systematically absent reflections in DataSet. 
+
+        Parameters
+        ----------
+        inplace : bool
+            Whether to add the column in place or to return a copy
+
+        Returns
+        -------
+        DataSet
+        """
+        mask = is_absent(self.get_hkls(), self.spacegroup)
+        idx = self.index[mask]
+        self.drop(index=idx, inplace=True)
+        return self
+
+    @inplace
     def infer_mtz_dtypes(self, inplace=False, index=True):
         """
         Infers MTZ dtypes from column names and underlying data. This 
