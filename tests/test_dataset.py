@@ -253,6 +253,8 @@ def test_remove_absences(inplace, hkl_index):
 
     if inplace:
         assert id(ds_test) == id(ds)
+    else:
+        assert id(ds_test) != id(ds)
 
         
 @pytest.mark.parametrize("cache", [True, False])
