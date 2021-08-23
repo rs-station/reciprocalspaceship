@@ -44,7 +44,7 @@ def generate_reciprocal_cell(cell, dmin, dtype=np.int32):
     -------
     hkl : np.array(int32)
     """
-    hmax,lmax,kmax = cell.get_hkl_limits(dmin)
+    hmax,kmax,lmax = cell.get_hkl_limits(dmin)
     hkl = np.meshgrid(
         np.linspace(-hmax-2, hmax+3, 2*hmax+6, dtype=dtype),
         np.linspace(-kmax-2, kmax+3, 2*kmax+6, dtype=dtype),
