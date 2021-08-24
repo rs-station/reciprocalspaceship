@@ -9,6 +9,21 @@ def getVersionNumber():
 __version__ = getVersionNumber()
 
 # Top-Level API
+from .dataset import DataSet
+from .dataseries import DataSeries
+from .io import (
+    read_mtz,
+    read_precognition,
+    read_csv,
+    read_crystfel,
+    read_pickle
+)
+from .dtypes import summarize_mtz_dtypes
+from .concat import concat
+
+# Import algorithms submodule
+from reciprocalspaceship import algorithms
+
 
 # Import algorithms submodule
 
@@ -34,22 +49,3 @@ from .dtypes import StructureFactorAmplitudeDtype  # F
 from .dtypes import WeightDtype  # W
 
 # fmt: on
-__all__ = [
-    "HKLIndexDtype",
-    "IntensityDtype",
-    "StructureFactorAmplitudeDtype",
-    "AnomalousDifferenceDtype",
-    "StandardDeviationDtype",
-    "FriedelStructureFactorAmplitudeDtype",
-    "StandardDeviationFriedelSFDtype",
-    "FriedelIntensityDtype",
-    "StandardDeviationFriedelIDtype",
-    "NormalizedStructureFactorAmplitudeDtype",
-    "PhaseDtype",
-    "WeightDtype",
-    "HendricksonLattmanDtype",
-    "BatchDtype",
-    "M_IsymDtype",
-    "MTZIntDtype",
-    "MTZRealDtype",
-]
