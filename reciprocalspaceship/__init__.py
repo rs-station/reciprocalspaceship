@@ -8,24 +8,14 @@ def getVersionNumber():
 
 __version__ = getVersionNumber()
 
-# Top-Level API
-from .dataset import DataSet
-from .dataseries import DataSeries
-from .io import (
-    read_mtz,
-    read_precognition,
-    read_csv,
-    read_crystfel,
-    read_pickle
-)
-from .dtypes import summarize_mtz_dtypes
-from .concat import concat
-
 # Import algorithms submodule
 from reciprocalspaceship import algorithms
 
+from .concat import concat
+from .dataseries import DataSeries
 
-# Import algorithms submodule
+# Top-Level API
+from .dataset import DataSet
 
 # Add support for MTZ data types:
 # see http://www.ccp4.ac.uk/html/f2mtz.html
@@ -47,5 +37,10 @@ from .dtypes import StandardDeviationFriedelIDtype  # M
 from .dtypes import StandardDeviationFriedelSFDtype  # L
 from .dtypes import StructureFactorAmplitudeDtype  # F
 from .dtypes import WeightDtype  # W
+from .dtypes import summarize_mtz_dtypes
+from .io import read_crystfel, read_csv, read_mtz, read_pickle, read_precognition
+
+# Import algorithms submodule
+
 
 # fmt: on

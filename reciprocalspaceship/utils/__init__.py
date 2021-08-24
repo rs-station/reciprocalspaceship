@@ -26,6 +26,7 @@ __all__ = [
 from .asu import generate_reciprocal_asu, hkl_to_asu, hkl_to_observed, in_asu
 from .binning import bin_by_percentile
 from .cell import compute_dHKL, generate_reciprocal_cell
+from .math import angle_between
 from .phases import canonicalize_phases, get_phase_restrictions
 from .rfree import add_rfree, copy_rfree
 from .stats import compute_redundancy
