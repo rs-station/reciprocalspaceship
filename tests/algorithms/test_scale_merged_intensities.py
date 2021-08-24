@@ -67,7 +67,6 @@ def test_centric_posterior(data_fw1978_input):
         lower = 0.0
         u = Iobs - SigIobs ** 2 / 2 / Sigma
         upper = np.abs(Iobs) + 10.0 * SigIobs
-        limit = 1000
 
         Z = np.zeros(len(u))
         for i in range(len(Z)):

@@ -10,7 +10,7 @@ def test_merge_valueerror(hewl_merged):
     merged DataSet
     """
     with pytest.raises(ValueError):
-        merged = rs.algorithms.merge(hewl_merged)
+        rs.algorithms.merge(hewl_merged)
 
 
 @pytest.mark.parametrize(

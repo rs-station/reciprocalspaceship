@@ -25,7 +25,7 @@ def test_stack_anomalous(data_merged, labels):
     # Check input data
     def check_ValueError(data, plus_labels, minus_labels):
         with pytest.raises(ValueError):
-            result = data.stack_anomalous(plus_labels, minus_labels)
+            data.stack_anomalous(plus_labels, minus_labels)
         return
 
     if plus_labels is None and minus_labels is None:
@@ -60,7 +60,7 @@ def test_stack_anomalous_unmerged(data_unmerged):
     Test DataSet.stack_anomalous() raises ValueError with unmerged data
     """
     with pytest.raises(ValueError):
-        result = data_unmerged.stack_anomalous()
+        data_unmerged.stack_anomalous()
 
 
 @pytest.mark.parametrize("columns", [None, "I", ["I", "SIGI"], ("I", "SIGI"), 5])
@@ -73,7 +73,7 @@ def test_unstack_anomalous(data_merged, columns, suffixes):
 
     def check_ValueError(data, columns, suffixes):
         with pytest.raises(ValueError):
-            result = data.unstack_anomalous(columns, suffixes)
+            data.unstack_anomalous(columns, suffixes)
         return
 
     # Test input validation
@@ -101,7 +101,7 @@ def test_unstack_anomalous_unmerged(data_unmerged):
     Test DataSet.unstack_anomalous() raises ValueError with unmerged data
     """
     with pytest.raises(ValueError):
-        result = data_unmerged.unstack_anomalous()
+        data_unmerged.unstack_anomalous()
 
 
 @pytest.mark.parametrize("rangeindexed", [True, False])

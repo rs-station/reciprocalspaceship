@@ -72,7 +72,7 @@ def test_structurefactor_multiplicity_valueerror(sg):
     """
     H = np.array([[1, 1, 1]])
     if isinstance(sg, gemmi.SpaceGroup) or isinstance(sg, gemmi.GroupOps):
-        epsilon = rs.utils.compute_structurefactor_multiplicity(H, sg)
+        rs.utils.compute_structurefactor_multiplicity(H, sg)
     else:
         with pytest.raises(ValueError):
-            epsilon = rs.utils.compute_structurefactor_multiplicity(H, sg)
+            rs.utils.compute_structurefactor_multiplicity(H, sg)

@@ -103,7 +103,6 @@ def _parse_stream(filename: str) -> dict:
             # analyzing what we have
             if ends_chunk_peaks(line):
                 is_chunk = False
-                chunk_peak_number = 0
             elif ends_crystal_peaks(line):
                 is_crystal = False
                 crystal_peak_number = 0
@@ -203,7 +202,6 @@ def _parse_stream(filename: str) -> dict:
                 current_serial_number = line.split()[-1]
 
             elif starts_chunk_peaks(line):
-                is_chunk = True
                 continue
 
             elif starts_crystal_peaks(line):

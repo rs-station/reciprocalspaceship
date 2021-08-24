@@ -105,7 +105,7 @@ def test_read_unmerged_2m_isym(data_unmerged):
     temp = tempfile.NamedTemporaryFile(suffix=".mtz")
     data_unmerged.write_mtz(temp.name)
     with pytest.raises(ValueError):
-        fails = rs.read_mtz(temp.name)
+        rs.read_mtz(temp.name)
 
     # Clean up
     temp.close()
