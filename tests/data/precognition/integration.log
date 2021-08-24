@@ -80,7 +80,7 @@ Message of type "result" is turned on.
 Precognition: Input   I: File & keyboard input (e.g., image & parameters)
               Dataset D: Process data set
               Quit    Q: Exit Precognition (default)
-Precognition: 
+Precognition:
 
 Precognition: Input   I: File & keyboard input (e.g., image & parameters)
               Dataset D: Process data set
@@ -107,7 +107,7 @@ Precognition:Input: Format     F: Image format                (f [esrf])
                     Chebyshev  V: Maximum degree of spectrum  (v 64)
                     Anomalous  A: Anomalous scattering        (a [on/off])
                     Quit       Q: Exit this menu (default)
-Precognition:Input:    Image      ../../Xray-spectrum_N.lam 
+Precognition:Input:    Image      ../../Xray-spectrum_N.lam
 File ../../Xray-spectrum_N.lam read.
 
 Precognition:Input: Format     F: Image format                (f [esrf])

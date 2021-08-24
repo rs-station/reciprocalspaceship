@@ -1,13 +1,17 @@
-import pytest
-import unittest
 import numpy as np
+import pytest
+
 import reciprocalspaceship as rs
 
 
 @pytest.fixture(
-    params=[ 50.0, -50.0, 250.0, -250.0,
-             np.array([50., -50., 250., -250.]),
-             rs.DataSeries([50., -50., 250., -250.], dtype="Phase")
+    params=[
+        50.0,
+        -50.0,
+        250.0,
+        -250.0,
+        np.array([50.0, -50.0, 250.0, -250.0]),
+        rs.DataSeries([50.0, -50.0, 250.0, -250.0], dtype="Phase"),
     ]
 )
 def phase_deg(request):
@@ -19,8 +23,8 @@ def phase_deg(request):
 def test_canonicalize_phases(phase_deg, deg):
     # Test canonicalize_phases
 
-    expected_phase = ((phase_deg + 180.) % 360.) - 180.
-    
+    expected_phase = ((phase_deg + 180.0) % 360.0) - 180.0
+
     if not deg:
         phase_deg = np.deg2rad(phase_deg)
         expected_phase = np.deg2rad(expected_phase)
@@ -28,7 +32,7 @@ def test_canonicalize_phases(phase_deg, deg):
     if isinstance(p, rs.DataSeries):
         p = p.to_numpy(np.float32)
         expected_phase = expected_phase.to_numpy(np.float32)
-        
+
     assert np.allclose(p, expected_phase)
 
 

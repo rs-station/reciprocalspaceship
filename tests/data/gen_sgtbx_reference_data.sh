@@ -1,23 +1,22 @@
-#!/usr/bin/env cctbx.python 
-import pandas as pd
-import gemmi
-from cctbx import sgtbx
-from cctbx import miller
-from os import remove,path
-import numpy as np
-from os import path,mkdir
+#!/usr/bin/env cctbx.python
+from os import mkdir, path, remove
 
-try:                                      
-    from tqdm import tqdm                 
-except:                                   
-    tqdm = iter                           
-                                          
-                                          
-#Run in the fmodel directory              
-abspath = path.abspath(__file__)          
-dname = path.dirname(abspath) + "/sgtbx" 
-if not path.exists(dname):                
-    mkdir(dname)                          
+import gemmi
+import numpy as np
+import pandas as pd
+from cctbx import miller, sgtbx
+
+try:
+    from tqdm import tqdm
+except:
+    tqdm = iter
+
+
+#Run in the fmodel directory
+abspath = path.abspath(__file__)
+dname = path.dirname(abspath) + "/sgtbx"
+if not path.exists(dname):
+    mkdir(dname)
 
 
 hmin,hmax = -5, 5
@@ -65,12 +64,12 @@ with open(outFN, 'w') as f:
           gemmi_epsilon,
           gemmi_epsilon_without_centering
           ] in zip(
-            H, 
-            H_asu, 
-            in_asu, 
-            is_centric, 
-            is_absent, 
-            epsilons, 
+            H,
+            H_asu,
+            in_asu,
+            is_centric,
+            is_absent,
+            epsilons,
             gemmi_epsilons,
             gemmi_epsilons_without_centering
           ):

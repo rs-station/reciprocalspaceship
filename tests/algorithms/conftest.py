@@ -1,12 +1,13 @@
-import pytest
-from os.path import dirname, abspath, join
-import pandas as pd
+from os.path import abspath, dirname, join
+
 import numpy as np
+import pandas as pd
+import pytest
+
 import reciprocalspaceship as rs
 
-@pytest.fixture(params=["hewl",
-                        "hewl_IMEAN_NaN",
-                        "hewl_I(+)_NaN"])
+
+@pytest.fixture(params=["hewl", "hewl_IMEAN_NaN", "hewl_I(+)_NaN"])
 def data_hewl_all(data_merged, request):
     if request.param == "hewl":
         return data_merged
@@ -16,6 +17,7 @@ def data_hewl_all(data_merged, request):
     elif request.param == "hewl_I(+)_NaN":
         data_merged.loc[(0, 0, 4), "I(+)"] = np.NaN
         return data_merged
+
 
 @pytest.fixture
 def hewl_merged():
@@ -27,6 +29,7 @@ def hewl_merged():
     mtz = rs.read_mtz(inFN)
     return mtz
 
+
 @pytest.fixture
 def hewl_unmerged():
     """
@@ -36,6 +39,7 @@ def hewl_unmerged():
     inFN = abspath(join(dirname(__file__), *datapath))
     mtz = rs.read_mtz(inFN)
     return mtz
+
 
 @pytest.fixture
 def ref_hewl():
@@ -47,6 +51,7 @@ def ref_hewl():
     mtz = rs.read_mtz(inFN)
     return mtz
 
+
 def load_fw1978():
     """
     Load reference data from French and Wilson, 1978.
@@ -54,8 +59,9 @@ def load_fw1978():
     datapath = ["..", "data", "algorithms", "fw1978.csv"]
     inFN = abspath(join(dirname(__file__), *datapath))
     fw1978 = pd.read_csv(inFN, dtype=np.float32)
-    fw1978["Sigma"] = 20.*np.ones(len(fw1978), dtype=np.float32)
+    fw1978["Sigma"] = 20.0 * np.ones(len(fw1978), dtype=np.float32)
     return fw1978
+
 
 @pytest.fixture
 def data_fw1978_input():
@@ -63,7 +69,8 @@ def data_fw1978_input():
     Input data from Table 1 of French and Wilson, 1978
     """
     data = load_fw1978()
-    return data[["I",  "SigI", "Sigma"]]
+    return data[["I", "SigI", "Sigma"]]
+
 
 def data_fw1978_intensities(centric):
     """
@@ -73,7 +80,8 @@ def data_fw1978_intensities(centric):
     if centric:
         return data[["Centric E(J|I)", "Centric sigma(J|I)"]]
     else:
-        return data[["Acentric E(J|I)", "Acentric sigma(J|I)"]]        
+        return data[["Acentric E(J|I)", "Acentric sigma(J|I)"]]
+
 
 def data_fw1978_structurefactors(centric):
     """
@@ -83,12 +91,17 @@ def data_fw1978_structurefactors(centric):
     if centric:
         return data[["Centric E(F|I)", "Centric sigma(F|I)"]]
     else:
-        return data[["Acentric E(F|I)", "Acentric sigma(F|I)"]]        
+        return data[["Acentric E(F|I)", "Acentric sigma(F|I)"]]
 
-@pytest.fixture(params=["centric intensities",
-                        "acentric intensities",
-                        "centric structurefactors",
-                        "acentric structurefactors"])
+
+@pytest.fixture(
+    params=[
+        "centric intensities",
+        "acentric intensities",
+        "centric structurefactors",
+        "acentric structurefactors",
+    ]
+)
 def data_fw1978_output(request):
     """
     Output data from Table 1 of French and Wilson, 1978. Parametrized
@@ -103,6 +116,7 @@ def data_fw1978_output(request):
     elif request.param == "acentric structurefactors":
         return data_fw1978_structurefactors(centric=False)
 
+
 @pytest.fixture
 def data_fw_cctbx():
     """
@@ -112,6 +126,7 @@ def data_fw_cctbx():
     inFN = abspath(join(dirname(__file__), *datapath))
     return pd.read_csv(inFN)
 
+
 @pytest.fixture
 def data_fw_mcmc():
     """
@@ -120,5 +135,3 @@ def data_fw_mcmc():
     datapath = ["..", "data", "french_wilson", "fw_mcmc_data.csv"]
     inFN = abspath(join(dirname(__file__), *datapath))
     return pd.read_csv(inFN)
-
-

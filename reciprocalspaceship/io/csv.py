@@ -1,8 +1,17 @@
 import pandas as pd
+
 from reciprocalspaceship import DataSet
 
-def read_csv(csvfile, spacegroup=None, cell=None, merged=None,
-             infer_mtz_dtypes=True, *args, **kwargs):
+
+def read_csv(
+    csvfile,
+    spacegroup=None,
+    cell=None,
+    merged=None,
+    infer_mtz_dtypes=True,
+    *args,
+    **kwargs
+):
     """
     Read a comma-separated values (csv) file into a DataSet.
 

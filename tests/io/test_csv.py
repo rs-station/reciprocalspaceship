@@ -1,16 +1,17 @@
-import pytest
 import tempfile
-import reciprocalspaceship as rs
+
 import gemmi
+import pytest
 from pandas.testing import assert_frame_equal
+
+import reciprocalspaceship as rs
+
 
 @pytest.mark.parametrize("sep", [",", "\t", ";"])
 @pytest.mark.parametrize("spacegroup", [None, gemmi.SpaceGroup("P 1"), 1, "P 1"])
-@pytest.mark.parametrize("cell", [
-    None,
-    gemmi.UnitCell(1, 1, 1, 90, 90, 90),
-    (1, 1, 1, 90, 90, 90)
-])
+@pytest.mark.parametrize(
+    "cell", [None, gemmi.UnitCell(1, 1, 1, 90, 90, 90), (1, 1, 1, 90, 90, 90)]
+)
 @pytest.mark.parametrize("merged", [None, True, False])
 @pytest.mark.parametrize("infer_mtz_dtypes", [True, False])
 def test_read_csv(IOtest_mtz, sep, spacegroup, cell, merged, infer_mtz_dtypes):
@@ -18,8 +19,14 @@ def test_read_csv(IOtest_mtz, sep, spacegroup, cell, merged, infer_mtz_dtypes):
     csvfile = tempfile.NamedTemporaryFile(suffix=".csv")
     expected = rs.read_mtz(IOtest_mtz)
     expected.to_csv(csvfile.name, sep=sep)
-    result = rs.read_csv(csvfile.name, spacegroup=spacegroup, cell=cell,
-                         merged=merged, infer_mtz_dtypes=infer_mtz_dtypes, sep=sep)
+    result = rs.read_csv(
+        csvfile.name,
+        spacegroup=spacegroup,
+        cell=cell,
+        merged=merged,
+        infer_mtz_dtypes=infer_mtz_dtypes,
+        sep=sep,
+    )
     print(result)
     result.set_index(["H", "K", "L"], inplace=True)
     csvfile.close()
@@ -41,7 +48,7 @@ def test_read_csv(IOtest_mtz, sep, spacegroup, cell, merged, infer_mtz_dtypes):
         assert result.cell is None
 
     assert result.merged == merged
-    
+
     if infer_mtz_dtypes:
         assert_frame_equal(result, expected)
     else:

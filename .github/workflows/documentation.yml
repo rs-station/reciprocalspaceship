@@ -12,15 +12,15 @@ jobs:
 
     # Skip docs if 'skip docs' is contained in latest commit message
     if: "!contains(github.event.head_commit.message, 'skip docs')"
-    
+
     steps:
-    
+
     - uses: actions/checkout@v2
     - name: Set up Python 3.7
       uses: actions/setup-python@v2
       with:
         python-version: 3.7
-    
+
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
@@ -44,7 +44,7 @@ jobs:
         git config --local user.email "action@github.com"
         git config --local user.name "GitHub Action"
         git add .
-        git diff --quiet && git diff --staged --quiet || git commit -m "Upload documentation from latest commit" 
+        git diff --quiet && git diff --staged --quiet || git commit -m "Upload documentation from latest commit"
 
     - name: Push changes to gh-pages
       uses: ad-m/github-push-action@master

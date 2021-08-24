@@ -1,21 +1,21 @@
-import pytest
-import numpy as np
-import reciprocalspaceship as rs
-import pandas as pd
 import gemmi
+import numpy as np
+
+import reciprocalspaceship as rs
+
 
 def test_phase_restrictions(sgtbx_by_xhm):
     """
-    Test rs.utils.phase_restrictions against reference data generated 
+    Test rs.utils.phase_restrictions against reference data generated
     from sgtbx.
     """
     xhm = sgtbx_by_xhm[0]
     reference = sgtbx_by_xhm[1]
 
     # Convert reference phase restrictions to canonical output
-    H = reference[['h', 'k', 'l']].to_numpy()
+    H = reference[["h", "k", "l"]].to_numpy()
     sg = gemmi.SpaceGroup(xhm)
-    ref_restrictions =  []
+    ref_restrictions = []
     for h, entry in zip(H, reference["phase_restrictions"].to_list()):
         if entry == "None" or rs.utils.is_absent([h], sg)[0]:
             ref_restrictions.append([])
@@ -31,4 +31,6 @@ def test_phase_restrictions(sgtbx_by_xhm):
         if ref is []:
             assert ref == test
         else:
-            assert np.allclose(np.sin(np.deg2rad(ref)), np.sin(np.deg2rad(np.array(test))))
+            assert np.allclose(
+                np.sin(np.deg2rad(ref)), np.sin(np.deg2rad(np.array(test)))
+            )

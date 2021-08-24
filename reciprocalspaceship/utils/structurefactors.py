@@ -1,6 +1,8 @@
 import numpy as np
-from gemmi import SpaceGroup,GroupOps
+from gemmi import GroupOps, SpaceGroup
+
 import reciprocalspaceship as rs
+
 
 def to_structurefactor(sfamps, phases):
     """
@@ -23,7 +25,8 @@ def to_structurefactor(sfamps, phases):
         sfamps = sfamps.to_numpy()
     if isinstance(phases, rs.DataSeries):
         phases = phases.to_numpy()
-    return sfamps*np.exp(1j*np.deg2rad(phases))
+    return sfamps * np.exp(1j * np.deg2rad(phases))
+
 
 def from_structurefactor(sfs):
     """
@@ -38,15 +41,18 @@ def from_structurefactor(sfs):
     Returns
     -------
     (sf, phase) : tuple of DataSeries
-        Tuple of DataSeries for the structure factor amplitudes and 
+        Tuple of DataSeries for the structure factor amplitudes and
         phases corresponding to the provided complex structure factors
     """
     index = None
     if isinstance(sfs, rs.DataSeries):
         index = sfs.index
     sf = rs.DataSeries(np.abs(sfs), index=index, name="F").astype("SFAmplitude")
-    phase = rs.DataSeries(np.angle(sfs, deg=True), index=index, name="Phi").astype("Phase")
+    phase = rs.DataSeries(np.angle(sfs, deg=True), index=index, name="Phi").astype(
+        "Phase"
+    )
     return sf, phase
+
 
 def compute_structurefactor_multiplicity(H, sg, include_centering=True):
     """
@@ -60,7 +66,7 @@ def compute_structurefactor_multiplicity(H, sg, include_centering=True):
         The space group to identify the asymmetric unit
     include_centering : bool
         Whether or not to include the multiplicity inherent in the lattice centering.
-        The default is True. If False, the minimum value of epsilon will be 1 
+        The default is True. If False, the minimum value of epsilon will be 1
         irrespective of space group.
 
     Returns
@@ -74,27 +80,30 @@ def compute_structurefactor_multiplicity(H, sg, include_centering=True):
     elif isinstance(sg, GroupOps):
         group_ops = sg
     else:
-        raise ValueError(f"gemmi.SpaceGroup or gemmi.GroupOps expected for parameter sg. "
-                         f"Received object of type: ({type(sg)}) instead.")
+        raise ValueError(
+            f"gemmi.SpaceGroup or gemmi.GroupOps expected for parameter sg. "
+            f"Received object of type: ({type(sg)}) instead."
+        )
 
     is_centric = group_ops.is_centric()
 
-    #Lookup based on centering is equivalent to counting the number of translational
-    #centering operations. Using the number of operations has proven more robust. 
+    # Lookup based on centering is equivalent to counting the number of translational
+    # centering operations. Using the number of operations has proven more robust.
     if include_centering:
-        L = (1 + is_centric)
+        L = 1 + is_centric
     else:
         L = len(group_ops.cen_ops)
-        L = L*(1 + is_centric)
+        L = L * (1 + is_centric)
 
     eps = np.zeros(len(H))
     for op in group_ops:
         h = rs.utils.apply_to_hkl(H, op)
         if is_centric:
-            eps += np.all(h==H, 1) | np.all(h==-H, 1)
+            eps += np.all(h == H, 1) | np.all(h == -H, 1)
         else:
-            eps += np.all(h==H, 1) 
-    return eps/L
+            eps += np.all(h == H, 1)
+    return eps / L
+
 
 def is_centric(H, spacegroup):
     """
@@ -117,16 +126,19 @@ def is_centric(H, spacegroup):
     elif isinstance(spacegroup, GroupOps):
         group_ops = spacegroup
     else:
-        raise ValueError(f"gemmi.SpaceGroup or gemmi.GroupOps expected for parameter sg. "
-                         f"Received object of type: ({type(spacegroup)}) instead.")
+        raise ValueError(
+            f"gemmi.SpaceGroup or gemmi.GroupOps expected for parameter sg. "
+            f"Received object of type: ({type(spacegroup)}) instead."
+        )
 
     hkl, inverse = np.unique(H, axis=0, return_inverse=True)
     centric = group_ops.centric_flag_array(hkl)
     return centric[inverse]
 
+
 def is_absent(H, spacegroup):
     """
-    Determine if Miller indices are systematically absent in a given 
+    Determine if Miller indices are systematically absent in a given
     spacegroup.
 
     Parameters
@@ -146,9 +158,9 @@ def is_absent(H, spacegroup):
     elif isinstance(spacegroup, GroupOps):
         group_ops = spacegroup
     else:
-        raise ValueError(f"gemmi.SpaceGroup or gemmi.GroupOps expected for parameter sg. "
-                         f"Received object of type: ({type(spacegroup)}) instead.")
-
+        raise ValueError(
+            f"gemmi.SpaceGroup or gemmi.GroupOps expected for parameter sg. "
+            f"Received object of type: ({type(spacegroup)}) instead."
+        )
 
     return group_ops.systematic_absences(H)
-

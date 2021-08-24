@@ -48,7 +48,7 @@ are available as methods of ``rs.DataSet`` objects.
 Algorithms
 ----------
 
-Algorithms for processing reflection data stored in ``rs.DataSet`` objects. 
+Algorithms for processing reflection data stored in ``rs.DataSet`` objects.
 
 .. currentmodule:: reciprocalspaceship
 .. autosummary::
@@ -57,7 +57,7 @@ Algorithms for processing reflection data stored in ``rs.DataSet`` objects.
 
    ~reciprocalspaceship.algorithms.merge
    ~reciprocalspaceship.algorithms.scale_merged_intensities
-   
+
 Helpful Functions
 -----------------
 
@@ -97,4 +97,3 @@ Commandline tools to support common use cases.
 	 </tr>
 	 </tbody>
    </table>
-

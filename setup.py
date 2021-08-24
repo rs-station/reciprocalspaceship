@@ -1,8 +1,9 @@
-from setuptools import setup, find_packages
+from setuptools import find_packages, setup
+
 
 # Get version number
 def getVersionNumber():
-    with open("reciprocalspaceship/VERSION", "r") as vfile:
+    with open("reciprocalspaceship/VERSION") as vfile:
         version = vfile.read().strip()
     return version
 
@@ -12,21 +13,21 @@ __version__ = getVersionNumber()
 DESCRIPTION = "Tools for exploring reciprocal space"
 LONG_DESCRIPTION = """
 ``reciprocalspaceship`` provides a ``pandas``-style interface for
-analyzing and manipulating reflection data from crystallography 
-experiments. Using this library, it is possible to interactively work 
-with crystallographic data in Python, enabling easy integration  with 
-modern scientific computing libraries. ``reciprocalspaceship`` is 
-intended to support the rapid prototyping of new crystallographic methods 
-and custom analyses while maintaining clear, reproducible, and performant 
+analyzing and manipulating reflection data from crystallography
+experiments. Using this library, it is possible to interactively work
+with crystallographic data in Python, enabling easy integration  with
+modern scientific computing libraries. ``reciprocalspaceship`` is
+intended to support the rapid prototyping of new crystallographic methods
+and custom analyses while maintaining clear, reproducible, and performant
 code.
 
 Features of this library include:
 
-  - Crystallographically-aware ``pandas`` objects, datatypes, and syntax 
+  - Crystallographically-aware ``pandas`` objects, datatypes, and syntax
     that are familiar to Python users.
-  - Convenient integration with `GEMMI <https://gemmi.readthedocs.io/en/latest/>`__ 
-    to provide built-in methods and support for developing functions that 
-    use space groups, unit cell parameters, and crystallographic symmetry 
+  - Convenient integration with `GEMMI <https://gemmi.readthedocs.io/en/latest/>`__
+    to provide built-in methods and support for developing functions that
+    use space groups, unit cell parameters, and crystallographic symmetry
     operations.
   - Support for reading and writing MTZ reflection files.
 """

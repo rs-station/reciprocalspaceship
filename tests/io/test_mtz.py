@@ -1,21 +1,22 @@
-import pytest
-import unittest
-from os.path import dirname, abspath, join, exists
-import tempfile
 import filecmp
+import tempfile
+import unittest
+from os.path import abspath, dirname, exists, join
+
 import gemmi
-import numpy as np
+import pytest
 from pandas.testing import assert_frame_equal
+
 import reciprocalspaceship as rs
 from reciprocalspaceship.utils import in_asu
 
-class TestMTZ(unittest.TestCase):
 
+class TestMTZ(unittest.TestCase):
     def test_read(self):
 
-        datadir = join(abspath(dirname(__file__)), '../data/fmodel')
-        data = rs.read_mtz(join(datadir, '9LYZ.mtz'))
-        
+        datadir = join(abspath(dirname(__file__)), "../data/fmodel")
+        data = rs.read_mtz(join(datadir, "9LYZ.mtz"))
+
         # Confirm columns, indices, and metadata
         self.assertEqual(data.spacegroup.number, 96)
         self.assertEqual(data.columns.to_list(), ["FMODEL", "PHIFMODEL"])
@@ -24,13 +25,13 @@ class TestMTZ(unittest.TestCase):
         self.assertIsInstance(data.cell, gemmi.UnitCell)
         self.assertIsInstance(data, rs.DataSet)
         self.assertIsInstance(data["FMODEL"], rs.DataSeries)
-        
+
         return
-    
+
     def test_write(self):
 
-        datadir = join(abspath(dirname(__file__)), '../data/fmodel')
-        data = rs.read_mtz(join(datadir, '9LYZ.mtz'))
+        datadir = join(abspath(dirname(__file__)), "../data/fmodel")
+        data = rs.read_mtz(join(datadir, "9LYZ.mtz"))
 
         temp = tempfile.NamedTemporaryFile(suffix=".mtz")
 
@@ -39,7 +40,7 @@ class TestMTZ(unittest.TestCase):
         data_missingcell.cell = None
         with self.assertRaises(AttributeError):
             data_missingcell.write_mtz(temp.name)
-            
+
         # Missing spacegroup should raise AttributeError
         data_missingsg = data.copy()
         data_missingsg.spacegroup = None
@@ -62,11 +63,11 @@ class TestMTZ(unittest.TestCase):
         temp.close()
 
         return
-    
+
     def test_roundtrip(self):
-        
-        datadir = join(abspath(dirname(__file__)), '../data/fmodel')
-        data = rs.read_mtz(join(datadir, '9LYZ.mtz'))
+
+        datadir = join(abspath(dirname(__file__)), "../data/fmodel")
+        data = rs.read_mtz(join(datadir, "9LYZ.mtz"))
 
         # Write data, read data, write data again... shouldn't change
         temp = tempfile.NamedTemporaryFile(suffix=".mtz")
@@ -83,7 +84,7 @@ class TestMTZ(unittest.TestCase):
         # Clean up
         temp.close()
         temp2.close()
-        
+
         return
 
 
@@ -93,8 +94,9 @@ def test_read_unmerged(data_unmerged):
     assert not in_asu(data_unmerged.get_hkls(), data_unmerged.spacegroup).all()
     assert "PARTIAL" in data_unmerged.columns
     assert data_unmerged["PARTIAL"].dtype.name == "bool"
-    assert not  "M/ISYM" in data_unmerged.columns
+    assert not "M/ISYM" in data_unmerged.columns
     assert not data_unmerged.merged
+
 
 def test_read_unmerged_2m_isym(data_unmerged):
     """Test rs.read_mtz() with unmerged data containing 2 M/ISYM columns"""
@@ -117,8 +119,8 @@ def test_roundtrip(data_unmerged, label_centrics):
     if label_centrics:
         data_unmerged.label_centrics(inplace=True)
 
-    temp  = tempfile.NamedTemporaryFile(suffix=".mtz")
-    temp2 = tempfile.NamedTemporaryFile(suffix=".mtz")    
+    temp = tempfile.NamedTemporaryFile(suffix=".mtz")
+    temp2 = tempfile.NamedTemporaryFile(suffix=".mtz")
     data_unmerged.write_mtz(temp.name)
     data2 = rs.read_mtz(temp.name)
     data2.write_mtz(temp2.name)
