@@ -2,7 +2,10 @@ import numpy as np
 import pandas as pd
 import reciprocalspaceship as rs
 
-def compute_redundancy(hobs, cell, spacegroup, full_asu=True, anomalous=False, dmin=None):
+
+def compute_redundancy(
+    hobs, cell, spacegroup, full_asu=True, anomalous=False, dmin=None
+):
     """
     Compute the multiplicity of all valid reflections in the reciprocal ASU.
 
@@ -35,32 +38,43 @@ def compute_redundancy(hobs, cell, spacegroup, full_asu=True, anomalous=False, d
     if dmin is None:
         dmin = dhkl.min()
     hobs = hobs[dhkl >= dmin]
-    decimals = 5. #Round after this many decimals
-    dmin = np.floor(dmin * 10**decimals) * 10**-decimals
-    hobs,isym = rs.utils.hkl_to_asu(hobs, spacegroup)
+    decimals = 5.0  # Round after this many decimals
+    dmin = np.floor(dmin * 10 ** decimals) * 10 ** -decimals
+    hobs, isym = rs.utils.hkl_to_asu(hobs, spacegroup)
     if anomalous:
         fminus = isym % 2 == 0
         hobs[fminus] = -hobs[fminus]
 
-    mult = rs.DataSet({                     
-	'H' : hobs[:,0],             
-	'K' : hobs[:,1],             
-	'L' : hobs[:,2],             
-	'Count' : np.ones(len(hobs)),
-    }, cell=cell, spacegroup=spacegroup).groupby(['H', 'K', 'L']).sum()
+    mult = (
+        rs.DataSet(
+            {
+                "H": hobs[:, 0],
+                "K": hobs[:, 1],
+                "L": hobs[:, 2],
+                "Count": np.ones(len(hobs)),
+            },
+            cell=cell,
+            spacegroup=spacegroup,
+        )
+        .groupby(["H", "K", "L"])
+        .sum()
+    )
 
     if full_asu:
         hall = rs.utils.generate_reciprocal_asu(cell, spacegroup, dmin, anomalous)
 
-        ASU = rs.DataSet({                     
-            'H' : hall[:,0],             
-            'K' : hall[:,1],             
-            'L' : hall[:,2],             
-            'Count' : np.zeros(len(hall)),
-        }, cell=cell, spacegroup=spacegroup).set_index(['H', 'K', 'L'])
+        ASU = rs.DataSet(
+            {
+                "H": hall[:, 0],
+                "K": hall[:, 1],
+                "L": hall[:, 2],
+                "Count": np.zeros(len(hall)),
+            },
+            cell=cell,
+            spacegroup=spacegroup,
+        ).set_index(["H", "K", "L"])
         ASU = ASU.loc[ASU.index.difference(mult.index)]
         mult = mult.append(ASU)
 
     mult = mult.sort_index()
-    return mult.get_hkls(), mult['Count'].to_numpy(np.int32)
-
+    return mult.get_hkls(), mult["Count"].to_numpy(np.int32)

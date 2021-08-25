@@ -1,5 +1,6 @@
 import numpy as np
 
+
 def apply_to_hkl(H, op):
     """
     Apply symmetry operator to hkls.
@@ -18,9 +19,10 @@ def apply_to_hkl(H, op):
     """
     return np.floor_divide(np.matmul(H, op.rot), op.DEN)
 
+
 def phase_shift(H, op):
     """
-    Calculate phase shift for symmetry operator. 
+    Calculate phase shift for symmetry operator.
 
     Parameters
     ----------
@@ -34,4 +36,4 @@ def phase_shift(H, op):
     result : array
         array of phase shifts
     """
-    return -2*np.pi*np.matmul(H, op.tran) / op.DEN
+    return -2 * np.pi * np.matmul(H, op.tran) / op.DEN
