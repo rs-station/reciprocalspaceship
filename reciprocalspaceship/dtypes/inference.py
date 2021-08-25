@@ -1,13 +1,14 @@
 from pandas.api.types import is_integer_dtype, is_float_dtype, is_object_dtype
 from reciprocalspaceship.dtypes.base import MTZDtype
 
+
 def infer_mtz_dtype(dataseries):
     """
     Infer MTZ dtype from column name and underlying data.
 
-    If name does not match a common MTZ column, the method will return 
-    an MTZInt or MTZReal depending on whether the data is composed of 
-    integers or floats, respectively. If the data is non-numeric, the 
+    If name does not match a common MTZ column, the method will return
+    an MTZInt or MTZReal depending on whether the data is composed of
+    integers or floats, respectively. If the data is non-numeric, the
     returned dtype will be unchanged.
 
     Notes
@@ -27,12 +28,12 @@ def infer_mtz_dtype(dataseries):
     """
     name = dataseries.name
     dtype = dataseries.dtype
-    
+
     # If dtype is object, try to coerce to more informative dtype
     if is_object_dtype(dataseries.dtype):
         new = dataseries.convert_dtypes()
         dtype = new.dtype
-    
+
     if isinstance(dataseries.dtype, MTZDtype):
         return dataseries
 
@@ -45,7 +46,7 @@ def infer_mtz_dtype(dataseries):
         else:
             return dataseries
 
-    elif (name.upper() == "H" or name.upper() == "K" or name.upper() == "L"):
+    elif name.upper() == "H" or name.upper() == "K" or name.upper() == "L":
         return dataseries.astype("H")
 
     elif name.upper().startswith("HL"):
@@ -62,10 +63,10 @@ def infer_mtz_dtype(dataseries):
 
     elif "M/ISYM" in name.upper():
         return dataseries.astype("Y")
-    
+
     elif name.upper().startswith("WEIGHT") or name.upper() == "W":
         return dataseries.astype("W")
-    
+
     elif name.upper().startswith("SIG"):
         # Check Friedel
         if any(match in name for match in ["(+)", "(-)"]):
@@ -85,13 +86,13 @@ def infer_mtz_dtype(dataseries):
 
     elif name.upper().startswith("FREE"):
         return dataseries.astype("I")
-        
-    elif (name.upper().startswith("F") or "ANOM" in name.upper()):
+
+    elif name.upper().startswith("F") or "ANOM" in name.upper():
         if any(match in name for match in ["(+)", "(-)"]):
             return dataseries.astype("G")
         else:
             return dataseries.astype("F")
-        
+
     # Fall back to general dtypes
     if is_integer_dtype(dtype):
         return dataseries.astype("I")
@@ -99,5 +100,3 @@ def infer_mtz_dtype(dataseries):
         return dataseries.astype("R")
     else:
         return dataseries
-
-        

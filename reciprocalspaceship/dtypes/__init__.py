@@ -1,20 +1,17 @@
 from .hklindex import HKLIndexDtype
 from .mtzint import MTZIntDtype
 from .mtzreal import MTZRealDtype
-from .intensity import (
-    IntensityDtype,
-    FriedelIntensityDtype
-)
+from .intensity import IntensityDtype, FriedelIntensityDtype
 from .structurefactor import (
     StructureFactorAmplitudeDtype,
     FriedelStructureFactorAmplitudeDtype,
-    NormalizedStructureFactorAmplitudeDtype
+    NormalizedStructureFactorAmplitudeDtype,
 )
 from .anomalousdifference import AnomalousDifferenceDtype
 from .stddev import (
     StandardDeviationDtype,
     StandardDeviationFriedelSFDtype,
-    StandardDeviationFriedelIDtype
+    StandardDeviationFriedelIDtype,
 )
 from .phase import PhaseDtype, HendricksonLattmanDtype
 from .weight import WeightDtype
