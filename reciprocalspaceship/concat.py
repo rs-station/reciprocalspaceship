@@ -2,41 +2,42 @@ import reciprocalspaceship as rs
 from itertools import tee
 import pandas as pd
 
+
 def concat(*args, check_isomorphous=True, **kwargs):
     """
-    Concatenate ``rs`` objects along a particular axis. This method 
+    Concatenate ``rs`` objects along a particular axis. This method
     follows the behavior of ``pd.concat``. However, if DataSet objects are provided,
-    attributes (such as `cell` and `spacegroup`) are set in the returned DataSet. 
+    attributes (such as `cell` and `spacegroup`) are set in the returned DataSet.
     The returned attributes are inherited from the first object in `objs`.
 
     For additional documentation on accepted arguments, see the `Pandas API Reference page
-    <https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.concat.html>`_. 
+    <https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.concat.html>`_.
 
     Parameters
     ----------
     check_isomorphous : bool
         If `objs` to concatenate are instances of ``rs.DataSet``, their
         cell and spacegroup attributes will be compared to ensure they are
-        isomorphous. 
+        isomorphous.
 
     Returns
     -------
     rs.DataSet or rs.DataSeries
         Returns rs.DataSeries when concatenating rs.DataSeries along the
-        index (axis=0). Returns rs.DataSet in all other cases.   
+        index (axis=0). Returns rs.DataSet in all other cases.
 
     See Also
     --------
     DataSet.append : Concatenate DataSets
     """
     objs = kwargs.get("objs", args[0])
-    objs,objs_tee = tee(objs)
+    objs, objs_tee = tee(objs)
     first = next(objs_tee)
     if check_isomorphous and isinstance(first, rs.DataSet):
         for obj in objs:
             if not first.is_isomorphous(obj):
                 raise ValueError("Provided DataSets are not isomorphous")
-        
+
     result = pd.concat(*args, **kwargs)
 
     # If `ignore_index=True`, the _index_dtypes attribute should
@@ -45,5 +46,5 @@ def concat(*args, check_isomorphous=True, **kwargs):
         result.__finalize__(first)
         result._index_dtypes = {}
         return result
-    
+
     return result.__finalize__(first)

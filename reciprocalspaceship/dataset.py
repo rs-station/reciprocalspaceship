@@ -15,42 +15,48 @@ from reciprocalspaceship.utils import (
     hkl_to_observed,
     compute_dHKL,
     compute_structurefactor_multiplicity,
-    bin_by_percentile
+    bin_by_percentile,
 )
 from functools import wraps
 from inspect import signature
 
-def inplace(f):
-    """ 
-    A decorator that applies the inplace argument. 
 
-    Base function must have a bool param called "inplace" in  the call 
+def inplace(f):
+    """
+    A decorator that applies the inplace argument.
+
+    Base function must have a bool param called "inplace" in  the call
     signature. The position of `inplace` argument doesn't matter.
     """
+
     @wraps(f)
     def wrapped(ds, *args, **kwargs):
         sig = signature(f)
         bargs = sig.bind(ds, *args, **kwargs)
         bargs.apply_defaults()
-        if 'inplace' in bargs.arguments:
-            if bargs.arguments['inplace']:
+        if "inplace" in bargs.arguments:
+            if bargs.arguments["inplace"]:
                 return f(ds, *args, **kwargs)
             else:
                 return f(ds.copy(), *args, **kwargs)
         else:
-            raise KeyError(f'"inplace" not found in local variables of @inplacemethod decorated function {f} '
-                             "Edit your method definition to include `inplace=Bool`. "
-                             )
+            raise KeyError(
+                f'"inplace" not found in local variables of @inplacemethod decorated function {f} '
+                "Edit your method definition to include `inplace=Bool`. "
+            )
+
     return wrapped
+
 
 def range_indexed(f):
     """
     A decorator that presents the calling dataset with a range index.
 
-    This decorator facilitates writing methods that are agnostic to the 
-    true indices in a DataSet. Original index columns are preserved through 
+    This decorator facilitates writing methods that are agnostic to the
+    true indices in a DataSet. Original index columns are preserved through
     wrapped function calls.
     """
+
     @wraps(f)
     def wrapped(ds, *args, **kwargs):
         names = ds.index.names
@@ -59,27 +65,39 @@ def range_indexed(f):
         result = result._index_from_names(names, inplace=True)
         ds = ds._index_from_names(names, inplace=True)
         return result.__finalize__(ds)
+
     return wrapped
+
 
 class DataSet(pd.DataFrame):
     """
     Representation of a crystallographic dataset.
 
-    A DataSet object provides a tabular representation of reflection data. 
-    Reflections are conventionally indexed by Miller indices (rows), but 
-    can also be indexed by additional metadata. Per-reflection data can be 
-    stored as columns. For additional information about inherited methods 
+    A DataSet object provides a tabular representation of reflection data.
+    Reflections are conventionally indexed by Miller indices (rows), but
+    can also be indexed by additional metadata. Per-reflection data can be
+    stored as columns. For additional information about inherited methods
     and attributes, please see the `Pandas.DataFrame documentation`_.
-    
+
     .. _Pandas.DataFrame documentation: https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.html
     """
-    _metadata = ['_spacegroup', '_cell', '_index_dtypes', '_merged']
 
-    #-------------------------------------------------------------------
+    _metadata = ["_spacegroup", "_cell", "_index_dtypes", "_merged"]
+
+    # -------------------------------------------------------------------
     # __init__ method
-    
-    def __init__(self, data=None, index=None, columns=None, dtype=None,
-                 copy=False, spacegroup=None, cell=None, merged=None):
+
+    def __init__(
+        self,
+        data=None,
+        index=None,
+        columns=None,
+        dtype=None,
+        copy=False,
+        spacegroup=None,
+        cell=None,
+        merged=None,
+    ):
         self._index_dtypes = {}
         self._spacegroup = None
         self._cell = None
@@ -88,16 +106,18 @@ class DataSet(pd.DataFrame):
         # Construct DataSet from gemmi.Mtz object
         if isinstance(data, gemmi.Mtz):
             from reciprocalspaceship import io
+
             dataset = io.from_gemmi(data)
             data = dataset
 
-        super().__init__(data=data, index=index, columns=columns,
-                         dtype=dtype, copy=copy)
+        super().__init__(
+            data=data, index=index, columns=columns, dtype=dtype, copy=copy
+        )
 
         # Copy over _metadata if present in provided data
         if isinstance(data, DataSet):
             self.__finalize__(data)
-            
+
         # Provided values for DataSet _metadata take precedence
         if spacegroup:
             self.spacegroup = spacegroup
@@ -105,16 +125,16 @@ class DataSet(pd.DataFrame):
             self.cell = cell
         if merged is not None:
             self.merged = merged
-            
+
         return
 
-    #-------------------------------------------------------------------
+    # -------------------------------------------------------------------
     # Attributes
-    
+
     @property
     def _constructor(self):
         return DataSet
-    
+
     @property
     def _constructor_sliced(self):
         return DataSeries
@@ -133,7 +153,7 @@ class DataSet(pd.DataFrame):
             self._spacegroup = gemmi.SpaceGroup(val)
         else:
             raise ValueError(f"Cannot construct gemmi.SpaceGroup from value: {val}")
-            
+
     @property
     def cell(self):
         """Unit cell parameters (a, b, c, alpha, beta, gamma)"""
@@ -148,7 +168,7 @@ class DataSet(pd.DataFrame):
             self._cell = gemmi.UnitCell(*val)
         else:
             raise ValueError(f"Cannot construct gemmi.UnitCell from value: {val}")
-            
+
     @property
     def merged(self):
         """Whether DataSet contains merged reflection data (boolean)"""
@@ -161,18 +181,18 @@ class DataSet(pd.DataFrame):
     @property
     def centrics(self):
         """Access centric reflections in DataSet"""
-        if 'CENTRIC' in self:
+        if "CENTRIC" in self:
             return self.loc[self.CENTRIC]
         return self.loc[self.label_centrics().CENTRIC]
 
     @property
     def acentrics(self):
         """Access acentric reflections in DataSet"""
-        if 'CENTRIC' in self:
+        if "CENTRIC" in self:
             return self.loc[~self.CENTRIC]
         return self.loc[~self.label_centrics().CENTRIC]
-    
-    #-------------------------------------------------------------------
+
+    # -------------------------------------------------------------------
     # Methods
 
     @inplace
@@ -187,20 +207,22 @@ class DataSet(pd.DataFrame):
             self.set_index(names, inplace=True)
         return self
 
-    def set_index(self, keys, drop=True, append=False, inplace=False, verify_integrity=False):
+    def set_index(
+        self, keys, drop=True, append=False, inplace=False, verify_integrity=False
+    ):
         """
         Set the DataSet index using existing columns.
 
-        Set the DataSet index (row labels) using one or more existing 
+        Set the DataSet index (row labels) using one or more existing
         columns or arrays (of the correct length). The index can replace
         the existing index or expand on it.
 
         Parameters
         ----------
         keys : label or array-like or list of labels/arrays
-            This parameter can be either a single column key, a single 
-            array of the same length as the calling DataSet, or a list 
-            containing an arbitrary combination of column keys and arrays. 
+            This parameter can be either a single column key, a single
+            array of the same length as the calling DataSet, or a list
+            containing an arbitrary combination of column keys and arrays.
         drop : bool
             Whether to delete columns to be used as the new index.
         append : bool
@@ -209,7 +231,7 @@ class DataSet(pd.DataFrame):
             Modify the DataFrame in place (do not create a new object).
         verify_integrity : bool
             Check the new index for duplicates. Otherwise defer the check
-            until necessary. Setting to False will improve the performance 
+            until necessary. Setting to False will improve the performance
             of this method
 
         Returns
@@ -233,11 +255,21 @@ class DataSet(pd.DataFrame):
             elif isinstance(key, (np.ndarray, list)):
                 continue
             else:
-                raise ValueError(f"{key} is not an instance of type str, np.ndarray, pd.Index, pd.Series, or list")
-            
-        return super().set_index(keys, drop=drop, append=append, inplace=inplace, verify_integrity=verify_integrity)
+                raise ValueError(
+                    f"{key} is not an instance of type str, np.ndarray, pd.Index, pd.Series, or list"
+                )
 
-    def reset_index(self, level=None, drop=False, inplace=False, col_level=0, col_fill=''):
+        return super().set_index(
+            keys,
+            drop=drop,
+            append=append,
+            inplace=inplace,
+            verify_integrity=verify_integrity,
+        )
+
+    def reset_index(
+        self, level=None, drop=False, inplace=False, col_level=0, col_fill=""
+    ):
         """
         Reset the index or a specific level of a MultiIndex.
 
@@ -253,7 +285,7 @@ class DataSet(pd.DataFrame):
         inplace ; bool
             Modify the DataSet in place (do not create a new object).
         col_level : int or str
-            If the columns have multiple levels, determines which level 
+            If the columns have multiple levels, determines which level
             the labels are inserted into. By default it is inserted into
             the first level.
         col_fill : object
@@ -269,12 +301,12 @@ class DataSet(pd.DataFrame):
         --------
         DataSet.set_index : Set index
         """
-        
+
         # GH#6: Handle level argument to reset_index
         columns = level
         if level is None:
             columns = list(self.index.names)
-        
+
         def _handle_cached_dtypes(dataset, columns, drop):
             """Use _index_dtypes to restore dtypes"""
             if drop:
@@ -287,13 +319,25 @@ class DataSet(pd.DataFrame):
                         dtype = dataset._index_dtypes.pop(key)
                         dataset[key] = dataset[key].astype(dtype)
             return dataset
-        
+
         if inplace:
-            super().reset_index(level, drop=drop, inplace=inplace, col_level=col_level, col_fill=col_fill)
+            super().reset_index(
+                level,
+                drop=drop,
+                inplace=inplace,
+                col_level=col_level,
+                col_fill=col_fill,
+            )
             _handle_cached_dtypes(self, columns, drop)
             return
         else:
-            dataset = super().reset_index(level, drop=drop, inplace=inplace, col_level=col_level, col_fill=col_fill)
+            dataset = super().reset_index(
+                level,
+                drop=drop,
+                inplace=inplace,
+                col_level=col_level,
+                col_fill=col_fill,
+            )
             dataset._index_dtypes = dataset._index_dtypes.copy()
             dataset = _handle_cached_dtypes(dataset, columns, drop)
             return dataset
@@ -304,13 +348,13 @@ class DataSet(pd.DataFrame):
         Creates DataSet object from gemmi.Mtz object.
 
         If the gemmi.Mtz object contains an M/ISYM column and contains duplicated
-        Miller indices, an unmerged DataSet will be constructed. The Miller indices 
-        will be mapped to their observed values, and a partiality flag will be 
-        extracted and stored as a boolean column with the label, ``PARTIAL``. 
+        Miller indices, an unmerged DataSet will be constructed. The Miller indices
+        will be mapped to their observed values, and a partiality flag will be
+        extracted and stored as a boolean column with the label, ``PARTIAL``.
         Otherwise, a merged DataSet will be constructed.
 
         If columns are found with the ``MTZInt`` dtype and are labeled ``PARTIAL``
-        or ``CENTRIC``, these will be interpreted as boolean flags used to 
+        or ``CENTRIC``, these will be interpreted as boolean flags used to
         label partial or centric reflections, respectively.
 
         Parameters
@@ -328,11 +372,11 @@ class DataSet(pd.DataFrame):
         Creates gemmi.Mtz object from DataSet object.
 
         If ``dataset.merged == False``, the reflections will be mapped to the
-        reciprocal space ASU, and a M/ISYM column will be constructed. 
+        reciprocal space ASU, and a M/ISYM column will be constructed.
 
         If boolean flags with the label ``PARTIAL`` or ``CENTRIC`` are found
         in the DataSet, these will be cast to the ``MTZInt`` dtype, and included
-        in the gemmi.Mtz object. 
+        in the gemmi.Mtz object.
 
         Parameters
         ----------
@@ -345,6 +389,7 @@ class DataSet(pd.DataFrame):
         gemmi.Mtz
         """
         from reciprocalspaceship import io
+
         return io.to_gemmi(self, skip_problem_mtztypes)
 
     def to_pickle(self, path, *args, **kwargs):
@@ -364,7 +409,7 @@ class DataSet(pd.DataFrame):
         read_pickle() : Load pickled reciprocalspaceship object from file.
         """
         return super().to_pickle(path, *args, **kwargs)
-    
+
     def to_structurefactor(self, sf_key, phase_key):
         """
         Convert structure factor amplitudes and phases to complex structure
@@ -398,7 +443,7 @@ class DataSet(pd.DataFrame):
         ----------
         sf_key : str
             Column label for complex structure factors
-        
+
         Returns
         -------
         (sf, phase) : tuple of DataSeris
@@ -410,14 +455,14 @@ class DataSet(pd.DataFrame):
         DataSet.to_structurefactor : Convert amplitude and phase to complex structure factor
         """
         return utils.from_structurefactor(self[sf_key])
-        
+
     def append(self, *args, check_isomorphous=True, **kwargs):
         """
         Append rows of `other` to the end of calling DataSet, returning
         a new DataSet object. Any columns in `other` that are not present
-        in the calling DataSet are added as new columns. 
+        in the calling DataSet are added as new columns.
 
-        For additional documentation on accepted arguments, see the 
+        For additional documentation on accepted arguments, see the
         `Pandas DataFrame.append() API <https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.append.html>`_.
 
         Parameters
@@ -425,7 +470,7 @@ class DataSet(pd.DataFrame):
         check_isomorphous : bool
             If True, the spacegroup and cell attributes of DataSets in `other`
             will be compared to those of the calling DataSet to ensure
-            they are isomorphous. 
+            they are isomorphous.
 
         Returns
         -------
@@ -452,7 +497,7 @@ class DataSet(pd.DataFrame):
             result.__finalize__(self)
             result._index_dtypes = {}
             return result
-        
+
         return result.__finalize__(self)
 
     def merge(self, *args, check_isomorphous=True, **kwargs):
@@ -460,7 +505,7 @@ class DataSet(pd.DataFrame):
         Merge DataSet or named DataSeries using a database-style join on
         columns or indices.
 
-        For additional documentation on accepted arguments, see the 
+        For additional documentation on accepted arguments, see the
         `Pandas DataFrame.merge() API <https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.merge.html>`_.
 
         Parameters
@@ -468,7 +513,7 @@ class DataSet(pd.DataFrame):
         check_isomorphous : bool
             If True, the spacegroup and cell attributes of DataSets in `other`
             will be compared to those of the calling DataSet to ensure
-            they are isomorphous. 
+            they are isomorphous.
 
         Returns
         -------
@@ -489,9 +534,9 @@ class DataSet(pd.DataFrame):
         """
         Join DataSets or named DataSeries using a database-style join on
         columns or indices. This method can be used to join lists ``rs`` objects
-        to a given DataSet. 
+        to a given DataSet.
 
-        For additional documentation on accepted arguments, see the 
+        For additional documentation on accepted arguments, see the
         `Pandas DataFrame.join() API <https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.join.html>`_.
 
         Parameters
@@ -499,7 +544,7 @@ class DataSet(pd.DataFrame):
         check_isomorphous : bool
             If True, the spacegroup and cell attributes of DataSets in `other`
             will be compared to those of the calling DataSet to ensure
-            they are isomorphous. 
+            they are isomorphous.
 
         Returns
         -------
@@ -520,17 +565,17 @@ class DataSet(pd.DataFrame):
                     raise ValueError("`other` DataSet is not isomorphous")
         result = super().join(*args, **kwargs)
         return result.__finalize__(self)
-    
+
     def write_mtz(self, mtzfile, skip_problem_mtztypes=False):
         """
         Write DataSet to MTZ file.
 
         If ``DataSet.merged == False``, the reflections will be mapped to the
-        reciprocal space ASU, and a M/ISYM column will be constructed. 
-        
+        reciprocal space ASU, and a M/ISYM column will be constructed.
+
         If boolean flags with the label ``PARTIAL`` or ``CENTRIC`` are found
         in the DataSet, these will be cast to the ``MTZInt`` dtype, and included
-        in the output MTZ file. 
+        in the output MTZ file.
 
         Parameters
         ----------
@@ -541,6 +586,7 @@ class DataSet(pd.DataFrame):
             MTZ datatypes
         """
         from reciprocalspaceship import io
+
         return io.write_mtz(self, mtzfile, skip_problem_mtztypes)
 
     def get_phase_keys(self):
@@ -552,7 +598,7 @@ class DataSet(pd.DataFrame):
         keys : list of strings
             list of column labels with ``Phase`` dtype
         """
-        keys = [ k for k in self if isinstance(self.dtypes[k], rs.PhaseDtype) ]
+        keys = [k for k in self if isinstance(self.dtypes[k], rs.PhaseDtype)]
         return keys
 
     def get_complex_keys(self):
@@ -564,7 +610,7 @@ class DataSet(pd.DataFrame):
         keys : list of strings
             list of column labels with complex dtype
         """
-        keys = [ k for k in self if is_complex_dtype(self.dtypes[k]) ]
+        keys = [k for k in self if is_complex_dtype(self.dtypes[k])]
         return keys
 
     def get_m_isym_keys(self):
@@ -576,14 +622,14 @@ class DataSet(pd.DataFrame):
         key : list of strings
             list of column labels with ``M/ISYM`` dtype
         """
-        keys = [ k for k in self if isinstance(self.dtypes[k], rs.M_IsymDtype) ]
+        keys = [k for k in self if isinstance(self.dtypes[k], rs.M_IsymDtype)]
         return keys
 
     @inplace
     @range_indexed
     def apply_symop(self, symop, inplace=False):
         """
-        Apply symmetry operation to all reflections in DataSet object. 
+        Apply symmetry operation to all reflections in DataSet object.
 
         Parameters
         ----------
@@ -609,19 +655,19 @@ class DataSet(pd.DataFrame):
         H = dataset.get_hkls()
         hkl = apply_to_hkl(H, symop)
         phase_shifts = phase_shift(H, symop)
-            
-        dataset[['H', 'K', 'L']] = hkl
-        dataset[['H', 'K', 'L']] = dataset[['H', 'K', 'L']].astype(rs.HKLIndexDtype())
+
+        dataset[["H", "K", "L"]] = hkl
+        dataset[["H", "K", "L"]] = dataset[["H", "K", "L"]].astype(rs.HKLIndexDtype())
 
         # Shift phases according to symop
         for key in dataset.get_phase_keys():
             dataset[key] = phic * (dataset[key] - np.rad2deg(phase_shifts))
             dataset[key] = utils.canonicalize_phases(dataset[key], deg=True)
         for key in dataset.get_complex_keys():
-            dataset[key] *= np.exp(-1j*phase_shifts)
+            dataset[key] *= np.exp(-1j * phase_shifts)
             if symop.det_rot() < 0:
                 dataset[key] = np.conjugate(dataset[key])
-        
+
         return dataset
 
     def get_hkls(self):
@@ -631,9 +677,9 @@ class DataSet(pd.DataFrame):
         Returns
         -------
         hkl : ndarray, shape=(n_reflections, 3)
-            Miller indices in DataSet 
+            Miller indices in DataSet
         """
-        hkl = self.reset_index()[['H', 'K', 'L']].to_numpy(dtype=np.int32)
+        hkl = self.reset_index()[["H", "K", "L"]].to_numpy(dtype=np.int32)
         return hkl
 
     @inplace
@@ -647,13 +693,13 @@ class DataSet(pd.DataFrame):
         inplace : bool
             Whether to add the column in place or to return a copy
         """
-        self['CENTRIC'] = is_centric(self.get_hkls(), self.spacegroup)
+        self["CENTRIC"] = is_centric(self.get_hkls(), self.spacegroup)
         return self
 
     @inplace
     def label_absences(self, inplace=False):
         """
-        Label systematically absent reflections in DataSet. A new column 
+        Label systematically absent reflections in DataSet. A new column
         of booleans, "ABSENT", is added to the object.
 
         Parameters
@@ -661,13 +707,13 @@ class DataSet(pd.DataFrame):
         inplace : bool
             Whether to add the column in place or to return a copy
         """
-        self['ABSENT'] = is_absent(self.get_hkls(), self.spacegroup)
+        self["ABSENT"] = is_absent(self.get_hkls(), self.spacegroup)
         return self
 
     @inplace
     def remove_absences(self, inplace=False):
         """
-        Remove systematically absent reflections in DataSet. 
+        Remove systematically absent reflections in DataSet.
 
         Parameters
         ----------
@@ -686,11 +732,11 @@ class DataSet(pd.DataFrame):
     @inplace
     def infer_mtz_dtypes(self, inplace=False, index=True):
         """
-        Infers MTZ dtypes from column names and underlying data. This 
+        Infers MTZ dtypes from column names and underlying data. This
         method iterates over each column in the DataSet and tries to infer
         its proper MTZ dtype based on common MTZ naming conventions.
 
-        If a given column is already a MTZDtype, its type will be unchanged. 
+        If a given column is already a MTZDtype, its type will be unchanged.
         If index is True, the MTZ dtypes will be inferred for named columns
         in the index.
 
@@ -735,7 +781,7 @@ class DataSet(pd.DataFrame):
             Whether to add the column in place or return a copy
         """
         dHKL = compute_dHKL(self.get_hkls(), self.cell)
-        self['dHKL'] = rs.DataSeries(dHKL, dtype='R', index=self.index)
+        self["dHKL"] = rs.DataSeries(dHKL, dtype="R", index=self.index)
         return self
 
     @inplace
@@ -752,8 +798,10 @@ class DataSet(pd.DataFrame):
             Whether to include centering operations in the multiplicity calculation.
             The default is to include them.
         """
-        epsilon = compute_structurefactor_multiplicity(self.get_hkls(), self.spacegroup, include_centering)
-        self['EPSILON'] = rs.DataSeries(epsilon, dtype='I', index=self.index)
+        epsilon = compute_structurefactor_multiplicity(
+            self.get_hkls(), self.spacegroup, include_centering
+        )
+        self["EPSILON"] = rs.DataSeries(epsilon, dtype="I", index=self.index)
         return self
 
     @inplace
@@ -784,22 +832,22 @@ class DataSet(pd.DataFrame):
             return self, labels
         else:
             return self
-        
+
     def stack_anomalous(self, plus_labels=None, minus_labels=None):
         """
         Convert data from two-column anomalous format to one-column
-        format. Intensities, structure factor amplitudes, or other data 
-        are converted from separate columns corresponding to a single 
-        Miller index to the same data column at different rows indexed 
-        by the Friedel-plus or Friedel-minus Miller index. 
+        format. Intensities, structure factor amplitudes, or other data
+        are converted from separate columns corresponding to a single
+        Miller index to the same data column at different rows indexed
+        by the Friedel-plus or Friedel-minus Miller index.
 
-        This method will return a DataSet with, at most, twice as many rows as the 
-        original --  one row for each Friedel pair. In most cases, the resulting 
-        DataSet will be smaller, because centric reflections will not be stacked. 
-        For a merged DataSet, this has the effect of mapping reflections 
-        from the positive reciprocal space ASU to the positive and negative 
-        reciprocal space ASU, for Friedel-plus and Friedel-minus reflections, 
-        respectively. 
+        This method will return a DataSet with, at most, twice as many rows as the
+        original --  one row for each Friedel pair. In most cases, the resulting
+        DataSet will be smaller, because centric reflections will not be stacked.
+        For a merged DataSet, this has the effect of mapping reflections
+        from the positive reciprocal space ASU to the positive and negative
+        reciprocal space ASU, for Friedel-plus and Friedel-minus reflections,
+        respectively.
 
         Notes
         -----
@@ -826,33 +874,40 @@ class DataSet(pd.DataFrame):
         DataSet.unstack_anomalous : Opposite of stack_anomalous
         """
         if not self.merged:
-            raise ValueError("DataSet.stack_anomalous() cannot be called with unmerged data")
+            raise ValueError(
+                "DataSet.stack_anomalous() cannot be called with unmerged data"
+            )
 
         # Default behavior: Use labels suffixed with "(+)" or "(-)"
-        if (plus_labels is None and minus_labels is None):
-            plus_labels  = [ l for l in self.columns if "(+)" in l ]
-            minus_labels = [ l for l in self.columns if "(-)" in l ]
-        
+        if plus_labels is None and minus_labels is None:
+            plus_labels = [l for l in self.columns if "(+)" in l]
+            minus_labels = [l for l in self.columns if "(-)" in l]
+
         # Validate column labels
         if isinstance(plus_labels, str) and isinstance(minus_labels, str):
             plus_labels = [plus_labels]
-            minus_labels =[minus_labels]
-        elif (isinstance(plus_labels, list) and
-              isinstance(minus_labels, list)):
+            minus_labels = [minus_labels]
+        elif isinstance(plus_labels, list) and isinstance(minus_labels, list):
             if len(plus_labels) != len(minus_labels):
-                raise ValueError(f"plus_labels: {plus_labels} and minus_labels: "
-                                 f"{minus_labels} do not have same length.")
+                raise ValueError(
+                    f"plus_labels: {plus_labels} and minus_labels: "
+                    f"{minus_labels} do not have same length."
+                )
         else:
-            raise ValueError(f"plus_labels and minus_labels must have same type "
-                             f"and be str or list: plus_labels is type "
-                             f"{type(plus_labels)} and minus_labe is type "
-                             f"{type(minus_labels)}.")
+            raise ValueError(
+                f"plus_labels and minus_labels must have same type "
+                f"and be str or list: plus_labels is type "
+                f"{type(plus_labels)} and minus_labe is type "
+                f"{type(minus_labels)}."
+            )
 
         for plus, minus in zip(plus_labels, minus_labels):
             if self[plus].dtype != self[minus].dtype:
-                raise ValueError(f"Corresponding labels in {plus_labels} and "
-                                 f"{minus_labels} are not the same dtype: "
-                                 f"{self[plus].dtype} and {self[minus].dtype}")
+                raise ValueError(
+                    f"Corresponding labels in {plus_labels} and "
+                    f"{minus_labels} are not the same dtype: "
+                    f"{self[plus].dtype} and {self[minus].dtype}"
+                )
 
         # Map Friedel reflections to +/- ASU
         centrics = self.label_centrics()["CENTRIC"]
@@ -861,29 +916,29 @@ class DataSet(pd.DataFrame):
         dataset_minus.apply_symop(gemmi.Op("-x,-y,-z"), inplace=True)
 
         # Rename columns and update dtypes
-        new_labels = [ l.rstrip("(+)") for l in plus_labels ]
-        column_mapping_plus  = dict(zip(plus_labels, new_labels))
+        new_labels = [l.rstrip("(+)") for l in plus_labels]
+        column_mapping_plus = dict(zip(plus_labels, new_labels))
         column_mapping_minus = dict(zip(minus_labels, new_labels))
         dataset_plus.rename(columns=column_mapping_plus, inplace=True)
         dataset_minus.rename(columns=column_mapping_minus, inplace=True)
         F = dataset_plus.append(dataset_minus)
         for label in new_labels:
             F[label] = F[label].from_friedel_dtype()
-            
+
         return F
 
     @range_indexed
     def unstack_anomalous(self, columns=None, suffixes=("(+)", "(-)")):
         """
         Convert data from one-column format to two-column anomalous
-        format. Provided column labels are converted from separate rows 
-        indexed by their Friedel-plus or Friedel-minus Miller index to 
+        format. Provided column labels are converted from separate rows
+        indexed by their Friedel-plus or Friedel-minus Miller index to
         different columns indexed at the Friedel-plus HKL.
 
-        This method will return a smaller DataSet than the original -- 
-        Friedel pairs will both be indexed at the Friedel-plus index. This 
-        has the effect of mapping reflections to the positive reciprocal 
-        space ASU, including data for both Friedel pairs at the Friedel-plus 
+        This method will return a smaller DataSet than the original --
+        Friedel pairs will both be indexed at the Friedel-plus index. This
+        has the effect of mapping reflections to the positive reciprocal
+        space ASU, including data for both Friedel pairs at the Friedel-plus
         Miller index.
 
         Notes
@@ -893,11 +948,11 @@ class DataSet(pd.DataFrame):
         Parameters
         ----------
         columns : str or list-like
-            Column label or list of column labels of data that should be 
-            associated with Friedel pairs. If None, all columns are 
+            Column label or list of column labels of data that should be
+            associated with Friedel pairs. If None, all columns are
             converted to the two-column anomalous format.
         suffixes : tuple or list  of str
-            Suffixes to append to Friedel-plus and Friedel-minus data 
+            Suffixes to append to Friedel-plus and Friedel-minus data
             columns
 
         Returns
@@ -909,7 +964,9 @@ class DataSet(pd.DataFrame):
         DataSet.stack_anomalous : Opposite of unstack_anomalous
         """
         if not self.merged:
-            raise ValueError("DataSet.unstack_anomalous() cannot be called with unmerged data")
+            raise ValueError(
+                "DataSet.unstack_anomalous() cannot be called with unmerged data"
+            )
 
         # Validate input
         if columns is None:
@@ -917,43 +974,46 @@ class DataSet(pd.DataFrame):
         elif isinstance(columns, str):
             columns = [columns]
         elif not isinstance(columns, (list, tuple)):
-            raise ValueError(f"Expected columns to be str, list or tuple. "
-                             f"Provided value is type {type(columns)}")
-        
+            raise ValueError(
+                f"Expected columns to be str, list or tuple. "
+                f"Provided value is type {type(columns)}"
+            )
+
         if not (isinstance(suffixes, (list, tuple)) and len(suffixes) == 2):
             raise ValueError(f"Expected suffixes to be tuple or list of len() of 2")
 
         # Separate DataSet into Friedel(+) and Friedel(-)
         columns = set(columns).union(set(["H", "K", "L"]))
         dataset = self.hkl_to_asu()
-        if "PARTIAL" in columns: columns.remove("PARTIAL")
+        if "PARTIAL" in columns:
+            columns.remove("PARTIAL")
         for column in columns:
             dataset[column] = dataset[column].to_friedel_dtype()
-        dataset_plus  = dataset.loc[dataset["M/ISYM"]%2 == 1].copy()
-        dataset_minus = dataset.loc[dataset["M/ISYM"]%2 == 0].copy()
+        dataset_plus = dataset.loc[dataset["M/ISYM"] % 2 == 1].copy()
+        dataset_minus = dataset.loc[dataset["M/ISYM"] % 2 == 0].copy()
         dataset_minus = dataset_minus.loc[:, columns]
-        result = dataset_plus.merge(dataset_minus, how="outer",
-                                    on=["H", "K", "L"],
-                                    suffixes=suffixes)
+        result = dataset_plus.merge(
+            dataset_minus, how="outer", on=["H", "K", "L"], suffixes=suffixes
+        )
 
         # Handle centric reflections
         columns = columns.difference(set(["H", "K", "L"]))
-        plus_columns  = [ c + suffixes[0] for c in columns ]
-        minus_columns = [ c + suffixes[1] for c in columns ]        
+        plus_columns = [c + suffixes[0] for c in columns]
+        minus_columns = [c + suffixes[1] for c in columns]
         centrics = result.label_centrics()["CENTRIC"]
         result.loc[centrics, minus_columns] = result.loc[centrics, plus_columns].values
-        
+
         if "M/ISYM" not in self.columns and self.merged:
             result.drop(columns="M/ISYM", inplace=True)
-            
+
         return result
-        
+
     def is_isomorphous(self, other, cell_threshold=0.05):
         """
         Determine whether DataSet is isomorphous to another DataSet. This
         method confirms isomorphism by ensuring the spacegroups are equivalent,
-        and that the cell parameters are within a specified percentage 
-        (see `cell_threshold`). 
+        and that the cell parameters are within a specified percentage
+        (see `cell_threshold`).
 
         Parameters
         ----------
@@ -974,8 +1034,8 @@ class DataSet(pd.DataFrame):
         elif not isinstance(self.cell, gemmi.UnitCell):
             raise AttributeError(f"Calling dataset's cell attribute is not set")
         elif not isinstance(other.cell, gemmi.UnitCell):
-            raise AttributeError(f"`other` dataset's cell attribute is not set")            
-        
+            raise AttributeError(f"`other` dataset's cell attribute is not set")
+
         # Check spacegroup
         if self.spacegroup.xhm() != other.spacegroup.xhm():
             return False
@@ -985,9 +1045,9 @@ class DataSet(pd.DataFrame):
         for param in params:
             param1 = self.cell.__getattribute__(param)
             param2 = other.cell.__getattribute__(param)
-            if (np.abs((param1 - param2)) / 100.) > cell_threshold:
+            if (np.abs((param1 - param2)) / 100.0) > cell_threshold:
                 return False
-        
+
         return True
 
     @inplace
@@ -999,17 +1059,17 @@ class DataSet(pd.DataFrame):
         phase shift associated with the necessary symmetry operation.
 
         If ``DataSet.merged == False``, and a partiality flag labeled ``PARTIAL``
-        is included in the DataSet, the partiality flag will be used to 
+        is included in the DataSet, the partiality flag will be used to
         construct a proper M/ISYM column. Both merged and unmerged DataSets
-        will have an M/ISYM column added. 
+        will have an M/ISYM column added.
 
         Parameters
         ----------
         inplace : bool
             Whether to modify the DataSet in place or return a copy
         anomalous : bool
-            If True, acentric reflections will be mapped to the +/- ASU. 
-            If False, all reflections are mapped to the Friedel-plus ASU. 
+            If True, acentric reflections will be mapped to the +/- ASU.
+            If False, all reflections are mapped to the Friedel-plus ASU.
 
         Returns
         -------
@@ -1025,9 +1085,7 @@ class DataSet(pd.DataFrame):
         hkls = dataset.get_hkls()
         compressed_hkls, inverse = np.unique(hkls, axis=0, return_inverse=True)
         asu_hkls, isym, phi_coeff, phi_shift = hkl_to_asu(
-            compressed_hkls, 
-            dataset.spacegroup, 
-            return_phase_shifts=True
+            compressed_hkls, dataset.spacegroup, return_phase_shifts=True
         )
 
         dataset[["H", "K", "L"]] = asu_hkls[inverse]
@@ -1039,48 +1097,52 @@ class DataSet(pd.DataFrame):
         dataset.canonicalize_phases(inplace=True)
         # GH#15: Handle complex structure factors
         for k in dataset.get_complex_keys():
-            self[k] *= np.exp(1j*np.deg2rad(phi_shift[inverse]))
+            self[k] *= np.exp(1j * np.deg2rad(phi_shift[inverse]))
             friedel_mask = phi_coeff[inverse] != 1
             self.loc[friedel_mask, k] = np.conjugate(self.loc[friedel_mask, k])
-        
+
         # GH#3: if PARTIAL column exists, use it to construct M/ISYM
         if "PARTIAL" in dataset.columns:
-            m_isym = isym[inverse] + 256*dataset["PARTIAL"].to_numpy()
-            dataset['M/ISYM'] = DataSeries(m_isym, dtype="M/ISYM", index=dataset.index)
+            m_isym = isym[inverse] + 256 * dataset["PARTIAL"].to_numpy()
+            dataset["M/ISYM"] = DataSeries(m_isym, dtype="M/ISYM", index=dataset.index)
             dataset.drop(columns="PARTIAL", inplace=True)
         else:
-            dataset['M/ISYM'] = DataSeries(isym[inverse], dtype="M/ISYM", index=dataset.index)
+            dataset["M/ISYM"] = DataSeries(
+                isym[inverse], dtype="M/ISYM", index=dataset.index
+            )
 
         # GH#16: Handle anomalous flag to separate Friedel pairs
         # GH#25: Centrics should not be considered Friedel pairs
         if anomalous:
             acentric = ~dataset.label_centrics()["CENTRIC"]
-            friedel_minus = dataset['M/ISYM']%2 == 0
-            dataset[friedel_minus & acentric] = dataset[friedel_minus & acentric].apply_symop("-x,-y,-z")
-            
+            friedel_minus = dataset["M/ISYM"] % 2 == 0
+            dataset[friedel_minus & acentric] = dataset[
+                friedel_minus & acentric
+            ].apply_symop("-x,-y,-z")
+
         return dataset
 
     @inplace
     @range_indexed
     def hkl_to_observed(self, m_isym=None, inplace=False):
         """
-        Map HKL indices to their observed index using an ``M/ISYM`` column. 
+        Map HKL indices to their observed index using an ``M/ISYM`` column.
         This method applies the symmetry operation specified by the ``M/ISYM``
         column to each Miller index in the DataSet. If phases are included
         in the DataSet, they will be changed by the phase shift associated
         with the symmetry operation.
 
-        If ``DataSet.merged == False``, the ``M/ISYM`` column is used to 
-        construct a partiality flag labeled ``PARTIAL``. This is added to 
-        the DataSet, and the M/ISYM column is dropped. If 
+        If ``DataSet.merged == False``, the ``M/ISYM`` column is used to
+        construct a partiality flag labeled ``PARTIAL``. This is added to
+        the DataSet, and the M/ISYM column is dropped. If
         ``DataSet.merged == True``, the ``M/ISYM`` column is dropped, but
         a partiality flag is not added.
 
         Parameters
         ----------
         m_isym : str
-            Column label for M/ISYM values in DataSet. If m_isym is None 
-            and a single M/ISYM column is present, it will automatically 
+            Column label for M/ISYM values in DataSet. If m_isym is None
+            and a single M/ISYM column is present, it will automatically
             be used.
         inplace : bool
             Whether to modify the DataSet in place or return a copy
@@ -1092,29 +1154,33 @@ class DataSet(pd.DataFrame):
         See Also
         --------
         DataSet.hkl_to_asu : Opposite of DataSet.hkl_to_observed()
-        """ 
+        """
         # Validate input
         if m_isym is None:
             m_isym = self.get_m_isym_keys()
             if len(m_isym) == 1:
                 m_isym = m_isym[0]
             else:
-                raise ValueError(f"Method requires a single M/ISYM column -- found: {m_isym}")
+                raise ValueError(
+                    f"Method requires a single M/ISYM column -- found: {m_isym}"
+                )
         elif not isinstance(m_isym, str):
             raise ValueError("Provided M/ISYM column label should be type str")
         elif not isinstance(self.dtypes[m_isym], rs.M_IsymDtype):
             raise ValueError(f"Provided M/ISYM column label is of wrong dtype")
 
-        # GH#3: Separate combined M/ISYM into M and ISYM        
+        # GH#3: Separate combined M/ISYM into M and ISYM
         isym = (self[m_isym] % 256).to_numpy(dtype=np.int32)
         if not self.merged:
-            self["PARTIAL"] = (self[m_isym]/256).astype(int) != 0
+            self["PARTIAL"] = (self[m_isym] / 256).astype(int) != 0
         self.drop(columns=m_isym, inplace=True)
-        
+
         # Compute new HKLs and phase shifts
         hkls = self.get_hkls()
         hkls_isym = np.concatenate([hkls, isym.reshape(-1, 1)], axis=1)
-        observed_hkls, phi_coeff, phi_shift = hkl_to_observed(hkls, isym, self.spacegroup, True)
+        observed_hkls, phi_coeff, phi_shift = hkl_to_observed(
+            hkls, isym, self.spacegroup, True
+        )
         self[["H", "K", "L"]] = observed_hkls
         self[["H", "K", "L"]] = self[["H", "K", "L"]].astype("HKL")
 
@@ -1123,19 +1189,19 @@ class DataSet(pd.DataFrame):
             self[k] = phi_coeff * (self[k] + phi_shift)
         # GH#15: Handle complex structure factors
         for k in self.get_complex_keys():
-            self[k] *= np.exp(1j*np.deg2rad(phi_shift))
+            self[k] *= np.exp(1j * np.deg2rad(phi_shift))
             friedel_mask = phi_coeff != 1
             self.loc[friedel_mask, k] = np.conjugate(self.loc[friedel_mask, k])
         self.canonicalize_phases(inplace=True)
-        
+
         return self
 
     @range_indexed
     def expand_to_p1(self):
         """
-        Generates all symmetrically equivalent reflections. The spacegroup 
+        Generates all symmetrically equivalent reflections. The spacegroup
         symmetry is set to P1.
-        
+
         Returns
         -------
         DataSet
@@ -1143,13 +1209,15 @@ class DataSet(pd.DataFrame):
         if not self.merged:
             raise ValueError("This function is only applicable for merged DataSets")
         if not in_asu(self.get_hkls(), spacegroup=self.spacegroup).all():
-            raise ValueError("This function is only  applicable for reflection data in the reciprocal ASU and anomalous data in a two-column (unstacked) format")
+            raise ValueError(
+                "This function is only  applicable for reflection data in the reciprocal ASU and anomalous data in a two-column (unstacked) format"
+            )
 
-        p1 = rs.DataSet(spacegroup=self.spacegroup, cell=self.cell)        
+        p1 = rs.DataSet(spacegroup=self.spacegroup, cell=self.cell)
 
         # Get all symops, in ascending order by ISYM
         groupops = self.spacegroup.operations()
-        allops = [ op for op in groupops for op in (op, op.negated()) ]
+        allops = [op for op in groupops for op in (op, op.negated())]
 
         # Apply each symop and drop duplicates with higher ISYM
         for isym, op in enumerate(allops, 1):
@@ -1169,15 +1237,15 @@ class DataSet(pd.DataFrame):
         """
         Expands data by applying Friedel operator (-x, -y, -z). The
         necessary phase shifts are made for columns of complex
-        dtypes or PhaseDtypes. 
-        
+        dtypes or PhaseDtypes.
+
         Returns
         -------
         DataSet
         """
         friedel = self.apply_symop("-x,-y,-z")
         return self.append(friedel)
-    
+
     @inplace
     def canonicalize_phases(self, inplace=False):
         """
@@ -1210,7 +1278,7 @@ class DataSet(pd.DataFrame):
         -----
         - The data being arranged on a reciprocal grid must be compatible
           with a numpy datatype.
-        
+
         Parameters
         ----------
         key : str
