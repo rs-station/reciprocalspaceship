@@ -7,7 +7,7 @@ from .mtz import (
 from .precognition import (
     read_precognition,
 )
-from .crystfel import (read_crystfel)
+from .crystfel import read_crystfel
 from .ccp4map import write_ccp4_map
 from .csv import read_csv
 from .pickle import read_pickle

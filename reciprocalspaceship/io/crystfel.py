@@ -11,7 +11,7 @@ def _parse_stream(filename: str) -> dict:
     Parameters
     ----------
     filename : stream filename
-        name of a .stream file 
+        name of a .stream file
 
     Returns
     --------
@@ -41,48 +41,50 @@ def _parse_stream(filename: str) -> dict:
         )
 
     def is_photon_energy(s):
-        return s.startswith('photon_energy_eV')
+        return s.startswith("photon_energy_eV")
 
     def is_astar(s):
-        return s.startswith('astar')
+        return s.startswith("astar")
 
     def is_bstar(s):
-        return s.startswith('bstar')
+        return s.startswith("bstar")
 
     def is_cstar(s):
-        return s.startswith('cstar')
+        return s.startswith("cstar")
 
     def ends_crystal_peaks(s):
         return s.startswith("End of reflections")
 
     def eV2Angstrom(e_eV):
-        return 12398. / e_eV
+        return 12398.0 / e_eV
 
     # add unit cell parameters parsing
-    with open(filename, 'r') as stream:
+    with open(filename, "r") as stream:
         is_unit_cell = False
         get_cellparam = lambda s: float(s.split()[2])
         rv_cell_param = None
-        a, b, c, al, be, ga = [None]*6 # None's are needed since stream not always has all 6 parameters
+        a, b, c, al, be, ga = [
+            None
+        ] * 6  # None's are needed since stream not always has all 6 parameters
         for line in stream:
-            if 'Begin unit cell' in line:
+            if "Begin unit cell" in line:
                 is_unit_cell = True
                 continue
             elif is_unit_cell:
-                if line.startswith('a ='):
+                if line.startswith("a ="):
                     a = get_cellparam(line)
-                if line.startswith('b ='):
+                if line.startswith("b ="):
                     b = get_cellparam(line)
-                if line.startswith('c ='):
+                if line.startswith("c ="):
                     c = get_cellparam(line)
-                if line.startswith('al ='):
+                if line.startswith("al ="):
                     al = get_cellparam(line)
-                if line.startswith('be ='):
+                if line.startswith("be ="):
                     be = get_cellparam(line)
-                if line.startswith('ga ='):
+                if line.startswith("ga ="):
                     ga = get_cellparam(line)
-                    is_unit_cell = False # gamma is the last parameters
-            elif 'End unit cell' in line:
+                    is_unit_cell = False  # gamma is the last parameters
+            elif "End unit cell" in line:
                 rv_cell_param = np.array([a, b, c, al, be, ga])
                 break
 
@@ -108,11 +110,17 @@ def _parse_stream(filename: str) -> dict:
             elif is_photon_energy(line):
                 photon_energy = float(line.split()[2])
             elif is_astar(line):
-                astar = np.array(line.split()[2:5], dtype='float32') / 10.  # crystfel's notation uses nm-1
+                astar = (
+                    np.array(line.split()[2:5], dtype="float32") / 10.0
+                )  # crystfel's notation uses nm-1
             elif is_bstar(line):
-                bstar = np.array(line.split()[2:5], dtype='float32') / 10.  # crystfel's notation uses nm-1
+                bstar = (
+                    np.array(line.split()[2:5], dtype="float32") / 10.0
+                )  # crystfel's notation uses nm-1
             elif is_cstar(line):
-                cstar = np.array(line.split()[2:5], dtype='float32') / 10.  # crystfel's notation uses nm-1
+                cstar = (
+                    np.array(line.split()[2:5], dtype="float32") / 10.0
+                )  # crystfel's notation uses nm-1
 
                 # since it's the last line needed to construct Ewald offset,
                 # we'll pre-compute the matrices here
@@ -125,12 +133,14 @@ def _parse_stream(filename: str) -> dict:
                 #    h    k    l          I   sigma(I)       peak background  fs/px  ss/px panel
                 #  -63   41    9     -41.31      57.45     195.00     170.86  731.0 1350.4 p0
                 crystal_peak_number += 1
-                h, k, l, I, sigmaI, peak, background, xdet, ydet, panel = [i for i in line.split()]
+                h, k, l, I, sigmaI, peak, background, xdet, ydet, panel = [
+                    i for i in line.split()
+                ]
                 h, k, l = map(int, [h, k, l])
 
                 # calculate ewald offset and s1
                 hkl = np.array([h, k, l])
-                q = A @ hkl 
+                q = A @ hkl
                 s1 = q + s0
                 s1x, s1y, s1z = s1
                 s1_norm = np.linalg.norm(s1)
@@ -141,8 +151,8 @@ def _parse_stream(filename: str) -> dict:
 
                 # Compute the angular ewald offset
                 q_obs = s1_obs - s0
-                qangle = np.sign(ewald_offset)*angle_between(q, q_obs)
-                
+                qangle = np.sign(ewald_offset) * angle_between(q, q_obs)
+
                 record = {
                     "H": h,
                     "K": k,
@@ -150,21 +160,29 @@ def _parse_stream(filename: str) -> dict:
                     "I": float(I),
                     "sigmaI": float(sigmaI),
                     "BATCH": crystal_idx,
-                    's1x': s1x,
-                    's1y': s1y,
-                    's1z': s1z,
-                    'ewald_offset': ewald_offset,
-                    'angular_ewald_offset': qangle,
-                    'XDET' : float(xdet),
-                    'YDET' : float(ydet),
+                    "s1x": s1x,
+                    "s1y": s1y,
+                    "s1z": s1z,
+                    "ewald_offset": ewald_offset,
+                    "angular_ewald_offset": qangle,
+                    "XDET": float(xdet),
+                    "YDET": float(ydet),
                 }
                 if current_event is not None:
-                    name = (current_filename, current_event,
-                            current_serial_number, crystal_idx,
-                            crystal_peak_number)
+                    name = (
+                        current_filename,
+                        current_event,
+                        current_serial_number,
+                        crystal_idx,
+                        crystal_peak_number,
+                    )
                 else:
-                    name = (current_filename, current_serial_number,
-                            crystal_idx, crystal_peak_number)
+                    name = (
+                        current_filename,
+                        current_serial_number,
+                        crystal_idx,
+                        crystal_peak_number,
+                    )
                 answ_crystals[name] = record
 
             # start analyzing where we are now
@@ -202,14 +220,14 @@ def read_crystfel(streamfile) -> DataSet:
     Parameters
     ----------
     streamfile : stream filename
-        name of a .stream file 
-       
+        name of a .stream file
+
     Returns
     --------
     rs.DataSet
     """
 
-    if not streamfile.endswith('.stream'):
+    if not streamfile.endswith(".stream"):
         raise ValueError("Stream file should end with .stream")
     # read data from stream file
     d, cell = _parse_stream(streamfile)
@@ -222,24 +240,24 @@ def read_crystfel(streamfile) -> DataSet:
     # s1{x,y,z} -- R
     # ewald_offset -- R
     mtzdtypes = {
-        "H" : "H",
-        "K" : "H",
-        "L" : "H",
-        "I" : "J",
-        "sigmaI" : "Q",
-        "BATCH" : "B",
-        "s1x" : "R",
-        "s1y" : "R",
-        "s1z" : "R",
-        "ewald_offset" : "R",
-        "angular_ewald_offset" : "R",
-        "XDET" : "R",
-        "YDET" : "R",
+        "H": "H",
+        "K": "H",
+        "L": "H",
+        "I": "J",
+        "sigmaI": "Q",
+        "BATCH": "B",
+        "s1x": "R",
+        "s1y": "R",
+        "s1z": "R",
+        "ewald_offset": "R",
+        "angular_ewald_offset": "R",
+        "XDET": "R",
+        "YDET": "R",
     }
     dataset = DataSet()
     for k, v in df.items():
         dataset[k] = v.astype(mtzdtypes[k])
-    dataset.set_index(['H', 'K', 'L'], inplace=True)
+    dataset.set_index(["H", "K", "L"], inplace=True)
 
     dataset.merged = False  # CrystFEL stream is always unmerged
     dataset.cell = cell

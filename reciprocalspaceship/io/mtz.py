@@ -4,18 +4,19 @@ import gemmi
 from reciprocalspaceship import DataSet
 from reciprocalspaceship.dtypes.base import MTZDtype
 
+
 def from_gemmi(gemmi_mtz):
     """
     Construct DataSet from gemmi.Mtz object
-    
+
     If the gemmi.Mtz object contains an M/ISYM column and contains duplicated
-    Miller indices, an unmerged DataSet will be constructed. The Miller indices 
-    will be mapped to their observed values, and a partiality flag will be 
-    extracted and stored as a boolean column with the label, ``PARTIAL``. 
+    Miller indices, an unmerged DataSet will be constructed. The Miller indices
+    will be mapped to their observed values, and a partiality flag will be
+    extracted and stored as a boolean column with the label, ``PARTIAL``.
     Otherwise, a merged DataSet will be constructed.
 
     If columns are found with the ``MTZInt`` dtype and are labeled ``PARTIAL``
-    or ``CENTRIC``, these will be interpreted as boolean flags used to 
+    or ``CENTRIC``, these will be interpreted as boolean flags used to
     label partial or centric reflections, respectively.
 
     Parameters
@@ -46,22 +47,25 @@ def from_gemmi(gemmi_mtz):
             dataset.merged = False
             dataset.hkl_to_observed(m_isym[0], inplace=True)
         else:
-            raise ValueError("Only a single M/ISYM column is supported for unmerged data")
+            raise ValueError(
+                "Only a single M/ISYM column is supported for unmerged data"
+            )
     else:
         dataset.merged = True
-        
+
     return dataset
+
 
 def to_gemmi(dataset, skip_problem_mtztypes=False):
     """
     Construct gemmi.Mtz object from DataSet
 
     If ``dataset.merged == False``, the reflections will be mapped to the
-    reciprocal space ASU, and a M/ISYM column will be constructed. 
+    reciprocal space ASU, and a M/ISYM column will be constructed.
 
     If boolean flags with the label ``PARTIAL`` or ``CENTRIC`` are found
     in the DataSet, these will be cast to the ``MTZInt`` dtype, and included
-    in the gemmi.Mtz object. 
+    in the gemmi.Mtz object.
 
     Parameters
     ----------
@@ -77,9 +81,13 @@ def to_gemmi(dataset, skip_problem_mtztypes=False):
     """
     # Check that cell and spacegroup are defined
     if not dataset.cell:
-        raise AttributeError(f"Instance of type {dataset.__class__.__name__} has no unit cell information")
+        raise AttributeError(
+            f"Instance of type {dataset.__class__.__name__} has no unit cell information"
+        )
     if not dataset.spacegroup:
-        raise AttributeError(f"Instance of type {dataset.__class__.__name__} has no space group information")
+        raise AttributeError(
+            f"Instance of type {dataset.__class__.__name__} has no space group information"
+        )
 
     # Build up a gemmi.Mtz object
     mtz = gemmi.Mtz()
@@ -89,8 +97,8 @@ def to_gemmi(dataset, skip_problem_mtztypes=False):
     # Handle Unmerged data
     if not dataset.merged:
         dataset.hkl_to_asu(inplace=True)
-    
-    # Construct data for Mtz object. 
+
+    # Construct data for Mtz object.
     mtz.add_dataset("reciprocalspaceship")
     temp = dataset.reset_index()
     columns = []
@@ -107,24 +115,27 @@ def to_gemmi(dataset, skip_problem_mtztypes=False):
         elif skip_problem_mtztypes:
             continue
         else:
-            raise ValueError(f"column {c} of type {cseries.dtype} cannot be written to an MTZ file. "
-                             f"To skip columns without explicit MTZ dtypes, set skip_problem_mtztypes=True")
+            raise ValueError(
+                f"column {c} of type {cseries.dtype} cannot be written to an MTZ file. "
+                f"To skip columns without explicit MTZ dtypes, set skip_problem_mtztypes=True"
+            )
     mtz.set_data(temp[columns].to_numpy(dtype="float32"))
 
     return mtz
-    
+
+
 def read_mtz(mtzfile):
     """
     Populate the dataset object with data from an MTZ reflection file.
 
     If the gemmi.Mtz object contains an M/ISYM column and contains duplicated
-    Miller indices, an unmerged DataSet will be constructed. The Miller indices 
-    will be mapped to their observed values, and a partiality flag will be 
-    extracted and stored as a boolean column with the label, ``PARTIAL``. 
+    Miller indices, an unmerged DataSet will be constructed. The Miller indices
+    will be mapped to their observed values, and a partiality flag will be
+    extracted and stored as a boolean column with the label, ``PARTIAL``.
     Otherwise, a merged DataSet will be constructed.
 
     If columns are found with the ``MTZInt`` dtype and are labeled ``PARTIAL``
-    or ``CENTRIC``, these will be interpreted as boolean flags used to 
+    or ``CENTRIC``, these will be interpreted as boolean flags used to
     label partial or centric reflections, respectively.
 
     Parameters
@@ -139,16 +150,17 @@ def read_mtz(mtzfile):
     gemmi_mtz = gemmi.read_mtz_file(mtzfile)
     return from_gemmi(gemmi_mtz)
 
+
 def write_mtz(dataset, mtzfile, skip_problem_mtztypes=False):
     """
     Write an MTZ reflection file from the reflection data in a DataSet.
 
     If ``dataset.merged == False``, the reflections will be mapped to the
-    reciprocal space ASU, and a M/ISYM column will be constructed. 
+    reciprocal space ASU, and a M/ISYM column will be constructed.
 
     If boolean flags with the label ``PARTIAL`` or ``CENTRIC`` are found
     in dataset, these will be cast to the ``MTZInt`` dtype, and included
-    in the output MTZ file. 
+    in the output MTZ file.
 
     Parameters
     ----------
