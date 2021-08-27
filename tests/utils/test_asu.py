@@ -49,6 +49,7 @@ def test_hkl_to_asu(sgtbx_by_xhm, return_phase_shifts):
     def gemmi_map2asu(H, sg, return_phase_shifts):
         """Map HKLs to reciprocal space ASU using gemmi"""
         m = build_emptyMTZ(sg)
+        m.switch_to_original_hkl()
         data = np.append(H, np.zeros((len(H), 1)), 1)
         m.set_data(data)
         m.switch_to_asu_hkl()
