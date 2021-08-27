@@ -13,7 +13,6 @@ from reciprocalspaceship.utils import (
     in_asu,
     hkl_to_asu,
     hkl_to_observed,
-    compute_dHKL,
     compute_structurefactor_multiplicity,
     bin_by_percentile
 )
@@ -734,7 +733,7 @@ class DataSet(pd.DataFrame):
         inplace : bool
             Whether to add the column in place or return a copy
         """
-        dHKL = compute_dHKL(self.get_hkls(), self.cell)
+        dHKL = self.cell.calculate_d_array(self.get_hkls())
         self['dHKL'] = rs.DataSeries(dHKL, dtype='R', index=self.index)
         return self
 

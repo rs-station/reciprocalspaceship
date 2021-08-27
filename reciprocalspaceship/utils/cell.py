@@ -46,14 +46,15 @@ def generate_reciprocal_cell(cell, dmin, dtype=np.int32):
     """
     hmax,kmax,lmax = cell.get_hkl_limits(dmin)
     hkl = np.meshgrid(
-        np.linspace(-hmax-2, hmax+3, 2*hmax+6, dtype=dtype),
-        np.linspace(-kmax-2, kmax+3, 2*kmax+6, dtype=dtype),
-        np.linspace(-lmax-2, lmax+3, 2*lmax+6, dtype=dtype),
+        np.linspace(-hmax, hmax+1, 2*hmax+2, dtype=dtype),
+        np.linspace(-kmax, kmax+1, 2*kmax+2, dtype=dtype),
+        np.linspace(-lmax, lmax+1, 2*lmax+2, dtype=dtype),
     )
     hkl = np.stack(hkl).reshape((3, -1)).T
     #Remove reflection 0,0,0
     hkl = hkl[np.any(hkl != 0, axis=1)]
     #Remove reflections outside of resolution range
-    hkl = hkl[cell.calculate_d_array(hkl) >= dmin]
+    dHKL = cell.calculate_d_array(hkl).astype('float32')
+    hkl = hkl[dHKL >= dmin]
     return hkl
 
