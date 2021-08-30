@@ -1,5 +1,5 @@
 {
-  "extends": ["config:base"],
+  "extends": ["config:base", ":disableDependencyDashboard"],
   "packageRules": [ 
     { "updateTypes": ["major", "minor", "patch", "digest", "bump"], "addLabels": ["version"] }
   ]
