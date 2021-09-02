@@ -1,12 +1,9 @@
 import numpy as np
-from gemmi import SpaceGroup, GroupOps
-from reciprocalspaceship.utils import (
-    apply_to_hkl,
-    phase_shift,
-    is_centric,
-    is_absent,
-    generate_reciprocal_cell,
-)
+from gemmi import GroupOps, SpaceGroup
+
+from reciprocalspaceship.utils.cell import generate_reciprocal_cell
+from reciprocalspaceship.utils.structurefactors import is_absent, is_centric
+from reciprocalspaceship.utils.symop import apply_to_hkl, phase_shift
 
 # fmt: off
 ccp4_hkl_asu = [

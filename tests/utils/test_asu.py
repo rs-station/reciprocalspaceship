@@ -1,7 +1,8 @@
-import pytest
-import numpy as np
-import reciprocalspaceship as rs
 import gemmi
+import numpy as np
+import pytest
+
+import reciprocalspaceship as rs
 
 
 def test_in_asu(sgtbx_by_xhm):

@@ -1,5 +1,5 @@
-import numpy as np
 import gemmi
+import numpy as np
 
 
 def canonicalize_phases(phases, deg=True):

@@ -1,5 +1,6 @@
 from pandas.core.dtypes.dtypes import register_extension_dtype
-from .base import MTZInt32Dtype, MTZIntegerArray
+
+from reciprocalspaceship.dtypes.base import MTZInt32Dtype, MTZIntegerArray
 
 
 @register_extension_dtype

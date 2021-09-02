@@ -1,7 +1,10 @@
-from reciprocalspaceship.algorithms.scale_merged_intensities import _french_wilson_posterior_quad
-from matplotlib import pyplot as plt
 import numpy as np
 import pandas as pd
+from matplotlib import pyplot as plt
+
+from reciprocalspaceship.algorithms.scale_merged_intensities import (
+    _french_wilson_posterior_quad,
+)
 
 data_fw_mcmc = pd.read_csv("fw_mcmc_data.csv")
 I,SigI,Sigma,J,SigJ,F,SigF,Centric = data_fw_mcmc.to_numpy(np.float64).T

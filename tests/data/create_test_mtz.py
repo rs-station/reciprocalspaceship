@@ -1,9 +1,10 @@
-from subprocess import call
-from os import devnull,rename,path,chdir,mkdir
-from io import StringIO
-from urllib3 import PoolManager
-import pandas as pd
 import os
+from io import StringIO
+from os import chdir, devnull, mkdir, path, rename
+from subprocess import call
+
+import pandas as pd
+from urllib3 import PoolManager
 
 try:                              
     from tqdm import tqdm         

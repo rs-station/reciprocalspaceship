@@ -1,7 +1,8 @@
+import numpy as np
 import pandas as pd
+
 from reciprocalspaceship import DataSet
 from reciprocalspaceship.utils import angle_between
-import numpy as np
 
 
 def _parse_stream(filename: str) -> dict:

@@ -1,5 +1,7 @@
+from os.path import abspath, dirname, join
+
 import pytest
-from os.path import dirname, abspath, join
+
 
 @pytest.fixture
 def IOtest_hkl():
@@ -9,6 +11,7 @@ def IOtest_hkl():
     datapath = join(abspath(dirname(__file__)), "../data/precognition")
     return join(datapath, "hewl.hkl")
 
+
 @pytest.fixture
 def IOtest_ii():
     """
@@ -17,6 +20,7 @@ def IOtest_ii():
     datapath = join(abspath(dirname(__file__)), "../data/precognition")
     return join(datapath, "e074a_off1_001.mccd.ii")
 
+
 @pytest.fixture
 def IOtest_log():
     """
@@ -24,6 +28,7 @@ def IOtest_log():
     """
     datapath = join(abspath(dirname(__file__)), "../data/precognition")
     return join(datapath, "integration.log")
+
 
 @pytest.fixture
 def IOtest_mtz():

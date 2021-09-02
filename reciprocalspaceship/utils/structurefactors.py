@@ -1,5 +1,6 @@
 import numpy as np
-from gemmi import SpaceGroup, GroupOps
+from gemmi import GroupOps, SpaceGroup
+
 import reciprocalspaceship as rs
 
 

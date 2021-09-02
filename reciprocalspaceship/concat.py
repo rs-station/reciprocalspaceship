@@ -1,6 +1,8 @@
-import reciprocalspaceship as rs
 from itertools import tee
+
 import pandas as pd
+
+import reciprocalspaceship as rs
 
 
 def concat(*args, check_isomorphous=True, **kwargs):

@@ -1,7 +1,9 @@
-import pytest
-import numpy as np
 import gemmi
+import numpy as np
+import pytest
+
 import reciprocalspaceship as rs
+
 
 @pytest.mark.parametrize("sample_rate", [2.5, 3, 5])
 @pytest.mark.parametrize("p1", [True, False])
@@ -15,7 +17,7 @@ def test_to_reciprocalgrid_complex(mtz_by_spacegroup, sample_rate, p1):
         dataset = rs.read_mtz(mtz_by_spacegroup)
     gemmimtz = dataset.to_gemmi()
 
-    # Note: Use P1 data to determine proper gridsize    
+    # Note: Use P1 data to determine proper gridsize
     testp1 = dataset.expand_to_p1().sort_index()
     testp1.spacegroup = dataset.spacegroup
     gridsize = testp1.to_gemmi().get_size_for_hkl(sample_rate=sample_rate)
@@ -25,6 +27,7 @@ def test_to_reciprocalgrid_complex(mtz_by_spacegroup, sample_rate, p1):
     dataset["sf"] = dataset.to_structurefactor("FMODEL", "PHIFMODEL")
     result = dataset.to_reciprocalgrid("sf", gridsize)
     assert np.allclose(result, expected, rtol=1e-4)
+
 
 @pytest.mark.parametrize("sample_rate", [2.5, 3, 5])
 @pytest.mark.parametrize("p1", [True, False])
@@ -48,4 +51,3 @@ def test_to_reciprocalgrid_float(mtz_by_spacegroup, sample_rate, p1):
     result = dataset.to_reciprocalgrid("FMODEL", gridsize)
 
     assert np.allclose(result, expected)
-

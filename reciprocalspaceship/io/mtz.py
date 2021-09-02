@@ -1,6 +1,7 @@
+import gemmi
 import numpy as np
 import pandas as pd
-import gemmi
+
 from reciprocalspaceship import DataSet
 from reciprocalspaceship.dtypes.base import MTZDtype
 

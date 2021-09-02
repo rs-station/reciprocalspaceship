@@ -1,12 +1,13 @@
 import numpy as np
-from pandas._libs import lib, missing as libmissing
+import pandas as pd
+from pandas._libs import lib
+from pandas._libs import missing as libmissing
 from pandas.api.extensions import ExtensionDtype
-from pandas.core.arrays.integer import IntegerArray
-from pandas.core.arrays.integer import coerce_to_array as coerce_to_int_array
 from pandas.core.arrays.floating import FloatingArray
 from pandas.core.arrays.floating import coerce_to_array as coerce_to_float_array
+from pandas.core.arrays.integer import IntegerArray
+from pandas.core.arrays.integer import coerce_to_array as coerce_to_int_array
 from pandas.util._decorators import cache_readonly
-import pandas as pd
 
 
 class MTZDtype(ExtensionDtype):
@@ -114,6 +115,7 @@ class MTZIntegerArray(IntegerArray):
         counts : DataSeries
         """
         from pandas import Index
+
         import reciprocalspaceship as rs
 
         # compute counts on the data with no nans
@@ -226,6 +228,7 @@ class MTZFloatArray(FloatingArray):
         counts : DataSeries
         """
         from pandas import Index
+
         import reciprocalspaceship as rs
 
         # compute counts on the data with no nans

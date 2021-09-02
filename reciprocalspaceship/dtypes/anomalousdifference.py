@@ -1,5 +1,6 @@
 from pandas.core.dtypes.dtypes import register_extension_dtype
-from .base import MTZFloatArray, MTZFloat32Dtype
+
+from reciprocalspaceship.dtypes.base import MTZFloat32Dtype, MTZFloatArray
 
 
 @register_extension_dtype

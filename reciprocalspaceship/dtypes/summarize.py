@@ -1,5 +1,7 @@
 import inspect
+
 from pandas import DataFrame
+
 import reciprocalspaceship as rs
 
 

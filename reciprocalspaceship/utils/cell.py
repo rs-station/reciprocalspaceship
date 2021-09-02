@@ -1,5 +1,6 @@
-import reciprocalspaceship as rs
 import numpy as np
+
+import reciprocalspaceship as rs
 
 
 def compute_dHKL(H, cell):

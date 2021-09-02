@@ -1,24 +1,28 @@
-import pandas as pd
-from pandas.api.types import is_complex_dtype
-import numpy as np
-import gemmi
-import reciprocalspaceship as rs
-from reciprocalspaceship.dataseries import DataSeries
-from reciprocalspaceship import utils
-from reciprocalspaceship.utils import (
-    apply_to_hkl,
-    phase_shift,
-    is_centric,
-    is_absent,
-    in_asu,
-    hkl_to_asu,
-    hkl_to_observed,
-    compute_dHKL,
-    compute_structurefactor_multiplicity,
-    bin_by_percentile,
-)
 from functools import wraps
 from inspect import signature
+
+import gemmi
+import numpy as np
+import pandas as pd
+from pandas.api.types import is_complex_dtype
+
+from reciprocalspaceship import dtypes
+from reciprocalspaceship.dataseries import DataSeries
+from reciprocalspaceship.utils import (
+    apply_to_hkl,
+    bin_by_percentile,
+    canonicalize_phases,
+    compute_dHKL,
+    compute_structurefactor_multiplicity,
+    from_structurefactor,
+    hkl_to_asu,
+    hkl_to_observed,
+    in_asu,
+    is_absent,
+    is_centric,
+    phase_shift,
+    to_structurefactor,
+)
 
 
 def inplace(f):
@@ -431,8 +435,8 @@ class DataSet(pd.DataFrame):
         --------
         DataSet.from_structurefactor : Convert complex structure factor to amplitude and phase
         """
-        sfs = utils.to_structurefactor(self[sf_key], self[phase_key])
-        return rs.DataSeries(sfs, index=self.index)
+        sfs = to_structurefactor(self[sf_key], self[phase_key])
+        return DataSeries(sfs, index=self.index)
 
     def from_structurefactor(self, sf_key):
         """
@@ -454,7 +458,7 @@ class DataSet(pd.DataFrame):
         --------
         DataSet.to_structurefactor : Convert amplitude and phase to complex structure factor
         """
-        return utils.from_structurefactor(self[sf_key])
+        return from_structurefactor(self[sf_key])
 
     def append(self, *args, check_isomorphous=True, **kwargs):
         """
@@ -598,7 +602,7 @@ class DataSet(pd.DataFrame):
         keys : list of strings
             list of column labels with ``Phase`` dtype
         """
-        keys = [k for k in self if isinstance(self.dtypes[k], rs.PhaseDtype)]
+        keys = [k for k in self if isinstance(self.dtypes[k], dtypes.PhaseDtype)]
         return keys
 
     def get_complex_keys(self):
@@ -622,7 +626,7 @@ class DataSet(pd.DataFrame):
         key : list of strings
             list of column labels with ``M/ISYM`` dtype
         """
-        keys = [k for k in self if isinstance(self.dtypes[k], rs.M_IsymDtype)]
+        keys = [k for k in self if isinstance(self.dtypes[k], dtypes.M_IsymDtype)]
         return keys
 
     @inplace
@@ -657,12 +661,14 @@ class DataSet(pd.DataFrame):
         phase_shifts = phase_shift(H, symop)
 
         dataset[["H", "K", "L"]] = hkl
-        dataset[["H", "K", "L"]] = dataset[["H", "K", "L"]].astype(rs.HKLIndexDtype())
+        dataset[["H", "K", "L"]] = dataset[["H", "K", "L"]].astype(
+            dtypes.HKLIndexDtype()
+        )
 
         # Shift phases according to symop
         for key in dataset.get_phase_keys():
             dataset[key] = phic * (dataset[key] - np.rad2deg(phase_shifts))
-            dataset[key] = utils.canonicalize_phases(dataset[key], deg=True)
+            dataset[key] = canonicalize_phases(dataset[key], deg=True)
         for key in dataset.get_complex_keys():
             dataset[key] *= np.exp(-1j * phase_shifts)
             if symop.det_rot() < 0:
@@ -781,7 +787,7 @@ class DataSet(pd.DataFrame):
             Whether to add the column in place or return a copy
         """
         dHKL = compute_dHKL(self.get_hkls(), self.cell)
-        self["dHKL"] = rs.DataSeries(dHKL, dtype="R", index=self.index)
+        self["dHKL"] = DataSeries(dHKL, dtype="R", index=self.index)
         return self
 
     @inplace
@@ -801,7 +807,7 @@ class DataSet(pd.DataFrame):
         epsilon = compute_structurefactor_multiplicity(
             self.get_hkls(), self.spacegroup, include_centering
         )
-        self["EPSILON"] = rs.DataSeries(epsilon, dtype="I", index=self.index)
+        self["EPSILON"] = DataSeries(epsilon, dtype="I", index=self.index)
         return self
 
     @inplace
@@ -826,7 +832,7 @@ class DataSet(pd.DataFrame):
         dHKL = self.compute_dHKL()["dHKL"]
 
         assignments, labels = bin_by_percentile(dHKL, bins=bins, ascending=False)
-        self["bin"] = rs.DataSeries(assignments, dtype="I", index=self.index)
+        self["bin"] = DataSeries(assignments, dtype="I", index=self.index)
 
         if return_labels:
             return self, labels
@@ -1166,7 +1172,7 @@ class DataSet(pd.DataFrame):
                 )
         elif not isinstance(m_isym, str):
             raise ValueError("Provided M/ISYM column label should be type str")
-        elif not isinstance(self.dtypes[m_isym], rs.M_IsymDtype):
+        elif not isinstance(self.dtypes[m_isym], dtypes.M_IsymDtype):
             raise ValueError(f"Provided M/ISYM column label is of wrong dtype")
 
         # GH#3: Separate combined M/ISYM into M and ISYM
@@ -1213,7 +1219,7 @@ class DataSet(pd.DataFrame):
                 "This function is only  applicable for reflection data in the reciprocal ASU and anomalous data in a two-column (unstacked) format"
             )
 
-        p1 = rs.DataSet(spacegroup=self.spacegroup, cell=self.cell)
+        p1 = DataSet(spacegroup=self.spacegroup, cell=self.cell)
 
         # Get all symops, in ascending order by ISYM
         groupops = self.spacegroup.operations()
@@ -1263,7 +1269,7 @@ class DataSet(pd.DataFrame):
         DataSet
         """
         for k in self.get_phase_keys():
-            self[k] = utils.canonicalize_phases(self[k])
+            self[k] = canonicalize_phases(self[k])
 
         return self
 

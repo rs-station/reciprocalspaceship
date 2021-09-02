@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 """
-Summarize the contents of an MTZ file. 
+Summarize the contents of an MTZ file.
 
 Examples
 --------
@@ -8,7 +8,7 @@ In order to summarize contents of file.mtz::
 
     > rs.mtzdump file.mtz
 
-If you would like to interactively inspect file.mtz in an IPython 
+If you would like to interactively inspect file.mtz in an IPython
 shell, use the "--embed" argument::
 
     > rs.mtzdump file.mtz --embed
@@ -22,7 +22,9 @@ Usage Details
 -------------
 """
 import argparse
+
 import pandas as pd
+
 import reciprocalspaceship as rs
 
 # If matplotlib is available, use pylab to setup IPython environment

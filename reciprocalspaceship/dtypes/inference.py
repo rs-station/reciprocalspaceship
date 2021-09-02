@@ -1,4 +1,5 @@
-from pandas.api.types import is_integer_dtype, is_float_dtype, is_object_dtype
+from pandas.api.types import is_float_dtype, is_integer_dtype, is_object_dtype
+
 from reciprocalspaceship.dtypes.base import MTZDtype
 
 

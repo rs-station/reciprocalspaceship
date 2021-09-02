@@ -1,5 +1,5 @@
-import numpy as np
 import gemmi
+import numpy as np
 
 
 def write_ccp4_map(realmap, mapfile, cell, spacegroup):

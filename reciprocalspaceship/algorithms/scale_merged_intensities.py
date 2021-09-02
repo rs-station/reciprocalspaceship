@@ -1,7 +1,8 @@
 import numpy as np
-import reciprocalspaceship as rs
 from scipy.special import logsumexp
 from scipy.stats import gamma, norm
+
+import reciprocalspaceship as rs
 
 
 def _french_wilson_posterior_quad(Iobs, SigIobs, Sigma, centric, npoints=100):
@@ -310,8 +311,9 @@ def scale_merged_intensities(
 
 
 if __name__ == "__main__":  # pragma: no cover
-    import reciprocalspaceship as rs
     from sys import argv
+
+    import reciprocalspaceship as rs
 
     ds = rs.read_mtz(argv[1]).dropna()
     ds = ds.stack_anomalous()

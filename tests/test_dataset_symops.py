@@ -1,8 +1,9 @@
-import pytest
-import numpy as np
-from pandas.testing import assert_index_equal
-import reciprocalspaceship as rs
 import gemmi
+import numpy as np
+import pytest
+from pandas.testing import assert_index_equal
+
+import reciprocalspaceship as rs
 
 
 @pytest.mark.parametrize("inplace", [True, False])
@@ -17,7 +18,7 @@ def test_hkl_to_asu(mtz_by_spacegroup, inplace, reset_index, anomalous):
     # Add complex structure factors
     p1["sf"] = p1.to_structurefactor("FMODEL", "PHIFMODEL")
     expected["sf"] = expected.to_structurefactor("FMODEL", "PHIFMODEL")
-    
+
     if reset_index:
         p1.reset_index(inplace=True)
 
@@ -53,8 +54,9 @@ def test_hkl_to_asu(mtz_by_spacegroup, inplace, reset_index, anomalous):
     assert len(expected.index.difference(result.index)) == 0
 
     # Confirm structure factor amplitudes are always unchanged
-    assert np.allclose(expected.loc[result.index, "FMODEL"].to_numpy(),
-                       result["FMODEL"].to_numpy())
+    assert np.allclose(
+        expected.loc[result.index, "FMODEL"].to_numpy(), result["FMODEL"].to_numpy()
+    )
 
     # Confirm phase changes are applied by comparing complex structure factors
     expected_sf = expected.loc[result.index].to_structurefactor("FMODEL", "PHIFMODEL")
@@ -75,7 +77,7 @@ def test_hklmapping_roundtrip_phase(mtz_by_spacegroup):
     expected = rs.read_mtz(mtz_by_spacegroup[:-4] + "_p1.mtz")
     expected["sf"] = expected.to_structurefactor("FMODEL", "PHIFMODEL")
     expected.spacegroup = ref.spacegroup
-    
+
     # Roundtrip
     temp = expected.hkl_to_asu()
     result = temp.hkl_to_observed()
@@ -107,7 +109,7 @@ def test_expand_to_p1(mtz_by_spacegroup, use_complex):
     if use_complex:
         result_sf = result["sf"].to_numpy()
     else:
-        result_sf = result.to_structurefactor("FMODEL", "PHIFMODEL")        
+        result_sf = result.to_structurefactor("FMODEL", "PHIFMODEL")
     expected_sf = expected.to_structurefactor("FMODEL", "PHIFMODEL")
 
     assert_index_equal(result.index, expected.index)

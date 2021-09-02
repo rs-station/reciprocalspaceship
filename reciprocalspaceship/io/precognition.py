@@ -1,5 +1,6 @@
-import pandas as pd
 import gemmi
+import pandas as pd
+
 from reciprocalspaceship import DataSet
 
 
