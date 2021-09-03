@@ -18,5 +18,6 @@ help you follow our best practices when contributing to the library.
 
    contributing
    utilities
+   style
    testing
    documentation
