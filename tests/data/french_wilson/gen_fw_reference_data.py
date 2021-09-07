@@ -1,8 +1,8 @@
 #!/usr/bin/env cctbx.python
 
-from cctbx.french_wilson import fw_centric,fw_acentric
-import pandas as pd
 import numpy as np
+import pandas as pd
+from cctbx.french_wilson import fw_acentric, fw_centric
 
 outFN = "fw_test_data.csv"
 

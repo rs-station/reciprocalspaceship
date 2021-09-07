@@ -1,8 +1,9 @@
-import pytest
-import numpy as np
-import reciprocalspaceship as rs
 import gemmi
+import numpy as np
+import pytest
 from pandas.testing import assert_frame_equal
+
+import reciprocalspaceship as rs
 
 
 def test_constructor_empty():
@@ -14,7 +15,9 @@ def test_constructor_empty():
 
 
 @pytest.mark.parametrize("spacegroup", [None, gemmi.SpaceGroup(1), "P 1"])
-@pytest.mark.parametrize("cell", [None, gemmi.UnitCell(1, 1, 1, 90, 90, 90), (1, 1, 1,  90, 90, 90)])
+@pytest.mark.parametrize(
+    "cell", [None, gemmi.UnitCell(1, 1, 1, 90, 90, 90), (1, 1, 1, 90, 90, 90)]
+)
 @pytest.mark.parametrize("merged", [None, True, False])
 def test_constructor_dataset(data_fmodel, spacegroup, cell, merged):
     """Test DataSet.__init__() when called with a DataSet"""
@@ -25,7 +28,7 @@ def test_constructor_dataset(data_fmodel, spacegroup, cell, merged):
         assert result.merged == merged
     else:
         assert result.merged == True
-        
+
     # Ensure provided values take precedence
     if spacegroup:
         assert result.spacegroup.xhm() == "P 1"
@@ -43,7 +46,9 @@ def test_constructor_dataset(data_fmodel, spacegroup, cell, merged):
         assert result.cell == data_fmodel.cell
 
 
-@pytest.mark.parametrize("spacegroup", [None, 1, 5, 19, "P 21 21 21", "R 3:h", "R 3:blah", 1.2])
+@pytest.mark.parametrize(
+    "spacegroup", [None, 1, 5, 19, "P 21 21 21", "R 3:h", "R 3:blah", 1.2]
+)
 def test_spacegroup(data_fmodel, spacegroup):
     if spacegroup != 1.2 and spacegroup != "R 3:blah":
         data_fmodel.spacegroup = spacegroup
@@ -56,14 +61,18 @@ def test_spacegroup(data_fmodel, spacegroup):
             data_fmodel.spacegroup = spacegroup
 
 
-@pytest.mark.parametrize("cell", [None,
-                                  gemmi.UnitCell(10, 20, 30, 40, 50, 60),
-                                  [10, 20, 30, 40, 50, 60],
-                                  (10, 20, 30, 40, 50, 60),
-                                  np.array([10, 20, 30, 40, 50, 60]),
-                                  [10, 20, 30],
-                                  []
-])
+@pytest.mark.parametrize(
+    "cell",
+    [
+        None,
+        gemmi.UnitCell(10, 20, 30, 40, 50, 60),
+        [10, 20, 30, 40, 50, 60],
+        (10, 20, 30, 40, 50, 60),
+        np.array([10, 20, 30, 40, 50, 60]),
+        [10, 20, 30],
+        [],
+    ],
+)
 def test_cell(data_fmodel, cell):
     if cell is None:
         data_fmodel.cell = cell
@@ -102,12 +111,13 @@ def test_constructor_gemmi(data_gemmi, spacegroup, cell):
     else:
         assert result.cell == data_gemmi.cell
 
+
 def test_to_structurefactor(data_fmodel):
     """Test DataSet.to_structurefactor()"""
     result = data_fmodel.to_structurefactor("FMODEL", "PHIFMODEL")
     sfamps = data_fmodel["FMODEL"].to_numpy()
     phases = data_fmodel["PHIFMODEL"].to_numpy()
-    expected = sfamps*np.exp(1j*np.deg2rad(phases))
+    expected = sfamps * np.exp(1j * np.deg2rad(phases))
     assert isinstance(result, rs.DataSeries)
     assert np.allclose(result.to_numpy(), expected)
 
@@ -121,14 +131,23 @@ def test_from_structurefactor(data_fmodel):
     assert isinstance(f.dtype, rs.StructureFactorAmplitudeDtype)
     assert isinstance(phi.dtype, rs.PhaseDtype)
     assert np.allclose(f.to_numpy(), data_fmodel["FMODEL"].to_numpy())
-    assert np.allclose(np.sin(np.deg2rad(phi.to_numpy())), np.sin(np.deg2rad(data_fmodel["PHIFMODEL"].to_numpy())), atol=1e-6)
-    assert np.allclose(np.cos(np.deg2rad(phi.to_numpy())), np.cos(np.deg2rad(data_fmodel["PHIFMODEL"].to_numpy())), atol=1e-6)    
-    
+    assert np.allclose(
+        np.sin(np.deg2rad(phi.to_numpy())),
+        np.sin(np.deg2rad(data_fmodel["PHIFMODEL"].to_numpy())),
+        atol=1e-6,
+    )
+    assert np.allclose(
+        np.cos(np.deg2rad(phi.to_numpy())),
+        np.cos(np.deg2rad(data_fmodel["PHIFMODEL"].to_numpy())),
+        atol=1e-6,
+    )
+
+
 @pytest.mark.parametrize("skip_problem_mtztypes", [True, False])
 def test_to_gemmi_roundtrip(data_gemmi, skip_problem_mtztypes):
     """Test DataSet.to_gemmi() and DataSet.from_gemmi() roundtrip"""
     rs_dataset = rs.DataSet.from_gemmi(data_gemmi)
-    roundtrip  = rs_dataset.to_gemmi(skip_problem_mtztypes)
+    roundtrip = rs_dataset.to_gemmi(skip_problem_mtztypes)
 
     assert data_gemmi.spacegroup.number == roundtrip.spacegroup.number
     assert data_gemmi.cell.a == roundtrip.cell.a
@@ -146,7 +165,7 @@ def test_from_gemmi(data_gemmi):
     assert result.spacegroup == expected.spacegroup
     assert result.cell == expected.cell
     assert result._index_dtypes == expected._index_dtypes
-        
+
 
 def test_get_phase_keys(data_fmodel):
     """Test DataSet.get_phase_keys()"""
@@ -160,7 +179,7 @@ def test_get_phase_keys(data_fmodel):
     result = data_fmodel.get_phase_keys()
     assert len(result) == 1
     assert result[0] == expected
-    
+
 
 def test_get_m_isym_keys(data_fmodel):
     """Test DataSet.get_m_isym_keys()"""
@@ -173,7 +192,7 @@ def test_get_m_isym_keys(data_fmodel):
     assert isinstance(result, list)
     assert isinstance(data_fmodel.dtypes[result[0]], rs.M_IsymDtype)
 
-    
+
 def test_get_hkls(data_fmodel):
     """Test DataSet.get_hkls()"""
     result = data_fmodel.get_hkls()
@@ -198,7 +217,7 @@ def test_label_centrics(data_fmodel, inplace, no_sg):
             assert id(result) == id(data_fmodel)
         else:
             assert id(result) != id(data_fmodel)
-            
+
         # Test centric column
         assert "CENTRIC" in result
         assert result["CENTRIC"].dtype.name == "bool"
@@ -220,30 +239,35 @@ def test_label_absences(data_fmodel, inplace, no_sg):
             assert id(result) == id(data_fmodel)
         else:
             assert id(result) != id(data_fmodel)
-            
+
         # Test centric column
         assert "ABSENT" in result
         assert result["ABSENT"].dtype.name == "bool"
+
 
 @pytest.mark.parametrize("inplace", [True, False])
 @pytest.mark.parametrize("hkl_index", [True, False])
 def test_remove_absences(inplace, hkl_index):
     """Test DataSet.remove_absences()"""
-    params = (34., 45., 98., 90., 90., 90.)
+    params = (34.0, 45.0, 98.0, 90.0, 90.0, 90.0)
     cell = gemmi.UnitCell(*params)
-    sg_1  = gemmi.SpaceGroup(1)
+    sg_1 = gemmi.SpaceGroup(1)
     sg_19 = gemmi.SpaceGroup(19)
-    Hall = rs.utils.generate_reciprocal_asu(cell,  sg_1, 5., anomalous=False)
-    h,k,l = Hall.T
+    Hall = rs.utils.generate_reciprocal_asu(cell, sg_1, 5.0, anomalous=False)
+    h, k, l = Hall.T
     absent = rs.utils.is_absent(Hall, sg_19)
-    ds = rs.DataSet({
-        'H' : h,
-        'K' : k,
-        'L' : l,
-        'I' : np.ones(len(h)),
-    }, spacegroup=sg_19, cell=cell).infer_mtz_dtypes()
+    ds = rs.DataSet(
+        {
+            "H": h,
+            "K": k,
+            "L": l,
+            "I": np.ones(len(h)),
+        },
+        spacegroup=sg_19,
+        cell=cell,
+    ).infer_mtz_dtypes()
     if hkl_index:
-        ds.set_index(['H', 'K', 'L'], inplace=True)
+        ds.set_index(["H", "K", "L"], inplace=True)
 
     ds_test = ds.remove_absences(inplace=inplace)
     ds_true = ds[~ds.label_absences().ABSENT]
@@ -256,11 +280,11 @@ def test_remove_absences(inplace, hkl_index):
     else:
         assert id(ds_test) != id(ds)
 
-        
+
 @pytest.mark.parametrize("cache", [True, False])
 def test_centrics(mtz_by_spacegroup, cache):
     """Test DataSet.centrics against DataSet.label_centrics"""
-    ds =  rs.read_mtz(mtz_by_spacegroup)
+    ds = rs.read_mtz(mtz_by_spacegroup)
     if cache:
         ds.label_centrics(inplace=True)
         expected = ds.loc[ds.CENTRIC]
@@ -277,7 +301,7 @@ def test_centrics(mtz_by_spacegroup, cache):
 @pytest.mark.parametrize("cache", [True, False])
 def test_acentrics(mtz_by_spacegroup, cache):
     """Test DataSet.acentrics against DataSet.label_centrics"""
-    ds =  rs.read_mtz(mtz_by_spacegroup)
+    ds = rs.read_mtz(mtz_by_spacegroup)
     if cache:
         ds.label_centrics(inplace=True)
         expected = ds.loc[~ds.CENTRIC]
@@ -321,12 +345,22 @@ def test_infer_mtz_dtypes_rangeindex(data_merged, inplace, index):
 
 
 @pytest.mark.parametrize("inplace", [True, False])
-@pytest.mark.parametrize("cell", [
-    gemmi.UnitCell(10., 20., 30., 90., 90., 90.,),
-    gemmi.UnitCell(60., 60., 90., 90., 90., 120.),
-    gemmi.UnitCell(291., 423., 315., 90., 100., 90.),
-    gemmi.UnitCell(30., 50., 90., 75., 80., 106.),
-])
+@pytest.mark.parametrize(
+    "cell",
+    [
+        gemmi.UnitCell(
+            10.0,
+            20.0,
+            30.0,
+            90.0,
+            90.0,
+            90.0,
+        ),
+        gemmi.UnitCell(60.0, 60.0, 90.0, 90.0, 90.0, 120.0),
+        gemmi.UnitCell(291.0, 423.0, 315.0, 90.0, 100.0, 90.0),
+        gemmi.UnitCell(30.0, 50.0, 90.0, 75.0, 80.0, 106.0),
+    ],
+)
 def test_compute_dHKL(dataset_hkl, inplace, cell):
     """Test DataSet.compute_dHKL()"""
     dataset_hkl.cell = cell
@@ -337,7 +371,7 @@ def test_compute_dHKL(dataset_hkl, inplace, cell):
         assert id(result) == id(dataset_hkl)
     else:
         assert id(result) != id(dataset_hkl)
-        
+
     # Compare to gemmi result
     expected = np.zeros(len(result), dtype=np.float32)
     for i, h in enumerate(result.get_hkls()):
@@ -345,16 +379,22 @@ def test_compute_dHKL(dataset_hkl, inplace, cell):
     assert np.allclose(result["dHKL"].to_numpy(), expected)
     assert isinstance(result["dHKL"].dtype, rs.MTZRealDtype)
 
+
 @pytest.mark.parametrize("inplace", [True, False])
 @pytest.mark.parametrize("include_centering", [True, False])
-@pytest.mark.parametrize("spacegroup", [
-    gemmi.SpaceGroup(19),
-    gemmi.SpaceGroup(4),
-])
+@pytest.mark.parametrize(
+    "spacegroup",
+    [
+        gemmi.SpaceGroup(19),
+        gemmi.SpaceGroup(4),
+    ],
+)
 def test_compute_multiplicity(dataset_hkl, inplace, include_centering, spacegroup):
     """Test DataSet.compute_multiplicity()"""
-    dataset_hkl.spacegroup = spacegroup 
-    result = dataset_hkl.compute_multiplicity(inplace=inplace, include_centering=include_centering)
+    dataset_hkl.spacegroup = spacegroup
+    result = dataset_hkl.compute_multiplicity(
+        inplace=inplace, include_centering=include_centering
+    )
 
     # Test inplace
     if inplace:
@@ -381,18 +421,18 @@ def test_compute_multiplicity(dataset_hkl, inplace, include_centering, spacegrou
 @pytest.mark.parametrize("return_labels", [True, False])
 def test_assign_resolution_bins(data_fmodel, bins, inplace, return_labels):
     """Test DataSet.assign_resolution_bins"""
-    
-    result = data_fmodel.assign_resolution_bins(bins=bins,
-                                                inplace=inplace,
-                                                return_labels=return_labels)
+
+    result = data_fmodel.assign_resolution_bins(
+        bins=bins, inplace=inplace, return_labels=return_labels
+    )
 
     if return_labels:
         result, labels = result
-        
+
     # Test bins
     assert "bin" in result.columns
     assert len(result["bin"].unique()) == bins
-    assert result.bin.max() == bins-1
+    assert result.bin.max() == bins - 1
 
     # Test inplace
     if inplace:
@@ -404,16 +444,20 @@ def test_assign_resolution_bins(data_fmodel, bins, inplace, return_labels):
     if return_labels:
         assert len(labels) == bins
 
-    
+
 @pytest.mark.parametrize("inplace", [True, False])
-@pytest.mark.parametrize("op", ["-x,-y,-z",
-                                gemmi.Op("x,y,z"),
-                                gemmi.Op("-x,-y,-z"),
-                                gemmi.Op("x,y,-z"),
-                                gemmi.Op("x,-y,-z"),
-                                gemmi.Op("-x,y,-z"),
-                                5,
-])
+@pytest.mark.parametrize(
+    "op",
+    [
+        "-x,-y,-z",
+        gemmi.Op("x,y,z"),
+        gemmi.Op("-x,-y,-z"),
+        gemmi.Op("x,y,-z"),
+        gemmi.Op("x,-y,-z"),
+        gemmi.Op("-x,y,-z"),
+        5,
+    ],
+)
 def test_apply_symop_hkl(data_fmodel, inplace, op):
     """
     Test DataSet.apply_symop() using fmodel dataset. This test is purely
@@ -426,21 +470,20 @@ def test_apply_symop_hkl(data_fmodel, inplace, op):
     if isinstance(op, (gemmi.Op, str)):
         if isinstance(op, str):
             op = gemmi.Op(op)
-        
+
         result = data_fmodel.apply_symop(op, inplace=inplace)
-        expectedH = [ op.apply_to_hkl(h) for h in copy.get_hkls() ]
+        expectedH = [op.apply_to_hkl(h) for h in copy.get_hkls()]
         expectedH = np.array(expectedH)
 
-        assert np.array_equal(result["FMODEL"].to_numpy(),
-                              copy["FMODEL"].to_numpy())
+        assert np.array_equal(result["FMODEL"].to_numpy(), copy["FMODEL"].to_numpy())
         assert np.array_equal(result.get_hkls(), expectedH)
 
         # Confirm Miller indices are still correct dtype
         temp = result.reset_index()
         assert isinstance(temp.H.dtype, rs.HKLIndexDtype)
         assert isinstance(temp.K.dtype, rs.HKLIndexDtype)
-        assert isinstance(temp.L.dtype, rs.HKLIndexDtype)        
-        
+        assert isinstance(temp.L.dtype, rs.HKLIndexDtype)
+
         # Confirm copy when desired
         if inplace:
             assert id(result) == id(data_fmodel)
@@ -487,11 +530,13 @@ def test_hkl_to_observed_phase(data_fmodel_P1):
     result = asu.hkl_to_observed()
 
     # Check phases have been canonicalized
-    assert (result["PHIFMODEL"] >= -180.).all()
-    assert (result["PHIFMODEL"] <= 180.).all()
-    
+    assert (result["PHIFMODEL"] >= -180.0).all()
+    assert (result["PHIFMODEL"] <= 180.0).all()
+
     # Compare as complex structure factors
-    original = rs.utils.to_structurefactor(data_fmodel_P1.FMODEL, data_fmodel_P1.PHIFMODEL)
+    original = rs.utils.to_structurefactor(
+        data_fmodel_P1.FMODEL, data_fmodel_P1.PHIFMODEL
+    )
     new = rs.utils.to_structurefactor(result.FMODEL, result.PHIFMODEL)
     assert np.allclose(new, original)
 
@@ -516,7 +561,7 @@ def test_hkl_to_observed_2_m_isym(data_fmodel_P1):
     with pytest.raises(ValueError):
         data_fmodel_P1.hkl_to_observed()
 
-    
+
 def test_apply_symop_roundtrip(mtz_by_spacegroup):
     """
     Test DataSet.apply_symop() using fmodel datasets. This test will
@@ -540,13 +585,13 @@ def test_apply_symop_roundtrip(mtz_by_spacegroup):
 def test_canonicalize_phases(data_fmodel, inplace):
     """Test DataSet.canonicalize_phases()"""
     temp = data_fmodel.copy()
-    temp["PHIFMODEL"] += np.random.randint(-5, 5, len(temp))*360.0
+    temp["PHIFMODEL"] += np.random.randint(-5, 5, len(temp)) * 360.0
     result = temp.canonicalize_phases(inplace=inplace)
-    
+
     original = rs.utils.to_structurefactor(data_fmodel.FMODEL, data_fmodel.PHIFMODEL)
     new = rs.utils.to_structurefactor(result.FMODEL, result.PHIFMODEL)
-    assert (result["PHIFMODEL"] >= -180.).all()
-    assert (result["PHIFMODEL"] <= 180.).all()
+    assert (result["PHIFMODEL"] >= -180.0).all()
+    assert (result["PHIFMODEL"] <= 180.0).all()
     assert np.allclose(new, original)
     if inplace:
         assert id(result) == id(temp)
@@ -556,19 +601,19 @@ def test_canonicalize_phases(data_fmodel, inplace):
 
 @pytest.mark.parametrize("sg1", [gemmi.SpaceGroup(96), None])
 @pytest.mark.parametrize("sg2", [gemmi.SpaceGroup(96), gemmi.SpaceGroup(19), None])
-@pytest.mark.parametrize("cell1", [
-    gemmi.UnitCell(78.9, 78.9, 38.1, 90, 90, 90),
-    None
-])
-@pytest.mark.parametrize("cell2", [
-    gemmi.UnitCell(78.97, 78.97, 38.25, 90, 90, 90),
-    gemmi.UnitCell(70.1, 70.1, 38.25, 90, 90, 90),
-    None
-])
+@pytest.mark.parametrize("cell1", [gemmi.UnitCell(78.9, 78.9, 38.1, 90, 90, 90), None])
+@pytest.mark.parametrize(
+    "cell2",
+    [
+        gemmi.UnitCell(78.97, 78.97, 38.25, 90, 90, 90),
+        gemmi.UnitCell(70.1, 70.1, 38.25, 90, 90, 90),
+        None,
+    ],
+)
 def test_is_isomorphous(data_unmerged, data_fmodel, sg1, sg2, cell1, cell2):
     """
-    Test DataSet.is_isomorphous() using HEWL data and FMODEL mtz files. 
-    9LYZ is isomorphous, and should return True. 
+    Test DataSet.is_isomorphous() using HEWL data and FMODEL mtz files.
+    9LYZ is isomorphous, and should return True.
     """
     data_unmerged.spacegroup = sg1
     data_unmerged.cell = cell1

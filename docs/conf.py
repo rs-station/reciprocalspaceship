@@ -10,9 +10,10 @@
 # add these directories to sys.path here. If the directory is relative to the
 # documentation root, use os.path.abspath to make it absolute, like shown here.
 
+import inspect
 import os
 import sys
-import inspect
+
 sys.path.insert(0, os.path.abspath('../reciprocalspaceship'))
 import reciprocalspaceship as rs
 
@@ -131,7 +132,7 @@ html_static_path = ['_static']
 # Add favicon
 html_favicon = 'img/rs-favicon_32x32.png'
 
-# Add 
+# Add
 html_logo = 'img/rs.png'
 
 # -- Resolve links to source code --------------------------------------------

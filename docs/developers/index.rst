@@ -11,14 +11,13 @@ methods and analyses for diffraction experiments.
 We hope that ``reciprocalspaceship`` will become a useful tool for crystallographers, and
 to that end, we invite anyone to contribute to the project on
 `GitHub <https://github.com/Hekstra-Lab/reciprocalspaceship>`_. This guide is intended to
-help you follow our best practices when contributing to the library. 
+help you follow our best practices when contributing to the library.
 
 .. toctree::
    :maxdepth: 1
 
    contributing
    utilities
+   style
    testing
    documentation
-
-   

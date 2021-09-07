@@ -1,5 +1,6 @@
-import numpy as np
 import gemmi
+import numpy as np
+
 
 def write_ccp4_map(realmap, mapfile, cell, spacegroup):
     """
@@ -31,5 +32,5 @@ def write_ccp4_map(realmap, mapfile, cell, spacegroup):
     ccp4.grid = grid
     ccp4.update_ccp4_header(2, True)
     ccp4.write_ccp4_map(mapfile)
-    
+
     return

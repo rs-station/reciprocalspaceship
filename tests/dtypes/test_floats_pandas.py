@@ -1,13 +1,15 @@
 """
-Pandas unittests for ExtensionDtypes and ExtensionArrays for custom 
+Pandas unittests for ExtensionDtypes and ExtensionArrays for custom
 reciprocalspaceship dtypes that are backed by numpy float32 arrays.
 """
 
-import pytest
 import numpy as np
-import reciprocalspaceship as rs
 import pandas as pd
+import pytest
 from pandas.tests.extension import base
+
+import reciprocalspaceship as rs
+
 
 @pytest.fixture(
     params=[
@@ -20,43 +22,50 @@ from pandas.tests.extension import base
         rs.FriedelIntensityDtype,
         rs.StandardDeviationFriedelIDtype,
         rs.NormalizedStructureFactorAmplitudeDtype,
-        rs.PhaseDtype,        
+        rs.PhaseDtype,
         rs.WeightDtype,
         rs.HendricksonLattmanDtype,
-        rs.MTZRealDtype
+        rs.MTZRealDtype,
     ]
 )
 def dtype(request):
     return request.param()
 
+
 @pytest.fixture
 def data(dtype):
     return pd.array(np.arange(0, 100), dtype=dtype)
+
 
 @pytest.fixture
 def data_for_twos(dtype):
     return pd.array(np.ones(100) * 2, dtype=dtype)
 
+
 @pytest.fixture
 def data_missing(dtype):
-    return pd.array([np.nan, 1.], dtype=dtype)
+    return pd.array([np.nan, 1.0], dtype=dtype)
+
 
 @pytest.fixture
 def data_for_sorting(dtype):
-    return pd.array([1., 2., 0.], dtype=dtype)
+    return pd.array([1.0, 2.0, 0.0], dtype=dtype)
+
 
 @pytest.fixture
 def data_missing_for_sorting(dtype):
-    return pd.array([1., np.nan, 0.], dtype=dtype)
+    return pd.array([1.0, np.nan, 0.0], dtype=dtype)
 
-@pytest.fixture(params=['data', 'data_missing'])
+
+@pytest.fixture(params=["data", "data_missing"])
 def all_data(request, data, data_missing):
     """Parametrized fixture giving 'data' and 'data_missing'"""
-    if request.param == 'data':
+    if request.param == "data":
         return data
-    elif request.param == 'data_missing':
+    elif request.param == "data_missing":
         return data_missing
-    
+
+
 @pytest.fixture
 def data_for_grouping(dtype):
     b = 1
@@ -65,29 +74,36 @@ def data_for_grouping(dtype):
     na = np.nan
     return pd.array([b, b, na, na, a, a, b, c], dtype=dtype)
 
+
 class TestCasting(base.BaseCastingTests):
     pass
+
 
 class TestConstructors(base.BaseConstructorsTests):
     pass
 
+
 class TestDtype(base.BaseDtypeTests):
     pass
+
 
 class TestGetitem(base.BaseGetitemTests):
     pass
 
+
 class TestGroupby(base.BaseGroupbyTests):
     pass
+
 
 class TestInterface(base.BaseInterfaceTests):
     pass
 
+
 class TestIO(base.BaseParsingTests):
     pass
 
-class TestMethods(base.BaseMethodsTests):
 
+class TestMethods(base.BaseMethodsTests):
     @pytest.mark.parametrize("dropna", [True, False])
     def test_value_counts(self, all_data, dropna):
         """
@@ -104,7 +120,7 @@ class TestMethods(base.BaseMethodsTests):
 
         print(result)
         print(expected)
-        
+
         self.assert_series_equal(result, expected)
 
     def test_value_counts_with_normalize(self, data):
@@ -113,14 +129,16 @@ class TestMethods(base.BaseMethodsTests):
         values = np.array(data[~data.isna()])
 
         result = (
-            rs.DataSeries(data, dtype=data.dtype).value_counts(normalize=True).sort_index()
+            rs.DataSeries(data, dtype=data.dtype)
+            .value_counts(normalize=True)
+            .sort_index()
         )
 
         expected = rs.DataSeries([1 / len(values)] * len(values), index=result.index)
         self.assert_series_equal(result, expected)
-        
+
+
 class TestComparisonOps(base.BaseComparisonOpsTests):
-    
     def _check_op(self, s, op, other, op_name, exc=NotImplementedError):
         if exc is None:
             result = op(s, other)
@@ -137,20 +155,26 @@ class TestComparisonOps(base.BaseComparisonOpsTests):
     def _compare_other(self, s, data, op_name, other):
         self.check_opname(s, op_name, other)
 
+
 class TestMissing(base.BaseMissingTests):
     pass
+
 
 class TestBooleanReduce(base.BaseBooleanReduceTests):
     pass
 
+
 class TestNumericReduce(base.BaseNumericReduceTests):
     pass
+
 
 class TestPrinting(base.BasePrintingTests):
     pass
 
+
 class TestReshaping(base.BaseReshapingTests):
     pass
+
 
 class TestSetitem(base.BaseSetitemTests):
     pass

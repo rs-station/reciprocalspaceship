@@ -5,7 +5,7 @@
 [![Anaconda-Server Badge](https://anaconda.org/conda-forge/reciprocalspaceship/badges/version.svg)](https://anaconda.org/conda-forge/reciprocalspaceship)
 [![codecov](https://codecov.io/gh/Hekstra-Lab/reciprocalspaceship/branch/master/graph/badge.svg)](https://codecov.io/gh/Hekstra-Lab/reciprocalspaceship)
 [![apm](https://img.shields.io/apm/l/vim-mode.svg)](https://github.com/Hekstra-Lab/reciprocalspaceship/blob/main/LICENSE)
-[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/Hekstra-Lab/reciprocalspaceship/main?filepath=docs%2Fexamples)  
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/Hekstra-Lab/reciprocalspaceship/main?filepath=docs%2Fexamples)
 
 Tools for exploring reciprocal space.
 
@@ -47,7 +47,7 @@ To get started with `reciprocalspaceship`, see our [quickstart guide](https://he
 
 ## Documentation
 
-For more details on the use of `reciprocalspaceship`, check out our [documentation](https://hekstra-lab.github.io/reciprocalspaceship). 
+For more details on the use of `reciprocalspaceship`, check out our [documentation](https://hekstra-lab.github.io/reciprocalspaceship).
 
 ## Reference
 

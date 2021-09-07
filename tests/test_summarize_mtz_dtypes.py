@@ -1,6 +1,8 @@
-import pytest
 import pandas as pd
+import pytest
+
 import reciprocalspaceship as rs
+
 
 @pytest.mark.parametrize("print_summary", [True, False])
 def test_summarize_mtz_dtypes(capsys, print_summary):
