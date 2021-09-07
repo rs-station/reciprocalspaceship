@@ -4,7 +4,7 @@ User Guide
 ==========
 
 This guide provides an overview of the design goals of ``reciprocalspaceship``, and some
-of the essential functionality for a new user to get started. 
+of the essential functionality for a new user to get started.
 
 .. toctree::
    :maxdepth: 1
@@ -14,4 +14,3 @@ of the essential functionality for a new user to get started.
    ../examples/0_quickstart.ipynb
    mtzdtypes.ipynb
    examples
-

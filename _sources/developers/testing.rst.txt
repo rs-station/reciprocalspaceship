@@ -55,5 +55,4 @@ Continuous Integration
 ----------------------
 
 The test suite for ``reciprocalspaceship`` is set up to run on any pull request. It will be necessary to
-fix any issues before the changes can be merged into the project repository. 
-  
+fix any issues before the changes can be merged into the project repository.

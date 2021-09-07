@@ -16,8 +16,8 @@
   <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
   <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
-  <link rel="stylesheet" href="../_static/panels-bootstrap.5fd3999ee7762ccc51105388f4a9d115.css" type="text/css" />
   <link rel="stylesheet" href="../_static/panels-main.c949a650a448cc0ae9fd3441c0e17fb0.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/panels-bootstrap.5fd3999ee7762ccc51105388f4a9d115.css" type="text/css" />
   <link rel="stylesheet" href="../_static/panels-variables.06eb56fa6e07937060861dad626602ad.css" type="text/css" />
 
   
@@ -101,8 +101,12 @@
 <li class="toctree-l1"><a class="reference internal" href="../userguide/index.html">User Guide</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../api/index.html">API Reference</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="index.html">For Developers</a><ul class="current">
-<li class="toctree-l2 current"><a class="current reference internal" href="#">Contributing to <code class="docutils literal notranslate"><span class="pre">rs</span></code></a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Contributing to <code class="docutils literal notranslate"><span class="pre">rs</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#setting-up-a-dev-environment">Setting up a Dev Environment</a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="utilities.html">Utility Functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="style.html">Code Style</a></li>
 <li class="toctree-l2"><a class="reference internal" href="testing.html">Running Tests</a></li>
 <li class="toctree-l2"><a class="reference internal" href="documentation.html">Building Documentation</a></li>
 </ul>
@@ -208,6 +212,18 @@ ask any questions.</p>
 <p>We also invite you to file Pull Requests in order to help us maintain this library.
 No Pull Request is too small (in fact, we encourage you to only tackle single tasks in a PR).
 Contributions to the library, tests, and documentation are all welcome.</p>
+<div class="section" id="setting-up-a-dev-environment">
+<h2>Setting up a Dev Environment<a class="headerlink" href="#setting-up-a-dev-environment" title="Permalink to this headline">¶</a></h2>
+<p>There are additional dependencies that are needed for running the testing suite, building documentation, and enforcing our code style.
+These can be installed by running the following commands from the project home directory:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="o">-</span><span class="n">e</span> <span class="o">.</span><span class="p">[</span><span class="n">dev</span><span class="p">]</span>
+<span class="n">pip</span> <span class="n">install</span> <span class="n">pre</span><span class="o">-</span><span class="n">commit</span>
+<span class="n">pre</span><span class="o">-</span><span class="n">commit</span> <span class="n">install</span>
+</pre></div>
+</div>
+<p>The above commands install a few extra dependencies, and also add a pre-commit hook that is used to enforce our code style. There are more
+detailed sections in this documentation that cover our <a class="reference internal" href="style.html"><span class="doc">code style</span></a>, <a class="reference internal" href="testing.html"><span class="doc">testing framework</span></a>, and <a class="reference internal" href="documentation.html"><span class="doc">documentation</span></a>.</p>
+</div>
 </div>
 
 
