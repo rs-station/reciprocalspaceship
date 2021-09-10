@@ -42,7 +42,7 @@ def test_read_stream(spacegroup):
     if isinstance(spacegroup, gemmi.SpaceGroup):
         assert hewl.spacegroup.xhm() == spacegroup.xhm()
     elif spacegroup is None:
-        pass
+        assert hewl.spacegroup is None
     else:
         assert hewl.spacegroup.xhm() == gemmi.SpaceGroup(spacegroup).xhm()
 
