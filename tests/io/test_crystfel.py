@@ -28,7 +28,7 @@ class TestCrystFEL(unittest.TestCase):
 
         self.assertEqual(list(hewl.index.names), ["H", "K", "L"])
         self.assertTrue("I" in hewl.columns)
-        self.assertTrue("sigmaI" in hewl.columns)
+        self.assertTrue("SigI" in hewl.columns)
         self.assertTrue("BATCH" in hewl.columns)
         self.assertTrue("s1x" in hewl.columns)
         self.assertTrue("s1y" in hewl.columns)
@@ -38,7 +38,7 @@ class TestCrystFEL(unittest.TestCase):
         self.assertTrue("YDET" in hewl.columns)
         self.assertIsInstance(hewl, rs.DataSet)
         self.assertIsInstance(hewl["I"], rs.DataSeries)
-        self.assertIsInstance(hewl["sigmaI"], rs.DataSeries)
+        self.assertIsInstance(hewl["SigI"], rs.DataSeries)
         self.assertIsInstance(hewl["ewald_offset"], rs.DataSeries)
         self.assertIsNone(hewl.spacegroup)
         self.assertTrue(hewl.cell is not None)
