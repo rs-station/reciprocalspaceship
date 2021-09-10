@@ -1,10 +1,8 @@
 #!/usr/bin/env python
 
 import numpy as np
-import pymc3 as pm
 import pandas as pd
-
-
+import pymc3 as pm
 
 inFN = "fw_test_data.csv"
 outFN = "fw_mcmc_data.csv"

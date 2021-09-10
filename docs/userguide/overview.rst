@@ -22,5 +22,3 @@ space asymmetric unit are already implemented as built-in methods. Perhaps most 
 ``rs.DataSet`` objects make it easy to use modern scientific computing libraries to support new
 methods and analyses, and can be used to write new analysis pipelines in a convenient and performant
 way without sacrificing reproducibility.
-
-

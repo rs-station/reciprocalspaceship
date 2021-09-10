@@ -1,5 +1,7 @@
 import pandas as pd
+
 from reciprocalspaceship import DataSeries
+
 
 def read_pickle(filepath_or_buffer):
     """

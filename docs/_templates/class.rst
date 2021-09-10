@@ -18,7 +18,7 @@
    {% endfor %}
    {% endif %}
    {% endblock %}
-	       
+
    {% block methods %}
 
    {% if methods %}
@@ -32,4 +32,3 @@
    {%- endfor %}
    {% endif %}
    {% endblock %}
-
