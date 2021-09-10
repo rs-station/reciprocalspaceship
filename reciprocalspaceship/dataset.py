@@ -122,9 +122,9 @@ class DataSet(pd.DataFrame):
             self.__finalize__(data)
 
         # Provided values for DataSet _metadata take precedence
-        if spacegroup:
+        if spacegroup is not None:
             self.spacegroup = spacegroup
-        if cell:
+        if cell is not None:
             self.cell = cell
         if merged is not None:
             self.merged = merged

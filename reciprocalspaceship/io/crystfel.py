@@ -159,7 +159,7 @@ def _parse_stream(filename: str) -> dict:
                     "K": k,
                     "L": l,
                     "I": float(I),
-                    "sigmaI": float(sigmaI),
+                    "SigI": float(sigmaI),
                     "BATCH": crystal_idx,
                     "s1x": s1x,
                     "s1y": s1y,
@@ -214,14 +214,17 @@ def _parse_stream(filename: str) -> dict:
     return answ_crystals, rv_cell_param
 
 
-def read_crystfel(streamfile) -> DataSet:
+def read_crystfel(streamfile: str, spacegroup=None) -> DataSet:
     """
-    Initialize attributes and populate the DataSet object with data from a CrystFEL stream with indexed reflections. This is the output format used by CrystFEL software when processing still diffraction data.
+    Initialize attributes and populate the DataSet object with data from a CrystFEL stream with indexed reflections.
+    This is the output format used by CrystFEL software when processing still diffraction data.
 
     Parameters
     ----------
-    streamfile : stream filename
+    streamfile : str
         name of a .stream file
+    spacegroup : gemmi.SpaceGroup or int or string (optional)
+        optionally set the spacegroup of the returned DataSet.
 
     Returns
     --------
@@ -245,7 +248,7 @@ def read_crystfel(streamfile) -> DataSet:
         "K": "H",
         "L": "H",
         "I": "J",
-        "sigmaI": "Q",
+        "SigI": "Q",
         "BATCH": "B",
         "s1x": "R",
         "s1y": "R",
@@ -255,12 +258,13 @@ def read_crystfel(streamfile) -> DataSet:
         "XDET": "R",
         "YDET": "R",
     }
-    dataset = DataSet()
+    dataset = DataSet(
+        spacegroup=spacegroup,
+        cell=cell,
+        merged=False,  # CrystFEL stream is always unmerged
+    )
     for k, v in df.items():
         dataset[k] = v.astype(mtzdtypes[k])
     dataset.set_index(["H", "K", "L"], inplace=True)
-
-    dataset.merged = False  # CrystFEL stream is always unmerged
-    dataset.cell = cell
 
     return dataset
