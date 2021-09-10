@@ -214,7 +214,7 @@ def _parse_stream(filename: str) -> dict:
     return answ_crystals, rv_cell_param
 
 
-def read_crystfel(streamfile : str, spacegroup=None) -> DataSet:
+def read_crystfel(streamfile: str, spacegroup=None) -> DataSet:
     """
     Initialize attributes and populate the DataSet object with data from a CrystFEL stream with indexed reflections.
     This is the output format used by CrystFEL software when processing still diffraction data.
