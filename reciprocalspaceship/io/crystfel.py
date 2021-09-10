@@ -241,19 +241,19 @@ def read_crystfel(streamfile) -> DataSet:
     # s1{x,y,z} -- R
     # ewald_offset -- R
     mtzdtypes = {
-        "H" : "H",
-        "K" : "H",
-        "L" : "H",
-        "I" : "J",
-        "SigI" : "Q",
-        "BATCH" : "B",
-        "s1x" : "R",
-        "s1y" : "R",
-        "s1z" : "R",
-        "ewald_offset" : "R",
-        "angular_ewald_offset" : "R",
-        "XDET" : "R",
-        "YDET" : "R",
+        "H": "H",
+        "K": "H",
+        "L": "H",
+        "I": "J",
+        "SigI": "Q",
+        "BATCH": "B",
+        "s1x": "R",
+        "s1y": "R",
+        "s1z": "R",
+        "ewald_offset": "R",
+        "angular_ewald_offset": "R",
+        "XDET": "R",
+        "YDET": "R",
     }
     dataset = DataSet()
     for k, v in df.items():
