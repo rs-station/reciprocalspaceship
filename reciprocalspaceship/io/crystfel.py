@@ -216,7 +216,7 @@ def _parse_stream(filename: str) -> dict:
 
 def read_crystfel(streamfile : str, spacegroup=None) -> DataSet:
     """
-    Initialize attributes and populate the DataSet object with data from a CrystFEL stream with indexed reflections. 
+    Initialize attributes and populate the DataSet object with data from a CrystFEL stream with indexed reflections.
     This is the output format used by CrystFEL software when processing still diffraction data.
 
     Parameters
@@ -224,7 +224,7 @@ def read_crystfel(streamfile : str, spacegroup=None) -> DataSet:
     streamfile : stream filename
         name of a .stream file
     spacegroup : gemmi.SpaceGroup or int or string (optional)
-        optionally set the spacegroup of the returned DataSet. 
+        optionally set the spacegroup of the returned DataSet.
 
     Returns
     --------
@@ -261,7 +261,7 @@ def read_crystfel(streamfile : str, spacegroup=None) -> DataSet:
     dataset = DataSet(
         spacegroup=spacegroup,
         cell=cell,
-        merged = False,  # CrystFEL stream is always unmerged
+        merged=False,  # CrystFEL stream is always unmerged
     )
     for k, v in df.items():
         dataset[k] = v.astype(mtzdtypes[k])
