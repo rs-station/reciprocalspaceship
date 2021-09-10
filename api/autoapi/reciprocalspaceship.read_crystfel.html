@@ -213,11 +213,15 @@
 <h1>reciprocalspaceship.read_crystfel<a class="headerlink" href="#reciprocalspaceship-read-crystfel" title="Permalink to this headline">¶</a></h1>
 <dl class="py function">
 <dt class="sig sig-object py" id="reciprocalspaceship.read_crystfel">
-<span class="sig-prename descclassname"><span class="pre">reciprocalspaceship.</span></span><span class="sig-name descname"><span class="pre">read_crystfel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">streamfile</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="reciprocalspaceship.DataSet.html#reciprocalspaceship.DataSet" title="reciprocalspaceship.dataset.DataSet"><span class="pre">reciprocalspaceship.dataset.DataSet</span></a></span></span><a class="reference external" href="https://github.com/Hekstra-Lab/reciprocalspaceship/blob/main/reciprocalspaceship/io/crystfel.py#L217-L266"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#reciprocalspaceship.read_crystfel" title="Permalink to this definition">¶</a></dt>
-<dd><p>Initialize attributes and populate the DataSet object with data from a CrystFEL stream with indexed reflections. This is the output format used by CrystFEL software when processing still diffraction data.</p>
+<span class="sig-prename descclassname"><span class="pre">reciprocalspaceship.</span></span><span class="sig-name descname"><span class="pre">read_crystfel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">streamfile</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">spacegroup</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="reciprocalspaceship.DataSet.html#reciprocalspaceship.DataSet" title="reciprocalspaceship.dataset.DataSet"><span class="pre">reciprocalspaceship.dataset.DataSet</span></a></span></span><a class="reference external" href="https://github.com/Hekstra-Lab/reciprocalspaceship/blob/main/reciprocalspaceship/io/crystfel.py#L217-L270"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#reciprocalspaceship.read_crystfel" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize attributes and populate the DataSet object with data from a CrystFEL stream with indexed reflections.
+This is the output format used by CrystFEL software when processing still diffraction data.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>streamfile</strong> (<em>stream filename</em>) – name of a .stream file</p>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>streamfile</strong> (<em>str</em>) – name of a .stream file</p></li>
+<li><p><strong>spacegroup</strong> (<em>gemmi.SpaceGroup or int or string (optional)</em>) – optionally set the spacegroup of the returned DataSet.</p></li>
+</ul>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p><em>rs.DataSet</em></p>
