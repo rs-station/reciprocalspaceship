@@ -221,7 +221,7 @@ def read_crystfel(streamfile : str, spacegroup=None) -> DataSet:
 
     Parameters
     ----------
-    streamfile : stream filename
+    streamfile : str
         name of a .stream file
     spacegroup : gemmi.SpaceGroup or int or string (optional)
         optionally set the spacegroup of the returned DataSet.
