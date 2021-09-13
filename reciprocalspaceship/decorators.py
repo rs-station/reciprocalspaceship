@@ -1,6 +1,8 @@
 from functools import wraps
 from inspect import signature
 
+import gemmi
+
 
 def inplace(f):
     """
