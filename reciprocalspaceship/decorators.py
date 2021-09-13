@@ -2,6 +2,7 @@ from functools import wraps
 from inspect import signature
 
 import gemmi
+import numpy as np
 
 
 def inplace(f):
