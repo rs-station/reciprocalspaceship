@@ -48,3 +48,52 @@ def range_indexed(f):
         return result.__finalize__(ds)
 
     return wrapped
+
+
+def _convert_spacegroup(val):
+    """Helper method to try to convert value to gemmi.SpaceGroup"""
+    if isinstance(val, gemmi.SpaceGroup) or (val is None):
+        return val
+    elif isinstance(val, (str, int)):
+        return gemmi.SpaceGroup(val)
+    else:
+        raise ValueError(f"Cannot construct gemmi.SpaceGroup from value: {val}")
+
+
+def spacegroupify(func=None, *sg_args):
+    """
+    A decorator that converts spacegroup arguments to gemmi.SpaceGroup objects.
+
+    This decorator facilitates writing methods that use gemmi.SpaceGroup objects
+    by allowing the method to accept spacegroup arguments as str, int, or
+    gemmi.SpaceGroup without needing to write boilerplate argument checking code.
+
+    When specified as ``@spacegroupify`` or ``@spacegroupify()``, any arguments
+    named "spacegroup", "space_group", or "sg" are automatically coerced to provide
+    gemmi.SpaceGroup values.
+
+    When specified with argument names, such as ``@spacegroupify("parent_sg")``, only
+    the provided argument names are coerced to gemmi.SpaceGroup. The provided argument
+    needs to exactly match an argument in the decorated function's call signature in order
+    for this decorator to coerce the input values.
+    """
+    if not callable(func) and func is not None:
+        sg_args = (func, *sg_args)
+
+    if len(sg_args) == 0:
+        sg_args = ("spacegroup", "space_group", "sg")
+
+    def _decorator(f):
+        @wraps(f)
+        def wrapped(*args, **kwargs):
+            sig = signature(f)
+            bargs = sig.bind(*args, **kwargs)
+            bargs.apply_defaults()
+            for arg in sg_args:
+                if arg in bargs.arguments:
+                    bargs.arguments[arg] = _convert_spacegroup(bargs.arguments[arg])
+            return f(**bargs.arguments)
+
+        return wrapped
+
+    return _decorator(func) if callable(func) else _decorator
