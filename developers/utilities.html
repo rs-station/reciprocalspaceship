@@ -244,21 +244,21 @@ denoting value ranges</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="reciprocalspaceship.utils.canonicalize_phases">
-<span class="sig-prename descclassname"><span class="pre">reciprocalspaceship.utils.</span></span><span class="sig-name descname"><span class="pre">canonicalize_phases</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">phases</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">deg</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/Hekstra-Lab/reciprocalspaceship/blob/main/reciprocalspaceship/utils/phases.py#L5-L15"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#reciprocalspaceship.utils.canonicalize_phases" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">reciprocalspaceship.utils.</span></span><span class="sig-name descname"><span class="pre">canonicalize_phases</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">phases</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">deg</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/Hekstra-Lab/reciprocalspaceship/blob/main/reciprocalspaceship/utils/phases.py#L7-L17"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#reciprocalspaceship.utils.canonicalize_phases" title="Permalink to this definition"></a></dt>
 <dd><p>Place phases in the interval between -180 and 180. deg == True implies
 degrees; False implies radians.</p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="reciprocalspaceship.utils.compute_dHKL">
-<span class="sig-prename descclassname"><span class="pre">reciprocalspaceship.utils.</span></span><span class="sig-name descname"><span class="pre">compute_dHKL</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">H</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cell</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/Hekstra-Lab/reciprocalspaceship/blob/main/reciprocalspaceship/utils/cell.py#L6-L28"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#reciprocalspaceship.utils.compute_dHKL" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">reciprocalspaceship.utils.</span></span><span class="sig-name descname"><span class="pre">compute_dHKL</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">H</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cell</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/Hekstra-Lab/reciprocalspaceship/blob/main/reciprocalspaceship/utils/cell.py#L6-L29"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#reciprocalspaceship.utils.compute_dHKL" title="Permalink to this definition"></a></dt>
 <dd><p>Compute the real space lattice plane spacing, d, associated with
 miller indices and cell.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>H</strong> (<em>array</em>) – An nx3 array of numerical miller indices.</p></li>
-<li><p><strong>cell</strong> (<em>gemmi.UnitCell</em>) – The gemmi UnitCell object with the cell parameters.</p></li>
+<li><p><strong>cell</strong> (<em>tuple, list, np.ndarray of cell parameters, or gemmi.UnitCell</em>) – Unit cell parameters</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -269,15 +269,15 @@ miller indices and cell.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="reciprocalspaceship.utils.compute_redundancy">
-<span class="sig-prename descclassname"><span class="pre">reciprocalspaceship.utils.</span></span><span class="sig-name descname"><span class="pre">compute_redundancy</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">hobs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cell</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">spacegroup</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">full_asu</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">anomalous</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dmin</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/Hekstra-Lab/reciprocalspaceship/blob/main/reciprocalspaceship/utils/stats.py#L7-L81"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#reciprocalspaceship.utils.compute_redundancy" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">reciprocalspaceship.utils.</span></span><span class="sig-name descname"><span class="pre">compute_redundancy</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">hobs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cell</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">spacegroup</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">full_asu</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">anomalous</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dmin</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/Hekstra-Lab/reciprocalspaceship/blob/main/reciprocalspaceship/utils/stats.py#L7-L83"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#reciprocalspaceship.utils.compute_redundancy" title="Permalink to this definition"></a></dt>
 <dd><p>Compute the multiplicity of all valid reflections in the reciprocal ASU.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>hobs</strong> (<em>np.array(int)</em>) – An n by 3 array of observed miller indices which are not necessarily
 in the reciprocal asymmetric unit</p></li>
-<li><p><strong>spacegroup</strong> (<em>gemmi.SpaceGroup</em>) – A gemmi SpaceGroup object.</p></li>
-<li><p><strong>cell</strong> (<em>gemmi.UnitCell</em>) – A gemmi UnitCell object.</p></li>
+<li><p><strong>cell</strong> (<em>tuple, list, np.ndarray of cell parameters, or gemmi.UnitCell</em>) – Unit cell parameters</p></li>
+<li><p><strong>spacegroup</strong> (<em>str, int, or gemmi.SpaceGroup</em>) – The space group of the dataset</p></li>
 <li><p><strong>full_asu</strong> (<em>bool (optional)</em>) – Include all the reflections in the calculation irrespective of whether they were
 observed.</p></li>
 <li><p><strong>anomalous</strong> (<em>bool (optional)</em>) – Whether or not the data are anomalous.</p></li>
@@ -296,13 +296,13 @@ observed.</p></li>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="reciprocalspaceship.utils.compute_structurefactor_multiplicity">
-<span class="sig-prename descclassname"><span class="pre">reciprocalspaceship.utils.</span></span><span class="sig-name descname"><span class="pre">compute_structurefactor_multiplicity</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">H</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sg</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">include_centering</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/Hekstra-Lab/reciprocalspaceship/blob/main/reciprocalspaceship/utils/structurefactors.py#L57-L105"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#reciprocalspaceship.utils.compute_structurefactor_multiplicity" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">reciprocalspaceship.utils.</span></span><span class="sig-name descname"><span class="pre">compute_structurefactor_multiplicity</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">H</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sg</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">include_centering</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/Hekstra-Lab/reciprocalspaceship/blob/main/reciprocalspaceship/utils/structurefactors.py#L58-L98"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#reciprocalspaceship.utils.compute_structurefactor_multiplicity" title="Permalink to this definition"></a></dt>
 <dd><p>Compute the multiplicity of each reflection in <code class="docutils literal notranslate"><span class="pre">H</span></code>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>H</strong> (<em>array</em>) – n x 3 array of Miller indices</p></li>
-<li><p><strong>spacegroup</strong> (<em>gemmi.SpaceGroup, gemmi.GroupOps</em>) – The space group to identify the asymmetric unit</p></li>
+<li><p><strong>spacegroup</strong> (<em>str, int, gemmi.SpaceGroup</em>) – The space group to identify the asymmetric unit</p></li>
 <li><p><strong>include_centering</strong> (<em>bool</em>) – Whether or not to include the multiplicity inherent in the lattice centering.
 The default is True. If False, the minimum value of epsilon will be 1
 irrespective of space group.</p></li>
@@ -335,7 +335,7 @@ of each hkl.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="reciprocalspaceship.utils.from_structurefactor">
-<span class="sig-prename descclassname"><span class="pre">reciprocalspaceship.utils.</span></span><span class="sig-name descname"><span class="pre">from_structurefactor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sfs</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/Hekstra-Lab/reciprocalspaceship/blob/main/reciprocalspaceship/utils/structurefactors.py#L31-L54"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#reciprocalspaceship.utils.from_structurefactor" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">reciprocalspaceship.utils.</span></span><span class="sig-name descname"><span class="pre">from_structurefactor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sfs</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/Hekstra-Lab/reciprocalspaceship/blob/main/reciprocalspaceship/utils/structurefactors.py#L32-L55"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#reciprocalspaceship.utils.from_structurefactor" title="Permalink to this definition"></a></dt>
 <dd><p>Convert complex structure factors into structure factor amplitudes
 and phases</p>
 <dl class="field-list simple">
@@ -351,7 +351,7 @@ phases corresponding to the provided complex structure factors</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="reciprocalspaceship.utils.generate_reciprocal_asu">
-<span class="sig-prename descclassname"><span class="pre">reciprocalspaceship.utils.</span></span><span class="sig-name descname"><span class="pre">generate_reciprocal_asu</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cell</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">spacegroup</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dmin</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">anomalous</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/Hekstra-Lab/reciprocalspaceship/blob/main/reciprocalspaceship/utils/asu.py#L191-L224"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#reciprocalspaceship.utils.generate_reciprocal_asu" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">reciprocalspaceship.utils.</span></span><span class="sig-name descname"><span class="pre">generate_reciprocal_asu</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cell</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">spacegroup</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dmin</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">anomalous</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/Hekstra-Lab/reciprocalspaceship/blob/main/reciprocalspaceship/utils/asu.py#L194-L229"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#reciprocalspaceship.utils.generate_reciprocal_asu" title="Permalink to this definition"></a></dt>
 <dd><p>Generate the Miller indices of the reflections in the reciprocal ASU.</p>
 <p>If <cite>anomalous=True</cite> the Miller indices of acentric reflections will be
 included in both the Friedel-plus and Friedel-minus halves of reciprocal
@@ -360,8 +360,8 @@ reciprocal ASU.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>cell</strong> (<em>gemmi.UnitCell</em>) – A gemmi cell object.</p></li>
-<li><p><strong>spacegroup</strong> (<em>gemmi.SpaceGroup</em>) – A gemmi spacegroup object.</p></li>
+<li><p><strong>cell</strong> (<em>tuple, list, np.ndarray of paramaters, or gemmi.UnitCell</em>) – Unit cell parameters or UnitCell object</p></li>
+<li><p><strong>spacegroup</strong> (<em>str, int, gemmi.SpaceGroup</em>) – Space group to identify asymmetric unit</p></li>
 <li><p><strong>dmin</strong> (<em>float</em>) – Maximum resolution of the data in Å</p></li>
 <li><p><strong>anomalous</strong> (<em>bool</em>) – Whether to include Friedel-minus Miller indices to represent anomalous data</p></li>
 </ul>
@@ -374,12 +374,12 @@ reciprocal ASU.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="reciprocalspaceship.utils.generate_reciprocal_cell">
-<span class="sig-prename descclassname"><span class="pre">reciprocalspaceship.utils.</span></span><span class="sig-name descname"><span class="pre">generate_reciprocal_cell</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">cell</span></em>, <em class="sig-param"><span class="pre">dmin</span></em>, <em class="sig-param"><span class="pre">dtype=&lt;class</span> <span class="pre">'numpy.int32'&gt;</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/Hekstra-Lab/reciprocalspaceship/blob/main/reciprocalspaceship/utils/cell.py#L31-L64"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#reciprocalspaceship.utils.generate_reciprocal_cell" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">reciprocalspaceship.utils.</span></span><span class="sig-name descname"><span class="pre">generate_reciprocal_cell</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">cell</span></em>, <em class="sig-param"><span class="pre">dmin</span></em>, <em class="sig-param"><span class="pre">dtype=&lt;class</span> <span class="pre">'numpy.int32'&gt;</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/Hekstra-Lab/reciprocalspaceship/blob/main/reciprocalspaceship/utils/cell.py#L32-L66"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#reciprocalspaceship.utils.generate_reciprocal_cell" title="Permalink to this definition"></a></dt>
 <dd><p>Generate the miller indices of the full P1 reciprocal cell.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>cell</strong> (<em>gemmi.UnitCell</em>) – A gemmi cell object.</p></li>
+<li><p><strong>cell</strong> (<em>tuple, list, np.ndarray of cell parameters, or gemmi.UnitCell</em>) – Unit cell parameters</p></li>
 <li><p><strong>dmin</strong> (<em>float</em>) – Maximum resolution of the data in Å</p></li>
 <li><p><strong>dtype</strong> (<em>np.dtype (optional)</em>) – The data type of the returned array. The default is np.int32.</p></li>
 </ul>
@@ -392,7 +392,7 @@ reciprocal ASU.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="reciprocalspaceship.utils.get_phase_restrictions">
-<span class="sig-prename descclassname"><span class="pre">reciprocalspaceship.utils.</span></span><span class="sig-name descname"><span class="pre">get_phase_restrictions</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">H</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">spacegroup</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/Hekstra-Lab/reciprocalspaceship/blob/main/reciprocalspaceship/utils/phases.py#L18-L70"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#reciprocalspaceship.utils.get_phase_restrictions" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">reciprocalspaceship.utils.</span></span><span class="sig-name descname"><span class="pre">get_phase_restrictions</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">H</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">spacegroup</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/Hekstra-Lab/reciprocalspaceship/blob/main/reciprocalspaceship/utils/phases.py#L20-L73"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#reciprocalspaceship.utils.get_phase_restrictions" title="Permalink to this definition"></a></dt>
 <dd><p>Return phase restrictions for Miller indices in a given space group.</p>
 <p>If there are no phase restrictions, an empty list is returned for that
 Miller index. If a given Miller index is systematically absent an
@@ -401,7 +401,7 @@ empty list is also returned.</p>
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>H</strong> (<em>array</em>) – n x 3 array of Miller indices</p></li>
-<li><p><strong>spacegroup</strong> (<em>gemmi.SpaceGroup</em>) – Space group for determining phase restrictions</p></li>
+<li><p><strong>spacegroup</strong> (<em>str, int, gemmi.SpaceGroup</em>) – Space group for determining phase restrictions</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -413,7 +413,7 @@ list is returned for Miller indices without phase restrictions</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="reciprocalspaceship.utils.hkl_to_asu">
-<span class="sig-prename descclassname"><span class="pre">reciprocalspaceship.utils.</span></span><span class="sig-name descname"><span class="pre">hkl_to_asu</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">H</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">spacegroup</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">return_phase_shifts</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/Hekstra-Lab/reciprocalspaceship/blob/main/reciprocalspaceship/utils/asu.py#L62-L131"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#reciprocalspaceship.utils.hkl_to_asu" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">reciprocalspaceship.utils.</span></span><span class="sig-name descname"><span class="pre">hkl_to_asu</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">H</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">spacegroup</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">return_phase_shifts</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/Hekstra-Lab/reciprocalspaceship/blob/main/reciprocalspaceship/utils/asu.py#L63-L133"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#reciprocalspaceship.utils.hkl_to_asu" title="Permalink to this definition"></a></dt>
 <dd><p>Map hkls to the asymmetric unit and optionally return shifts for the associated phases.</p>
 <p class="rubric">Examples</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">H_asu</span><span class="p">,</span> <span class="n">phi_coeff</span><span class="p">,</span> <span class="n">phi_shift</span> <span class="o">=</span> <span class="n">hkl_to_asu</span><span class="p">(</span><span class="n">H</span><span class="p">,</span> <span class="n">spacegroup</span><span class="p">,</span> <span class="n">return_phase_shifts</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
@@ -424,7 +424,7 @@ list is returned for Miller indices without phase restrictions</p>
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>H</strong> (<em>array</em>) – n x 3 array of Miller indices</p></li>
-<li><p><strong>spacegroup</strong> (<em>gemmi.SpaceGroup</em>) – The space group to identify the asymmetric unit</p></li>
+<li><p><strong>spacegroup</strong> (<em>str, int, or gemmi.SpaceGroup</em>) – The space group to identify the asymmetric unit</p></li>
 <li><p><strong>return_phase_shifts</strong> (<em>bool (optional)</em>) – If True, return the phase shift and phase multiplier to apply to each miller index</p></li>
 </ul>
 </dd>
@@ -443,7 +443,7 @@ This is needed to output an unmerged mtz file.</p></li>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="reciprocalspaceship.utils.hkl_to_observed">
-<span class="sig-prename descclassname"><span class="pre">reciprocalspaceship.utils.</span></span><span class="sig-name descname"><span class="pre">hkl_to_observed</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">H</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">isym</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sg</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">return_phase_shifts</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/Hekstra-Lab/reciprocalspaceship/blob/main/reciprocalspaceship/utils/asu.py#L134-L188"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#reciprocalspaceship.utils.hkl_to_observed" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">reciprocalspaceship.utils.</span></span><span class="sig-name descname"><span class="pre">hkl_to_observed</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">H</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">isym</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sg</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">return_phase_shifts</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/Hekstra-Lab/reciprocalspaceship/blob/main/reciprocalspaceship/utils/asu.py#L136-L191"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#reciprocalspaceship.utils.hkl_to_observed" title="Permalink to this definition"></a></dt>
 <dd><p>Apply symmetry operations to move miller indices in the reciprocal asymmetric unit to their originally observed locations. Optionally, return the corresponding phase shifts.</p>
 <p class="rubric">Examples</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">H_obs</span><span class="p">,</span> <span class="n">phi_coeff</span><span class="p">,</span> <span class="n">phi_shift</span> <span class="o">=</span> <span class="n">hkl_to_observed</span><span class="p">(</span><span class="n">H</span><span class="p">,</span> <span class="n">isym</span><span class="p">,</span> <span class="n">spacegroup</span><span class="p">,</span> <span class="n">return_phase_shifts</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
@@ -455,7 +455,7 @@ This is needed to output an unmerged mtz file.</p></li>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>H</strong> (<em>array</em>) – n x 3 array of Miller indices</p></li>
 <li><p><strong>isym</strong> (<em>array</em>) – integer array of isym values corresponding to the symmetry operator used to map the original miller index into the asu. see mtz spec for an explanation of this.</p></li>
-<li><p><strong>sg</strong> (<em>gemmi.SpaceGroup</em>) – The space group to identify the asymmetric unit</p></li>
+<li><p><strong>sg</strong> (<em>str, int, or gemmi.SpaceGroup</em>) – The space group to identify the asymmetric unit</p></li>
 <li><p><strong>return_phase_shifts</strong> (<em>bool (optional)</em>) – If True, return the phase shift and phase multiplier to apply to each miller index</p></li>
 </ul>
 </dd>
@@ -472,13 +472,13 @@ This is needed to output an unmerged mtz file.</p></li>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="reciprocalspaceship.utils.in_asu">
-<span class="sig-prename descclassname"><span class="pre">reciprocalspaceship.utils.</span></span><span class="sig-name descname"><span class="pre">in_asu</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">H</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">spacegroup</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/Hekstra-Lab/reciprocalspaceship/blob/main/reciprocalspaceship/utils/asu.py#L37-L59"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#reciprocalspaceship.utils.in_asu" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">reciprocalspaceship.utils.</span></span><span class="sig-name descname"><span class="pre">in_asu</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">H</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">spacegroup</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/Hekstra-Lab/reciprocalspaceship/blob/main/reciprocalspaceship/utils/asu.py#L37-L60"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#reciprocalspaceship.utils.in_asu" title="Permalink to this definition"></a></dt>
 <dd><p>Check to see if Miller indices are in the asymmetric unit of a space group.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>H</strong> (<em>array</em>) – n x 3 array of Miller indices</p></li>
-<li><p><strong>spacegroup</strong> (<em>gemmi.SpaceGroup</em>) – The space group to identify the asymmetric unit</p></li>
+<li><p><strong>spacegroup</strong> (<em>str, int, or gemmi.SpaceGroup</em>) – The space group to identify the asymmetric unit</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -489,14 +489,14 @@ This is needed to output an unmerged mtz file.</p></li>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="reciprocalspaceship.utils.is_absent">
-<span class="sig-prename descclassname"><span class="pre">reciprocalspaceship.utils.</span></span><span class="sig-name descname"><span class="pre">is_absent</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">H</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">spacegroup</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/Hekstra-Lab/reciprocalspaceship/blob/main/reciprocalspaceship/utils/structurefactors.py#L139-L166"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#reciprocalspaceship.utils.is_absent" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">reciprocalspaceship.utils.</span></span><span class="sig-name descname"><span class="pre">is_absent</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">H</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">spacegroup</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/Hekstra-Lab/reciprocalspaceship/blob/main/reciprocalspaceship/utils/structurefactors.py#L124-L142"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#reciprocalspaceship.utils.is_absent" title="Permalink to this definition"></a></dt>
 <dd><p>Determine if Miller indices are systematically absent in a given
 spacegroup.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>H</strong> (<em>array</em>) – n x 3 array of Miller indices</p></li>
-<li><p><strong>spacegroup</strong> (<em>gemmi.SpaceGroup, gemmi.GroupOps</em>) – The space group in which to classify systematic absences</p></li>
+<li><p><strong>spacegroup</strong> (<em>str, int, gemmi.SpaceGroup</em>) – The space group in which to classify systematic absences</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -507,13 +507,13 @@ spacegroup.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="reciprocalspaceship.utils.is_centric">
-<span class="sig-prename descclassname"><span class="pre">reciprocalspaceship.utils.</span></span><span class="sig-name descname"><span class="pre">is_centric</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">H</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">spacegroup</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/Hekstra-Lab/reciprocalspaceship/blob/main/reciprocalspaceship/utils/structurefactors.py#L108-L136"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#reciprocalspaceship.utils.is_centric" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">reciprocalspaceship.utils.</span></span><span class="sig-name descname"><span class="pre">is_centric</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">H</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">spacegroup</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/Hekstra-Lab/reciprocalspaceship/blob/main/reciprocalspaceship/utils/structurefactors.py#L101-L121"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#reciprocalspaceship.utils.is_centric" title="Permalink to this definition"></a></dt>
 <dd><p>Determine if Miller indices are centric in a given spacegroup</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>H</strong> (<em>array</em>) – n x 3 array of Miller indices</p></li>
-<li><p><strong>spacegroup</strong> (<em>gemmi.SpaceGroup, gemmi.GroupOps</em>) – The space group in which to classify centrics</p></li>
+<li><p><strong>spacegroup</strong> (<em>str, int, gemmi.SpaceGroup</em>) – The space group in which to classify centrics</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -541,7 +541,7 @@ spacegroup.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="reciprocalspaceship.utils.to_structurefactor">
-<span class="sig-prename descclassname"><span class="pre">reciprocalspaceship.utils.</span></span><span class="sig-name descname"><span class="pre">to_structurefactor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sfamps</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">phases</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/Hekstra-Lab/reciprocalspaceship/blob/main/reciprocalspaceship/utils/structurefactors.py#L7-L28"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#reciprocalspaceship.utils.to_structurefactor" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">reciprocalspaceship.utils.</span></span><span class="sig-name descname"><span class="pre">to_structurefactor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sfamps</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">phases</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/Hekstra-Lab/reciprocalspaceship/blob/main/reciprocalspaceship/utils/structurefactors.py#L8-L29"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#reciprocalspaceship.utils.to_structurefactor" title="Permalink to this definition"></a></dt>
 <dd><p>Convert structure factor amplitude and phase to complex structure
 factors</p>
 <dl class="field-list simple">
