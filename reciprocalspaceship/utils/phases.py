@@ -1,6 +1,8 @@
 import gemmi
 import numpy as np
 
+from reciprocalspaceship.decorators import spacegroupify
+
 
 def canonicalize_phases(phases, deg=True):
     """
@@ -15,6 +17,7 @@ def canonicalize_phases(phases, deg=True):
         raise TypeError(f"deg has type {type(deg)}, but it should have type bool")
 
 
+@spacegroupify
 def get_phase_restrictions(H, spacegroup):
     """
     Return phase restrictions for Miller indices in a given space group.
@@ -27,7 +30,7 @@ def get_phase_restrictions(H, spacegroup):
     ----------
     H : array
         n x 3 array of Miller indices
-    spacegroup : gemmi.SpaceGroup
+    spacegroup : str, int, gemmi.SpaceGroup
         Space group for determining phase restrictions
 
     Returns

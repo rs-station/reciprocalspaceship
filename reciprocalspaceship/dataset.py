@@ -1,6 +1,3 @@
-from functools import wraps
-from inspect import signature
-
 import gemmi
 import numpy as np
 import pandas as pd
@@ -8,6 +5,12 @@ from pandas.api.types import is_complex_dtype
 
 from reciprocalspaceship import dtypes
 from reciprocalspaceship.dataseries import DataSeries
+from reciprocalspaceship.decorators import (
+    cellify,
+    inplace,
+    range_indexed,
+    spacegroupify,
+)
 from reciprocalspaceship.utils import (
     apply_to_hkl,
     bin_by_percentile,
@@ -22,54 +25,6 @@ from reciprocalspaceship.utils import (
     phase_shift,
     to_structurefactor,
 )
-
-
-def inplace(f):
-    """
-    A decorator that applies the inplace argument.
-
-    Base function must have a bool param called "inplace" in  the call
-    signature. The position of `inplace` argument doesn't matter.
-    """
-
-    @wraps(f)
-    def wrapped(ds, *args, **kwargs):
-        sig = signature(f)
-        bargs = sig.bind(ds, *args, **kwargs)
-        bargs.apply_defaults()
-        if "inplace" in bargs.arguments:
-            if bargs.arguments["inplace"]:
-                return f(ds, *args, **kwargs)
-            else:
-                return f(ds.copy(), *args, **kwargs)
-        else:
-            raise KeyError(
-                f'"inplace" not found in local variables of @inplacemethod decorated function {f} '
-                "Edit your method definition to include `inplace=Bool`. "
-            )
-
-    return wrapped
-
-
-def range_indexed(f):
-    """
-    A decorator that presents the calling dataset with a range index.
-
-    This decorator facilitates writing methods that are agnostic to the
-    true indices in a DataSet. Original index columns are preserved through
-    wrapped function calls.
-    """
-
-    @wraps(f)
-    def wrapped(ds, *args, **kwargs):
-        names = ds.index.names
-        ds = ds._index_from_names([None], inplace=True)
-        result = f(ds, *args, **kwargs)
-        result = result._index_from_names(names, inplace=True)
-        ds = ds._index_from_names(names, inplace=True)
-        return result.__finalize__(ds)
-
-    return wrapped
 
 
 class DataSet(pd.DataFrame):
@@ -148,14 +103,9 @@ class DataSet(pd.DataFrame):
         return self._spacegroup
 
     @spacegroup.setter
-    def spacegroup(self, val):
-        # GH#18: Type-checking for supported input types
-        if isinstance(val, gemmi.SpaceGroup) or (val is None):
-            self._spacegroup = val
-        elif isinstance(val, (str, int)):
-            self._spacegroup = gemmi.SpaceGroup(val)
-        else:
-            raise ValueError(f"Cannot construct gemmi.SpaceGroup from value: {val}")
+    @spacegroupify("sg")
+    def spacegroup(self, sg):
+        self._spacegroup = sg
 
     @property
     def cell(self):
@@ -163,14 +113,9 @@ class DataSet(pd.DataFrame):
         return self._cell
 
     @cell.setter
-    def cell(self, val):
-        # GH#18: Type-checking for supported input types
-        if isinstance(val, gemmi.UnitCell) or (val is None):
-            self._cell = val
-        elif isinstance(val, (list, tuple, np.ndarray)) and len(val) == 6:
-            self._cell = gemmi.UnitCell(*val)
-        else:
-            raise ValueError(f"Cannot construct gemmi.UnitCell from value: {val}")
+    @cellify("uc")
+    def cell(self, uc):
+        self._cell = uc
 
     @property
     def merged(self):
@@ -698,6 +643,8 @@ class DataSet(pd.DataFrame):
         inplace : bool
             Whether to add the column in place or to return a copy
         """
+        if self.spacegroup is None:
+            raise ValueError("DataSet space group must be set to label absences")
         self["CENTRIC"] = is_centric(self.get_hkls(), self.spacegroup)
         return self
 
@@ -712,6 +659,8 @@ class DataSet(pd.DataFrame):
         inplace : bool
             Whether to add the column in place or to return a copy
         """
+        if self.spacegroup is None:
+            raise ValueError("DataSet space group must be set to label absences")
         self["ABSENT"] = is_absent(self.get_hkls(), self.spacegroup)
         return self
 

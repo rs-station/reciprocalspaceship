@@ -2,6 +2,7 @@ import numpy as np
 from gemmi import GroupOps, SpaceGroup
 
 import reciprocalspaceship as rs
+from reciprocalspaceship.decorators import spacegroupify
 
 
 def to_structurefactor(sfamps, phases):
@@ -54,6 +55,7 @@ def from_structurefactor(sfs):
     return sf, phase
 
 
+@spacegroupify
 def compute_structurefactor_multiplicity(H, sg, include_centering=True):
     """
     Compute the multiplicity of each reflection in ``H``.
@@ -62,7 +64,7 @@ def compute_structurefactor_multiplicity(H, sg, include_centering=True):
     ----------
     H : array
         n x 3 array of Miller indices
-    spacegroup : gemmi.SpaceGroup, gemmi.GroupOps
+    spacegroup : str, int, gemmi.SpaceGroup
         The space group to identify the asymmetric unit
     include_centering : bool
         Whether or not to include the multiplicity inherent in the lattice centering.
@@ -75,16 +77,7 @@ def compute_structurefactor_multiplicity(H, sg, include_centering=True):
         an array of length n containing the multiplicity
         of each hkl.
     """
-    if isinstance(sg, SpaceGroup):
-        group_ops = sg.operations()
-    elif isinstance(sg, GroupOps):
-        group_ops = sg
-    else:
-        raise ValueError(
-            f"gemmi.SpaceGroup or gemmi.GroupOps expected for parameter sg. "
-            f"Received object of type: ({type(sg)}) instead."
-        )
-
+    group_ops = sg.operations()
     is_centric = group_ops.is_centric()
 
     # Lookup based on centering is equivalent to counting the number of translational
@@ -105,6 +98,7 @@ def compute_structurefactor_multiplicity(H, sg, include_centering=True):
     return eps / L
 
 
+@spacegroupify
 def is_centric(H, spacegroup):
     """
     Determine if Miller indices are centric in a given spacegroup
@@ -113,7 +107,7 @@ def is_centric(H, spacegroup):
     ----------
     H : array
         n x 3 array of Miller indices
-    spacegroup : gemmi.SpaceGroup, gemmi.GroupOps
+    spacegroup : str, int, gemmi.SpaceGroup
         The space group in which to classify centrics
 
     Returns
@@ -121,21 +115,13 @@ def is_centric(H, spacegroup):
     centric : array
         Boolean arreay with len(centric) == np.shape(H)[0] == n
     """
-    if isinstance(spacegroup, SpaceGroup):
-        group_ops = spacegroup.operations()
-    elif isinstance(spacegroup, GroupOps):
-        group_ops = spacegroup
-    else:
-        raise ValueError(
-            f"gemmi.SpaceGroup or gemmi.GroupOps expected for parameter sg. "
-            f"Received object of type: ({type(spacegroup)}) instead."
-        )
-
+    group_ops = spacegroup.operations()
     hkl, inverse = np.unique(H, axis=0, return_inverse=True)
     centric = group_ops.centric_flag_array(hkl)
     return centric[inverse]
 
 
+@spacegroupify
 def is_absent(H, spacegroup):
     """
     Determine if Miller indices are systematically absent in a given
@@ -145,7 +131,7 @@ def is_absent(H, spacegroup):
     ----------
     H : array
         n x 3 array of Miller indices
-    spacegroup : gemmi.SpaceGroup, gemmi.GroupOps
+    spacegroup : str, int, gemmi.SpaceGroup
         The space group in which to classify systematic absences
 
     Returns
@@ -153,14 +139,4 @@ def is_absent(H, spacegroup):
     absent : array
         Boolean array of length n. absent[i] == True if H[i] is systematically absent in sg.
     """
-    if isinstance(spacegroup, SpaceGroup):
-        group_ops = spacegroup.operations()
-    elif isinstance(spacegroup, GroupOps):
-        group_ops = spacegroup
-    else:
-        raise ValueError(
-            f"gemmi.SpaceGroup or gemmi.GroupOps expected for parameter sg. "
-            f"Received object of type: ({type(spacegroup)}) instead."
-        )
-
-    return group_ops.systematic_absences(H)
+    return spacegroup.operations().systematic_absences(H)

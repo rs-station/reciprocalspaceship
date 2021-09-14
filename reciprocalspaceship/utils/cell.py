@@ -1,8 +1,9 @@
 import numpy as np
 
-import reciprocalspaceship as rs
+from reciprocalspaceship.decorators import cellify
 
 
+@cellify
 def compute_dHKL(H, cell):
     """
     Compute the real space lattice plane spacing, d, associated with
@@ -12,8 +13,8 @@ def compute_dHKL(H, cell):
     ----------
     H : array
         An nx3 array of numerical miller indices.
-    cell : gemmi.UnitCell
-        The gemmi UnitCell object with the cell parameters.
+    cell : tuple, list, np.ndarray of cell parameters, or gemmi.UnitCell
+        Unit cell parameters
 
     Returns
     -------
@@ -28,14 +29,15 @@ def compute_dHKL(H, cell):
     return dhkls[inverse]
 
 
+@cellify
 def generate_reciprocal_cell(cell, dmin, dtype=np.int32):
     """
     Generate the miller indices of the full P1 reciprocal cell.
 
     Parameters
     ----------
-    cell : gemmi.UnitCell
-        A gemmi cell object.
+    cell : tuple, list, np.ndarray of cell parameters, or gemmi.UnitCell
+        Unit cell parameters
     dmin : float
         Maximum resolution of the data in Å
     dtype : np.dtype (optional)
