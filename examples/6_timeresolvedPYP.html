@@ -1,42 +1,21 @@
-
-
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8" />
-  
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  
   <title>Time-Resolved Difference Map &mdash; reciprocalspaceship 0.9.15 documentation</title>
-  
-
-  
-  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
-  <link rel="stylesheet" href="../_static/panels-main.c949a650a448cc0ae9fd3441c0e17fb0.css" type="text/css" />
-  <link rel="stylesheet" href="../_static/panels-bootstrap.5fd3999ee7762ccc51105388f4a9d115.css" type="text/css" />
-  <link rel="stylesheet" href="../_static/panels-variables.06eb56fa6e07937060861dad626602ad.css" type="text/css" />
-
-  
-  
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/panels-main.c949a650a448cc0ae9fd3441c0e17fb0.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/panels-bootstrap.5fd3999ee7762ccc51105388f4a9d115.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/panels-variables.06eb56fa6e07937060861dad626602ad.css" type="text/css" />
     <link rel="shortcut icon" href="../_static/rs-favicon_32x32.png"/>
-  
-
-  
-  
-
-  
-
-  
   <!--[if lt IE 9]>
     <script src="../_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-    
-      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
         <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
         <script src="../_static/jquery.js"></script>
         <script src="../_static/underscore.js"></script>
@@ -44,42 +23,21 @@
         <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
         <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
         <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
-    
-    <script type="text/javascript" src="../_static/js/theme.js"></script>
-
-    
+    <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="API Reference" href="../api/index.html" />
     <link rel="prev" title="Anomalous Differences in Real Space" href="5_anomaloussites.html" /> 
 </head>
 
-<body class="wy-body-for-nav">
-
-   
+<body class="wy-body-for-nav"> 
   <div class="wy-grid-for-nav">
-    
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-          
-
-          
             <a href="../index.html" class="icon icon-home"> reciprocalspaceship
-          
-
-          
-            
             <img src="../_static/rs.png" class="logo" alt="Logo"/>
-          
           </a>
-
-          
-            
-            
-          
-
-          
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
     <input type="text" name="q" placeholder="Search docs" />
@@ -87,18 +45,7 @@
     <input type="hidden" name="area" value="default" />
   </form>
 </div>
-
-          
-        </div>
-
-        
-        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
-          
-            
-            
-              
-            
-            
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <ul class="current">
 <li class="toctree-l1 current"><a class="reference internal" href="../userguide/index.html">User Guide</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="../userguide/overview.html">Overview and Goals</a></li>
@@ -126,75 +73,32 @@
 <li class="toctree-l1"><a class="reference internal" href="../developers/index.html">For Developers</a></li>
 </ul>
 
-            
-          
         </div>
-        
       </div>
     </nav>
 
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
-
-      
-      <nav class="wy-nav-top" aria-label="top navigation">
-        
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
           <a href="../index.html">reciprocalspaceship</a>
-        
       </nav>
 
-
       <div class="wy-nav-content">
-        
         <div class="rst-content">
-        
-          
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div role="navigation" aria-label="breadcrumbs navigation">
-
+          <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-    
       <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
-        
           <li><a href="../userguide/index.html">User Guide</a> &raquo;</li>
-        
           <li><a href="../userguide/examples.html">Examples</a> &raquo;</li>
-        
       <li>Time-Resolved Difference Map</li>
-    
-    
       <li class="wy-breadcrumbs-aside">
-        
-          
             <a href="../_sources/examples/6_timeresolvedPYP.ipynb.txt" rel="nofollow"> View page source</a>
-          
-        
       </li>
-    
   </ul>
-
-  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
-            
+             
   
 <style>
 /* CSS for nbsphinx extension */
@@ -473,8 +377,8 @@ div.rendered_html tbody tr:hover {
     <a href="https://mybinder.org/v2/gh/Hekstra-Lab/reciprocalspaceship/main?filepath=docs/examples/6_timeresolvedPYP.ipynb?urlpath=lab">
     <img alt="Binder badge" src="https://mybinder.org/badge_logo.svg" style="vertical-align:text-bottom"></a>.
   </span>
-</div><div class="section" id="Time-Resolved-Difference-Map">
-<h1>Time-Resolved Difference Map<a class="headerlink" href="#Time-Resolved-Difference-Map" title="Permalink to this headline">¶</a></h1>
+</div><section id="Time-Resolved-Difference-Map">
+<h1>Time-Resolved Difference Map<a class="headerlink" href="#Time-Resolved-Difference-Map" title="Permalink to this headline"></a></h1>
 <p>Time-resolved crystallography experiments make use of X-ray diffraction to monitor structural changes in a crystalline sample. Such experiments typically use a pump-probe setup where atomic motions are induced by a “pump” (often some sort of a laser pulse) and then are monitored using a probe X-ray pulse. Due to the need for an X-ray pulse with a short time duration, it is most common to conduct time-resolved diffraction experiments using an XFEL or using a Laue (pink beam) beamline at a
 synchrotron in order to achieve the desired X-ray intensity.</p>
 <p>A common methodology for investigating structural changes in time-resolved experiments is using difference maps between structure factor amplitudes collected with and without a perturbation. These <span class="math notranslate nohighlight">\((|F_{On}| - |F_{Off}|)\)</span> maps may be noisy due to systematic errors or scaling artifacts, and have historically been weighted based on the magnitude of the difference signal and/or the error estimates associated with the measured values.</p>
@@ -520,8 +424,8 @@ symmetry, and were processed using Precognition (Renz Research, Inc.), a softwar
 </pre></div></div>
 </div>
 <hr class="docutils" />
-<div class="section" id="Load-On-and-Off-PYP-DataSets">
-<h2>Load <code class="docutils literal notranslate"><span class="pre">On</span></code> and <code class="docutils literal notranslate"><span class="pre">Off</span></code> PYP DataSets<a class="headerlink" href="#Load-On-and-Off-PYP-DataSets" title="Permalink to this headline">¶</a></h2>
+<section id="Load-On-and-Off-PYP-DataSets">
+<h2>Load <code class="docutils literal notranslate"><span class="pre">On</span></code> and <code class="docutils literal notranslate"><span class="pre">Off</span></code> PYP DataSets<a class="headerlink" href="#Load-On-and-Off-PYP-DataSets" title="Permalink to this headline"></a></h2>
 <p>The <code class="docutils literal notranslate"><span class="pre">.hkl</span></code> files used in this example came directly from Precognition and contain scaled, merged structure amplitudes (<strong>F</strong>) and associated errors (<strong>SigF</strong>). Precognition uses a different convention for the reciprocal space asymmetric unit (ASU) than CCP4/Phenix, so we will map all reflections to the ASU.</p>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
@@ -650,10 +554,10 @@ symmetry, and were processed using Precognition (Renz Research, Inc.), a softwar
 </table>
 </div></div>
 </div>
-</div>
+</section>
 <hr class="docutils" />
-<div class="section" id="Compute-Difference-Map-Coefficients-and-Errors">
-<h2>Compute Difference Map Coefficients and Errors<a class="headerlink" href="#Compute-Difference-Map-Coefficients-and-Errors" title="Permalink to this headline">¶</a></h2>
+<section id="Compute-Difference-Map-Coefficients-and-Errors">
+<h2>Compute Difference Map Coefficients and Errors<a class="headerlink" href="#Compute-Difference-Map-Coefficients-and-Errors" title="Permalink to this headline"></a></h2>
 <p>We will compute <span class="math notranslate nohighlight">\((|F_{On}| - |F_{Off}|)\)</span> for use as the coefficients of the difference map, and we will propagate the uncertainties in quadrature. These propagated uncertainties will be used when computing weights for each Miller index.</p>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
@@ -665,10 +569,10 @@ symmetry, and were processed using Precognition (Renz Research, Inc.), a softwar
 </pre></div>
 </div>
 </div>
-</div>
+</section>
 <hr class="docutils" />
-<div class="section" id="Compute-Difference-Map-Weights">
-<h2>Compute Difference Map Weights<a class="headerlink" href="#Compute-Difference-Map-Weights" title="Permalink to this headline">¶</a></h2>
+<section id="Compute-Difference-Map-Weights">
+<h2>Compute Difference Map Weights<a class="headerlink" href="#Compute-Difference-Map-Weights" title="Permalink to this headline"></a></h2>
 <p>There are several weighting schemes that have been used to produce time-resolved difference maps. Many of them take the form below, involving a term based on the uncertainty in the difference structure factor amplitude (<span class="math notranslate nohighlight">\(\sigma_{\Delta F}\)</span>), and optionally, a scale term based on the the magnitude of the observed <span class="math notranslate nohighlight">\(\Delta F\)</span>. With <span class="math notranslate nohighlight">\(\alpha=0\)</span>, these weights take the form employed in <a class="reference external" href="https://scripts.iucr.org/cgi-bin/paper?he0183">Ursby and Bourgeois, Acta Cryst (1997)</a>. On the
 other hand, <a class="reference external" href="https://pubs.acs.org/doi/10.1021/bi010715u">Šrajer et al, Biochemistry (2001)</a> employed weights with <span class="math notranslate nohighlight">\(\alpha=1\)</span> in order to decrease the impact of abnormally large values of <span class="math notranslate nohighlight">\(\Delta F\)</span> that may have erroneously small uncertainties. Finally, other weighting schemes have employed intermediate values of <span class="math notranslate nohighlight">\(\alpha\)</span> (<a class="reference external" href="https://www.nature.com/articles/nature20571">Hekstra et al, Nature (2016)</a>).</p>
 <p><span class="math">\begin{equation}
@@ -731,10 +635,10 @@ w = \left(1 + \frac{\sigma_{\Delta F}^2}{\overline{\sigma_{\Delta F}^2}} + \alph
 </div>
 </div>
 <p>As seen in the above plot, difference Fourier coefficients with low signal-to-noise ratios (large <span class="math notranslate nohighlight">\(\sigma_{\Delta F}\)</span> relative to <span class="math notranslate nohighlight">\(|\Delta F|\)</span>) are assigned lower weight. Difference Fourier coefficients with large amplitude are also assigned lower weight.</p>
-</div>
+</section>
 <hr class="docutils" />
-<div class="section" id="Visualize-Weighted-Difference-Map">
-<h2>Visualize Weighted Difference Map<a class="headerlink" href="#Visualize-Weighted-Difference-Map" title="Permalink to this headline">¶</a></h2>
+<section id="Visualize-Weighted-Difference-Map">
+<h2>Visualize Weighted Difference Map<a class="headerlink" href="#Visualize-Weighted-Difference-Map" title="Permalink to this headline"></a></h2>
 <p>We have our difference Fourier amplitudes and weights, so we just need phases in order to make a difference map. We will use phases from a refined “dark” state model of PYP, PDB: 2PHY. Phases were computed using <a class="reference external" href="https://www.phenix-online.org/documentation/reference/fmodel.html">phenix.fmodel</a>.</p>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
@@ -770,55 +674,38 @@ w = \left(1 + \frac{\sigma_{\Delta F}^2}{\overline{\sigma_{\Delta F}^2}} + \alph
     <br>Time-resolved difference map of PYP photocycle with and without weights. The dark state structure is shown in red, and the pB intermediate state of the chromophore is shown in green.
 </center></div>
 </div>
-</div>
-</div>
+</section>
+</section>
 
 
            </div>
-           
           </div>
-          <footer>
-    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-        <a href="../api/index.html" class="btn btn-neutral float-right" title="API Reference" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="5_anomaloussites.html" class="btn btn-neutral float-left" title="Anomalous Differences in Real Space" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../api/index.html" class="btn btn-neutral float-right" title="API Reference" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>
 
   <div role="contentinfo">
-    <p>
-        &#169; Copyright 2020, Jack B. Greisman, Kevin M. Dalton.
-
-    </p>
+    <p>&#169; Copyright 2020, Jack B. Greisman, Kevin M. Dalton.</p>
   </div>
-    
-    
-    
-    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
-    
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
     <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
-    
-    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
 
 </footer>
         </div>
       </div>
-
     </section>
-
   </div>
-  
-
-  <script type="text/javascript">
+  <script>
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script>
-
-  
-  
-    
-   
+  </script> 
 
 </body>
 </html>
