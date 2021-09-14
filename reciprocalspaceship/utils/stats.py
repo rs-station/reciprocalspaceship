@@ -1,9 +1,11 @@
 import numpy as np
-import pandas as pd
 
 import reciprocalspaceship as rs
+from reciprocalspaceship.decorators import cellify, spacegroupify
 
 
+@cellify
+@spacegroupify
 def compute_redundancy(
     hobs, cell, spacegroup, full_asu=True, anomalous=False, dmin=None
 ):
@@ -15,10 +17,10 @@ def compute_redundancy(
     hobs : np.array(int)
         An n by 3 array of observed miller indices which are not necessarily
         in the reciprocal asymmetric unit
-    spacegroup : gemmi.SpaceGroup
-        A gemmi SpaceGroup object.
-    cell : gemmi.UnitCell
-        A gemmi UnitCell object.
+    cell : tuple, list, np.ndarray of cell parameters, or gemmi.UnitCell
+        Unit cell parameters
+    spacegroup : str, int, or gemmi.SpaceGroup
+        The space group of the dataset
     full_asu : bool (optional)
         Include all the reflections in the calculation irrespective of whether they were
         observed.

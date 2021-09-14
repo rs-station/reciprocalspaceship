@@ -54,25 +54,3 @@ def test_from_structurefactor():
     assert isinstance(phase.dtype, rs.PhaseDtype)
     assert np.isclose(sf.to_numpy(), np.abs(sfs)).all()
     assert np.isclose(phase.to_numpy(), np.angle(sfs, deg=True)).all()
-
-
-@pytest.mark.parametrize(
-    "sg",
-    [
-        gemmi.SpaceGroup(1),
-        gemmi.SpaceGroup(1).operations(),
-        "invalid",
-        None,
-    ],
-)
-def test_structurefactor_multiplicity_valueerror(sg):
-    """
-    Test rs.utils.compute_structurefactor_multiplicity() raises
-    ValueError when invoked with invalid spacegroup
-    """
-    H = np.array([[1, 1, 1]])
-    if isinstance(sg, gemmi.SpaceGroup) or isinstance(sg, gemmi.GroupOps):
-        epsilon = rs.utils.compute_structurefactor_multiplicity(H, sg)
-    else:
-        with pytest.raises(ValueError):
-            epsilon = rs.utils.compute_structurefactor_multiplicity(H, sg)

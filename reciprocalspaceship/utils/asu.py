@@ -1,6 +1,6 @@
 import numpy as np
-from gemmi import GroupOps, SpaceGroup
 
+from reciprocalspaceship.decorators import cellify, spacegroupify
 from reciprocalspaceship.utils.cell import generate_reciprocal_cell
 from reciprocalspaceship.utils.structurefactors import is_absent, is_centric
 from reciprocalspaceship.utils.symop import apply_to_hkl, phase_shift
@@ -34,6 +34,7 @@ asu_cases = {
 # fmt: on
 
 
+@spacegroupify("spacegroup")
 def in_asu(H, spacegroup):
     """
     Check to see if Miller indices are in the asymmetric unit of a space group.
@@ -42,7 +43,7 @@ def in_asu(H, spacegroup):
     ----------
     H : array
         n x 3 array of Miller indices
-    spacegroup : gemmi.SpaceGroup
+    spacegroup : str, int, or gemmi.SpaceGroup
         The space group to identify the asymmetric unit
 
     Returns
@@ -59,6 +60,7 @@ def in_asu(H, spacegroup):
     return asu_cases[idx](*H_ref.T)
 
 
+@spacegroupify("spacegroup")
 def hkl_to_asu(H, spacegroup, return_phase_shifts=False):
     """
     Map hkls to the asymmetric unit and optionally return shifts for the associated phases.
@@ -73,7 +75,7 @@ def hkl_to_asu(H, spacegroup, return_phase_shifts=False):
     ----------
     H : array
         n x 3 array of Miller indices
-    spacegroup : gemmi.SpaceGroup
+    spacegroup : str, int, or gemmi.SpaceGroup
         The space group to identify the asymmetric unit
     return_phase_shifts : bool (optional)
         If True, return the phase shift and phase multiplier to apply to each miller index
@@ -131,6 +133,7 @@ def hkl_to_asu(H, spacegroup, return_phase_shifts=False):
         return H_asu, isym
 
 
+@spacegroupify("sg")
 def hkl_to_observed(H, isym, sg, return_phase_shifts=False):
     """
     Apply symmetry operations to move miller indices in the reciprocal asymmetric unit to their originally observed locations. Optionally, return the corresponding phase shifts.
@@ -146,7 +149,7 @@ def hkl_to_observed(H, isym, sg, return_phase_shifts=False):
         n x 3 array of Miller indices
     isym : array
         integer array of isym values corresponding to the symmetry operator used to map the original miller index into the asu. see mtz spec for an explanation of this.
-    sg : gemmi.SpaceGroup
+    sg : str, int, or gemmi.SpaceGroup
         The space group to identify the asymmetric unit
     return_phase_shifts : bool (optional)
         If True, return the phase shift and phase multiplier to apply to each miller index
@@ -188,6 +191,8 @@ def hkl_to_observed(H, isym, sg, return_phase_shifts=False):
     return observed_H
 
 
+@cellify("cell")
+@spacegroupify("spacegroup")
 def generate_reciprocal_asu(cell, spacegroup, dmin, anomalous=False):
     """
     Generate the Miller indices of the reflections in the reciprocal ASU.
@@ -199,10 +204,10 @@ def generate_reciprocal_asu(cell, spacegroup, dmin, anomalous=False):
 
     Parameters
     ----------
-    cell : gemmi.UnitCell
-        A gemmi cell object.
-    spacegroup : gemmi.SpaceGroup
-        A gemmi spacegroup object.
+    cell : tuple, list, np.ndarray of paramaters, or gemmi.UnitCell
+        Unit cell parameters or UnitCell object
+    spacegroup : str, int, gemmi.SpaceGroup
+        Space group to identify asymmetric unit
     dmin : float
         Maximum resolution of the data in Å
     anomalous : bool

@@ -5,7 +5,12 @@ from pandas.api.types import is_complex_dtype
 
 from reciprocalspaceship import dtypes
 from reciprocalspaceship.dataseries import DataSeries
-from reciprocalspaceship.decorators import inplace, range_indexed
+from reciprocalspaceship.decorators import (
+    cellify,
+    inplace,
+    range_indexed,
+    spacegroupify,
+)
 from reciprocalspaceship.utils import (
     apply_to_hkl,
     bin_by_percentile,
@@ -98,14 +103,9 @@ class DataSet(pd.DataFrame):
         return self._spacegroup
 
     @spacegroup.setter
-    def spacegroup(self, val):
-        # GH#18: Type-checking for supported input types
-        if isinstance(val, gemmi.SpaceGroup) or (val is None):
-            self._spacegroup = val
-        elif isinstance(val, (str, int)):
-            self._spacegroup = gemmi.SpaceGroup(val)
-        else:
-            raise ValueError(f"Cannot construct gemmi.SpaceGroup from value: {val}")
+    @spacegroupify("sg")
+    def spacegroup(self, sg):
+        self._spacegroup = sg
 
     @property
     def cell(self):
@@ -113,14 +113,9 @@ class DataSet(pd.DataFrame):
         return self._cell
 
     @cell.setter
-    def cell(self, val):
-        # GH#18: Type-checking for supported input types
-        if isinstance(val, gemmi.UnitCell) or (val is None):
-            self._cell = val
-        elif isinstance(val, (list, tuple, np.ndarray)) and len(val) == 6:
-            self._cell = gemmi.UnitCell(*val)
-        else:
-            raise ValueError(f"Cannot construct gemmi.UnitCell from value: {val}")
+    @cellify("uc")
+    def cell(self, uc):
+        self._cell = uc
 
     @property
     def merged(self):

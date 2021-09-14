@@ -6,11 +6,7 @@ import pytest
 import reciprocalspaceship as rs
 
 
-@pytest.mark.parametrize(
-    "sg_type",
-    [gemmi.SpaceGroup, gemmi.GroupOps],
-)
-def test_multiplicity_epsilon(sgtbx_by_xhm, sg_type):
+def test_multiplicity_epsilon(sgtbx_by_xhm):
     """
     Test rs.utils.compute_structurefactor_multiplicity using reference
     data generated from sgtbx and gemmi.
@@ -32,13 +28,9 @@ def test_multiplicity_epsilon(sgtbx_by_xhm, sg_type):
     gemmi_epsilon_without_centering = reference[
         "gemmi_epsilon_without_centering"
     ].to_numpy()  # This is computed by gemmi
-    if sg_type is gemmi.SpaceGroup:
-        sg = gemmi.SpaceGroup(xhm)
-    elif sg_type is gemmi.GroupOps:
-        sg = gemmi.SpaceGroup(xhm).operations()
-    epsilon = rs.utils.compute_structurefactor_multiplicity(H, sg)
+    epsilon = rs.utils.compute_structurefactor_multiplicity(H, xhm)
     epsilon_without_centering = rs.utils.compute_structurefactor_multiplicity(
-        H, sg, include_centering=False
+        H, xhm, include_centering=False
     )
     assert np.array_equal(epsilon_without_centering, sgtbx_epsilon_without_centering)
     assert np.array_equal(epsilon_without_centering, gemmi_epsilon_without_centering)
