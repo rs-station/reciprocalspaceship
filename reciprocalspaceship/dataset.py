@@ -643,6 +643,8 @@ class DataSet(pd.DataFrame):
         inplace : bool
             Whether to add the column in place or to return a copy
         """
+        if self.spacegroup is None:
+            raise ValueError("DataSet space group must be set to label absences")
         self["CENTRIC"] = is_centric(self.get_hkls(), self.spacegroup)
         return self
 
@@ -657,6 +659,8 @@ class DataSet(pd.DataFrame):
         inplace : bool
             Whether to add the column in place or to return a copy
         """
+        if self.spacegroup is None:
+            raise ValueError("DataSet space group must be set to label absences")
         self["ABSENT"] = is_absent(self.get_hkls(), self.spacegroup)
         return self
 
