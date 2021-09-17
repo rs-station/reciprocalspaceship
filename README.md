@@ -3,7 +3,7 @@
 [![Documentation](https://github.com/Hekstra-Lab/reciprocalspaceship/workflows/Documentation/badge.svg)](https://hekstra-lab.github.io/reciprocalspaceship)
 [![PyPI](https://img.shields.io/pypi/v/reciprocalspaceship?color=blue)](https://pypi.org/project/reciprocalspaceship/)
 [![Anaconda-Server Badge](https://anaconda.org/conda-forge/reciprocalspaceship/badges/version.svg)](https://anaconda.org/conda-forge/reciprocalspaceship)
-[![codecov](https://codecov.io/gh/Hekstra-Lab/reciprocalspaceship/branch/master/graph/badge.svg)](https://codecov.io/gh/Hekstra-Lab/reciprocalspaceship)
+[![codecov](https://codecov.io/gh/Hekstra-Lab/reciprocalspaceship/branch/main/graph/badge.svg)](https://codecov.io/gh/Hekstra-Lab/reciprocalspaceship)
 [![apm](https://img.shields.io/apm/l/vim-mode.svg)](https://github.com/Hekstra-Lab/reciprocalspaceship/blob/main/LICENSE)
 [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/Hekstra-Lab/reciprocalspaceship/main?filepath=docs%2Fexamples)
 
