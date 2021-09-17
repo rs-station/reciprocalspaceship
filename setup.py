@@ -62,6 +62,7 @@ docs_require = [
 setup(
     name="reciprocalspaceship",
     packages=find_packages(),
+    include_package_data=True,
     version=__version__,
     license="MIT",
     description=DESCRIPTION,
