@@ -32,6 +32,6 @@ command in the ``docs/`` subdirectory::
 Pushing Changes to Documentation
 --------------------------------
 
-The documentation is rebuilt by default upon any ``git push`` action to the master branch. This occurs when a Pull
+The documentation is rebuilt by default upon any ``git push`` action to the main branch. This occurs when a Pull
 Request is merged into the master branch. As such, please feel free to propose changes to the documentation via a
 Pull Request. The changes will take place when the Pull Request is merged into the project repository.
