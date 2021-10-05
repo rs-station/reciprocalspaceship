@@ -951,11 +951,11 @@ class DataSet(pd.DataFrame):
             dataset_minus, how="outer", on=["H", "K", "L"], suffixes=suffixes
         )
 
-        # Handle centric reflections
+        # Update centric reflections to use "aimless"-style formatting
         columns = list(columns)[3:]  # First 3 items are always ["H", "K", "L"]
         plus_columns = [c + suffixes[0] for c in columns]
         minus_columns = [c + suffixes[1] for c in columns]
-        centrics = result.label_centrics()["CENTRIC"]
+        centrics = result.centrics.index
         result.loc[centrics, minus_columns] = result.loc[centrics, plus_columns].values
 
         if "M/ISYM" not in self.columns and self.merged:
