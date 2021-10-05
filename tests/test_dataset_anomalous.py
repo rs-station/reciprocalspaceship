@@ -106,7 +106,7 @@ def test_unstack_anomalous_unmerged(data_unmerged):
 
 
 @pytest.mark.parametrize("rangeindexed", [True, False])
-def test_roundtrip_merged(data_merged, rangeindexed):
+def test_roundtrip_stack_unstack_merged(data_merged, rangeindexed):
     """
     Test that DataSet is unchanged by roundtrip call of DataSet.stack_anomalous()
     followed by DataSet.unstack_anomalous()
@@ -122,5 +122,27 @@ def test_roundtrip_merged(data_merged, rangeindexed):
     # Re-order columns if needed
     result = result[data.columns]
 
-    # DataSet.merge() operations seem to recast index dtypes
-    assert_frame_equal(result, data, check_index_type=False)
+    assert_frame_equal(result, data)
+
+
+@pytest.mark.parametrize("rangeindexed", [True, False])
+def test_roundtrip_unstack_stack_merged(data_merged, rangeindexed):
+    """
+    Test that DataSet is unchanged by roundtrip call of DataSet.unstack_anomalous()
+    followed by DataSet.stack_anomalous()
+    """
+
+    stacked = data_merged.stack_anomalous()
+
+    if rangeindexed:
+        data = stacked.reset_index()
+    else:
+        data = stacked
+
+    unstacked = data.unstack_anomalous(["I", "SIGI", "N"])
+    result = unstacked.stack_anomalous()
+
+    # Re-order columns if needed
+    result = result[data.columns]
+
+    assert_frame_equal(result, data)
