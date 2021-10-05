@@ -937,24 +937,25 @@ class DataSet(pd.DataFrame):
             raise ValueError(f"Expected suffixes to be tuple or list of len() of 2")
 
         # Separate DataSet into Friedel(+) and Friedel(-)
-        columns = set(columns).union(set(["H", "K", "L"]))
+        # GH#97: switch to Python dict instead of set to preserve column order
+        columns = dict.fromkeys(["H", "K", "L"] + list(columns))
         dataset = self.hkl_to_asu()
-        if "PARTIAL" in columns:
-            columns.remove("PARTIAL")
-        for column in columns:
+        if "PARTIAL" in columns.keys():
+            columns.pop("PARTIAL")
+        for column in columns.keys():
             dataset[column] = dataset[column].to_friedel_dtype()
         dataset_plus = dataset.loc[dataset["M/ISYM"] % 2 == 1].copy()
         dataset_minus = dataset.loc[dataset["M/ISYM"] % 2 == 0].copy()
-        dataset_minus = dataset_minus.loc[:, columns]
+        dataset_minus = dataset_minus.loc[:, columns.keys()]
         result = dataset_plus.merge(
             dataset_minus, how="outer", on=["H", "K", "L"], suffixes=suffixes
         )
 
-        # Handle centric reflections
-        columns = columns.difference(set(["H", "K", "L"]))
+        # Update centric reflections to use "aimless"-style formatting
+        columns = list(columns)[3:]  # First 3 items are always ["H", "K", "L"]
         plus_columns = [c + suffixes[0] for c in columns]
         minus_columns = [c + suffixes[1] for c in columns]
-        centrics = result.label_centrics()["CENTRIC"]
+        centrics = result.centrics.index
         result.loc[centrics, minus_columns] = result.loc[centrics, plus_columns].values
 
         if "M/ISYM" not in self.columns and self.merged:
