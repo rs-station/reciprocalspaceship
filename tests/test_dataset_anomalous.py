@@ -123,6 +123,7 @@ def test_roundtrip_stack_unstack_merged(data_merged, rangeindexed):
     result = result[data.columns]
 
     assert_frame_equal(result, data)
+    assert result._index_dtypes == data._index_dtypes
 
 
 @pytest.mark.parametrize("rangeindexed", [True, False])
@@ -132,17 +133,18 @@ def test_roundtrip_unstack_stack_merged(data_merged, rangeindexed):
     followed by DataSet.stack_anomalous()
     """
 
-    stacked = data_merged.stack_anomalous()
-
     if rangeindexed:
-        data = stacked.reset_index()
+        data = data_merged.reset_index()
     else:
-        data = stacked
+        data = data_merged
 
-    unstacked = data.unstack_anomalous(["I", "SIGI", "N"])
+    stacked = data.stack_anomalous()
+
+    unstacked = stacked.unstack_anomalous(["I", "SIGI", "N"])
     result = unstacked.stack_anomalous()
 
     # Re-order columns if needed
-    result = result[data.columns]
+    result = result[stacked.columns]
 
-    assert_frame_equal(result, data)
+    assert_frame_equal(result, stacked, check_index_type=False)
+    assert result._index_dtypes == stacked._index_dtypes
