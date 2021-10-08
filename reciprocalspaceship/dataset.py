@@ -787,7 +787,7 @@ class DataSet(pd.DataFrame):
         else:
             return self
 
-    def stack_anomalous(self, plus_labels=None, minus_labels=None):
+    def stack_anomalous(self, plus_labels=None, minus_labels=None, suffixes=("(+)", "(-)")):
         """
         Convert data from two-column anomalous format to one-column
         format. Intensities, structure factor amplitudes, or other data
@@ -814,10 +814,14 @@ class DataSet(pd.DataFrame):
         ----------
         plus_labels: str or list-like
             Column label or list of column labels of data associated with
-            Friedel-plus reflection (Defaults to columns suffixed with "(+)")
+            Friedel-plus reflections
         minus_labels: str or list-like
             Column label or list of column labels of data associated with
-            Friedel-minus reflection (Defaults to columns suffixed with "(-)")
+            Friedel-minus reflections
+        suffixes: list of strings
+            Suffixes found on column labels of data associated with Friedel-plus
+            and Friedel-minus reflections. Only consulted if plus_labels and
+            minus_labels are None. Defaults to ("(+)", "(-)")
 
         Returns
         -------
@@ -834,8 +838,14 @@ class DataSet(pd.DataFrame):
 
         # Default behavior: Use labels suffixed with "(+)" or "(-)"
         if plus_labels is None and minus_labels is None:
-            plus_labels = [l for l in self.columns if "(+)" in l]
-            minus_labels = [l for l in self.columns if "(-)" in l]
+            if len(suffixes) != 2:
+                raise ValueError(
+                    f"suffixes must be of length 2. Provided suffixes "
+                    f"{suffixes} have length {len(suffixes)}."
+                )
+            else:
+                plus_labels = [l for l in self.columns if suffixes[0] in l]
+                minus_labels = [l for l in self.columns if suffixes[1] in l]
 
         # Validate column labels
         if isinstance(plus_labels, str) and isinstance(minus_labels, str):
@@ -870,7 +880,7 @@ class DataSet(pd.DataFrame):
         dataset_minus.apply_symop(gemmi.Op("-x,-y,-z"), inplace=True)
 
         # Rename columns and update dtypes
-        new_labels = [l.rstrip("(+)") for l in plus_labels]
+        new_labels = [l.rstrip(suffixes[0]) for l in plus_labels]
         column_mapping_plus = dict(zip(plus_labels, new_labels))
         column_mapping_minus = dict(zip(minus_labels, new_labels))
         dataset_plus.rename(columns=column_mapping_plus, inplace=True)
