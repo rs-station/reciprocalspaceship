@@ -37,6 +37,9 @@ def test_stack_anomalous(data_merged, labels):
     "bad_labels",
     [
         (None, None, None),
+        (None, None, 5),
+        (None, None, ("(+)")),
+        (None, None, ("(+)", "(-)", "(=)")),
         (None, "I(-)"),
         (["I(+)", "SIGI(+)"], ["I(-)"]),
         (["I(+)", "SIGI(+)"], ["SIGI(-)", "I(-)"]),

@@ -838,14 +838,20 @@ class DataSet(pd.DataFrame):
 
         # Default behavior: Use labels suffixed with "(+)" or "(-)"
         if plus_labels is None and minus_labels is None:
-            if len(suffixes) != 2:
-                raise ValueError(
-                    f"suffixes must be of length 2. Provided suffixes "
-                    f"{suffixes} have length {len(suffixes)}."
-                )
+            if isinstance(suffixes, tuple) or isinstance(suffixes, list):
+                if len(suffixes) != 2:
+                    raise ValueError(
+                        f"suffixes must be of length 2. Provided suffixes "
+                        f"{suffixes} have length {len(suffixes)}."
+                    )
+                else:
+                    plus_labels = [l for l in self.columns if suffixes[0] in l]
+                    minus_labels = [l for l in self.columns if suffixes[1] in l]
             else:
-                plus_labels = [l for l in self.columns if suffixes[0] in l]
-                minus_labels = [l for l in self.columns if suffixes[1] in l]
+                raise ValueError(
+                        f"suffixes must have type tuple or list. supplied suffixes"
+                        f"{suffixes} have type {type(suffixes)}"
+                    )
 
         # Validate column labels
         if isinstance(plus_labels, str) and isinstance(minus_labels, str):
