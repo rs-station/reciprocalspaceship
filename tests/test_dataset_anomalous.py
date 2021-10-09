@@ -33,6 +33,7 @@ def test_stack_anomalous(data_merged, labels):
     assert len(result) == (2 * (~centrics).sum()) + centrics.sum()
     assert result.spacegroup.xhm() == data_merged.spacegroup.xhm()
 
+
 @pytest.mark.parametrize(
     "bad_labels",
     [
@@ -43,7 +44,7 @@ def test_stack_anomalous(data_merged, labels):
         (None, "I(-)"),
         (["I(+)", "SIGI(+)"], ["I(-)"]),
         (["I(+)", "SIGI(+)"], ["SIGI(-)", "I(-)"]),
-        (("I(+)", "SIGI(+)"), ("I(-)", "SIGI(-)"))
+        (("I(+)", "SIGI(+)"), ("I(-)", "SIGI(-)")),
     ],
 )
 def test_stack_anomalous_failure(data_merged, bad_labels):
@@ -53,38 +54,43 @@ def test_stack_anomalous_failure(data_merged, bad_labels):
     with pytest.raises(ValueError):
         result = data_merged.stack_anomalous(bad_labels)
 
+
 @pytest.mark.parametrize(
     "labels",
     [
-        ({"I(+)":"Iplus",
-          "SIGI(+)":"SIGIplus",
-          "I(-)":"Iminus",
-          "SIGI(-)":"SIGIminus"}, ("plus", "minus")),
-        ({"I(+)":"I+",
-          "SIGI(+)":"SIGI+",
-          "I(-)":"I-",
-          "SIGI(-)":"SIGI-"}, ("+", "-")),
+        (
+            {
+                "I(+)": "Iplus",
+                "SIGI(+)": "SIGIplus",
+                "I(-)": "Iminus",
+                "SIGI(-)": "SIGIminus",
+            },
+            ("plus", "minus"),
+        ),
+        (
+            {"I(+)": "I+", "SIGI(+)": "SIGI+", "I(-)": "I-", "SIGI(-)": "SIGI-"},
+            ("+", "-"),
+        ),
     ],
 )
 def test_stack_anomalous_suffixes(data_merged, labels):
     """
     Test DataSet.stack_anomalous() with custom suffixes
     """
-                                  
+
     custom = data_merged.rename(columns=labels[0])
     result = custom.stack_anomalous(suffixes=labels[1])
     centrics = custom.label_centrics()["CENTRIC"]
 
-    assert len(result) == (2 * (~centrics).sum()) + centrics.sum()                                  
+    assert len(result) == (2 * (~centrics).sum()) + centrics.sum()
 
-    
+
 def test_stack_anomalous_unmerged(data_unmerged):
     """
     Test DataSet.stack_anomalous() raises ValueError with unmerged data
     """
     with pytest.raises(ValueError):
         result = data_unmerged.stack_anomalous()
-
 
 
 @pytest.mark.parametrize("columns", [None, "I", ["I", "SIGI"], ("I", "SIGI"), 5])

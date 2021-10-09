@@ -787,7 +787,9 @@ class DataSet(pd.DataFrame):
         else:
             return self
 
-    def stack_anomalous(self, plus_labels=None, minus_labels=None, suffixes=("(+)", "(-)")):
+    def stack_anomalous(
+        self, plus_labels=None, minus_labels=None, suffixes=("(+)", "(-)")
+    ):
         """
         Convert data from two-column anomalous format to one-column
         format. Intensities, structure factor amplitudes, or other data
@@ -849,9 +851,9 @@ class DataSet(pd.DataFrame):
                     minus_labels = [l for l in self.columns if suffixes[1] in l]
             else:
                 raise ValueError(
-                        f"suffixes must have type tuple or list. supplied suffixes"
-                        f"{suffixes} have type {type(suffixes)}"
-                    )
+                    f"suffixes must have type tuple or list. supplied suffixes"
+                    f"{suffixes} have type {type(suffixes)}"
+                )
 
         # Validate column labels
         if isinstance(plus_labels, str) and isinstance(minus_labels, str):
