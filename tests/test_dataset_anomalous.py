@@ -9,59 +9,79 @@ from reciprocalspaceship.utils import in_asu
     "labels",
     [
         (None, None),
-        ("I(+)", "I(-)"),
+        (None, None, ("(+)", "(-)")),
+        (["I(+)"], ["I(-)"]),
         (["I(+)", "SIGI(+)"], ["I(-)", "SIGI(-)"]),
-        (("I(+)", "SIGI(+)"), ("I(-)", "SIGI(-)")),
-        (None, "I(-)"),
-        (["I(+)", "SIGI(+)"], ["I(-)"]),
-        (["I(+)", "SIGI(+)"], ["SIGI(-)", "I(-)"]),
     ],
 )
 def test_stack_anomalous(data_merged, labels):
-    """Test behavior of DataSet.stack_anomalous()"""
-
-    plus_labels = labels[0]
-    minus_labels = labels[1]
-
-    # Check input data
-    def check_ValueError(data, plus_labels, minus_labels):
-        with pytest.raises(ValueError):
-            result = data.stack_anomalous(plus_labels, minus_labels)
-        return
-
-    if plus_labels is None and minus_labels is None:
-        plus_labels = [l for l in data_merged.columns if "(+)" in l]
-        minus_labels = [l for l in data_merged.columns if "(-)" in l]
-
-    if isinstance(plus_labels, str) and isinstance(minus_labels, str):
-        plus_labels = [plus_labels]
-        minus_labels = [minus_labels]
-    elif isinstance(plus_labels, list) and isinstance(minus_labels, list):
-        if len(plus_labels) != len(minus_labels):
-            check_ValueError(data_merged, plus_labels, minus_labels)
-            return
+    """
+    Test behavior of DataSet.stack_anomalous()
+    """
+    if len(labels) == 3:
+        result = data_merged.stack_anomalous(labels[0], labels[1], labels[2])
+        plus_labels = [l for l in data_merged.columns if labels[2][0] in l]
+        assert len(result.columns) == (len(data_merged.columns) - len(plus_labels))
+    elif labels[0] is not None:
+        result = data_merged.stack_anomalous(labels[0], labels[1])
+        assert len(result.columns) == (len(data_merged.columns) - len(labels[0]))
     else:
-        check_ValueError(data_merged, plus_labels, minus_labels)
-        return
-
-    for plus, minus in zip(plus_labels, minus_labels):
-        if data_merged[plus].dtype != data_merged[minus].dtype:
-            check_ValueError(data_merged, plus_labels, minus_labels)
-            return
-
-    result = data_merged.stack_anomalous(labels[0], labels[1])
+        result = data_merged.stack_anomalous()
+        plus_labels = [l for l in data_merged.columns if "(+)" in l]
+        assert len(result.columns) == (len(data_merged.columns) - len(plus_labels))
     centrics = data_merged.label_centrics()["CENTRIC"]
-    assert len(result.columns) == (len(data_merged.columns) - len(plus_labels))
     assert len(result) == (2 * (~centrics).sum()) + centrics.sum()
     assert result.spacegroup.xhm() == data_merged.spacegroup.xhm()
 
+@pytest.mark.parametrize(
+    "bad_labels",
+    [
+        (None, None, None),
+        (None, "I(-)"),
+        (["I(+)", "SIGI(+)"], ["I(-)"]),
+        (["I(+)", "SIGI(+)"], ["SIGI(-)", "I(-)"]),
+        (("I(+)", "SIGI(+)"), ("I(-)", "SIGI(-)"))
+    ],
+)
+def test_stack_anomalous_failure(data_merged, bad_labels):
+    """
+    Test that DataSet.stack_anomalous() fails with improper arguments
+    """
+    with pytest.raises(ValueError):
+        result = data_merged.stack_anomalous(bad_labels)
 
+@pytest.mark.parametrize(
+    "labels",
+    [
+        ({"I(+)":"Iplus",
+          "SIGI(+)":"SIGIplus",
+          "I(-)":"Iminus",
+          "SIGI(-)":"SIGIminus"}, ("plus", "minus")),
+        ({"I(+)":"I+",
+          "SIGI(+)":"SIGI+",
+          "I(-)":"I-",
+          "SIGI(-)":"SIGI-"}, ("+", "-")),
+    ],
+)
+def test_stack_anomalous_suffixes(data_merged, labels):
+    """
+    Test DataSet.stack_anomalous() with custom suffixes
+    """
+                                  
+    custom = data_merged.rename(columns=labels[0])
+    result = custom.stack_anomalous(suffixes=labels[1])
+    centrics = custom.label_centrics()["CENTRIC"]
+
+    assert len(result) == (2 * (~centrics).sum()) + centrics.sum()                                  
+
+    
 def test_stack_anomalous_unmerged(data_unmerged):
     """
     Test DataSet.stack_anomalous() raises ValueError with unmerged data
     """
     with pytest.raises(ValueError):
         result = data_unmerged.stack_anomalous()
+
 
 
 @pytest.mark.parametrize("columns", [None, "I", ["I", "SIGI"], ("I", "SIGI"), 5])
