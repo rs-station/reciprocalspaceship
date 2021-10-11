@@ -819,7 +819,7 @@ class DataSet(pd.DataFrame):
             Column label or list of column labels of data associated with
             Friedel-minus reflections
         suffixes: list of strings
-            Suffixes found on column labels of data associated with Friedel-plus
+            Suffixes to identify column labels associated with Friedel-plus
             and Friedel-minus reflections. Only consulted if plus_labels and
             minus_labels are None. Defaults to ("(+)", "(-)")
 
@@ -838,26 +838,32 @@ class DataSet(pd.DataFrame):
 
         # Default behavior: Use labels suffixed with "(+)" or "(-)"
         if plus_labels is None and minus_labels is None:
-            if isinstance(suffixes, tuple) or isinstance(suffixes, list):
+            if isinstance(suffixes, (list, tuple)):
                 if len(suffixes) != 2:
                     raise ValueError(
                         f"suffixes must be of length 2. Provided suffixes "
                         f"{suffixes} have length {len(suffixes)}."
                     )
                 else:
-                    plus_labels = [l for l in self.columns if suffixes[0] in l]
-                    minus_labels = [l for l in self.columns if suffixes[1] in l]
+                    plus_labels = [l for l in self.columns if l.endswith(suffixes[0])]
+                    minus_labels = [l for l in self.columns if l.endswith(suffixes[1])]
             else:
                 raise ValueError(
                         f"suffixes must have type tuple or list. supplied suffixes"
                         f"{suffixes} have type {type(suffixes)}"
+                    )
+        elif plus_labels is None or minus_labels is None:
+            raise ValueError(
+                        f"plus_labels and minus_labels must either both be None"
+                        f"or both not be None: plus_labels has type {type(plus_labels)}"
+                        f"and minus_labels has type {type(minus_labels)}"
                     )
 
         # Validate column labels
         if isinstance(plus_labels, str) and isinstance(minus_labels, str):
             plus_labels = [plus_labels]
             minus_labels = [minus_labels]
-        elif isinstance(plus_labels, list) and isinstance(minus_labels, list):
+        elif isinstance(plus_labels, (list, tuple)) and isinstance(minus_labels, (list, tuple)):
             if len(plus_labels) != len(minus_labels):
                 raise ValueError(
                     f"plus_labels: {plus_labels} and minus_labels: "
@@ -866,8 +872,8 @@ class DataSet(pd.DataFrame):
         else:
             raise ValueError(
                 f"plus_labels and minus_labels must have same type "
-                f"and be str or list: plus_labels is type "
-                f"{type(plus_labels)} and minus_labe is type "
+                f"and be str, list, or tuple: plus_labels is type "
+                f"{type(plus_labels)} and minus_labels is type "
                 f"{type(minus_labels)}."
             )
 
@@ -881,8 +887,8 @@ class DataSet(pd.DataFrame):
 
         # Map Friedel reflections to +/- ASU
         centrics = self.label_centrics()["CENTRIC"]
-        dataset_plus = self.drop(columns=minus_labels)
-        dataset_minus = self.loc[~centrics].drop(columns=plus_labels)
+        dataset_plus = self.drop(columns=list(minus_labels))
+        dataset_minus = self.loc[~centrics].drop(columns=list(plus_labels))
         dataset_minus.apply_symop(gemmi.Op("-x,-y,-z"), inplace=True)
 
         # Rename columns and update dtypes
