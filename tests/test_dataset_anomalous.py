@@ -24,7 +24,7 @@ def test_stack_anomalous(data_merged, plus_labels, minus_labels, suffixes):
         result = data_merged.stack_anomalous(plus_labels, minus_labels)
     else:
         result = data_merged.stack_anomalous(plus_labels, minus_labels, suffixes)
-    
+
     if plus_labels is None:
         if suffixes is not None:
             plus_labels = [l for l in data_merged.columns if l.endswith(suffixes[0])]
@@ -32,7 +32,7 @@ def test_stack_anomalous(data_merged, plus_labels, minus_labels, suffixes):
             plus_labels = [l for l in data_merged.columns if l.endswith("(+)")]
     elif isinstance(plus_labels, str):
         plus_labels = [plus_labels]
-        
+
     assert len(result.columns) == (len(data_merged.columns) - len(plus_labels))
 
     centrics = data_merged.label_centrics()["CENTRIC"]
@@ -90,7 +90,7 @@ def test_stack_anomalous_suffixes(data_merged, label_dict, suffixes):
     Test DataSet.stack_anomalous() with custom suffixes
     """
 <<<<<<< HEAD
-                                  
+
     custom = data_merged.rename(columns=label_dict)
     result = custom.stack_anomalous(suffixes=suffixes)
 =======
@@ -117,13 +117,13 @@ def test_stack_anomalous_non_suffixes(data_merged, label_dict, suffixes):
     """
     Test DataSet.stack_anomalous() does not strip non-suffixes
     """
-                                  
+
     custom = data_merged.rename(columns=label_dict)
     result = custom.stack_anomalous(suffixes=suffixes)
 
     assert 'I' not in result.columns
-    assert 'I_foo' not in result.columns                                  
-    
+    assert 'I_foo' not in result.columns
+
 =======
 >>>>>>> 59f1502cad30a6b0cfa1d6346fab78f11997aa48
 def test_stack_anomalous_unmerged(data_unmerged):

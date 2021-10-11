@@ -787,7 +787,9 @@ class DataSet(pd.DataFrame):
         else:
             return self
 
-    def stack_anomalous(self, plus_labels=None, minus_labels=None, suffixes=("(+)", "(-)")):
+    def stack_anomalous(
+        self, plus_labels=None, minus_labels=None, suffixes=("(+)", "(-)")
+    ):
         """
         Convert data from two-column anomalous format to one-column
         format. Intensities, structure factor amplitudes, or other data
@@ -849,21 +851,23 @@ class DataSet(pd.DataFrame):
                     minus_labels = [l for l in self.columns if l.endswith(suffixes[1])]
             else:
                 raise ValueError(
-                        f"suffixes must have type tuple or list. supplied suffixes"
-                        f"{suffixes} have type {type(suffixes)}"
-                    )
+                    f"suffixes must have type tuple or list. supplied suffixes"
+                    f"{suffixes} have type {type(suffixes)}"
+                )
         elif plus_labels is None or minus_labels is None:
             raise ValueError(
-                        f"plus_labels and minus_labels must either both be None"
-                        f"or both not be None: plus_labels has type {type(plus_labels)}"
-                        f"and minus_labels has type {type(minus_labels)}"
-                    )
+                f"plus_labels and minus_labels must either both be None"
+                f"or both not be None: plus_labels has type {type(plus_labels)}"
+                f"and minus_labels has type {type(minus_labels)}"
+            )
 
         # Validate column labels
         if isinstance(plus_labels, str) and isinstance(minus_labels, str):
             plus_labels = [plus_labels]
             minus_labels = [minus_labels]
-        elif isinstance(plus_labels, (list, tuple)) and isinstance(minus_labels, (list, tuple)):
+        elif isinstance(plus_labels, (list, tuple)) and isinstance(
+            minus_labels, (list, tuple)
+        ):
             if len(plus_labels) != len(minus_labels):
                 raise ValueError(
                     f"plus_labels: {plus_labels} and minus_labels: "
