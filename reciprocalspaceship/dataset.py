@@ -849,7 +849,7 @@ class DataSet(pd.DataFrame):
                 f"suffixes must be of length 2. Provided suffixes "
                 f"{suffixes} have length {len(suffixes)}."
             )
-        
+
         # If no labels provided, use suffixes to create them
         if plus_labels is None and minus_labels is None:
             plus_labels = [l for l in self.columns if l.endswith(suffixes[0])]
