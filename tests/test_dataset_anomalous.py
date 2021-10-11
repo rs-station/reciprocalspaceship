@@ -39,6 +39,7 @@ def test_stack_anomalous(data_merged, plus_labels, minus_labels, suffixes):
     assert len(result) == (2 * (~centrics).sum()) + centrics.sum()
     assert result.spacegroup.xhm() == data_merged.spacegroup.xhm()
 
+
 @pytest.mark.parametrize(
     "plus_labels,minus_labels,suffixes",
     [
@@ -46,9 +47,16 @@ def test_stack_anomalous(data_merged, plus_labels, minus_labels, suffixes):
         (None, None, 5),
         (None, None, ("(+)")),
         (None, None, ("(+)", "(-)", "(=)")),
+<<<<<<< HEAD
         (None, "I(-)", None),
         (["I(+)", "SIGI(+)"], ["I(-)"], None),
         (["I(+)", "SIGI(+)"], ["SIGI(-)", "I(-)"], None),
+=======
+        (None, "I(-)"),
+        (["I(+)", "SIGI(+)"], ["I(-)"]),
+        (["I(+)", "SIGI(+)"], ["SIGI(-)", "I(-)"]),
+        (("I(+)", "SIGI(+)"), ("I(-)", "SIGI(-)")),
+>>>>>>> 59f1502cad30a6b0cfa1d6346fab78f11997aa48
     ],
 )
 def test_stack_anomalous_failure(data_merged, plus_labels, minus_labels, suffixes):
@@ -58,30 +66,44 @@ def test_stack_anomalous_failure(data_merged, plus_labels, minus_labels, suffixe
     with pytest.raises(ValueError):
         result = data_merged.stack_anomalous(plus_labels, minus_labels, suffixes)
 
+
 @pytest.mark.parametrize(
     "label_dict,suffixes",
     [
-        ({"I(+)":"Iplus",
-          "SIGI(+)":"SIGIplus",
-          "I(-)":"Iminus",
-          "SIGI(-)":"SIGIminus"}, ("plus", "minus")),
-        ({"I(+)":"I+",
-          "SIGI(+)":"SIGI+",
-          "I(-)":"I-",
-          "SIGI(-)":"SIGI-"}, ("+", "-")),
+        (
+            {
+                "I(+)": "Iplus",
+                "SIGI(+)": "SIGIplus",
+                "I(-)": "Iminus",
+                "SIGI(-)": "SIGIminus",
+            },
+            ("plus", "minus"),
+        ),
+        (
+            {"I(+)": "I+", "SIGI(+)": "SIGI+", "I(-)": "I-", "SIGI(-)": "SIGI-"},
+            ("+", "-"),
+        ),
     ],
 )
 def test_stack_anomalous_suffixes(data_merged, label_dict, suffixes):
     """
     Test DataSet.stack_anomalous() with custom suffixes
     """
+<<<<<<< HEAD
                                   
     custom = data_merged.rename(columns=label_dict)
     result = custom.stack_anomalous(suffixes=suffixes)
+=======
+
+    custom = data_merged.rename(columns=labels[0])
+    result = custom.stack_anomalous(suffixes=labels[1])
+>>>>>>> 59f1502cad30a6b0cfa1d6346fab78f11997aa48
     centrics = custom.label_centrics()["CENTRIC"]
 
-    assert len(result) == (2 * (~centrics).sum()) + centrics.sum()                                  
+    assert len(result) == (2 * (~centrics).sum()) + centrics.sum()
 
+
+<<<<<<< HEAD
 @pytest.mark.parametrize(
     "label_dict,suffixes",
     [
@@ -102,13 +124,14 @@ def test_stack_anomalous_non_suffixes(data_merged, label_dict, suffixes):
     assert 'I' not in result.columns
     assert 'I_foo' not in result.columns                                  
     
+=======
+>>>>>>> 59f1502cad30a6b0cfa1d6346fab78f11997aa48
 def test_stack_anomalous_unmerged(data_unmerged):
     """
     Test DataSet.stack_anomalous() raises ValueError with unmerged data
     """
     with pytest.raises(ValueError):
         result = data_unmerged.stack_anomalous()
-
 
 
 @pytest.mark.parametrize("columns", [None, "I", ["I", "SIGI"], ("I", "SIGI"), 5])
