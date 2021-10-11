@@ -838,22 +838,23 @@ class DataSet(pd.DataFrame):
                 "DataSet.stack_anomalous() cannot be called with unmerged data"
             )
 
-        # Default behavior: Use labels suffixed with "(+)" or "(-)"
+        # Make sure suffixes are valid
+        if not isinstance(suffixes, (list, tuple)):
+            raise ValueError(
+                f"suffixes must have type tuple or list. supplied suffixes"
+                f"{suffixes} have type {type(suffixes)}"
+            )
+        if len(suffixes) != 2:
+            raise ValueError(
+                f"suffixes must be of length 2. Provided suffixes "
+                f"{suffixes} have length {len(suffixes)}."
+            )
+        
+        # If no labels provided, use suffixes to create them
         if plus_labels is None and minus_labels is None:
-            if isinstance(suffixes, (list, tuple)):
-                if len(suffixes) != 2:
-                    raise ValueError(
-                        f"suffixes must be of length 2. Provided suffixes "
-                        f"{suffixes} have length {len(suffixes)}."
-                    )
-                else:
-                    plus_labels = [l for l in self.columns if l.endswith(suffixes[0])]
-                    minus_labels = [l for l in self.columns if l.endswith(suffixes[1])]
-            else:
-                raise ValueError(
-                    f"suffixes must have type tuple or list. supplied suffixes"
-                    f"{suffixes} have type {type(suffixes)}"
-                )
+            plus_labels = [l for l in self.columns if l.endswith(suffixes[0])]
+            minus_labels = [l for l in self.columns if l.endswith(suffixes[1])]
+
         elif plus_labels is None or minus_labels is None:
             raise ValueError(
                 f"plus_labels and minus_labels must either both be None"
@@ -861,7 +862,7 @@ class DataSet(pd.DataFrame):
                 f"and minus_labels has type {type(minus_labels)}"
             )
 
-        # Validate column labels
+        # Validate column labels (either default or created via suffixes)
         if isinstance(plus_labels, str) and isinstance(minus_labels, str):
             plus_labels = [plus_labels]
             minus_labels = [minus_labels]
