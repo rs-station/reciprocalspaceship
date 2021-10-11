@@ -93,10 +93,15 @@ def test_stack_anomalous_suffixes(data_merged, label_dict, suffixes):
 @pytest.mark.parametrize(
     "label_dict,suffixes",
     [
-        ({"I(+)":"I(+)_foo",
-          "SIGI(+)":"SIGI(+)_foo",
-          "I(-)":"I(-)_foo",
-          "SIGI(-)":"SIGI(-)_foo"}, ("+", "-")),
+        (
+            {
+                "I(+)": "I(+)_foo",
+                "SIGI(+)": "SIGI(+)_foo",
+                "I(-)": "I(-)_foo",
+                "SIGI(-)": "SIGI(-)_foo",
+            },
+            ("+", "-"),
+        ),
     ],
 )
 def test_stack_anomalous_non_suffixes(data_merged, label_dict, suffixes):
@@ -107,8 +112,8 @@ def test_stack_anomalous_non_suffixes(data_merged, label_dict, suffixes):
     custom = data_merged.rename(columns=label_dict)
     result = custom.stack_anomalous(suffixes=suffixes)
 
-    assert 'I' not in result.columns
-    assert 'I_foo' not in result.columns
+    assert "I" not in result.columns
+    assert "I_foo" not in result.columns
 
 
 def test_stack_anomalous_unmerged(data_unmerged):
