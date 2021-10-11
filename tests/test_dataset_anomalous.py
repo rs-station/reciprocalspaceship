@@ -89,7 +89,7 @@ def test_stack_anomalous_suffixes(data_merged, label_dict, suffixes):
 
     assert len(result) == (2 * (~centrics).sum()) + centrics.sum()
     assert result.spacegroup.xhm() == data_merged.spacegroup.xhm()
-    
+
 
 @pytest.mark.parametrize(
     "label_dict,suffixes",
