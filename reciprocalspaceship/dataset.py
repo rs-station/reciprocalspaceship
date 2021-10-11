@@ -787,7 +787,9 @@ class DataSet(pd.DataFrame):
         else:
             return self
 
-    def stack_anomalous(self, plus_labels=None, minus_labels=None):
+    def stack_anomalous(
+        self, plus_labels=None, minus_labels=None, suffixes=("(+)", "(-)")
+    ):
         """
         Convert data from two-column anomalous format to one-column
         format. Intensities, structure factor amplitudes, or other data
@@ -814,10 +816,14 @@ class DataSet(pd.DataFrame):
         ----------
         plus_labels: str or list-like
             Column label or list of column labels of data associated with
-            Friedel-plus reflection (Defaults to columns suffixed with "(+)")
+            Friedel-plus reflections
         minus_labels: str or list-like
             Column label or list of column labels of data associated with
-            Friedel-minus reflection (Defaults to columns suffixed with "(-)")
+            Friedel-minus reflections
+        suffixes: list of strings
+            Suffixes to identify column labels associated with Friedel-plus
+            and Friedel-minus reflections. Only consulted if plus_labels and
+            minus_labels are None. Defaults to ("(+)", "(-)")
 
         Returns
         -------
@@ -832,16 +838,37 @@ class DataSet(pd.DataFrame):
                 "DataSet.stack_anomalous() cannot be called with unmerged data"
             )
 
-        # Default behavior: Use labels suffixed with "(+)" or "(-)"
-        if plus_labels is None and minus_labels is None:
-            plus_labels = [l for l in self.columns if "(+)" in l]
-            minus_labels = [l for l in self.columns if "(-)" in l]
+        # Make sure suffixes are valid
+        if not isinstance(suffixes, (list, tuple)):
+            raise ValueError(
+                f"suffixes must have type tuple or list. supplied suffixes"
+                f"{suffixes} have type {type(suffixes)}"
+            )
+        if len(suffixes) != 2:
+            raise ValueError(
+                f"suffixes must be of length 2. Provided suffixes "
+                f"{suffixes} have length {len(suffixes)}."
+            )
 
-        # Validate column labels
+        # If no labels provided, use suffixes to create them
+        if plus_labels is None and minus_labels is None:
+            plus_labels = [l for l in self.columns if l.endswith(suffixes[0])]
+            minus_labels = [l for l in self.columns if l.endswith(suffixes[1])]
+
+        elif plus_labels is None or minus_labels is None:
+            raise ValueError(
+                f"plus_labels and minus_labels must either both be None"
+                f"or both not be None: plus_labels has type {type(plus_labels)}"
+                f"and minus_labels has type {type(minus_labels)}"
+            )
+
+        # Validate column labels (either default or created via suffixes)
         if isinstance(plus_labels, str) and isinstance(minus_labels, str):
             plus_labels = [plus_labels]
             minus_labels = [minus_labels]
-        elif isinstance(plus_labels, list) and isinstance(minus_labels, list):
+        elif isinstance(plus_labels, (list, tuple)) and isinstance(
+            minus_labels, (list, tuple)
+        ):
             if len(plus_labels) != len(minus_labels):
                 raise ValueError(
                     f"plus_labels: {plus_labels} and minus_labels: "
@@ -850,8 +877,8 @@ class DataSet(pd.DataFrame):
         else:
             raise ValueError(
                 f"plus_labels and minus_labels must have same type "
-                f"and be str or list: plus_labels is type "
-                f"{type(plus_labels)} and minus_labe is type "
+                f"and be str, list, or tuple: plus_labels is type "
+                f"{type(plus_labels)} and minus_labels is type "
                 f"{type(minus_labels)}."
             )
 
@@ -865,12 +892,12 @@ class DataSet(pd.DataFrame):
 
         # Map Friedel reflections to +/- ASU
         centrics = self.label_centrics()["CENTRIC"]
-        dataset_plus = self.drop(columns=minus_labels)
-        dataset_minus = self.loc[~centrics].drop(columns=plus_labels)
+        dataset_plus = self.drop(columns=list(minus_labels))
+        dataset_minus = self.loc[~centrics].drop(columns=list(plus_labels))
         dataset_minus.apply_symop(gemmi.Op("-x,-y,-z"), inplace=True)
 
         # Rename columns and update dtypes
-        new_labels = [l.rstrip("(+)") for l in plus_labels]
+        new_labels = [l.rstrip(suffixes[0]) for l in plus_labels]
         column_mapping_plus = dict(zip(plus_labels, new_labels))
         column_mapping_minus = dict(zip(minus_labels, new_labels))
         dataset_plus.rename(columns=column_mapping_plus, inplace=True)
