@@ -114,15 +114,16 @@
 <h1>reciprocalspaceship.algorithms.merge<a class="headerlink" href="#reciprocalspaceship-algorithms-merge" title="Permalink to this headline"></a></h1>
 <dl class="py function">
 <dt class="sig sig-object py" id="reciprocalspaceship.algorithms.merge">
-<span class="sig-prename descclassname"><span class="pre">reciprocalspaceship.algorithms.</span></span><span class="sig-name descname"><span class="pre">merge</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataset</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">intensity_key</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'I'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sigma_key</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'SIGI'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sort</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/Hekstra-Lab/reciprocalspaceship/blob/main/reciprocalspaceship/algorithms/merge.py#L4-L64"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#reciprocalspaceship.algorithms.merge" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">reciprocalspaceship.algorithms.</span></span><span class="sig-name descname"><span class="pre">merge</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataset</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">intensity_key</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'I'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sigma_key</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'SIGI'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">anomalous</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sort</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/Hekstra-Lab/reciprocalspaceship/blob/main/reciprocalspaceship/algorithms/merge.py#L4-L69"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#reciprocalspaceship.algorithms.merge" title="Permalink to this definition"></a></dt>
 <dd><p>Merge dataset using inverse-variance weights.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>dataset</strong> (<em>rs.DataSet</em>) – Unmerged DataSet containing scaled intensities and uncertainties</p></li>
-<li><p><strong>intensity_key</strong> (<em>str</em>) – Column name for intensities</p></li>
-<li><p><strong>sigma_key</strong> (<em>str</em>) – Column name for uncertainties</p></li>
-<li><p><strong>sort</strong> (<em>bool</em>) – If True, index of returned DataSet will be sorted</p></li>
+<li><p><strong>intensity_key</strong> (<em>str (optional)</em>) – Column name for intensities</p></li>
+<li><p><strong>sigma_key</strong> (<em>str (optional)</em>) – Column name for uncertainties</p></li>
+<li><p><strong>anomalous</strong> (<em>bool (optional)</em>) – If True, do not merge Friedel mates</p></li>
+<li><p><strong>sort</strong> (<em>bool (optional)</em>) – If True, index of returned DataSet will be sorted</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
