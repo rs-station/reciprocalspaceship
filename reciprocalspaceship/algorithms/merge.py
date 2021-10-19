@@ -61,9 +61,7 @@ def merge(dataset, intensity_key="I", sigma_key="SIGI", anomalous=True, sort=Fal
             ["IMEAN", "SIGIMEAN", "I(+)", "SIGI(+)", "I(-)", "SIGI(-)", "N(+)", "N(-)"]
         ]
     else:
-        result = result[
-            ["I", "SIGI", "N"]
-        ]
+        result = result[["I", "SIGI", "N"]]
 
     if sort:
         return result.sort_index()
