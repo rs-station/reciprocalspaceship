@@ -7,9 +7,9 @@ def merge(dataset, intensity_key="I", sigma_key="SIGI", anomalous=True, sort=Fal
 
     Parameters
     ----------
-    dataset : rs.DataSet (optional)
+    dataset : rs.DataSet
         Unmerged DataSet containing scaled intensities and uncertainties
-    intensity_key : str
+    intensity_key : str (optional)
         Column name for intensities
     sigma_key : str (optional)
         Column name for uncertainties
