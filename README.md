@@ -52,7 +52,7 @@ For more details on the use of `reciprocalspaceship`, check out our [documentati
 
 ## Reference
 
-Our paper describing the library was published in the Journal of Applied Crystallography: [link to paper](https://doi.org/10.1107/S160057672100755X). 
-Please cite this publication for any work that makes use of this library.  
+Our paper describing the library was published in the Journal of Applied Crystallography: [link to paper](https://doi.org/10.1107/S160057672100755X).
+Please cite this publication for any work that makes use of this library.
 
 We also have a pre-print describing the library on [bioRxiv](https://www.biorxiv.org/content/10.1101/2021.02.03.429617v1).
