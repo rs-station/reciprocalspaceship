@@ -99,10 +99,7 @@ def to_gemmi(dataset, skip_problem_mtztypes=False):
     # Handle Unmerged data
     if not dataset.merged:
         all_in_asu = in_asu(dataset.get_hkls(), dataset.spacegroup).all()
-        if all_in_asu and "M/ISYM" in dataset.columns:
-            unmerged_in_asu = True
-        else:
-            unmerged_in_asu = False
+        if not all_in_asu:
             dataset.hkl_to_asu(inplace=True)
 
     # Construct data for Mtz object.
@@ -129,7 +126,7 @@ def to_gemmi(dataset, skip_problem_mtztypes=False):
     mtz.set_data(temp[columns].to_numpy(dtype="float32"))
 
     # Handle Unmerged data
-    if not dataset.merged and not unmerged_in_asu:
+    if not dataset.merged and not all_in_asu:
         dataset.hkl_to_observed(m_isym="M/ISYM", inplace=True)
 
     return mtz
