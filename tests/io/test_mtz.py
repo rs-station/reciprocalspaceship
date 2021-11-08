@@ -51,7 +51,7 @@ def test_write_merged_nocell(IOtest_mtz):
 
 
 @pytest.mark.parametrize("skip_problem_mtztypes", [True, False])
-def test_write_merged_nocell(IOtest_mtz, skip_problem_mtztypes):
+def test_write_merged_nonMTZDtype(IOtest_mtz, skip_problem_mtztypes):
     """
     Test skip_problem_mtztypes flag of DataSet.write_mtz()
     """
