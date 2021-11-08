@@ -134,11 +134,14 @@ def test_roundtrip_unmerged(data_unmerged, label_centrics):
     temp2.close()
 
 
-def test_unmerged_after_write(data_unmerged):
+@pytest.mark.parametrize("in_asu", [True, False])
+def test_unmerged_after_write(data_unmerged, in_asu):
     """
     #110: Test that unmerged DataSet objects are unchanged following calls to
     DataSet.write_mtz()
     """
+    if in_asu:
+        data_unmerged.hkl_to_asu(inplace=True)
     expected = data_unmerged.copy()
     data_unmerged.write_mtz("/dev/null")
     assert_frame_equal(data_unmerged, expected)
