@@ -1,7 +1,6 @@
 import filecmp
 import tempfile
-import unittest
-from os.path import abspath, dirname, exists, join
+from os.path import exists
 
 import gemmi
 import numpy as np
@@ -12,81 +11,81 @@ import reciprocalspaceship as rs
 from reciprocalspaceship.utils import in_asu
 
 
-class TestMTZ(unittest.TestCase):
-    def test_read(self):
+def test_read_merged(IOtest_mtz):
+    """Test rs.read_mtz() with merged MTZ file"""
+    dataset = rs.read_mtz(IOtest_mtz)
 
-        datadir = join(abspath(dirname(__file__)), "../data/fmodel")
-        data = rs.read_mtz(join(datadir, "9LYZ.mtz"))
+    assert dataset.spacegroup.number == 96
+    assert dataset.columns.to_list() == ["FMODEL", "PHIFMODEL"]
+    assert dataset.index.names == ["H", "K", "L"]
+    assert isinstance(dataset, rs.DataSet)
 
-        # Confirm columns, indices, and metadata
-        self.assertEqual(data.spacegroup.number, 96)
-        self.assertEqual(data.columns.to_list(), ["FMODEL", "PHIFMODEL"])
-        self.assertEqual(list(data.index.names), ["H", "K", "L"])
-        self.assertIsInstance(data.spacegroup, gemmi.SpaceGroup)
-        self.assertIsInstance(data.cell, gemmi.UnitCell)
-        self.assertIsInstance(data, rs.DataSet)
-        self.assertIsInstance(data["FMODEL"], rs.DataSeries)
 
-        return
+def test_write_merged(IOtest_mtz):
+    """Test DataSet.write_mtz() with merged MTZ file"""
+    dataset = rs.read_mtz(IOtest_mtz)
 
-    def test_write(self):
+    with tempfile.NamedTemporaryFile(suffix=".mtz") as temp:
+        dataset.write_mtz(temp.name)
+        assert exists(temp.name)
 
-        datadir = join(abspath(dirname(__file__)), "../data/fmodel")
-        data = rs.read_mtz(join(datadir, "9LYZ.mtz"))
 
-        temp = tempfile.NamedTemporaryFile(suffix=".mtz")
+def test_write_merged_nosg(IOtest_mtz):
+    """Test that DataSet.write_mtz() without spacegroup raises AttributeError"""
+    dataset = rs.read_mtz(IOtest_mtz)
+    dataset.spacegroup = None
 
-        # Missing cell should raise AttributeError
-        data_missingcell = data.copy()
-        data_missingcell.cell = None
-        with self.assertRaises(AttributeError):
-            data_missingcell.write_mtz(temp.name)
+    with tempfile.NamedTemporaryFile(suffix=".mtz") as temp:
+        with pytest.raises(AttributeError):
+            dataset.write_mtz(temp.name)
 
-        # Missing spacegroup should raise AttributeError
-        data_missingsg = data.copy()
-        data_missingsg.spacegroup = None
-        with self.assertRaises(AttributeError):
-            data_missingsg.write_mtz(temp.name)
 
-        # Writing MTZ should produce a file
-        data.write_mtz(temp.name)
-        self.assertTrue(exists(temp.name))
-        temp.close()
+def test_write_merged_nocell(IOtest_mtz):
+    """Test that DataSet.write_mtz() without cell raises AttributeError"""
+    dataset = rs.read_mtz(IOtest_mtz)
+    dataset.cell = None
 
-        # Having a non-MTZType should raise AttributeError, unless flag
-        # is set
-        temp = tempfile.NamedTemporaryFile(suffix=".mtz")
-        data["nonMTZ"] = 1
-        with self.assertRaises(ValueError):
-            data.write_mtz(temp.name)
-        data.write_mtz(temp.name, skip_problem_mtztypes=True)
-        self.assertTrue(exists(temp.name))
-        temp.close()
+    with tempfile.NamedTemporaryFile(suffix=".mtz") as temp:
+        with pytest.raises(AttributeError):
+            dataset.write_mtz(temp.name)
 
-        return
 
-    def test_roundtrip(self):
+@pytest.mark.parametrize("skip_problem_mtztypes", [True, False])
+def test_write_merged_nocell(IOtest_mtz, skip_problem_mtztypes):
+    """
+    Test skip_problem_mtztypes flag of DataSet.write_mtz()
+    """
+    dataset = rs.read_mtz(IOtest_mtz)
+    dataset["nonMTZ"] = 1
 
-        datadir = join(abspath(dirname(__file__)), "../data/fmodel")
-        data = rs.read_mtz(join(datadir, "9LYZ.mtz"))
+    with tempfile.NamedTemporaryFile(suffix=".mtz") as temp:
+        if not skip_problem_mtztypes:
+            with pytest.raises(ValueError):
+                dataset.write_mtz(
+                    temp.name, skip_problem_mtztypes=skip_problem_mtztypes
+                )
+        else:
+            dataset.write_mtz(temp.name, skip_problem_mtztypes=skip_problem_mtztypes)
+            assert exists(temp.name)
 
-        # Write data, read data, write data again... shouldn't change
-        temp = tempfile.NamedTemporaryFile(suffix=".mtz")
-        data.write_mtz(temp.name)
-        data2 = rs.read_mtz(temp.name)
-        temp2 = tempfile.NamedTemporaryFile(suffix=".mtz")
-        data2.write_mtz(temp2.name)
 
-        self.assertTrue(data.equals(data2))
-        self.assertEqual(data.spacegroup.number, data2.spacegroup.number)
-        self.assertEqual(data.cell.a, data2.cell.a)
-        self.assertTrue(filecmp.cmp(temp.name, temp2.name))
+def test_roundtrip_merged(IOtest_mtz):
+    """Test roundtrip of rs.read_mtz() and DataSet.write_mtz() with merged MTZ file"""
+    expected = rs.read_mtz(IOtest_mtz)
 
-        # Clean up
-        temp.close()
-        temp2.close()
+    temp1 = tempfile.NamedTemporaryFile(suffix=".mtz")
+    temp2 = tempfile.NamedTemporaryFile(suffix=".mtz")
 
-        return
+    expected.write_mtz(temp1.name)
+    result = rs.read_mtz(temp1.name)
+    result.write_mtz(temp2.name)
+
+    assert_frame_equal(result, expected)
+    assert filecmp.cmp(temp1.name, temp2.name)
+
+    # Clean up
+    temp1.close()
+    temp2.close()
 
 
 def test_read_unmerged(data_unmerged):
@@ -113,7 +112,7 @@ def test_read_unmerged_2m_isym(data_unmerged):
 
 
 @pytest.mark.parametrize("label_centrics", [True, False])
-def test_roundtrip(data_unmerged, label_centrics):
+def test_roundtrip_unmerged(data_unmerged, label_centrics):
     """
     Test roundtrip of rs.read_mtz() and DataSet.write_mtz() with unmerged data
     """
@@ -133,3 +132,13 @@ def test_roundtrip(data_unmerged, label_centrics):
     # Clean up
     temp.close()
     temp2.close()
+
+
+def test_unmerged_after_write(data_unmerged):
+    """
+    #110: Test that unmerged DataSet objects are unchanged following calls to
+    DataSet.write_mtz()
+    """
+    expected = data_unmerged.copy()
+    data_unmerged.write_mtz("/dev/null")
+    assert_frame_equal(data_unmerged, expected)
