@@ -97,7 +97,7 @@ def to_gemmi(dataset, skip_problem_mtztypes=False):
 
     # Handle Unmerged data
     if not dataset.merged:
-        dataset = dataset.hkl_to_asu(inplace=False)
+        dataset.hkl_to_asu(inplace=True)
 
     # Construct data for Mtz object.
     mtz.add_dataset("reciprocalspaceship")
@@ -121,6 +121,10 @@ def to_gemmi(dataset, skip_problem_mtztypes=False):
                 f"To skip columns without explicit MTZ dtypes, set skip_problem_mtztypes=True"
             )
     mtz.set_data(temp[columns].to_numpy(dtype="float32"))
+
+    # Handle Unmerged data
+    if not dataset.merged:
+        dataset.hkl_to_observed(m_isym="M/ISYM", inplace=True)
 
     return mtz
 
