@@ -97,7 +97,7 @@ def to_gemmi(dataset, skip_problem_mtztypes=False):
 
     # Handle Unmerged data
     if not dataset.merged:
-        dataset.hkl_to_asu(inplace=True)
+        dataset = dataset.hkl_to_asu(inplace=False)
 
     # Construct data for Mtz object.
     mtz.add_dataset("reciprocalspaceship")

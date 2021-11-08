@@ -123,8 +123,8 @@ def test_roundtrip_unmerged(data_unmerged, label_centrics):
     temp2 = tempfile.NamedTemporaryFile(suffix=".mtz")
     data_unmerged.write_mtz(temp.name)
     data2 = rs.read_mtz(temp.name)
+    data2 = data2[data_unmerged.columns]  # Ensure consistent column ordering
     data2.write_mtz(temp2.name)
-
     assert filecmp.cmp(temp.name, temp2.name)
     assert_frame_equal(data_unmerged, data2)
     assert data_unmerged.merged == data2.merged
