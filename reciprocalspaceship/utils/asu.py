@@ -51,11 +51,8 @@ def in_asu(H, spacegroup):
     result : array
         Array of bools with length n.
     """
-    h, k, l = H.T
-    H_ref = np.zeros(H.shape, dtype=H.dtype)
     basis_op = spacegroup.basisop
-    for i, h in enumerate(H):
-        H_ref[i] = basis_op.apply_to_hkl(h)
+    H_ref = apply_to_hkl(H, basis_op)
     idx = ccp4_hkl_asu[spacegroup.number - 1]
     return asu_cases[idx](*H_ref.T)
 
