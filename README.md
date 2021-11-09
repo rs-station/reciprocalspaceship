@@ -6,6 +6,7 @@
 [![codecov](https://codecov.io/gh/Hekstra-Lab/reciprocalspaceship/branch/main/graph/badge.svg)](https://codecov.io/gh/Hekstra-Lab/reciprocalspaceship)
 [![apm](https://img.shields.io/apm/l/vim-mode.svg)](https://github.com/Hekstra-Lab/reciprocalspaceship/blob/main/LICENSE)
 [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/Hekstra-Lab/reciprocalspaceship/main?filepath=docs%2Fexamples)
+[![DOI](https://img.shields.io/badge/DOI-10.1107%2FS160057672100755X-blue)](https://doi.org/10.1107/S160057672100755X)
 
 Tools for exploring reciprocal space.
 
@@ -51,4 +52,7 @@ For more details on the use of `reciprocalspaceship`, check out our [documentati
 
 ## Reference
 
-We have a pre-print describing the library on [bioRxiv](https://www.biorxiv.org/content/10.1101/2021.02.03.429617v1).
+Our paper describing the library was published in the Journal of Applied Crystallography: [link to paper](https://doi.org/10.1107/S160057672100755X).
+Please cite this publication for any work that makes use of this library.
+
+We also have a pre-print describing the library on [bioRxiv](https://www.biorxiv.org/content/10.1101/2021.02.03.429617v1).

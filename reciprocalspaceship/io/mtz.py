@@ -4,6 +4,7 @@ import pandas as pd
 
 from reciprocalspaceship import DataSet
 from reciprocalspaceship.dtypes.base import MTZDtype
+from reciprocalspaceship.utils import in_asu
 
 
 def from_gemmi(gemmi_mtz):
@@ -97,7 +98,9 @@ def to_gemmi(dataset, skip_problem_mtztypes=False):
 
     # Handle Unmerged data
     if not dataset.merged:
-        dataset.hkl_to_asu(inplace=True)
+        all_in_asu = in_asu(dataset.get_hkls(), dataset.spacegroup).all()
+        if not all_in_asu:
+            dataset.hkl_to_asu(inplace=True)
 
     # Construct data for Mtz object.
     mtz.add_dataset("reciprocalspaceship")
@@ -121,6 +124,10 @@ def to_gemmi(dataset, skip_problem_mtztypes=False):
                 f"To skip columns without explicit MTZ dtypes, set skip_problem_mtztypes=True"
             )
     mtz.set_data(temp[columns].to_numpy(dtype="float32"))
+
+    # Handle Unmerged data
+    if not dataset.merged and not all_in_asu:
+        dataset.hkl_to_observed(m_isym="M/ISYM", inplace=True)
 
     return mtz
 
