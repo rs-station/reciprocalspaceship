@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>DataSet &mdash; reciprocalspaceship 0.9.16 documentation</title>
+  <title>DataSet &mdash; reciprocalspaceship 0.9.17 documentation</title>
       <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
@@ -114,7 +114,7 @@
 <h1>DataSet<a class="headerlink" href="#dataset" title="Permalink to this headline"></a></h1>
 <dl class="py class">
 <dt class="sig sig-object py" id="reciprocalspaceship.DataSet">
-<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">reciprocalspaceship.</span></span><span class="sig-name descname"><span class="pre">DataSet</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">index</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">columns</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dtype</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">copy</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">spacegroup</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cell</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">merged</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/Hekstra-Lab/reciprocalspaceship/blob/main/reciprocalspaceship/dataset.py#L30-L1287"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#reciprocalspaceship.DataSet" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">reciprocalspaceship.</span></span><span class="sig-name descname"><span class="pre">DataSet</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">index</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">columns</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dtype</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">copy</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">spacegroup</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cell</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">merged</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/Hekstra-Lab/reciprocalspaceship/blob/main/reciprocalspaceship/dataset.py#L30-L1287"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#reciprocalspaceship.DataSet" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">pandas.core.frame.DataFrame</span></code></p>
 <p>Representation of a crystallographic dataset.</p>
 <p>A DataSet object provides a tabular representation of reflection data.
@@ -256,7 +256,7 @@ and attributes, please see the <a class="reference external" href="https://panda
 </table>
 <dl class="py property">
 <dt class="sig sig-object py" id="reciprocalspaceship.DataSet.acentrics">
-<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">acentrics</span></span><a class="headerlink" href="#reciprocalspaceship.DataSet.acentrics" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">acentrics</span></span><a class="headerlink" href="#reciprocalspaceship.DataSet.acentrics" title="Permalink to this definition"></a></dt>
 <dd><p>Access acentric reflections in DataSet</p>
 </dd></dl>
 
@@ -338,13 +338,13 @@ column composed of data with the PhaseDtype.</p>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="reciprocalspaceship.DataSet.cell">
-<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">cell</span></span><a class="headerlink" href="#reciprocalspaceship.DataSet.cell" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">cell</span></span><a class="headerlink" href="#reciprocalspaceship.DataSet.cell" title="Permalink to this definition"></a></dt>
 <dd><p>Unit cell parameters (a, b, c, alpha, beta, gamma)</p>
 </dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="reciprocalspaceship.DataSet.centrics">
-<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">centrics</span></span><a class="headerlink" href="#reciprocalspaceship.DataSet.centrics" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">centrics</span></span><a class="headerlink" href="#reciprocalspaceship.DataSet.centrics" title="Permalink to this definition"></a></dt>
 <dd><p>Access centric reflections in DataSet</p>
 </dd></dl>
 
@@ -403,7 +403,7 @@ symmetry is set to P1.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="reciprocalspaceship.DataSet.from_gemmi">
-<em class="property"><span class="pre">classmethod</span> </em><span class="sig-name descname"><span class="pre">from_gemmi</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">gemmiMtz</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/Hekstra-Lab/reciprocalspaceship/blob/main/reciprocalspaceship/dataset.py#L293-L316"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#reciprocalspaceship.DataSet.from_gemmi" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_gemmi</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">gemmiMtz</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/Hekstra-Lab/reciprocalspaceship/blob/main/reciprocalspaceship/dataset.py#L293-L316"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#reciprocalspaceship.DataSet.from_gemmi" title="Permalink to this definition"></a></dt>
 <dd><p>Creates DataSet object from gemmi.Mtz object.</p>
 <p>If the gemmi.Mtz object contains an M/ISYM column and contains duplicated
 Miller indices, an unmerged DataSet will be constructed. The Miller indices
@@ -684,7 +684,7 @@ they are isomorphous.</p>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="reciprocalspaceship.DataSet.merged">
-<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">merged</span></span><a class="headerlink" href="#reciprocalspaceship.DataSet.merged" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">merged</span></span><a class="headerlink" href="#reciprocalspaceship.DataSet.merged" title="Permalink to this definition"></a></dt>
 <dd><p>Whether DataSet contains merged reflection data (boolean)</p>
 </dd></dl>
 
@@ -770,7 +770,7 @@ of this method</p></li>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="reciprocalspaceship.DataSet.spacegroup">
-<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">spacegroup</span></span><a class="headerlink" href="#reciprocalspaceship.DataSet.spacegroup" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">spacegroup</span></span><a class="headerlink" href="#reciprocalspaceship.DataSet.spacegroup" title="Permalink to this definition"></a></dt>
 <dd><p>Crystallographic space group</p>
 </dd></dl>
 
