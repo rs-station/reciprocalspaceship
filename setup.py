@@ -71,7 +71,7 @@ setup(
     author_email="kmdalton@g.harvard.edu, greisman@g.harvard.edu",
     url="https://hekstra-lab.github.io/reciprocalspaceship/",
     project_urls=PROJECT_URLS,
-    python_requires=">3.6",
+    python_requires=">3.7",
     install_requires=[
         "gemmi>=0.4.2, <=0.5.0",
         "pandas>=1.2.0, <=1.3.4",
