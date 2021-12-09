@@ -8,8 +8,8 @@ def getVersionNumber():
 
 __version__ = getVersionNumber()
 
-# Import algorithms submodule
-from reciprocalspaceship import algorithms
+# Import submodules
+from reciprocalspaceship import algorithms, stats
 
 # Top-Level API
 from reciprocalspaceship.concat import concat
