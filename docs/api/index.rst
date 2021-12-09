@@ -58,6 +58,18 @@ Algorithms for processing reflection data stored in ``rs.DataSet`` objects.
    ~reciprocalspaceship.algorithms.merge
    ~reciprocalspaceship.algorithms.scale_merged_intensities
 
+Summary Statistics
+------------------
+
+Summary statistics from data reduction that can be computed from ``rs.DataSet`` objects.
+
+.. currentmodule:: reciprocalspaceship
+.. autosummary::
+   :toctree: autoapi
+   :nosignatures:
+
+   ~reciprocalspaceship.stats.compute_completeness
+
 Helpful Functions
 -----------------
 
