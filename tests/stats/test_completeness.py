@@ -14,7 +14,9 @@ def test_compute_completeness_hewl(data_hewl, bins, anomalous, dmin):
     This test does not assess numerical values, but just that the output
     behaves as expected for given arguments.
     """
-    result = rs.stats.compute_completeness(data_hewl, bins=bins, dmin=dmin)
+    result = rs.stats.compute_completeness(
+        data_hewl, bins=bins, anomalous=anomalous, dmin=dmin
+    )
 
     assert len(result) == bins + 1
     assert result.index[-1] == "overall"
