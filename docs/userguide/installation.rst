@@ -15,4 +15,4 @@ It is also always possible to install the library by cloning the repository from
 
   git clone https://github.com/Hekstra-Lab/reciprocalspaceship
   cd reciprocalspaceship
-  python -m pip install -e .
+  pip install -e .
