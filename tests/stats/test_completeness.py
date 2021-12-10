@@ -19,3 +19,4 @@ def test_compute_completeness_hewl(data_hewl, bins, anomalous, dmin):
     assert len(result) == bins + 1
     assert result.index[-1] == "overall"
     assert float(result.index[-2].split()[-1]) == dmin
+    assert (result["completeness"] <= 1.0).all()
