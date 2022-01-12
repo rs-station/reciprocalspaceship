@@ -4,12 +4,12 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Merging with a Robust Error Model &mdash; reciprocalspaceship 0.9.17 documentation</title>
+  <title>Merging with a Robust Error Model &mdash; reciprocalspaceship 0.9.18 documentation</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
-      <link rel="stylesheet" href="../_static/panels-bootstrap.5fd3999ee7762ccc51105388f4a9d115.css" type="text/css" />
       <link rel="stylesheet" href="../_static/panels-main.c949a650a448cc0ae9fd3441c0e17fb0.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/panels-bootstrap.5fd3999ee7762ccc51105388f4a9d115.css" type="text/css" />
       <link rel="stylesheet" href="../_static/panels-variables.06eb56fa6e07937060861dad626602ad.css" type="text/css" />
     <link rel="shortcut icon" href="../_static/rs-favicon_32x32.png"/>
   <!--[if lt IE 9]>
@@ -309,7 +309,7 @@ div.nboutput.container div.output_area > div[class^='highlight']{
 }
 
 /* hide copybtn icon on prompts (needed for 'sphinx_copybutton') */
-.prompt a.copybtn {
+.prompt .copybtn {
     display: none;
 }
 
@@ -386,8 +386,7 @@ example, we will explore whether the scaled reflection observations are normally
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">seaborn</span> <span class="k">as</span> <span class="nn">sns</span>
 <span class="n">sns</span><span class="o">.</span><span class="n">set_context</span><span class="p">(</span><span class="s2">&quot;notebook&quot;</span><span class="p">,</span> <span class="n">font_scale</span><span class="o">=</span><span class="mf">1.3</span><span class="p">)</span>
@@ -400,8 +399,7 @@ example, we will explore whether the scaled reflection observations are normally
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="kn">import</span> <span class="nn">reciprocalspaceship</span> <span class="k">as</span> <span class="nn">rs</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">reciprocalspaceship</span> <span class="k">as</span> <span class="nn">rs</span>
 </pre></div>
 </div>
 </div>
@@ -409,8 +407,7 @@ example, we will explore whether the scaled reflection observations are normally
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="nb">print</span><span class="p">(</span><span class="n">rs</span><span class="o">.</span><span class="n">__version__</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">rs</span><span class="o">.</span><span class="n">__version__</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -430,8 +427,7 @@ example, we will explore whether the scaled reflection observations are normally
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">ds</span> <span class="o">=</span> <span class="n">rs</span><span class="o">.</span><span class="n">read_mtz</span><span class="p">(</span><span class="s2">&quot;data/HEWL_unmerged.mtz&quot;</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ds</span> <span class="o">=</span> <span class="n">rs</span><span class="o">.</span><span class="n">read_mtz</span><span class="p">(</span><span class="s2">&quot;data/HEWL_unmerged.mtz&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -439,8 +435,7 @@ example, we will explore whether the scaled reflection observations are normally
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">merged_normal</span> <span class="o">=</span> <span class="n">rs</span><span class="o">.</span><span class="n">algorithms</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">ds</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">merged_normal</span> <span class="o">=</span> <span class="n">rs</span><span class="o">.</span><span class="n">algorithms</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">ds</span><span class="p">)</span>
 <span class="n">merged_normal</span> <span class="o">=</span> <span class="n">merged_normal</span><span class="o">.</span><span class="n">stack_anomalous</span><span class="p">()</span>
 </pre></div>
 </div>
@@ -449,8 +444,7 @@ example, we will explore whether the scaled reflection observations are normally
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">ds</span><span class="o">.</span><span class="n">hkl_to_asu</span><span class="p">(</span><span class="n">anomalous</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ds</span><span class="o">.</span><span class="n">hkl_to_asu</span><span class="p">(</span><span class="n">anomalous</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="n">ds</span><span class="p">[</span><span class="s2">&quot;IML&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">merged_normal</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">ds</span><span class="o">.</span><span class="n">index</span><span class="p">,</span> <span class="s2">&quot;I&quot;</span><span class="p">]</span>
 </pre></div>
 </div>
@@ -459,8 +453,7 @@ example, we will explore whether the scaled reflection observations are normally
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="c1"># Expected residuals for normally distributed data</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Expected residuals for normally distributed data</span>
 <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="mf">6.</span><span class="p">,</span> <span class="mf">6.</span><span class="p">,</span> <span class="mi">50</span><span class="p">)</span>
 <span class="n">bin_width</span> <span class="o">=</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
 <span class="n">normal</span> <span class="o">=</span> <span class="n">bin_width</span><span class="o">*</span><span class="n">ds</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">*</span><span class="p">(</span><span class="mi">1</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">))</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="mf">0.5</span><span class="o">*</span><span class="n">x</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
@@ -503,8 +496,7 @@ I^{ML} &= \underset{\mu}{\mathrm{argmin}}\ -\sum_{h,i} \log P(I_{h,i} | \mu_h, \
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="k">def</span> <span class="nf">merge_mle</span><span class="p">(</span><span class="n">ds</span><span class="p">,</span> <span class="n">distribution</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="n">lr</span><span class="o">=</span><span class="mf">.5</span><span class="p">,</span> <span class="n">progress_bar</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">return_loss</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">merge_mle</span><span class="p">(</span><span class="n">ds</span><span class="p">,</span> <span class="n">distribution</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="n">lr</span><span class="o">=</span><span class="mf">.5</span><span class="p">,</span> <span class="n">progress_bar</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">return_loss</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Merge observations using the provided distribution as an error model.</span>
 <span class="sd">    Additional arguments or keyword arguments will be passed to the PyTorch</span>
@@ -580,8 +572,7 @@ model</a> with <code class="docutils literal notranslate"><span class="pre">df=4
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">result1</span><span class="p">,</span> <span class="n">loss1</span> <span class="o">=</span> <span class="n">merge_mle</span><span class="p">(</span><span class="n">ds</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">distributions</span><span class="o">.</span><span class="n">StudentT</span><span class="p">,</span> <span class="mf">4.0</span><span class="p">,</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">result1</span><span class="p">,</span> <span class="n">loss1</span> <span class="o">=</span> <span class="n">merge_mle</span><span class="p">(</span><span class="n">ds</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">distributions</span><span class="o">.</span><span class="n">StudentT</span><span class="p">,</span> <span class="mf">4.0</span><span class="p">,</span>
                            <span class="n">progress_bar</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">return_loss</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
 <span class="c1"># Plot loss function</span>
@@ -611,8 +602,7 @@ model</a> with <code class="docutils literal notranslate"><span class="pre">df=4
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">result1</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">result1</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -711,8 +701,7 @@ model</a> with <code class="docutils literal notranslate"><span class="pre">df=4
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">result2</span><span class="p">,</span> <span class="n">loss2</span> <span class="o">=</span> <span class="n">merge_mle</span><span class="p">(</span><span class="n">ds</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">distributions</span><span class="o">.</span><span class="n">Normal</span><span class="p">,</span> <span class="n">lr</span><span class="o">=</span><span class="mf">1e-3</span><span class="p">,</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">result2</span><span class="p">,</span> <span class="n">loss2</span> <span class="o">=</span> <span class="n">merge_mle</span><span class="p">(</span><span class="n">ds</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">distributions</span><span class="o">.</span><span class="n">Normal</span><span class="p">,</span> <span class="n">lr</span><span class="o">=</span><span class="mf">1e-3</span><span class="p">,</span>
                            <span class="n">progress_bar</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">return_loss</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="n">result2</span> <span class="o">=</span> <span class="n">result2</span><span class="p">[[</span><span class="s2">&quot;I(+)&quot;</span><span class="p">,</span> <span class="s2">&quot;SIGI(+)&quot;</span><span class="p">,</span> <span class="s2">&quot;I(-)&quot;</span><span class="p">,</span> <span class="s2">&quot;SIGI(-)&quot;</span><span class="p">]]</span><span class="o">.</span><span class="n">stack_anomalous</span><span class="p">()</span>
 
@@ -757,8 +746,7 @@ model</a> with <code class="docutils literal notranslate"><span class="pre">df=4
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="k">def</span> <span class="nf">sample_halfdatasets</span><span class="p">(</span><span class="n">data</span><span class="p">):</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">sample_halfdatasets</span><span class="p">(</span><span class="n">data</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Randomly split DataSet into two equal halves by BATCH&quot;&quot;&quot;</span>
     <span class="n">batch</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">BATCH</span><span class="o">.</span><span class="n">unique</span><span class="p">()</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">(</span><span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>
     <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">shuffle</span><span class="p">(</span><span class="n">batch</span><span class="p">)</span>
@@ -773,8 +761,7 @@ model</a> with <code class="docutils literal notranslate"><span class="pre">df=4
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="k">def</span> <span class="nf">merge_dataset</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">nsamples</span><span class="p">,</span> <span class="n">distribution</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">merge_dataset</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">nsamples</span><span class="p">,</span> <span class="n">distribution</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Merge dataset with repeated 2-fold cross-validation using `distribution`</span>
 <span class="sd">    as error model.</span>
@@ -796,8 +783,7 @@ model</a> with <code class="docutils literal notranslate"><span class="pre">df=4
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="k">def</span> <span class="nf">merge_dataset_normal</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">nsamples</span><span class="p">):</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">merge_dataset_normal</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">nsamples</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Merge dataset with repeated 2-fold cross-validation using normal distribution</span>
 <span class="sd">    as error model.</span>
@@ -820,8 +806,7 @@ model</a> with <code class="docutils literal notranslate"><span class="pre">df=4
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">merged_df4</span> <span class="o">=</span> <span class="n">merge_dataset</span><span class="p">(</span><span class="n">ds</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">distributions</span><span class="o">.</span><span class="n">StudentT</span><span class="p">,</span> <span class="mf">4.0</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">merged_df4</span> <span class="o">=</span> <span class="n">merge_dataset</span><span class="p">(</span><span class="n">ds</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">distributions</span><span class="o">.</span><span class="n">StudentT</span><span class="p">,</span> <span class="mf">4.0</span><span class="p">)</span>
 <span class="n">merged_df8</span> <span class="o">=</span> <span class="n">merge_dataset</span><span class="p">(</span><span class="n">ds</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">distributions</span><span class="o">.</span><span class="n">StudentT</span><span class="p">,</span> <span class="mf">8.0</span><span class="p">)</span>
 <span class="n">merged_df16</span> <span class="o">=</span> <span class="n">merge_dataset</span><span class="p">(</span><span class="n">ds</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">distributions</span><span class="o">.</span><span class="n">StudentT</span><span class="p">,</span> <span class="mf">16.0</span><span class="p">)</span>
 <span class="n">merged_df32</span> <span class="o">=</span> <span class="n">merge_dataset</span><span class="p">(</span><span class="n">ds</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">distributions</span><span class="o">.</span><span class="n">StudentT</span><span class="p">,</span> <span class="mf">32.0</span><span class="p">)</span>
@@ -845,8 +830,7 @@ model</a> with <code class="docutils literal notranslate"><span class="pre">df=4
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">merged_dfinf</span> <span class="o">=</span> <span class="n">merge_dataset_normal</span><span class="p">(</span><span class="n">ds</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">merged_dfinf</span> <span class="o">=</span> <span class="n">merge_dataset_normal</span><span class="p">(</span><span class="n">ds</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -863,8 +847,7 @@ model</a> with <code class="docutils literal notranslate"><span class="pre">df=4
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="k">def</span> <span class="nf">computeCC</span><span class="p">(</span><span class="n">merged</span><span class="p">,</span> <span class="n">bins</span><span class="o">=</span><span class="mi">12</span><span class="p">):</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">computeCC</span><span class="p">(</span><span class="n">merged</span><span class="p">,</span> <span class="n">bins</span><span class="o">=</span><span class="mi">12</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Compute CCanom for input data&quot;&quot;&quot;</span>
     <span class="n">merged</span><span class="p">,</span> <span class="n">labels</span> <span class="o">=</span> <span class="n">merged</span><span class="o">.</span><span class="n">assign_resolution_bins</span><span class="p">(</span><span class="n">bins</span><span class="o">=</span><span class="n">bins</span><span class="p">)</span>
     <span class="n">merged</span><span class="p">[</span><span class="s2">&quot;ANOM1&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">merged</span><span class="p">[</span><span class="s2">&quot;I(+)1&quot;</span><span class="p">]</span> <span class="o">-</span> <span class="n">merged</span><span class="p">[</span><span class="s2">&quot;I(-)1&quot;</span><span class="p">]</span>
@@ -880,8 +863,7 @@ model</a> with <code class="docutils literal notranslate"><span class="pre">df=4
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">resultsinf</span><span class="p">,</span> <span class="n">labels</span> <span class="o">=</span> <span class="n">computeCC</span><span class="p">(</span><span class="n">merged_dfinf</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">resultsinf</span><span class="p">,</span> <span class="n">labels</span> <span class="o">=</span> <span class="n">computeCC</span><span class="p">(</span><span class="n">merged_dfinf</span><span class="p">)</span>
 <span class="n">results4</span><span class="p">,</span> <span class="n">labels</span> <span class="o">=</span> <span class="n">computeCC</span><span class="p">(</span><span class="n">merged_df4</span><span class="p">)</span>
 <span class="n">results8</span><span class="p">,</span> <span class="n">labels</span> <span class="o">=</span> <span class="n">computeCC</span><span class="p">(</span><span class="n">merged_df8</span><span class="p">)</span>
 <span class="n">results16</span><span class="p">,</span> <span class="n">labels</span> <span class="o">=</span> <span class="n">computeCC</span><span class="p">(</span><span class="n">merged_df16</span><span class="p">)</span>
@@ -894,8 +876,7 @@ model</a> with <code class="docutils literal notranslate"><span class="pre">df=4
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[19]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="k">def</span> <span class="nf">plot</span><span class="p">(</span><span class="n">results</span><span class="p">,</span> <span class="n">label</span><span class="p">,</span> <span class="n">ax</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">plot</span><span class="p">(</span><span class="n">results</span><span class="p">,</span> <span class="n">label</span><span class="p">,</span> <span class="n">ax</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
     <span class="n">ax</span><span class="o">.</span><span class="n">errorbar</span><span class="p">(</span><span class="n">results</span><span class="o">.</span><span class="n">index</span><span class="p">,</span> <span class="n">results</span><span class="p">[</span><span class="s2">&quot;mean&quot;</span><span class="p">],</span> <span class="n">yerr</span><span class="o">=</span><span class="n">results</span><span class="p">[</span><span class="s2">&quot;std&quot;</span><span class="p">],</span> <span class="n">color</span><span class="o">=</span><span class="n">color</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="n">label</span><span class="p">)</span>
     <span class="k">return</span>
 
