@@ -1,2 +1,2 @@
 # Add binder requirements that are not dependencies
-pip install reciprocalspaceship[dev]
+pip install reciprocalspaceship[examples]
