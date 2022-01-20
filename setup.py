@@ -47,18 +47,17 @@ docs_require = [
     "nbsphinx",
     "sphinx-panels",
     "sphinxcontrib-autoprogram",
-    "jupyter",
     "autodocsumm",
 ]
 
 # Examples requirements
 examples_require = [
+    "jupyter",
     "tqdm",
     "matplotlib",
     "seaborn",
     "celluloid",
     "scikit-image",
-    "torch",
 ]
 
 setup(
