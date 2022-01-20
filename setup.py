@@ -58,7 +58,6 @@ examples_require = [
     "seaborn",
     "celluloid",
     "scikit-image",
-    "torch",
 ]
 
 setup(
