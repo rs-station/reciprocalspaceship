@@ -390,13 +390,39 @@ example, we will explore whether the scaled reflection observations are normally
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">seaborn</span> <span class="k">as</span> <span class="nn">sns</span>
 <span class="n">sns</span><span class="o">.</span><span class="n">set_context</span><span class="p">(</span><span class="s2">&quot;notebook&quot;</span><span class="p">,</span> <span class="n">font_scale</span><span class="o">=</span><span class="mf">1.3</span><span class="p">)</span>
-<span class="kn">from</span> <span class="nn">tqdm</span> <span class="kn">import</span> <span class="n">tqdm</span>
-<span class="kn">import</span> <span class="nn">torch</span>
+<span class="kn">from</span> <span class="nn">tqdm.notebook</span> <span class="kn">import</span> <span class="n">tqdm</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Install PyTorch to running kernel</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="o">!{</span>sys.executable<span class="o">}</span> -m pip install torch
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Requirement already satisfied: torch in /Users/jgreisman/miniconda3/envs/test/lib/python3.9/site-packages (1.10.1)
+Requirement already satisfied: typing-extensions in /Users/jgreisman/miniconda3/envs/test/lib/python3.9/site-packages (from torch) (4.0.1)
+</pre></div></div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">torch</span>
 </pre></div>
 </div>
 </div>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">reciprocalspaceship</span> <span class="k">as</span> <span class="nn">rs</span>
@@ -404,7 +430,7 @@ example, we will explore whether the scaled reflection observations are normally
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">rs</span><span class="o">.</span><span class="n">__version__</span><span class="p">)</span>
@@ -416,7 +442,7 @@ example, we will explore whether the scaled reflection observations are normally
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-0.9.9
+0.9.18
 </pre></div></div>
 </div>
 <hr class="docutils" />
@@ -424,7 +450,7 @@ example, we will explore whether the scaled reflection observations are normally
 <h2>Normal Error Model<a class="headerlink" href="#Normal-Error-Model" title="Permalink to this headline"></a></h2>
 <p>It is common in merging to assume that scaled intensities are normally distributed about the true mean. We can assess the validity of this assumption by looking at the residuals between scaled intensities and the maximum likelihood esimate of their true intensity.</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ds</span> <span class="o">=</span> <span class="n">rs</span><span class="o">.</span><span class="n">read_mtz</span><span class="p">(</span><span class="s2">&quot;data/HEWL_unmerged.mtz&quot;</span><span class="p">)</span>
@@ -432,7 +458,7 @@ example, we will explore whether the scaled reflection observations are normally
 </div>
 </div>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">merged_normal</span> <span class="o">=</span> <span class="n">rs</span><span class="o">.</span><span class="n">algorithms</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">ds</span><span class="p">)</span>
@@ -441,7 +467,7 @@ example, we will explore whether the scaled reflection observations are normally
 </div>
 </div>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ds</span><span class="o">.</span><span class="n">hkl_to_asu</span><span class="p">(</span><span class="n">anomalous</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
@@ -450,7 +476,7 @@ example, we will explore whether the scaled reflection observations are normally
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Expected residuals for normally distributed data</span>
@@ -476,7 +502,7 @@ example, we will explore whether the scaled reflection observations are normally
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../_images/examples_3_mergingerrormodel_8_0.png" src="../_images/examples_3_mergingerrormodel_8_0.png" />
+<img alt="../_images/examples_3_mergingerrormodel_10_0.png" src="../_images/examples_3_mergingerrormodel_10_0.png" />
 </div>
 </div>
 <p>These residuals are not symmetric about <span class="math notranslate nohighlight">\(0\)</span>, which would have been expected for truly normally distributed data. In addition, the tails are much “heavier” than for a normal distribution. This suggests that it may be possible to do a better job merging these scaled observations by using a different error model that is more robust to outliers.</p>
@@ -493,7 +519,7 @@ P(data | model) &= \prod_{h,i}P(I_{h,i}|\mu_h, \sigma_{I_{h,i}})
 I^{ML} &= \underset{\mu}{\mathrm{argmin}}\ -\sum_{h,i} \log P(I_{h,i} | \mu_h, \sigma_{I_{h,i}})
 \end{align*}</span> with respect to <span class="math notranslate nohighlight">\(\mu\)</span>. With this formulation, it is possible to supply any parametric form for the error model belonging to the <a class="reference external" href="https://en.wikipedia.org/wiki/Location%E2%80%93scale_family">location-scale family</a> of distributions. This maximum likelihood estimator is implemented in the function below.</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">merge_mle</span><span class="p">(</span><span class="n">ds</span><span class="p">,</span> <span class="n">distribution</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="n">lr</span><span class="o">=</span><span class="mf">.5</span><span class="p">,</span> <span class="n">progress_bar</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">return_loss</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
@@ -569,7 +595,7 @@ I^{ML} &= \underset{\mu}{\mathrm{argmin}}\ -\sum_{h,i} \log P(I_{h,i} | \mu_h, \
 <p>This function must be passed a <code class="docutils literal notranslate"><span class="pre">torch.distribution.Distribution</span></code> to use as the error model. It then uses the <a class="reference external" href="https://pytorch.org/docs/stable/optim.html#torch.optim.Adam">Adam optimizer</a> to minimize the negative log-likelihood and fit the merged intensities, <span class="math notranslate nohighlight">\(I^{ML}\)</span>. For stability, the model is initialized using the mean intensity values from <code class="docutils literal notranslate"><span class="pre">rs.algorithms.merge()</span></code>. The following cell fits the model using a <a class="reference external" href="https://pytorch.org/docs/stable/distributions.html#studentt">Student’s t-distributed error
 model</a> with <code class="docutils literal notranslate"><span class="pre">df=4.0</span></code>.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">result1</span><span class="p">,</span> <span class="n">loss1</span> <span class="o">=</span> <span class="n">merge_mle</span><span class="p">(</span><span class="n">ds</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">distributions</span><span class="o">.</span><span class="n">StudentT</span><span class="p">,</span> <span class="mf">4.0</span><span class="p">,</span>
@@ -586,20 +612,18 @@ model</a> with <code class="docutils literal notranslate"><span class="pre">df=4
 <div class="nboutput docutils container">
 <div class="prompt empty docutils container">
 </div>
-<div class="output_area stderr docutils container">
-<div class="highlight"><pre>
-100%|██████████| 300/300 [00:15&lt;00:00, 19.10it/s]
-</pre></div></div>
+<div class="output_area docutils container">
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "6cd5820834fa44d5b66d870ad7bd24e1", "version_major": 2, "version_minor": 0}</script></div>
 </div>
 <div class="nboutput nblast docutils container">
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../_images/examples_3_mergingerrormodel_13_1.png" src="../_images/examples_3_mergingerrormodel_13_1.png" />
+<img alt="../_images/examples_3_mergingerrormodel_15_1.png" src="../_images/examples_3_mergingerrormodel_15_1.png" />
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">result1</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
@@ -607,7 +631,7 @@ model</a> with <code class="docutils literal notranslate"><span class="pre">df=4
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
 </pre></div>
 </div>
 <div class="output_area rendered_html docutils container">
@@ -633,8 +657,8 @@ model</a> with <code class="docutils literal notranslate"><span class="pre">df=4
       <th></th>
       <th>I(+)</th>
       <th>SIGI(+)</th>
-      <th>SIGI(-)</th>
       <th>I(-)</th>
+      <th>SIGI(-)</th>
     </tr>
     <tr>
       <th>H</th>
@@ -648,49 +672,49 @@ model</a> with <code class="docutils literal notranslate"><span class="pre">df=4
   </thead>
   <tbody>
     <tr>
-      <th>29</th>
-      <th>22</th>
-      <th>10</th>
-      <td>24.814007</td>
-      <td>2.2302854</td>
-      <td>2.4028344</td>
-      <td>18.25422</td>
-    </tr>
-    <tr>
+      <th>18</th>
       <th>14</th>
-      <th>2</th>
-      <th>2</th>
-      <td>651.4589</td>
-      <td>11.476823</td>
-      <td>11.798667</td>
-      <td>674.9979</td>
+      <th>9</th>
+      <td>13.383095</td>
+      <td>0.59039783</td>
+      <td>12.244447</td>
+      <td>0.5472484</td>
     </tr>
     <tr>
-      <th>26</th>
+      <th>25</th>
+      <th>24</th>
+      <th>1</th>
+      <td>481.62515</td>
+      <td>16.697405</td>
+      <td>487.13596</td>
+      <td>16.214811</td>
+    </tr>
+    <tr>
+      <th>39</th>
       <th>13</th>
-      <th>15</th>
-      <td>203.8359</td>
-      <td>6.8648214</td>
-      <td>7.0678773</td>
-      <td>200.09224</td>
+      <th>7</th>
+      <td>62.35997</td>
+      <td>3.6021707</td>
+      <td>61.64068</td>
+      <td>3.1317017</td>
+    </tr>
+    <tr>
+      <th>29</th>
+      <th>29</th>
+      <th>5</th>
+      <td>235.86664</td>
+      <td>8.579554</td>
+      <td>235.86664</td>
+      <td>8.579554</td>
     </tr>
     <tr>
       <th>30</th>
-      <th>23</th>
-      <th>7</th>
-      <td>106.34943</td>
-      <td>3.7508175</td>
-      <td>4.130177</td>
-      <td>93.06098</td>
-    </tr>
-    <tr>
-      <th>37</th>
-      <th>2</th>
-      <th>0</th>
-      <td>1.3474302</td>
-      <td>0.59519184</td>
-      <td>0.59519184</td>
-      <td>1.3474302</td>
+      <th>14</th>
+      <th>5</th>
+      <td>174.9836</td>
+      <td>5.340581</td>
+      <td>189.3732</td>
+      <td>4.8809543</td>
     </tr>
   </tbody>
 </table>
@@ -698,7 +722,7 @@ model</a> with <code class="docutils literal notranslate"><span class="pre">df=4
 </div>
 <p>As a sanity check we can test this implementation by passing the normal distribution as the error model. In this case, the initial values should match the maximum likelihood estimate and optimization should not change the estimates.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">result2</span><span class="p">,</span> <span class="n">loss2</span> <span class="o">=</span> <span class="n">merge_mle</span><span class="p">(</span><span class="n">ds</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">distributions</span><span class="o">.</span><span class="n">Normal</span><span class="p">,</span> <span class="n">lr</span><span class="o">=</span><span class="mf">1e-3</span><span class="p">,</span>
@@ -723,16 +747,14 @@ model</a> with <code class="docutils literal notranslate"><span class="pre">df=4
 <div class="nboutput docutils container">
 <div class="prompt empty docutils container">
 </div>
-<div class="output_area stderr docutils container">
-<div class="highlight"><pre>
-100%|██████████| 300/300 [00:05&lt;00:00, 52.75it/s]
-</pre></div></div>
+<div class="output_area docutils container">
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "df1d4a7dda514a0d84aef6c962136263", "version_major": 2, "version_minor": 0}</script></div>
 </div>
 <div class="nboutput nblast docutils container">
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../_images/examples_3_mergingerrormodel_16_1.png" src="../_images/examples_3_mergingerrormodel_16_1.png" />
+<img alt="../_images/examples_3_mergingerrormodel_18_1.png" src="../_images/examples_3_mergingerrormodel_18_1.png" />
 </div>
 </div>
 <p>We can see here that the loss function does not change during the optimization, and that the final maximum likelihood estimates for the intensities are equivalent to the input. This validates that the merging function is working as expected.</p>
@@ -743,7 +765,7 @@ model</a> with <code class="docutils literal notranslate"><span class="pre">df=4
 <p>A Student’s <em>t</em>-distribution is useful in modeling data that contain outliers. This distribution places more density in the tails than a normal which makes maximum likelihood estimates robust to outlying measurements. It is parameterized by a degree of freedom, <span class="math notranslate nohighlight">\(\nu\)</span>, which can take a value between <span class="math notranslate nohighlight">\([0, \infty)\)</span> and controls the heaviness of the tails. As <span class="math notranslate nohighlight">\(\nu\to\infty\)</span>, the probability density function approaches a normal distribution.</p>
 <p>Below, we will set up a few helper functions for merging our data within randomly partitioned half-datasets. We will do this for the Student’s t-distribution scanning several degrees of freedom and for the normal distribution so that we can compare the results. Based on the previous example, we will compute <span class="math notranslate nohighlight">\(CC_{anom}\)</span> using a Spearman correlation coefficient and repeated 2-fold cross-validation to compare the different error models.</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">sample_halfdatasets</span><span class="p">(</span><span class="n">data</span><span class="p">):</span>
@@ -758,7 +780,7 @@ model</a> with <code class="docutils literal notranslate"><span class="pre">df=4
 </div>
 </div>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">merge_dataset</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">nsamples</span><span class="p">,</span> <span class="n">distribution</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
@@ -780,7 +802,7 @@ model</a> with <code class="docutils literal notranslate"><span class="pre">df=4
 </div>
 </div>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">merge_dataset_normal</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">nsamples</span><span class="p">):</span>
@@ -803,7 +825,7 @@ model</a> with <code class="docutils literal notranslate"><span class="pre">df=4
 </div>
 <p><em>Note:</em> Using these settings, the following will take ~15 min to complete. For the pre-print, this was run with <code class="docutils literal notranslate"><span class="pre">nsamples=15</span></code>. It is possible to run into occasional numerical instabilities when computing the Hessian for <code class="docutils literal notranslate"><span class="pre">df=4.0</span></code>, but these will only impact <span class="math notranslate nohighlight">\(\sigma_I^{ML}\)</span> estimates which are not used here.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">merged_df4</span> <span class="o">=</span> <span class="n">merge_dataset</span><span class="p">(</span><span class="n">ds</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">distributions</span><span class="o">.</span><span class="n">StudentT</span><span class="p">,</span> <span class="mf">4.0</span><span class="p">)</span>
@@ -814,20 +836,38 @@ model</a> with <code class="docutils literal notranslate"><span class="pre">df=4
 </pre></div>
 </div>
 </div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "e90b8157e9544b92993a1bf9fdbd16de", "version_major": 2, "version_minor": 0}</script></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "c3b8a44979194a8797bbab8b188461b0", "version_major": 2, "version_minor": 0}</script></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "5ad2c52e888140d4aa7dacb1d02bba8b", "version_major": 2, "version_minor": 0}</script></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "6352e6d754a24eb69cd40833d62ca824", "version_major": 2, "version_minor": 0}</script></div>
+</div>
 <div class="nboutput nblast docutils container">
 <div class="prompt empty docutils container">
 </div>
-<div class="output_area stderr docutils container">
-<div class="highlight"><pre>
-100%|██████████| 5/5 [01:29&lt;00:00, 17.96s/it]
-100%|██████████| 5/5 [01:30&lt;00:00, 18.15s/it]
-100%|██████████| 5/5 [01:29&lt;00:00, 17.95s/it]
-100%|██████████| 5/5 [01:29&lt;00:00, 17.93s/it]
-100%|██████████| 5/5 [01:29&lt;00:00, 17.99s/it]
-</pre></div></div>
+<div class="output_area docutils container">
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "935dbe5bc04d46c0ad929bfd045aee20", "version_major": 2, "version_minor": 0}</script></div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">merged_dfinf</span> <span class="o">=</span> <span class="n">merge_dataset_normal</span><span class="p">(</span><span class="n">ds</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
@@ -837,14 +877,12 @@ model</a> with <code class="docutils literal notranslate"><span class="pre">df=4
 <div class="nboutput nblast docutils container">
 <div class="prompt empty docutils container">
 </div>
-<div class="output_area stderr docutils container">
-<div class="highlight"><pre>
-100%|██████████| 5/5 [00:16&lt;00:00,  3.38s/it]
-</pre></div></div>
+<div class="output_area docutils container">
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "d537839fa249477f99f60a35675304f2", "version_major": 2, "version_minor": 0}</script></div>
 </div>
 <p>Now that we have merged the data using Student’s <em>t</em>-distributions and a normal distribution as the error model, we can compute <span class="math notranslate nohighlight">\(CC_{anom}\)</span> and plot the results by resolution bin.</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[19]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">computeCC</span><span class="p">(</span><span class="n">merged</span><span class="p">,</span> <span class="n">bins</span><span class="o">=</span><span class="mi">12</span><span class="p">):</span>
@@ -860,7 +898,7 @@ model</a> with <code class="docutils literal notranslate"><span class="pre">df=4
 </div>
 </div>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[20]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">resultsinf</span><span class="p">,</span> <span class="n">labels</span> <span class="o">=</span> <span class="n">computeCC</span><span class="p">(</span><span class="n">merged_dfinf</span><span class="p">)</span>
@@ -873,7 +911,7 @@ model</a> with <code class="docutils literal notranslate"><span class="pre">df=4
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[19]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[21]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">plot</span><span class="p">(</span><span class="n">results</span><span class="p">,</span> <span class="n">label</span><span class="p">,</span> <span class="n">ax</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
@@ -905,7 +943,7 @@ model</a> with <code class="docutils literal notranslate"><span class="pre">df=4
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../_images/examples_3_mergingerrormodel_28_0.png" src="../_images/examples_3_mergingerrormodel_28_0.png" />
+<img alt="../_images/examples_3_mergingerrormodel_30_0.png" src="../_images/examples_3_mergingerrormodel_30_0.png" />
 </div>
 </div>
 </section>
