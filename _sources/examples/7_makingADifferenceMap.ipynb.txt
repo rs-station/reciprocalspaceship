@@ -1,0 +1,431 @@
+{
+ "cells": [
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "# Making Your Own Weighted Difference Map \n",
+    "\n",
+    "A common methodology for investigating structural changes in change-of-state crystallography experiments is using difference maps between structure factor amplitudes collected with and without a perturbation. These $(|F_{On}| - |F_{Off}|)$ maps may be noisy due to systematic errors or scaling artifacts, and have historically been weighted based on the magnitude of the difference signal and/or the error estimates associated with the measured values.  \n",
+    "\n",
+    "In the previous notebook, we used PYP data to make a weighted difference map. This notebook is a template to allow you to make your own difference map using your own data.\n",
+    "\n",
+    "<div class=\"alert alert-block alert-info\">\n",
+    "<b>Note:</b> To run this, you will be uploading MTZ files to this notebook. Although these files will be on a server temporarily, they are deleted once this notebook is closed.\n",
+    "</div>"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "%matplotlib inline\n",
+    "import matplotlib.pyplot as plt\n",
+    "import seaborn as sns\n",
+    "sns.set_context(\"notebook\", font_scale=1.4)\n",
+    "import numpy as np"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "import reciprocalspaceship as rs"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "print(rs.__version__)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "---\n",
+    "### Load `On` and `Off` DataSets  \n",
+    "\n",
+    "You will specify `On` and `Off` MTZ files that are uploaded to this notebook. It is assumed that there is exactly one column in each MTZ containing structure factors and one column containing uncertainties in those structure factors. If there are multiple columns with each data type, only the first will be used."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "import ipywidgets as widgets\n",
+    "from IPython.display import display\n",
+    "import io\n",
+    "\n",
+    "print(\"On MTZ:\")\n",
+    "uploader_on = widgets.FileUpload(accept=\".mtz\", multiple=False)\n",
+    "display(uploader_on)\n",
+    "\n",
+    "print(\"Off MTZ:\")\n",
+    "uploader_off = widgets.FileUpload(accept=\".mtz\", multiple=False)\n",
+    "display(uploader_off)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "def read_uploadedFile(uploadedFile):\n",
+    "    \"\"\"Use temporary file to read uploaded data\"\"\"\n",
+    "    from tempfile import NamedTemporaryFile\n",
+    "    upload = NamedTemporaryFile(suffix=\"mtz\")\n",
+    "    upload.write(uploadedFile.data[0])\n",
+    "    mtz = rs.read_mtz(upload.name)\n",
+    "    upload.close()\n",
+    "    return mtz"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "mtz_on  = read_uploadedFile(uploader_on)\n",
+    "mtz_off = read_uploadedFile(uploader_off)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "The on file looks like this:"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "mtz_on"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "def subset_to_F_and_SigF(mtz):\n",
+    "    F_column = [ l for l in mtz.columns if mtz[l].dtype.mtztype == \"F\"]\n",
+    "    SigF_column = [ l for l in mtz.columns if mtz[l].dtype.mtztype == \"Q\"]\n",
+    "    return mtz[[F_column[0], SigF_column[0]]]"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "mtz_on = subset_to_F_and_SigF(mtz_on)\n",
+    "mtz_off = subset_to_F_and_SigF(mtz_off)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "Since difference maps can only be made with Fourier magnitudes that were measured in both datasets, we will subset the datasets to their common Miller indices."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "diff = mtz_off.merge(mtz_on, left_index=True, right_index=True, suffixes=(\"_off\", \"_on\"))"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "diff.head()"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "---\n",
+    "### Compute Difference Map Coefficients and Errors  \n",
+    "\n",
+    "We will compute $(|F_{On}| - |F_{Off}|)$ for use as the coefficients of the difference map, and we will propagate the uncertainties in quadrature. These propagated uncertainties will be used when computing weights for each Miller index."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "diff[\"DF\"] = (diff[\"F_on\"] - diff[\"F_off\"]).astype(\"SFAmplitude\")\n",
+    "diff[\"SigDF\"] = np.sqrt(diff[\"SigF_on\"]**2 + diff[\"SigF_off\"]**2).astype(\"Stddev\")"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "---\n",
+    "### Compute Difference Map Weights  \n",
+    "\n",
+    "There are several weighting schemes that have been used to produce time-resolved difference maps. Many of them take the form below, involving a term based on the uncertainty in the difference structure factor amplitude ($\\sigma_{\\Delta F}$), and optionally, a scale term based on the the magnitude of the observed $\\Delta F$. With $\\alpha=0$, these weights take the form employed in [Ursby and Bourgeois, **Acta Cryst** (1997)](https://scripts.iucr.org/cgi-bin/paper?he0183). On the other hand, [Šrajer *et al*, **Biochemistry** (2001)](https://pubs.acs.org/doi/10.1021/bi010715u) employed weights with $\\alpha=1$ in order to decrease the impact of abnormally large values of $\\Delta F$ that may have erroneously small uncertainties. Finally, other weighting schemes have employed intermediate values of $\\alpha$ ([Hekstra *et al*, **Nature** (2016)](https://www.nature.com/articles/nature20571)). \n",
+    "\n",
+    "\\begin{equation}\n",
+    "w = \\left(1 + \\frac{\\sigma_{\\Delta F}^2}{\\overline{\\sigma_{\\Delta F}^2}} + \\alpha\\frac{|\\Delta F|^2}{\\overline{ |\\Delta F|^2 }} \\right)^{-1}\n",
+    "\\end{equation}  \n",
+    "\n",
+    "For illustration purposes, we will compute weights with $\\alpha=0.05$."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "def compute_weights(df, sigdf, alpha=0):\n",
+    "    \"\"\"\n",
+    "    Compute weights for each structure factor based on deltaF and its uncertainty\n",
+    "    \"\"\"\n",
+    "    w = (1 + (sigdf**2 / (sigdf**2).mean()) + alpha*(df**2 / (df**2).mean()))\n",
+    "    return w**-1"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "diff[\"W\"] = compute_weights(diff[\"DF\"], diff[\"SigDF\"], alpha=0.00)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "Let's visualize the weights relative to the magnitude of $\\Delta F$ and the signal-to-noise ratio in order to understand how they will affect different structure factors."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "fig, ax = plt.subplots(figsize=(10, 7))\n",
+    "pts = ax.scatter(diff.DF, diff.DF.abs()/diff.SigDF, c=diff.W)\n",
+    "x1, x2 = plt.gca().get_xlim()\n",
+    "ax.set_xlim(x1-0.5, x2+0.5)\n",
+    "ax.set_xlabel(r\"$\\Delta F$\")\n",
+    "ax.set_ylabel(r\"$\\frac{\\left| \\Delta F \\right|}{\\sigma_{\\Delta F}}$\")\n",
+    "\n",
+    "# Inset\n",
+    "axins = ax.inset_axes([0.6, 0.6, 0.37, 0.37])\n",
+    "axins.scatter(diff.DF, diff.DF.abs()/diff.SigDF, c=diff.W)\n",
+    "y1, y2 = 0, 10\n",
+    "axins.set_xlim(x1, x2)\n",
+    "axins.set_ylim(y1, y2)\n",
+    "ax.indicate_inset_zoom(axins)\n",
+    "\n",
+    "fig.colorbar(pts, label=\"Weight\")\n",
+    "plt.show()"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "As seen in the above plot, difference Fourier coefficients with low signal-to-noise ratios (large $\\sigma_{\\Delta F}$ relative to $|\\Delta F|$) are assigned lower weight. Difference Fourier coefficients with large amplitude are also assigned lower weight."
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "---\n",
+    "### Phasing the Difference Map\n",
+    "\n",
+    "We have our difference Fourier amplitudes and weights, so we just need phases in order to make a difference map. We will use the phases from an uploaded MTZ file -- this should correspond to an isomorphous refined structure for the system of interest. If a column named `PH2FOFCWT` is defined, it is used. Otherwise, the first column of phases is used."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "print(\"Reference MTZ with Phases:\")\n",
+    "uploader_ref = widgets.FileUpload(accept=\".mtz\", multiple=False)\n",
+    "display(uploader_ref)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "mtz_ref = read_uploadedFile(uploader_ref)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "phases = mtz_ref.get_phase_keys()\n",
+    "if \"PH2FOFCWT\" in phases:\n",
+    "    phi = \"PH2FOFCWT\"\n",
+    "else:\n",
+    "    phi = phases[0]"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "diff = diff.merge(mtz_ref[phi], left_index=True, right_index=True)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "diff"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "The object `diff` can now be written to an MTZ file and downloaded to view offline in your GUI of choice -- we will first make a \"download\" button."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "import base64\n",
+    "import hashlib\n",
+    "from typing import Callable\n",
+    "\n",
+    "import ipywidgets\n",
+    "from IPython.display import HTML\n",
+    "\n",
+    "\n",
+    "class DownloadButton(ipywidgets.Button):\n",
+    "    \"\"\"Download button with dynamic content\n",
+    "\n",
+    "    The content is generated using a callback when the button is clicked.\n",
+    "    \"\"\"\n",
+    "\n",
+    "    def __init__(self, filename: str, contents: Callable[[], str], **kwargs):\n",
+    "        super(DownloadButton, self).__init__(**kwargs)\n",
+    "        self.filename = filename\n",
+    "        self.contents = contents\n",
+    "        self.on_click(self.__on_click)\n",
+    "\n",
+    "    def __on_click(self, b):\n",
+    "        contents: bytes = self.contents()\n",
+    "        b64 = base64.encodebytes(contents)\n",
+    "        payload = b64.decode()\n",
+    "        digest = hashlib.md5(contents).hexdigest()  # bypass browser cache\n",
+    "        id = f'dl_{digest}'\n",
+    "\n",
+    "        display(HTML(f\"\"\"\n",
+    "<html>\n",
+    "<body>\n",
+    "<a id=\"{id}\" download=\"{self.filename}\" href=\"data:text/csv;base64,{payload}\" download>\n",
+    "</a>\n",
+    "\n",
+    "<script>\n",
+    "(function download() {{\n",
+    "document.getElementById('{id}').click();\n",
+    "}})()\n",
+    "</script>\n",
+    "\n",
+    "</body>\n",
+    "</html>\n",
+    "\"\"\"))"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "def getDiffMap(mtz):\n",
+    "    from tempfile import NamedTemporaryFile\n",
+    "    from io import BytesIO\n",
+    "    download = NamedTemporaryFile(suffix=\"mtz\")\n",
+    "    mtz.write_mtz(download.name)\n",
+    "    with open(download.name, 'rb') as fh:\n",
+    "        buf = BytesIO(fh.read())\n",
+    "    download.close()\n",
+    "    return buf.getvalue()\n",
+    "\n",
+    "DownloadButton(filename='diffmap.mtz', contents=lambda: getDiffMap(diff), description='download')"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "Good luck with your weighted difference map!"
+   ]
+  }
+ ],
+ "metadata": {
+  "kernelspec": {
+   "display_name": "Python 3 (ipykernel)",
+   "language": "python",
+   "name": "python3"
+  },
+  "language_info": {
+   "codemirror_mode": {
+    "name": "ipython",
+    "version": 3
+   },
+   "file_extension": ".py",
+   "mimetype": "text/x-python",
+   "name": "python",
+   "nbconvert_exporter": "python",
+   "pygments_lexer": "ipython3",
+   "version": "3.8.11"
+  }
+ },
+ "nbformat": 4,
+ "nbformat_minor": 4
+}
