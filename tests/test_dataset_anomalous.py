@@ -116,18 +116,19 @@ def test_stack_anomalous_non_suffixes(data_merged, label_dict, suffixes):
     assert "I" not in result.columns
     assert "I_foo" not in result.columns
 
+
 def test_stack_anomalous_duplicates(data_merged):
     """
     Test DataSet.stack_anomalous() raises ValueError if stacking will result
     in duplicate column names
     """
-    
-    rename_dict = {"IMEAN" : "I"}
+
+    rename_dict = {"IMEAN": "I"}
     data_duplicates = data_merged.rename(columns=rename_dict)
-    
+
     with pytest.raises(ValueError):
         data_duplicates.stack_anomalous()
-    
+
 
 def test_stack_anomalous_unmerged(data_unmerged):
     """

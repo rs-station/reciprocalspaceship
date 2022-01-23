@@ -897,10 +897,10 @@ class DataSet(pd.DataFrame):
         for lab in new_labels:
             if lab in self.columns:
                 raise ValueError(
-                    f"Stacking anomalous data will result in duplicate column " 
+                    f"Stacking anomalous data will result in duplicate column "
                     f"names. Rename or drop column '{lab}' and try again."
                 )
-        
+
         # Map Friedel reflections to +/- ASU
         centrics = self.label_centrics()["CENTRIC"]
         dataset_plus = self.drop(columns=list(minus_labels))
