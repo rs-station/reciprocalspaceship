@@ -82,7 +82,7 @@ def _french_wilson_posterior_quad(Iobs, SigIobs, Sigma, centric, npoints=100):
             log_prefactor
             + logsumexp(logweights + 2.0 * logJ + logP + logL - logZ[:, None], axis=1)
         )
-        - mean ** 2
+        - mean**2
     )
 
     # Compute expected value and variance of structure factor amplitude
@@ -91,7 +91,7 @@ def _french_wilson_posterior_quad(Iobs, SigIobs, Sigma, centric, npoints=100):
         logweights + logF + logP + logL - logZ[:, None], axis=1
     )
     mean_F = np.exp(log_mean_F)
-    variance_F = mean - mean_F ** 2
+    variance_F = mean - mean_F**2
     return mean, np.sqrt(variance), mean_F, np.sqrt(variance_F)
 
 
@@ -157,7 +157,7 @@ def mean_intensity_by_resolution(I, dHKL, bins=50, gridpoints=None):
     if gridpoints is None:
         gridpoints = int(bins * 20)
 
-    X = dHKL ** -2.0
+    X = dHKL**-2.0
     bw = (X.max() - X.min()) / bins
 
     # Evaulate the kernel smoother over grid points
