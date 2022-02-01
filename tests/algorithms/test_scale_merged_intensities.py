@@ -68,7 +68,7 @@ def test_centric_posterior(data_fw1978_input):
         from scipy.integrate import quad
 
         lower = 0.0
-        u = Iobs - SigIobs ** 2 / 2 / Sigma
+        u = Iobs - SigIobs**2 / 2 / Sigma
         upper = np.abs(Iobs) + 10.0 * SigIobs
         limit = 1000
 
@@ -102,7 +102,7 @@ def test_centric_posterior(data_fw1978_input):
                 lower,
                 upper[i],
             )[0]
-        variance = variance / Z - mean ** 2.0
+        variance = variance / Z - mean**2.0
 
         return mean, np.sqrt(variance)
 
