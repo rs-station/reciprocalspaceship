@@ -8,6 +8,13 @@ from pandas.core.arrays.floating import coerce_to_array as coerce_to_float_array
 from pandas.core.arrays.integer import IntegerArray
 from pandas.core.arrays.integer import coerce_to_array as coerce_to_int_array
 from pandas.util._decorators import cache_readonly
+from pandas.core.dtypes.common import (
+    is_float_dtype,
+    is_float,
+    is_numeric_dtype,
+    is_bool_dtype,
+    is_integer_dtype,
+)
 
 
 class MTZDtype(ExtensionDtype):
@@ -39,6 +46,23 @@ class MTZInt32Dtype(MTZDtype, pd.Int32Dtype):
 
 
 class MTZIntegerArray(IntegerArray):
+    """Base ExtensionArray class for integer arrays backed by pd.IntegerArray"""
+
+    def _maybe_mask_result(self, result, mask, other, op_name: str):
+        """
+        Parameters
+        ----------
+        result : array-like
+        mask : array-like bool
+        other : scalar or array-like
+        op_name : str
+        """
+        if is_integer_dtype(result):
+            return type(self)(result, mask, copy=False)
+        return super()._maybe_mask_result(
+            result=result, mask=mask, other=other, op_name=op_name
+        )
+
     @cache_readonly
     def dtype(self):
         return self._dtype
@@ -149,6 +173,7 @@ class MTZFloat32Dtype(MTZDtype, pd.Float32Dtype):
     """Base ExtensionDtype class for MTZDtype backed by pd.Float32Dtype"""
 
     def _get_common_dtype(self, dtypes):
+        print("In _get_common_dtype!")
         if len(set(dtypes)) == 1:
             # only itself
             return self
@@ -160,6 +185,30 @@ class MTZFloat32Dtype(MTZDtype, pd.Float32Dtype):
 
 
 class MTZFloatArray(FloatingArray):
+    """Base ExtensionArray class for floating point arrays backed by pd.FloatingArray"""
+
+    def _maybe_mask_result(self, result, mask, other, op_name: str):
+        """
+        Parameters
+        ----------
+        result : array-like
+        mask : array-like bool
+        other : scalar or array-like
+        op_name : str
+        """
+        # if we have a float operand we are by-definition
+        # a float result
+        # or our op is a divide
+        if (
+            (is_float_dtype(other) or is_float(other))
+            or (op_name in ["rtruediv", "truediv"])
+            or (is_float_dtype(self.dtype) and is_numeric_dtype(result.dtype))
+        ):
+            return type(self)(result, mask, copy=False)
+        return super()._maybe_mask_result(
+            result=result, mask=mask, other=other, op_name=op_name
+        )
+
     @cache_readonly
     def dtype(self):
         return self._dtype
