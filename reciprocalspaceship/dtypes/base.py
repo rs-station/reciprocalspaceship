@@ -8,7 +8,6 @@ from pandas.core.arrays.floating import coerce_to_array as coerce_to_float_array
 from pandas.core.arrays.integer import IntegerArray
 from pandas.core.arrays.integer import coerce_to_array as coerce_to_int_array
 from pandas.core.dtypes.common import (
-    is_bool_dtype,
     is_float,
     is_float_dtype,
     is_integer_dtype,
@@ -173,7 +172,6 @@ class MTZFloat32Dtype(MTZDtype, pd.Float32Dtype):
     """Base ExtensionDtype class for MTZDtype backed by pd.Float32Dtype"""
 
     def _get_common_dtype(self, dtypes):
-        print("In _get_common_dtype!")
         if len(set(dtypes)) == 1:
             # only itself
             return self
