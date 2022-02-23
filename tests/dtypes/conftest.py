@@ -1,3 +1,5 @@
+import operator
+
 import numpy as np
 import pandas as pd
 import pytest
@@ -192,5 +194,32 @@ def sort_by_key(request):
     """
     Simple fixture for testing keys in sorting methods.
     Tests None (no key) and the identity key.
+    """
+    return request.param
+
+
+@pytest.fixture
+def invalid_scalar(data):
+    """
+    A scalar that *cannot* be held by this ExtensionArray.
+    The default should work for most subclasses, but is not guaranteed.
+    If the array can hold any item (i.e. object dtype), then use pytest.skip.
+    """
+    return object.__new__(object)
+
+
+@pytest.fixture(
+    params=[
+        operator.eq,
+        operator.ne,
+        operator.gt,
+        operator.ge,
+        operator.lt,
+        operator.le,
+    ]
+)
+def comparison_op(request):
+    """
+    Fixture for operator module comparison functions.
     """
     return request.param

@@ -24,7 +24,7 @@ def test_numpy_dtype(dtype_floats):
 def test_float_nan_conversion(data_int, dtype_floats):
     """Test that float dtypes can support conversion of data with NaNs"""
     x = rs.DataSeries(data_int)
-    x.iloc[0] = pd.NaT
+    x.iloc[0] = np.nan
     x = x.astype(dtype_floats[0]())
     assert x.isna()[0]
 
