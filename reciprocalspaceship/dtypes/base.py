@@ -7,14 +7,14 @@ from pandas.core.arrays.floating import FloatingArray
 from pandas.core.arrays.floating import coerce_to_array as coerce_to_float_array
 from pandas.core.arrays.integer import IntegerArray
 from pandas.core.arrays.integer import coerce_to_array as coerce_to_int_array
-from pandas.util._decorators import cache_readonly
 from pandas.core.dtypes.common import (
-    is_float_dtype,
-    is_float,
-    is_numeric_dtype,
     is_bool_dtype,
+    is_float,
+    is_float_dtype,
     is_integer_dtype,
+    is_numeric_dtype,
 )
+from pandas.util._decorators import cache_readonly
 
 
 class MTZDtype(ExtensionDtype):
