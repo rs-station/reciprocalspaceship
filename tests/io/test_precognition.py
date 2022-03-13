@@ -68,7 +68,7 @@ def test_read_ii(IOtest_ii, IOtest_log, spacegroup, cell, log):
     else:
         result = rs.read_precognition(
             IOtest_ii, spacegroup=spacegroup, cell=cell, logfile=log
-        )  
+        )
 
     # Check main DataSet features
     assert isinstance(result, rs.DataSet)
@@ -78,14 +78,14 @@ def test_read_ii(IOtest_ii, IOtest_log, spacegroup, cell, log):
 
     # Check _metadata
     assert result._index_dtypes == {"H": "HKL", "K": "HKL", "L": "HKL"}
-    
+
     if spacegroup:
         assert result.spacegroup.xhm() == gemmi.SpaceGroup(spacegroup).xhm()
     elif log:
-        assert result.spacegroup.xhm() == 'P 21 21 21'
+        assert result.spacegroup.xhm() == "P 21 21 21"
     else:
         assert result.spacegroup is None
-    
+
     if cell:
         assert result.cell.a == cell[0]
         assert result.cell.b == cell[1]
@@ -93,7 +93,7 @@ def test_read_ii(IOtest_ii, IOtest_log, spacegroup, cell, log):
         assert result.cell.alpha == cell[3]
         assert result.cell.beta == cell[4]
         assert result.cell.gamma == cell[5]
-    elif log:  
+    elif log:
         assert result.cell.a == 34.4660
         assert result.cell.b == 45.6000
         assert result.cell.c == 99.5850

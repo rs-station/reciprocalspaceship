@@ -1,7 +1,7 @@
-import gemmi
-import pandas as pd
 import warnings
 
+import gemmi
+import pandas as pd
 
 from reciprocalspaceship import DataSet
 
@@ -43,7 +43,7 @@ def read_precognition(hklfile, spacegroup=None, cell=None, logfile=None):
             F.rename(columns={"F(+)": "F", "SigF(+)": "SigF"}, inplace=True)
             mtztypes = ["H", "H", "H", "F", "Q"]
 
-    # Read data from II file    
+    # Read data from II file
     elif hklfile.endswith(".ii"):
         usecols = range(10)
         F = pd.read_csv(
@@ -69,8 +69,7 @@ def read_precognition(hklfile, spacegroup=None, cell=None, logfile=None):
     # Limit use to supported file formats
     else:
         raise ValueError("rs.read_precognition() only supports .ii and .hkl files")
-    
-    
+
     # If logfile is given, read cell parameters and spacegroup
     # Assign these as temporary variables, and determine priority later.
 
@@ -92,7 +91,6 @@ def read_precognition(hklfile, spacegroup=None, cell=None, logfile=None):
         alpha, beta, gamma = map(float, angles)
         cell_from_log = (a, b, c, alpha, beta, gamma)
 
-
     dataset = DataSet(F)
     dataset = dataset.astype(dict(zip(dataset.columns, mtztypes)))
     dataset.set_index(["H", "K", "L"], inplace=True)
@@ -101,26 +99,17 @@ def read_precognition(hklfile, spacegroup=None, cell=None, logfile=None):
     # Prioritize explicitly supplied arguments
     if cell:
         if len(cell) != 6:
-            raise ValueError("'cell' must have length 6")   
+            raise ValueError("'cell' must have length 6")
         dataset.cell = cell
     elif logfile:
         dataset.cell = cell_from_log
-        
+
     if spacegroup:
         dataset.spacegroup = spacegroup
     elif logfile:
         dataset.spacegroup = spacegroup_from_log
-        
+
     if cell and spacegroup and logfile:
-        warnings.warn('Ignoring logfile, as cell and spacegroup are both provided')
-        
+        warnings.warn("Ignoring logfile, as cell and spacegroup are both provided")
+
     return dataset
-
-
-
-
-
-
-
-
-
