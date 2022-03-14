@@ -119,18 +119,19 @@
 <h1>reciprocalspaceship.read_precognition<a class="headerlink" href="#reciprocalspaceship-read-precognition" title="Permalink to this headline"></a></h1>
 <dl class="py function">
 <dt class="sig sig-object py" id="reciprocalspaceship.read_precognition">
-<span class="sig-prename descclassname"><span class="pre">reciprocalspaceship.</span></span><span class="sig-name descname"><span class="pre">read_precognition</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">hklfile</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">spacegroup</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cell</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">logfile</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/Hekstra-Lab/reciprocalspaceship/blob/main/reciprocalspaceship/io/precognition.py#L7-L98"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#reciprocalspaceship.read_precognition" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">reciprocalspaceship.</span></span><span class="sig-name descname"><span class="pre">read_precognition</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">hklfile</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">spacegroup</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cell</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">logfile</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/Hekstra-Lab/reciprocalspaceship/blob/main/reciprocalspaceship/io/precognition.py#L9-L113"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#reciprocalspaceship.read_precognition" title="Permalink to this definition"></a></dt>
 <dd><p>Initialize attributes and populate the DataSet object with data from
-a HKL file of reflections. This is the output format used by
+a precognition hkl or ii file of reflections. This is the output format used by
 Precognition when processing Laue diffraction data.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>hklfile</strong> (<em>str or file</em>) – name of an hkl file or a file object</p></li>
+<li><p><strong>hklfile</strong> (<em>str or file</em>) – name of an hkl or ii file or a file object</p></li>
 <li><p><strong>spacegroup</strong> (<em>str or int</em>) – If int, this should specify the space group number. If str,
 this should be a space group symbol</p></li>
 <li><p><strong>cell</strong> (<em>tuple or list of floats</em>) – Unit cell parameters</p></li>
-<li><p><strong>logfile</strong> (<em>str or file</em>) – name of a log file to parse to get cell parameters and sg</p></li>
+<li><p><strong>logfile</strong> (<em>str or file</em>) – name of a log file to parse to get cell parameters and spacegroup. Only
+used when spacegroup and/or cell are not explicitly provided.</p></li>
 </ul>
 </dd>
 </dl>
