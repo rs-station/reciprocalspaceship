@@ -1,6 +1,6 @@
 repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v4.0.1
+    rev: v4.1.0
     hooks:
       - id: check-docstring-first
       - id: end-of-file-fixer
@@ -9,7 +9,7 @@ repos:
         exclude: ^(tests/data|docs/examples)
       - id: check-yaml
   - repo: https://github.com/MarcoGorelli/absolufy-imports
-    rev: v0.3.0
+    rev: v0.3.1
     hooks:
     -   id: absolufy-imports
         files: ^reciprocalspaceship/
@@ -19,7 +19,7 @@ repos:
       - id: isort
         args: ["--profile", "black"]
   - repo: https://github.com/psf/black
-    rev: 21.12b0
+    rev: 22.1.0
     hooks:
       - id: black
         files: ^(reciprocalspaceship|tests)/

@@ -810,6 +810,8 @@ class DataSet(pd.DataFrame):
         - A ValueError is raised if invoked with an unmerged DataSet
         - It is assumed that Friedel-plus column labels are suffixed with (+),
           and that Friedel-minus column labels are suffixed with (-)
+        - A ValueError is raised if stripping suffixes will lead to a duplicate
+          column name
         - Corresponding column labels are expected to be given in the same order
 
         Parameters
@@ -890,6 +892,15 @@ class DataSet(pd.DataFrame):
                     f"{self[plus].dtype} and {self[minus].dtype}"
                 )
 
+        # confirm that new_labels doesn't create duplicate column names
+        new_labels = [l.rstrip(suffixes[0]) for l in plus_labels]
+        for lab in new_labels:
+            if lab in self.columns:
+                raise ValueError(
+                    f"Stacking anomalous data will result in duplicate column "
+                    f"names. Rename or drop column '{lab}' and try again."
+                )
+
         # Map Friedel reflections to +/- ASU
         centrics = self.label_centrics()["CENTRIC"]
         dataset_plus = self.drop(columns=list(minus_labels))
@@ -897,7 +908,6 @@ class DataSet(pd.DataFrame):
         dataset_minus.apply_symop(gemmi.Op("-x,-y,-z"), inplace=True)
 
         # Rename columns and update dtypes
-        new_labels = [l.rstrip(suffixes[0]) for l in plus_labels]
         column_mapping_plus = dict(zip(plus_labels, new_labels))
         column_mapping_minus = dict(zip(minus_labels, new_labels))
         dataset_plus.rename(columns=column_mapping_plus, inplace=True)

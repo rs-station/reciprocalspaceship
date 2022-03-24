@@ -42,21 +42,22 @@ tests_require = ["pytest", "pytest-cov", "pytest-xdist"]
 
 # Documentation requirements
 docs_require = [
-    # sphinx documentation
     "sphinx",
     "sphinx_rtd_theme",
     "nbsphinx",
     "sphinx-panels",
     "sphinxcontrib-autoprogram",
-    "jupyter",
     "autodocsumm",
-    # example notebooks
+]
+
+# Examples requirements
+examples_require = [
+    "jupyter",
     "tqdm",
     "matplotlib",
     "seaborn",
     "celluloid",
     "scikit-image",
-    "torch",
 ]
 
 setup(
@@ -73,15 +74,18 @@ setup(
     project_urls=PROJECT_URLS,
     python_requires=">3.7",
     install_requires=[
-        "gemmi>=0.4.2, <=0.5.0",
-        "pandas>=1.2.0, <=1.3.4",
+        "gemmi>=0.4.2, <=0.5.3",
+        "pandas>=1.2.0, <=1.4.1",
         "numpy",
         "scipy",
         "ipython",
     ],
     setup_requires=["pytest-runner"],
     tests_require=tests_require,
-    extras_require={"dev": tests_require + docs_require},
+    extras_require={
+        "dev": tests_require + docs_require + examples_require,
+        "examples": examples_require,
+    },
     entry_points={
         "console_scripts": [
             "rs.mtzdump=reciprocalspaceship.commandline.mtzdump:main",

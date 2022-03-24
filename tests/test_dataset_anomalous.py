@@ -57,7 +57,7 @@ def test_stack_anomalous_failure(data_merged, plus_labels, minus_labels, suffixe
     Test that DataSet.stack_anomalous() fails with improper arguments
     """
     with pytest.raises(ValueError):
-        result = data_merged.stack_anomalous(plus_labels, minus_labels, suffixes)
+        data_merged.stack_anomalous(plus_labels, minus_labels, suffixes)
 
 
 @pytest.mark.parametrize(
@@ -117,12 +117,25 @@ def test_stack_anomalous_non_suffixes(data_merged, label_dict, suffixes):
     assert "I_foo" not in result.columns
 
 
+def test_stack_anomalous_duplicates(data_merged):
+    """
+    Test DataSet.stack_anomalous() raises ValueError if stacking will result
+    in duplicate column names
+    """
+
+    rename_dict = {"IMEAN": "I"}
+    data_duplicates = data_merged.rename(columns=rename_dict)
+
+    with pytest.raises(ValueError):
+        data_duplicates.stack_anomalous()
+
+
 def test_stack_anomalous_unmerged(data_unmerged):
     """
     Test DataSet.stack_anomalous() raises ValueError with unmerged data
     """
     with pytest.raises(ValueError):
-        result = data_unmerged.stack_anomalous()
+        data_unmerged.stack_anomalous()
 
 
 @pytest.mark.parametrize("columns", [None, "I", ["I", "SIGI"], ("I", "SIGI"), 5])
@@ -135,7 +148,7 @@ def test_unstack_anomalous(data_merged, columns, suffixes):
 
     def check_ValueError(data, columns, suffixes):
         with pytest.raises(ValueError):
-            result = data.unstack_anomalous(columns, suffixes)
+            data.unstack_anomalous(columns, suffixes)
         return
 
     # Test input validation
@@ -163,7 +176,7 @@ def test_unstack_anomalous_unmerged(data_unmerged):
     Test DataSet.unstack_anomalous() raises ValueError with unmerged data
     """
     with pytest.raises(ValueError):
-        result = data_unmerged.unstack_anomalous()
+        data_unmerged.unstack_anomalous()
 
 
 @pytest.mark.parametrize("rangeindexed", [True, False])

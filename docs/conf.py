@@ -90,6 +90,7 @@ nbsphinx_prolog = r"""
     \textcolor{gray}{The following section was generated from
     \sphinxcode{\sphinxupquote{\strut {{ docname | escape_latex }}}} \dotfill}}
 """
+nbsphinx_allow_errors = True
 
 autoclass_content = "class"
 autosummary_generate = True

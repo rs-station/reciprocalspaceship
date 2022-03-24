@@ -2,6 +2,9 @@ import numpy as np
 import pandas as pd
 import pytest
 from pandas.tests.extension import base
+from pandas.tests.extension.test_integer import (
+    TestComparisonOps as IntegerTestComparisonOps,
+)
 
 import reciprocalspaceship as rs
 
@@ -113,24 +116,8 @@ class TestMethods(base.BaseMethodsTests):
         self.assert_series_equal(result, expected)
 
 
-class TestComparisonOps(base.BaseComparisonOpsTests):
-    # Copied from pandas/tests/extension/test_integer.py
-
-    def _check_op(self, s, op, other, op_name, exc=NotImplementedError):
-        if exc is None:
-            result = op(s, other)
-            # Override to do the astype to boolean
-            expected = s.combine(other, op).astype("boolean")
-            self.assert_series_equal(result, expected)
-        else:
-            with pytest.raises(exc):
-                op(s, other)
-
-    def check_opname(self, s, op_name, other, exc=None):
-        super().check_opname(s, op_name, other, exc=None)
-
-    def _compare_other(self, s, data, op_name, other):
-        self.check_opname(s, op_name, other)
+class TestComparisonOps(IntegerTestComparisonOps):
+    pass
 
 
 class TestMissing(base.BaseMissingTests):
