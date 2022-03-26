@@ -10,6 +10,9 @@ class HKLIndexDtype(MTZInt32Dtype):
     name = "HKL"
     mtztype = "H"
 
+    def is_friedel_dtype(self):
+        return False
+
     @classmethod
     def construct_array_type(cls):
         return HKLIndexArray

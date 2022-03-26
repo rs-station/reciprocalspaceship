@@ -10,6 +10,9 @@ class StructureFactorAmplitudeDtype(MTZFloat32Dtype):
     name = "SFAmplitude"
     mtztype = "F"
 
+    def is_friedel_dtype(self):
+        return False
+
     @classmethod
     def construct_array_type(cls):
         return StructureFactorAmplitudeArray
@@ -32,6 +35,9 @@ class FriedelStructureFactorAmplitudeDtype(MTZFloat32Dtype):
     name = "FriedelSFAmplitude"
     mtztype = "G"
 
+    def is_friedel_dtype(self):
+        return True
+
     @classmethod
     def construct_array_type(cls):
         return FriedelStructureFactorAmplitudeArray
@@ -50,6 +56,9 @@ class NormalizedStructureFactorAmplitudeDtype(MTZFloat32Dtype):
 
     name = "NormalizedSFAmplitude"
     mtztype = "E"
+
+    def is_friedel_dtype(self):
+        return False
 
     @classmethod
     def construct_array_type(cls):

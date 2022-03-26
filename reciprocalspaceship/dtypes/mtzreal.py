@@ -10,6 +10,9 @@ class MTZRealDtype(MTZFloat32Dtype):
     name = "MTZReal"
     mtztype = "R"
 
+    def is_friedel_dtype(self):
+        return False
+
     @classmethod
     def construct_array_type(cls):
         return MTZRealArray

@@ -19,6 +19,10 @@ from pandas.util._decorators import cache_readonly
 class MTZDtype(ExtensionDtype):
     """Base ExtensionDtype for implementing persistent MTZ data types"""
 
+    def is_friedel_dtype(self):
+        """Returns whether MTZ dtype represents a Friedel dtype"""
+        raise NotImplementedError
+
     @classmethod
     def construct_from_string(cls, string):
         if not isinstance(string, str):

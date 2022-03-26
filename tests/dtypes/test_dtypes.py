@@ -55,3 +55,13 @@ def test_to_numpy_nan(data_int, with_nan):
         assert result.dtype.name == "object"
     else:
         assert result.dtype.name == "int32"
+
+
+def test_is_friedel_dtype(dtype_all):
+    """Test MTZDtype.is_friedel_dtype()"""
+    expected = rs.DataSeries(np.arange(0, 100), dtype=dtype_all[0]())
+
+    if expected.dtype.mtztype in "KGML":
+        assert expected.dtype.is_friedel_dtype()
+    else:
+        assert not expected.dtype.is_friedel_dtype()
