@@ -22,14 +22,14 @@ def compute_completeness(
 
     There are several types of completeness that can be computed using this
     function:
-    - completeness (all): completeness of data before merging Friedel pairs
-                          (all reflections in +/- ASU)
-    - completeness (non-anomalous): completeness after merging Friedel pairs
-                                    (all reflections in +ASU)
-    - completeness (anomalous): completeness of the anomalous data. Only
-                                accounts for acentric Bijvoet mates measured
-                                in both +/- ASU. Centric reflections do not
-                                factor into this calculation.
+
+    - **completeness (all)**: completeness of data before merging Friedel pairs
+      (all reflections in +/- ASU)
+    - **completeness (non-anomalous)**: completeness after merging Friedel pairs
+      (all reflections in +ASU)
+    - **completeness (anomalous)**: completeness of the anomalous data. Only
+      accounts for acentric Bijvoet mates measured in both +/- ASU. Centric
+      reflections do not factor into this calculation.
 
     Notes
     -----

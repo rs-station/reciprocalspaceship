@@ -61,7 +61,7 @@ Algorithms for processing reflection data stored in ``rs.DataSet`` objects.
 Summary Statistics
 ------------------
 
-Summary statistics from data reduction that can be computed from ``rs.DataSet`` objects.
+Summary statistics that can be computed from ``rs.DataSet`` objects.
 
 .. currentmodule:: reciprocalspaceship
 .. autosummary::
