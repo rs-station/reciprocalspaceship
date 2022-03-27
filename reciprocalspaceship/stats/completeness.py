@@ -71,23 +71,35 @@ def compute_completeness(
         DataSet object summarizing the completeness by resolution bin
     """
     if anomalous == "auto":
-        if dataset.merged:
+        if not isinstance(dataset.merged, bool):
+            raise AttributeError(
+                f"DataSet.merged should be True or False -- value is: {dataset.merged}"
+            )
+        # Merged
+        elif dataset.merged:
             if any([dataset[c].dtype.is_friedel_dtype() for c in dataset]):
                 anomalous = True
             else:
                 anomalous = False
-        elif not dataset.merged:
-            anomalous = True
+        # Unmerged
         else:
-            raise AttributeError(
-                f"DataSet.merged should be True or False -- value is: {dataset.merged}"
-            )
+            anomalous = True
 
     # Get bin edges for resolution bins
     dHKL = dataset.compute_dHKL()["dHKL"]
+    dmax = dHKL.max()
+    if dmin:
+        dataset = dataset.loc[dHKL >= dmin]
+        dHKL = dHKL[dHKL > dmin]
     assignments, labels, binedges = bin_by_percentile(
         dHKL, bins=bins, ascending=False, return_edges=True
     )
+
+    # Adjust high resolution bin to dmin
+    if dmin:
+        binedges[-1] = dmin
+        fields = labels[-1].split()
+        labels[-1] = f"{fields[0]} - {dmin:.2f}"
 
     # If dataset is merged, all reflections should be in reciprocal ASU
     if dataset.merged:
@@ -96,7 +108,6 @@ def compute_completeness(
                 "Merged DataSet should only contain reflections in the reciprocal ASU"
             )
 
-    if dataset.merged:
         if anomalous:
             dataset = dataset[[c for c in dataset if dataset[c].dtype.mtztype != "I"]]
             H = (
@@ -107,6 +118,8 @@ def compute_completeness(
             )
         else:
             H = dataset.get_hkls()
+
+    # If unmerged, map to reciprocal ASU
     elif not dataset.merged:
         H = dataset.hkl_to_asu(anomalous=anomalous).get_hkls()
 
@@ -121,19 +134,21 @@ def compute_completeness(
     )
     result.set_index(["H", "K", "L"], inplace=True)
     dHKL = result.compute_dHKL()["dHKL"]
-    assignments = assign_with_binedges(dHKL, binedges, right=True)
+    result = result.loc[dHKL < dmax]
+    dHKL = dHKL[dHKL < dmax]
+    assignments = assign_with_binedges(dHKL, binedges, right=False)
     result["bin"] = assignments
     result["observed"] = result["n"] > 0
     asu = result.hkl_to_asu()
 
     def completeness_by_bin(ds, labels, column="observed"):
         """Compute completeness by bin using given column name"""
-        result = ds.groupby("bin")["observed"].agg(["sum", "count"])
+        result = ds.groupby("bin")[column].agg(["sum", "count"])
         result["completeness"] = result["sum"] / result["count"]
         result = result[["completeness"]]
         result.index = labels
 
-        overall = ds["observed"].sum() / len(ds)
+        overall = ds[column].sum() / len(ds)
         result.loc["overall", "completeness"] = overall
         return result
 
@@ -156,5 +171,4 @@ def compute_completeness(
 
         return rs.concat([result2, result, result3], axis=1, check_isomorphous=False)
 
-    else:
-        return result
+    return result
