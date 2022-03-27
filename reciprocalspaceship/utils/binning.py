@@ -2,11 +2,58 @@ import numpy as np
 
 
 def assign_with_binedges(data, bin_edges, right=True):
-    """Assign data using given bin edges"""
-    # 0-index bins and ensure that right-most datapoint is in correct bin
+    """
+    Assign data using given bin edges. This function assumes that the bin edges
+    are monotonic, and that the resulting bins contain every entry in `data`.
+
+    If the smallest and largest values in `data` exactly match a bin edge,
+    they are assigned to the relevant bin, regardless of the value of `right`.
+
+    Parameters
+    ----------
+    data : list, np.ndarray or Series-like
+        Data to assign to bins
+    bin_edges : list or np.ndarray
+        Edge values for each bin. Must be monotonically ascending or descending
+    right : bool
+        Whether the right edge of each bin should be considered inclusive or
+        exclusive
+    """
+    # Check bin_edges are strictly ascending or descending
+    if not (
+        np.all(bin_edges[1:] >= bin_edges[:-1])
+        or np.all(bin_edges[1:] <= bin_edges[:-1])
+    ):
+        raise ValueError(
+            f"Given `bin_edges` are not strictly ascending or descending: {bin_edges}"
+        )
+
+    # Check bin_edges contain every data point
+    if (min(data) < min(bin_edges)) or (max(data) > max(bin_edges)):
+        raise ValueError(
+            "This function assumes `bin_edges` contain every entry in `data`"
+        )
+
+    ascending = bin_edges[0] < bin_edges[-1]
     assignments = np.digitize(data, bins=bin_edges, right=right) - 1
-    rightmost = np.where(assignments == (len(bin_edges) - 1))[0]
-    assignments[rightmost] -= 1
+
+    # Fix biggest or smallest entry
+    if right:
+        if ascending:
+            smallest = np.where(data == bin_edges[0])[0]
+            assignments[smallest] += 1
+        else:
+            smallest = np.where(data == bin_edges[-1])[0]
+            assignments[smallest] -= 1
+
+    else:
+        if ascending:
+            biggest = np.where(data == bin_edges[-1])[0]
+            assignments[biggest] -= 1
+        else:
+            biggest = np.where(data == bin_edges[0])[0]
+            assignments[biggest] += 1
+
     return assignments
 
 

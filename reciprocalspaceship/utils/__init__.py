@@ -17,7 +17,7 @@ __all__ = [
     "hkl_to_observed",
     "in_asu",
     "generate_reciprocal_asu",
-    "bin_by_percentile",
+    "assign_with_binedges" "bin_by_percentile",
     "ev2angstroms",
     "angstroms2ev",
     "compute_redundancy",
@@ -29,7 +29,7 @@ from reciprocalspaceship.utils.asu import (
     hkl_to_observed,
     in_asu,
 )
-from reciprocalspaceship.utils.binning import bin_by_percentile
+from reciprocalspaceship.utils.binning import assign_with_binedges, bin_by_percentile
 from reciprocalspaceship.utils.cell import compute_dHKL, generate_reciprocal_cell
 from reciprocalspaceship.utils.math import angle_between
 from reciprocalspaceship.utils.phases import canonicalize_phases, get_phase_restrictions
