@@ -10,6 +10,9 @@ class PhaseDtype(MTZFloat32Dtype):
     name = "Phase"
     mtztype = "P"
 
+    def is_friedel_dtype(self):
+        return False
+
     @classmethod
     def construct_array_type(cls):
         return PhaseArray
@@ -31,6 +34,9 @@ class HendricksonLattmanDtype(MTZFloat32Dtype):
 
     name = "HendricksonLattman"
     mtztype = "A"
+
+    def is_friedel_dtype(self):
+        return False
 
     @classmethod
     def construct_array_type(cls):

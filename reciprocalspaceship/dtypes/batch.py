@@ -10,6 +10,9 @@ class BatchDtype(MTZInt32Dtype):
     name = "Batch"
     mtztype = "B"
 
+    def is_friedel_dtype(self):
+        return False
+
     @classmethod
     def construct_array_type(cls):
         return BatchArray

@@ -10,6 +10,9 @@ class StandardDeviationDtype(MTZFloat32Dtype):
     name = "Stddev"
     mtztype = "Q"
 
+    def is_friedel_dtype(self):
+        return False
+
     @classmethod
     def construct_array_type(cls):
         return StandardDeviationArray
@@ -29,6 +32,9 @@ class StandardDeviationFriedelSFDtype(MTZFloat32Dtype):
     name = "StddevFriedelSF"
     mtztype = "L"
 
+    def is_friedel_dtype(self):
+        return True
+
     @classmethod
     def construct_array_type(cls):
         return StandardDeviationFriedelSFArray
@@ -47,6 +53,9 @@ class StandardDeviationFriedelIDtype(MTZFloat32Dtype):
 
     name = "StddevFriedelI"
     mtztype = "M"
+
+    def is_friedel_dtype(self):
+        return True
 
     @classmethod
     def construct_array_type(cls):

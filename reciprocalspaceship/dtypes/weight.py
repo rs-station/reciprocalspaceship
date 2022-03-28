@@ -10,6 +10,9 @@ class WeightDtype(MTZFloat32Dtype):
     name = "Weight"
     mtztype = "W"
 
+    def is_friedel_dtype(self):
+        return False
+
     @classmethod
     def construct_array_type(cls):
         return WeightArray

@@ -10,6 +10,9 @@ class M_IsymDtype(MTZInt32Dtype):
     name = "M/ISYM"
     mtztype = "Y"
 
+    def is_friedel_dtype(self):
+        return False
+
     @classmethod
     def construct_array_type(cls):
         return M_IsymArray

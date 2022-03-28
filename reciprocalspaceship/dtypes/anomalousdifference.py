@@ -10,6 +10,9 @@ class AnomalousDifferenceDtype(MTZFloat32Dtype):
     name = "AnomalousDifference"
     mtztype = "D"
 
+    def is_friedel_dtype(self):
+        return False
+
     @classmethod
     def construct_array_type(cls):
         return AnomalousDifferenceArray

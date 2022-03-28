@@ -10,6 +10,9 @@ class MTZIntDtype(MTZInt32Dtype):
     name = "MTZInt"
     mtztype = "I"
 
+    def is_friedel_dtype(self):
+        return False
+
     @classmethod
     def construct_array_type(cls):
         return MTZIntArray

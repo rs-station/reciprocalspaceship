@@ -10,6 +10,9 @@ class IntensityDtype(MTZFloat32Dtype):
     name = "Intensity"
     mtztype = "J"
 
+    def is_friedel_dtype(self):
+        return False
+
     @classmethod
     def construct_array_type(cls):
         return IntensityArray
@@ -28,6 +31,9 @@ class FriedelIntensityDtype(MTZFloat32Dtype):
 
     name = "FriedelIntensity"
     mtztype = "K"
+
+    def is_friedel_dtype(self):
+        return True
 
     @classmethod
     def construct_array_type(cls):
