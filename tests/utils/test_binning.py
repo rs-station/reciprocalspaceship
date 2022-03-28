@@ -6,25 +6,25 @@ import reciprocalspaceship as rs
 
 @pytest.mark.parametrize("data", [np.arange(0, 11)])
 @pytest.mark.parametrize("bin_edges", [[0, 5, 3, 10], [10, 3, 5, 0]])
-@pytest.mark.parametrize("right", [True, False])
-def test_assign_with_binedges_nonmonotonic(data, bin_edges, right):
+@pytest.mark.parametrize("right_inclusive", [True, False])
+def test_assign_with_binedges_nonmonotonic(data, bin_edges, right_inclusive):
     """
     Test assign_with_binedges() raises ValueError with non-monotonic bin edges
     """
     with pytest.raises(ValueError):
-        rs.utils.assign_with_binedges(data, bin_edges, right)
+        rs.utils.assign_with_binedges(data, bin_edges, right_inclusive)
 
 
 @pytest.mark.parametrize("data", [np.arange(0, 11)])
 @pytest.mark.parametrize("bin_edges", [[1, 3, 5, 10], [10, 5, 1]])
-@pytest.mark.parametrize("right", [True, False])
-def test_assign_with_binedges_dataoutside(data, bin_edges, right):
+@pytest.mark.parametrize("right_inclusive", [True, False])
+def test_assign_with_binedges_dataoutside(data, bin_edges, right_inclusive):
     """
     Test assign_with_binedges() raises ValueError if `bin_edges` do not fully
     contain `data`
     """
     with pytest.raises(ValueError):
-        rs.utils.assign_with_binedges(data, bin_edges, right)
+        rs.utils.assign_with_binedges(data, bin_edges, right_inclusive)
 
 
 @pytest.mark.parametrize(

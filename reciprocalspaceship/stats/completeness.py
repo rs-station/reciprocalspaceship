@@ -62,7 +62,7 @@ def compute_completeness(
         Resolution cutoff to use. If no dmin is supplied, the maximum
         resolution reflection will be used
     unobserved_value : float
-        Fill value for unobserved Friedel entries. Will be used if `anomalous=True`
+        Value of unobserved Friedel mates in `dataset`. Will be used if `anomalous=True`
         for removing unobserved reflections from merged DataSet objects.
 
     Returns
@@ -136,7 +136,7 @@ def compute_completeness(
     dHKL = result.compute_dHKL()["dHKL"]
     result = result.loc[dHKL < dmax]
     dHKL = dHKL[dHKL < dmax]
-    assignments = assign_with_binedges(dHKL, binedges, right=False)
+    assignments = assign_with_binedges(dHKL, binedges, right_inclusive=False)
     result["bin"] = assignments
     result["observed"] = result["n"] > 0
     asu = result.hkl_to_asu()

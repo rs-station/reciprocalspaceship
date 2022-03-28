@@ -1,7 +1,7 @@
 import numpy as np
 
 
-def assign_with_binedges(data, bin_edges, right=True):
+def assign_with_binedges(data, bin_edges, right_inclusive=True):
     """
     Assign data using given bin edges. This function assumes that the bin edges
     are monotonic, and that the resulting bins contain every entry in `data`.
@@ -15,7 +15,7 @@ def assign_with_binedges(data, bin_edges, right=True):
         Data to assign to bins
     bin_edges : list or np.ndarray
         Edge values for each bin. Must be monotonically ascending or descending
-    right : bool
+    right_incusive : bool
         Whether the right edge of each bin should be considered inclusive or
         exclusive
     """
@@ -35,10 +35,10 @@ def assign_with_binedges(data, bin_edges, right=True):
         )
 
     ascending = bin_edges[0] < bin_edges[-1]
-    assignments = np.digitize(data, bins=bin_edges, right=right) - 1
+    assignments = np.digitize(data, bins=bin_edges, right=right_inclusive) - 1
 
     # Fix biggest or smallest entry
-    if right:
+    if right_inclusive:
         if ascending:
             smallest = np.where(data == bin_edges[0])[0]
             assignments[smallest] += 1
@@ -78,9 +78,12 @@ def bin_by_percentile(
 
     Return
     ------
-    assignments, bin_labels
-        Bins to which data were assigned, and corresponding labels
-        denoting value ranges
+    assignments : np.ndarray
+        Bins to which data were assigned
+    bin_labels : list
+        Labels denoting bin edges
+    bin_edges : np.ndarray (optional)
+        If `return_edges=True`, an array with the bin edges is returned
     """
     if ascending:
         order = 1
@@ -91,7 +94,7 @@ def bin_by_percentile(
 
     bin_edges = np.percentile(data, np.linspace(0, 100, bins + 1)[::order])
 
-    assignments = assign_with_binedges(data, bin_edges, right=right)
+    assignments = assign_with_binedges(data, bin_edges, right_inclusive=right)
 
     bin_labels = [
         f"{edge1:{format_str}} - {edge2:{format_str}}"
