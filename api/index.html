@@ -67,6 +67,10 @@
 <li class="toctree-l3"><a class="reference internal" href="autoapi/reciprocalspaceship.algorithms.scale_merged_intensities.html">reciprocalspaceship.algorithms.scale_merged_intensities</a></li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="#summary-statistics">Summary Statistics</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="autoapi/reciprocalspaceship.stats.compute_completeness.html">reciprocalspaceship.stats.compute_completeness</a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="#helpful-functions">Helpful Functions</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="autoapi/reciprocalspaceship.concat.html">reciprocalspaceship.concat</a></li>
 <li class="toctree-l3"><a class="reference internal" href="autoapi/reciprocalspaceship.summarize_mtz_dtypes.html">reciprocalspaceship.summarize_mtz_dtypes</a></li>
@@ -144,7 +148,7 @@ and user-facing methods that use the <code class="docutils literal notranslate">
 <h2>Reflection Data<a class="headerlink" href="#reflection-data" title="Permalink to this headline"></a></h2>
 <p>Python objects for representing reflection data – tabular data with values (columns) that are indexed by Miller HKL indices.
 These two objects can be thought of as crystallographically-aware versions of <code class="docutils literal notranslate"><span class="pre">pandas.DataFrame</span></code> and <code class="docutils literal notranslate"><span class="pre">pandas.Series</span></code>, respectively.</p>
-<table class="longtable docutils align-default">
+<table class="autosummary longtable docutils align-default">
 <colgroup>
 <col style="width: 10%" />
 <col style="width: 90%" />
@@ -163,7 +167,7 @@ These two objects can be thought of as crystallographically-aware versions of <c
 <h2>Input/Output<a class="headerlink" href="#input-output" title="Permalink to this headline"></a></h2>
 <p>Supported crystallographic file formats for data I/O. Although they are not listed below, write functions for reflection file formats
 are available as methods of <code class="docutils literal notranslate"><span class="pre">rs.DataSet</span></code> objects.</p>
-<table class="longtable docutils align-default">
+<table class="autosummary longtable docutils align-default">
 <colgroup>
 <col style="width: 10%" />
 <col style="width: 90%" />
@@ -193,7 +197,7 @@ are available as methods of <code class="docutils literal notranslate"><span cla
 <section id="algorithms">
 <h2>Algorithms<a class="headerlink" href="#algorithms" title="Permalink to this headline"></a></h2>
 <p>Algorithms for processing reflection data stored in <code class="docutils literal notranslate"><span class="pre">rs.DataSet</span></code> objects.</p>
-<table class="longtable docutils align-default">
+<table class="autosummary longtable docutils align-default">
 <colgroup>
 <col style="width: 10%" />
 <col style="width: 90%" />
@@ -208,10 +212,25 @@ are available as methods of <code class="docutils literal notranslate"><span cla
 </tbody>
 </table>
 </section>
+<section id="summary-statistics">
+<h2>Summary Statistics<a class="headerlink" href="#summary-statistics" title="Permalink to this headline"></a></h2>
+<p>Summary statistics that can be computed from <code class="docutils literal notranslate"><span class="pre">rs.DataSet</span></code> objects.</p>
+<table class="autosummary longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="autoapi/reciprocalspaceship.stats.compute_completeness.html#reciprocalspaceship.stats.compute_completeness" title="reciprocalspaceship.stats.compute_completeness"><code class="xref py py-obj docutils literal notranslate"><span class="pre">compute_completeness</span></code></a></p></td>
+<td><p>Compute completeness of DataSet by resolution bin.</p></td>
+</tr>
+</tbody>
+</table>
+</section>
 <section id="helpful-functions">
 <h2>Helpful Functions<a class="headerlink" href="#helpful-functions" title="Permalink to this headline"></a></h2>
 <p>Functions intended to help users work with the library. These functions are available from the top-level <code class="docutils literal notranslate"><span class="pre">rs</span></code> namespace.</p>
-<table class="longtable docutils align-default">
+<table class="autosummary longtable docutils align-default">
 <colgroup>
 <col style="width: 10%" />
 <col style="width: 90%" />

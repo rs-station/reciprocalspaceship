@@ -1,0 +1,6 @@
+﻿reciprocalspaceship.stats.compute\_completeness
+===============================================
+
+.. currentmodule:: reciprocalspaceship.stats
+
+.. autofunction:: compute_completeness

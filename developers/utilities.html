@@ -120,7 +120,7 @@ chosen to ensure that these methods are performant, and can be largely independe
 interface decisions related to <code class="docutils literal notranslate"><span class="pre">rs.DataSet</span></code> or <code class="docutils literal notranslate"><span class="pre">pandas</span></code>.</p>
 </div>
 <span class="target" id="module-reciprocalspaceship.utils"></span><p><strong>Functions:</strong></p>
-<table class="longtable docutils align-default">
+<table class="autosummary longtable docutils align-default">
 <colgroup>
 <col style="width: 10%" />
 <col style="width: 90%" />
@@ -132,55 +132,52 @@ interface decisions related to <code class="docutils literal notranslate"><span 
 <tr class="row-even"><td><p><a class="reference internal" href="#reciprocalspaceship.utils.apply_to_hkl" title="reciprocalspaceship.utils.apply_to_hkl"><code class="xref py py-obj docutils literal notranslate"><span class="pre">apply_to_hkl</span></code></a>(H, op)</p></td>
 <td><p>Apply symmetry operator to hkls.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#reciprocalspaceship.utils.bin_by_percentile" title="reciprocalspaceship.utils.bin_by_percentile"><code class="xref py py-obj docutils literal notranslate"><span class="pre">bin_by_percentile</span></code></a>(data[, bins, ascending, ...])</p></td>
-<td><p>Bin data by percentile.</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#reciprocalspaceship.utils.canonicalize_phases" title="reciprocalspaceship.utils.canonicalize_phases"><code class="xref py py-obj docutils literal notranslate"><span class="pre">canonicalize_phases</span></code></a>(phases[, deg])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#reciprocalspaceship.utils.canonicalize_phases" title="reciprocalspaceship.utils.canonicalize_phases"><code class="xref py py-obj docutils literal notranslate"><span class="pre">canonicalize_phases</span></code></a>(phases[, deg])</p></td>
 <td><p>Place phases in the interval between -180 and 180.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#reciprocalspaceship.utils.compute_dHKL" title="reciprocalspaceship.utils.compute_dHKL"><code class="xref py py-obj docutils literal notranslate"><span class="pre">compute_dHKL</span></code></a>(H, cell)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#reciprocalspaceship.utils.compute_dHKL" title="reciprocalspaceship.utils.compute_dHKL"><code class="xref py py-obj docutils literal notranslate"><span class="pre">compute_dHKL</span></code></a>(H, cell)</p></td>
 <td><p>Compute the real space lattice plane spacing, d, associated with miller indices and cell.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#reciprocalspaceship.utils.compute_redundancy" title="reciprocalspaceship.utils.compute_redundancy"><code class="xref py py-obj docutils literal notranslate"><span class="pre">compute_redundancy</span></code></a>(hobs, cell, spacegroup[, ...])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#reciprocalspaceship.utils.compute_redundancy" title="reciprocalspaceship.utils.compute_redundancy"><code class="xref py py-obj docutils literal notranslate"><span class="pre">compute_redundancy</span></code></a>(hobs, cell, spacegroup[, ...])</p></td>
 <td><p>Compute the multiplicity of all valid reflections in the reciprocal ASU.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#reciprocalspaceship.utils.compute_structurefactor_multiplicity" title="reciprocalspaceship.utils.compute_structurefactor_multiplicity"><code class="xref py py-obj docutils literal notranslate"><span class="pre">compute_structurefactor_multiplicity</span></code></a>(H, sg)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#reciprocalspaceship.utils.compute_structurefactor_multiplicity" title="reciprocalspaceship.utils.compute_structurefactor_multiplicity"><code class="xref py py-obj docutils literal notranslate"><span class="pre">compute_structurefactor_multiplicity</span></code></a>(H, sg)</p></td>
 <td><p>Compute the multiplicity of each reflection in <code class="docutils literal notranslate"><span class="pre">H</span></code>.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#reciprocalspaceship.utils.copy_rfree" title="reciprocalspaceship.utils.copy_rfree"><code class="xref py py-obj docutils literal notranslate"><span class="pre">copy_rfree</span></code></a>(dataset, dataset_with_rfree[, ...])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#reciprocalspaceship.utils.copy_rfree" title="reciprocalspaceship.utils.copy_rfree"><code class="xref py py-obj docutils literal notranslate"><span class="pre">copy_rfree</span></code></a>(dataset, dataset_with_rfree[, ...])</p></td>
 <td><p>Copy the rfree flag from one dataset object to another.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#reciprocalspaceship.utils.from_structurefactor" title="reciprocalspaceship.utils.from_structurefactor"><code class="xref py py-obj docutils literal notranslate"><span class="pre">from_structurefactor</span></code></a>(sfs)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#reciprocalspaceship.utils.from_structurefactor" title="reciprocalspaceship.utils.from_structurefactor"><code class="xref py py-obj docutils literal notranslate"><span class="pre">from_structurefactor</span></code></a>(sfs)</p></td>
 <td><p>Convert complex structure factors into structure factor amplitudes and phases</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#reciprocalspaceship.utils.generate_reciprocal_asu" title="reciprocalspaceship.utils.generate_reciprocal_asu"><code class="xref py py-obj docutils literal notranslate"><span class="pre">generate_reciprocal_asu</span></code></a>(cell, spacegroup, dmin)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#reciprocalspaceship.utils.generate_reciprocal_asu" title="reciprocalspaceship.utils.generate_reciprocal_asu"><code class="xref py py-obj docutils literal notranslate"><span class="pre">generate_reciprocal_asu</span></code></a>(cell, spacegroup, dmin)</p></td>
 <td><p>Generate the Miller indices of the reflections in the reciprocal ASU.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#reciprocalspaceship.utils.generate_reciprocal_cell" title="reciprocalspaceship.utils.generate_reciprocal_cell"><code class="xref py py-obj docutils literal notranslate"><span class="pre">generate_reciprocal_cell</span></code></a>(cell, dmin[, dtype])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#reciprocalspaceship.utils.generate_reciprocal_cell" title="reciprocalspaceship.utils.generate_reciprocal_cell"><code class="xref py py-obj docutils literal notranslate"><span class="pre">generate_reciprocal_cell</span></code></a>(cell, dmin[, dtype])</p></td>
 <td><p>Generate the miller indices of the full P1 reciprocal cell.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#reciprocalspaceship.utils.get_phase_restrictions" title="reciprocalspaceship.utils.get_phase_restrictions"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_phase_restrictions</span></code></a>(H, spacegroup)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#reciprocalspaceship.utils.get_phase_restrictions" title="reciprocalspaceship.utils.get_phase_restrictions"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_phase_restrictions</span></code></a>(H, spacegroup)</p></td>
 <td><p>Return phase restrictions for Miller indices in a given space group.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#reciprocalspaceship.utils.hkl_to_asu" title="reciprocalspaceship.utils.hkl_to_asu"><code class="xref py py-obj docutils literal notranslate"><span class="pre">hkl_to_asu</span></code></a>(H, spacegroup[, return_phase_shifts])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#reciprocalspaceship.utils.hkl_to_asu" title="reciprocalspaceship.utils.hkl_to_asu"><code class="xref py py-obj docutils literal notranslate"><span class="pre">hkl_to_asu</span></code></a>(H, spacegroup[, return_phase_shifts])</p></td>
 <td><p>Map hkls to the asymmetric unit and optionally return shifts for the associated phases.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#reciprocalspaceship.utils.hkl_to_observed" title="reciprocalspaceship.utils.hkl_to_observed"><code class="xref py py-obj docutils literal notranslate"><span class="pre">hkl_to_observed</span></code></a>(H, isym, sg[, ...])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#reciprocalspaceship.utils.hkl_to_observed" title="reciprocalspaceship.utils.hkl_to_observed"><code class="xref py py-obj docutils literal notranslate"><span class="pre">hkl_to_observed</span></code></a>(H, isym, sg[, ...])</p></td>
 <td><p>Apply symmetry operations to move miller indices in the reciprocal asymmetric unit to their originally observed locations.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#reciprocalspaceship.utils.in_asu" title="reciprocalspaceship.utils.in_asu"><code class="xref py py-obj docutils literal notranslate"><span class="pre">in_asu</span></code></a>(H, spacegroup)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#reciprocalspaceship.utils.in_asu" title="reciprocalspaceship.utils.in_asu"><code class="xref py py-obj docutils literal notranslate"><span class="pre">in_asu</span></code></a>(H, spacegroup)</p></td>
 <td><p>Check to see if Miller indices are in the asymmetric unit of a space group.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#reciprocalspaceship.utils.is_absent" title="reciprocalspaceship.utils.is_absent"><code class="xref py py-obj docutils literal notranslate"><span class="pre">is_absent</span></code></a>(H, spacegroup)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#reciprocalspaceship.utils.is_absent" title="reciprocalspaceship.utils.is_absent"><code class="xref py py-obj docutils literal notranslate"><span class="pre">is_absent</span></code></a>(H, spacegroup)</p></td>
 <td><p>Determine if Miller indices are systematically absent in a given spacegroup.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#reciprocalspaceship.utils.is_centric" title="reciprocalspaceship.utils.is_centric"><code class="xref py py-obj docutils literal notranslate"><span class="pre">is_centric</span></code></a>(H, spacegroup)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#reciprocalspaceship.utils.is_centric" title="reciprocalspaceship.utils.is_centric"><code class="xref py py-obj docutils literal notranslate"><span class="pre">is_centric</span></code></a>(H, spacegroup)</p></td>
 <td><p>Determine if Miller indices are centric in a given spacegroup</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#reciprocalspaceship.utils.phase_shift" title="reciprocalspaceship.utils.phase_shift"><code class="xref py py-obj docutils literal notranslate"><span class="pre">phase_shift</span></code></a>(H, op)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#reciprocalspaceship.utils.phase_shift" title="reciprocalspaceship.utils.phase_shift"><code class="xref py py-obj docutils literal notranslate"><span class="pre">phase_shift</span></code></a>(H, op)</p></td>
 <td><p>Calculate phase shift for symmetry operator.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#reciprocalspaceship.utils.to_structurefactor" title="reciprocalspaceship.utils.to_structurefactor"><code class="xref py py-obj docutils literal notranslate"><span class="pre">to_structurefactor</span></code></a>(sfamps, phases)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#reciprocalspaceship.utils.to_structurefactor" title="reciprocalspaceship.utils.to_structurefactor"><code class="xref py py-obj docutils literal notranslate"><span class="pre">to_structurefactor</span></code></a>(sfamps, phases)</p></td>
 <td><p>Convert structure factor amplitude and phase to complex structure factors</p></td>
 </tr>
 </tbody>
@@ -219,26 +216,6 @@ This is the crystallographic refinement version of cross validation.</p>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p><strong>result</strong> (<em>array</em>) – n x 3 array of Miller indices after operator application</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="reciprocalspaceship.utils.bin_by_percentile">
-<span class="sig-prename descclassname"><span class="pre">reciprocalspaceship.utils.</span></span><span class="sig-name descname"><span class="pre">bin_by_percentile</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bins</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">20</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ascending</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">format_str</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'.2f'</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/Hekstra-Lab/reciprocalspaceship/blob/main/reciprocalspaceship/utils/binning.py#L4-L44"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#reciprocalspaceship.utils.bin_by_percentile" title="Permalink to this definition"></a></dt>
-<dd><p>Bin data by percentile.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>data</strong> (<em>list, np.ndarray or Series-like</em>) – Data to bin by percentile</p></li>
-<li><p><strong>bins</strong> (<em>int</em>) – Number of bins</p></li>
-<li><p><strong>ascending</strong> (<em>bool</em>) – Whether to bin data by value from low to high</p></li>
-<li><p><strong>format_str</strong> (<em>str</em>) – Format string for constructing bin labels</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p><em>assignments, bin_labels</em> – Bins to which data were assigned, and corresponding labels
-denoting value ranges</p>
 </dd>
 </dl>
 </dd></dl>
