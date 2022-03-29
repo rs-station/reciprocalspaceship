@@ -26,6 +26,10 @@ Features of this library include:
   symmetry operations.
 - Support for reading and writing MTZ reflection files.
 
+<p align="center">
+  <img src="docs/img/screenshot.png" width=750 title="Screenshot of Jupyter Notebook">
+</p>
+
 ## Installation
 
 The fastest way to install `reciprocalspaceship` is using `pip`:
