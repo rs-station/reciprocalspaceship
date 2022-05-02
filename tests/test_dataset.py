@@ -1,5 +1,6 @@
 import gemmi
 import numpy as np
+import pandas as pd
 import pytest
 from pandas.testing import assert_frame_equal
 
@@ -629,3 +630,16 @@ def test_is_isomorphous(data_unmerged, data_fmodel, sg1, sg2, cell1, cell2):
             assert result
         else:
             assert not result
+
+
+def test_to_gemmi_withNans(data_merged):
+    """
+    GH144: Test whether DataSet.to_gemmi() works with NaN-containing data.
+
+    This test is intended to ensure DataSet works as intended with Phenix
+    output, which often has many NaNs from filled reflections.
+    """
+    data_merged.loc[data_merged.index[0], "N(+)"] = np.nan
+    roundtrip = rs.DataSet.from_gemmi(data_merged.to_gemmi())
+
+    assert pd.isna(roundtrip.loc[data_merged.index[0], "N(+)"])

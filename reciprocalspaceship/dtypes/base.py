@@ -1,7 +1,5 @@
 import numpy as np
 import pandas as pd
-from pandas._libs import lib
-from pandas._libs import missing as libmissing
 from pandas.api.extensions import ExtensionDtype
 from pandas.core.arrays.floating import FloatingArray
 from pandas.core.arrays.floating import coerce_to_array as coerce_to_float_array
@@ -83,12 +81,12 @@ class MTZIntegerArray(IntegerArray):
     def reshape(self, *args, **kwargs):
         return self._data.reshape(*args, **kwargs)
 
-    def to_numpy(self, dtype=None, copy=False, na_value=lib.no_default):
+    def to_numpy(self, dtype=None, copy=False, **kwargs):
         """
         Convert to a NumPy Array.
 
-        If array does not contain any NaN values, will return a np.int32
-        ndarray. If array contains NaN values, will return a ndarray of
+        If `dtype` is None and array does not contain any NaNs, this method
+        will return a np.int32 array.  Otherwise it will return a ndarray of
         object dtype.
 
         Parameters
@@ -102,30 +100,17 @@ class MTZIntegerArray(IntegerArray):
             a copy is made, even if not strictly necessary. This is typically
             only possible when no missing values are present and `dtype`
             is the equivalent numpy dtype.
-        na_value : scalar, optional
-             Scalar missing value indicator to use in numpy array. Defaults
-             to the native missing value indicator of this array.
 
         Returns
         -------
         numpy.ndarray
         """
-        if na_value is lib.no_default:
-            na_value = libmissing.NA
+        if dtype is None and not self._hasna:
+            dtype = np.int32
 
-        if dtype is None:
-            if self._hasna:
-                dtype = object
-            else:
-                dtype = np.int32
-
-        if self._hasna:
-            data = self._data.astype(dtype, copy=copy)
-            data[self._mask] = na_value
-        else:
-            data = self._data.astype(dtype, copy=copy)
-
-        return data
+        # na_value is hard-coded to np.nan -- this prevents other functions
+        # from resetting it.
+        return super().to_numpy(dtype=dtype, copy=copy, na_value=np.nan)
 
     def value_counts(self, dropna=True):
         """
@@ -223,17 +208,15 @@ class MTZFloatArray(FloatingArray):
     def _coerce_to_array(self, value):
         return coerce_to_float_array(value, dtype=self.dtype)
 
-    def to_numpy(self, dtype=None, copy=False, na_value=lib.no_default):
+    def to_numpy(self, dtype=None, copy=False, **kwargs):
         """
         Convert to a NumPy Array.
 
-        If array does not contain any NaN values, will return a np.int32
-        ndarray. If array contains NaN values, will return a ndarray of
-        object dtype.
+        If `dtype` is None it will default to a float32 ndarray.
 
         Parameters
         ----------
-        dtype : dtype, default np.int32 or np.float32
+        dtype : dtype, default np.float32
             The numpy dtype to return
         copy : bool, default False
             Whether to ensure that the returned value is a not a view on
@@ -242,27 +225,17 @@ class MTZFloatArray(FloatingArray):
             a copy is made, even if not strictly necessary. This is typically
             only possible when no missing values are present and `dtype`
             is the equivalent numpy dtype.
-        na_value : scalar, optional
-             Scalar missing value indicator to use in numpy array. Defaults
-             to the native missing value indicator of this array.
 
         Returns
         -------
         numpy.ndarray
         """
-        if na_value is lib.no_default:
-            na_value = np.nan
-
         if dtype is None:
             dtype = np.float32
 
-        if self._hasna:
-            data = self._data.astype(dtype, copy=copy)
-            data[self._mask] = na_value
-        else:
-            data = self._data.astype(dtype, copy=copy)
-
-        return data
+        # na_value is hard-coded to np.nan -- this prevents other functions
+        # from resetting it.
+        return super().to_numpy(dtype=dtype, copy=copy, na_value=np.nan)
 
     def value_counts(self, dropna=True):
         """
