@@ -372,7 +372,7 @@ div.rendered_html tbody tr:hover {
   </span>
 </div><section id="MTZ-Data-Types">
 <h1>MTZ Data Types<a class="headerlink" href="#MTZ-Data-Types" title="Permalink to this headline"></a></h1>
-<p>MTZ files use column types to specify what type of crystallographic data is contained within a given column (see <a class="reference external" href="http://www.ccp4.ac.uk/html/mtzformat.html#coltypes">MTZ specification</a>). This enables columns to have arbitrary names while ensuring that the column values are interpreted correctly.</p>
+<p>MTZ files use column types to specify what type of crystallographic data is contained within a given column (see <a class="reference external" href="https://www.ccp4.ac.uk/html/mtzformat.html#column-types">MTZ specification</a>). This enables columns to have arbitrary names while ensuring that the column values are interpreted correctly.</p>
 <p>In order to ensure that MTZ data types behave as expected in <code class="docutils literal notranslate"><span class="pre">rs.DataSet</span></code> objects, we have implemented a set of custom <code class="docutils literal notranslate"><span class="pre">pandas</span></code> dtypes to represent the crystallographic data found in MTZ files. This facilitates MTZ file I/O, and makes it possible to write methods that operate only on expected types of crystallographic data.</p>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
@@ -800,9 +800,9 @@ dtype: Intensity
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-0    0
-1    1
-2    2
+0   0
+1   1
+2   2
 dtype: MTZInt
 </pre></div></div>
 </div>
@@ -889,31 +889,31 @@ dtype: object
 <div class="highlight"><pre>
 <span class="ansi-red-fg">---------------------------------------------------------------------------</span>
 <span class="ansi-red-fg">ValueError</span>                                Traceback (most recent call last)
-<span class="ansi-green-fg">&lt;ipython-input-18-34c859a707fe&gt;</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
+<span class="ansi-green-fg">/var/folders/hd/0z53c0y171l7xz7kl4vqmtgc0000gp/T/ipykernel_7958/2127968585.py</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
 <span class="ansi-green-fg">----&gt; 1</span><span class="ansi-red-fg"> </span>dataset<span class="ansi-blue-fg">.</span>write_mtz<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">&#34;temp.mtz&#34;</span><span class="ansi-blue-fg">)</span>
 
-<span class="ansi-green-fg">~/anaconda2/envs/rs/lib/python3.7/site-packages/reciprocalspaceship-0.8.2-py3.7.egg/reciprocalspaceship/dataset.py</span> in <span class="ansi-cyan-fg">write_mtz</span><span class="ansi-blue-fg">(self, mtzfile, skip_problem_mtztypes)</span>
-<span class="ansi-green-intense-fg ansi-bold">    178</span>         &#34;&#34;&#34;
-<span class="ansi-green-intense-fg ansi-bold">    179</span>         <span class="ansi-green-fg">from</span> reciprocalspaceship <span class="ansi-green-fg">import</span> io
-<span class="ansi-green-fg">--&gt; 180</span><span class="ansi-red-fg">         </span><span class="ansi-green-fg">return</span> io<span class="ansi-blue-fg">.</span>write_mtz<span class="ansi-blue-fg">(</span>self<span class="ansi-blue-fg">,</span> mtzfile<span class="ansi-blue-fg">,</span> skip_problem_mtztypes<span class="ansi-blue-fg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">    181</span>
-<span class="ansi-green-intense-fg ansi-bold">    182</span>     <span class="ansi-green-fg">def</span> get_phase_keys<span class="ansi-blue-fg">(</span>self<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">:</span>
+<span class="ansi-green-fg">~/Documents/Hekstra_Lab/github/reciprocalspaceship/reciprocalspaceship/dataset.py</span> in <span class="ansi-cyan-fg">write_mtz</span><span class="ansi-blue-fg">(self, mtzfile, skip_problem_mtztypes)</span>
+<span class="ansi-green-intense-fg ansi-bold">    536</span>         <span class="ansi-green-fg">from</span> reciprocalspaceship <span class="ansi-green-fg">import</span> io
+<span class="ansi-green-intense-fg ansi-bold">    537</span>
+<span class="ansi-green-fg">--&gt; 538</span><span class="ansi-red-fg">         </span><span class="ansi-green-fg">return</span> io<span class="ansi-blue-fg">.</span>write_mtz<span class="ansi-blue-fg">(</span>self<span class="ansi-blue-fg">,</span> mtzfile<span class="ansi-blue-fg">,</span> skip_problem_mtztypes<span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">    539</span>
+<span class="ansi-green-intense-fg ansi-bold">    540</span>     <span class="ansi-green-fg">def</span> get_phase_keys<span class="ansi-blue-fg">(</span>self<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">:</span>
 
-<span class="ansi-green-fg">~/anaconda2/envs/rs/lib/python3.7/site-packages/reciprocalspaceship-0.8.2-py3.7.egg/reciprocalspaceship/io/mtz.py</span> in <span class="ansi-cyan-fg">write_mtz</span><span class="ansi-blue-fg">(dataset, mtzfile, skip_problem_mtztypes)</span>
-<span class="ansi-green-intense-fg ansi-bold">    112</span>         MTZ datatypes
-<span class="ansi-green-intense-fg ansi-bold">    113</span>     &#34;&#34;&#34;
-<span class="ansi-green-fg">--&gt; 114</span><span class="ansi-red-fg">     </span>mtz <span class="ansi-blue-fg">=</span> to_gemmi<span class="ansi-blue-fg">(</span>dataset<span class="ansi-blue-fg">,</span> skip_problem_mtztypes<span class="ansi-blue-fg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">    115</span>     mtz<span class="ansi-blue-fg">.</span>write_to_file<span class="ansi-blue-fg">(</span>mtzfile<span class="ansi-blue-fg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">    116</span>     <span class="ansi-green-fg">return</span>
+<span class="ansi-green-fg">~/Documents/Hekstra_Lab/github/reciprocalspaceship/reciprocalspaceship/io/mtz.py</span> in <span class="ansi-cyan-fg">write_mtz</span><span class="ansi-blue-fg">(dataset, mtzfile, skip_problem_mtztypes)</span>
+<span class="ansi-green-intense-fg ansi-bold">    181</span>         MTZ datatypes
+<span class="ansi-green-intense-fg ansi-bold">    182</span>     &#34;&#34;&#34;
+<span class="ansi-green-fg">--&gt; 183</span><span class="ansi-red-fg">     </span>mtz <span class="ansi-blue-fg">=</span> to_gemmi<span class="ansi-blue-fg">(</span>dataset<span class="ansi-blue-fg">,</span> skip_problem_mtztypes<span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">    184</span>     mtz<span class="ansi-blue-fg">.</span>write_to_file<span class="ansi-blue-fg">(</span>mtzfile<span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">    185</span>     <span class="ansi-green-fg">return</span>
 
-<span class="ansi-green-fg">~/anaconda2/envs/rs/lib/python3.7/site-packages/reciprocalspaceship-0.8.2-py3.7.egg/reciprocalspaceship/io/mtz.py</span> in <span class="ansi-cyan-fg">to_gemmi</span><span class="ansi-blue-fg">(dataset, skip_problem_mtztypes)</span>
-<span class="ansi-green-intense-fg ansi-bold">     80</span>             <span class="ansi-green-fg">continue</span>
-<span class="ansi-green-intense-fg ansi-bold">     81</span>         <span class="ansi-green-fg">else</span><span class="ansi-blue-fg">:</span>
-<span class="ansi-green-fg">---&gt; 82</span><span class="ansi-red-fg">             raise ValueError(f&#34;column of type {cseries.dtype} cannot be written to an MTZ file. &#34;
-</span><span class="ansi-green-intense-fg ansi-bold">     83</span>                              f&#34;To skip columns without explicit MTZ dtypes, set skip_problem_mtztypes=True&#34;)
-<span class="ansi-green-intense-fg ansi-bold">     84</span>     mtz<span class="ansi-blue-fg">.</span>set_data<span class="ansi-blue-fg">(</span>temp<span class="ansi-blue-fg">[</span>columns<span class="ansi-blue-fg">]</span><span class="ansi-blue-fg">.</span>to_numpy<span class="ansi-blue-fg">(</span>dtype<span class="ansi-blue-fg">=</span><span class="ansi-blue-fg">&#34;float32&#34;</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">)</span>
+<span class="ansi-green-fg">~/Documents/Hekstra_Lab/github/reciprocalspaceship/reciprocalspaceship/io/mtz.py</span> in <span class="ansi-cyan-fg">to_gemmi</span><span class="ansi-blue-fg">(dataset, skip_problem_mtztypes)</span>
+<span class="ansi-green-intense-fg ansi-bold">    120</span>             <span class="ansi-green-fg">continue</span>
+<span class="ansi-green-intense-fg ansi-bold">    121</span>         <span class="ansi-green-fg">else</span><span class="ansi-blue-fg">:</span>
+<span class="ansi-green-fg">--&gt; 122</span><span class="ansi-red-fg">             raise ValueError(
+</span><span class="ansi-green-intense-fg ansi-bold">    123</span>                 <span class="ansi-blue-fg">f&#34;column {c} of type {cseries.dtype} cannot be written to an MTZ file. &#34;</span>
+<span class="ansi-green-intense-fg ansi-bold">    124</span>                 <span class="ansi-blue-fg">f&#34;To skip columns without explicit MTZ dtypes, set skip_problem_mtztypes=True&#34;</span>
 
-<span class="ansi-red-fg">ValueError</span>: column of type object cannot be written to an MTZ file. To skip columns without explicit MTZ dtypes, set skip_problem_mtztypes=True
+<span class="ansi-red-fg">ValueError</span>: column Temp of type object cannot be written to an MTZ file. To skip columns without explicit MTZ dtypes, set skip_problem_mtztypes=True
 </pre></div></div>
 </div>
 <p>As the error message states, it is still possible to write out the MTZ by setting <code class="docutils literal notranslate"><span class="pre">skip_problem_mtztypes=True</span></code>. This will skip any columns with non-MTZ data types:</p>
