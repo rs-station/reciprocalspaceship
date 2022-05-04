@@ -12,7 +12,7 @@ def summarize_mtz_dtypes(print_summary=True):
     compatibility with the different column types supported by the
     `MTZ file specification`_.
 
-    .. _MTZ file specification: http://legacy.ccp4.ac.uk/html/mtzformat.html#coltypes
+    .. _MTZ file specification: https://www.ccp4.ac.uk/html/mtzformat.html#column-types
 
     Parameters
     ----------
