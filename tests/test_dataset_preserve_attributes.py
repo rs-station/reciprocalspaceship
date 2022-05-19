@@ -39,65 +39,6 @@ def test_concat(data_fmodel, check_isomorphous, sg, ignore_index):
 
 @pytest.mark.parametrize("check_isomorphous", [True, False])
 @pytest.mark.parametrize("sg", [gemmi.SpaceGroup(19), gemmi.SpaceGroup(96)])
-@pytest.mark.parametrize("ignore_index", [True, False])
-def test_append(data_fmodel, check_isomorphous, sg, ignore_index):
-    """
-    Test whether attributes of DataSet are preserved through calls to
-    DataSet.append()
-    """
-    other = data_fmodel.copy(deep=True)
-    other.spacegroup = sg
-    if check_isomorphous and sg.number == 19:
-        with pytest.raises(ValueError):
-            result = data_fmodel.append(
-                other, ignore_index, check_isomorphous=check_isomorphous
-            )
-    else:
-        result = data_fmodel.append(
-            other, ignore_index, check_isomorphous=check_isomorphous
-        )
-        assert isinstance(result, rs.DataSet)
-        assert len(result) == len(data_fmodel) * 2
-        if ignore_index:
-            assert result._index_dtypes == {}
-        for attr in data_fmodel._metadata:
-            if attr == "_index_dtypes":
-                continue
-            assert result.__getattr__(attr) == data_fmodel.__getattr__(attr)
-
-
-@pytest.mark.parametrize("check_isomorphous", [True, False])
-@pytest.mark.parametrize("sg", [gemmi.SpaceGroup(19), gemmi.SpaceGroup(96)])
-@pytest.mark.parametrize("ignore_index", [True, False])
-def test_append_list(data_fmodel, check_isomorphous, sg, ignore_index):
-    """
-    Test whether attributes of DataSet are preserved through calls to
-    DataSet.append() using a list for `other` argument
-    """
-    other = data_fmodel.copy(deep=True)
-    other.spacegroup = sg
-    other = [other] * 3
-    if check_isomorphous and sg.number == 19:
-        with pytest.raises(ValueError):
-            result = data_fmodel.append(
-                other, ignore_index, check_isomorphous=check_isomorphous
-            )
-    else:
-        result = data_fmodel.append(
-            other, ignore_index, check_isomorphous=check_isomorphous
-        )
-        assert isinstance(result, rs.DataSet)
-        assert len(result) == len(data_fmodel) * 4
-        if ignore_index:
-            assert result._index_dtypes == {}
-        for attr in data_fmodel._metadata:
-            if attr == "_index_dtypes":
-                continue
-            assert result.__getattr__(attr) == data_fmodel.__getattr__(attr)
-
-
-@pytest.mark.parametrize("check_isomorphous", [True, False])
-@pytest.mark.parametrize("sg", [gemmi.SpaceGroup(19), gemmi.SpaceGroup(96)])
 def test_merge(data_fmodel, check_isomorphous, sg):
     """
     Test whether attributes of DataSet are preserved through calls to

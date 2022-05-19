@@ -3,7 +3,7 @@ import numpy as np
 import pandas as pd
 from pandas.api.types import is_complex_dtype
 
-from reciprocalspaceship import dtypes
+from reciprocalspaceship import concat, dtypes
 from reciprocalspaceship.dataseries import DataSeries
 from reciprocalspaceship.decorators import (
     cellify,
@@ -403,50 +403,6 @@ class DataSet(pd.DataFrame):
         DataSet.to_structurefactor : Convert amplitude and phase to complex structure factor
         """
         return from_structurefactor(self[sf_key])
-
-    def append(self, *args, check_isomorphous=True, **kwargs):
-        """
-        Append rows of `other` to the end of calling DataSet, returning
-        a new DataSet object. Any columns in `other` that are not present
-        in the calling DataSet are added as new columns.
-
-        For additional documentation on accepted arguments, see the
-        `Pandas DataFrame.append() API <https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.append.html>`_.
-
-        Parameters
-        ----------
-        check_isomorphous : bool
-            If True, the spacegroup and cell attributes of DataSets in `other`
-            will be compared to those of the calling DataSet to ensure
-            they are isomorphous.
-
-        Returns
-        -------
-        rs.DataSet
-
-        See Also
-        --------
-        concat : Concatenate ``rs`` objects
-        """
-        other = kwargs.get("other", args[0])
-        if check_isomorphous:
-            if isinstance(other, (list, tuple)):
-                for o in other:
-                    if isinstance(o, DataSet) and not self.is_isomorphous(o):
-                        raise ValueError("DataSet in `other` is not isomorphous")
-            else:
-                if isinstance(other, DataSet) and not self.is_isomorphous(other):
-                    raise ValueError("`other` DataSet is not isomorphous")
-        result = super().append(*args, **kwargs)
-
-        # If `ignore_index=True`, the _index_dtypes attribute should
-        # be reset.
-        if isinstance(result.index, pd.RangeIndex) and self._index_dtypes != {}:
-            result.__finalize__(self)
-            result._index_dtypes = {}
-            return result
-
-        return result.__finalize__(self)
 
     def merge(self, *args, check_isomorphous=True, **kwargs):
         """
@@ -912,7 +868,7 @@ class DataSet(pd.DataFrame):
         column_mapping_minus = dict(zip(minus_labels, new_labels))
         dataset_plus.rename(columns=column_mapping_plus, inplace=True)
         dataset_minus.rename(columns=column_mapping_minus, inplace=True)
-        F = dataset_plus.append(dataset_minus)
+        F = concat([dataset_plus, dataset_minus])
         for label in new_labels:
             F[label] = F[label].from_friedel_dtype()
 
@@ -1216,7 +1172,7 @@ class DataSet(pd.DataFrame):
             ds = self.copy()
             ds["M/ISYM"] = isym
             ds["M/ISYM"] = ds["M/ISYM"].astype("M/ISYM")
-            p1 = p1.append(ds.hkl_to_observed(m_isym="M/ISYM"))
+            p1 = concat([p1, ds.hkl_to_observed(m_isym="M/ISYM")])
             p1.drop_duplicates(subset=["H", "K", "L"], inplace=True)
 
         # Restrict to p1 ASU
@@ -1236,7 +1192,7 @@ class DataSet(pd.DataFrame):
         DataSet
         """
         friedel = self.apply_symop("-x,-y,-z")
-        return self.append(friedel)
+        return concat([self, friedel])
 
     @inplace
     def canonicalize_phases(self, inplace=False):
