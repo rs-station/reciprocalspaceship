@@ -567,7 +567,9 @@ class DataSet(pd.DataFrame):
                 return self[[k for k in self if self[k].dtype.mtztype == dtype]]
             else:
                 return self[[k for k in self if self[k].dtype.name == dtype]]
-        raise ValueError(f"dtype must be a str or MTZDtype class. Called with: {dtype}")
+        raise ValueError(
+            f"dtype must be a str or MTZDtype instance. Called with: {dtype}"
+        )
 
     def get_phase_keys(self):
         """
