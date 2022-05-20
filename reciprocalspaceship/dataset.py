@@ -540,12 +540,12 @@ class DataSet(pd.DataFrame):
 
     def select_mtzdtype(self, dtype):
         """
-        Return the subset of the DataSet’s columns that are of the given dtype.
+        Return subset of DataSet’s columns that are of the given dtype.
 
         Parameters
         ----------
-        dtype : str or instance of MTZDtype class
-            Single-letter MTZ code, name, or MTZDtype class to return
+        dtype : str or instance of MTZDtype
+            Single-letter MTZ code, name, or MTZDtype instance to return
 
         Returns
         -------
@@ -557,7 +557,7 @@ class DataSet(pd.DataFrame):
         Raises
         ------
         ValueError
-            If `dtype` is not a string nor a MTZDtype class
+            If `dtype` is not a string nor a MTZDtype instance
         """
         if isinstance(dtype, MTZDtype):
             return self[[k for k in self if isinstance(self.dtypes[k], type(dtype))]]
