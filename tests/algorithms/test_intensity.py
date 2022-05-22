@@ -3,6 +3,7 @@ import pytest
 
 import reciprocalspaceship as rs
 
+
 @pytest.mark.parametrize(
     "F_SigF",
     [
@@ -18,14 +19,14 @@ import reciprocalspaceship as rs
 )
 def test_compute_intensity_from_structurefactor(F_SigF):
     """
-    Test rs.algorithms.compute_intensity_from_structurefactor() returns 
+    Test rs.algorithms.compute_intensity_from_structurefactor() returns
     intensities and intensity error estimates as expected based on assumptions
     """
-    
+
     F = F_SigF[0]
     SigF = F_SigF[1]
-    
+
     I, SigI = rs.algorithms.compute_intensity_from_structurefactor(F, SigF)
-    
-    assert np.isclose(I, SigF*SigF + F*F)
-    assert np.isclose(SigI, np.abs(2*F*SigF))
+
+    assert np.isclose(I, SigF * SigF + F * F)
+    assert np.isclose(SigI, np.abs(2 * F * SigF))
