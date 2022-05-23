@@ -27,8 +27,13 @@ def compute_intensity_from_structurefactor(F, SigF):
 
     if isinstance(F, rs.DataSeries):
         F = F.to_numpy()
+    elif isinstance(F, list):
+        F = np.array(F)
+    
     if isinstance(SigF, rs.DataSeries):
         SigF = SigF.to_numpy()
+    elif isinstance(SigF, list):
+        SigF = np.array(SigF)
 
     I = SigF * SigF + F * F
     SigI = np.abs(2 * F * SigF)
