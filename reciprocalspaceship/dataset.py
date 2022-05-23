@@ -1202,19 +1202,16 @@ class DataSet(pd.DataFrame):
                 "This function is only  applicable for reflection data in the reciprocal ASU and anomalous data in a two-column (unstacked) format"
             )
 
-        p1 = DataSet(spacegroup=self.spacegroup, cell=self.cell)
-
-        # Get all symops, in ascending order by ISYM
+        # Number of symops, including Friedel operations
         groupops = self.spacegroup.operations()
-        allops = [op for op in groupops for op in (op, op.negated())]
+        n_symops = len(groupops) * 2
 
-        # Apply each symop and drop duplicates with higher ISYM
-        for isym, op in enumerate(allops, 1):
-            ds = self.copy()
-            ds["M/ISYM"] = isym
-            ds["M/ISYM"] = ds["M/ISYM"].astype("M/ISYM")
-            p1 = concat([p1, ds.hkl_to_observed(m_isym="M/ISYM")])
-            p1.drop_duplicates(subset=["H", "K", "L"], inplace=True)
+        # Copy data n_symops times with all possible M/ISYM values
+        p1 = self.loc[self.index.repeat(n_symops)]
+        p1["M/ISYM"] = np.tile(range(1, n_symops + 1), reps=len(self))
+        p1["M/ISYM"] = p1["M/ISYM"].astype("M/ISYM")
+        p1 = p1.hkl_to_observed(m_isym="M/ISYM", inplace=True)
+        p1.drop_duplicates(subset=["H", "K", "L"], inplace=True)
 
         # Restrict to p1 ASU
         p1.spacegroup = gemmi.SpaceGroup(1)
