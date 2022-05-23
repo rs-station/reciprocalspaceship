@@ -649,7 +649,8 @@ def test_to_gemmi_withNans(data_merged):
     "dtype",
     rs.summarize_mtz_dtypes(False)[["MTZ Code", "Name", "Class"]].melt().itertuples(),
 )
-def test_select_mtzdtype(data_hewl, dtype):
+@pytest.mark.parametrize("reset_index", [True, False])
+def test_select_mtzdtype(data_hewl, dtype, reset_index):
     """
     Test DataSet.select_mtzdtype() with MTZDtype class, MTZ code, and dtype name
     """
@@ -659,6 +660,10 @@ def test_select_mtzdtype(data_hewl, dtype):
         import sys
 
         return getattr(sys.modules["reciprocalspaceship"], classname)
+
+    # If True, remove HKL from index:
+    if reset_index:
+        data_hewl.reset_index(inplace=True)
 
     d = data_hewl.copy()
     if dtype.variable == "MTZ Code":
