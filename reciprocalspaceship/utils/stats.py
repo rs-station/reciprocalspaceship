@@ -77,7 +77,7 @@ def compute_redundancy(
             spacegroup=spacegroup,
         ).set_index(["H", "K", "L"])
         ASU = ASU.loc[ASU.index.difference(mult.index)]
-        mult = mult.append(ASU)
+        mult = rs.concat([mult, ASU])
 
     mult = mult.sort_index()
     return mult.get_hkls(), mult["Count"].to_numpy(np.int32)
