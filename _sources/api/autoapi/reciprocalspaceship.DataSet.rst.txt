@@ -50,7 +50,6 @@
    .. autosummary::
    
        ~DataSet.__init__
-       ~DataSet.append
        ~DataSet.apply_symop
        ~DataSet.assign_resolution_bins
        ~DataSet.canonicalize_phases
