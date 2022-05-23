@@ -649,7 +649,7 @@ def test_to_gemmi_withNans(data_merged):
     "dtype",
     rs.summarize_mtz_dtypes(False)[["MTZ Code", "Name", "Class"]].melt().itertuples(),
 )
-def test_select_mtzdtype(data_merged, dtype):
+def test_select_mtzdtype(data_hewl, dtype):
     """
     Test DataSet.select_mtzdtype() with MTZDtype class, MTZ code, and dtype name
     """
@@ -660,23 +660,29 @@ def test_select_mtzdtype(data_merged, dtype):
 
         return getattr(sys.modules["reciprocalspaceship"], classname)
 
-    d = data_merged.copy()
+    d = data_hewl.copy()
     if dtype.variable == "MTZ Code":
         dtype = dtype.value
-        expected = d[[k for k in d if d[k].dtype.mtztype == dtype]]
-        result = data_merged.select_mtzdtype(dtype)
+        expected = d[
+            [
+                k
+                for k in d
+                if hasattr(d[k].dtype, "mtztype") and d[k].dtype.mtztype == dtype
+            ]
+        ]
+        result = data_hewl.select_mtzdtype(dtype)
     elif dtype.variable == "Name":
         dtype = dtype.value
         expected = d[[k for k in d if d[k].dtype.name == dtype]]
-        result = data_merged.select_mtzdtype(dtype)
+        result = data_hewl.select_mtzdtype(dtype)
     else:
         dtype = _str_to_class(dtype.value)
         expected = d[[k for k in d if isinstance(d[k].dtype, dtype)]]
-        result = data_merged.select_mtzdtype(dtype())
+        result = data_hewl.select_mtzdtype(dtype())
 
     assert_frame_equal(result, expected)
-    assert result.spacegroup.xhm() == data_merged.spacegroup.xhm()
-    assert np.array_equal(result.cell.parameters, data_merged.cell.parameters)
+    assert result.spacegroup.xhm() == data_hewl.spacegroup.xhm()
+    assert np.array_equal(result.cell.parameters, data_hewl.cell.parameters)
 
 
 @pytest.mark.parametrize("dtype", [1, 1.0, pd.Int32Dtype()])

@@ -564,7 +564,14 @@ class DataSet(pd.DataFrame):
         elif isinstance(dtype, str):
             # One-letter code
             if len(dtype) == 1:
-                return self[[k for k in self if self[k].dtype.mtztype == dtype]]
+                return self[
+                    [
+                        k
+                        for k in self
+                        if hasattr(self[k].dtype, "mtztype")
+                        and self[k].dtype.mtztype == dtype
+                    ]
+                ]
             else:
                 return self[[k for k in self if self[k].dtype.name == dtype]]
         raise ValueError(
