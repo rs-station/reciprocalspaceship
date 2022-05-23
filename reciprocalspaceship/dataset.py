@@ -11,6 +11,7 @@ from reciprocalspaceship.decorators import (
     range_indexed,
     spacegroupify,
 )
+from reciprocalspaceship.dtypes.base import MTZDtype
 from reciprocalspaceship.utils import (
     apply_to_hkl,
     bin_by_percentile,
@@ -492,6 +493,46 @@ class DataSet(pd.DataFrame):
         from reciprocalspaceship import io
 
         return io.write_mtz(self, mtzfile, skip_problem_mtztypes)
+
+    def select_mtzdtype(self, dtype):
+        """
+        Return subset of DataSet’s columns that are of the given dtype.
+
+        Parameters
+        ----------
+        dtype : str or instance of MTZDtype
+            Single-letter MTZ code, name, or MTZDtype instance to return
+
+        Returns
+        -------
+        DataSet
+            Subset of the DataSet with columns matching the requested dtype. If
+            no columns of the requested dtype are found, an empty DataSet is
+            returned.
+
+        Raises
+        ------
+        ValueError
+            If `dtype` is not a string nor a MTZDtype instance
+        """
+        if isinstance(dtype, MTZDtype):
+            return self[[k for k in self if isinstance(self.dtypes[k], type(dtype))]]
+        elif isinstance(dtype, str):
+            # One-letter code
+            if len(dtype) == 1:
+                return self[
+                    [
+                        k
+                        for k in self
+                        if hasattr(self[k].dtype, "mtztype")
+                        and self[k].dtype.mtztype == dtype
+                    ]
+                ]
+            else:
+                return self[[k for k in self if self[k].dtype.name == dtype]]
+        raise ValueError(
+            f"dtype must be a str or MTZDtype instance. Called with: {dtype}"
+        )
 
     def get_phase_keys(self):
         """

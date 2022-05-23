@@ -643,3 +643,58 @@ def test_to_gemmi_withNans(data_merged):
     roundtrip = rs.DataSet.from_gemmi(data_merged.to_gemmi())
 
     assert pd.isna(roundtrip.loc[data_merged.index[0], "N(+)"])
+
+
+@pytest.mark.parametrize(
+    "dtype",
+    rs.summarize_mtz_dtypes(False)[["MTZ Code", "Name", "Class"]].melt().itertuples(),
+)
+@pytest.mark.parametrize("reset_index", [True, False])
+def test_select_mtzdtype(data_hewl, dtype, reset_index):
+    """
+    Test DataSet.select_mtzdtype() with MTZDtype class, MTZ code, and dtype name
+    """
+
+    def _str_to_class(classname):
+        """Convert string of class into instance of class"""
+        import sys
+
+        return getattr(sys.modules["reciprocalspaceship"], classname)
+
+    # If True, remove HKL from index:
+    if reset_index:
+        data_hewl.reset_index(inplace=True)
+
+    d = data_hewl.copy()
+    if dtype.variable == "MTZ Code":
+        dtype = dtype.value
+        expected = d[
+            [
+                k
+                for k in d
+                if hasattr(d[k].dtype, "mtztype") and d[k].dtype.mtztype == dtype
+            ]
+        ]
+        result = data_hewl.select_mtzdtype(dtype)
+    elif dtype.variable == "Name":
+        dtype = dtype.value
+        expected = d[[k for k in d if d[k].dtype.name == dtype]]
+        result = data_hewl.select_mtzdtype(dtype)
+    else:
+        dtype = _str_to_class(dtype.value)
+        expected = d[[k for k in d if isinstance(d[k].dtype, dtype)]]
+        result = data_hewl.select_mtzdtype(dtype())
+
+    assert_frame_equal(result, expected)
+    assert result.spacegroup.xhm() == data_hewl.spacegroup.xhm()
+    assert np.array_equal(result.cell.parameters, data_hewl.cell.parameters)
+
+
+@pytest.mark.parametrize("dtype", [1, 1.0, pd.Int32Dtype()])
+def test_select_mtzdtype_ValueError(data_merged, dtype):
+    """
+    Test DataSet.select_mtzdtype() raises ValueError if `dtype` is not a
+    string nor MTZDtype instance.
+    """
+    with pytest.raises(ValueError):
+        data_merged.select_mtzdtype(dtype)
