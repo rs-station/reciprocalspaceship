@@ -73,6 +73,7 @@
        ~DataSet.merge
        ~DataSet.remove_absences
        ~DataSet.reset_index
+       ~DataSet.select_mtzdtype
        ~DataSet.set_index
        ~DataSet.stack_anomalous
        ~DataSet.to_gemmi
