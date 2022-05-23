@@ -29,7 +29,14 @@ def test_constructor_expanddim(data, series_name, frame_name, dtype):
     """Test DataSeries.to_frame()"""
 
     ds = rs.DataSeries(data, name=series_name, dtype=dtype)
-    d = ds.to_frame(name=frame_name)
+
+    # Avoids FutureWarning from Pandas:
+    #     - passing `None` will lead to column named "None" in future
+    if frame_name:
+        d = ds.to_frame(name=frame_name)
+    else:
+        d = ds.to_frame()
+
     assert isinstance(d, rs.DataSet)
     assert len(d.columns) == 1
     assert isinstance(d.dtypes[0], type(ds.dtype))
