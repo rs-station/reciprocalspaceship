@@ -173,19 +173,19 @@ def test_to_gemmi_names(IOtest_mtz, project_name, crystal_name, dataset_name):
         )
 
     if project_name:
-        assert gemmimtz.dataset(1).project_name == project_name
+        assert gemmimtz.dataset(0).project_name == project_name
     else:
-        assert gemmimtz.dataset(1).project_name == "reciprocalspaceship"
+        assert gemmimtz.dataset(0).project_name == "reciprocalspaceship"
 
     if crystal_name:
-        assert gemmimtz.dataset(1).crystal_name == crystal_name
+        assert gemmimtz.dataset(0).crystal_name == crystal_name
     else:
-        assert gemmimtz.dataset(1).crystal_name == "reciprocalspaceship"
+        assert gemmimtz.dataset(0).crystal_name == "reciprocalspaceship"
 
     if dataset_name:
-        assert gemmimtz.dataset(1).dataset_name == dataset_name
+        assert gemmimtz.dataset(0).dataset_name == dataset_name
     else:
-        assert gemmimtz.dataset(1).dataset_name == "reciprocalspaceship"
+        assert gemmimtz.dataset(0).dataset_name == "reciprocalspaceship"
 
 
 @pytest.mark.parametrize("project_name", [None, "project", 1])
@@ -221,18 +221,18 @@ def test_write_mtz_names(IOtest_mtz, project_name, crystal_name, dataset_name):
     gemmimtz = gemmi.read_mtz_file(temp.name)
 
     if project_name:
-        assert gemmimtz.dataset(1).project_name == project_name
+        assert gemmimtz.dataset(0).project_name == project_name
     else:
-        assert gemmimtz.dataset(1).project_name == "reciprocalspaceship"
+        assert gemmimtz.dataset(0).project_name == "reciprocalspaceship"
 
     if crystal_name:
-        assert gemmimtz.dataset(1).crystal_name == crystal_name
+        assert gemmimtz.dataset(0).crystal_name == crystal_name
     else:
-        assert gemmimtz.dataset(1).crystal_name == "reciprocalspaceship"
+        assert gemmimtz.dataset(0).crystal_name == "reciprocalspaceship"
 
     if dataset_name:
-        assert gemmimtz.dataset(1).dataset_name == dataset_name
+        assert gemmimtz.dataset(0).dataset_name == dataset_name
     else:
-        assert gemmimtz.dataset(1).dataset_name == "reciprocalspaceship"
+        assert gemmimtz.dataset(0).dataset_name == "reciprocalspaceship"
 
     temp.close()

@@ -1,6 +1,4 @@
 import gemmi
-import numpy as np
-import pandas as pd
 
 from reciprocalspaceship import DataSet
 from reciprocalspaceship.dtypes.base import MTZDtype
@@ -104,7 +102,7 @@ def to_gemmi(
         )
 
     # Build up a gemmi.Mtz object
-    mtz = gemmi.Mtz(with_base=True)  # Adds HKL_base
+    mtz = gemmi.Mtz()
     mtz.cell = dataset.cell
     mtz.spacegroup = dataset.spacegroup
 
@@ -117,25 +115,24 @@ def to_gemmi(
     # Add Dataset with indicated names
     mtz.add_dataset("reciprocalspaceship")
     if project_name:
-        mtz.datasets[1].project_name = project_name
+        mtz.datasets[0].project_name = project_name
     if crystal_name:
-        mtz.datasets[1].crystal_name = crystal_name
+        mtz.datasets[0].crystal_name = crystal_name
     if dataset_name:
-        mtz.datasets[1].dataset_name = dataset_name
+        mtz.datasets[0].dataset_name = dataset_name
 
     # Construct data for Mtz object
     temp = dataset.reset_index()
-    columns = ["H", "K", "L"]  # already in HKL_base
+    columns = []
     for c in temp.columns:
         cseries = temp[c]
         if isinstance(cseries.dtype, MTZDtype):
-            if c not in ["H", "K", "L"]:  # HKL already in HKL_base
-                mtz.add_column(label=c, type=cseries.dtype.mtztype)
-                columns.append(c)
+            mtz.add_column(label=c, type=cseries.dtype.mtztype)
+            columns.append(c)
         # Special case for CENTRIC and PARTIAL flags
         elif cseries.dtype.name == "bool" and c in ["CENTRIC", "PARTIAL"]:
             temp[c] = temp[c].astype("MTZInt")
-            mtz.add_column(label=c, type="I", dataset_id=1)
+            mtz.add_column(label=c, type="I")
             columns.append(c)
         elif skip_problem_mtztypes:
             continue
