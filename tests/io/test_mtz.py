@@ -186,3 +186,53 @@ def test_to_gemmi_names(IOtest_mtz, project_name, crystal_name, dataset_name):
         assert gemmimtz.dataset(1).dataset_name == dataset_name
     else:
         assert gemmimtz.dataset(1).dataset_name == "reciprocalspaceship"
+
+
+@pytest.mark.parametrize("project_name", [None, "project", 1])
+@pytest.mark.parametrize("crystal_name", [None, "crystal", 1])
+@pytest.mark.parametrize("dataset_name", [None, "dataset", 1])
+def test_write_mtz_names(IOtest_mtz, project_name, crystal_name, dataset_name):
+    """
+    Test that DataSet.write_mtz() sets project/crystal/dataset names when given.
+
+    Values should default to "reciprocalspaceship" when not given
+    """
+    ds = rs.read_mtz(IOtest_mtz)
+
+    temp = tempfile.NamedTemporaryFile(suffix=".mtz")
+    if project_name == 1 or crystal_name == 1 or dataset_name == 1:
+        with pytest.raises(TypeError):
+            ds.write_mtz(
+                temp.name,
+                project_name=project_name,
+                crystal_name=crystal_name,
+                dataset_name=dataset_name,
+            )
+        temp.close()
+        return
+    else:
+        ds.write_mtz(
+            temp.name,
+            project_name=project_name,
+            crystal_name=crystal_name,
+            dataset_name=dataset_name,
+        )
+
+    gemmimtz = gemmi.read_mtz_file(temp.name)
+
+    if project_name:
+        assert gemmimtz.dataset(1).project_name == project_name
+    else:
+        assert gemmimtz.dataset(1).project_name == "reciprocalspaceship"
+
+    if crystal_name:
+        assert gemmimtz.dataset(1).crystal_name == crystal_name
+    else:
+        assert gemmimtz.dataset(1).crystal_name == "reciprocalspaceship"
+
+    if dataset_name:
+        assert gemmimtz.dataset(1).dataset_name == dataset_name
+    else:
+        assert gemmimtz.dataset(1).dataset_name == "reciprocalspaceship"
+
+    temp.close()
