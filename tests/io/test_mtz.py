@@ -3,7 +3,6 @@ import tempfile
 from os.path import exists
 
 import gemmi
-import numpy as np
 import pytest
 from pandas.testing import assert_frame_equal
 
@@ -145,3 +144,45 @@ def test_unmerged_after_write(data_unmerged, in_asu):
     expected = data_unmerged.copy()
     data_unmerged.write_mtz("/dev/null")
     assert_frame_equal(data_unmerged, expected)
+
+
+@pytest.mark.parametrize("project_name", [None, "project", 1])
+@pytest.mark.parametrize("crystal_name", [None, "crystal", 1])
+@pytest.mark.parametrize("dataset_name", [None, "dataset", 1])
+def test_to_gemmi_names(IOtest_mtz, project_name, crystal_name, dataset_name):
+    """
+    Test that DataSet.to_gemmi() sets project/crystal/dataset names when given.
+
+    Values should default to "reciprocalspaceship" when not given
+    """
+    ds = rs.read_mtz(IOtest_mtz)
+
+    if project_name == 1 or crystal_name == 1 or dataset_name == 1:
+        with pytest.raises(TypeError):
+            ds.to_gemmi(
+                project_name=project_name,
+                crystal_name=crystal_name,
+                dataset_name=dataset_name,
+            )
+        return
+    else:
+        gemmimtz = ds.to_gemmi(
+            project_name=project_name,
+            crystal_name=crystal_name,
+            dataset_name=dataset_name,
+        )
+
+    if project_name:
+        assert gemmimtz.dataset(1).project_name == project_name
+    else:
+        assert gemmimtz.dataset(1).project_name == "reciprocalspaceship"
+
+    if crystal_name:
+        assert gemmimtz.dataset(1).crystal_name == crystal_name
+    else:
+        assert gemmimtz.dataset(1).crystal_name == "reciprocalspaceship"
+
+    if dataset_name:
+        assert gemmimtz.dataset(1).dataset_name == dataset_name
+    else:
+        assert gemmimtz.dataset(1).dataset_name == "reciprocalspaceship"

@@ -316,7 +316,13 @@ class DataSet(pd.DataFrame):
         """
         return cls(gemmiMtz)
 
-    def to_gemmi(self, skip_problem_mtztypes=False):
+    def to_gemmi(
+        self,
+        skip_problem_mtztypes=False,
+        project_name=None,
+        crystal_name=None,
+        dataset_name=None,
+    ):
         """
         Creates gemmi.Mtz object from DataSet object.
 
@@ -332,6 +338,12 @@ class DataSet(pd.DataFrame):
         skip_problem_mtztypes : bool
             Whether to skip columns in DataSet that do not have specified
             MTZ datatypes
+        project_name : str
+            Project name to assign to MTZ file
+        crystal_name : str
+            Crystal name to assign to MTZ file
+        dataset_name : str
+            Dataset name to assign to MTZ file
 
         Returns
         -------
@@ -339,7 +351,9 @@ class DataSet(pd.DataFrame):
         """
         from reciprocalspaceship import io
 
-        return io.to_gemmi(self, skip_problem_mtztypes)
+        return io.to_gemmi(
+            self, skip_problem_mtztypes, project_name, crystal_name, dataset_name
+        )
 
     def to_pickle(self, path, *args, **kwargs):
         """
@@ -471,7 +485,14 @@ class DataSet(pd.DataFrame):
         result = super().join(*args, **kwargs)
         return result.__finalize__(self)
 
-    def write_mtz(self, mtzfile, skip_problem_mtztypes=False):
+    def write_mtz(
+        self,
+        mtzfile,
+        skip_problem_mtztypes=False,
+        project_name=None,
+        crystal_name=None,
+        dataset_name=None,
+    ):
         """
         Write DataSet to MTZ file.
 
@@ -489,10 +510,23 @@ class DataSet(pd.DataFrame):
         skip_problem_mtztypes : bool
             Whether to skip columns in DataSet that do not have specified
             MTZ datatypes
+        project_name : str
+            Project name to assign to MTZ file
+        crystal_name : str
+            Crystal name to assign to MTZ file
+        dataset_name : str
+            Dataset name to assign to MTZ file
         """
         from reciprocalspaceship import io
 
-        return io.write_mtz(self, mtzfile, skip_problem_mtztypes)
+        return io.write_mtz(
+            self,
+            mtzfile,
+            skip_problem_mtztypes,
+            project_name,
+            crystal_name,
+            dataset_name,
+        )
 
     def select_mtzdtype(self, dtype):
         """
