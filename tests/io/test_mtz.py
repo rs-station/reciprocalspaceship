@@ -146,62 +146,59 @@ def test_unmerged_after_write(data_unmerged, in_asu):
     assert_frame_equal(data_unmerged, expected)
 
 
-@pytest.mark.parametrize("project_name", [None, "project", 1])
-@pytest.mark.parametrize("crystal_name", [None, "crystal", 1])
-@pytest.mark.parametrize("dataset_name", [None, "dataset", 1])
+@pytest.mark.parametrize("project_name", [None, "project", "reciprocalspaceship", 1])
+@pytest.mark.parametrize("crystal_name", [None, "crystal", "reciprocalspaceship", 1])
+@pytest.mark.parametrize("dataset_name", [None, "dataset", "reciprocalspaceship", 1])
 def test_to_gemmi_names(IOtest_mtz, project_name, crystal_name, dataset_name):
     """
     Test that DataSet.to_gemmi() sets project/crystal/dataset names when given.
 
-    Values should default to "reciprocalspaceship" when not given
+    ValueError should be raised for anything other than a string.
     """
     ds = rs.read_mtz(IOtest_mtz)
 
-    if project_name == 1 or crystal_name == 1 or dataset_name == 1:
-        with pytest.raises(TypeError):
+    if (
+        not isinstance(project_name, str)
+        or not isinstance(crystal_name, str)
+        or not isinstance(dataset_name, str)
+    ):
+        with pytest.raises(ValueError):
             ds.to_gemmi(
                 project_name=project_name,
                 crystal_name=crystal_name,
                 dataset_name=dataset_name,
             )
         return
-    else:
-        gemmimtz = ds.to_gemmi(
-            project_name=project_name,
-            crystal_name=crystal_name,
-            dataset_name=dataset_name,
-        )
 
-    if project_name:
-        assert gemmimtz.dataset(0).project_name == project_name
-    else:
-        assert gemmimtz.dataset(0).project_name == "reciprocalspaceship"
+    gemmimtz = ds.to_gemmi(
+        project_name=project_name,
+        crystal_name=crystal_name,
+        dataset_name=dataset_name,
+    )
 
-    if crystal_name:
-        assert gemmimtz.dataset(0).crystal_name == crystal_name
-    else:
-        assert gemmimtz.dataset(0).crystal_name == "reciprocalspaceship"
-
-    if dataset_name:
-        assert gemmimtz.dataset(0).dataset_name == dataset_name
-    else:
-        assert gemmimtz.dataset(0).dataset_name == "reciprocalspaceship"
+    assert gemmimtz.dataset(0).project_name == project_name
+    assert gemmimtz.dataset(0).crystal_name == crystal_name
+    assert gemmimtz.dataset(0).dataset_name == dataset_name
 
 
-@pytest.mark.parametrize("project_name", [None, "project", 1])
-@pytest.mark.parametrize("crystal_name", [None, "crystal", 1])
-@pytest.mark.parametrize("dataset_name", [None, "dataset", 1])
+@pytest.mark.parametrize("project_name", [None, "project", "reciprocalspaceship", 1])
+@pytest.mark.parametrize("crystal_name", [None, "crystal", "reciprocalspaceship", 1])
+@pytest.mark.parametrize("dataset_name", [None, "dataset", "reciprocalspaceship", 1])
 def test_write_mtz_names(IOtest_mtz, project_name, crystal_name, dataset_name):
     """
     Test that DataSet.write_mtz() sets project/crystal/dataset names when given.
 
-    Values should default to "reciprocalspaceship" when not given
+    ValueError should be raised for anything other than a string.
     """
     ds = rs.read_mtz(IOtest_mtz)
 
     temp = tempfile.NamedTemporaryFile(suffix=".mtz")
-    if project_name == 1 or crystal_name == 1 or dataset_name == 1:
-        with pytest.raises(TypeError):
+    if (
+        not isinstance(project_name, str)
+        or not isinstance(crystal_name, str)
+        or not isinstance(dataset_name, str)
+    ):
+        with pytest.raises(ValueError):
             ds.write_mtz(
                 temp.name,
                 project_name=project_name,
@@ -220,19 +217,9 @@ def test_write_mtz_names(IOtest_mtz, project_name, crystal_name, dataset_name):
 
     gemmimtz = gemmi.read_mtz_file(temp.name)
 
-    if project_name:
-        assert gemmimtz.dataset(0).project_name == project_name
-    else:
-        assert gemmimtz.dataset(0).project_name == "reciprocalspaceship"
+    assert gemmimtz.dataset(0).project_name == project_name
+    assert gemmimtz.dataset(0).crystal_name == crystal_name
+    assert gemmimtz.dataset(0).dataset_name == dataset_name
 
-    if crystal_name:
-        assert gemmimtz.dataset(0).crystal_name == crystal_name
-    else:
-        assert gemmimtz.dataset(0).crystal_name == "reciprocalspaceship"
-
-    if dataset_name:
-        assert gemmimtz.dataset(0).dataset_name == dataset_name
-    else:
-        assert gemmimtz.dataset(0).dataset_name == "reciprocalspaceship"
-
+    # Clean up
     temp.close()
