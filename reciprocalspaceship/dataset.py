@@ -319,9 +319,9 @@ class DataSet(pd.DataFrame):
     def to_gemmi(
         self,
         skip_problem_mtztypes=False,
-        project_name=None,
-        crystal_name=None,
-        dataset_name=None,
+        project_name="reciprocalspaceship",
+        crystal_name="reciprocalspaceship",
+        dataset_name="reciprocalspaceship",
     ):
         """
         Creates gemmi.Mtz object from DataSet object.
@@ -489,9 +489,9 @@ class DataSet(pd.DataFrame):
         self,
         mtzfile,
         skip_problem_mtztypes=False,
-        project_name=None,
-        crystal_name=None,
-        dataset_name=None,
+        project_name="reciprocalspaceship",
+        crystal_name="reciprocalspaceship",
+        dataset_name="reciprocalspaceship",
     ):
         """
         Write DataSet to MTZ file.

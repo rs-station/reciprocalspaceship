@@ -59,9 +59,9 @@ def from_gemmi(gemmi_mtz):
 def to_gemmi(
     dataset,
     skip_problem_mtztypes=False,
-    project_name=None,
-    crystal_name=None,
-    dataset_name=None,
+    project_name="reciprocalspaceship",
+    crystal_name="reciprocalspaceship",
+    dataset_name="reciprocalspaceship",
 ):
     """
     Construct gemmi.Mtz object from DataSet
@@ -181,9 +181,9 @@ def write_mtz(
     dataset,
     mtzfile,
     skip_problem_mtztypes=False,
-    project_name=None,
-    crystal_name=None,
-    dataset_name=None,
+    project_name="reciprocalspaceship",
+    crystal_name="reciprocalspaceship",
+    dataset_name="reciprocalspaceship",
 ):
     """
     Write an MTZ reflection file from the reflection data in a DataSet.
