@@ -3,7 +3,6 @@ import tempfile
 from os.path import exists
 
 import gemmi
-import numpy as np
 import pytest
 from pandas.testing import assert_frame_equal
 
@@ -145,3 +144,82 @@ def test_unmerged_after_write(data_unmerged, in_asu):
     expected = data_unmerged.copy()
     data_unmerged.write_mtz("/dev/null")
     assert_frame_equal(data_unmerged, expected)
+
+
+@pytest.mark.parametrize("project_name", [None, "project", "reciprocalspaceship", 1])
+@pytest.mark.parametrize("crystal_name", [None, "crystal", "reciprocalspaceship", 1])
+@pytest.mark.parametrize("dataset_name", [None, "dataset", "reciprocalspaceship", 1])
+def test_to_gemmi_names(IOtest_mtz, project_name, crystal_name, dataset_name):
+    """
+    Test that DataSet.to_gemmi() sets project/crystal/dataset names when given.
+
+    ValueError should be raised for anything other than a string.
+    """
+    ds = rs.read_mtz(IOtest_mtz)
+
+    if (
+        not isinstance(project_name, str)
+        or not isinstance(crystal_name, str)
+        or not isinstance(dataset_name, str)
+    ):
+        with pytest.raises(ValueError):
+            ds.to_gemmi(
+                project_name=project_name,
+                crystal_name=crystal_name,
+                dataset_name=dataset_name,
+            )
+        return
+
+    gemmimtz = ds.to_gemmi(
+        project_name=project_name,
+        crystal_name=crystal_name,
+        dataset_name=dataset_name,
+    )
+
+    assert gemmimtz.dataset(0).project_name == project_name
+    assert gemmimtz.dataset(0).crystal_name == crystal_name
+    assert gemmimtz.dataset(0).dataset_name == dataset_name
+
+
+@pytest.mark.parametrize("project_name", [None, "project", "reciprocalspaceship", 1])
+@pytest.mark.parametrize("crystal_name", [None, "crystal", "reciprocalspaceship", 1])
+@pytest.mark.parametrize("dataset_name", [None, "dataset", "reciprocalspaceship", 1])
+def test_write_mtz_names(IOtest_mtz, project_name, crystal_name, dataset_name):
+    """
+    Test that DataSet.write_mtz() sets project/crystal/dataset names when given.
+
+    ValueError should be raised for anything other than a string.
+    """
+    ds = rs.read_mtz(IOtest_mtz)
+
+    temp = tempfile.NamedTemporaryFile(suffix=".mtz")
+    if (
+        not isinstance(project_name, str)
+        or not isinstance(crystal_name, str)
+        or not isinstance(dataset_name, str)
+    ):
+        with pytest.raises(ValueError):
+            ds.write_mtz(
+                temp.name,
+                project_name=project_name,
+                crystal_name=crystal_name,
+                dataset_name=dataset_name,
+            )
+        temp.close()
+        return
+    else:
+        ds.write_mtz(
+            temp.name,
+            project_name=project_name,
+            crystal_name=crystal_name,
+            dataset_name=dataset_name,
+        )
+
+    gemmimtz = gemmi.read_mtz_file(temp.name)
+
+    assert gemmimtz.dataset(0).project_name == project_name
+    assert gemmimtz.dataset(0).crystal_name == crystal_name
+    assert gemmimtz.dataset(0).dataset_name == dataset_name
+
+    # Clean up
+    temp.close()

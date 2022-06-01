@@ -1,6 +1,4 @@
 import gemmi
-import numpy as np
-import pandas as pd
 
 from reciprocalspaceship import DataSet
 from reciprocalspaceship.dtypes.base import MTZDtype
@@ -58,7 +56,13 @@ def from_gemmi(gemmi_mtz):
     return dataset
 
 
-def to_gemmi(dataset, skip_problem_mtztypes=False):
+def to_gemmi(
+    dataset,
+    skip_problem_mtztypes,
+    project_name,
+    crystal_name,
+    dataset_name,
+):
     """
     Construct gemmi.Mtz object from DataSet
 
@@ -76,6 +80,12 @@ def to_gemmi(dataset, skip_problem_mtztypes=False):
     skip_problem_mtztypes : bool
         Whether to skip columns in DataSet that do not have specified
         mtz datatypes
+    project_name : str
+        Project name to assign to MTZ file
+    crystal_name : str
+        Crystal name to assign to MTZ file
+    dataset_name : str
+        Dataset name to assign to MTZ file
 
     Returns
     -------
@@ -91,6 +101,20 @@ def to_gemmi(dataset, skip_problem_mtztypes=False):
             f"Instance of type {dataset.__class__.__name__} has no space group information"
         )
 
+    # Check project_name, crystal_name, and dataset_name are str
+    if not isinstance(project_name, str):
+        raise ValueError(
+            f"project_name must be a string. Given type: {type(project_name)}"
+        )
+    if not isinstance(crystal_name, str):
+        raise ValueError(
+            f"crystal_name must be a string. Given type: {type(crystal_name)}"
+        )
+    if not isinstance(dataset_name, str):
+        raise ValueError(
+            f"dataset_name must be a string. Given type: {type(dataset_name)}"
+        )
+
     # Build up a gemmi.Mtz object
     mtz = gemmi.Mtz()
     mtz.cell = dataset.cell
@@ -102,19 +126,24 @@ def to_gemmi(dataset, skip_problem_mtztypes=False):
         if not all_in_asu:
             dataset.hkl_to_asu(inplace=True)
 
-    # Construct data for Mtz object.
+    # Add Dataset with indicated names
     mtz.add_dataset("reciprocalspaceship")
+    mtz.datasets[0].project_name = project_name
+    mtz.datasets[0].crystal_name = crystal_name
+    mtz.datasets[0].dataset_name = dataset_name
+
+    # Construct data for Mtz object
     temp = dataset.reset_index()
     columns = []
     for c in temp.columns:
         cseries = temp[c]
         if isinstance(cseries.dtype, MTZDtype):
-            mtzcol = mtz.add_column(label=c, type=cseries.dtype.mtztype)
+            mtz.add_column(label=c, type=cseries.dtype.mtztype)
             columns.append(c)
         # Special case for CENTRIC and PARTIAL flags
         elif cseries.dtype.name == "bool" and c in ["CENTRIC", "PARTIAL"]:
             temp[c] = temp[c].astype("MTZInt")
-            mtzcol = mtz.add_column(label=c, type="I")
+            mtz.add_column(label=c, type="I")
             columns.append(c)
         elif skip_problem_mtztypes:
             continue
@@ -159,7 +188,14 @@ def read_mtz(mtzfile):
     return from_gemmi(gemmi_mtz)
 
 
-def write_mtz(dataset, mtzfile, skip_problem_mtztypes=False):
+def write_mtz(
+    dataset,
+    mtzfile,
+    skip_problem_mtztypes,
+    project_name,
+    crystal_name,
+    dataset_name,
+):
     """
     Write an MTZ reflection file from the reflection data in a DataSet.
 
@@ -179,7 +215,15 @@ def write_mtz(dataset, mtzfile, skip_problem_mtztypes=False):
     skip_problem_mtztypes : bool
         Whether to skip columns in DataSet that do not have specified
         MTZ datatypes
+    project_name : str
+        Project name to assign to MTZ file
+    crystal_name : str
+        Crystal name to assign to MTZ file
+    dataset_name : str
+        Dataset name to assign to MTZ file
     """
-    mtz = to_gemmi(dataset, skip_problem_mtztypes)
+    mtz = to_gemmi(
+        dataset, skip_problem_mtztypes, project_name, crystal_name, dataset_name
+    )
     mtz.write_to_file(mtzfile)
     return
