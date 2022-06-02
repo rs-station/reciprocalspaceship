@@ -61,8 +61,9 @@ def test_hkl_to_asu(sgtbx_by_xhm, return_phase_shifts):
         ref_isym = m.column_with_label("M/ISYM").array.astype(int)
 
         if return_phase_shifts:
+            friedel = gemmi.Op("-x,-y,-z")
             ops_plus = sg.operations().sym_ops
-            ops_minus = [op.negated() for op in sg.operations().sym_ops]
+            ops_minus = [op.combine(friedel) for op in sg.operations().sym_ops]
             ops = np.array(list(zip(ops_plus, ops_minus))).flatten()
             shift = [ops[i - 1].phase_shift(h) for i, h in zip(ref_isym, H)]
             shift = rs.utils.canonicalize_phases(np.array(shift), deg=False)

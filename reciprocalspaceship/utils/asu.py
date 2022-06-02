@@ -1,3 +1,4 @@
+import gemmi
 import numpy as np
 
 from reciprocalspaceship.decorators import cellify, spacegroupify
@@ -160,10 +161,10 @@ def hkl_to_observed(H, isym, sg, return_phase_shifts=False):
     phi_shift : array (optional)
         an array length n containing phase shifts in degrees
     """
-
     H = np.array(H, dtype=np.float32)
     isym = np.array(isym, dtype=int)
     observed_H = np.zeros_like(H)
+    friedel = gemmi.Op("-x,-y,-z")
 
     if return_phase_shifts:
         phi_coeff = np.zeros(len(H))
@@ -178,7 +179,7 @@ def hkl_to_observed(H, isym, sg, return_phase_shifts=False):
             phi_coeff[idx] = 1.0
         # Friedel
         idx = isym == i * 2 + 2
-        observed_H[idx] = apply_to_hkl(H[idx], op.negated())
+        observed_H[idx] = apply_to_hkl(H[idx], op.combine(friedel))
         if return_phase_shifts:
             phi_shift[idx] = phase_shift(H[idx], op)
             phi_coeff[idx] = -1.0
