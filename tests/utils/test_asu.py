@@ -75,7 +75,7 @@ def test_hkl_to_asu(sgtbx_by_xhm, return_phase_shifts):
     # matches sgtbx
     if return_phase_shifts:
         Hasu_gemmi, ref_isym, ref_phis = gemmi_map2asu(H, sg, return_phase_shifts)
-        phis = np.deg2rad(rs.utils.canonicalize_phases(phic * phis))
+        phis = np.deg2rad(rs.utils.canonicalize_phases(phis))
     else:
         Hasu_gemmi, ref_isym = gemmi_map2asu(H, sg, return_phase_shifts)
 
