@@ -78,7 +78,7 @@ def compute_structurefactor_multiplicity(H, sg, include_centering=True):
         of each hkl.
     """
     group_ops = sg.operations()
-    is_centric = group_ops.is_centric()
+    is_centric = sg.is_centrosymmetric()
 
     # Lookup based on centering is equivalent to counting the number of translational
     # centering operations. Using the number of operations has proven more robust.
