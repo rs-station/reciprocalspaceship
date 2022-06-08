@@ -60,11 +60,7 @@ def test_compute_intensity_from_structurefactor_failure(ref_hewl):
 
     # Function should require inputs of the correct types
     with pytest.raises(ValueError):
-        rs.algorithms.compute_intensity_from_structurefactor(
-            ref_hewl, "F", "F"
-        )
+        rs.algorithms.compute_intensity_from_structurefactor(ref_hewl, "F", "F")
 
     with pytest.raises(ValueError):
-        rs.algorithms.compute_intensity_from_structurefactor(
-            ref_hewl, "SIGF", "SIGF"
-        )
+        rs.algorithms.compute_intensity_from_structurefactor(ref_hewl, "SIGF", "SIGF")
