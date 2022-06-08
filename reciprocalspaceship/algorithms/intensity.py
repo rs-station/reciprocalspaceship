@@ -3,6 +3,7 @@ import numpy as np
 import reciprocalspaceship as rs
 from reciprocalspaceship.decorators import inplace
 
+
 @inplace
 def compute_intensity_from_structurefactor(
     ds,
@@ -12,7 +13,7 @@ def compute_intensity_from_structurefactor(
     inplace=False,
 ):
     """
-    Compute intensities (I) and uncertainty estimates (SigI) from structure 
+    Compute intensities (I) and uncertainty estimates (SigI) from structure
     factor amplitudes (F) and their uncertainties (SigF) using error propagation
 
     Intensity computed as I = SigF*SigF + F*F. Intensity error estimate
@@ -72,14 +73,9 @@ def compute_intensity_from_structurefactor(
         )
 
     # Initialize outputs
-    ds[I_key] = (
-        (ds[F_key]*ds[F_key] + ds[SigF_key]*ds[SigF_key])
-        .astype("Intensity")
-        )
-    ds[SigI_key] = (
-        (2*ds[F_key]*ds[SigF_key])
-        .abs()
-        .astype("Stddev")
-        )
+    ds[I_key] = (ds[F_key] * ds[F_key] + ds[SigF_key] * ds[SigF_key]).astype(
+        "Intensity"
+    )
+    ds[SigI_key] = (2 * ds[F_key] * ds[SigF_key]).abs().astype("Stddev")
 
     return ds

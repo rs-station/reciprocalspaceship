@@ -7,17 +7,16 @@ import reciprocalspaceship as rs
 @pytest.mark.parametrize("inplace", [True, False])
 @pytest.mark.parametrize("output_columns", [None, ("I_CALC", "SigI_CALC")])
 @pytest.mark.parametrize("test_na", [True, False])
-def test_compute_intensity_from_structurefactor(ref_hewl, 
-                                                inplace, 
-                                                output_columns, 
-                                                test_na):
+def test_compute_intensity_from_structurefactor(
+    ref_hewl, inplace, output_columns, test_na
+):
     """
     Test rs.algorithms.compute_intensity_from_structurefactor() returns
     intensities and intensity error estimates as expected based on assumptions
     """
 
-    if test_na:  
-        ref_hewl.loc[0,0,4] = np.nan
+    if test_na:
+        ref_hewl.loc[0, 0, 4] = np.nan
 
     result = rs.algorithms.compute_intensity_from_structurefactor(
         ref_hewl, "F", "SIGF", output_columns=output_columns, inplace=inplace
