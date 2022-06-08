@@ -66,13 +66,13 @@ def compute_intensity_from_structurefactor(
         raise ValueError(
             f"Column {F_key} is not of type rs.StructureFactorAmplitudeDtype."
             f"Try again and provide structure factor amplitudes for F_key"
-            )
+        )
     if not isinstance(ds.dtypes[SigF_key], rs.StandardDeviationDtype):
         raise ValueError(
             f"Column {SigF_key} is not of type rs.StandardDeviationDtype."
             f"Try again and provide standard deviations for SigF_key"
-            )
-    
+        )
+
     # Initialize outputs
     ds[I_key] = (ds[F_key] * ds[F_key] + ds[SigF_key] * ds[SigF_key]).astype(
         "Intensity"
