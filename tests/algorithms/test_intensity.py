@@ -48,11 +48,23 @@ def test_compute_intensity_from_structurefactor(
 
 def test_compute_intensity_from_structurefactor_failure(ref_hewl):
     """
-    Test that rs.algorithms.compute_intensity_from_structurefactor() throws a
-    ValueError rather than overwriting columns
+    Test that rs.algorithms.compute_intensity_from_structurefactor() throws
+    ValueErrors when appropriate
     """
 
+    # Function should not overwrite existing columns
     with pytest.raises(ValueError):
         rs.algorithms.compute_intensity_from_structurefactor(
             ref_hewl, "F", "SIGF", output_columns=("I", "SIGI")
+        )
+    
+    # Function should require inputs of the correct types
+    with pytest.raises(ValueError):
+        rs.algorithms.compute_intensity_from_structurefactor(
+            ref_hewl, "F", "F", output_columns=("I", "SIGI")
+        )
+
+    with pytest.raises(ValueError):
+        rs.algorithms.compute_intensity_from_structurefactor(
+            ref_hewl, "SIGF", "SIGF", output_columns=("I", "SIGI")
         )

@@ -41,17 +41,6 @@ def compute_intensity_from_structurefactor(
 
     """
 
-    # Sanitize input or check for invalid reflections
-    # if dropna:
-    #     ds.dropna(subset=[F_key, SigF_key], inplace=True)
-    # else:
-    #     if ds[[F_key, SigF_key]].isna().to_numpy().any():
-    #         raise ValueError(
-    #             f"Input {ds.__class__.__name__} contains NaNs "
-    #             f"in columns '{F_key}' and/or '{SigF_key}'. "
-    #             f"Please fix these input values, or run with dropna=True"
-    #         )
-
     if output_columns is None:
         output_columns = ["I_calc", "SigI_calc"]
     (
@@ -72,6 +61,18 @@ def compute_intensity_from_structurefactor(
             f"output column name."
         )
 
+    # Confirm F_key and SigF_key are of the correct dtype
+    if not isinstance(ds.dtypes[F_key], rs.StructureFactorAmplitudeDtype):
+        raise ValueError(
+            f"Column {F_key} is not of type rs.StructureFactorAmplitudeDtype."
+            f"Try again and provide structure factor amplitudes for F_key"
+            )
+    if not isinstance(ds.dtypes[SigF_key], rs.StandardDeviationDtype):
+        raise ValueError(
+            f"Column {SigF_key} is not of type rs.StandardDeviationDtype."
+            f"Try again and provide standard deviations for SigF_key"
+            )
+    
     # Initialize outputs
     ds[I_key] = (ds[F_key] * ds[F_key] + ds[SigF_key] * ds[SigF_key]).astype(
         "Intensity"
