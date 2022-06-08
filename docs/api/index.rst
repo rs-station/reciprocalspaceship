@@ -57,6 +57,7 @@ Algorithms for processing reflection data stored in ``rs.DataSet`` objects.
 
    ~reciprocalspaceship.algorithms.merge
    ~reciprocalspaceship.algorithms.scale_merged_intensities
+   ~reciprocalspaceship.algorithms.compute_intensity_from_structurefactor
 
 Summary Statistics
 ------------------

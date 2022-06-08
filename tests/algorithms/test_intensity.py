@@ -5,12 +5,19 @@ import reciprocalspaceship as rs
 
 
 @pytest.mark.parametrize("inplace", [True, False])
-@pytest.mark.parametrize("output_columns", [None, ("I_backcalc", "SigI_backcalc")])
-def test_compute_intensity_from_structurefactor(ref_hewl, inplace, output_columns):
+@pytest.mark.parametrize("output_columns", [None, ("I_CALC", "SigI_CALC")])
+@pytest.mark.parametrize("test_na", [True, False])
+def test_compute_intensity_from_structurefactor(ref_hewl, 
+                                                inplace, 
+                                                output_columns, 
+                                                test_na):
     """
     Test rs.algorithms.compute_intensity_from_structurefactor() returns
     intensities and intensity error estimates as expected based on assumptions
     """
+
+    if test_na:  
+        ref_hewl.loc[0,0,4] = np.nan
 
     result = rs.algorithms.compute_intensity_from_structurefactor(
         ref_hewl, "F", "SIGF", output_columns=output_columns, inplace=inplace
@@ -21,7 +28,7 @@ def test_compute_intensity_from_structurefactor(ref_hewl, inplace, output_column
     else:
         assert id(result) != id(ref_hewl)
 
-    defaults = ("I_back", "SigI_back")
+    defaults = ("I_calc", "SigI_calc")
     if output_columns:
         o1, o2 = output_columns
     else:
@@ -36,8 +43,8 @@ def test_compute_intensity_from_structurefactor(ref_hewl, inplace, output_column
     SigF = result["SIGF"].to_numpy()
     I = result[o1].to_numpy()
     SigI = result[o2].to_numpy()
-    assert np.isclose(I, SigF * SigF + F * F).all()
-    assert np.isclose(SigI, np.abs(2 * F * SigF)).all()
+    assert np.allclose(I, SigF * SigF + F * F, equal_nan=True)
+    assert np.allclose(SigI, np.abs(2 * F * SigF), equal_nan=True)
 
 
 def test_compute_intensity_from_structurefactor_failure(ref_hewl):
