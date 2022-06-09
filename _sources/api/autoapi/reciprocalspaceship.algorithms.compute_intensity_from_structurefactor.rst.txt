@@ -1,0 +1,6 @@
+﻿reciprocalspaceship.algorithms.compute\_intensity\_from\_structurefactor
+========================================================================
+
+.. currentmodule:: reciprocalspaceship.algorithms
+
+.. autofunction:: compute_intensity_from_structurefactor

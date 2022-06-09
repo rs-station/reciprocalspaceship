@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>reciprocalspaceship.algorithms.merge &mdash; reciprocalspaceship 0.10.1 documentation</title>
+  <title>reciprocalspaceship.algorithms.compute_intensity_from_structurefactor &mdash; reciprocalspaceship 0.10.1 documentation</title>
       <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
@@ -25,8 +25,8 @@
     <script src="../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="reciprocalspaceship.algorithms.scale_merged_intensities" href="reciprocalspaceship.algorithms.scale_merged_intensities.html" />
-    <link rel="prev" title="reciprocalspaceship.io.write_ccp4_map" href="reciprocalspaceship.io.write_ccp4_map.html" /> 
+    <link rel="next" title="reciprocalspaceship.stats.compute_completeness" href="reciprocalspaceship.stats.compute_completeness.html" />
+    <link rel="prev" title="reciprocalspaceship.algorithms.scale_merged_intensities" href="reciprocalspaceship.algorithms.scale_merged_intensities.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -51,9 +51,9 @@
 <li class="toctree-l2"><a class="reference internal" href="../index.html#reflection-data">Reflection Data</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../index.html#input-output">Input/Output</a></li>
 <li class="toctree-l2 current"><a class="reference internal" href="../index.html#algorithms">Algorithms</a><ul class="current">
-<li class="toctree-l3 current"><a class="current reference internal" href="#">reciprocalspaceship.algorithms.merge</a></li>
+<li class="toctree-l3"><a class="reference internal" href="reciprocalspaceship.algorithms.merge.html">reciprocalspaceship.algorithms.merge</a></li>
 <li class="toctree-l3"><a class="reference internal" href="reciprocalspaceship.algorithms.scale_merged_intensities.html">reciprocalspaceship.algorithms.scale_merged_intensities</a></li>
-<li class="toctree-l3"><a class="reference internal" href="reciprocalspaceship.algorithms.compute_intensity_from_structurefactor.html">reciprocalspaceship.algorithms.compute_intensity_from_structurefactor</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">reciprocalspaceship.algorithms.compute_intensity_from_structurefactor</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../index.html#summary-statistics">Summary Statistics</a></li>
@@ -79,9 +79,9 @@
   <ul class="wy-breadcrumbs">
       <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
           <li><a href="../index.html">API Reference</a> &raquo;</li>
-      <li>reciprocalspaceship.algorithms.merge</li>
+      <li>reciprocalspaceship.algorithms.compute_intensity_from_structurefactor</li>
       <li class="wy-breadcrumbs-aside">
-            <a href="../../_sources/api/autoapi/reciprocalspaceship.algorithms.merge.rst.txt" rel="nofollow"> View page source</a>
+            <a href="../../_sources/api/autoapi/reciprocalspaceship.algorithms.compute_intensity_from_structurefactor.rst.txt" rel="nofollow"> View page source</a>
       </li>
   </ul>
   <hr/>
@@ -113,24 +113,29 @@
     text-align: unset;
 }
 </style>
-<section id="reciprocalspaceship-algorithms-merge">
-<h1>reciprocalspaceship.algorithms.merge<a class="headerlink" href="#reciprocalspaceship-algorithms-merge" title="Permalink to this headline"></a></h1>
+<section id="reciprocalspaceship-algorithms-compute-intensity-from-structurefactor">
+<h1>reciprocalspaceship.algorithms.compute_intensity_from_structurefactor<a class="headerlink" href="#reciprocalspaceship-algorithms-compute-intensity-from-structurefactor" title="Permalink to this headline"></a></h1>
 <dl class="py function">
-<dt class="sig sig-object py" id="reciprocalspaceship.algorithms.merge">
-<span class="sig-prename descclassname"><span class="pre">reciprocalspaceship.algorithms.</span></span><span class="sig-name descname"><span class="pre">merge</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataset</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">intensity_key</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'I'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sigma_key</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'SIGI'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">anomalous</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sort</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/Hekstra-Lab/reciprocalspaceship/blob/main/reciprocalspaceship/algorithms/merge.py#L4-L69"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#reciprocalspaceship.algorithms.merge" title="Permalink to this definition"></a></dt>
-<dd><p>Merge dataset using inverse-variance weights.</p>
+<dt class="sig sig-object py" id="reciprocalspaceship.algorithms.compute_intensity_from_structurefactor">
+<span class="sig-prename descclassname"><span class="pre">reciprocalspaceship.algorithms.</span></span><span class="sig-name descname"><span class="pre">compute_intensity_from_structurefactor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ds</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">F_key</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">SigF_key</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_columns</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inplace</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/Hekstra-Lab/reciprocalspaceship/blob/main/reciprocalspaceship/algorithms/intensity.py#L7-L82"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#reciprocalspaceship.algorithms.compute_intensity_from_structurefactor" title="Permalink to this definition"></a></dt>
+<dd><p>Compute intensities (I) and uncertainty estimates (SigI) from structure
+factor amplitudes (F) and their uncertainties (SigF) using error propagation</p>
+<p>Intensity computed as I = SigF*SigF + F*F. Intensity error estimate
+approximated as SigI = abs(2*F*SigF)</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>dataset</strong> (<em>rs.DataSet</em>) – Unmerged DataSet containing scaled intensities and uncertainties</p></li>
-<li><p><strong>intensity_key</strong> (<em>str (optional)</em>) – Column name for intensities</p></li>
-<li><p><strong>sigma_key</strong> (<em>str (optional)</em>) – Column name for uncertainties</p></li>
-<li><p><strong>anomalous</strong> (<em>bool (optional)</em>) – If True, do not merge Friedel mates</p></li>
-<li><p><strong>sort</strong> (<em>bool (optional)</em>) – If True, index of returned DataSet will be sorted</p></li>
+<li><p><strong>ds</strong> (<em>DataSet</em>) – Input DataSet containing columns with F_key and SigF_key labels</p></li>
+<li><p><strong>F_key</strong> (<em>str</em>) – Column label for structure factor amplitudes</p></li>
+<li><p><strong>SigF_key</strong> (<em>str</em>) – Column label for structure factor error estimates</p></li>
+<li><p><strong>output_columns</strong> (<em>list or tuple of column names</em>) – Column labels to be added to ds for calculated I and
+SigI, respectively. output_columns must have len=2.</p></li>
+<li><p><strong>inplace</strong> (<em>bool</em>) – Whether to modify the DataSet in place or create a copy</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p><em>rs.DataSet</em> – Merged DataSet object</p>
+<dd class="field-even"><p><em>DataSet</em> – DataSet with 2 additional columns corresponding to calculated
+intensities and intensity error estimates</p>
 </dd>
 </dl>
 </dd></dl>
@@ -141,8 +146,8 @@
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="reciprocalspaceship.io.write_ccp4_map.html" class="btn btn-neutral float-left" title="reciprocalspaceship.io.write_ccp4_map" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="reciprocalspaceship.algorithms.scale_merged_intensities.html" class="btn btn-neutral float-right" title="reciprocalspaceship.algorithms.scale_merged_intensities" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="reciprocalspaceship.algorithms.scale_merged_intensities.html" class="btn btn-neutral float-left" title="reciprocalspaceship.algorithms.scale_merged_intensities" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="reciprocalspaceship.stats.compute_completeness.html" class="btn btn-neutral float-right" title="reciprocalspaceship.stats.compute_completeness" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>
