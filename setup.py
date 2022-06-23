@@ -75,7 +75,7 @@ setup(
     python_requires=">3.7",
     install_requires=[
         "gemmi>=0.5.5, <=0.5.5",
-        "pandas>=1.2.0, <=1.4.2",
+        "pandas>=1.2.0, <=1.4.3",
         "numpy",
         "scipy",
         "ipython",
