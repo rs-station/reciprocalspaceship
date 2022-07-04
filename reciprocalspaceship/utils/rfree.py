@@ -51,7 +51,7 @@ def add_rfree(dataset, fraction=0.05, bins=20, ccp4_convention=False, inplace=Fa
 
     for i in range(bins):
         dmax, dmin = bin_edges[i]
-        dataset[update & (dataset["dHKL"] >= dmin) & (dataset["dHKL"] <= dmax)][rfree_key] = i+1
+        dataset.loc[update & (dataset["dHKL"] >= dmin) & (dataset["dHKL"] <= dmax), rfree_key] = i+1
 
     if not dHKL_present:
         del dataset["dHKL"]
