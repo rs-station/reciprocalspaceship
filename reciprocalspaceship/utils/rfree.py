@@ -43,7 +43,7 @@ def add_rfree(dataset, fraction=0.05, bins=20, ccp4_convention=False, inplace=Fa
         rfree_key = "R-free-flags"
         update = test_set
     else:
-        rfree_key = "FreeR_flags"
+        rfree_key = "FreeR_flag"
         update = ~test_set
 
     dataset[rfree_key] = 0
