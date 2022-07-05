@@ -3,7 +3,7 @@ import numpy as np
 from reciprocalspaceship.dtypes import MTZIntDtype
 
 
-def add_rfree(dataset, fraction=0.05, bins=20, ccp4_convention=False, inplace=False):
+def add_rfree(dataset, fraction=0.05, ccp4_convention=False, inplace=False):
     """
     Add an r-free flag to the dataset object for refinement.
     R-free flags are used to identify reflections which are not used in automated refinement routines.
@@ -15,11 +15,11 @@ def add_rfree(dataset, fraction=0.05, bins=20, ccp4_convention=False, inplace=Fa
         Dataset object for which to compute a random fraction.
     fraction : float, optional
         Fraction of reflections to be added to the r-free. (the default is 0.05)
-    bins : int, optional
-        Number of resolution bins to divide the free reflections over. (the default is 20)
     ccp4_conventiion: bool, optional
-        Default False to use Phenix(CNS/XPLOR) convention: !=0 is test set and key is "R-free-flags".
-        Set to True to use ccp4 convention: ==0 is test set and the key is "FreeR_flag".
+        Default False to use Phenix(CNS/XPLOR) convention: 
+        1 is test set, 0 is working set, and key is "R-free-flags".
+        Set to True to use ccp4 convention: 
+        0 is test set, 1 is working set, and the key is "FreeR_flag".
         See https://www.ccp4.ac.uk/html/freerflag.html#description for convention details.
     inplace : bool, optional
 
@@ -30,13 +30,6 @@ def add_rfree(dataset, fraction=0.05, bins=20, ccp4_convention=False, inplace=Fa
     """
     if not inplace:
         dataset = dataset.copy()
-    dHKL_present = "dHKL" in dataset
-    if not dHKL_present:
-        dataset = dataset.compute_dHKL(inplace=True)
-
-    bin_edges = np.percentile(dataset["dHKL"], np.linspace(100, 0, bins + 1))
-    bin_edges = np.vstack([bin_edges[:-1], bin_edges[1:]]).T
-
     test_set = np.random.random(len(dataset)) <= fraction
 
     if not ccp4_convention:
@@ -48,14 +41,7 @@ def add_rfree(dataset, fraction=0.05, bins=20, ccp4_convention=False, inplace=Fa
 
     dataset[rfree_key] = 0
     dataset[rfree_key] = dataset[rfree_key].astype(MTZIntDtype())
-
-    for i in range(bins):
-        dmax, dmin = bin_edges[i]
-        dataset.loc[update & (dataset["dHKL"] >= dmin) & (dataset["dHKL"] <= dmax), rfree_key] = i+1
-
-    if not dHKL_present:
-        del dataset["dHKL"]
-
+    dataset.loc[update, rfree_key] = 1
     return dataset
 
 
