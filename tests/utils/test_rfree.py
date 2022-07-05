@@ -28,9 +28,13 @@ class TestRfree(unittest.TestCase):
         self.assertTrue("FreeR_flag" in rfree_ccp4.columns)
 
         # Should keep all other unchanged
-        self.assertTrue(np.all(data == rfree_ccp4.loc[:, rfree_ccp4.columns != "FreeR_flag"]))
+        self.assertTrue(
+            np.all(data == rfree_ccp4.loc[:, rfree_ccp4.columns != "FreeR_flag"])
+        )
         # Should have fewer ==0 as test set
-        self.assertTrue(np.sum(rfree_ccp4.loc[:, "FreeR_flag"] == 0)/len(rfree_ccp4) < 0.15)
+        self.assertTrue(
+            np.sum(rfree_ccp4.loc[:, "FreeR_flag"] == 0) / len(rfree_ccp4) < 0.15
+        )
 
         # Test inplace option
         rfree = rs.utils.add_rfree(data, inplace=True)
