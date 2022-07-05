@@ -21,7 +21,7 @@ class TestRfree(unittest.TestCase):
         # Should keep all other unchanged
         self.assertTrue(np.all(data == rfree.loc[:, rfree.columns != "R-free-flags"]))
         # Should have fewer ==1 as test set
-        self.assertTrue(np.sum(rfree.loc[:, "R-free-flags"] == 1)/len(rfree) < 0.15)
+        self.assertTrue(np.sum(rfree.loc[:, "R-free-flags"] == 1) / len(rfree) < 0.15)
 
         # Test ccp4_convention
         rfree_ccp4 = rs.utils.add_rfree(data, ccp4_convention=True)
