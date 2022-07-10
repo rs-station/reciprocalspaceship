@@ -16,7 +16,7 @@ def add_rfree(dataset, fraction=0.05, ccp4_convention=False, inplace=False):
     fraction : float, optional
         Fraction of reflections to be added to the r-free. (the default is 0.05)
     ccp4_conventiion: bool, optional
-        Whether to use the CCP4 convention for R-free flags (Default: False). 
+        Whether to use the CCP4 convention for R-free flags (Default: False).
         If True, use CCP4 convention:
         0 is test set, 1 is working set, and the key is "FreeR_flag".
         If False, use Phenix(CNS/XPOLAR) convention:
