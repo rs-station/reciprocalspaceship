@@ -87,7 +87,7 @@ def copy_rfree(dataset, dataset_with_rfree, inplace=False, rfree_key=None):
         rfree_key = "FreeR_flag"
     else:
         raise ValueError(
-            """Failed to automatically find r-free flags in dataset_with_rfree. Please supply a custom_rfree_key"""
+            """Failed to automatically find r-free flags in dataset_with_rfree. Please supply an rfree_key"""
         )
 
     dataset[rfree_key] = 0
