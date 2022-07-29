@@ -103,12 +103,17 @@ def test_copy_rfree(data_fmodel, ccp4_convention, inplace, rfree_key):
         assert np.all(data_fmodel == data_copy)
 
 
-def test_copy_rfree_errors(data_fmodel):
+@pytest.mark.parametrize("rfree_key", [None, "missing key"])
+def test_copy_rfree_errors(data_fmodel, rfree_key):
     """
     Test expected ValueErrors for rs.utils.copy_rfree
+
+    When rfree_key=None, copy_rfree searches for columns named
+    "R-free-flags" and "FreeR_flag", and throws a ValueError when neither
+    is found
+
+    When rfree_key="missing key", copy_rfree throws a ValueError because
+    there is no column "missing key"
     """
     with pytest.raises(ValueError):
-        rs.utils.copy_rfree(data_fmodel, data_fmodel)
-
-    with pytest.raises(ValueError):
-        rs.utils.copy_rfree(data_fmodel, data_fmodel, rfree_key="missing key")
+        rs.utils.copy_rfree(data_fmodel, data_fmodel, rfree_key=rfree_key)
