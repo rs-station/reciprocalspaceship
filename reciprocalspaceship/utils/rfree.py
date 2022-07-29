@@ -52,7 +52,7 @@ def add_rfree(dataset, fraction=0.05, ccp4_convention=False, inplace=False, seed
     return dataset
 
 
-def copy_rfree(dataset, dataset_with_rfree, inplace=False, custom_rfree_key=None):
+def copy_rfree(dataset, dataset_with_rfree, inplace=False, rfree_key=None):
     """
     Copy the rfree flag from one dataset object to another.
 
@@ -64,7 +64,7 @@ def copy_rfree(dataset, dataset_with_rfree, inplace=False, custom_rfree_key=None
         A dataset with desired r-free flags.
     inplace : bool, optional
         Whether to operate in place or return a copy
-    custom_rfree_key : str, optional
+    rfree_key : str, optional
         Name of the column containing rfree flags in dataset_with_rfree.
         If None, dataset_with_rfree will be checked for column "R-free-flags"
         (phenix convention) then column "FreeR_flag" (ccp4 convention)
@@ -76,12 +76,11 @@ def copy_rfree(dataset, dataset_with_rfree, inplace=False, custom_rfree_key=None
     if not inplace:
         dataset = dataset.copy()
 
-    if custom_rfree_key is not None:
-        if custom_rfree_key not in dataset_with_rfree.columns:
+    if rfree_key is not None:
+        if rfree_key not in dataset_with_rfree.columns:
             raise ValueError(
-                f"""Supplied dataset_with_rfree contains no column {custom_rfree_key}"""
+                f"""Supplied dataset_with_rfree contains no column {rfree_key}"""
             )
-        rfree_key = custom_rfree_key
     elif "R-free-flags" in dataset_with_rfree.columns:
         rfree_key = "R-free-flags"
     elif "FreeR_flag" in dataset_with_rfree.columns:

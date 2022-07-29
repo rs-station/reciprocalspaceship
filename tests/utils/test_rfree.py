@@ -58,8 +58,8 @@ def test_add_rfree(data_fmodel, fraction, ccp4_convention, inplace, seed):
 
 @pytest.mark.parametrize("ccp4_convention", [False, True])
 @pytest.mark.parametrize("inplace", [False, True])
-@pytest.mark.parametrize("custom_rfree_key", [None, "custom-rfree-key"])
-def test_copy_rfree(data_fmodel, ccp4_convention, inplace, custom_rfree_key):
+@pytest.mark.parametrize("rfree_key", [None, "custom-rfree-key"])
+def test_copy_rfree(data_fmodel, ccp4_convention, inplace, rfree_key):
     """
     Test rs.utils.copy_rfree
     """
@@ -71,14 +71,13 @@ def test_copy_rfree(data_fmodel, ccp4_convention, inplace, custom_rfree_key):
     )
 
     # handle different possible column names for rfree flags
-    if custom_rfree_key is not None:
+    if rfree_key is not None:
         if ccp4_convention:
-            rename_dict = {"FreeR_flag": custom_rfree_key}
+            rename_dict = {"FreeR_flag": rfree_key}
         else:
-            rename_dict = {"R-free-flags": custom_rfree_key}
+            rename_dict = {"R-free-flags": rfree_key}
 
         data_with_rfree.rename(columns=rename_dict, inplace=True)
-        rfree_key = custom_rfree_key
     else:
         if ccp4_convention:
             rfree_key = "FreeR_flag"
@@ -86,7 +85,7 @@ def test_copy_rfree(data_fmodel, ccp4_convention, inplace, custom_rfree_key):
             rfree_key = "R-free-flags"
 
     data_with_copied_rfree = rs.utils.copy_rfree(
-        data_fmodel, data_with_rfree, inplace=inplace, custom_rfree_key=custom_rfree_key
+        data_fmodel, data_with_rfree, inplace=inplace, rfree_key=rfree_key
     )
 
     if inplace:
@@ -112,40 +111,4 @@ def test_copy_rfree_errors(data_fmodel):
         rs.utils.copy_rfree(data_fmodel, data_fmodel)
 
     with pytest.raises(ValueError):
-        rs.utils.copy_rfree(data_fmodel, data_fmodel, custom_rfree_key="missing key")
-
-
-class TestRfree(unittest.TestCase):
-    """
-    Test rs.utils.copy_free - legacy version using the unittest framework.
-    """
-
-    def test_copy_rfree(self):
-
-        datadir = join(abspath(dirname(__file__)), "../data/fmodel")
-        data = rs.read_mtz(join(datadir, "9LYZ.mtz"))
-        data_rfree = rs.utils.add_rfree(data, inplace=False)
-
-        # Test copy of R-free to copy of data
-        rfree = rs.utils.copy_rfree(data, data_rfree, inplace=False)
-        self.assertFalse(id(data) == id(rfree))
-        self.assertFalse("R-free-flags" in data.columns)
-        self.assertTrue("R-free-flags" in rfree.columns)
-        self.assertTrue(
-            np.array_equal(
-                rfree["R-free-flags"].values, data_rfree["R-free-flags"].values
-            )
-        )
-
-        # Test copy of R-free inplace
-        rfree = rs.utils.copy_rfree(data, data_rfree, inplace=True)
-        self.assertTrue(id(data) == id(rfree))
-        self.assertTrue("R-free-flags" in data.columns)
-        self.assertTrue("R-free-flags" in rfree.columns)
-        self.assertTrue(
-            np.array_equal(
-                rfree["R-free-flags"].values, data_rfree["R-free-flags"].values
-            )
-        )
-
-        return
+        rs.utils.copy_rfree(data_fmodel, data_fmodel, rfree_key="missing key")
