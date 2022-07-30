@@ -1,7 +1,3 @@
-from multiprocessing.sharedctypes import Value
-import unittest
-from os.path import abspath, dirname, join
-
 import numpy as np
 import pytest
 
