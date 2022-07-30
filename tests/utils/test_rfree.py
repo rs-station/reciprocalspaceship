@@ -109,7 +109,7 @@ def test_copy_rfree_errors(data_fmodel):
         rs.utils.copy_rfree(data_fmodel, data_fmodel)
 
     # Raise ValueError because "missing key" is missing,
-    # even though "R-free-flags" is present
+    # even though "R-free-flags" exists
     data_with_standard_rfree = rs.utils.add_rfree(data_fmodel, inplace=False)
     with pytest.raises(ValueError):
         rs.utils.copy_rfree(
