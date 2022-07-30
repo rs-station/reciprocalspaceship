@@ -1,5 +1,5 @@
-from multiprocessing.sharedctypes import Value
 import unittest
+from multiprocessing.sharedctypes import Value
 from os.path import abspath, dirname, join
 
 import numpy as np
