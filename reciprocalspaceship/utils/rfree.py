@@ -3,7 +3,7 @@ import numpy as np
 from reciprocalspaceship.dtypes import MTZIntDtype
 
 
-def add_rfree(dataset, fraction=0.05, ccp4_convention=False, inplace=False):
+def add_rfree(dataset, fraction=0.05, ccp4_convention=False, inplace=False, seed=None):
     """
     Add an r-free flag to the dataset object for refinement.
     R-free flags are used to identify reflections which are not used in automated refinement routines.
@@ -23,6 +23,10 @@ def add_rfree(dataset, fraction=0.05, ccp4_convention=False, inplace=False):
         1 is test set, 0 is working set, and key is "R-free-flags".
         See https://www.ccp4.ac.uk/html/freerflag.html#description for convention details.
     inplace : bool, optional
+    seed : int, optional
+        Seed to be passed to numpy.random.default_rng random number generator
+        for reproducible r-free flags. If None (default), r-free flags will
+        different each time.
 
     Returns
     -------
@@ -31,7 +35,9 @@ def add_rfree(dataset, fraction=0.05, ccp4_convention=False, inplace=False):
     """
     if not inplace:
         dataset = dataset.copy()
-    test_set = np.random.random(len(dataset)) <= fraction
+
+    rng = np.random.default_rng(seed)
+    test_set = rng.random(len(dataset)) <= fraction
 
     if not ccp4_convention:
         rfree_key = "R-free-flags"
@@ -46,7 +52,7 @@ def add_rfree(dataset, fraction=0.05, ccp4_convention=False, inplace=False):
     return dataset
 
 
-def copy_rfree(dataset, dataset_with_rfree, inplace=False):
+def copy_rfree(dataset, dataset_with_rfree, inplace=False, rfree_key=None):
     """
     Copy the rfree flag from one dataset object to another.
 
@@ -58,6 +64,10 @@ def copy_rfree(dataset, dataset_with_rfree, inplace=False):
         A dataset with desired r-free flags.
     inplace : bool, optional
         Whether to operate in place or return a copy
+    rfree_key : str, optional
+        Name of the column containing rfree flags in dataset_with_rfree.
+        If None, dataset_with_rfree will be checked for column "R-free-flags"
+        (phenix convention) then column "FreeR_flag" (ccp4 convention)
 
     Returns
     -------
@@ -66,8 +76,22 @@ def copy_rfree(dataset, dataset_with_rfree, inplace=False):
     if not inplace:
         dataset = dataset.copy()
 
-    dataset["R-free-flags"] = 0
-    dataset["R-free-flags"] = dataset["R-free-flags"].astype(MTZIntDtype())
+    if rfree_key is not None:
+        if rfree_key not in dataset_with_rfree.columns:
+            raise ValueError(
+                f"""Supplied dataset_with_rfree contains no column {rfree_key}"""
+            )
+    elif "R-free-flags" in dataset_with_rfree.columns:
+        rfree_key = "R-free-flags"
+    elif "FreeR_flag" in dataset_with_rfree.columns:
+        rfree_key = "FreeR_flag"
+    else:
+        raise ValueError(
+            """Failed to automatically find r-free flags in dataset_with_rfree. Please supply an rfree_key"""
+        )
+
+    dataset[rfree_key] = 0
+    dataset[rfree_key] = dataset[rfree_key].astype(MTZIntDtype())
     idx = dataset.index.intersection(dataset_with_rfree.index)
-    dataset.loc[idx, "R-free-flags"] = dataset_with_rfree.loc[idx, "R-free-flags"]
+    dataset.loc[idx, rfree_key] = dataset_with_rfree.loc[idx, rfree_key]
     return dataset
