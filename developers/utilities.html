@@ -184,7 +184,7 @@ interface decisions related to <code class="docutils literal notranslate"><span 
 </table>
 <dl class="py function">
 <dt class="sig sig-object py" id="reciprocalspaceship.utils.add_rfree">
-<span class="sig-prename descclassname"><span class="pre">reciprocalspaceship.utils.</span></span><span class="sig-name descname"><span class="pre">add_rfree</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataset</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fraction</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.05</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ccp4_convention</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inplace</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/Hekstra-Lab/reciprocalspaceship/blob/main/reciprocalspaceship/utils/rfree.py#L6-L46"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#reciprocalspaceship.utils.add_rfree" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">reciprocalspaceship.utils.</span></span><span class="sig-name descname"><span class="pre">add_rfree</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataset</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fraction</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.05</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ccp4_convention</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inplace</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/Hekstra-Lab/reciprocalspaceship/blob/main/reciprocalspaceship/utils/rfree.py#L6-L52"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#reciprocalspaceship.utils.add_rfree" title="Permalink to this definition"></a></dt>
 <dd><p>Add an r-free flag to the dataset object for refinement.
 R-free flags are used to identify reflections which are not used in automated refinement routines.
 This is the crystallographic refinement version of cross validation.</p>
@@ -200,6 +200,9 @@ If False, use Phenix(CNS/XPOLAR) convention:
 1 is test set, 0 is working set, and key is “R-free-flags”.
 See <a class="reference external" href="https://www.ccp4.ac.uk/html/freerflag.html#description">https://www.ccp4.ac.uk/html/freerflag.html#description</a> for convention details.</p></li>
 <li><p><strong>inplace</strong> (<em>bool, optional</em>)</p></li>
+<li><p><strong>seed</strong> (<em>int, optional</em>) – Seed to be passed to numpy.random.default_rng random number generator
+for reproducible r-free flags. If None (default), r-free flags will
+different each time.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -300,7 +303,7 @@ of each hkl.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="reciprocalspaceship.utils.copy_rfree">
-<span class="sig-prename descclassname"><span class="pre">reciprocalspaceship.utils.</span></span><span class="sig-name descname"><span class="pre">copy_rfree</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataset</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dataset_with_rfree</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inplace</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/Hekstra-Lab/reciprocalspaceship/blob/main/reciprocalspaceship/utils/rfree.py#L49-L73"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#reciprocalspaceship.utils.copy_rfree" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">reciprocalspaceship.utils.</span></span><span class="sig-name descname"><span class="pre">copy_rfree</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataset</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dataset_with_rfree</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inplace</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rfree_key</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/Hekstra-Lab/reciprocalspaceship/blob/main/reciprocalspaceship/utils/rfree.py#L55-L97"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#reciprocalspaceship.utils.copy_rfree" title="Permalink to this definition"></a></dt>
 <dd><p>Copy the rfree flag from one dataset object to another.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -308,6 +311,9 @@ of each hkl.</p>
 <li><p><strong>dataset</strong> (<em>rs.DataSet</em>) – A dataset without an r-free flag or with an undesired one.</p></li>
 <li><p><strong>dataset_with_rfree</strong> (<em>rs.DataSet</em>) – A dataset with desired r-free flags.</p></li>
 <li><p><strong>inplace</strong> (<em>bool, optional</em>) – Whether to operate in place or return a copy</p></li>
+<li><p><strong>rfree_key</strong> (<em>str, optional</em>) – Name of the column containing rfree flags in dataset_with_rfree.
+If None, dataset_with_rfree will be checked for column “R-free-flags”
+(phenix convention) then column “FreeR_flag” (ccp4 convention)</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
