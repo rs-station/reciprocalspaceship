@@ -4,10 +4,19 @@ from os.path import abspath, dirname, join
 
 import gemmi
 import numpy as np
-import pandas as pd
 import pytest
 
 import reciprocalspaceship as rs
+
+
+@pytest.fixture
+def hkls():
+    """
+    Return all Miller indices with H, K, L values between [-5, 5]
+    """
+    hmin, hmax = -5, 5
+    H = np.mgrid[hmin : hmax + 1, hmin : hmax + 1, hmin : hmax + 1].reshape((3, -1)).T
+    return H
 
 
 @pytest.fixture
