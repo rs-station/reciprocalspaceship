@@ -14,10 +14,29 @@ def apply_to_hkl(H, op):
 
     Returns
     -------
-    result : array
+    result : np.ndarray(int32)
         n x 3 array of Miller indices after operator application
+
+    Raises
+    ------
+    RuntimeError
+        If `op` generates fractional Miller indices when applied to `H`
     """
-    return np.floor_divide(np.matmul(H, op.rot), op.DEN)
+    # Case 1: No risk of fractional Miller indices
+    if ((np.array(op.rot) / op.DEN) % 1 == 0).all():
+        return np.floor_divide(np.matmul(H, op.rot), op.DEN).astype("int32")
+
+    # Case 2: Depends on input Miller indices
+    else:
+        Hnew = np.divide(np.matmul(H, op.rot), op.DEN)
+        # Check for issues
+        if np.any(np.mod(Hnew, 1)):
+            raise RuntimeError(
+                f"Applying {op} to Miller indices produced non-integer results. "
+                f"Fractional Miller indices are not currently supported."
+            )
+        else:
+            return Hnew.astype("int32")
 
 
 def phase_shift(H, op):
