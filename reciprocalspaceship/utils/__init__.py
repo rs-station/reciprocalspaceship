@@ -42,5 +42,5 @@ from reciprocalspaceship.utils.structurefactors import (
     is_centric,
     to_structurefactor,
 )
-from reciprocalspaceship.utils.symop import apply_to_hkl, phase_shift
+from reciprocalspaceship.utils.symmetry import apply_to_hkl, is_polar, phase_shift
 from reciprocalspaceship.utils.units import angstroms2ev, ev2angstroms

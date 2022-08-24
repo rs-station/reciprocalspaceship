@@ -1,4 +1,5 @@
 import numpy as np
+from reciprocalspaceship.decorators import spacegroupify
 
 
 def apply_to_hkl(H, op):
@@ -56,3 +57,23 @@ def phase_shift(H, op):
         array of phase shifts
     """
     return -2 * np.pi * np.matmul(H, op.tran) / op.DEN
+
+
+@spacegroupify
+def is_polar(spacegroup):
+    """
+    Classify whether spacegroup is polar
+
+    Parameters
+    ----------
+    spacegroup : str, int, gemmi.SpaceGroup
+        Spacegroup to classify as polar
+
+    Returns
+    -------
+    bool
+        Whether the spacegroup is polar
+    """
+    sym_ops = spacegroup.operations().sym_ops
+    a = np.array([op.rot for op in sym_ops])
+    return ~(a < 0).any(axis=2).any(axis=0).all()

@@ -40,7 +40,7 @@ def get_phase_restrictions(H, spacegroup):
          list is returned for Miller indices without phase restrictions
     """
     from reciprocalspaceship.utils.asu import is_absent, is_centric
-    from reciprocalspaceship.utils.symop import apply_to_hkl, phase_shift
+    from reciprocalspaceship.utils.symmetry import apply_to_hkl, phase_shift
 
     friedel_op = gemmi.Op("-x,-y,-z")
     # Grabs all the non-identity symops
