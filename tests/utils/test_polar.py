@@ -3,6 +3,7 @@ from os.path import abspath, dirname, join
 import gemmi
 import pandas as pd
 import pytest
+
 import reciprocalspaceship as rs
 
 

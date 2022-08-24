@@ -2,8 +2,8 @@
 Generate test data using sgtbx classifications of polar spacegroups
 """
 
-from cctbx import sgtbx
 import pandas as pd
+from cctbx import sgtbx
 
 # Classify all space group settings
 is_polar = []
