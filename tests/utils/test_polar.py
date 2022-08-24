@@ -3,13 +3,19 @@ from os.path import abspath, dirname, join
 import gemmi
 import pandas as pd
 import pytest
+
 import reciprocalspaceship as rs
 
 
 def sgtbx_polar_classification():
     """
-    Helper function for generating Hermann-Mauguin (xhm) symbols with
-    corresponding polar classifications
+    Helper function for iterating over Hermann-Mauguin (xhm) symbols with
+    corresponding polar classifications.
+
+    Yields
+    ------
+    Tuple(int, pd.Series)
+        Row index and pd.Series with values of row in pd.DataFrame
     """
     data = ["..", "data", "sgtbx", "sgtbx_polar.csv"]
     inFN = abspath(join(dirname(__file__), *data))
@@ -20,12 +26,14 @@ def sgtbx_polar_classification():
 @pytest.fixture(params=sgtbx_polar_classification())
 def polar_by_xhm(request):
     """
-    sgtbx classifications of whether spacegroup settings are polar.
+    Fixture function that parametrizes over sgtbx polar classifications
+    of each space group setting. This fixture takes the sgtbx_polar_classification()
+    iterable and packages each as a (xhm, bool) tuple.
 
     Yields
     ------
-    Tuple(xhm_str, is_polar_bool)
-       xhm symbol and is_polar classification
+    Tuple(str, bool)
+       xhm symbol and whether corresponding space group is polar
     """
     i, row = request.param
     return row["xhm"], row["is_polar"]
