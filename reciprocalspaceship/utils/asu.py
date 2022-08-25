@@ -4,7 +4,7 @@ import numpy as np
 from reciprocalspaceship.decorators import cellify, spacegroupify
 from reciprocalspaceship.utils.cell import generate_reciprocal_cell
 from reciprocalspaceship.utils.structurefactors import is_absent, is_centric
-from reciprocalspaceship.utils.symop import apply_to_hkl, phase_shift
+from reciprocalspaceship.utils.symmetry import apply_to_hkl, phase_shift
 
 # fmt: off
 ccp4_hkl_asu = [
