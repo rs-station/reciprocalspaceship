@@ -77,4 +77,4 @@ def is_polar(spacegroup):
     """
     sym_ops = spacegroup.operations().sym_ops
     a = np.array([op.rot for op in sym_ops])
-    return ~(a < 0).any(axis=2).any(axis=0).all()
+    return ~(a < 0).any(axis=1).any(axis=0).all()
