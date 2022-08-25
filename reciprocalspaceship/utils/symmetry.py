@@ -98,8 +98,8 @@ def polar_axes(spacegroup):
 
     Returns
     -------
-    list
-        List of whether a-, b-, or c-axis is polar
+    List[bool]
+        Whether a-, b-, or c-axis is polar
 
     Raises
     ------
