@@ -78,3 +78,41 @@ def is_polar(spacegroup):
     sym_ops = spacegroup.operations().sym_ops
     a = np.array([op.rot for op in sym_ops])
     return ~(a < 0).any(axis=1).any(axis=0).all()
+
+
+@spacegroupify
+def polar_axes(spacegroup):
+    """
+    Classify which cell axes are polar in given spacegroup
+
+    Notes
+    -----
+    - This method assumes that the lattice basis vectors are a, b, and c.
+      Specifically, trigonal spacegroups with rhombohedral centering are not
+      supported.
+
+    Parameters
+    ----------
+    spacegroup : str, int, gemmi.SpaceGroup
+        Spacegroup to classify axes as polar
+
+    Returns
+    -------
+    List[bool]
+        Whether a-, b-, or c-axis is polar
+
+    Raises
+    ------
+    ValueError
+        If trigonal spacegroup is provided with rhombohedral Bravais lattice
+    """
+    if spacegroup.crystal_system_str() == "trigonal" and spacegroup.xhm().endswith(
+        ":R"
+    ):
+        raise ValueError(
+            f"Spacegroup {spacegroup} is not supported. Please provide with hexagonal Bravais lattice"
+        )
+
+    sym_ops = spacegroup.operations().sym_ops
+    a = np.array([op.rot for op in sym_ops])
+    return (~(a < 0).any(axis=1).any(axis=0)).tolist()

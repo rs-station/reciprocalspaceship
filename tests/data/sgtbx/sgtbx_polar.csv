@@ -1,531 +1,531 @@
-xhm,is_polar
-P 1,True
-P -1,False
-P 1 2 1,True
-P 1 1 2,True
-P 2 1 1,True
-P 1 21 1,True
-P 1 1 21,True
-P 21 1 1,True
-C 1 2 1,True
-A 1 2 1,True
-I 1 2 1,True
-A 1 1 2,True
-B 1 1 2,True
-I 1 1 2,True
-B 2 1 1,True
-C 2 1 1,True
-I 2 1 1,True
-P 1 m 1,True
-P 1 1 m,True
-P m 1 1,True
-P 1 c 1,True
-P 1 n 1,True
-P 1 a 1,True
-P 1 1 a,True
-P 1 1 n,True
-P 1 1 b,True
-P b 1 1,True
-P n 1 1,True
-P c 1 1,True
-C 1 m 1,True
-A 1 m 1,True
-I 1 m 1,True
-A 1 1 m,True
-B 1 1 m,True
-I 1 1 m,True
-B m 1 1,True
-C m 1 1,True
-I m 1 1,True
-C 1 c 1,True
-A 1 n 1,True
-I 1 a 1,True
-A 1 a 1,True
-C 1 n 1,True
-I 1 c 1,True
-A 1 1 a,True
-B 1 1 n,True
-I 1 1 b,True
-B 1 1 b,True
-A 1 1 n,True
-I 1 1 a,True
-B b 1 1,True
-C n 1 1,True
-I c 1 1,True
-C c 1 1,True
-B n 1 1,True
-I b 1 1,True
-P 1 2/m 1,False
-P 1 1 2/m,False
-P 2/m 1 1,False
-P 1 21/m 1,False
-P 1 1 21/m,False
-P 21/m 1 1,False
-C 1 2/m 1,False
-A 1 2/m 1,False
-I 1 2/m 1,False
-A 1 1 2/m,False
-B 1 1 2/m,False
-I 1 1 2/m,False
-B 2/m 1 1,False
-C 2/m 1 1,False
-I 2/m 1 1,False
-P 1 2/c 1,False
-P 1 2/n 1,False
-P 1 2/a 1,False
-P 1 1 2/a,False
-P 1 1 2/n,False
-P 1 1 2/b,False
-P 2/b 1 1,False
-P 2/n 1 1,False
-P 2/c 1 1,False
-P 1 21/c 1,False
-P 1 21/n 1,False
-P 1 21/a 1,False
-P 1 1 21/a,False
-P 1 1 21/n,False
-P 1 1 21/b,False
-P 21/b 1 1,False
-P 21/n 1 1,False
-P 21/c 1 1,False
-C 1 2/c 1,False
-A 1 2/n 1,False
-I 1 2/a 1,False
-A 1 2/a 1,False
-C 1 2/n 1,False
-I 1 2/c 1,False
-A 1 1 2/a,False
-B 1 1 2/n,False
-I 1 1 2/b,False
-B 1 1 2/b,False
-A 1 1 2/n,False
-I 1 1 2/a,False
-B 2/b 1 1,False
-C 2/n 1 1,False
-I 2/c 1 1,False
-C 2/c 1 1,False
-B 2/n 1 1,False
-I 2/b 1 1,False
-P 2 2 2,False
-P 2 2 21,False
-P 21 2 2,False
-P 2 21 2,False
-P 21 21 2,False
-P 2 21 21,False
-P 21 2 21,False
-P 21 21 21,False
-C 2 2 21,False
-A 21 2 2,False
-B 2 21 2,False
-C 2 2 2,False
-A 2 2 2,False
-B 2 2 2,False
-F 2 2 2,False
-I 2 2 2,False
-I 21 21 21,False
-P m m 2,True
-P 2 m m,True
-P m 2 m,True
-P m c 21,True
-P c m 21,True
-P 21 m a,True
-P 21 a m,True
-P b 21 m,True
-P m 21 b,True
-P c c 2,True
-P 2 a a,True
-P b 2 b,True
-P m a 2,True
-P b m 2,True
-P 2 m b,True
-P 2 c m,True
-P c 2 m,True
-P m 2 a,True
-P c a 21,True
-P b c 21,True
-P 21 a b,True
-P 21 c a,True
-P c 21 b,True
-P b 21 a,True
-P n c 2,True
-P c n 2,True
-P 2 n a,True
-P 2 a n,True
-P b 2 n,True
-P n 2 b,True
-P m n 21,True
-P n m 21,True
-P 21 m n,True
-P 21 n m,True
-P n 21 m,True
-P m 21 n,True
-P b a 2,True
-P 2 c b,True
-P c 2 a,True
-P n a 21,True
-P b n 21,True
-P 21 n b,True
-P 21 c n,True
-P c 21 n,True
-P n 21 a,True
-P n n 2,True
-P 2 n n,True
-P n 2 n,True
-C m m 2,True
-A 2 m m,True
-B m 2 m,True
-C m c 21,True
-C c m 21,True
-A 21 m a,True
-A 21 a m,True
-B b 21 m,True
-B m 21 b,True
-C c c 2,True
-A 2 a a,True
-B b 2 b,True
-A m m 2,True
-B m m 2,True
-B 2 m m,True
-C 2 m m,True
-C m 2 m,True
-A m 2 m,True
-A b m 2,True
-B m a 2,True
-B 2 c m,True
-C 2 m b,True
-C m 2 a,True
-A c 2 m,True
-A m a 2,True
-B b m 2,True
-B 2 m b,True
-C 2 c m,True
-C c 2 m,True
-A m 2 a,True
-A b a 2,True
-B b a 2,True
-B 2 c b,True
-C 2 c b,True
-C c 2 a,True
-A c 2 a,True
-F m m 2,True
-F 2 m m,True
-F m 2 m,True
-F d d 2,True
-F 2 d d,True
-F d 2 d,True
-I m m 2,True
-I 2 m m,True
-I m 2 m,True
-I b a 2,True
-I 2 c b,True
-I c 2 a,True
-I m a 2,True
-I b m 2,True
-I 2 m b,True
-I 2 c m,True
-I c 2 m,True
-I m 2 a,True
-P m m m,False
-P n n n :1,False
-P n n n :2,False
-P c c m,False
-P m a a,False
-P b m b,False
-P b a n :1,False
-P b a n :2,False
-P n c b :1,False
-P n c b :2,False
-P c n a :1,False
-P c n a :2,False
-P m m a,False
-P m m b,False
-P b m m,False
-P c m m,False
-P m c m,False
-P m a m,False
-P n n a,False
-P n n b,False
-P b n n,False
-P c n n,False
-P n c n,False
-P n a n,False
-P m n a,False
-P n m b,False
-P b m n,False
-P c n m,False
-P n c m,False
-P m a n,False
-P c c a,False
-P c c b,False
-P b a a,False
-P c a a,False
-P b c b,False
-P b a b,False
-P b a m,False
-P m c b,False
-P c m a,False
-P c c n,False
-P n a a,False
-P b n b,False
-P b c m,False
-P c a m,False
-P m c a,False
-P m a b,False
-P b m a,False
-P c m b,False
-P n n m,False
-P m n n,False
-P n m n,False
-P m m n :1,False
-P m m n :2,False
-P n m m :1,False
-P n m m :2,False
-P m n m :1,False
-P m n m :2,False
-P b c n,False
-P c a n,False
-P n c a,False
-P n a b,False
-P b n a,False
-P c n b,False
-P b c a,False
-P c a b,False
-P n m a,False
-P m n b,False
-P b n m,False
-P c m n,False
-P m c n,False
-P n a m,False
-C m c m,False
-C c m m,False
-A m m a,False
-A m a m,False
-B b m m,False
-B m m b,False
-C m c a,False
-C c m b,False
-A b m a,False
-A c a m,False
-B b c m,False
-B m a b,False
-C m m m,False
-A m m m,False
-B m m m,False
-C c c m,False
-A m a a,False
-B b m b,False
-C m m a,False
-C m m b,False
-A b m m,False
-A c m m,False
-B m c m,False
-B m a m,False
-C c c a :1,False
-C c c a :2,False
-C c c b :1,False
-C c c b :2,False
-A b a a :1,False
-A b a a :2,False
-A c a a :1,False
-A c a a :2,False
-B b c b :1,False
-B b c b :2,False
-B b a b :1,False
-B b a b :2,False
-F m m m,False
-F d d d :1,False
-F d d d :2,False
-I m m m,False
-I b a m,False
-I m c b,False
-I c m a,False
-I b c a,False
-I c a b,False
-I m m a,False
-I m m b,False
-I b m m,False
-I c m m,False
-I m c m,False
-I m a m,False
-P 4,True
-P 41,True
-P 42,True
-P 43,True
-I 4,True
-I 41,True
-P -4,False
-I -4,False
-P 4/m,False
-P 42/m,False
-P 4/n :1,False
-P 4/n :2,False
-P 42/n :1,False
-P 42/n :2,False
-I 4/m,False
-I 41/a :1,False
-I 41/a :2,False
-P 4 2 2,False
-P 4 21 2,False
-P 41 2 2,False
-P 41 21 2,False
-P 42 2 2,False
-P 42 21 2,False
-P 43 2 2,False
-P 43 21 2,False
-I 4 2 2,False
-I 41 2 2,False
-P 4 m m,True
-P 4 b m,True
-P 42 c m,True
-P 42 n m,True
-P 4 c c,True
-P 4 n c,True
-P 42 m c,True
-P 42 b c,True
-I 4 m m,True
-I 4 c m,True
-I 41 m d,True
-I 41 c d,True
-P -4 2 m,False
-P -4 2 c,False
-P -4 21 m,False
-P -4 21 c,False
-P -4 m 2,False
-P -4 c 2,False
-P -4 b 2,False
-P -4 n 2,False
-I -4 m 2,False
-I -4 c 2,False
-I -4 2 m,False
-I -4 2 d,False
-P 4/m m m,False
-P 4/m c c,False
-P 4/n b m :1,False
-P 4/n b m :2,False
-P 4/n n c :1,False
-P 4/n n c :2,False
-P 4/m b m,False
-P 4/m n c,False
-P 4/n m m :1,False
-P 4/n m m :2,False
-P 4/n c c :1,False
-P 4/n c c :2,False
-P 42/m m c,False
-P 42/m c m,False
-P 42/n b c :1,False
-P 42/n b c :2,False
-P 42/n n m :1,False
-P 42/n n m :2,False
-P 42/m b c,False
-P 42/m n m,False
-P 42/n m c :1,False
-P 42/n m c :2,False
-P 42/n c m :1,False
-P 42/n c m :2,False
-I 4/m m m,False
-I 4/m c m,False
-I 41/a m d :1,False
-I 41/a m d :2,False
-I 41/a c d :1,False
-I 41/a c d :2,False
-P 3,True
-P 31,True
-P 32,True
-R 3 :H,True
-R 3 :R,True
-P -3,False
-R -3 :H,False
-R -3 :R,False
-P 3 1 2,False
-P 3 2 1,False
-P 31 1 2,False
-P 31 2 1,False
-P 32 1 2,False
-P 32 2 1,False
-R 3 2 :H,False
-R 3 2 :R,False
-P 3 m 1,True
-P 3 1 m,True
-P 3 c 1,True
-P 3 1 c,True
-R 3 m :H,True
-R 3 m :R,True
-R 3 c :H,True
-R 3 c :R,True
-P -3 1 m,False
-P -3 1 c,False
-P -3 m 1,False
-P -3 c 1,False
-R -3 m :H,False
-R -3 m :R,False
-R -3 c :H,False
-R -3 c :R,False
-P 6,True
-P 61,True
-P 65,True
-P 62,True
-P 64,True
-P 63,True
-P -6,False
-P 6/m,False
-P 63/m,False
-P 6 2 2,False
-P 61 2 2,False
-P 65 2 2,False
-P 62 2 2,False
-P 64 2 2,False
-P 63 2 2,False
-P 6 m m,True
-P 6 c c,True
-P 63 c m,True
-P 63 m c,True
-P -6 m 2,False
-P -6 c 2,False
-P -6 2 m,False
-P -6 2 c,False
-P 6/m m m,False
-P 6/m c c,False
-P 63/m c m,False
-P 63/m m c,False
-P 2 3,False
-F 2 3,False
-I 2 3,False
-P 21 3,False
-I 21 3,False
-P m -3,False
-P n -3 :1,False
-P n -3 :2,False
-F m -3,False
-F d -3 :1,False
-F d -3 :2,False
-I m -3,False
-P a -3,False
-I a -3,False
-P 4 3 2,False
-P 42 3 2,False
-F 4 3 2,False
-F 41 3 2,False
-I 4 3 2,False
-P 43 3 2,False
-P 41 3 2,False
-I 41 3 2,False
-P -4 3 m,False
-F -4 3 m,False
-I -4 3 m,False
-P -4 3 n,False
-F -4 3 c,False
-I -4 3 d,False
-P m -3 m,False
-P n -3 n :1,False
-P n -3 n :2,False
-P m -3 n,False
-P n -3 m :1,False
-P n -3 m :2,False
-F m -3 m,False
-F m -3 c,False
-F d -3 m :1,False
-F d -3 m :2,False
-F d -3 c :1,False
-F d -3 c :2,False
-I m -3 m,False
-I a -3 d,False
+xhm,is_polar,is_a_polar,is_b_polar,is_c_polar
+P 1,True,True,True,True
+P -1,False,False,False,False
+P 1 2 1,True,False,True,False
+P 1 1 2,True,False,False,True
+P 2 1 1,True,True,False,False
+P 1 21 1,True,False,True,False
+P 1 1 21,True,False,False,True
+P 21 1 1,True,True,False,False
+C 1 2 1,True,False,True,False
+A 1 2 1,True,False,True,False
+I 1 2 1,True,False,True,False
+A 1 1 2,True,False,False,True
+B 1 1 2,True,False,False,True
+I 1 1 2,True,False,False,True
+B 2 1 1,True,True,False,False
+C 2 1 1,True,True,False,False
+I 2 1 1,True,True,False,False
+P 1 m 1,True,True,False,True
+P 1 1 m,True,True,True,False
+P m 1 1,True,False,True,True
+P 1 c 1,True,True,False,True
+P 1 n 1,True,True,False,True
+P 1 a 1,True,True,False,True
+P 1 1 a,True,True,True,False
+P 1 1 n,True,True,True,False
+P 1 1 b,True,True,True,False
+P b 1 1,True,False,True,True
+P n 1 1,True,False,True,True
+P c 1 1,True,False,True,True
+C 1 m 1,True,True,False,True
+A 1 m 1,True,True,False,True
+I 1 m 1,True,True,False,True
+A 1 1 m,True,True,True,False
+B 1 1 m,True,True,True,False
+I 1 1 m,True,True,True,False
+B m 1 1,True,False,True,True
+C m 1 1,True,False,True,True
+I m 1 1,True,False,True,True
+C 1 c 1,True,True,False,True
+A 1 n 1,True,True,False,True
+I 1 a 1,True,True,False,True
+A 1 a 1,True,True,False,True
+C 1 n 1,True,True,False,True
+I 1 c 1,True,True,False,True
+A 1 1 a,True,True,True,False
+B 1 1 n,True,True,True,False
+I 1 1 b,True,True,True,False
+B 1 1 b,True,True,True,False
+A 1 1 n,True,True,True,False
+I 1 1 a,True,True,True,False
+B b 1 1,True,False,True,True
+C n 1 1,True,False,True,True
+I c 1 1,True,False,True,True
+C c 1 1,True,False,True,True
+B n 1 1,True,False,True,True
+I b 1 1,True,False,True,True
+P 1 2/m 1,False,False,False,False
+P 1 1 2/m,False,False,False,False
+P 2/m 1 1,False,False,False,False
+P 1 21/m 1,False,False,False,False
+P 1 1 21/m,False,False,False,False
+P 21/m 1 1,False,False,False,False
+C 1 2/m 1,False,False,False,False
+A 1 2/m 1,False,False,False,False
+I 1 2/m 1,False,False,False,False
+A 1 1 2/m,False,False,False,False
+B 1 1 2/m,False,False,False,False
+I 1 1 2/m,False,False,False,False
+B 2/m 1 1,False,False,False,False
+C 2/m 1 1,False,False,False,False
+I 2/m 1 1,False,False,False,False
+P 1 2/c 1,False,False,False,False
+P 1 2/n 1,False,False,False,False
+P 1 2/a 1,False,False,False,False
+P 1 1 2/a,False,False,False,False
+P 1 1 2/n,False,False,False,False
+P 1 1 2/b,False,False,False,False
+P 2/b 1 1,False,False,False,False
+P 2/n 1 1,False,False,False,False
+P 2/c 1 1,False,False,False,False
+P 1 21/c 1,False,False,False,False
+P 1 21/n 1,False,False,False,False
+P 1 21/a 1,False,False,False,False
+P 1 1 21/a,False,False,False,False
+P 1 1 21/n,False,False,False,False
+P 1 1 21/b,False,False,False,False
+P 21/b 1 1,False,False,False,False
+P 21/n 1 1,False,False,False,False
+P 21/c 1 1,False,False,False,False
+C 1 2/c 1,False,False,False,False
+A 1 2/n 1,False,False,False,False
+I 1 2/a 1,False,False,False,False
+A 1 2/a 1,False,False,False,False
+C 1 2/n 1,False,False,False,False
+I 1 2/c 1,False,False,False,False
+A 1 1 2/a,False,False,False,False
+B 1 1 2/n,False,False,False,False
+I 1 1 2/b,False,False,False,False
+B 1 1 2/b,False,False,False,False
+A 1 1 2/n,False,False,False,False
+I 1 1 2/a,False,False,False,False
+B 2/b 1 1,False,False,False,False
+C 2/n 1 1,False,False,False,False
+I 2/c 1 1,False,False,False,False
+C 2/c 1 1,False,False,False,False
+B 2/n 1 1,False,False,False,False
+I 2/b 1 1,False,False,False,False
+P 2 2 2,False,False,False,False
+P 2 2 21,False,False,False,False
+P 21 2 2,False,False,False,False
+P 2 21 2,False,False,False,False
+P 21 21 2,False,False,False,False
+P 2 21 21,False,False,False,False
+P 21 2 21,False,False,False,False
+P 21 21 21,False,False,False,False
+C 2 2 21,False,False,False,False
+A 21 2 2,False,False,False,False
+B 2 21 2,False,False,False,False
+C 2 2 2,False,False,False,False
+A 2 2 2,False,False,False,False
+B 2 2 2,False,False,False,False
+F 2 2 2,False,False,False,False
+I 2 2 2,False,False,False,False
+I 21 21 21,False,False,False,False
+P m m 2,True,False,False,True
+P 2 m m,True,True,False,False
+P m 2 m,True,False,True,False
+P m c 21,True,False,False,True
+P c m 21,True,False,False,True
+P 21 m a,True,True,False,False
+P 21 a m,True,True,False,False
+P b 21 m,True,False,True,False
+P m 21 b,True,False,True,False
+P c c 2,True,False,False,True
+P 2 a a,True,True,False,False
+P b 2 b,True,False,True,False
+P m a 2,True,False,False,True
+P b m 2,True,False,False,True
+P 2 m b,True,True,False,False
+P 2 c m,True,True,False,False
+P c 2 m,True,False,True,False
+P m 2 a,True,False,True,False
+P c a 21,True,False,False,True
+P b c 21,True,False,False,True
+P 21 a b,True,True,False,False
+P 21 c a,True,True,False,False
+P c 21 b,True,False,True,False
+P b 21 a,True,False,True,False
+P n c 2,True,False,False,True
+P c n 2,True,False,False,True
+P 2 n a,True,True,False,False
+P 2 a n,True,True,False,False
+P b 2 n,True,False,True,False
+P n 2 b,True,False,True,False
+P m n 21,True,False,False,True
+P n m 21,True,False,False,True
+P 21 m n,True,True,False,False
+P 21 n m,True,True,False,False
+P n 21 m,True,False,True,False
+P m 21 n,True,False,True,False
+P b a 2,True,False,False,True
+P 2 c b,True,True,False,False
+P c 2 a,True,False,True,False
+P n a 21,True,False,False,True
+P b n 21,True,False,False,True
+P 21 n b,True,True,False,False
+P 21 c n,True,True,False,False
+P c 21 n,True,False,True,False
+P n 21 a,True,False,True,False
+P n n 2,True,False,False,True
+P 2 n n,True,True,False,False
+P n 2 n,True,False,True,False
+C m m 2,True,False,False,True
+A 2 m m,True,True,False,False
+B m 2 m,True,False,True,False
+C m c 21,True,False,False,True
+C c m 21,True,False,False,True
+A 21 m a,True,True,False,False
+A 21 a m,True,True,False,False
+B b 21 m,True,False,True,False
+B m 21 b,True,False,True,False
+C c c 2,True,False,False,True
+A 2 a a,True,True,False,False
+B b 2 b,True,False,True,False
+A m m 2,True,False,False,True
+B m m 2,True,False,False,True
+B 2 m m,True,True,False,False
+C 2 m m,True,True,False,False
+C m 2 m,True,False,True,False
+A m 2 m,True,False,True,False
+A b m 2,True,False,False,True
+B m a 2,True,False,False,True
+B 2 c m,True,True,False,False
+C 2 m b,True,True,False,False
+C m 2 a,True,False,True,False
+A c 2 m,True,False,True,False
+A m a 2,True,False,False,True
+B b m 2,True,False,False,True
+B 2 m b,True,True,False,False
+C 2 c m,True,True,False,False
+C c 2 m,True,False,True,False
+A m 2 a,True,False,True,False
+A b a 2,True,False,False,True
+B b a 2,True,False,False,True
+B 2 c b,True,True,False,False
+C 2 c b,True,True,False,False
+C c 2 a,True,False,True,False
+A c 2 a,True,False,True,False
+F m m 2,True,False,False,True
+F 2 m m,True,True,False,False
+F m 2 m,True,False,True,False
+F d d 2,True,False,False,True
+F 2 d d,True,True,False,False
+F d 2 d,True,False,True,False
+I m m 2,True,False,False,True
+I 2 m m,True,True,False,False
+I m 2 m,True,False,True,False
+I b a 2,True,False,False,True
+I 2 c b,True,True,False,False
+I c 2 a,True,False,True,False
+I m a 2,True,False,False,True
+I b m 2,True,False,False,True
+I 2 m b,True,True,False,False
+I 2 c m,True,True,False,False
+I c 2 m,True,False,True,False
+I m 2 a,True,False,True,False
+P m m m,False,False,False,False
+P n n n :1,False,False,False,False
+P n n n :2,False,False,False,False
+P c c m,False,False,False,False
+P m a a,False,False,False,False
+P b m b,False,False,False,False
+P b a n :1,False,False,False,False
+P b a n :2,False,False,False,False
+P n c b :1,False,False,False,False
+P n c b :2,False,False,False,False
+P c n a :1,False,False,False,False
+P c n a :2,False,False,False,False
+P m m a,False,False,False,False
+P m m b,False,False,False,False
+P b m m,False,False,False,False
+P c m m,False,False,False,False
+P m c m,False,False,False,False
+P m a m,False,False,False,False
+P n n a,False,False,False,False
+P n n b,False,False,False,False
+P b n n,False,False,False,False
+P c n n,False,False,False,False
+P n c n,False,False,False,False
+P n a n,False,False,False,False
+P m n a,False,False,False,False
+P n m b,False,False,False,False
+P b m n,False,False,False,False
+P c n m,False,False,False,False
+P n c m,False,False,False,False
+P m a n,False,False,False,False
+P c c a,False,False,False,False
+P c c b,False,False,False,False
+P b a a,False,False,False,False
+P c a a,False,False,False,False
+P b c b,False,False,False,False
+P b a b,False,False,False,False
+P b a m,False,False,False,False
+P m c b,False,False,False,False
+P c m a,False,False,False,False
+P c c n,False,False,False,False
+P n a a,False,False,False,False
+P b n b,False,False,False,False
+P b c m,False,False,False,False
+P c a m,False,False,False,False
+P m c a,False,False,False,False
+P m a b,False,False,False,False
+P b m a,False,False,False,False
+P c m b,False,False,False,False
+P n n m,False,False,False,False
+P m n n,False,False,False,False
+P n m n,False,False,False,False
+P m m n :1,False,False,False,False
+P m m n :2,False,False,False,False
+P n m m :1,False,False,False,False
+P n m m :2,False,False,False,False
+P m n m :1,False,False,False,False
+P m n m :2,False,False,False,False
+P b c n,False,False,False,False
+P c a n,False,False,False,False
+P n c a,False,False,False,False
+P n a b,False,False,False,False
+P b n a,False,False,False,False
+P c n b,False,False,False,False
+P b c a,False,False,False,False
+P c a b,False,False,False,False
+P n m a,False,False,False,False
+P m n b,False,False,False,False
+P b n m,False,False,False,False
+P c m n,False,False,False,False
+P m c n,False,False,False,False
+P n a m,False,False,False,False
+C m c m,False,False,False,False
+C c m m,False,False,False,False
+A m m a,False,False,False,False
+A m a m,False,False,False,False
+B b m m,False,False,False,False
+B m m b,False,False,False,False
+C m c a,False,False,False,False
+C c m b,False,False,False,False
+A b m a,False,False,False,False
+A c a m,False,False,False,False
+B b c m,False,False,False,False
+B m a b,False,False,False,False
+C m m m,False,False,False,False
+A m m m,False,False,False,False
+B m m m,False,False,False,False
+C c c m,False,False,False,False
+A m a a,False,False,False,False
+B b m b,False,False,False,False
+C m m a,False,False,False,False
+C m m b,False,False,False,False
+A b m m,False,False,False,False
+A c m m,False,False,False,False
+B m c m,False,False,False,False
+B m a m,False,False,False,False
+C c c a :1,False,False,False,False
+C c c a :2,False,False,False,False
+C c c b :1,False,False,False,False
+C c c b :2,False,False,False,False
+A b a a :1,False,False,False,False
+A b a a :2,False,False,False,False
+A c a a :1,False,False,False,False
+A c a a :2,False,False,False,False
+B b c b :1,False,False,False,False
+B b c b :2,False,False,False,False
+B b a b :1,False,False,False,False
+B b a b :2,False,False,False,False
+F m m m,False,False,False,False
+F d d d :1,False,False,False,False
+F d d d :2,False,False,False,False
+I m m m,False,False,False,False
+I b a m,False,False,False,False
+I m c b,False,False,False,False
+I c m a,False,False,False,False
+I b c a,False,False,False,False
+I c a b,False,False,False,False
+I m m a,False,False,False,False
+I m m b,False,False,False,False
+I b m m,False,False,False,False
+I c m m,False,False,False,False
+I m c m,False,False,False,False
+I m a m,False,False,False,False
+P 4,True,False,False,True
+P 41,True,False,False,True
+P 42,True,False,False,True
+P 43,True,False,False,True
+I 4,True,False,False,True
+I 41,True,False,False,True
+P -4,False,False,False,False
+I -4,False,False,False,False
+P 4/m,False,False,False,False
+P 42/m,False,False,False,False
+P 4/n :1,False,False,False,False
+P 4/n :2,False,False,False,False
+P 42/n :1,False,False,False,False
+P 42/n :2,False,False,False,False
+I 4/m,False,False,False,False
+I 41/a :1,False,False,False,False
+I 41/a :2,False,False,False,False
+P 4 2 2,False,False,False,False
+P 4 21 2,False,False,False,False
+P 41 2 2,False,False,False,False
+P 41 21 2,False,False,False,False
+P 42 2 2,False,False,False,False
+P 42 21 2,False,False,False,False
+P 43 2 2,False,False,False,False
+P 43 21 2,False,False,False,False
+I 4 2 2,False,False,False,False
+I 41 2 2,False,False,False,False
+P 4 m m,True,False,False,True
+P 4 b m,True,False,False,True
+P 42 c m,True,False,False,True
+P 42 n m,True,False,False,True
+P 4 c c,True,False,False,True
+P 4 n c,True,False,False,True
+P 42 m c,True,False,False,True
+P 42 b c,True,False,False,True
+I 4 m m,True,False,False,True
+I 4 c m,True,False,False,True
+I 41 m d,True,False,False,True
+I 41 c d,True,False,False,True
+P -4 2 m,False,False,False,False
+P -4 2 c,False,False,False,False
+P -4 21 m,False,False,False,False
+P -4 21 c,False,False,False,False
+P -4 m 2,False,False,False,False
+P -4 c 2,False,False,False,False
+P -4 b 2,False,False,False,False
+P -4 n 2,False,False,False,False
+I -4 m 2,False,False,False,False
+I -4 c 2,False,False,False,False
+I -4 2 m,False,False,False,False
+I -4 2 d,False,False,False,False
+P 4/m m m,False,False,False,False
+P 4/m c c,False,False,False,False
+P 4/n b m :1,False,False,False,False
+P 4/n b m :2,False,False,False,False
+P 4/n n c :1,False,False,False,False
+P 4/n n c :2,False,False,False,False
+P 4/m b m,False,False,False,False
+P 4/m n c,False,False,False,False
+P 4/n m m :1,False,False,False,False
+P 4/n m m :2,False,False,False,False
+P 4/n c c :1,False,False,False,False
+P 4/n c c :2,False,False,False,False
+P 42/m m c,False,False,False,False
+P 42/m c m,False,False,False,False
+P 42/n b c :1,False,False,False,False
+P 42/n b c :2,False,False,False,False
+P 42/n n m :1,False,False,False,False
+P 42/n n m :2,False,False,False,False
+P 42/m b c,False,False,False,False
+P 42/m n m,False,False,False,False
+P 42/n m c :1,False,False,False,False
+P 42/n m c :2,False,False,False,False
+P 42/n c m :1,False,False,False,False
+P 42/n c m :2,False,False,False,False
+I 4/m m m,False,False,False,False
+I 4/m c m,False,False,False,False
+I 41/a m d :1,False,False,False,False
+I 41/a m d :2,False,False,False,False
+I 41/a c d :1,False,False,False,False
+I 41/a c d :2,False,False,False,False
+P 3,True,False,False,True
+P 31,True,False,False,True
+P 32,True,False,False,True
+R 3 :H,True,False,False,True
+R 3 :R,True,False,False,False
+P -3,False,False,False,False
+R -3 :H,False,False,False,False
+R -3 :R,False,False,False,False
+P 3 1 2,False,False,False,False
+P 3 2 1,False,False,False,False
+P 31 1 2,False,False,False,False
+P 31 2 1,False,False,False,False
+P 32 1 2,False,False,False,False
+P 32 2 1,False,False,False,False
+R 3 2 :H,False,False,False,False
+R 3 2 :R,False,False,False,False
+P 3 m 1,True,False,False,True
+P 3 1 m,True,False,False,True
+P 3 c 1,True,False,False,True
+P 3 1 c,True,False,False,True
+R 3 m :H,True,False,False,True
+R 3 m :R,True,False,False,False
+R 3 c :H,True,False,False,True
+R 3 c :R,True,False,False,False
+P -3 1 m,False,False,False,False
+P -3 1 c,False,False,False,False
+P -3 m 1,False,False,False,False
+P -3 c 1,False,False,False,False
+R -3 m :H,False,False,False,False
+R -3 m :R,False,False,False,False
+R -3 c :H,False,False,False,False
+R -3 c :R,False,False,False,False
+P 6,True,False,False,True
+P 61,True,False,False,True
+P 65,True,False,False,True
+P 62,True,False,False,True
+P 64,True,False,False,True
+P 63,True,False,False,True
+P -6,False,False,False,False
+P 6/m,False,False,False,False
+P 63/m,False,False,False,False
+P 6 2 2,False,False,False,False
+P 61 2 2,False,False,False,False
+P 65 2 2,False,False,False,False
+P 62 2 2,False,False,False,False
+P 64 2 2,False,False,False,False
+P 63 2 2,False,False,False,False
+P 6 m m,True,False,False,True
+P 6 c c,True,False,False,True
+P 63 c m,True,False,False,True
+P 63 m c,True,False,False,True
+P -6 m 2,False,False,False,False
+P -6 c 2,False,False,False,False
+P -6 2 m,False,False,False,False
+P -6 2 c,False,False,False,False
+P 6/m m m,False,False,False,False
+P 6/m c c,False,False,False,False
+P 63/m c m,False,False,False,False
+P 63/m m c,False,False,False,False
+P 2 3,False,False,False,False
+F 2 3,False,False,False,False
+I 2 3,False,False,False,False
+P 21 3,False,False,False,False
+I 21 3,False,False,False,False
+P m -3,False,False,False,False
+P n -3 :1,False,False,False,False
+P n -3 :2,False,False,False,False
+F m -3,False,False,False,False
+F d -3 :1,False,False,False,False
+F d -3 :2,False,False,False,False
+I m -3,False,False,False,False
+P a -3,False,False,False,False
+I a -3,False,False,False,False
+P 4 3 2,False,False,False,False
+P 42 3 2,False,False,False,False
+F 4 3 2,False,False,False,False
+F 41 3 2,False,False,False,False
+I 4 3 2,False,False,False,False
+P 43 3 2,False,False,False,False
+P 41 3 2,False,False,False,False
+I 41 3 2,False,False,False,False
+P -4 3 m,False,False,False,False
+F -4 3 m,False,False,False,False
+I -4 3 m,False,False,False,False
+P -4 3 n,False,False,False,False
+F -4 3 c,False,False,False,False
+I -4 3 d,False,False,False,False
+P m -3 m,False,False,False,False
+P n -3 n :1,False,False,False,False
+P n -3 n :2,False,False,False,False
+P m -3 n,False,False,False,False
+P n -3 m :1,False,False,False,False
+P n -3 m :2,False,False,False,False
+F m -3 m,False,False,False,False
+F m -3 c,False,False,False,False
+F d -3 m :1,False,False,False,False
+F d -3 m :2,False,False,False,False
+F d -3 c :1,False,False,False,False
+F d -3 c :2,False,False,False,False
+I m -3 m,False,False,False,False
+I a -3 d,False,False,False,False
