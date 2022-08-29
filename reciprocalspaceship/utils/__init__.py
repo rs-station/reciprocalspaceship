@@ -8,6 +8,8 @@ __all__ = [
     "is_centric",
     "is_absent",
     "apply_to_hkl",
+    "is_polar",
+    "polar_axes",
     "phase_shift",
     "add_rfree",
     "copy_rfree",
