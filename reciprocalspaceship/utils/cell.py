@@ -30,6 +30,32 @@ def compute_dHKL(H, cell):
 
 
 @cellify
+def get_gridsize(cell, dmin, sample_rate=3.0):
+    """
+    Determine an appropriate 3D grid size for the provided unit cell that can
+    represent data with the given `dmin` and `sample_rate`.
+
+    Parameters
+    ----------
+    cell : tuple, list, np.ndarray of cell parameters, or gemmi.UnitCell
+        Unit cell parameters
+    dmin : float
+        Maximum resolution of the data in Å
+    sample_rate : float
+        Sets the minimal grid spacing relative to dmin. For example,
+        `sample_rate=3` corresponds to a real-space sampling of dmin/3.
+        (default: 3.0)
+
+    Returns
+    -------
+    tuple(int, int, int)
+        Grid size with desired spacing (tuple of 3 integers)
+    """
+    grid = np.ceil(sample_rate * np.array(cell.get_hkl_limits(dmin))).astype("int")
+    return tuple(grid)
+
+
+@cellify
 def generate_reciprocal_cell(cell, dmin, dtype=np.int32):
     """
     Generate the miller indices of the full P1 reciprocal cell.

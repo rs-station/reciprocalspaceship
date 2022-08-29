@@ -12,6 +12,7 @@ __all__ = [
     "add_rfree",
     "copy_rfree",
     "compute_dHKL",
+    "get_gridsize",
     "generate_reciprocal_cell",
     "hkl_to_asu",
     "hkl_to_observed",
@@ -30,7 +31,11 @@ from reciprocalspaceship.utils.asu import (
     in_asu,
 )
 from reciprocalspaceship.utils.binning import assign_with_binedges, bin_by_percentile
-from reciprocalspaceship.utils.cell import compute_dHKL, generate_reciprocal_cell
+from reciprocalspaceship.utils.cell import (
+    compute_dHKL,
+    generate_reciprocal_cell,
+    get_gridsize,
+)
 from reciprocalspaceship.utils.math import angle_between
 from reciprocalspaceship.utils.phases import canonicalize_phases, get_phase_restrictions
 from reciprocalspaceship.utils.rfree import add_rfree, copy_rfree
