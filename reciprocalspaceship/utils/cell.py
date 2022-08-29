@@ -29,18 +29,22 @@ def compute_dHKL(H, cell):
     return dhkls[inverse]
 
 
-@cellify
-def get_gridsize(cell, dmin, sample_rate=3.0):
+def get_gridsize(dataset, sample_rate=3.0):
     """
-    Determine an appropriate 3D grid size for the provided unit cell that can
-    represent data with the given `dmin` and `sample_rate`.
+    Determine an appropriate 3D grid size for the provided rs.DataSet object
+    to represent data with the given `sample_rate`. The grid size will support
+    the full resolution of `dataset`; if a `dmin` is desired, the resolution
+    cutoff should be applied to `dataset` before calling this function.
+
+    Notes
+    -----
+    - This function returns values equivalent to a `gemmi` call of:
+      gemmi.Mtz.get_size_for_hkl(sample_rate=`sample_rate`)
 
     Parameters
     ----------
-    cell : tuple, list, np.ndarray of cell parameters, or gemmi.UnitCell
-        Unit cell parameters
-    dmin : float
-        Maximum resolution of the data in Å
+    dataset : rs.DataSet
+        DataSet object for 3D grid
     sample_rate : float
         Sets the minimal grid spacing relative to dmin. For example,
         `sample_rate=3` corresponds to a real-space sampling of dmin/3.
@@ -48,11 +52,10 @@ def get_gridsize(cell, dmin, sample_rate=3.0):
 
     Returns
     -------
-    tuple(int, int, int)
-        Grid size with desired spacing (tuple of 3 integers)
+    list(int, int, int)
+        Grid size with desired spacing (list of 3 integers)
     """
-    grid = np.ceil(sample_rate * np.array(cell.get_hkl_limits(dmin))).astype("int")
-    return tuple(grid)
+    return dataset.to_gemmi().get_size_for_hkl(sample_rate=sample_rate)
 
 
 @cellify
