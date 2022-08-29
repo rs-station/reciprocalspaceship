@@ -174,8 +174,14 @@ interface decisions related to <code class="docutils literal notranslate"><span 
 <tr class="row-even"><td><p><a class="reference internal" href="#reciprocalspaceship.utils.is_centric" title="reciprocalspaceship.utils.is_centric"><code class="xref py py-obj docutils literal notranslate"><span class="pre">is_centric</span></code></a>(H, spacegroup)</p></td>
 <td><p>Determine if Miller indices are centric in a given spacegroup</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#reciprocalspaceship.utils.phase_shift" title="reciprocalspaceship.utils.phase_shift"><code class="xref py py-obj docutils literal notranslate"><span class="pre">phase_shift</span></code></a>(H, op)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#reciprocalspaceship.utils.is_polar" title="reciprocalspaceship.utils.is_polar"><code class="xref py py-obj docutils literal notranslate"><span class="pre">is_polar</span></code></a>(spacegroup)</p></td>
+<td><p>Classify whether spacegroup is polar</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#reciprocalspaceship.utils.phase_shift" title="reciprocalspaceship.utils.phase_shift"><code class="xref py py-obj docutils literal notranslate"><span class="pre">phase_shift</span></code></a>(H, op)</p></td>
 <td><p>Calculate phase shift for symmetry operator.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#reciprocalspaceship.utils.polar_axes" title="reciprocalspaceship.utils.polar_axes"><code class="xref py py-obj docutils literal notranslate"><span class="pre">polar_axes</span></code></a>(spacegroup)</p></td>
+<td><p>Classify which cell axes are polar in given spacegroup</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#reciprocalspaceship.utils.to_structurefactor" title="reciprocalspaceship.utils.to_structurefactor"><code class="xref py py-obj docutils literal notranslate"><span class="pre">to_structurefactor</span></code></a>(sfamps, phases)</p></td>
 <td><p>Convert structure factor amplitude and phase to complex structure factors</p></td>
@@ -515,6 +521,20 @@ spacegroup.</p>
 </dd></dl>
 
 <dl class="py function">
+<dt class="sig sig-object py" id="reciprocalspaceship.utils.is_polar">
+<span class="sig-prename descclassname"><span class="pre">reciprocalspaceship.utils.</span></span><span class="sig-name descname"><span class="pre">is_polar</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">spacegroup</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/Hekstra-Lab/reciprocalspaceship/blob/main/reciprocalspaceship/utils/symmetry.py#L63-L80"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#reciprocalspaceship.utils.is_polar" title="Permalink to this definition"></a></dt>
+<dd><p>Classify whether spacegroup is polar</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>spacegroup</strong> (<em>str, int, gemmi.SpaceGroup</em>) – Spacegroup to classify as polar</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><em>bool</em> – Whether the spacegroup is polar</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
 <dt class="sig sig-object py" id="reciprocalspaceship.utils.phase_shift">
 <span class="sig-prename descclassname"><span class="pre">reciprocalspaceship.utils.</span></span><span class="sig-name descname"><span class="pre">phase_shift</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">H</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">op</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/Hekstra-Lab/reciprocalspaceship/blob/main/reciprocalspaceship/utils/symmetry.py#L44-L60"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#reciprocalspaceship.utils.phase_shift" title="Permalink to this definition"></a></dt>
 <dd><p>Calculate phase shift for symmetry operator.</p>
@@ -527,6 +547,29 @@ spacegroup.</p>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p><strong>result</strong> (<em>array</em>) – array of phase shifts</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="reciprocalspaceship.utils.polar_axes">
+<span class="sig-prename descclassname"><span class="pre">reciprocalspaceship.utils.</span></span><span class="sig-name descname"><span class="pre">polar_axes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">spacegroup</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/Hekstra-Lab/reciprocalspaceship/blob/main/reciprocalspaceship/utils/symmetry.py#L83-L118"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#reciprocalspaceship.utils.polar_axes" title="Permalink to this definition"></a></dt>
+<dd><p>Classify which cell axes are polar in given spacegroup</p>
+<p class="rubric">Notes</p>
+<ul class="simple">
+<li><p>This method assumes that the lattice basis vectors are a, b, and c.
+Specifically, trigonal spacegroups with rhombohedral centering are not
+supported.</p></li>
+</ul>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>spacegroup</strong> (<em>str, int, gemmi.SpaceGroup</em>) – Spacegroup to classify axes as polar</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><em>List[bool]</em> – Whether a-, b-, or c-axis is polar</p>
+</dd>
+<dt class="field-odd">Raises</dt>
+<dd class="field-odd"><p><strong>ValueError</strong> – If trigonal spacegroup is provided with rhombohedral Bravais lattice</p>
 </dd>
 </dl>
 </dd></dl>
