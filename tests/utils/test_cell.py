@@ -2,6 +2,7 @@ import gemmi
 import numpy as np
 import pytest
 
+import reciprocalspaceship as rs
 from reciprocalspaceship.utils import compute_dHKL, generate_reciprocal_cell
 
 
@@ -39,6 +40,26 @@ def test_compute_dHKL(dataset_hkl, cell):
 
     assert np.allclose(result, expected)
     assert np.all(np.isfinite(result))
+
+
+@pytest.mark.parametrize("sample_rate", [2.5, 3, 5])
+@pytest.mark.parametrize("dmin", [10.0, 7.5, 5.0, None])
+def test_get_gridsize(mtz_by_spacegroup, sample_rate, dmin):
+    """
+    Test rs.utils.get_gridsize() against gemmi using fmodel data.
+
+    Note: This is a slightly tautological test because the function
+          is implemented with gemmi, but I think it's good practice
+          to write this test in case we change the implementation.
+    """
+    dataset = rs.read_mtz(mtz_by_spacegroup)
+
+    if dmin:
+        dataset = dataset.loc[dataset.compute_dHKL().dHKL > dmin]
+
+    expected = dataset.to_gemmi().get_size_for_hkl(sample_rate=sample_rate)
+    result = rs.utils.get_gridsize(dataset, sample_rate=sample_rate)
+    assert result == expected
 
 
 @pytest.mark.parametrize(
