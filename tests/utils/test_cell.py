@@ -42,24 +42,25 @@ def test_compute_dHKL(dataset_hkl, cell):
     assert np.all(np.isfinite(result))
 
 
-@pytest.mark.parametrize("sample_rate", [2.5, 3, 5])
-@pytest.mark.parametrize("dmin", [10.0, 7.5, 5.0, None])
+@pytest.mark.parametrize("sample_rate", [1.0, 2.5, 3.0])
+@pytest.mark.parametrize("dmin", [10.0, 7.0, 5.0, 3.0, 2.0, None])
 def test_get_gridsize(mtz_by_spacegroup, sample_rate, dmin):
     """
-    Test rs.utils.get_gridsize() against gemmi using fmodel data.
-
-    Note: This is a slightly tautological test because the function
-          is implemented with gemmi, but I think it's good practice
-          to write this test in case we change the implementation.
+    Test rs.utils.get_gridsize() with fmodel data
     """
     dataset = rs.read_mtz(mtz_by_spacegroup)
+    result = rs.utils.get_gridsize(dataset, sample_rate=sample_rate, dmin=dmin)
 
-    if dmin:
-        dataset = dataset.loc[dataset.compute_dHKL().dHKL > dmin]
+    assert isinstance(result, list)
+    assert len(result) == 3
 
-    expected = dataset.to_gemmi().get_size_for_hkl(sample_rate=sample_rate)
-    result = rs.utils.get_gridsize(dataset, sample_rate=sample_rate)
-    assert result == expected
+    if dmin is None:
+        dmin = dataset.compute_dHKL().dHKL.min()
+
+    # real-space grid spacing must be higher resolution than dmin/sample_rate
+    abc = np.array(dataset.cell.parameters[:3])
+    min_size = abc / (dmin / sample_rate)
+    assert (np.array(result) >= min_size).all()
 
 
 @pytest.mark.parametrize(
