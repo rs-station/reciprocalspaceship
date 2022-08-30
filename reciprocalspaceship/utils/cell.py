@@ -53,7 +53,7 @@ def get_gridsize(dataset, sample_rate=3.0, dmin=None):
     sample_rate : float
         Sets the minimal grid spacing relative to dmin. For example,
         `sample_rate=3` corresponds to a real-space sampling of dmin/3.
-        (default: 3.0)
+        Value must be >= 1.0 (default: 3.0)
     dmin : float
         Highest-resolution reflection to consider for grid size. If None,
         `dmin` will be set to the highest resolution reflection in the
@@ -63,7 +63,15 @@ def get_gridsize(dataset, sample_rate=3.0, dmin=None):
     -------
     list(int, int, int)
         Grid size with desired spacing (list of 3 integers)
+
+    Raises
+    ------
+    ValueError
+        If sample_rate < 1.0
     """
+    if sample_rate < 1.0:
+        raise ValueError(f"sample_rate must be >= 1.0. Given: {sample_rate}")
+
     dHKL = dataset.compute_dHKL()["dHKL"]
     if dmin is None:
         dmin = dHKL.min()
