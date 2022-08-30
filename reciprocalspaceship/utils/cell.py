@@ -81,7 +81,9 @@ def get_gridsize(dataset, sample_rate=3.0, dmin=None):
     min_spacing = dmin / sample_rate
     min_size = np.ceil(abc / min_spacing).astype(int)
     ds = dataset.loc[dHKL >= dmin]
-    return ds.to_gemmi().get_size_for_hkl(min_size=min_size, sample_rate=sample_rate)
+    return ds.to_gemmi(skip_problem_mtztypes=True).get_size_for_hkl(
+        min_size=min_size, sample_rate=sample_rate
+    )
 
 
 @cellify
