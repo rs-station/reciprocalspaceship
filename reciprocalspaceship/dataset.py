@@ -18,6 +18,7 @@ from reciprocalspaceship.utils import (
     canonicalize_phases,
     compute_structurefactor_multiplicity,
     from_structurefactor,
+    get_gridsize,
     hkl_to_asu,
     hkl_to_observed,
     in_asu,
@@ -1287,31 +1288,49 @@ class DataSet(pd.DataFrame):
 
         return self
 
-    def to_reciprocalgrid(self, key, gridsize):
+    def to_reciprocalgrid(self, key, sample_rate=3.0, dmin=None, gridsize=None):
         """
         Set up reciprocal grid with values from column, ``key``, indexed by
-        Miller indices. A 3D numpy array will be initialized with the
-        specified gridsize. Any missing Miller indices are initialized to
-        zero.
+        Miller indices.
 
         Notes
         -----
         - The data being arranged on a reciprocal grid must be compatible
           with a numpy datatype.
+        - Any missing Miller indices are initialized to zero.
+        - The grid size determined using `sample_rate` and `dmin` will depend
+          on the cell parameters of the dataset. If the grid size must be
+          consistent across different isomorphous cell parameters, `gridsize`
+          can be explicitly provided.
 
         Parameters
         ----------
         key : str
             Column label for value to arrange on reciprocal grid
+        sample_rate : float
+            Sets the minimal grid spacing relative to dmin. For example,
+            `sample_rate=3` corresponds to a real-space sampling of dmin/3.
+            (default: 3.0)
+        dmin : float
+            Highest-resolution reflection to consider for grid size. If None,
+            `dmin` will be set to the highest resolution reflection in the
+            dataset (default: None)
         gridsize : array-like (len==3)
-            Dimensions for 3D reciprocal grid.
+            If given, provides the explicit dimensions for 3D reciprocal
+            grid. If None, grid size will be set based on `sample_rate` and
+            `dmin`. If provided, this grid size will be used regardless of
+            the values provided as `sample_rate` and `dmin`
 
         Returns
         -------
         numpy.ndarray
         """
+        ds = self.loc[:, [key]]
+        if gridsize is None:
+            gridsize = get_gridsize(ds, sample_rate=sample_rate, dmin=dmin)
+
         # Set up P1 unit cell
-        p1 = self.expand_to_p1()
+        p1 = ds.expand_to_p1()
         p1 = p1.expand_anomalous()
 
         # Get data and indices
