@@ -3,7 +3,7 @@ import numpy as np
 import pandas as pd
 from pandas.api.types import is_complex_dtype
 
-from reciprocalspaceship import concat, dtypes, utils
+from reciprocalspaceship import concat, dtypes
 from reciprocalspaceship.dataseries import DataSeries
 from reciprocalspaceship.decorators import (
     cellify,
@@ -18,6 +18,7 @@ from reciprocalspaceship.utils import (
     canonicalize_phases,
     compute_structurefactor_multiplicity,
     from_structurefactor,
+    get_reciprocal_grid_size,
     hkl_to_asu,
     hkl_to_observed,
     in_asu,
