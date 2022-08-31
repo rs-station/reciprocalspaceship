@@ -26,9 +26,10 @@ def test_get_reciprocal_grid_size(mtz_by_spacegroup, sample_rate, dmin):
             dataset.cell, dmin=dmin, sample_rate=sample_rate
         )
 
-        # shape of output
+        # shape and type of output
         assert isinstance(result, list)
         assert len(result) == 3
+        assert all([isinstance(i, int) for i in result])
 
         # real-space grid spacing must be higher resolution than dmin/sample_rate
         abc = np.array(dataset.cell.parameters[:3])
