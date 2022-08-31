@@ -6,7 +6,7 @@ from reciprocalspaceship.decorators import cellify, spacegroupify
 
 @cellify
 @spacegroupify
-def get_gridsize(cell, dmin, sample_rate=3.0, spacegroup=None):
+def get_reciprocal_grid_size(cell, dmin, sample_rate=3.0, spacegroup=None):
     """
     Determine an appropriate 3D grid size for the provided cell and spacegroup
     to represent data with the given `sample_rate` and `dmin`.

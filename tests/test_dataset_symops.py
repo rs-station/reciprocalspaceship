@@ -211,8 +211,8 @@ def test_apply_symop_mapshift(data_fmodel_P1, op, use_complex):
     corresponding to a map that was shifted in real space
     """
     ds = data_fmodel_P1.copy()
-    gridsize = (48, 48, 48)
-    tran = (np.array(gridsize) * np.array(op.tran) / op.DEN).astype(int)
+    grid_size = (48, 48, 48)
+    tran = (np.array(grid_size) * np.array(op.tran) / op.DEN).astype(int)
 
     # Apply symop
     if use_complex:
@@ -225,8 +225,8 @@ def test_apply_symop_mapshift(data_fmodel_P1, op, use_complex):
 
     # Compute and shift map
     ds["sf"] = ds.to_structurefactor("FMODEL", "PHIFMODEL")
-    reciprocalgrid = ds.to_reciprocalgrid("sf", gridsize=gridsize)
-    realmap = np.real(np.fft.fftn(reciprocalgrid))
+    reciprocal_grid = ds.to_reciprocal_grid("sf", grid_size=grid_size)
+    realmap = np.real(np.fft.fftn(reciprocal_grid))
     shiftedmap = np.roll(realmap, tran, axis=(0, 1, 2))
     back = np.fft.ifftn(shiftedmap)
     H = ds.get_hkls()

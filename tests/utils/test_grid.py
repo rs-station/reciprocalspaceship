@@ -6,9 +6,9 @@ import reciprocalspaceship as rs
 
 @pytest.mark.parametrize("sample_rate", [0.5, 1.0, 2.5, 3.0, 5.7])
 @pytest.mark.parametrize("dmin", [10.0, 7.0, 5.0, 3.0, 2.0, None])
-def test_get_gridsize(mtz_by_spacegroup, sample_rate, dmin):
+def test_get_reciprocal_grid_size(mtz_by_spacegroup, sample_rate, dmin):
     """
-    Test rs.utils.get_gridsize() with fmodel data
+    Test rs.utils.get_reciprocal_grid_size() with fmodel data
     """
     dataset = rs.read_mtz(mtz_by_spacegroup)
 
@@ -17,10 +17,14 @@ def test_get_gridsize(mtz_by_spacegroup, sample_rate, dmin):
 
     if sample_rate < 1.0:
         with pytest.raises(ValueError):
-            rs.utils.get_gridsize(dataset.cell, dmin=dmin, sample_rate=sample_rate)
+            rs.utils.get_reciprocal_grid_size(
+                dataset.cell, dmin=dmin, sample_rate=sample_rate
+            )
 
     else:
-        result = rs.utils.get_gridsize(dataset.cell, dmin=dmin, sample_rate=sample_rate)
+        result = rs.utils.get_reciprocal_grid_size(
+            dataset.cell, dmin=dmin, sample_rate=sample_rate
+        )
 
         # shape of output
         assert isinstance(result, list)
@@ -33,7 +37,7 @@ def test_get_gridsize(mtz_by_spacegroup, sample_rate, dmin):
 
         # When invoked with spacegroup symmetry-constraints, the returned grid should be
         # at least as large as without those constraints
-        result_sg = rs.utils.get_gridsize(
+        result_sg = rs.utils.get_reciprocal_grid_size(
             dataset.cell,
             dmin=dmin,
             sample_rate=sample_rate,
