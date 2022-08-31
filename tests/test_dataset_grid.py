@@ -19,7 +19,7 @@ def test_to_reciprocalgrid_gemmi(mtz_by_spacegroup, sample_rate, p1, use_sf):
         dataset = rs.read_mtz(mtz_by_spacegroup)
 
     gemmimtz = dataset.to_gemmi()
-    gridsize = rs.utils.get_gridsize(dataset, sample_rate=sample_rate)
+    gridsize = dataset.get_gridsize(sample_rate=sample_rate)
 
     if use_sf:
         gemmigrid = gemmimtz.get_f_phi_on_grid("FMODEL", "PHIFMODEL", size=gridsize)
@@ -41,14 +41,14 @@ def test_to_reciprocalgrid_gemmi(mtz_by_spacegroup, sample_rate, p1, use_sf):
 def test_to_reciprocalgrid_p1(mtz_by_spacegroup, sample_rate, column):
     """
     DataSet.to_reciprocalgrid() should yield the same reciprocal grid if
-    invoked with current spacegroup or the P1-ified version.
+    invoked with current spacegroup or the P1 version.
     """
     dataset = rs.read_mtz(mtz_by_spacegroup)
     dataset["sf"] = dataset.to_structurefactor("FMODEL", "PHIFMODEL")
     p1 = rs.read_mtz(mtz_by_spacegroup[:-4] + "_p1.mtz")
     p1["sf"] = p1.to_structurefactor("FMODEL", "PHIFMODEL")
 
-    gridsize = rs.utils.get_gridsize(dataset, sample_rate=sample_rate)
+    gridsize = dataset.get_gridsize(sample_rate=sample_rate)
 
     result1 = dataset.to_reciprocalgrid(column, gridsize=gridsize)
     result2 = p1.to_reciprocalgrid(column, gridsize=gridsize)
@@ -69,7 +69,7 @@ def test_to_reciprocalgrid_sizes(mtz_by_spacegroup, sample_rate, dmin, gridsize)
     )
 
     if gridsize is None:
-        expected = rs.utils.get_gridsize(dataset, sample_rate=sample_rate, dmin=dmin)
+        expected = dataset.get_gridsize(dmin=dmin, sample_rate=sample_rate)
         assert reciprocalgrid.shape == tuple(expected)
     else:
         assert reciprocalgrid.shape == tuple(gridsize)

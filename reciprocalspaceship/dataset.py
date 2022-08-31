@@ -3,7 +3,7 @@ import numpy as np
 import pandas as pd
 from pandas.api.types import is_complex_dtype
 
-from reciprocalspaceship import concat, dtypes
+from reciprocalspaceship import concat, dtypes, utils
 from reciprocalspaceship.dataseries import DataSeries
 from reciprocalspaceship.decorators import (
     cellify,
@@ -18,7 +18,6 @@ from reciprocalspaceship.utils import (
     canonicalize_phases,
     compute_structurefactor_multiplicity,
     from_structurefactor,
-    get_gridsize,
     hkl_to_asu,
     hkl_to_observed,
     in_asu,
@@ -1288,6 +1287,36 @@ class DataSet(pd.DataFrame):
 
         return self
 
+    def get_gridsize(self, dmin=None, sample_rate=3.0):
+        """
+        Determine an appropriate 3D grid size for reflection data.
+
+        Returns the smallest grid size that yields a real-space grid spacing
+        of at most `dmin`/`sample_rate` (in Å). The returned grid size will
+        be 'FFT-friendly' (2, 3, or 5 are the largest prime factors), and will
+        obey any symmetry constraints of the spacegroup.
+
+        Parameters
+        ----------
+        dmin : float
+            Highest-resolution reflection to consider for grid size
+        sample_rate : float
+            Sets the minimal grid spacing relative to dmin. For example,
+            `sample_rate=3` corresponds to a real-space sampling of dmin/3.
+            Value must be >= 1.0 (default: 3.0)
+
+        Returns
+        -------
+        list(int, int, int)
+            Grid size with desired spacing (list of 3 integers)
+        """
+        if dmin is None:
+            dmin = self.compute_dHKL().dHKL.min()
+
+        return utils.get_gridsize(
+            self.cell, dmin=dmin, sample_rate=sample_rate, spacegroup=self.spacegroup
+        )
+
     def to_reciprocalgrid(self, key, sample_rate=3.0, dmin=None, gridsize=None):
         """
         Set up reciprocal grid with values from column, ``key``, indexed by
@@ -1325,9 +1354,13 @@ class DataSet(pd.DataFrame):
         -------
         numpy.ndarray
         """
-        ds = self.loc[:, [key]]
+        if dmin is not None:
+            ds = self.loc[self.compute_dHKL().dHKL >= dmin, [key]]
+        else:
+            ds = self.loc[:, [key]]
+
         if gridsize is None:
-            gridsize = get_gridsize(ds, sample_rate=sample_rate, dmin=dmin)
+            gridsize = self.get_gridsize(dmin=dmin, sample_rate=sample_rate)
 
         # Set up P1 unit cell
         p1 = ds.expand_to_p1()
