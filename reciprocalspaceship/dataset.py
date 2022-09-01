@@ -1314,7 +1314,7 @@ class DataSet(pd.DataFrame):
         if dmin is None:
             dmin = self.compute_dHKL().dHKL.min()
 
-        return utils.get_reciprocal_grid_size(
+        return get_reciprocal_grid_size(
             self.cell, dmin=dmin, sample_rate=sample_rate, spacegroup=self.spacegroup
         )
 
