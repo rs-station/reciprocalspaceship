@@ -63,6 +63,7 @@
        ~DataSet.get_hkls
        ~DataSet.get_m_isym_keys
        ~DataSet.get_phase_keys
+       ~DataSet.get_reciprocal_grid_size
        ~DataSet.hkl_to_asu
        ~DataSet.hkl_to_observed
        ~DataSet.infer_mtz_dtypes
@@ -78,6 +79,7 @@
        ~DataSet.stack_anomalous
        ~DataSet.to_gemmi
        ~DataSet.to_pickle
+       ~DataSet.to_reciprocal_grid
        ~DataSet.to_reciprocalgrid
        ~DataSet.to_structurefactor
        ~DataSet.unstack_anomalous

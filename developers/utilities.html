@@ -159,31 +159,34 @@ interface decisions related to <code class="docutils literal notranslate"><span 
 <tr class="row-odd"><td><p><a class="reference internal" href="#reciprocalspaceship.utils.get_phase_restrictions" title="reciprocalspaceship.utils.get_phase_restrictions"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_phase_restrictions</span></code></a>(H, spacegroup)</p></td>
 <td><p>Return phase restrictions for Miller indices in a given space group.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#reciprocalspaceship.utils.hkl_to_asu" title="reciprocalspaceship.utils.hkl_to_asu"><code class="xref py py-obj docutils literal notranslate"><span class="pre">hkl_to_asu</span></code></a>(H, spacegroup[, return_phase_shifts])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#reciprocalspaceship.utils.get_reciprocal_grid_size" title="reciprocalspaceship.utils.get_reciprocal_grid_size"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_reciprocal_grid_size</span></code></a>(cell, dmin[, ...])</p></td>
+<td><p>Determine an appropriate 3D grid size for the provided cell and spacegroup to represent data with the given <cite>sample_rate</cite> and <cite>dmin</cite>.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#reciprocalspaceship.utils.hkl_to_asu" title="reciprocalspaceship.utils.hkl_to_asu"><code class="xref py py-obj docutils literal notranslate"><span class="pre">hkl_to_asu</span></code></a>(H, spacegroup[, return_phase_shifts])</p></td>
 <td><p>Map hkls to the asymmetric unit and optionally return shifts for the associated phases.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#reciprocalspaceship.utils.hkl_to_observed" title="reciprocalspaceship.utils.hkl_to_observed"><code class="xref py py-obj docutils literal notranslate"><span class="pre">hkl_to_observed</span></code></a>(H, isym, sg[, ...])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#reciprocalspaceship.utils.hkl_to_observed" title="reciprocalspaceship.utils.hkl_to_observed"><code class="xref py py-obj docutils literal notranslate"><span class="pre">hkl_to_observed</span></code></a>(H, isym, sg[, ...])</p></td>
 <td><p>Apply symmetry operations to move miller indices in the reciprocal asymmetric unit to their originally observed locations.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#reciprocalspaceship.utils.in_asu" title="reciprocalspaceship.utils.in_asu"><code class="xref py py-obj docutils literal notranslate"><span class="pre">in_asu</span></code></a>(H, spacegroup)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#reciprocalspaceship.utils.in_asu" title="reciprocalspaceship.utils.in_asu"><code class="xref py py-obj docutils literal notranslate"><span class="pre">in_asu</span></code></a>(H, spacegroup)</p></td>
 <td><p>Check to see if Miller indices are in the asymmetric unit of a space group.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#reciprocalspaceship.utils.is_absent" title="reciprocalspaceship.utils.is_absent"><code class="xref py py-obj docutils literal notranslate"><span class="pre">is_absent</span></code></a>(H, spacegroup)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#reciprocalspaceship.utils.is_absent" title="reciprocalspaceship.utils.is_absent"><code class="xref py py-obj docutils literal notranslate"><span class="pre">is_absent</span></code></a>(H, spacegroup)</p></td>
 <td><p>Determine if Miller indices are systematically absent in a given spacegroup.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#reciprocalspaceship.utils.is_centric" title="reciprocalspaceship.utils.is_centric"><code class="xref py py-obj docutils literal notranslate"><span class="pre">is_centric</span></code></a>(H, spacegroup)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#reciprocalspaceship.utils.is_centric" title="reciprocalspaceship.utils.is_centric"><code class="xref py py-obj docutils literal notranslate"><span class="pre">is_centric</span></code></a>(H, spacegroup)</p></td>
 <td><p>Determine if Miller indices are centric in a given spacegroup</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#reciprocalspaceship.utils.is_polar" title="reciprocalspaceship.utils.is_polar"><code class="xref py py-obj docutils literal notranslate"><span class="pre">is_polar</span></code></a>(spacegroup)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#reciprocalspaceship.utils.is_polar" title="reciprocalspaceship.utils.is_polar"><code class="xref py py-obj docutils literal notranslate"><span class="pre">is_polar</span></code></a>(spacegroup)</p></td>
 <td><p>Classify whether spacegroup is polar</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#reciprocalspaceship.utils.phase_shift" title="reciprocalspaceship.utils.phase_shift"><code class="xref py py-obj docutils literal notranslate"><span class="pre">phase_shift</span></code></a>(H, op)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#reciprocalspaceship.utils.phase_shift" title="reciprocalspaceship.utils.phase_shift"><code class="xref py py-obj docutils literal notranslate"><span class="pre">phase_shift</span></code></a>(H, op)</p></td>
 <td><p>Calculate phase shift for symmetry operator.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#reciprocalspaceship.utils.polar_axes" title="reciprocalspaceship.utils.polar_axes"><code class="xref py py-obj docutils literal notranslate"><span class="pre">polar_axes</span></code></a>(spacegroup)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#reciprocalspaceship.utils.polar_axes" title="reciprocalspaceship.utils.polar_axes"><code class="xref py py-obj docutils literal notranslate"><span class="pre">polar_axes</span></code></a>(spacegroup)</p></td>
 <td><p>Classify which cell axes are polar in given spacegroup</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#reciprocalspaceship.utils.to_structurefactor" title="reciprocalspaceship.utils.to_structurefactor"><code class="xref py py-obj docutils literal notranslate"><span class="pre">to_structurefactor</span></code></a>(sfamps, phases)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#reciprocalspaceship.utils.to_structurefactor" title="reciprocalspaceship.utils.to_structurefactor"><code class="xref py py-obj docutils literal notranslate"><span class="pre">to_structurefactor</span></code></a>(sfamps, phases)</p></td>
 <td><p>Convert structure factor amplitude and phase to complex structure factors</p></td>
 </tr>
 </tbody>
@@ -405,6 +408,36 @@ empty list is also returned.</p>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p><strong>restrictions</strong> (<em>list of lists</em>) – List of lists of phase restrictions for each Miller index. An empty
 list is returned for Miller indices without phase restrictions</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="reciprocalspaceship.utils.get_reciprocal_grid_size">
+<span class="sig-prename descclassname"><span class="pre">reciprocalspaceship.utils.</span></span><span class="sig-name descname"><span class="pre">get_reciprocal_grid_size</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cell</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dmin</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sample_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">3.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">spacegroup</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/Hekstra-Lab/reciprocalspaceship/blob/main/reciprocalspaceship/utils/grid.py#L7-L55"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#reciprocalspaceship.utils.get_reciprocal_grid_size" title="Permalink to this definition"></a></dt>
+<dd><p>Determine an appropriate 3D grid size for the provided cell and spacegroup
+to represent data with the given <cite>sample_rate</cite> and <cite>dmin</cite>.</p>
+<p>This function will return the smallest grid that yields a real-space grid
+spacing of at most <cite>dmin</cite>/<cite>sample_rate</cite> (in Å) that is ‘FFT-friendly’,
+meaning that each dimension has 2, 3, or 5 as the largest prime factors.
+The grid will also obey any symmetry relations for the spacegroup.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>cell</strong> (<em>tuple, list, np.ndarray of cell parameters, or gemmi.UnitCell</em>) – Unit cell parameters</p></li>
+<li><p><strong>dmin</strong> (<em>float</em>) – Highest-resolution reflection to consider for grid size</p></li>
+<li><p><strong>sample_rate</strong> (<em>float</em>) – Sets the minimal grid spacing relative to dmin. For example,
+<cite>sample_rate=3</cite> corresponds to a real-space sampling of dmin/3.
+Value must be &gt;= 1.0 (default: 3.0)</p></li>
+<li><p><strong>spacegroup</strong> (<em>int, str, gemmi.SpaceGroup, or None</em>) – Spacegroup for imposing symmetry constraints on grid dimensions.
+(default: None)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><em>list(int, int, int)</em> – Grid size with desired spacing (list of 3 integers)</p>
+</dd>
+<dt class="field-odd">Raises</dt>
+<dd class="field-odd"><p><strong>ValueError</strong> – If sample_rate &lt; 1.0</p>
 </dd>
 </dl>
 </dd></dl>
