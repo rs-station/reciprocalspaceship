@@ -18,6 +18,7 @@ from reciprocalspaceship.utils import (
     canonicalize_phases,
     compute_structurefactor_multiplicity,
     from_structurefactor,
+    get_reciprocal_grid_size,
     hkl_to_asu,
     hkl_to_observed,
     in_asu,
@@ -1287,31 +1288,162 @@ class DataSet(pd.DataFrame):
 
         return self
 
-    def to_reciprocalgrid(self, key, gridsize):
+    def get_reciprocal_grid_size(self, dmin=None, sample_rate=3.0):
+        """
+        Determine an appropriate 3D grid size for reflection data.
+
+        Returns the smallest grid size that yields a real-space grid spacing
+        of at most `dmin`/`sample_rate` (in Å). The returned grid size will
+        be 'FFT-friendly' (2, 3, or 5 are the largest prime factors), and will
+        obey any symmetry constraints of the spacegroup.
+
+        Parameters
+        ----------
+        dmin : float
+            Highest-resolution reflection to consider for grid size
+        sample_rate : float
+            Sets the minimal grid spacing relative to dmin. For example,
+            `sample_rate=3` corresponds to a real-space sampling of dmin/3.
+            Value must be >= 1.0 (default: 3.0)
+
+        Returns
+        -------
+        list(int, int, int)
+            Grid size with desired spacing (list of 3 integers)
+        """
+        if dmin is None:
+            dmin = self.compute_dHKL().dHKL.min()
+
+        return get_reciprocal_grid_size(
+            self.cell, dmin=dmin, sample_rate=sample_rate, spacegroup=self.spacegroup
+        )
+
+    def to_reciprocal_grid(self, key, sample_rate=3.0, dmin=None, grid_size=None):
         """
         Set up reciprocal grid with values from column, ``key``, indexed by
-        Miller indices. A 3D numpy array will be initialized with the
-        specified gridsize. Any missing Miller indices are initialized to
-        zero.
+        Miller indices.
 
         Notes
         -----
         - The data being arranged on a reciprocal grid must be compatible
           with a numpy datatype.
+        - Any missing Miller indices are initialized to zero.
+        - If explicitly provided, `grid_size` supersedes `dmin` and `sample_rate`
+          for grid size determination.
+        - The grid size determined using `sample_rate` and `dmin` will depend
+          on the cell parameters of the dataset. If the grid size must be
+          consistent across different isomorphous cell parameters, `grid_size`
+          can be explicitly provided.
 
         Parameters
         ----------
         key : str
             Column label for value to arrange on reciprocal grid
-        gridsize : array-like (len==3)
-            Dimensions for 3D reciprocal grid.
+        sample_rate : float
+            Sets the minimal grid spacing relative to dmin. For example,
+            `sample_rate=3` corresponds to a real-space sampling of dmin/3.
+            (default: 3.0)
+        dmin : float
+            Highest-resolution reflection to consider for grid size. If None,
+            `dmin` will be set to the highest resolution reflection in the
+            dataset. The reflections used to populate the grid will also
+            be truncated to `dHKL >= dmin` (default: None)
+        grid_size : array-like (len==3)
+            If given, provides the explicit dimensions for 3D reciprocal
+            grid. If None, grid size will be set based on `sample_rate` and
+            `dmin`. If provided, this grid size will be used regardless of
+            the values provided as `sample_rate` and `dmin`
 
         Returns
         -------
         numpy.ndarray
         """
+        if dmin is not None:
+            ds = self.loc[self.compute_dHKL().dHKL >= dmin, [key]]
+        else:
+            ds = self.loc[:, [key]]
+
+        if grid_size is None:
+            grid_size = self.get_reciprocal_grid_size(
+                dmin=dmin, sample_rate=sample_rate
+            )
+
         # Set up P1 unit cell
-        p1 = self.expand_to_p1()
+        p1 = ds.expand_to_p1()
+        p1 = p1.expand_anomalous()
+
+        # Get data and indices
+        data = p1[key].to_numpy()
+        H = p1.get_hkls()
+
+        # Populate grid
+        grid = np.zeros(grid_size, dtype=data.dtype)
+        grid[H[:, 0], H[:, 1], H[:, 2]] = data
+
+        return grid
+
+    def to_reciprocalgrid(self, key, sample_rate=3.0, dmin=None, gridsize=None):
+        """
+        Deprecated: Set up reciprocal grid with values from column, ``key``, indexed by
+        Miller indices.
+
+        .. warning:: This function is deprecated. Use ``to_reciprocal_grid()`` instead.
+
+        Notes
+        -----
+        - The data being arranged on a reciprocal grid must be compatible
+          with a numpy datatype.
+        - Any missing Miller indices are initialized to zero.
+        - If explicitly provided, `gridsize` supersedes `dmin` and `sample_rate`
+          for grid size determination.
+        - The grid size determined using `sample_rate` and `dmin` will depend
+          on the cell parameters of the dataset. If the grid size must be
+          consistent across different isomorphous cell parameters, `gridsize`
+          can be explicitly provided.
+
+        Parameters
+        ----------
+        key : str
+            Column label for value to arrange on reciprocal grid
+        sample_rate : float
+            Sets the minimal grid spacing relative to dmin. For example,
+            `sample_rate=3` corresponds to a real-space sampling of dmin/3.
+            (default: 3.0)
+        dmin : float
+            Highest-resolution reflection to consider for grid size. If None,
+            `dmin` will be set to the highest resolution reflection in the
+            dataset. The reflections used to populate the grid will also
+            be truncated to `dHKL >= dmin` (default: None)
+        gridsize : array-like (len==3)
+            If given, provides the explicit dimensions for 3D reciprocal
+            grid. If None, grid size will be set based on `sample_rate` and
+            `dmin`. If provided, this grid size will be used regardless of
+            the values provided as `sample_rate` and `dmin`
+
+        Returns
+        -------
+        numpy.ndarray
+        """
+        import warnings
+
+        message = (
+            "DataSet.to_reciprocalgrid(key, gridsize=...) has been renamed to "
+            "DataSet.to_reciprocal_grid(key... grid_size=None).\n"
+            "DataSet.to_reciprocalgrid() will be removed in a future release."
+        )
+        warnings.simplefilter("always")
+        warnings.warn(message, DeprecationWarning)
+
+        if dmin is not None:
+            ds = self.loc[self.compute_dHKL().dHKL >= dmin, [key]]
+        else:
+            ds = self.loc[:, [key]]
+
+        if gridsize is None:
+            gridsize = self.get_reciprocal_grid_size(dmin=dmin, sample_rate=sample_rate)
+
+        # Set up P1 unit cell
+        p1 = ds.expand_to_p1()
         p1 = p1.expand_anomalous()
 
         # Get data and indices
