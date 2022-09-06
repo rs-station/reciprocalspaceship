@@ -297,12 +297,14 @@ class DataSet(pd.DataFrame):
         """
         Convert the DataSet to a NumPy array.
 
-        By default, the returned array will be `float32` if all columns of the DataSet are
-        MTZ dtypes. If the DataSet is composed of only `int32`-backed MTZ dtypes and does
-        not contain any NaN values, an `int32` array by `int32` and does not contain NaN
-        values, this will be `int32`. If the DataSet contains only MTZ dtypes (but not all
-        `int32`-backed or contains NaNs) the returned array will be `float32`. Otherwise,
-        the default Pandas behavior will be used.
+        This method will attempt to infer a consensus numpy dtype from the dtypes
+        of the DataSet columns. If the DataSet is composed of all `int32`-backed
+        MTZ dtypes and does contain NaN values, the returned `dtype` will be `int32`.
+        For all other combinations of `MTZDtype`, the returned dtype will be `float32`.
+        If the DataSet contains dtypes other than `MTZDtype`, the default Pandas
+        behavior is used (see `Pandas documentation`_).
+
+        .. _Pandas documentation: https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.to_numpy.html
 
         Parameters
         ----------
