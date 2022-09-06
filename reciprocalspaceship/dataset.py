@@ -1,5 +1,3 @@
-from inspect import signature
-
 import gemmi
 import numpy as np
 import pandas as pd
