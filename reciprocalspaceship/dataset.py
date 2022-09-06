@@ -299,15 +299,15 @@ class DataSet(pd.DataFrame):
 
         By default, the returned array will be `float32` if all columns of the DataSet are
         MTZ dtypes. If the DataSet is composed of only `int32`-backed MTZ dtypes and does
-        not contain any NaN values, an `int32` array
-        by `int32` and does not contain NaN values, this will be `int32`. If the DataSet
-        contains only MTZ dtypes (but not all int32-backed or contains NaNs) the returned
-        array will be `float32`. Otherwise, the default Pandas behavior will be used.
+        not contain any NaN values, an `int32` array by `int32` and does not contain NaN
+        values, this will be `int32`. If the DataSet contains only MTZ dtypes (but not all
+        `int32`-backed or contains NaNs) the returned array will be `float32`. Otherwise,
+        the default Pandas behavior will be used.
 
         Parameters
         ----------
         dtype : str or np.dtype
-            The dtype to pass to `np.asarray()` (optional)
+            The dtype to pass to `np.asarray()`
         copy : bool
             Whether to ensure that the returned value is not a view on another array.
             Note that `copy=False` does not ensure that `to_numpy()` is no-copy. Rather,
