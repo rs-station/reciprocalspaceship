@@ -7,16 +7,17 @@ import reciprocalspaceship as rs
 
 @pytest.mark.parametrize("dtype", [None, np.int32, np.float32, np.float64, object])
 @pytest.mark.parametrize("hasna", [True, False])
-def test_to_numpy_ints(dtype, hasna):
+def test_to_numpy_mtzints(dtype, hasna):
     """
-    Test DataSet.to_numpy() with int32-backed MTZDtypes
+    Test DataSet.to_numpy() with only int32-backed MTZDtypes
     """
     ds = rs.DataSet(
         {
             "X": np.random.randint(0, 100, size=100),
             "Y": np.random.randint(0, 100, size=100),
-        }
-    ).infer_mtz_dtypes()
+        },
+        dtype="MTZInt",
+    )
 
     if hasna:
         ds.loc[0, "X"] = np.nan
@@ -41,16 +42,17 @@ def test_to_numpy_ints(dtype, hasna):
 
 @pytest.mark.parametrize("dtype", [None, np.float32, np.float64, object])
 @pytest.mark.parametrize("hasna", [True, False])
-def test_to_numpy_floats(dtype, hasna):
+def test_to_numpy_mtzfloats(dtype, hasna):
     """
-    Test DataSet.to_numpy() with float32-backed MTZDtypes
+    Test DataSet.to_numpy() with only float32-backed MTZDtypes
     """
     ds = rs.DataSet(
         {
             "X": np.random.random(100),
             "Y": np.random.random(100),
-        }
-    ).infer_mtz_dtypes()
+        },
+        dtype="MTZReal",
+    )
 
     if hasna:
         ds.loc[0, "X"] = np.nan
@@ -66,7 +68,7 @@ def test_to_numpy_floats(dtype, hasna):
 
 @pytest.mark.parametrize("dtype", [None, np.float32, np.float64, object])
 @pytest.mark.parametrize("hasna", [True, False])
-def test_to_numpy_mtzdtypes(dtype, hasna):
+def test_to_numpy_mixed_mtzdtypes(dtype, hasna):
     """
     Test DataSet.to_numpy() with both int32-backed and float-32-backed MTZDtypes
     """
@@ -74,8 +76,10 @@ def test_to_numpy_mtzdtypes(dtype, hasna):
         {
             "X": np.random.random(100),
             "Y": np.random.randint(100),
-        }
-    ).infer_mtz_dtypes()
+        },
+    )
+    ds["X"] = ds["X"].astype("MTZReal")
+    ds["Y"] = ds["Y"].astype("MTZInt")
 
     if hasna:
         ds.loc[0, "X"] = np.nan
@@ -90,7 +94,7 @@ def test_to_numpy_mtzdtypes(dtype, hasna):
 
 
 @pytest.mark.parametrize("non_mtzdtype", ["string", np.int32, np.float32, bool, object])
-def test_to_numpy_object(non_mtzdtype):
+def test_to_numpy_non_mtzdtype(non_mtzdtype):
     """
     With a non-MTZDtype, DataSet.to_numpy() should always output the same thing as
     pandas.DataFrame.to_numpy(). Currently, that is "object".
@@ -99,8 +103,11 @@ def test_to_numpy_object(non_mtzdtype):
         {
             "X": np.random.random(100),
             "Y": np.random.randint(100),
-        }
-    ).infer_mtz_dtypes()
+        },
+    )
+    ds["X"] = ds["X"].astype("MTZReal")
+    ds["Y"] = ds["Y"].astype("MTZInt")
+
     ds["non_mtz"] = 0
     ds["non_mtz"] = ds["non_mtz"].astype(non_mtzdtype)
 
