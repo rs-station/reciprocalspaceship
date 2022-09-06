@@ -325,8 +325,7 @@ class DataSet(pd.DataFrame):
             dtype_list = [self.dtypes[k] for k in self]
 
             # If all dtypes are MTZInt32Dtype, we can coerce to either int32 or float32
-            all_mtzints = all([isinstance(d, MTZInt32Dtype) for d in dtype_list])
-            if all_mtzints:
+            if all([isinstance(d, MTZInt32Dtype) for d in dtype_list]):
                 if not any([self[k].hasnans for k in self]):
                     return super().to_numpy(dtype="int32", copy=copy, na_value=na_value)
                 else:
@@ -335,8 +334,7 @@ class DataSet(pd.DataFrame):
                     )
 
             # All MTZDtypes can be represented as float32
-            all_mtzdtypes = all([isinstance(d, MTZDtype) for d in dtype_list])
-            if all_mtzdtypes:
+            if all([isinstance(d, MTZDtype) for d in dtype_list]):
                 return super().to_numpy(dtype="float32", copy=copy, na_value=na_value)
 
         # Use Pandas default behavior
