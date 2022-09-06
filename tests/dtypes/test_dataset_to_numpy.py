@@ -93,7 +93,7 @@ def test_to_numpy_mtzdtypes(dtype, hasna):
 def test_to_numpy_object(non_mtzdtype):
     """
     With a non-MTZDtype, DataSet.to_numpy() should always output the same thing as
-    an pandas.DataFrame.to_numpy(). Currently, that is "object".
+    pandas.DataFrame.to_numpy(). Currently, that is "object".
     """
     ds = rs.DataSet(
         {
