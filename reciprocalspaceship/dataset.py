@@ -1,6 +1,7 @@
 import gemmi
 import numpy as np
 import pandas as pd
+from pandas._libs import lib
 from pandas.api.types import is_complex_dtype
 
 from reciprocalspaceship import concat, dtypes
@@ -11,7 +12,7 @@ from reciprocalspaceship.decorators import (
     range_indexed,
     spacegroupify,
 )
-from reciprocalspaceship.dtypes.base import MTZDtype
+from reciprocalspaceship.dtypes.base import MTZDtype, MTZInt32Dtype
 from reciprocalspaceship.utils import (
     apply_to_hkl,
     bin_by_percentile,
@@ -291,6 +292,55 @@ class DataSet(pd.DataFrame):
             dataset._index_dtypes = dataset._index_dtypes.copy()
             dataset = _handle_cached_dtypes(dataset, columns, drop)
             return dataset
+
+    def to_numpy(self, dtype=None, copy=False, na_value=lib.no_default):
+        """
+        Convert the DataSet to a NumPy array.
+
+        This method will attempt to infer a consensus numpy dtype from the dtypes
+        of the DataSet columns. If the DataSet is composed of all `int32`-backed
+        MTZ dtypes and does contain NaN values, the returned `dtype` will be `int32`.
+        For all other combinations of `MTZDtype`, the returned dtype will be `float32`.
+        If the DataSet contains dtypes other than `MTZDtype`, the default Pandas
+        behavior is used (see `Pandas documentation`_).
+
+        .. _Pandas documentation: https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.to_numpy.html
+
+        Parameters
+        ----------
+        dtype : str or np.dtype
+            The dtype to pass to `np.asarray()`
+        copy : bool
+            Whether to ensure that the returned value is not a view on another array.
+            Note that `copy=False` does not ensure that `to_numpy()` is no-copy. Rather,
+            `copy=True` ensure that a copy is made, even if not strictly necessary.
+            (default: False)
+        na_value : Any
+            The value to use for missing values. The default value depends on `dtype` and
+            the dtypes of the DataSet columns.
+
+        Returns
+        -------
+        np.ndarray
+        """
+        if dtype is None:
+            dtype_list = [self.dtypes[k] for k in self]
+
+            # If all dtypes are MTZInt32Dtype, we can coerce to either int32 or float32
+            if all([isinstance(d, MTZInt32Dtype) for d in dtype_list]):
+                if not any([self[k].hasnans for k in self]):
+                    return super().to_numpy(dtype="int32", copy=copy, na_value=na_value)
+                else:
+                    return super().to_numpy(
+                        dtype="float32", copy=copy, na_value=na_value
+                    )
+
+            # All MTZDtypes can be represented as float32
+            if all([isinstance(d, MTZDtype) for d in dtype_list]):
+                return super().to_numpy(dtype="float32", copy=copy, na_value=na_value)
+
+        # Use Pandas default behavior
+        return super().to_numpy(dtype=dtype, copy=copy, na_value=na_value)
 
     @classmethod
     def from_gemmi(cls, gemmiMtz):
