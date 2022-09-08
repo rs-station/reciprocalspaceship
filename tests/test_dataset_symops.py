@@ -233,3 +233,62 @@ def test_apply_symop_mapshift(data_fmodel_P1, op, use_complex):
     ds["expected"] = back[H[:, 0], H[:, 1], H[:, 2]]
 
     assert np.allclose(result["result"], ds["expected"])
+
+
+def test_reindexing_ops(mtz_by_spacegroup):
+    """
+    Test DataSet.reindexing_ops against properties of merohedral twin laws
+    and gemmi output
+    """
+    ds = rs.read_mtz(mtz_by_spacegroup)
+    result = ds.reindexing_ops
+
+    # No merohedral twin laws for triclinic, monoclinic, nor orthorhombic (<75)
+    if ds.spacegroup.number < 75:
+        assert result == []
+
+    # All reindexing ops should have rotation matrix with determinant of +1
+    # (shouldn't change handedness of coordinate system). In gemmi, determinant
+    # will be 13824 due to `DEN==24`.
+    for op in result:
+        assert op.det_rot() == 13824
+
+    # Compare to gemmi output
+    expected = gemmi.find_twin_laws(
+        ds.cell, ds.spacegroup, max_obliq=1e-6, all_ops=False
+    )
+    assert result == expected
+
+
+@pytest.mark.parametrize("max_obliq", [1e-6, 1.0, 2.0, 5.0])
+@pytest.mark.parametrize("use_p1", [True, False])
+def test_find_twin_laws(mtz_by_spacegroup, max_obliq, use_p1):
+    """
+    Test DataSet.find_twin_laws() against gemmi output in current spacegroup and
+    in reduced-symmetry, P1 case.
+    """
+    ds = rs.read_mtz(mtz_by_spacegroup)
+    if use_p1:
+        ds.spacegroup = "P 1"
+
+    result = ds.find_twin_laws(max_obliq=max_obliq, all_ops=False)
+    result_all_ops = ds.find_twin_laws(max_obliq=max_obliq, all_ops=True)
+
+    # `all_ops=True` should have at least as many ops `all_ops=False`
+    assert len(result_all_ops) >= len(result)
+
+    # All reindexing ops should have rotation matrix with determinant of +1
+    # (shouldn't change handedness of coordinate system). In gemmi, determinant
+    # will be 13824 due to `DEN==24`.
+    for op in result + result_all_ops:
+        assert op.det_rot() == 13824
+
+    # Compare to gemmi output
+    expected = gemmi.find_twin_laws(
+        ds.cell, ds.spacegroup, max_obliq=max_obliq, all_ops=False
+    )
+    expected_all_ops = gemmi.find_twin_laws(
+        ds.cell, ds.spacegroup, max_obliq=max_obliq, all_ops=True
+    )
+    assert result == expected
+    assert result_all_ops == expected_all_ops

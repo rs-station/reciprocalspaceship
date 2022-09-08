@@ -143,8 +143,45 @@ class DataSet(pd.DataFrame):
             return self.loc[~self.CENTRIC]
         return self.loc[~self.label_centrics().CENTRIC]
 
+    @property
+    def reindexing_ops(self):
+        """Possible reindexing operations (merohedral twin laws) for DataSet"""
+        return gemmi.find_twin_laws(
+            self.cell, self.spacegroup, max_obliq=1e-6, all_ops=False
+        )
+
     # -------------------------------------------------------------------
     # Methods
+
+    def find_twin_laws(self, max_obliq=1.0, all_ops=False):
+        """
+        Find merohedral and pseudo-merohedral twin laws for cell and spacegroup of
+        DataSet given an obliquity threshold (degrees).
+
+        Notes
+        -----
+        - With `max_obliq=1e-6` and `all_ops=False`, this method returns the same operators
+          as `DataSet.reindexing_ops`
+        - For additional information, see the `GEMMI symmetry page`_.
+
+        .. _GEMMI symmetry page: https://gemmi.readthedocs.io/en/latest/symmetry.html#twinning
+
+        Parameters
+        ----------
+        max_obliq : float
+            Obliquity threshold (in degrees) as defined in Le Page, J Appl Cryst (1982).
+            (default: 1.0)
+        all_ops : bool
+            Whether to return all twin operators. If False, only non-redundant operators
+            are returned (coset representative).
+
+        Returns
+        -------
+        List of gemmi.Op
+        """
+        return gemmi.find_twin_laws(
+            self.cell, self.spacegroup, max_obliq=max_obliq, all_ops=all_ops
+        )
 
     @inplace
     def _index_from_names(self, names, inplace=False):
