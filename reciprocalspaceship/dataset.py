@@ -879,7 +879,12 @@ class DataSet(pd.DataFrame):
 
     @inplace
     def assign_resolution_bins(
-        self, bins=20, inplace=False, return_labels=True, return_edges=False
+        self,
+        bins=20,
+        inplace=False,
+        return_labels=True,
+        format_str=".2f",
+        return_edges=False,
     ):
         """
         Assign reflections in DataSet to resolution bins.
@@ -893,8 +898,11 @@ class DataSet(pd.DataFrame):
         return_labels : bool
             Whether to return a list of labels corresponding to the edges
             of each resolution bin (default: True)
+        format_str : str
+            Format string for constructing bin labels
         return_edges : bool
-            Whether to return bin edges that define the resolution bin boundaries
+            Whether to return bin edges that define the resolution bin boundaries.
+            The bin edges are returned as a 1-dimensional array with `bins + 1` entries
             (default: False)
 
         Returns
@@ -903,12 +911,16 @@ class DataSet(pd.DataFrame):
         """
         dHKL = self.compute_dHKL()["dHKL"]
 
-        assignments, labels, edges = bin_by_percentile(dHKL, bins=bins, ascending=False)
+        assignments, edges = bin_by_percentile(dHKL, bins=bins, ascending=False)
         self["bin"] = DataSeries(assignments, dtype="I", index=self.index)
 
         # Package return values
         result = [self]
         if return_labels:
+            labels = [
+                f"{e1:{format_str}} - {e2:{format_str}}"
+                for e1, e2 in zip(edges[0:-1], edges[1:])
+            ]
             result.append(labels)
         if return_edges:
             result.append(edges)

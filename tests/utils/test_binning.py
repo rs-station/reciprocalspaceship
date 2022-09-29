@@ -42,10 +42,9 @@ def test_bin_by_percentile(data, bins, ascending, shuffle):
     if shuffle:
         np.random.shuffle(data)
 
-    assignments, labels, edges = rs.utils.bin_by_percentile(data, bins, ascending)
+    assignments, edges = rs.utils.bin_by_percentile(data, bins, ascending)
 
     # Make sure number of bins is correct
-    assert len(labels) == bins
     assert len(edges) == bins + 1
     assert len(assignments) == len(data)
     assert len(np.unique(assignments)) == bins

@@ -91,7 +91,9 @@ def compute_completeness(
     if dmin:
         dataset = dataset.loc[dHKL >= dmin]
         dHKL = dHKL[dHKL > dmin]
-    assignments, labels, binedges = bin_by_percentile(dHKL, bins=bins, ascending=False)
+    assignments, binedges = bin_by_percentile(dHKL, bins=bins, ascending=False)
+
+    labels = [f"{e1:.2f} - {e2:.2f}" for e1, e2 in zip(binedges[0:-1], binedges[1:])]
 
     # Adjust high resolution bin to dmin
     if dmin:
