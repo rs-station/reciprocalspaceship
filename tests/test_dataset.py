@@ -420,15 +420,25 @@ def test_compute_multiplicity(dataset_hkl, inplace, include_centering, spacegrou
 @pytest.mark.parametrize("bins", [5, 10, 20, 50])
 @pytest.mark.parametrize("inplace", [True, False])
 @pytest.mark.parametrize("return_labels", [True, False])
-def test_assign_resolution_bins(data_fmodel, bins, inplace, return_labels):
+@pytest.mark.parametrize("return_edges", [True, False])
+def test_assign_resolution_bins(
+    data_fmodel, bins, inplace, return_labels, return_edges
+):
     """Test DataSet.assign_resolution_bins"""
 
     result = data_fmodel.assign_resolution_bins(
-        bins=bins, inplace=inplace, return_labels=return_labels
+        bins=bins,
+        inplace=inplace,
+        return_labels=return_labels,
+        return_edges=return_edges,
     )
 
-    if return_labels:
+    if return_labels and return_edges:
+        result, labels, edges = result
+    elif return_labels:
         result, labels = result
+    elif return_edges:
+        result, edges = result
 
     # Test bins
     assert "bin" in result.columns
@@ -444,6 +454,14 @@ def test_assign_resolution_bins(data_fmodel, bins, inplace, return_labels):
     # Test labels
     if return_labels:
         assert len(labels) == bins
+        assert isinstance(labels, list)
+        assert all([isinstance(l, str) for l in labels])
+
+    # Test edges
+    if return_edges:
+        assert len(edges) == bins + 1
+        assert np.all(np.diff(edges) < 0)
+        assert isinstance(edges, np.ndarray)
 
 
 @pytest.mark.parametrize("inplace", [True, False])

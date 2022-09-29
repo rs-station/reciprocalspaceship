@@ -34,7 +34,7 @@ def test_assign_with_binedges_dataoutside(data, bin_edges, right_inclusive):
         np.repeat(np.linspace(0, 100, 1000), 3),  # Simulates unmerged data
     ],
 )
-@pytest.mark.parametrize("bins", [10, 20, 50])
+@pytest.mark.parametrize("bins", [1, 10, 20, 50])
 @pytest.mark.parametrize("ascending", [True, False])
 @pytest.mark.parametrize("shuffle", [True, False])
 def test_bin_by_percentile(data, bins, ascending, shuffle):
@@ -42,14 +42,17 @@ def test_bin_by_percentile(data, bins, ascending, shuffle):
     if shuffle:
         np.random.shuffle(data)
 
-    assignments, labels = rs.utils.bin_by_percentile(data, bins, ascending)
+    assignments, labels, edges = rs.utils.bin_by_percentile(data, bins, ascending)
 
     # Make sure number of bins is correct
     assert len(labels) == bins
+    assert len(edges) == bins + 1
     assert len(assignments) == len(data)
     assert len(np.unique(assignments)) == bins
 
-    if ascending:
+    if ascending and bins > 1:
         np.all(np.diff(assignments) >= 0)
-    else:
+        np.all(np.diff(edges) > 0)
+    elif bins > 1:
         np.all(np.diff(assignments) <= 0)
+        np.all(np.diff(edges) < 0)

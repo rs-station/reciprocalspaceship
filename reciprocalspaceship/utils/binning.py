@@ -58,7 +58,10 @@ def assign_with_binedges(data, bin_edges, right_inclusive=True):
 
 
 def bin_by_percentile(
-    data, bins=20, ascending=True, return_edges=False, format_str=".2f"
+    data,
+    bins=20,
+    ascending=True,
+    format_str=".2f",
 ):
     """
     Bin data by percentile.
@@ -71,8 +74,6 @@ def bin_by_percentile(
         Number of bins
     ascending : bool
         Whether to bin data by value from low to high
-    return_edges: bool
-        Whether to return the bin edges
     format_str : str
         Format string for constructing bin labels
 
@@ -80,10 +81,10 @@ def bin_by_percentile(
     ------
     assignments : np.ndarray
         Bins to which data were assigned
-    bin_labels : list
-        Labels denoting bin edges
-    bin_edges : np.ndarray (optional)
-        If `return_edges=True`, an array with the bin edges is returned
+    bin_labels : list of str
+        labels denoting bin edges
+    bin_edges : np.ndarray
+        Array with values of bin edges
     """
     if ascending:
         order = 1
@@ -101,7 +102,4 @@ def bin_by_percentile(
         for edge1, edge2 in zip(bin_edges[0:-1], bin_edges[1:])
     ]
 
-    if return_edges:
-        return assignments, bin_labels, bin_edges
-    else:
-        return assignments, bin_labels
+    return assignments, bin_labels, bin_edges
