@@ -919,7 +919,7 @@ class DataSet(pd.DataFrame):
         if return_labels:
             labels = [
                 f"{e1:{format_str}} - {e2:{format_str}}"
-                for e1, e2 in zip(edges[0:-1], edges[1:])
+                for e1, e2 in zip(edges[:-1], edges[1:])
             ]
             result.append(labels)
         if return_edges:
