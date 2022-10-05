@@ -907,7 +907,7 @@ class DataSet(pd.DataFrame):
 
         Returns
         -------
-        (DataSet, list, ndarray) or (DataSet, list) or DataSet
+        (DataSet, list), (DataSet, ndarray), (DataSet, list, ndarray) or DataSet
         """
         dHKL = self.compute_dHKL()["dHKL"]
 
