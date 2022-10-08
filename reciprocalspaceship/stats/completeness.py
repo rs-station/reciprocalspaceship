@@ -3,7 +3,7 @@ import pandas as pd
 
 import reciprocalspaceship as rs
 from reciprocalspaceship.utils.asu import in_asu
-from reciprocalspaceship.utils.binning import assign_with_binedges, bin_by_percentile
+from reciprocalspaceship.utils.binning import assign_with_binedges
 from reciprocalspaceship.utils.stats import compute_redundancy
 
 
@@ -85,15 +85,17 @@ def compute_completeness(
         else:
             anomalous = True
 
-    # Get bin edges for resolution bins
+    # Apply resolution cutoff
     dHKL = dataset.compute_dHKL()["dHKL"]
     dmax = dHKL.max()
     if dmin:
         dataset = dataset.loc[dHKL >= dmin]
         dHKL = dHKL[dHKL > dmin]
-    assignments, binedges = bin_by_percentile(dHKL, bins=bins, ascending=False)
 
-    labels = [f"{e1:.2f} - {e2:.2f}" for e1, e2 in zip(binedges[0:-1], binedges[1:])]
+    # Assign resolution bins
+    dataset, labels, binedges = dataset.assign_resolution_bins(
+        bins=bins, return_labels=True, return_edges=True
+    )
 
     # Adjust high resolution bin to dmin
     if dmin:
