@@ -92,7 +92,7 @@ def test_binedges_order(data_fmodel, reverse):
         result = data_fmodel.assign_resolution_bins(
             edges[::-1], return_labels=False, return_edges=False
         )
-        assert all(expected["bin"] != result["bin"])
+        assert all(expected["bin"] == (1 - result["bin"]))
 
     # All assignments should be equivalent
     else:
