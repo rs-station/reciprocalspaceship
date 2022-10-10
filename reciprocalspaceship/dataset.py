@@ -890,6 +890,11 @@ class DataSet(pd.DataFrame):
         """
         Assign reflections in DataSet to resolution bins.
 
+        Notes
+        -----
+        - If bin edges are provided, any reflections outside of the specified range
+          are dropped.
+
         Parameters
         ----------
         bins : int, list, or np.ndarray
@@ -919,10 +924,15 @@ class DataSet(pd.DataFrame):
         else:
             mask = (dHKL >= min(bins)) & (dHKL <= max(bins))
             assignments = assign_with_binedges(dHKL[mask], bin_edges=bins)
-            result = self
-            result.loc[mask, "bin"] = assignments
+            edges = np.array(bins)
+
+            # Drop reflections outside of resolution range
+            result = self.loc[mask].copy()
+            result["bin"] = DataSeries(assignments, dtype="I", index=result.index)
             if inplace:
                 self._update_inplace(result)
+            else:
+                self = result
 
         # Package return values
         result = [self]
