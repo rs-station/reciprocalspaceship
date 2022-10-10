@@ -920,19 +920,14 @@ class DataSet(pd.DataFrame):
 
         if isinstance(bins, int):
             assignments, edges = bin_by_percentile(dHKL, bins=bins, ascending=False)
-            self.loc[:, "bin"] = DataSeries(assignments, dtype="I", index=self.index)
         else:
+            # Use bin edges for assignments and drop reflections outside of range
             mask = (dHKL >= min(bins)) & (dHKL <= max(bins))
             assignments = assign_with_binedges(dHKL[mask], bin_edges=bins)
             edges = np.array(bins)
+            self._update_inplace(self.loc[mask])
 
-            # Drop reflections outside of resolution range
-            result = self.loc[mask].copy()
-            result["bin"] = DataSeries(assignments, dtype="I", index=result.index)
-            if inplace:
-                self._update_inplace(result)
-            else:
-                self = result
+        self.loc[:, "bin"] = DataSeries(assignments, dtype="I", index=self.index)
 
         # Package return values
         result = [self]
