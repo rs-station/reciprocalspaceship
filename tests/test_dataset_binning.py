@@ -58,41 +58,25 @@ def test_assign_resolution_bins(
             assert all(edges == bins)
 
 
-@pytest.mark.parametrize("bins", [1, 5, 10, 20, 50])
-def test_binedges_equivalence(data_fmodel, bins):
+@pytest.mark.parametrize("bins", [1, 2, 5, 10, 20, 50])
+@pytest.mark.parametrize("reverse", [True, False])
+def test_binedges_equivalence(data_fmodel, bins, reverse):
     """
     Test DataSet.assign_resolution_bins() generates consistent assignment when
-    provided bin edges from `return_edges=True`
+    provided bin edges from `return_edges=True`. Tests using bin edges provided
+    in both ascending or descending order
     """
 
     expected, edges = data_fmodel.assign_resolution_bins(
         bins, return_labels=False, return_edges=True
     )
 
-    result = data_fmodel.assign_resolution_bins(
-        edges, return_labels=False, return_edges=False
-    )
-
-    assert all(expected["bin"] == result["bin"])
-
-
-@pytest.mark.parametrize("reverse", [True, False])
-def test_binedges_order(data_fmodel, reverse):
-    """
-    Test DataSet.assign_resolution_bins() assignments depend on whether bin edges
-    are provided in ascending or descending order
-    """
-
-    expected, edges = data_fmodel.assign_resolution_bins(
-        2, return_labels=False, return_edges=True
-    )
-
-    # Flip bin edges -- all assignments should differ
+    # Reversed bin edges should reverse assignments
     if reverse:
         result = data_fmodel.assign_resolution_bins(
             edges[::-1], return_labels=False, return_edges=False
         )
-        assert all(expected["bin"] == (1 - result["bin"]))
+        assert all(expected["bin"] == ((bins - 1) - result["bin"]))
 
     # All assignments should be equivalent
     else:
