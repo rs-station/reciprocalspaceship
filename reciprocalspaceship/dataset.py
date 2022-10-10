@@ -15,6 +15,7 @@ from reciprocalspaceship.decorators import (
 from reciprocalspaceship.dtypes.base import MTZDtype, MTZInt32Dtype
 from reciprocalspaceship.utils import (
     apply_to_hkl,
+    assign_with_binedges,
     bin_by_percentile,
     canonicalize_phases,
     compute_structurefactor_multiplicity,
@@ -891,8 +892,9 @@ class DataSet(pd.DataFrame):
 
         Parameters
         ----------
-        bins : int
-            Number of bins (default: 20)
+        bins : int, list, or np.ndarray
+            Number of bins or bin edges to use when assigning resolution bins. If
+            bin edges are provided, they must be monotonic (default: 20)
         inplace : bool
             Whether to add the column in place or return a copy (default: False)
         return_labels : bool
@@ -911,8 +913,16 @@ class DataSet(pd.DataFrame):
         """
         dHKL = self.compute_dHKL()["dHKL"]
 
-        assignments, edges = bin_by_percentile(dHKL, bins=bins, ascending=False)
-        self["bin"] = DataSeries(assignments, dtype="I", index=self.index)
+        if isinstance(bins, int):
+            assignments, edges = bin_by_percentile(dHKL, bins=bins, ascending=False)
+            self.loc[:, "bin"] = DataSeries(assignments, dtype="I", index=self.index)
+        else:
+            mask = (dHKL >= min(bins)) & (dHKL <= max(bins))
+            assignments = assign_with_binedges(dHKL[mask], bin_edges=bins)
+            result = self
+            result.loc[mask, "bin"] = assignments
+            if inplace:
+                self._update_inplace(result)
 
         # Package return values
         result = [self]

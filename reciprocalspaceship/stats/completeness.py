@@ -3,7 +3,6 @@ import pandas as pd
 
 import reciprocalspaceship as rs
 from reciprocalspaceship.utils.asu import in_asu
-from reciprocalspaceship.utils.binning import assign_with_binedges
 from reciprocalspaceship.utils.stats import compute_redundancy
 
 
@@ -135,11 +134,10 @@ def compute_completeness(
         cell=dataset.cell,
     )
     result.set_index(["H", "K", "L"], inplace=True)
-    dHKL = result.compute_dHKL()["dHKL"]
-    result = result.loc[dHKL < dmax]
-    dHKL = dHKL[dHKL < dmax]
-    assignments = assign_with_binedges(dHKL, binedges, right_inclusive=False)
-    result["bin"] = assignments
+    result = result.loc[result.compute_dHKL()["dHKL"] < dmax]
+    result.assign_resolution_bins(
+        binedges, inplace=True, return_labels=False, return_edges=False
+    )
     result["observed"] = result["n"] > 0
     asu = result.hkl_to_asu()
 
