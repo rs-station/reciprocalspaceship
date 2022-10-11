@@ -15,6 +15,7 @@ from reciprocalspaceship.decorators import (
 from reciprocalspaceship.dtypes.base import MTZDtype, MTZInt32Dtype
 from reciprocalspaceship.utils import (
     apply_to_hkl,
+    assign_with_binedges,
     bin_by_percentile,
     canonicalize_phases,
     compute_structurefactor_multiplicity,
@@ -878,33 +879,70 @@ class DataSet(pd.DataFrame):
         return self
 
     @inplace
-    def assign_resolution_bins(self, bins=20, inplace=False, return_labels=True):
+    def assign_resolution_bins(
+        self,
+        bins=20,
+        inplace=False,
+        return_labels=True,
+        format_str=".2f",
+        return_edges=False,
+    ):
         """
         Assign reflections in DataSet to resolution bins.
 
+        Notes
+        -----
+        - If bin edges are provided, any reflections outside of the specified range
+          are dropped.
+
         Parameters
         ----------
-        bins : int
-            Number of bins
+        bins : int, list, or np.ndarray
+            Number of bins or bin edges to use when assigning resolution bins. If
+            bin edges are provided, they must be monotonic (default: 20)
         inplace : bool
-            Whether to add the column in place or return a copy
+            Whether to add the column in place or return a copy (default: False)
         return_labels : bool
             Whether to return a list of labels corresponding to the edges
-            of each resolution bin
+            of each resolution bin (default: True)
+        format_str : str
+            Format string for constructing bin labels
+        return_edges : bool
+            Whether to return bin edges that define the resolution bin boundaries.
+            The bin edges are returned as a 1-dimensional array with `bins + 1` entries
+            (default: False)
 
         Returns
         -------
-        (DataSet, list) or DataSet
+        (DataSet, list), (DataSet, ndarray), (DataSet, list, ndarray) or DataSet
         """
         dHKL = self.compute_dHKL()["dHKL"]
 
-        assignments, labels = bin_by_percentile(dHKL, bins=bins, ascending=False)
-        self["bin"] = DataSeries(assignments, dtype="I", index=self.index)
-
-        if return_labels:
-            return self, labels
+        if isinstance(bins, int):
+            assignments, edges = bin_by_percentile(dHKL, bins=bins, ascending=False)
         else:
+            # Use bin edges for assignments and drop reflections outside of range
+            mask = (dHKL >= min(bins)) & (dHKL <= max(bins))
+            assignments = assign_with_binedges(dHKL[mask], bin_edges=bins)
+            edges = np.array(bins)
+            self._update_inplace(self.loc[mask])
+
+        self.loc[:, "bin"] = DataSeries(assignments, dtype="I", index=self.index)
+
+        # Package return values
+        result = [self]
+        if return_labels:
+            labels = [
+                f"{e1:{format_str}} - {e2:{format_str}}"
+                for e1, e2 in zip(edges[:-1], edges[1:])
+            ]
+            result.append(labels)
+        if return_edges:
+            result.append(edges)
+
+        if len(result) == 1:
             return self
+        return tuple(result)
 
     def stack_anomalous(
         self, plus_labels=None, minus_labels=None, suffixes=("(+)", "(-)")
