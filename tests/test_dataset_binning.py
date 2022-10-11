@@ -93,19 +93,22 @@ def test_bindges_drops_reflections(data_fmodel, bins, inplace):
     Test DataSet.assign_resolution_bins() drops reflections outside of
     resolution range when provided explicit bin edges
     """
-
+    nrows = len(data_fmodel)
     result = data_fmodel.assign_resolution_bins(
         bins, inplace=inplace, return_labels=False, return_edges=False
     )
 
-    #    assert all(result["bin"] == 0)
+    assert all(result["bin"] == 0)
 
     dHKL = result.compute_dHKL()["dHKL"]
     assert all(dHKL <= max(bins))
     assert all(dHKL >= min(bins))
+    assert len(result) < nrows
 
     # Test inplace
     if inplace:
         assert id(result) == id(data_fmodel)
+        assert len(data_fmodel) == len(result)
     else:
         assert id(result) != id(data_fmodel)
+        assert len(data_fmodel) == nrows
