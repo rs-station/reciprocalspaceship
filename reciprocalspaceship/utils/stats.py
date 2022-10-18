@@ -113,9 +113,9 @@ def weighted_pearsonr(x, y, w):
     dx = x - np.expand_dims(mx, axis=-1)
     dy = y - np.expand_dims(my, axis=-1)
 
-    cxy = z * (w * dx * dy).sum(-1) 
-    cx  = z * (w * dx * dx).sum(-1) 
-    cy  = z * (w * dy * dy).sum(-1) 
+    cxy = z * (w * dx * dy).sum(-1)
+    cx = z * (w * dx * dx).sum(-1)
+    cy = z * (w * dy * dy).sum(-1)
 
     r = cxy / np.sqrt(cx * cy)
     return r
