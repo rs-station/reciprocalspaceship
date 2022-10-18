@@ -105,17 +105,17 @@ def weighted_pearsonr(x, y, w):
     r : float
         The Pearson correlation coefficient
     """
-    z = w.sum(-1)
+    z = np.reciprocal(w.sum(-1))
 
-    mx = np.reciprocal(z) * (w * x).sum(-1)
-    my = np.reciprocal(z) * (w * y).sum(-1)
+    mx = z * (w * x).sum(-1)
+    my = z * (w * y).sum(-1)
 
     dx = x - np.expand_dims(mx, axis=-1)
     dy = y - np.expand_dims(my, axis=-1)
 
-    cxy = (w * dx * dy).sum(-1) / z
-    cx = (w * dx * dx).sum(-1) / z
-    cy = (w * dy * dy).sum(-1) / z
+    cxy = z * (w * dx * dy).sum(-1) 
+    cx  = z * (w * dx * dx).sum(-1) 
+    cy  = z * (w * dy * dy).sum(-1) 
 
     r = cxy / np.sqrt(cx * cy)
     return r
