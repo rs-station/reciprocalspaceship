@@ -81,3 +81,41 @@ def compute_redundancy(
 
     mult = mult.sort_index()
     return mult.get_hkls(), mult["Count"].to_numpy(np.int32)
+
+def weighted_pearsonr(x, y, w):
+    """
+    Calculate a [weighted Pearson correlation coefficient](https://en.wikipedia.org/wiki/Pearson_correlation_coefficient#Weighted_correlation_coefficient).
+
+    Note
+    ----
+    x, y, and w may be arbitrarily batched. the correlation coefficient will be computed pairwise along the last axis. 
+
+    Parameters
+    ----------
+    x : np.array(float)
+        An array of observations. 
+    y : np.array(float)
+        An array of observations the same length as x.
+    w : np.array(float)
+        An array of weights the same length as x. These needn't be normalized.
+
+    Returns
+    -------
+    r : float
+        The Pearson correlation coefficient
+    """
+    z = w.sum(-1)
+
+    mx = np.reciprocal(z) * (w * x).sum(-1)
+    my = np.reciprocal(z) * (w * y).sum(-1)
+
+    dx = x - np.expand_dims(mx, axis=-1)
+    dy = y - np.expand_dims(my, axis=-1)
+
+    cxy = (w * dx * dy).sum(-1) / z
+    cx  = (w * dx * dx).sum(-1) / z
+    cy  = (w * dy * dy).sum(-1) / z
+
+    r = cxy / np.sqrt(cx * cy)
+    return r
+
