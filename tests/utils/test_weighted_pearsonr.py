@@ -5,6 +5,8 @@ from scipy.stats import pearsonr
 import reciprocalspaceship as rs
 
 
+
+
 def test_weighted_pearsonr():
     n = 100
 
@@ -16,6 +18,12 @@ def test_weighted_pearsonr():
 
     # Test against scipy pearsonr
     w = np.ones(n)
+    r = rs.utils.stats.weighted_pearsonr(x, y, w)
+    expected_r = pearsonr(x, y)[0]
+    assert np.isclose(r, expected_r)
+
+    # Test against scipy with another uniform weight value
+    w = np.ones(n) * 42.
     r = rs.utils.stats.weighted_pearsonr(x, y, w)
     expected_r = pearsonr(x, y)[0]
     assert np.isclose(r, expected_r)
