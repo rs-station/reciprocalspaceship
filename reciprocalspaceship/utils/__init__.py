@@ -38,7 +38,7 @@ from reciprocalspaceship.utils.grid import get_reciprocal_grid_size
 from reciprocalspaceship.utils.math import angle_between
 from reciprocalspaceship.utils.phases import canonicalize_phases, get_phase_restrictions
 from reciprocalspaceship.utils.rfree import add_rfree, copy_rfree
-from reciprocalspaceship.utils.stats import compute_redundancy
+from reciprocalspaceship.utils.stats import compute_redundancy, weighted_pearsonr
 from reciprocalspaceship.utils.structurefactors import (
     compute_structurefactor_multiplicity,
     from_structurefactor,
