@@ -89,21 +89,21 @@ def weighted_pearsonr(x, y, w):
 
     Note
     ----
-    x, y, and w may be arbitrarily batched. the correlation coefficient will be computed pairwise along the last axis.
+    x, y, and w may have arbitrarily shaped leading dimensions. The correlation coefficient will always be computed pairwise along the last axis.
 
     Parameters
     ----------
     x : np.array(float)
         An array of observations.
     y : np.array(float)
-        An array of observations the same length as x.
+        An array of observations the same shape as x.
     w : np.array(float)
-        An array of weights the same length as x. These needn't be normalized.
+        An array of weights the same shape as x. These needn't be normalized.
 
     Returns
     -------
     r : float
-        The Pearson correlation coefficient
+        The Pearson correlation coefficient along the last dimension. This has shape {x,y,w}.shape[:-1]. 
     """
     z = np.reciprocal(w.sum(-1))
 
