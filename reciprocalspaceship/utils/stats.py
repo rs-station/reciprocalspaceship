@@ -103,7 +103,7 @@ def weighted_pearsonr(x, y, w):
     Returns
     -------
     r : float
-        The Pearson correlation coefficient along the last dimension. This has shape {x,y,w}.shape[:-1]. 
+        The Pearson correlation coefficient along the last dimension. This has shape {x,y,w}.shape[:-1].
     """
     z = np.reciprocal(w.sum(-1))
 
