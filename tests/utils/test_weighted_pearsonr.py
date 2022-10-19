@@ -1,13 +1,11 @@
+from io import StringIO
+
 import numpy as np
+import pandas as pd
 import pytest
 from scipy.stats import pearsonr
 
 import reciprocalspaceship as rs
-
-
-import pandas as pd
-from io import StringIO
-
 
 
 def test_against_previous_result():
@@ -25,7 +23,7 @@ def test_against_previous_result():
 9,0.3923683608283065,0.18587807020463565,0.9318927399856036
     """
     df = pd.read_csv(StringIO(csv))
-    x,y,w = df.x.to_numpy(),df.y.to_numpy(),df.w.to_numpy()
+    x, y, w = df.x.to_numpy(), df.y.to_numpy(), df.w.to_numpy()
     expected_r = -0.1478766135438829
 
     r = rs.utils.stats.weighted_pearsonr(x, y, w)
@@ -48,7 +46,7 @@ def test_weighted_pearsonr():
     assert np.isclose(r, expected_r)
 
     # Test against scipy with another uniform weight value
-    w = np.ones(n) * 42.
+    w = np.ones(n) * 42.0
     r = rs.utils.stats.weighted_pearsonr(x, y, w)
     expected_r = pearsonr(x, y)[0]
     assert np.isclose(r, expected_r)
