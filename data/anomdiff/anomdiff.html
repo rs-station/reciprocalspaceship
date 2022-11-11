@@ -60,8 +60,8 @@
    a { color: #59C; }
   </style>
 
-  <script src="https://hekstra-lab.github.io/reciprocalspaceship/src/uglymol.js"></script>
-  <script src="https://hekstra-lab.github.io/reciprocalspaceship/src/mtz.js"></script> 
+  <script src="https://rs-station.github.io/reciprocalspaceship/src/uglymol.js"></script>
+  <script src="https://rs-station.github.io/reciprocalspaceship/src/mtz.js"></script> 
 </head>
 <body style="background-color: black">
   <div id="viewer"></div>
@@ -74,7 +74,7 @@
     V = new UM.Viewer({viewer: "viewer", hud: "hud", help: "help"});
     V.load_pdb("https://files.rcsb.org/download/7L84.pdb");
     GemmiMtz().then(function(Module) {
-	UM.load_maps_from_mtz(Module, V, "https://hekstra-lab.github.io/reciprocalspaceship/data/anomdiff/anomdiff.mtz", ['ANOM', 'PHANOM']);
+	UM.load_maps_from_mtz(Module, V, "https://rs-station.github.io/reciprocalspaceship/data/anomdiff/anomdiff.mtz", ['ANOM', 'PHANOM']);
     });;
     
     /*Customizations to Default Settings*/
