@@ -13,6 +13,6 @@ or ``conda``::
 
 It is also always possible to install the library by cloning the repository from GitHub::
 
-  git clone https://github.com/Hekstra-Lab/reciprocalspaceship
+  git clone https://github.com/rs-station/reciprocalspaceship
   cd reciprocalspaceship
   pip install -e .

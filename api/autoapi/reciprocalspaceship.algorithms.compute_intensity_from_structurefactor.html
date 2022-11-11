@@ -8,8 +8,8 @@
       <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
-      <link rel="stylesheet" href="../../_static/panels-bootstrap.5fd3999ee7762ccc51105388f4a9d115.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/panels-main.c949a650a448cc0ae9fd3441c0e17fb0.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/panels-bootstrap.5fd3999ee7762ccc51105388f4a9d115.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/panels-variables.06eb56fa6e07937060861dad626602ad.css" type="text/css" />
     <link rel="shortcut icon" href="../../_static/rs-favicon_32x32.png"/>
   <!--[if lt IE 9]>
@@ -77,9 +77,9 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
-          <li><a href="../index.html">API Reference</a> &raquo;</li>
-      <li>reciprocalspaceship.algorithms.compute_intensity_from_structurefactor</li>
+      <li><a href="../../index.html" class="icon icon-home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">API Reference</a></li>
+      <li class="breadcrumb-item active">reciprocalspaceship.algorithms.compute_intensity_from_structurefactor</li>
       <li class="wy-breadcrumbs-aside">
             <a href="../../_sources/api/autoapi/reciprocalspaceship.algorithms.compute_intensity_from_structurefactor.rst.txt" rel="nofollow"> View page source</a>
       </li>
@@ -117,7 +117,7 @@
 <h1>reciprocalspaceship.algorithms.compute_intensity_from_structurefactor<a class="headerlink" href="#reciprocalspaceship-algorithms-compute-intensity-from-structurefactor" title="Permalink to this headline"></a></h1>
 <dl class="py function">
 <dt class="sig sig-object py" id="reciprocalspaceship.algorithms.compute_intensity_from_structurefactor">
-<span class="sig-prename descclassname"><span class="pre">reciprocalspaceship.algorithms.</span></span><span class="sig-name descname"><span class="pre">compute_intensity_from_structurefactor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ds</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">F_key</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">SigF_key</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_columns</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inplace</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/Hekstra-Lab/reciprocalspaceship/blob/main/reciprocalspaceship/algorithms/intensity.py#L7-L82"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#reciprocalspaceship.algorithms.compute_intensity_from_structurefactor" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">reciprocalspaceship.algorithms.</span></span><span class="sig-name descname"><span class="pre">compute_intensity_from_structurefactor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ds</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">F_key</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">SigF_key</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_columns</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inplace</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/rs-station/reciprocalspaceship/blob/main/reciprocalspaceship/algorithms/intensity.py#L7-L82"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#reciprocalspaceship.algorithms.compute_intensity_from_structurefactor" title="Permalink to this definition"></a></dt>
 <dd><p>Compute intensities (I) and uncertainty estimates (SigI) from structure
 factor amplitudes (F) and their uncertainties (SigF) using error propagation</p>
 <p>Intensity computed as I = SigF*SigF + F*F. Intensity error estimate

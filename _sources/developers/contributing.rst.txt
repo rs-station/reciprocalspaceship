@@ -3,7 +3,7 @@
 Contributing to ``rs``
 =======================================
 
-We encourage you to file `Issues on GitHub <https://github.com/Hekstra-Lab/reciprocalspaceship/issues>`_ if you run into any problems when using
+We encourage you to file `Issues on GitHub <https://github.com/rs-station/reciprocalspaceship/issues>`_ if you run into any problems when using
 ``reciprocalspaceship``. This is also a great place to request features, suggest improvements, or
 ask any questions.
 
