@@ -38,7 +38,7 @@ jobs:
     - name: Commit documentation changes to gh-pages
       run: |
         cd docs
-        git clone https://github.com/Hekstra-Lab/reciprocalspaceship.git --branch gh-pages --single-branch gh-pages
+        git clone https://github.com/rs-station/reciprocalspaceship.git --branch gh-pages --single-branch gh-pages
         cd gh-pages
         cp -r ../_build/html/* .
         git config --local user.email "action@github.com"

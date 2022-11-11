@@ -14,14 +14,14 @@ import inspect
 import os
 import sys
 
-sys.path.insert(0, os.path.abspath('../reciprocalspaceship'))
+sys.path.insert(0, os.path.abspath("../reciprocalspaceship"))
 import reciprocalspaceship as rs
 
 # -- Project information -----------------------------------------------------
 
-project = 'reciprocalspaceship'
-copyright = '2020, Jack B. Greisman, Kevin M. Dalton'
-author = 'Jack B. Greisman, Kevin M. Dalton'
+project = "reciprocalspaceship"
+copyright = "2020, Jack B. Greisman, Kevin M. Dalton"
+author = "Jack B. Greisman, Kevin M. Dalton"
 
 # The full version, including alpha/beta/rc tags
 release = rs.__version__
@@ -33,12 +33,12 @@ release = rs.__version__
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
 extensions = [
-    'sphinx.ext.autodoc',
-    'sphinx.ext.autosummary',
-    'sphinx.ext.mathjax',
-    'sphinx.ext.napoleon',
-    'sphinx_rtd_theme',
-    'nbsphinx',
+    "sphinx.ext.autodoc",
+    "sphinx.ext.autosummary",
+    "sphinx.ext.mathjax",
+    "sphinx.ext.napoleon",
+    "sphinx_rtd_theme",
+    "nbsphinx",
     "sphinx.ext.linkcode",
     "sphinx_panels",
     "sphinxcontrib.autoprogram",
@@ -62,10 +62,10 @@ napoleon_use_rtype = False
 # currently the default branch on the webpage is the latest branch so I pointed them to master.
 ###
 
-#   <a class="reference external" href="https://github.com/Hekstra-Lab/reciprocalspaceship/blob/v{{ env.config.release|e }}/{{ docname|e }}">{{ docname|e }}</a>.
+#   <a class="reference external" href="https://github.com/rs-station/reciprocalspaceship/blob/v{{ env.config.release|e }}/{{ docname|e }}">{{ docname|e }}</a>.
 #   Interactive online version:
 #   <span style="white-space: nowrap;">
-#     <a href="https://mybinder.org/v2/gh/Hekstra-Lab/reciprocalspaceship/v{{ env.config.release|e }}?filepath={{ docname|e }}">
+#     <a href="https://mybinder.org/v2/gh/rs-station/reciprocalspaceship/v{{ env.config.release|e }}?filepath={{ docname|e }}">
 #     <img alt="Binder badge" src="https://mybinder.org/badge_logo.svg" style="vertical-align:text-bottom"></a>.
 
 # prolog taken nearly verbatim from https://github.com/spatialaudio/nbsphinx/blob/98005a9d6b331b7d6d14221539154df69f7ae51a/doc/conf.py#L38
@@ -76,10 +76,10 @@ nbsphinx_prolog = r"""
 
     <div class="admonition note">
       This page was generated from
-      <a class="reference external" href="https://github.com/Hekstra-Lab/reciprocalspaceship/blob/main/{{ docname|e }}">{{ docname|e }}</a>.
+      <a class="reference external" href="https://github.com/rs-station/reciprocalspaceship/blob/main/{{ docname|e }}">{{ docname|e }}</a>.
       Interactive online version:
       <span style="white-space: nowrap;">
-        <a href="https://mybinder.org/v2/gh/Hekstra-Lab/reciprocalspaceship/main?filepath={{ docname|e }}?urlpath=lab">
+        <a href="https://mybinder.org/v2/gh/rs-station/reciprocalspaceship/main?filepath={{ docname|e }}?urlpath=lab">
         <img alt="Binder badge" src="https://mybinder.org/badge_logo.svg" style="vertical-align:text-bottom"></a>.
       </span>
     </div>
@@ -95,46 +95,54 @@ nbsphinx_allow_errors = True
 autoclass_content = "class"
 autosummary_generate = True
 autodoc_default_options = {
-    'members':True,
-    'show-inheritance':True,
+    "members": True,
+    "show-inheritance": True,
 }
 # numpydoc_show_inherited_class_members = False
 # numpydoc_class_members_toctree = False
 
 # Add any paths that contain templates here, relative to this directory.
-templates_path = ['_templates']
+templates_path = ["_templates"]
 
 # The suffix of source filenames.
-source_suffix = '.rst'
+source_suffix = ".rst"
 
 # The main toctree document.
-main_doc = 'index'
+main_doc = "index"
 
 # List of patterns, relative to source directory, that match files and
 # directories to ignore when looking for source files.
 # This pattern also affects html_static_path and html_extra_path.
-exclude_patterns = ['_build', '_templates', 'Thumbs.db', '.DS_Store', '**.ipynb_checkpoints']
+exclude_patterns = [
+    "_build",
+    "_templates",
+    "Thumbs.db",
+    ".DS_Store",
+    "**.ipynb_checkpoints",
+]
+
 
 def setup(app):
     app.add_css_file("custom.css")
+
 
 # -- Options for HTML output -------------------------------------------------
 
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
 #
-html_theme = 'sphinx_rtd_theme'
+html_theme = "sphinx_rtd_theme"
 
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
 # so a file named "default.css" will overwrite the builtin "default.css".
-html_static_path = ['_static']
+html_static_path = ["_static"]
 
 # Add favicon
-html_favicon = 'img/rs-favicon_32x32.png'
+html_favicon = "img/rs-favicon_32x32.png"
 
 # Add
-html_logo = 'img/rs.png'
+html_logo = "img/rs.png"
 
 # -- Resolve links to source code --------------------------------------------
 
@@ -179,4 +187,4 @@ def linkcode_resolve(domain, info):
 
     fn = os.path.relpath(fn, start=os.path.dirname(rs.__file__))
 
-    return f"https://github.com/Hekstra-Lab/reciprocalspaceship/blob/main/reciprocalspaceship/{fn}{linespec}"
+    return f"https://github.com/rs-station/reciprocalspaceship/blob/main/reciprocalspaceship/{fn}{linespec}"

@@ -1,11 +1,11 @@
 # 1 /:rocket: = reciprocalspaceship
-![Build](https://github.com/Hekstra-Lab/reciprocalspaceship/workflows/Build/badge.svg)
-[![Documentation](https://github.com/Hekstra-Lab/reciprocalspaceship/workflows/Documentation/badge.svg)](https://hekstra-lab.github.io/reciprocalspaceship)
+![Build](https://github.com/rs-station/reciprocalspaceship/workflows/Build/badge.svg)
+[![Documentation](https://github.com/rs-station/reciprocalspaceship/workflows/Documentation/badge.svg)](https://rs-station.github.io/reciprocalspaceship)
 [![PyPI](https://img.shields.io/pypi/v/reciprocalspaceship?color=blue)](https://pypi.org/project/reciprocalspaceship/)
 [![Anaconda-Server Badge](https://anaconda.org/conda-forge/reciprocalspaceship/badges/version.svg)](https://anaconda.org/conda-forge/reciprocalspaceship)
-[![codecov](https://codecov.io/gh/Hekstra-Lab/reciprocalspaceship/branch/main/graph/badge.svg)](https://codecov.io/gh/Hekstra-Lab/reciprocalspaceship)
-[![apm](https://img.shields.io/apm/l/vim-mode.svg)](https://github.com/Hekstra-Lab/reciprocalspaceship/blob/main/LICENSE)
-[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/Hekstra-Lab/reciprocalspaceship/main?filepath=docs%2Fexamples)
+[![codecov](https://codecov.io/gh/rs-station/reciprocalspaceship/branch/main/graph/badge.svg)](https://codecov.io/gh/rs-station/reciprocalspaceship)
+[![apm](https://img.shields.io/apm/l/vim-mode.svg)](https://github.com/rs-station/reciprocalspaceship/blob/main/LICENSE)
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/rs-station/reciprocalspaceship/main?filepath=docs%2Fexamples)
 [![DOI](https://img.shields.io/badge/DOI-10.1107%2FS160057672100755X-blue)](https://doi.org/10.1107/S160057672100755X)
 
 Tools for exploring reciprocal space.
@@ -44,15 +44,15 @@ or using `conda`:
 conda install -c conda-forge reciprocalspaceship
 ```
 
-For more installation information, see our [installation guide](https://hekstra-lab.github.io/reciprocalspaceship/userguide/installation.html).
+For more installation information, see our [installation guide](https://rs-station.github.io/reciprocalspaceship/userguide/installation.html).
 
 ## Quickstart
 
-To get started with `reciprocalspaceship`, see our [quickstart guide](https://hekstra-lab.github.io/reciprocalspaceship/examples/quickstart.html).
+To get started with `reciprocalspaceship`, see our [quickstart guide](https://rs-station.github.io/reciprocalspaceship/examples/quickstart.html).
 
 ## Documentation
 
-For more details on the use of `reciprocalspaceship`, check out our [documentation](https://hekstra-lab.github.io/reciprocalspaceship).
+For more details on the use of `reciprocalspaceship`, check out our [documentation](https://rs-station.github.io/reciprocalspaceship).
 
 ## Reference
 
