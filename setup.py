@@ -32,9 +32,9 @@ Features of this library include:
   - Support for reading and writing MTZ reflection files.
 """
 PROJECT_URLS = {
-    "Bug Tracker": "https://github.com/Hekstra-Lab/reciprocalspaceship/issues",
-    "Documentation": "https://hekstra-lab.github.io/reciprocalspaceship/",
-    "Source Code": "https://github.com/Hekstra-Lab/reciprocalspaceship",
+    "Bug Tracker": "https://github.com/rs-station/reciprocalspaceship/issues",
+    "Documentation": "https://rs-station.github.io/reciprocalspaceship/",
+    "Source Code": "https://github.com/rs-station/reciprocalspaceship",
 }
 
 # Testing requirements
@@ -70,7 +70,7 @@ setup(
     long_description=LONG_DESCRIPTION,
     author="Kevin M. Dalton, Jack B. Greisman",
     author_email="kmdalton@g.harvard.edu, greisman@g.harvard.edu",
-    url="https://hekstra-lab.github.io/reciprocalspaceship/",
+    url="https://rs-station.github.io/reciprocalspaceship/",
     project_urls=PROJECT_URLS,
     python_requires=">3.7",
     install_requires=[
