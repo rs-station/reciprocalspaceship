@@ -414,7 +414,7 @@ div.rendered_html tbody tr:hover {
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-0.10.2
+0.10.3
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
@@ -1106,7 +1106,7 @@ Number of reflections: 12542
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">alpha</span> <span class="o">=</span> <span class="mi">90</span> <span class="o">+</span> <span class="mi">180</span><span class="o">*</span><span class="p">(</span><span class="n">anom</span><span class="p">[</span><span class="s2">&quot;FW-F(+)&quot;</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="n">anom</span><span class="p">[</span><span class="s2">&quot;FW-F(-)&quot;</span><span class="p">])</span>
 <span class="n">anom</span><span class="p">[</span><span class="s2">&quot;PHANOM&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">ref</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">hkls</span><span class="p">,</span> <span class="s2">&quot;PH2FOFCWT&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="n">alpha</span>
-<span class="n">anom</span><span class="p">[</span><span class="s2">&quot;PHANOM&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">rs</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">canonicalize_phases</span><span class="p">(</span><span class="n">anom</span><span class="p">[</span><span class="s2">&quot;PHANOM&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s2">&quot;Phase&quot;</span><span class="p">))</span>
+<span class="n">anom</span><span class="p">[</span><span class="s2">&quot;PHANOM&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">rs</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">canonicalize_phases</span><span class="p">(</span><span class="n">anom</span><span class="p">[</span><span class="s2">&quot;PHANOM&quot;</span><span class="p">])</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s2">&quot;Phase&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -1155,7 +1155,7 @@ dtype: object
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>%%html
 &lt;center&gt;
-    &lt;iframe src=&quot;https://hekstra-lab.github.io/reciprocalspaceship/data/anomdiff/anomdiff.html#zoom=25&quot;, width=600, height=600&gt;&lt;/iframe&gt;
+    &lt;iframe src=&quot;https://rs-station.github.io/reciprocalspaceship/data/anomdiff/anomdiff.html#zoom=25&quot;, width=600, height=600&gt;&lt;/iframe&gt;
     &lt;br&gt;Anomalous difference map from HEWL crystal overlayed with refined model (PDB: 7L84). Map is contoured at +5&amp;sigma;.
 &lt;/center&gt;
 </pre></div>
@@ -1166,17 +1166,9 @@ dtype: object
 </div>
 <div class="output_area rendered_html docutils container">
 <center>
-    <iframe src="https://hekstra-lab.github.io/reciprocalspaceship/data/anomdiff/anomdiff.html#zoom=25", width=600, height=600></iframe>
+    <iframe src="https://rs-station.github.io/reciprocalspaceship/data/anomdiff/anomdiff.html#zoom=25", width=600, height=600></iframe>
     <br>Anomalous difference map from HEWL crystal overlayed with refined model (PDB: 7L84). Map is contoured at +5&sigma;.
 </center></div>
-</div>
-<div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
-</pre></div>
-</div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>
-</pre></div>
-</div>
 </div>
 </section>
 </section>
