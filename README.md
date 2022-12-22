@@ -4,7 +4,7 @@
 [![PyPI](https://img.shields.io/pypi/v/reciprocalspaceship?color=blue)](https://pypi.org/project/reciprocalspaceship/)
 [![Anaconda-Server Badge](https://anaconda.org/conda-forge/reciprocalspaceship/badges/version.svg)](https://anaconda.org/conda-forge/reciprocalspaceship)
 [![codecov](https://codecov.io/gh/rs-station/reciprocalspaceship/branch/main/graph/badge.svg)](https://codecov.io/gh/rs-station/reciprocalspaceship)
-[![apm](https://img.shields.io/apm/l/vim-mode.svg)](https://github.com/rs-station/reciprocalspaceship/blob/main/LICENSE)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://github.com/rs-station/reciprocalspaceship/blob/main/LICENSE)
 [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/rs-station/reciprocalspaceship/main?filepath=docs%2Fexamples)
 [![DOI](https://img.shields.io/badge/DOI-10.1107%2FS160057672100755X-blue)](https://doi.org/10.1107/S160057672100755X)
 
