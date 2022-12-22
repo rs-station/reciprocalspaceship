@@ -8,8 +8,8 @@
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
-      <link rel="stylesheet" href="../_static/panels-main.c949a650a448cc0ae9fd3441c0e17fb0.css" type="text/css" />
       <link rel="stylesheet" href="../_static/panels-bootstrap.5fd3999ee7762ccc51105388f4a9d115.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/panels-main.c949a650a448cc0ae9fd3441c0e17fb0.css" type="text/css" />
       <link rel="stylesheet" href="../_static/panels-variables.06eb56fa6e07937060861dad626602ad.css" type="text/css" />
     <link rel="shortcut icon" href="../_static/rs-favicon_32x32.png"/>
   <!--[if lt IE 9]>
@@ -185,10 +185,11 @@ div.nboutput.container div.prompt > div {
     }
 }
 
-/* disable scrollbars on prompts */
+/* disable scrollbars and line breaks on prompts */
 div.nbinput.container div.prompt pre,
 div.nboutput.container div.prompt pre {
     overflow: hidden;
+    white-space: pre;
 }
 
 /* input/output area */
@@ -370,11 +371,11 @@ div.rendered_html tbody tr:hover {
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%</span><span class="k">matplotlib</span> inline
-<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
-<span class="kn">import</span> <span class="nn">seaborn</span> <span class="k">as</span> <span class="nn">sns</span>
-<span class="n">sns</span><span class="o">.</span><span class="n">set_context</span><span class="p">(</span><span class="s2">&quot;notebook&quot;</span><span class="p">,</span> <span class="n">font_scale</span><span class="o">=</span><span class="mf">1.4</span><span class="p">)</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>%matplotlib inline
+import matplotlib.pyplot as plt
+import seaborn as sns
+sns.set_context(&quot;notebook&quot;, font_scale=1.4)
+import numpy as np
 </pre></div>
 </div>
 </div>
@@ -382,7 +383,7 @@ div.rendered_html tbody tr:hover {
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">reciprocalspaceship</span> <span class="k">as</span> <span class="nn">rs</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>import reciprocalspaceship as rs
 </pre></div>
 </div>
 </div>
@@ -390,7 +391,7 @@ div.rendered_html tbody tr:hover {
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">rs</span><span class="o">.</span><span class="n">__version__</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>print(rs.__version__)
 </pre></div>
 </div>
 </div>
@@ -410,17 +411,17 @@ div.rendered_html tbody tr:hover {
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">ipywidgets</span> <span class="k">as</span> <span class="nn">widgets</span>
-<span class="kn">from</span> <span class="nn">IPython.display</span> <span class="kn">import</span> <span class="n">display</span>
-<span class="kn">import</span> <span class="nn">io</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>import ipywidgets as widgets
+from IPython.display import display
+import io
 
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;On MTZ:&quot;</span><span class="p">)</span>
-<span class="n">uploader_on</span> <span class="o">=</span> <span class="n">widgets</span><span class="o">.</span><span class="n">FileUpload</span><span class="p">(</span><span class="n">accept</span><span class="o">=</span><span class="s2">&quot;.mtz&quot;</span><span class="p">,</span> <span class="n">multiple</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-<span class="n">display</span><span class="p">(</span><span class="n">uploader_on</span><span class="p">)</span>
+print(&quot;On MTZ:&quot;)
+uploader_on = widgets.FileUpload(accept=&quot;.mtz&quot;, multiple=False)
+display(uploader_on)
 
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Off MTZ:&quot;</span><span class="p">)</span>
-<span class="n">uploader_off</span> <span class="o">=</span> <span class="n">widgets</span><span class="o">.</span><span class="n">FileUpload</span><span class="p">(</span><span class="n">accept</span><span class="o">=</span><span class="s2">&quot;.mtz&quot;</span><span class="p">,</span> <span class="n">multiple</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-<span class="n">display</span><span class="p">(</span><span class="n">uploader_off</span><span class="p">)</span>
+print(&quot;Off MTZ:&quot;)
+uploader_off = widgets.FileUpload(accept=&quot;.mtz&quot;, multiple=False)
+display(uploader_off)
 </pre></div>
 </div>
 </div>
@@ -436,7 +437,7 @@ On MTZ:
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<script type="application/vnd.jupyter.widget-view+json">{"version_major": 2, "version_minor": 0, "model_id": "0110220ded304e68ae6b3e04e6f37ca5"}</script></div>
+<script type="application/vnd.jupyter.widget-view+json">{"version_major": 2, "version_minor": 0, "model_id": "85cdd5676e154b60b49ddfe1ce2291d2"}</script></div>
 </div>
 <div class="nboutput docutils container">
 <div class="prompt empty docutils container">
@@ -450,20 +451,20 @@ Off MTZ:
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<script type="application/vnd.jupyter.widget-view+json">{"version_major": 2, "version_minor": 0, "model_id": "9b79426eb11e465b869d900047b4f6ac"}</script></div>
+<script type="application/vnd.jupyter.widget-view+json">{"version_major": 2, "version_minor": 0, "model_id": "eb6d44a1413c4b079ddaf2784caabe63"}</script></div>
 </div>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">read_uploadedFile</span><span class="p">(</span><span class="n">uploadedFile</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Use temporary file to read uploaded data&quot;&quot;&quot;</span>
-    <span class="kn">from</span> <span class="nn">tempfile</span> <span class="kn">import</span> <span class="n">NamedTemporaryFile</span>
-    <span class="n">upload</span> <span class="o">=</span> <span class="n">NamedTemporaryFile</span><span class="p">(</span><span class="n">suffix</span><span class="o">=</span><span class="s2">&quot;mtz&quot;</span><span class="p">)</span>
-    <span class="n">upload</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">uploadedFile</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
-    <span class="n">mtz</span> <span class="o">=</span> <span class="n">rs</span><span class="o">.</span><span class="n">read_mtz</span><span class="p">(</span><span class="n">upload</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
-    <span class="n">upload</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
-    <span class="k">return</span> <span class="n">mtz</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>def read_uploadedFile(uploadedFile):
+    &quot;&quot;&quot;Use temporary file to read uploaded data&quot;&quot;&quot;
+    from tempfile import NamedTemporaryFile
+    upload = NamedTemporaryFile(suffix=&quot;mtz&quot;)
+    upload.write(uploadedFile.data[0])
+    mtz = rs.read_mtz(upload.name)
+    upload.close()
+    return mtz
 </pre></div>
 </div>
 </div>
@@ -471,8 +472,8 @@ Off MTZ:
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">mtz_on</span>  <span class="o">=</span> <span class="n">read_uploadedFile</span><span class="p">(</span><span class="n">uploader_on</span><span class="p">)</span>
-<span class="n">mtz_off</span> <span class="o">=</span> <span class="n">read_uploadedFile</span><span class="p">(</span><span class="n">uploader_off</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>mtz_on  = read_uploadedFile(uploader_on)
+mtz_off = read_uploadedFile(uploader_off)
 </pre></div>
 </div>
 </div>
@@ -483,11 +484,11 @@ Off MTZ:
 <div class="highlight"><pre>
 <span class="ansi-red-fg">---------------------------------------------------------------------------</span>
 <span class="ansi-red-fg">AttributeError</span>                            Traceback (most recent call last)
-Cell <span class="ansi-green-fg">In [6], line 1</span>
+Cell <span class="ansi-green-fg">In[6], line 1</span>
 <span class="ansi-green-fg">----&gt; 1</span> mtz_on  <span style="color: rgb(98,98,98)">=</span> <span class="ansi-yellow-bg">read_uploadedFile</span><span class="ansi-yellow-bg">(</span><span class="ansi-yellow-bg">uploader_on</span><span class="ansi-yellow-bg">)</span>
 <span class="ansi-green-intense-fg ansi-bold">      2</span> mtz_off <span style="color: rgb(98,98,98)">=</span> read_uploadedFile(uploader_off)
 
-Cell <span class="ansi-green-fg">In [5], line 5</span>, in <span class="ansi-cyan-fg">read_uploadedFile</span><span class="ansi-blue-fg">(uploadedFile)</span>
+Cell <span class="ansi-green-fg">In[5], line 5</span>, in <span class="ansi-cyan-fg">read_uploadedFile</span><span class="ansi-blue-fg">(uploadedFile)</span>
 <span class="ansi-green-intense-fg ansi-bold">      3</span> <span class="ansi-bold" style="color: rgb(0,135,0)">from</span> <span class="ansi-bold" style="color: rgb(0,0,255)">tempfile</span> <span class="ansi-bold" style="color: rgb(0,135,0)">import</span> NamedTemporaryFile
 <span class="ansi-green-intense-fg ansi-bold">      4</span> upload <span style="color: rgb(98,98,98)">=</span> NamedTemporaryFile(suffix<span style="color: rgb(98,98,98)">=</span><span style="color: rgb(175,0,0)">&#34;</span><span style="color: rgb(175,0,0)">mtz</span><span style="color: rgb(175,0,0)">&#34;</span>)
 <span class="ansi-green-fg">----&gt; 5</span> upload<span style="color: rgb(98,98,98)">.</span>write(<span class="ansi-yellow-bg">uploadedFile</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">.</span><span class="ansi-yellow-bg">data</span>[<span style="color: rgb(98,98,98)">0</span>])
@@ -502,7 +503,7 @@ Cell <span class="ansi-green-fg">In [5], line 5</span>, in <span class="ansi-cya
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">mtz_on</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>mtz_on
 </pre></div>
 </div>
 </div>
@@ -513,7 +514,7 @@ Cell <span class="ansi-green-fg">In [5], line 5</span>, in <span class="ansi-cya
 <div class="highlight"><pre>
 <span class="ansi-red-fg">---------------------------------------------------------------------------</span>
 <span class="ansi-red-fg">NameError</span>                                 Traceback (most recent call last)
-Cell <span class="ansi-green-fg">In [7], line 1</span>
+Cell <span class="ansi-green-fg">In[7], line 1</span>
 <span class="ansi-green-fg">----&gt; 1</span> <span class="ansi-yellow-bg">mtz_on</span>
 
 <span class="ansi-red-fg">NameError</span>: name &#39;mtz_on&#39; is not defined
@@ -523,10 +524,10 @@ Cell <span class="ansi-green-fg">In [7], line 1</span>
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">subset_to_F_and_SigF</span><span class="p">(</span><span class="n">mtz</span><span class="p">):</span>
-    <span class="n">F_column</span> <span class="o">=</span> <span class="p">[</span> <span class="n">l</span> <span class="k">for</span> <span class="n">l</span> <span class="ow">in</span> <span class="n">mtz</span><span class="o">.</span><span class="n">columns</span> <span class="k">if</span> <span class="n">mtz</span><span class="p">[</span><span class="n">l</span><span class="p">]</span><span class="o">.</span><span class="n">dtype</span><span class="o">.</span><span class="n">mtztype</span> <span class="o">==</span> <span class="s2">&quot;F&quot;</span><span class="p">]</span>
-    <span class="n">SigF_column</span> <span class="o">=</span> <span class="p">[</span> <span class="n">l</span> <span class="k">for</span> <span class="n">l</span> <span class="ow">in</span> <span class="n">mtz</span><span class="o">.</span><span class="n">columns</span> <span class="k">if</span> <span class="n">mtz</span><span class="p">[</span><span class="n">l</span><span class="p">]</span><span class="o">.</span><span class="n">dtype</span><span class="o">.</span><span class="n">mtztype</span> <span class="o">==</span> <span class="s2">&quot;Q&quot;</span><span class="p">]</span>
-    <span class="k">return</span> <span class="n">mtz</span><span class="p">[[</span><span class="n">F_column</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">SigF_column</span><span class="p">[</span><span class="mi">0</span><span class="p">]]]</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>def subset_to_F_and_SigF(mtz):
+    F_column = [ l for l in mtz.columns if mtz[l].dtype.mtztype == &quot;F&quot;]
+    SigF_column = [ l for l in mtz.columns if mtz[l].dtype.mtztype == &quot;Q&quot;]
+    return mtz[[F_column[0], SigF_column[0]]]
 </pre></div>
 </div>
 </div>
@@ -534,8 +535,8 @@ Cell <span class="ansi-green-fg">In [7], line 1</span>
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">mtz_on</span> <span class="o">=</span> <span class="n">subset_to_F_and_SigF</span><span class="p">(</span><span class="n">mtz_on</span><span class="p">)</span>
-<span class="n">mtz_off</span> <span class="o">=</span> <span class="n">subset_to_F_and_SigF</span><span class="p">(</span><span class="n">mtz_off</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>mtz_on = subset_to_F_and_SigF(mtz_on)
+mtz_off = subset_to_F_and_SigF(mtz_off)
 </pre></div>
 </div>
 </div>
@@ -546,7 +547,7 @@ Cell <span class="ansi-green-fg">In [7], line 1</span>
 <div class="highlight"><pre>
 <span class="ansi-red-fg">---------------------------------------------------------------------------</span>
 <span class="ansi-red-fg">NameError</span>                                 Traceback (most recent call last)
-Cell <span class="ansi-green-fg">In [9], line 1</span>
+Cell <span class="ansi-green-fg">In[9], line 1</span>
 <span class="ansi-green-fg">----&gt; 1</span> mtz_on <span style="color: rgb(98,98,98)">=</span> subset_to_F_and_SigF(<span class="ansi-yellow-bg">mtz_on</span>)
 <span class="ansi-green-intense-fg ansi-bold">      2</span> mtz_off <span style="color: rgb(98,98,98)">=</span> subset_to_F_and_SigF(mtz_off)
 
@@ -558,7 +559,7 @@ Cell <span class="ansi-green-fg">In [9], line 1</span>
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">diff</span> <span class="o">=</span> <span class="n">mtz_off</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">mtz_on</span><span class="p">,</span> <span class="n">left_index</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">right_index</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">suffixes</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;_off&quot;</span><span class="p">,</span> <span class="s2">&quot;_on&quot;</span><span class="p">))</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>diff = mtz_off.merge(mtz_on, left_index=True, right_index=True, suffixes=(&quot;_off&quot;, &quot;_on&quot;))
 </pre></div>
 </div>
 </div>
@@ -569,7 +570,7 @@ Cell <span class="ansi-green-fg">In [9], line 1</span>
 <div class="highlight"><pre>
 <span class="ansi-red-fg">---------------------------------------------------------------------------</span>
 <span class="ansi-red-fg">NameError</span>                                 Traceback (most recent call last)
-Cell <span class="ansi-green-fg">In [10], line 1</span>
+Cell <span class="ansi-green-fg">In[10], line 1</span>
 <span class="ansi-green-fg">----&gt; 1</span> diff <span style="color: rgb(98,98,98)">=</span> <span class="ansi-yellow-bg">mtz_off</span><span style="color: rgb(98,98,98)">.</span>merge(mtz_on, left_index<span style="color: rgb(98,98,98)">=</span><span class="ansi-bold" style="color: rgb(0,135,0)">True</span>, right_index<span style="color: rgb(98,98,98)">=</span><span class="ansi-bold" style="color: rgb(0,135,0)">True</span>, suffixes<span style="color: rgb(98,98,98)">=</span>(<span style="color: rgb(175,0,0)">&#34;</span><span style="color: rgb(175,0,0)">_off</span><span style="color: rgb(175,0,0)">&#34;</span>, <span style="color: rgb(175,0,0)">&#34;</span><span style="color: rgb(175,0,0)">_on</span><span style="color: rgb(175,0,0)">&#34;</span>))
 
 <span class="ansi-red-fg">NameError</span>: name &#39;mtz_off&#39; is not defined
@@ -579,7 +580,7 @@ Cell <span class="ansi-green-fg">In [10], line 1</span>
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">diff</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>diff.head()
 </pre></div>
 </div>
 </div>
@@ -590,7 +591,7 @@ Cell <span class="ansi-green-fg">In [10], line 1</span>
 <div class="highlight"><pre>
 <span class="ansi-red-fg">---------------------------------------------------------------------------</span>
 <span class="ansi-red-fg">NameError</span>                                 Traceback (most recent call last)
-Cell <span class="ansi-green-fg">In [11], line 1</span>
+Cell <span class="ansi-green-fg">In[11], line 1</span>
 <span class="ansi-green-fg">----&gt; 1</span> <span class="ansi-yellow-bg">diff</span><span style="color: rgb(98,98,98)">.</span>head()
 
 <span class="ansi-red-fg">NameError</span>: name &#39;diff&#39; is not defined
@@ -605,8 +606,8 @@ Cell <span class="ansi-green-fg">In [11], line 1</span>
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">diff</span><span class="p">[</span><span class="s2">&quot;DF&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">diff</span><span class="p">[</span><span class="s2">&quot;F_on&quot;</span><span class="p">]</span> <span class="o">-</span> <span class="n">diff</span><span class="p">[</span><span class="s2">&quot;F_off&quot;</span><span class="p">])</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s2">&quot;SFAmplitude&quot;</span><span class="p">)</span>
-<span class="n">diff</span><span class="p">[</span><span class="s2">&quot;SigDF&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">diff</span><span class="p">[</span><span class="s2">&quot;SigF_on&quot;</span><span class="p">]</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="n">diff</span><span class="p">[</span><span class="s2">&quot;SigF_off&quot;</span><span class="p">]</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s2">&quot;Stddev&quot;</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>diff[&quot;DF&quot;] = (diff[&quot;F_on&quot;] - diff[&quot;F_off&quot;]).astype(&quot;SFAmplitude&quot;)
+diff[&quot;SigDF&quot;] = np.sqrt(diff[&quot;SigF_on&quot;]**2 + diff[&quot;SigF_off&quot;]**2).astype(&quot;Stddev&quot;)
 </pre></div>
 </div>
 </div>
@@ -617,7 +618,7 @@ Cell <span class="ansi-green-fg">In [11], line 1</span>
 <div class="highlight"><pre>
 <span class="ansi-red-fg">---------------------------------------------------------------------------</span>
 <span class="ansi-red-fg">NameError</span>                                 Traceback (most recent call last)
-Cell <span class="ansi-green-fg">In [12], line 1</span>
+Cell <span class="ansi-green-fg">In[12], line 1</span>
 <span class="ansi-green-fg">----&gt; 1</span> diff[<span style="color: rgb(175,0,0)">&#34;</span><span style="color: rgb(175,0,0)">DF</span><span style="color: rgb(175,0,0)">&#34;</span>] <span style="color: rgb(98,98,98)">=</span> (<span class="ansi-yellow-bg">diff</span>[<span style="color: rgb(175,0,0)">&#34;</span><span style="color: rgb(175,0,0)">F_on</span><span style="color: rgb(175,0,0)">&#34;</span>] <span style="color: rgb(98,98,98)">-</span> diff[<span style="color: rgb(175,0,0)">&#34;</span><span style="color: rgb(175,0,0)">F_off</span><span style="color: rgb(175,0,0)">&#34;</span>])<span style="color: rgb(98,98,98)">.</span>astype(<span style="color: rgb(175,0,0)">&#34;</span><span style="color: rgb(175,0,0)">SFAmplitude</span><span style="color: rgb(175,0,0)">&#34;</span>)
 <span class="ansi-green-intense-fg ansi-bold">      2</span> diff[<span style="color: rgb(175,0,0)">&#34;</span><span style="color: rgb(175,0,0)">SigDF</span><span style="color: rgb(175,0,0)">&#34;</span>] <span style="color: rgb(98,98,98)">=</span> np<span style="color: rgb(98,98,98)">.</span>sqrt(diff[<span style="color: rgb(175,0,0)">&#34;</span><span style="color: rgb(175,0,0)">SigF_on</span><span style="color: rgb(175,0,0)">&#34;</span>]<span style="color: rgb(98,98,98)">*</span><span style="color: rgb(98,98,98)">*</span><span style="color: rgb(98,98,98)">2</span> <span style="color: rgb(98,98,98)">+</span> diff[<span style="color: rgb(175,0,0)">&#34;</span><span style="color: rgb(175,0,0)">SigF_off</span><span style="color: rgb(175,0,0)">&#34;</span>]<span style="color: rgb(98,98,98)">*</span><span style="color: rgb(98,98,98)">*</span><span style="color: rgb(98,98,98)">2</span>)<span style="color: rgb(98,98,98)">.</span>astype(<span style="color: rgb(175,0,0)">&#34;</span><span style="color: rgb(175,0,0)">Stddev</span><span style="color: rgb(175,0,0)">&#34;</span>)
 
@@ -638,12 +639,12 @@ w = \left(1 + \frac{\sigma_{\Delta F}^2}{\overline{\sigma_{\Delta F}^2}} + \alph
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">compute_weights</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">sigdf</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Compute weights for each structure factor based on deltaF and its uncertainty</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">w</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="p">(</span><span class="n">sigdf</span><span class="o">**</span><span class="mi">2</span> <span class="o">/</span> <span class="p">(</span><span class="n">sigdf</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">())</span> <span class="o">+</span> <span class="n">alpha</span><span class="o">*</span><span class="p">(</span><span class="n">df</span><span class="o">**</span><span class="mi">2</span> <span class="o">/</span> <span class="p">(</span><span class="n">df</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">()))</span>
-    <span class="k">return</span> <span class="n">w</span><span class="o">**-</span><span class="mi">1</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>def compute_weights(df, sigdf, alpha=0):
+    &quot;&quot;&quot;
+    Compute weights for each structure factor based on deltaF and its uncertainty
+    &quot;&quot;&quot;
+    w = (1 + (sigdf**2 / (sigdf**2).mean()) + alpha*(df**2 / (df**2).mean()))
+    return w**-1
 </pre></div>
 </div>
 </div>
@@ -651,8 +652,8 @@ w = \left(1 + \frac{\sigma_{\Delta F}^2}{\overline{\sigma_{\Delta F}^2}} + \alph
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">diff</span><span class="p">[</span><span class="s2">&quot;W&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">compute_weights</span><span class="p">(</span><span class="n">diff</span><span class="p">[</span><span class="s2">&quot;DF&quot;</span><span class="p">],</span> <span class="n">diff</span><span class="p">[</span><span class="s2">&quot;SigDF&quot;</span><span class="p">],</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.00</span><span class="p">)</span>
-<span class="n">diff</span><span class="p">[</span><span class="s2">&quot;W&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">diff</span><span class="p">[</span><span class="s2">&quot;W&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s2">&quot;W&quot;</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>diff[&quot;W&quot;] = compute_weights(diff[&quot;DF&quot;], diff[&quot;SigDF&quot;], alpha=0.00)
+diff[&quot;W&quot;] = diff[&quot;W&quot;].astype(&quot;W&quot;)
 </pre></div>
 </div>
 </div>
@@ -663,7 +664,7 @@ w = \left(1 + \frac{\sigma_{\Delta F}^2}{\overline{\sigma_{\Delta F}^2}} + \alph
 <div class="highlight"><pre>
 <span class="ansi-red-fg">---------------------------------------------------------------------------</span>
 <span class="ansi-red-fg">NameError</span>                                 Traceback (most recent call last)
-Cell <span class="ansi-green-fg">In [14], line 1</span>
+Cell <span class="ansi-green-fg">In[14], line 1</span>
 <span class="ansi-green-fg">----&gt; 1</span> diff[<span style="color: rgb(175,0,0)">&#34;</span><span style="color: rgb(175,0,0)">W</span><span style="color: rgb(175,0,0)">&#34;</span>] <span style="color: rgb(98,98,98)">=</span> compute_weights(<span class="ansi-yellow-bg">diff</span>[<span style="color: rgb(175,0,0)">&#34;</span><span style="color: rgb(175,0,0)">DF</span><span style="color: rgb(175,0,0)">&#34;</span>], diff[<span style="color: rgb(175,0,0)">&#34;</span><span style="color: rgb(175,0,0)">SigDF</span><span style="color: rgb(175,0,0)">&#34;</span>], alpha<span style="color: rgb(98,98,98)">=</span><span style="color: rgb(98,98,98)">0.00</span>)
 <span class="ansi-green-intense-fg ansi-bold">      2</span> diff[<span style="color: rgb(175,0,0)">&#34;</span><span style="color: rgb(175,0,0)">W</span><span style="color: rgb(175,0,0)">&#34;</span>] <span style="color: rgb(98,98,98)">=</span> diff[<span style="color: rgb(175,0,0)">&#34;</span><span style="color: rgb(175,0,0)">W</span><span style="color: rgb(175,0,0)">&#34;</span>]<span style="color: rgb(98,98,98)">.</span>astype(<span style="color: rgb(175,0,0)">&#34;</span><span style="color: rgb(175,0,0)">W</span><span style="color: rgb(175,0,0)">&#34;</span>)
 
@@ -675,23 +676,23 @@ Cell <span class="ansi-green-fg">In [14], line 1</span>
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">7</span><span class="p">))</span>
-<span class="n">pts</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">diff</span><span class="o">.</span><span class="n">DF</span><span class="p">,</span> <span class="n">diff</span><span class="o">.</span><span class="n">DF</span><span class="o">.</span><span class="n">abs</span><span class="p">()</span><span class="o">/</span><span class="n">diff</span><span class="o">.</span><span class="n">SigDF</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="n">diff</span><span class="o">.</span><span class="n">W</span><span class="p">)</span>
-<span class="n">x1</span><span class="p">,</span> <span class="n">x2</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">gca</span><span class="p">()</span><span class="o">.</span><span class="n">get_xlim</span><span class="p">()</span>
-<span class="n">ax</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="n">x1</span><span class="o">-</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">x2</span><span class="o">+</span><span class="mf">0.5</span><span class="p">)</span>
-<span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;$\Delta F$&quot;</span><span class="p">)</span>
-<span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;$\frac{\left| \Delta F \right|}{\sigma_{\Delta F}}$&quot;</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>fig, ax = plt.subplots(figsize=(10, 7))
+pts = ax.scatter(diff.DF, diff.DF.abs()/diff.SigDF, c=diff.W)
+x1, x2 = plt.gca().get_xlim()
+ax.set_xlim(x1-0.5, x2+0.5)
+ax.set_xlabel(r&quot;$\Delta F$&quot;)
+ax.set_ylabel(r&quot;$\frac{\left| \Delta F \right|}{\sigma_{\Delta F}}$&quot;)
 
-<span class="c1"># Inset</span>
-<span class="n">axins</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">inset_axes</span><span class="p">([</span><span class="mf">0.6</span><span class="p">,</span> <span class="mf">0.6</span><span class="p">,</span> <span class="mf">0.37</span><span class="p">,</span> <span class="mf">0.37</span><span class="p">])</span>
-<span class="n">axins</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">diff</span><span class="o">.</span><span class="n">DF</span><span class="p">,</span> <span class="n">diff</span><span class="o">.</span><span class="n">DF</span><span class="o">.</span><span class="n">abs</span><span class="p">()</span><span class="o">/</span><span class="n">diff</span><span class="o">.</span><span class="n">SigDF</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="n">diff</span><span class="o">.</span><span class="n">W</span><span class="p">)</span>
-<span class="n">y1</span><span class="p">,</span> <span class="n">y2</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">10</span>
-<span class="n">axins</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="n">x1</span><span class="p">,</span> <span class="n">x2</span><span class="p">)</span>
-<span class="n">axins</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="n">y1</span><span class="p">,</span> <span class="n">y2</span><span class="p">)</span>
-<span class="n">ax</span><span class="o">.</span><span class="n">indicate_inset_zoom</span><span class="p">(</span><span class="n">axins</span><span class="p">)</span>
+# Inset
+axins = ax.inset_axes([0.6, 0.6, 0.37, 0.37])
+axins.scatter(diff.DF, diff.DF.abs()/diff.SigDF, c=diff.W)
+y1, y2 = 0, 10
+axins.set_xlim(x1, x2)
+axins.set_ylim(y1, y2)
+ax.indicate_inset_zoom(axins)
 
-<span class="n">fig</span><span class="o">.</span><span class="n">colorbar</span><span class="p">(</span><span class="n">pts</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Weight&quot;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+fig.colorbar(pts, label=&quot;Weight&quot;)
+plt.show()
 </pre></div>
 </div>
 </div>
@@ -702,7 +703,7 @@ Cell <span class="ansi-green-fg">In [14], line 1</span>
 <div class="highlight"><pre>
 <span class="ansi-red-fg">---------------------------------------------------------------------------</span>
 <span class="ansi-red-fg">NameError</span>                                 Traceback (most recent call last)
-Cell <span class="ansi-green-fg">In [15], line 2</span>
+Cell <span class="ansi-green-fg">In[15], line 2</span>
 <span class="ansi-green-intense-fg ansi-bold">      1</span> fig, ax <span style="color: rgb(98,98,98)">=</span> plt<span style="color: rgb(98,98,98)">.</span>subplots(figsize<span style="color: rgb(98,98,98)">=</span>(<span style="color: rgb(98,98,98)">10</span>, <span style="color: rgb(98,98,98)">7</span>))
 <span class="ansi-green-fg">----&gt; 2</span> pts <span style="color: rgb(98,98,98)">=</span> ax<span style="color: rgb(98,98,98)">.</span>scatter(<span class="ansi-yellow-bg">diff</span><span style="color: rgb(98,98,98)">.</span>DF, diff<span style="color: rgb(98,98,98)">.</span>DF<span style="color: rgb(98,98,98)">.</span>abs()<span style="color: rgb(98,98,98)">/</span>diff<span style="color: rgb(98,98,98)">.</span>SigDF, c<span style="color: rgb(98,98,98)">=</span>diff<span style="color: rgb(98,98,98)">.</span>W)
 <span class="ansi-green-intense-fg ansi-bold">      3</span> x1, x2 <span style="color: rgb(98,98,98)">=</span> plt<span style="color: rgb(98,98,98)">.</span>gca()<span style="color: rgb(98,98,98)">.</span>get_xlim()
@@ -728,9 +729,9 @@ Cell <span class="ansi-green-fg">In [15], line 2</span>
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Reference MTZ with Phases:&quot;</span><span class="p">)</span>
-<span class="n">uploader_ref</span> <span class="o">=</span> <span class="n">widgets</span><span class="o">.</span><span class="n">FileUpload</span><span class="p">(</span><span class="n">accept</span><span class="o">=</span><span class="s2">&quot;.mtz&quot;</span><span class="p">,</span> <span class="n">multiple</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-<span class="n">display</span><span class="p">(</span><span class="n">uploader_ref</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>print(&quot;Reference MTZ with Phases:&quot;)
+uploader_ref = widgets.FileUpload(accept=&quot;.mtz&quot;, multiple=False)
+display(uploader_ref)
 </pre></div>
 </div>
 </div>
@@ -746,13 +747,13 @@ Reference MTZ with Phases:
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<script type="application/vnd.jupyter.widget-view+json">{"version_major": 2, "version_minor": 0, "model_id": "6236b0d0b88c4d4daf11af9cff8df5ba"}</script></div>
+<script type="application/vnd.jupyter.widget-view+json">{"version_major": 2, "version_minor": 0, "model_id": "6d640a8bb9aa4e4d8d98f53f8a07f6e6"}</script></div>
 </div>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">mtz_ref</span> <span class="o">=</span> <span class="n">read_uploadedFile</span><span class="p">(</span><span class="n">uploader_ref</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>mtz_ref = read_uploadedFile(uploader_ref)
 </pre></div>
 </div>
 </div>
@@ -763,10 +764,10 @@ Reference MTZ with Phases:
 <div class="highlight"><pre>
 <span class="ansi-red-fg">---------------------------------------------------------------------------</span>
 <span class="ansi-red-fg">AttributeError</span>                            Traceback (most recent call last)
-Cell <span class="ansi-green-fg">In [17], line 1</span>
+Cell <span class="ansi-green-fg">In[17], line 1</span>
 <span class="ansi-green-fg">----&gt; 1</span> mtz_ref <span style="color: rgb(98,98,98)">=</span> <span class="ansi-yellow-bg">read_uploadedFile</span><span class="ansi-yellow-bg">(</span><span class="ansi-yellow-bg">uploader_ref</span><span class="ansi-yellow-bg">)</span>
 
-Cell <span class="ansi-green-fg">In [5], line 5</span>, in <span class="ansi-cyan-fg">read_uploadedFile</span><span class="ansi-blue-fg">(uploadedFile)</span>
+Cell <span class="ansi-green-fg">In[5], line 5</span>, in <span class="ansi-cyan-fg">read_uploadedFile</span><span class="ansi-blue-fg">(uploadedFile)</span>
 <span class="ansi-green-intense-fg ansi-bold">      3</span> <span class="ansi-bold" style="color: rgb(0,135,0)">from</span> <span class="ansi-bold" style="color: rgb(0,0,255)">tempfile</span> <span class="ansi-bold" style="color: rgb(0,135,0)">import</span> NamedTemporaryFile
 <span class="ansi-green-intense-fg ansi-bold">      4</span> upload <span style="color: rgb(98,98,98)">=</span> NamedTemporaryFile(suffix<span style="color: rgb(98,98,98)">=</span><span style="color: rgb(175,0,0)">&#34;</span><span style="color: rgb(175,0,0)">mtz</span><span style="color: rgb(175,0,0)">&#34;</span>)
 <span class="ansi-green-fg">----&gt; 5</span> upload<span style="color: rgb(98,98,98)">.</span>write(<span class="ansi-yellow-bg">uploadedFile</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">.</span><span class="ansi-yellow-bg">data</span>[<span style="color: rgb(98,98,98)">0</span>])
@@ -780,11 +781,11 @@ Cell <span class="ansi-green-fg">In [5], line 5</span>, in <span class="ansi-cya
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">phases</span> <span class="o">=</span> <span class="n">mtz_ref</span><span class="o">.</span><span class="n">get_phase_keys</span><span class="p">()</span>
-<span class="k">if</span> <span class="s2">&quot;PH2FOFCWT&quot;</span> <span class="ow">in</span> <span class="n">phases</span><span class="p">:</span>
-    <span class="n">phi</span> <span class="o">=</span> <span class="s2">&quot;PH2FOFCWT&quot;</span>
-<span class="k">else</span><span class="p">:</span>
-    <span class="n">phi</span> <span class="o">=</span> <span class="n">phases</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>phases = mtz_ref.get_phase_keys()
+if &quot;PH2FOFCWT&quot; in phases:
+    phi = &quot;PH2FOFCWT&quot;
+else:
+    phi = phases[0]
 </pre></div>
 </div>
 </div>
@@ -795,7 +796,7 @@ Cell <span class="ansi-green-fg">In [5], line 5</span>, in <span class="ansi-cya
 <div class="highlight"><pre>
 <span class="ansi-red-fg">---------------------------------------------------------------------------</span>
 <span class="ansi-red-fg">NameError</span>                                 Traceback (most recent call last)
-Cell <span class="ansi-green-fg">In [18], line 1</span>
+Cell <span class="ansi-green-fg">In[18], line 1</span>
 <span class="ansi-green-fg">----&gt; 1</span> phases <span style="color: rgb(98,98,98)">=</span> <span class="ansi-yellow-bg">mtz_ref</span><span style="color: rgb(98,98,98)">.</span>get_phase_keys()
 <span class="ansi-green-intense-fg ansi-bold">      2</span> <span class="ansi-bold" style="color: rgb(0,135,0)">if</span> <span style="color: rgb(175,0,0)">&#34;</span><span style="color: rgb(175,0,0)">PH2FOFCWT</span><span style="color: rgb(175,0,0)">&#34;</span> <span class="ansi-bold" style="color: rgb(175,0,255)">in</span> phases:
 <span class="ansi-green-intense-fg ansi-bold">      3</span>     phi <span style="color: rgb(98,98,98)">=</span> <span style="color: rgb(175,0,0)">&#34;</span><span style="color: rgb(175,0,0)">PH2FOFCWT</span><span style="color: rgb(175,0,0)">&#34;</span>
@@ -807,7 +808,7 @@ Cell <span class="ansi-green-fg">In [18], line 1</span>
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[19]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">diff</span> <span class="o">=</span> <span class="n">diff</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">mtz_ref</span><span class="p">[</span><span class="n">phi</span><span class="p">],</span> <span class="n">left_index</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">right_index</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>diff = diff.merge(mtz_ref[phi], left_index=True, right_index=True)
 </pre></div>
 </div>
 </div>
@@ -818,7 +819,7 @@ Cell <span class="ansi-green-fg">In [18], line 1</span>
 <div class="highlight"><pre>
 <span class="ansi-red-fg">---------------------------------------------------------------------------</span>
 <span class="ansi-red-fg">NameError</span>                                 Traceback (most recent call last)
-Cell <span class="ansi-green-fg">In [19], line 1</span>
+Cell <span class="ansi-green-fg">In[19], line 1</span>
 <span class="ansi-green-fg">----&gt; 1</span> diff <span style="color: rgb(98,98,98)">=</span> <span class="ansi-yellow-bg">diff</span><span style="color: rgb(98,98,98)">.</span>merge(mtz_ref[phi], left_index<span style="color: rgb(98,98,98)">=</span><span class="ansi-bold" style="color: rgb(0,135,0)">True</span>, right_index<span style="color: rgb(98,98,98)">=</span><span class="ansi-bold" style="color: rgb(0,135,0)">True</span>)
 
 <span class="ansi-red-fg">NameError</span>: name &#39;diff&#39; is not defined
@@ -828,7 +829,7 @@ Cell <span class="ansi-green-fg">In [19], line 1</span>
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[20]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">diff</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>diff
 </pre></div>
 </div>
 </div>
@@ -839,7 +840,7 @@ Cell <span class="ansi-green-fg">In [19], line 1</span>
 <div class="highlight"><pre>
 <span class="ansi-red-fg">---------------------------------------------------------------------------</span>
 <span class="ansi-red-fg">NameError</span>                                 Traceback (most recent call last)
-Cell <span class="ansi-green-fg">In [20], line 1</span>
+Cell <span class="ansi-green-fg">In[20], line 1</span>
 <span class="ansi-green-fg">----&gt; 1</span> <span class="ansi-yellow-bg">diff</span>
 
 <span class="ansi-red-fg">NameError</span>: name &#39;diff&#39; is not defined
@@ -850,60 +851,60 @@ Cell <span class="ansi-green-fg">In [20], line 1</span>
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[21]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">base64</span>
-<span class="kn">import</span> <span class="nn">hashlib</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Callable</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>import base64
+import hashlib
+from typing import Callable
 
-<span class="kn">import</span> <span class="nn">ipywidgets</span>
-<span class="kn">from</span> <span class="nn">IPython.display</span> <span class="kn">import</span> <span class="n">HTML</span>
+import ipywidgets
+from IPython.display import HTML
 
 
-<span class="k">class</span> <span class="nc">DownloadButton</span><span class="p">(</span><span class="n">ipywidgets</span><span class="o">.</span><span class="n">Button</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Download button with dynamic content</span>
+class DownloadButton(ipywidgets.Button):
+    &quot;&quot;&quot;Download button with dynamic content
 
-<span class="sd">    The content is generated using a callback when the button is clicked.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+    The content is generated using a callback when the button is clicked.
+    &quot;&quot;&quot;
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filename</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">contents</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[],</span> <span class="nb">str</span><span class="p">],</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-        <span class="nb">super</span><span class="p">(</span><span class="n">DownloadButton</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">filename</span> <span class="o">=</span> <span class="n">filename</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">contents</span> <span class="o">=</span> <span class="n">contents</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">on_click</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__on_click</span><span class="p">)</span>
+    def __init__(self, filename: str, contents: Callable[[], str], **kwargs):
+        super(DownloadButton, self).__init__(**kwargs)
+        self.filename = filename
+        self.contents = contents
+        self.on_click(self.__on_click)
 
-    <span class="k">def</span> <span class="nf">__on_click</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span>
-        <span class="n">contents</span><span class="p">:</span> <span class="nb">bytes</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">contents</span><span class="p">()</span>
-        <span class="n">b64</span> <span class="o">=</span> <span class="n">base64</span><span class="o">.</span><span class="n">encodebytes</span><span class="p">(</span><span class="n">contents</span><span class="p">)</span>
-        <span class="n">payload</span> <span class="o">=</span> <span class="n">b64</span><span class="o">.</span><span class="n">decode</span><span class="p">()</span>
-        <span class="n">digest</span> <span class="o">=</span> <span class="n">hashlib</span><span class="o">.</span><span class="n">md5</span><span class="p">(</span><span class="n">contents</span><span class="p">)</span><span class="o">.</span><span class="n">hexdigest</span><span class="p">()</span>  <span class="c1"># bypass browser cache</span>
-        <span class="nb">id</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;dl_</span><span class="si">{</span><span class="n">digest</span><span class="si">}</span><span class="s1">&#39;</span>
+    def __on_click(self, b):
+        contents: bytes = self.contents()
+        b64 = base64.encodebytes(contents)
+        payload = b64.decode()
+        digest = hashlib.md5(contents).hexdigest()  # bypass browser cache
+        id = f&#39;dl_{digest}&#39;
 
-        <span class="n">display</span><span class="p">(</span><span class="n">HTML</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;&quot;&quot;</span>
-<span class="s2">&lt;html&gt;</span>
-<span class="s2">&lt;body&gt;</span>
-<span class="s2">&lt;a id=&quot;</span><span class="si">{</span><span class="nb">id</span><span class="si">}</span><span class="s2">&quot; download=&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">filename</span><span class="si">}</span><span class="s2">&quot; href=&quot;data:text/csv;base64,</span><span class="si">{</span><span class="n">payload</span><span class="si">}</span><span class="s2">&quot; download&gt;</span>
-<span class="s2">&lt;/a&gt;</span>
+        display(HTML(f&quot;&quot;&quot;
+&lt;html&gt;
+&lt;body&gt;
+&lt;a id=&quot;{id}&quot; download=&quot;{self.filename}&quot; href=&quot;data:text/csv;base64,{payload}&quot; download&gt;
+&lt;/a&gt;
 
-<span class="s2">&lt;script&gt;</span>
-<span class="s2">(function download() </span><span class="se">{{</span><span class="s2"></span>
-<span class="s2">document.getElementById(&#39;</span><span class="si">{</span><span class="nb">id</span><span class="si">}</span><span class="s2">&#39;).click();</span>
-<span class="se">}}</span><span class="s2">)()</span>
-<span class="s2">&lt;/script&gt;</span>
+&lt;script&gt;
+(function download() {{
+document.getElementById(&#39;{id}&#39;).click();
+}})()
+&lt;/script&gt;
 
-<span class="s2">&lt;/body&gt;</span>
-<span class="s2">&lt;/html&gt;</span>
-<span class="s2">&quot;&quot;&quot;</span><span class="p">))</span>
+&lt;/body&gt;
+&lt;/html&gt;
+&quot;&quot;&quot;))
 
-<span class="k">def</span> <span class="nf">getDiffMap</span><span class="p">(</span><span class="n">mtz</span><span class="p">):</span>
-    <span class="kn">from</span> <span class="nn">tempfile</span> <span class="kn">import</span> <span class="n">NamedTemporaryFile</span>
-    <span class="kn">from</span> <span class="nn">io</span> <span class="kn">import</span> <span class="n">BytesIO</span>
-    <span class="n">download</span> <span class="o">=</span> <span class="n">NamedTemporaryFile</span><span class="p">(</span><span class="n">suffix</span><span class="o">=</span><span class="s2">&quot;mtz&quot;</span><span class="p">)</span>
-    <span class="n">mtz</span><span class="o">.</span><span class="n">write_mtz</span><span class="p">(</span><span class="n">download</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
-    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">download</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="s1">&#39;rb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">fh</span><span class="p">:</span>
-        <span class="n">buf</span> <span class="o">=</span> <span class="n">BytesIO</span><span class="p">(</span><span class="n">fh</span><span class="o">.</span><span class="n">read</span><span class="p">())</span>
-    <span class="n">download</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
-    <span class="k">return</span> <span class="n">buf</span><span class="o">.</span><span class="n">getvalue</span><span class="p">()</span>
+def getDiffMap(mtz):
+    from tempfile import NamedTemporaryFile
+    from io import BytesIO
+    download = NamedTemporaryFile(suffix=&quot;mtz&quot;)
+    mtz.write_mtz(download.name)
+    with open(download.name, &#39;rb&#39;) as fh:
+        buf = BytesIO(fh.read())
+    download.close()
+    return buf.getvalue()
 
-<span class="n">DownloadButton</span><span class="p">(</span><span class="n">filename</span><span class="o">=</span><span class="s1">&#39;diffmap.mtz&#39;</span><span class="p">,</span> <span class="n">contents</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="n">getDiffMap</span><span class="p">(</span><span class="n">diff</span><span class="p">),</span> <span class="n">description</span><span class="o">=</span><span class="s1">&#39;download&#39;</span><span class="p">)</span>
+DownloadButton(filename=&#39;diffmap.mtz&#39;, contents=lambda: getDiffMap(diff), description=&#39;download&#39;)
 </pre></div>
 </div>
 </div>
@@ -912,11 +913,11 @@ Cell <span class="ansi-green-fg">In [20], line 1</span>
 </pre></div>
 </div>
 <div class="output_area docutils container">
-<script type="application/vnd.jupyter.widget-view+json">{"version_major": 2, "version_minor": 0, "model_id": "34bd834356b44aceabcd09b32a613c1f"}</script></div>
+<script type="application/vnd.jupyter.widget-view+json">{"version_major": 2, "version_minor": 0, "model_id": "b592ac439aba4db98abd0237f8159588"}</script></div>
 </div>
 <p>Good luck with your weighted difference map!</p>
 <script type="application/vnd.jupyter.widget-state+json">
-{"state": {"64ed43ababa3415f950ecb953aba3f75": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "2.0.0", "state": {"_model_module": "@jupyter-widgets/base", "_model_module_version": "2.0.0", "_model_name": "LayoutModel", "_view_count": null, "_view_module": "@jupyter-widgets/base", "_view_module_version": "2.0.0", "_view_name": "LayoutView", "align_content": null, "align_items": null, "align_self": null, "border_bottom": null, "border_left": null, "border_right": null, "border_top": null, "bottom": null, "display": null, "flex": null, "flex_flow": null, "grid_area": null, "grid_auto_columns": null, "grid_auto_flow": null, "grid_auto_rows": null, "grid_column": null, "grid_gap": null, "grid_row": null, "grid_template_areas": null, "grid_template_columns": null, "grid_template_rows": null, "height": null, "justify_content": null, "justify_items": null, "left": null, "margin": null, "max_height": null, "max_width": null, "min_height": null, "min_width": null, "object_fit": null, "object_position": null, "order": null, "overflow": null, "padding": null, "right": null, "top": null, "visibility": null, "width": null}}, "201d730b185248b8865070a1fc364d9d": {"model_name": "ButtonStyleModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "2.0.0", "state": {"_model_module": "@jupyter-widgets/controls", "_model_module_version": "2.0.0", "_model_name": "ButtonStyleModel", "_view_count": null, "_view_module": "@jupyter-widgets/base", "_view_module_version": "2.0.0", "_view_name": "StyleView", "button_color": null, "font_family": null, "font_size": null, "font_style": null, "font_variant": null, "font_weight": null, "text_color": null, "text_decoration": null}}, "0110220ded304e68ae6b3e04e6f37ca5": {"model_name": "FileUploadModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "2.0.0", "state": {"_dom_classes": [], "_model_module": "@jupyter-widgets/controls", "_model_module_version": "2.0.0", "_model_name": "FileUploadModel", "_view_count": null, "_view_module": "@jupyter-widgets/controls", "_view_module_version": "2.0.0", "_view_name": "FileUploadView", "accept": ".mtz", "button_style": "", "description": "Upload", "description_allow_html": false, "disabled": false, "error": "", "icon": "upload", "layout": "IPY_MODEL_64ed43ababa3415f950ecb953aba3f75", "multiple": false, "style": "IPY_MODEL_201d730b185248b8865070a1fc364d9d", "tabbable": null, "tooltip": null, "value": []}}, "e100c123dc504e6a84d2eeb06e31cd1b": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "2.0.0", "state": {"_model_module": "@jupyter-widgets/base", "_model_module_version": "2.0.0", "_model_name": "LayoutModel", "_view_count": null, "_view_module": "@jupyter-widgets/base", "_view_module_version": "2.0.0", "_view_name": "LayoutView", "align_content": null, "align_items": null, "align_self": null, "border_bottom": null, "border_left": null, "border_right": null, "border_top": null, "bottom": null, "display": null, "flex": null, "flex_flow": null, "grid_area": null, "grid_auto_columns": null, "grid_auto_flow": null, "grid_auto_rows": null, "grid_column": null, "grid_gap": null, "grid_row": null, "grid_template_areas": null, "grid_template_columns": null, "grid_template_rows": null, "height": null, "justify_content": null, "justify_items": null, "left": null, "margin": null, "max_height": null, "max_width": null, "min_height": null, "min_width": null, "object_fit": null, "object_position": null, "order": null, "overflow": null, "padding": null, "right": null, "top": null, "visibility": null, "width": null}}, "7361c38501744ad78f86b34cf3ad5ccb": {"model_name": "ButtonStyleModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "2.0.0", "state": {"_model_module": "@jupyter-widgets/controls", "_model_module_version": "2.0.0", "_model_name": "ButtonStyleModel", "_view_count": null, "_view_module": "@jupyter-widgets/base", "_view_module_version": "2.0.0", "_view_name": "StyleView", "button_color": null, "font_family": null, "font_size": null, "font_style": null, "font_variant": null, "font_weight": null, "text_color": null, "text_decoration": null}}, "9b79426eb11e465b869d900047b4f6ac": {"model_name": "FileUploadModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "2.0.0", "state": {"_dom_classes": [], "_model_module": "@jupyter-widgets/controls", "_model_module_version": "2.0.0", "_model_name": "FileUploadModel", "_view_count": null, "_view_module": "@jupyter-widgets/controls", "_view_module_version": "2.0.0", "_view_name": "FileUploadView", "accept": ".mtz", "button_style": "", "description": "Upload", "description_allow_html": false, "disabled": false, "error": "", "icon": "upload", "layout": "IPY_MODEL_e100c123dc504e6a84d2eeb06e31cd1b", "multiple": false, "style": "IPY_MODEL_7361c38501744ad78f86b34cf3ad5ccb", "tabbable": null, "tooltip": null, "value": []}}, "5ca6f3a1f2b44ff091b77588fb33ef54": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "2.0.0", "state": {"_model_module": "@jupyter-widgets/base", "_model_module_version": "2.0.0", "_model_name": "LayoutModel", "_view_count": null, "_view_module": "@jupyter-widgets/base", "_view_module_version": "2.0.0", "_view_name": "LayoutView", "align_content": null, "align_items": null, "align_self": null, "border_bottom": null, "border_left": null, "border_right": null, "border_top": null, "bottom": null, "display": null, "flex": null, "flex_flow": null, "grid_area": null, "grid_auto_columns": null, "grid_auto_flow": null, "grid_auto_rows": null, "grid_column": null, "grid_gap": null, "grid_row": null, "grid_template_areas": null, "grid_template_columns": null, "grid_template_rows": null, "height": null, "justify_content": null, "justify_items": null, "left": null, "margin": null, "max_height": null, "max_width": null, "min_height": null, "min_width": null, "object_fit": null, "object_position": null, "order": null, "overflow": null, "padding": null, "right": null, "top": null, "visibility": null, "width": null}}, "a58d73fb405840c7897381547c46d910": {"model_name": "ButtonStyleModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "2.0.0", "state": {"_model_module": "@jupyter-widgets/controls", "_model_module_version": "2.0.0", "_model_name": "ButtonStyleModel", "_view_count": null, "_view_module": "@jupyter-widgets/base", "_view_module_version": "2.0.0", "_view_name": "StyleView", "button_color": null, "font_family": null, "font_size": null, "font_style": null, "font_variant": null, "font_weight": null, "text_color": null, "text_decoration": null}}, "6236b0d0b88c4d4daf11af9cff8df5ba": {"model_name": "FileUploadModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "2.0.0", "state": {"_dom_classes": [], "_model_module": "@jupyter-widgets/controls", "_model_module_version": "2.0.0", "_model_name": "FileUploadModel", "_view_count": null, "_view_module": "@jupyter-widgets/controls", "_view_module_version": "2.0.0", "_view_name": "FileUploadView", "accept": ".mtz", "button_style": "", "description": "Upload", "description_allow_html": false, "disabled": false, "error": "", "icon": "upload", "layout": "IPY_MODEL_5ca6f3a1f2b44ff091b77588fb33ef54", "multiple": false, "style": "IPY_MODEL_a58d73fb405840c7897381547c46d910", "tabbable": null, "tooltip": null, "value": []}}, "2c67f96e6e9941f49182015e0628c7dd": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "2.0.0", "state": {"_model_module": "@jupyter-widgets/base", "_model_module_version": "2.0.0", "_model_name": "LayoutModel", "_view_count": null, "_view_module": "@jupyter-widgets/base", "_view_module_version": "2.0.0", "_view_name": "LayoutView", "align_content": null, "align_items": null, "align_self": null, "border_bottom": null, "border_left": null, "border_right": null, "border_top": null, "bottom": null, "display": null, "flex": null, "flex_flow": null, "grid_area": null, "grid_auto_columns": null, "grid_auto_flow": null, "grid_auto_rows": null, "grid_column": null, "grid_gap": null, "grid_row": null, "grid_template_areas": null, "grid_template_columns": null, "grid_template_rows": null, "height": null, "justify_content": null, "justify_items": null, "left": null, "margin": null, "max_height": null, "max_width": null, "min_height": null, "min_width": null, "object_fit": null, "object_position": null, "order": null, "overflow": null, "padding": null, "right": null, "top": null, "visibility": null, "width": null}}, "8161e2fd0b07416396fbb9b39f42fb6b": {"model_name": "ButtonStyleModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "2.0.0", "state": {"_model_module": "@jupyter-widgets/controls", "_model_module_version": "2.0.0", "_model_name": "ButtonStyleModel", "_view_count": null, "_view_module": "@jupyter-widgets/base", "_view_module_version": "2.0.0", "_view_name": "StyleView", "button_color": null, "font_family": null, "font_size": null, "font_style": null, "font_variant": null, "font_weight": null, "text_color": null, "text_decoration": null}}, "34bd834356b44aceabcd09b32a613c1f": {"model_name": "ButtonModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "2.0.0", "state": {"_dom_classes": [], "_model_module": "@jupyter-widgets/controls", "_model_module_version": "2.0.0", "_model_name": "ButtonModel", "_view_count": null, "_view_module": "@jupyter-widgets/controls", "_view_module_version": "2.0.0", "_view_name": "ButtonView", "button_style": "", "description": "download", "disabled": false, "icon": "", "layout": "IPY_MODEL_2c67f96e6e9941f49182015e0628c7dd", "style": "IPY_MODEL_8161e2fd0b07416396fbb9b39f42fb6b", "tabbable": null, "tooltip": null}}}, "version_major": 2, "version_minor": 0}
+{"state": {"ae13f67916d44ec49e5c16a516eac127": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "2.0.0", "state": {"_model_module": "@jupyter-widgets/base", "_model_module_version": "2.0.0", "_model_name": "LayoutModel", "_view_count": null, "_view_module": "@jupyter-widgets/base", "_view_module_version": "2.0.0", "_view_name": "LayoutView", "align_content": null, "align_items": null, "align_self": null, "border_bottom": null, "border_left": null, "border_right": null, "border_top": null, "bottom": null, "display": null, "flex": null, "flex_flow": null, "grid_area": null, "grid_auto_columns": null, "grid_auto_flow": null, "grid_auto_rows": null, "grid_column": null, "grid_gap": null, "grid_row": null, "grid_template_areas": null, "grid_template_columns": null, "grid_template_rows": null, "height": null, "justify_content": null, "justify_items": null, "left": null, "margin": null, "max_height": null, "max_width": null, "min_height": null, "min_width": null, "object_fit": null, "object_position": null, "order": null, "overflow": null, "padding": null, "right": null, "top": null, "visibility": null, "width": null}}, "a170d7d269f140f78d7cb921fe99d589": {"model_name": "ButtonStyleModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "2.0.0", "state": {"_model_module": "@jupyter-widgets/controls", "_model_module_version": "2.0.0", "_model_name": "ButtonStyleModel", "_view_count": null, "_view_module": "@jupyter-widgets/base", "_view_module_version": "2.0.0", "_view_name": "StyleView", "button_color": null, "font_family": null, "font_size": null, "font_style": null, "font_variant": null, "font_weight": null, "text_color": null, "text_decoration": null}}, "85cdd5676e154b60b49ddfe1ce2291d2": {"model_name": "FileUploadModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "2.0.0", "state": {"_dom_classes": [], "_model_module": "@jupyter-widgets/controls", "_model_module_version": "2.0.0", "_model_name": "FileUploadModel", "_view_count": null, "_view_module": "@jupyter-widgets/controls", "_view_module_version": "2.0.0", "_view_name": "FileUploadView", "accept": ".mtz", "button_style": "", "description": "Upload", "description_allow_html": false, "disabled": false, "error": "", "icon": "upload", "layout": "IPY_MODEL_ae13f67916d44ec49e5c16a516eac127", "multiple": false, "style": "IPY_MODEL_a170d7d269f140f78d7cb921fe99d589", "tabbable": null, "tooltip": null, "value": []}}, "5e24f75657d34546ab93f016894119d7": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "2.0.0", "state": {"_model_module": "@jupyter-widgets/base", "_model_module_version": "2.0.0", "_model_name": "LayoutModel", "_view_count": null, "_view_module": "@jupyter-widgets/base", "_view_module_version": "2.0.0", "_view_name": "LayoutView", "align_content": null, "align_items": null, "align_self": null, "border_bottom": null, "border_left": null, "border_right": null, "border_top": null, "bottom": null, "display": null, "flex": null, "flex_flow": null, "grid_area": null, "grid_auto_columns": null, "grid_auto_flow": null, "grid_auto_rows": null, "grid_column": null, "grid_gap": null, "grid_row": null, "grid_template_areas": null, "grid_template_columns": null, "grid_template_rows": null, "height": null, "justify_content": null, "justify_items": null, "left": null, "margin": null, "max_height": null, "max_width": null, "min_height": null, "min_width": null, "object_fit": null, "object_position": null, "order": null, "overflow": null, "padding": null, "right": null, "top": null, "visibility": null, "width": null}}, "16c19f8e25e34ea7bffbdf6de922d2aa": {"model_name": "ButtonStyleModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "2.0.0", "state": {"_model_module": "@jupyter-widgets/controls", "_model_module_version": "2.0.0", "_model_name": "ButtonStyleModel", "_view_count": null, "_view_module": "@jupyter-widgets/base", "_view_module_version": "2.0.0", "_view_name": "StyleView", "button_color": null, "font_family": null, "font_size": null, "font_style": null, "font_variant": null, "font_weight": null, "text_color": null, "text_decoration": null}}, "eb6d44a1413c4b079ddaf2784caabe63": {"model_name": "FileUploadModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "2.0.0", "state": {"_dom_classes": [], "_model_module": "@jupyter-widgets/controls", "_model_module_version": "2.0.0", "_model_name": "FileUploadModel", "_view_count": null, "_view_module": "@jupyter-widgets/controls", "_view_module_version": "2.0.0", "_view_name": "FileUploadView", "accept": ".mtz", "button_style": "", "description": "Upload", "description_allow_html": false, "disabled": false, "error": "", "icon": "upload", "layout": "IPY_MODEL_5e24f75657d34546ab93f016894119d7", "multiple": false, "style": "IPY_MODEL_16c19f8e25e34ea7bffbdf6de922d2aa", "tabbable": null, "tooltip": null, "value": []}}, "03b9ae1881454e86b68801f8ae93a33a": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "2.0.0", "state": {"_model_module": "@jupyter-widgets/base", "_model_module_version": "2.0.0", "_model_name": "LayoutModel", "_view_count": null, "_view_module": "@jupyter-widgets/base", "_view_module_version": "2.0.0", "_view_name": "LayoutView", "align_content": null, "align_items": null, "align_self": null, "border_bottom": null, "border_left": null, "border_right": null, "border_top": null, "bottom": null, "display": null, "flex": null, "flex_flow": null, "grid_area": null, "grid_auto_columns": null, "grid_auto_flow": null, "grid_auto_rows": null, "grid_column": null, "grid_gap": null, "grid_row": null, "grid_template_areas": null, "grid_template_columns": null, "grid_template_rows": null, "height": null, "justify_content": null, "justify_items": null, "left": null, "margin": null, "max_height": null, "max_width": null, "min_height": null, "min_width": null, "object_fit": null, "object_position": null, "order": null, "overflow": null, "padding": null, "right": null, "top": null, "visibility": null, "width": null}}, "4eb0a00a22d6466296b5772cfd6c8de4": {"model_name": "ButtonStyleModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "2.0.0", "state": {"_model_module": "@jupyter-widgets/controls", "_model_module_version": "2.0.0", "_model_name": "ButtonStyleModel", "_view_count": null, "_view_module": "@jupyter-widgets/base", "_view_module_version": "2.0.0", "_view_name": "StyleView", "button_color": null, "font_family": null, "font_size": null, "font_style": null, "font_variant": null, "font_weight": null, "text_color": null, "text_decoration": null}}, "6d640a8bb9aa4e4d8d98f53f8a07f6e6": {"model_name": "FileUploadModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "2.0.0", "state": {"_dom_classes": [], "_model_module": "@jupyter-widgets/controls", "_model_module_version": "2.0.0", "_model_name": "FileUploadModel", "_view_count": null, "_view_module": "@jupyter-widgets/controls", "_view_module_version": "2.0.0", "_view_name": "FileUploadView", "accept": ".mtz", "button_style": "", "description": "Upload", "description_allow_html": false, "disabled": false, "error": "", "icon": "upload", "layout": "IPY_MODEL_03b9ae1881454e86b68801f8ae93a33a", "multiple": false, "style": "IPY_MODEL_4eb0a00a22d6466296b5772cfd6c8de4", "tabbable": null, "tooltip": null, "value": []}}, "e02ad900a62f4540b853fedec1f7c594": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "2.0.0", "state": {"_model_module": "@jupyter-widgets/base", "_model_module_version": "2.0.0", "_model_name": "LayoutModel", "_view_count": null, "_view_module": "@jupyter-widgets/base", "_view_module_version": "2.0.0", "_view_name": "LayoutView", "align_content": null, "align_items": null, "align_self": null, "border_bottom": null, "border_left": null, "border_right": null, "border_top": null, "bottom": null, "display": null, "flex": null, "flex_flow": null, "grid_area": null, "grid_auto_columns": null, "grid_auto_flow": null, "grid_auto_rows": null, "grid_column": null, "grid_gap": null, "grid_row": null, "grid_template_areas": null, "grid_template_columns": null, "grid_template_rows": null, "height": null, "justify_content": null, "justify_items": null, "left": null, "margin": null, "max_height": null, "max_width": null, "min_height": null, "min_width": null, "object_fit": null, "object_position": null, "order": null, "overflow": null, "padding": null, "right": null, "top": null, "visibility": null, "width": null}}, "55242385e5774fe285a07a9639c26210": {"model_name": "ButtonStyleModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "2.0.0", "state": {"_model_module": "@jupyter-widgets/controls", "_model_module_version": "2.0.0", "_model_name": "ButtonStyleModel", "_view_count": null, "_view_module": "@jupyter-widgets/base", "_view_module_version": "2.0.0", "_view_name": "StyleView", "button_color": null, "font_family": null, "font_size": null, "font_style": null, "font_variant": null, "font_weight": null, "text_color": null, "text_decoration": null}}, "b592ac439aba4db98abd0237f8159588": {"model_name": "ButtonModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "2.0.0", "state": {"_dom_classes": [], "_model_module": "@jupyter-widgets/controls", "_model_module_version": "2.0.0", "_model_name": "ButtonModel", "_view_count": null, "_view_module": "@jupyter-widgets/controls", "_view_module_version": "2.0.0", "_view_name": "ButtonView", "button_style": "", "description": "download", "disabled": false, "icon": "", "layout": "IPY_MODEL_e02ad900a62f4540b853fedec1f7c594", "style": "IPY_MODEL_55242385e5774fe285a07a9639c26210", "tabbable": null, "tooltip": null}}}, "version_major": 2, "version_minor": 0}
 </script></section>
 </section>
 
