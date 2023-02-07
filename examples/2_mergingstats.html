@@ -1,44 +1,84 @@
+
+
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" />
+  <meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
   <title>HEWL S-SAD Merging Statistics &mdash; reciprocalspaceship 1.0.0 documentation</title>
-      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
-      <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
-      <link rel="stylesheet" href="../_static/panels-bootstrap.5fd3999ee7762ccc51105388f4a9d115.css" type="text/css" />
-      <link rel="stylesheet" href="../_static/panels-main.c949a650a448cc0ae9fd3441c0e17fb0.css" type="text/css" />
-      <link rel="stylesheet" href="../_static/panels-variables.06eb56fa6e07937060861dad626602ad.css" type="text/css" />
+  
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/panels-bootstrap.5fd3999ee7762ccc51105388f4a9d115.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/panels-main.c949a650a448cc0ae9fd3441c0e17fb0.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/panels-variables.06eb56fa6e07937060861dad626602ad.css" type="text/css" />
+
+  
+  
     <link rel="shortcut icon" href="../_static/rs-favicon_32x32.png"/>
+  
+
+  
+  
+
+  
+
+  
   <!--[if lt IE 9]>
     <script src="../_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
         <script src="../_static/jquery.js"></script>
         <script src="../_static/underscore.js"></script>
         <script src="../_static/doctools.js"></script>
         <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/@jupyter-widgets/html-manager@^1.0.1/dist/embed-amd.js"></script>
-        <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
-        <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-    <script src="../_static/js/theme.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "tex2jax_ignore|mathjax_ignore|document", "processClass": "tex2jax_process|mathjax_process|math|output_area"}})</script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Merging with a Robust Error Model" href="3_mergingerrormodel.html" />
     <link rel="prev" title="Basics" href="1_basics.html" /> 
 </head>
 
-<body class="wy-body-for-nav"> 
+<body class="wy-body-for-nav">
+
+   
   <div class="wy-grid-for-nav">
+    
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
+          
+
+          
             <a href="../index.html" class="icon icon-home"> reciprocalspaceship
+          
+
+          
+            
             <img src="../_static/rs.png" class="logo" alt="Logo"/>
+          
           </a>
+
+          
+            
+            
+          
+
+          
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
     <input type="text" name="q" placeholder="Search docs" />
@@ -46,7 +86,18 @@
     <input type="hidden" name="area" value="default" />
   </form>
 </div>
-        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
               <ul class="current">
 <li class="toctree-l1 current"><a class="reference internal" href="../userguide/index.html">User Guide</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="../userguide/overview.html">Overview and Goals</a></li>
@@ -76,32 +127,75 @@
 <li class="toctree-l1"><a class="reference internal" href="../developers/index.html">For Developers</a></li>
 </ul>
 
+            
+          
         </div>
+        
       </div>
     </nav>
 
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
           <a href="../index.html">reciprocalspaceship</a>
+        
       </nav>
 
+
       <div class="wy-nav-content">
+        
         <div class="rst-content">
-          <div role="navigation" aria-label="Page navigation">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
   <ul class="wy-breadcrumbs">
-      <li><a href="../index.html" class="icon icon-home"></a></li>
-          <li class="breadcrumb-item"><a href="../userguide/index.html">User Guide</a></li>
-          <li class="breadcrumb-item"><a href="../userguide/examples.html">Examples</a></li>
-      <li class="breadcrumb-item active">HEWL S-SAD Merging Statistics</li>
+    
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../userguide/index.html">User Guide</a> &raquo;</li>
+        
+          <li><a href="../userguide/examples.html">Examples</a> &raquo;</li>
+        
+      <li>HEWL S-SAD Merging Statistics</li>
+    
+    
       <li class="wy-breadcrumbs-aside">
+        
+          
             <a href="../_sources/examples/2_mergingstats.ipynb.txt" rel="nofollow"> View page source</a>
+          
+        
       </li>
+    
   </ul>
+
+  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
-             
+            
   
 <style>
 /* CSS for nbsphinx extension */
@@ -390,7 +484,7 @@ div.rendered_html tbody tr:hover {
     <img alt="Binder badge" src="https://mybinder.org/badge_logo.svg" style="vertical-align:text-bottom"></a>.
   </span>
 </div><section id="HEWL-S-SAD-Merging-Statistics">
-<h1>HEWL S-SAD Merging Statistics<a class="headerlink" href="#HEWL-S-SAD-Merging-Statistics" title="Permalink to this headline"></a></h1>
+<h1>HEWL S-SAD Merging Statistics<a class="headerlink" href="#HEWL-S-SAD-Merging-Statistics" title="Permalink to this headline">¶</a></h1>
 <p>Merging statistics are a useful means to assess data quality in crystallography. However, each statistic has inherent shortcomings. For example, R-merge will appear inflated if the multiplicity is high, and the Pearson correlation coefficients used for <span class="math notranslate nohighlight">\(CC_{1/2}\)</span> are very sensitive to outliers.</p>
 <p>Most scaling and merging programs output multiple merging statistics to get around these shortcomings. However, one can imagine that it could also be useful to customize certain parameters, such as how many resolution bins are used. Or, perhaps a better statistic will be developed that is worth implementing.</p>
 <p>In this notebook, <code class="docutils literal notranslate"><span class="pre">reciprocalspaceship</span></code> is used to compute half-dataset correlation coefficients (<span class="math notranslate nohighlight">\(CC_{1/2}\)</span> and <span class="math notranslate nohighlight">\(CC_{anom}\)</span>) for a dataset collected from a tetragonal hen egg-white lysozyme (HEWL) crystal at 6550 eV. These data are unmerged, but were scaled in AIMLESS. They contain sufficient sulfur anomalous signal to determine a solution by the SAD method. This illustrates the use of <code class="docutils literal notranslate"><span class="pre">rs</span></code> to implement a merging routine, create a custom analysis, and could be useful as a
@@ -399,11 +493,11 @@ template for other exploratory crystallographic data analyses. As an example, we
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>%matplotlib inline
-import matplotlib.pyplot as plt
-import seaborn as sns
-sns.set_context(&quot;notebook&quot;, font_scale=1.3)
-import numpy as np
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%</span><span class="k">matplotlib</span> inline
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">seaborn</span> <span class="k">as</span> <span class="nn">sns</span>
+<span class="n">sns</span><span class="o">.</span><span class="n">set_context</span><span class="p">(</span><span class="s2">&quot;notebook&quot;</span><span class="p">,</span> <span class="n">font_scale</span><span class="o">=</span><span class="mf">1.3</span><span class="p">)</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 </pre></div>
 </div>
 </div>
@@ -411,7 +505,7 @@ import numpy as np
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>import reciprocalspaceship as rs
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">reciprocalspaceship</span> <span class="k">as</span> <span class="nn">rs</span>
 </pre></div>
 </div>
 </div>
@@ -419,7 +513,7 @@ import numpy as np
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>print(rs.__version__)
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">rs</span><span class="o">.</span><span class="n">__version__</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -433,13 +527,13 @@ import numpy as np
 </div>
 <hr class="docutils" />
 <section id="Load-scaled,-unmerged-data">
-<h2>Load scaled, unmerged data<a class="headerlink" href="#Load-scaled,-unmerged-data" title="Permalink to this headline"></a></h2>
+<h2>Load scaled, unmerged data<a class="headerlink" href="#Load-scaled,-unmerged-data" title="Permalink to this headline">¶</a></h2>
 <p>This data has been scaled in AIMLESS. The data includes the image number and the scaled <strong>I</strong> and <strong>SIGI</strong> values.</p>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>hewl = rs.read_mtz(&quot;data/HEWL_unmerged.mtz&quot;)
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">hewl</span> <span class="o">=</span> <span class="n">rs</span><span class="o">.</span><span class="n">read_mtz</span><span class="p">(</span><span class="s2">&quot;data/HEWL_unmerged.mtz&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -447,7 +541,7 @@ import numpy as np
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>hewl.head()
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">hewl</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
@@ -537,7 +631,7 @@ import numpy as np
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>print(f&quot;Number of observed reflections: {len(hewl)}&quot;)
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Number of observed reflections: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">hewl</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -552,7 +646,7 @@ Number of observed reflections: 816804
 </section>
 <hr class="docutils" />
 <section id="Merging-with-Inverse-Variance-Weights">
-<h2>Merging with Inverse-Variance Weights<a class="headerlink" href="#Merging-with-Inverse-Variance-Weights" title="Permalink to this headline"></a></h2>
+<h2>Merging with Inverse-Variance Weights<a class="headerlink" href="#Merging-with-Inverse-Variance-Weights" title="Permalink to this headline">¶</a></h2>
 <p>Since the input data are unmerged, we will implement the inverse-variance weighting scheme used by AIMLESS to merge the observations. The weighted average is a better estimator of the true mean than the raw average, and this weighting scheme corresponds to the maximum likelihood estimator of the true mean if we assume that the observations are normally-distributed about the true mean.</p>
 <p>The merged intensity for each reflection, <span class="math notranslate nohighlight">\(I_h\)</span>, can be determined from the observed intensities, <span class="math notranslate nohighlight">\(I_{h,i}\)</span>, and error estimates, <span class="math notranslate nohighlight">\(\sigma_{h,i}\)</span>, as follows:</p>
 <p><span class="math">\begin{equation}
@@ -571,38 +665,38 @@ w_{h,i} = \frac{1}{(\sigma_{h,i})^2}
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>def merge(dataset, anomalous=False):
-    &quot;&quot;&quot;
-    Merge dataset using inverse-variance weights.
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">merge</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">anomalous</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Merge dataset using inverse-variance weights.</span>
 
-    Parameters
-    ----------
-    dataset : rs.DataSet
-        DataSet to be merged containing scaled I and SIGI
-    anomalous : bool
-        If True, I(+) and I(-) will be reported. If False,
-        IMEAN will be reported
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    dataset : rs.DataSet</span>
+<span class="sd">        DataSet to be merged containing scaled I and SIGI</span>
+<span class="sd">    anomalous : bool</span>
+<span class="sd">        If True, I(+) and I(-) will be reported. If False,</span>
+<span class="sd">        IMEAN will be reported</span>
 
-    Returns
-    -------
-    rs.DataSet
-        Merged DataSet object
-    &quot;&quot;&quot;
-    ds = dataset.hkl_to_asu(anomalous=anomalous)
-    ds[&quot;w&quot;]  = ds[&#39;SIGI&#39;]**-2
-    ds[&quot;wI&quot;] = ds[&quot;I&quot;] * ds[&quot;w&quot;]
-    g = ds.groupby([&quot;H&quot;, &quot;K&quot;, &quot;L&quot;])
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    rs.DataSet</span>
+<span class="sd">        Merged DataSet object</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">ds</span> <span class="o">=</span> <span class="n">dataset</span><span class="o">.</span><span class="n">hkl_to_asu</span><span class="p">(</span><span class="n">anomalous</span><span class="o">=</span><span class="n">anomalous</span><span class="p">)</span>
+    <span class="n">ds</span><span class="p">[</span><span class="s2">&quot;w&quot;</span><span class="p">]</span>  <span class="o">=</span> <span class="n">ds</span><span class="p">[</span><span class="s1">&#39;SIGI&#39;</span><span class="p">]</span><span class="o">**-</span><span class="mi">2</span>
+    <span class="n">ds</span><span class="p">[</span><span class="s2">&quot;wI&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">ds</span><span class="p">[</span><span class="s2">&quot;I&quot;</span><span class="p">]</span> <span class="o">*</span> <span class="n">ds</span><span class="p">[</span><span class="s2">&quot;w&quot;</span><span class="p">]</span>
+    <span class="n">g</span> <span class="o">=</span> <span class="n">ds</span><span class="o">.</span><span class="n">groupby</span><span class="p">([</span><span class="s2">&quot;H&quot;</span><span class="p">,</span> <span class="s2">&quot;K&quot;</span><span class="p">,</span> <span class="s2">&quot;L&quot;</span><span class="p">])</span>
 
-    result = g[[&quot;w&quot;, &quot;wI&quot;]].sum()
-    result[&quot;I&quot;] = result[&quot;wI&quot;] / result[&quot;w&quot;]
-    result[&quot;SIGI&quot;] = np.sqrt(1 / result[&quot;w&quot;])
-    result = result.loc[:, [&quot;I&quot;, &quot;SIGI&quot;]]
-    result.merged = True
+    <span class="n">result</span> <span class="o">=</span> <span class="n">g</span><span class="p">[[</span><span class="s2">&quot;w&quot;</span><span class="p">,</span> <span class="s2">&quot;wI&quot;</span><span class="p">]]</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+    <span class="n">result</span><span class="p">[</span><span class="s2">&quot;I&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">result</span><span class="p">[</span><span class="s2">&quot;wI&quot;</span><span class="p">]</span> <span class="o">/</span> <span class="n">result</span><span class="p">[</span><span class="s2">&quot;w&quot;</span><span class="p">]</span>
+    <span class="n">result</span><span class="p">[</span><span class="s2">&quot;SIGI&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">1</span> <span class="o">/</span> <span class="n">result</span><span class="p">[</span><span class="s2">&quot;w&quot;</span><span class="p">])</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="n">result</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span> <span class="p">[</span><span class="s2">&quot;I&quot;</span><span class="p">,</span> <span class="s2">&quot;SIGI&quot;</span><span class="p">]]</span>
+    <span class="n">result</span><span class="o">.</span><span class="n">merged</span> <span class="o">=</span> <span class="kc">True</span>
 
-    if anomalous:
-        result = result.unstack_anomalous()
+    <span class="k">if</span> <span class="n">anomalous</span><span class="p">:</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">result</span><span class="o">.</span><span class="n">unstack_anomalous</span><span class="p">()</span>
 
-    return result
+    <span class="k">return</span> <span class="n">result</span>
 </pre></div>
 </div>
 </div>
@@ -611,7 +705,7 @@ w_{h,i} = \frac{1}{(\sigma_{h,i})^2}
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>result1 = merge(hewl, anomalous=False)
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">result1</span> <span class="o">=</span> <span class="n">merge</span><span class="p">(</span><span class="n">hewl</span><span class="p">,</span> <span class="n">anomalous</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -619,7 +713,7 @@ w_{h,i} = \frac{1}{(\sigma_{h,i})^2}
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>result1.sample(5)
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">result1</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -704,7 +798,7 @@ w_{h,i} = \frac{1}{(\sigma_{h,i})^2}
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>result2 = merge(hewl, anomalous=True)
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">result2</span> <span class="o">=</span> <span class="n">merge</span><span class="p">(</span><span class="n">hewl</span><span class="p">,</span> <span class="n">anomalous</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -712,7 +806,7 @@ w_{h,i} = \frac{1}{(\sigma_{h,i})^2}
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>result2.sample(5)
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">result2</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -811,7 +905,7 @@ w_{h,i} = \frac{1}{(\sigma_{h,i})^2}
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>result3 = rs.algorithms.merge(hewl)
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">result3</span> <span class="o">=</span> <span class="n">rs</span><span class="o">.</span><span class="n">algorithms</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">hewl</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -819,7 +913,7 @@ w_{h,i} = \frac{1}{(\sigma_{h,i})^2}
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>result3.sample(5)
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">result3</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -944,20 +1038,20 @@ w_{h,i} = \frac{1}{(\sigma_{h,i})^2}
 </section>
 <hr class="docutils" />
 <section id="Merging-with-2-fold-Cross-Validation">
-<h2>Merging with 2-fold Cross-Validation<a class="headerlink" href="#Merging-with-2-fold-Cross-Validation" title="Permalink to this headline"></a></h2>
+<h2>Merging with 2-fold Cross-Validation<a class="headerlink" href="#Merging-with-2-fold-Cross-Validation" title="Permalink to this headline">¶</a></h2>
 <p>To compute correlation coefficients we will repeatedly split our data into half-datasets. We will do this by randomly splitting the data using the image number. These half-datasets will be merged independently and used to determine uncertainties in the correlation coefficients. We will first write a method to randomly split our data, and then we will then write a method that automates the sampling and merging of multiple half-datasets.</p>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>def sample_halfdatasets(data):
-    &quot;&quot;&quot;Randomly split DataSet into two equal halves by BATCH&quot;&quot;&quot;
-    batch = data.BATCH.unique().to_numpy(dtype=int)
-    np.random.shuffle(batch)
-    halfbatch1, halfbatch2 = np.array_split(batch, 2)
-    half1 = data.loc[data.BATCH.isin(halfbatch1)]
-    half2 = data.loc[data.BATCH.isin(halfbatch2)]
-    return half1, half2
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">sample_halfdatasets</span><span class="p">(</span><span class="n">data</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Randomly split DataSet into two equal halves by BATCH&quot;&quot;&quot;</span>
+    <span class="n">batch</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">BATCH</span><span class="o">.</span><span class="n">unique</span><span class="p">()</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">(</span><span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>
+    <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">shuffle</span><span class="p">(</span><span class="n">batch</span><span class="p">)</span>
+    <span class="n">halfbatch1</span><span class="p">,</span> <span class="n">halfbatch2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array_split</span><span class="p">(</span><span class="n">batch</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+    <span class="n">half1</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">data</span><span class="o">.</span><span class="n">BATCH</span><span class="o">.</span><span class="n">isin</span><span class="p">(</span><span class="n">halfbatch1</span><span class="p">)]</span>
+    <span class="n">half2</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">data</span><span class="o">.</span><span class="n">BATCH</span><span class="o">.</span><span class="n">isin</span><span class="p">(</span><span class="n">halfbatch2</span><span class="p">)]</span>
+    <span class="k">return</span> <span class="n">half1</span><span class="p">,</span> <span class="n">half2</span>
 </pre></div>
 </div>
 </div>
@@ -965,38 +1059,38 @@ w_{h,i} = \frac{1}{(\sigma_{h,i})^2}
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>def merge_dataset(dataset, nsamples):
-    &quot;&quot;&quot;
-    Merge DataSet using inverse-variance weighting scheme. This represents the
-    maximum-likelihood estimator of the mean of the observed intensities assuming
-    they are independent and normally distributed with the same mean.
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">merge_dataset</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">nsamples</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Merge DataSet using inverse-variance weighting scheme. This represents the</span>
+<span class="sd">    maximum-likelihood estimator of the mean of the observed intensities assuming</span>
+<span class="sd">    they are independent and normally distributed with the same mean.</span>
 
-    Sample means across half-datasets can be used to compute the merging statistics CC1/2 and CCanom.
-    &quot;&quot;&quot;
-    dataset = dataset.copy()
-    samples = []
-    for n in range(nsamples):
-        half1, half2 = sample_halfdatasets(dataset)
-        mergedhalf1 = rs.algorithms.merge(half1)
-        mergedhalf2 = rs.algorithms.merge(half2)
-        result = mergedhalf1.merge(mergedhalf2, left_index=True, right_index=True, suffixes=(1, 2))
-        result[&quot;sample&quot;] = n
-        samples.append(result)
-    return rs.concat(samples).sort_index()
+<span class="sd">    Sample means across half-datasets can be used to compute the merging statistics CC1/2 and CCanom.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">dataset</span> <span class="o">=</span> <span class="n">dataset</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+    <span class="n">samples</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nsamples</span><span class="p">):</span>
+        <span class="n">half1</span><span class="p">,</span> <span class="n">half2</span> <span class="o">=</span> <span class="n">sample_halfdatasets</span><span class="p">(</span><span class="n">dataset</span><span class="p">)</span>
+        <span class="n">mergedhalf1</span> <span class="o">=</span> <span class="n">rs</span><span class="o">.</span><span class="n">algorithms</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">half1</span><span class="p">)</span>
+        <span class="n">mergedhalf2</span> <span class="o">=</span> <span class="n">rs</span><span class="o">.</span><span class="n">algorithms</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">half2</span><span class="p">)</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">mergedhalf1</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">mergedhalf2</span><span class="p">,</span> <span class="n">left_index</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">right_index</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">suffixes</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
+        <span class="n">result</span><span class="p">[</span><span class="s2">&quot;sample&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">n</span>
+        <span class="n">samples</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">rs</span><span class="o">.</span><span class="n">concat</span><span class="p">(</span><span class="n">samples</span><span class="p">)</span><span class="o">.</span><span class="n">sort_index</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
 </section>
 <hr class="docutils" />
 <section id="Merge-HEWL-data">
-<h2>Merge HEWL data<a class="headerlink" href="#Merge-HEWL-data" title="Permalink to this headline"></a></h2>
+<h2>Merge HEWL data<a class="headerlink" href="#Merge-HEWL-data" title="Permalink to this headline">¶</a></h2>
 <p>We will now merge the HEWL data, repeatedly sampling across half-datasets in order to assess the distribution of correlation coefficients.</p>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># This cell takes a few minutes with nsamples=15
-merged = merge_dataset(hewl, 15)
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># This cell takes a few minutes with nsamples=15</span>
+<span class="n">merged</span> <span class="o">=</span> <span class="n">merge_dataset</span><span class="p">(</span><span class="n">hewl</span><span class="p">,</span> <span class="mi">15</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -1004,7 +1098,7 @@ merged = merge_dataset(hewl, 15)
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>merged
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">merged</span>
 </pre></div>
 </div>
 </div>
@@ -1309,13 +1403,13 @@ merged = merge_dataset(hewl, 15)
 </section>
 <hr class="docutils" />
 <section id="Compute-CC_{1/2}-and-CC_{anom}">
-<h2>Compute <span class="math notranslate nohighlight">\(CC_{1/2}\)</span> and <span class="math notranslate nohighlight">\(CC_{anom}\)</span><a class="headerlink" href="#Compute-CC_{1/2}-and-CC_{anom}" title="Permalink to this headline"></a></h2>
+<h2>Compute <span class="math notranslate nohighlight">\(CC_{1/2}\)</span> and <span class="math notranslate nohighlight">\(CC_{anom}\)</span><a class="headerlink" href="#Compute-CC_{1/2}-and-CC_{anom}" title="Permalink to this headline">¶</a></h2>
 <p>We will first assign each reflection to a resolution bin and then we will compute the correlation coefficients</p>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>merged, labels = merged.assign_resolution_bins(bins=15)
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">merged</span><span class="p">,</span> <span class="n">labels</span> <span class="o">=</span> <span class="n">merged</span><span class="o">.</span><span class="n">assign_resolution_bins</span><span class="p">(</span><span class="n">bins</span><span class="o">=</span><span class="mi">15</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -1323,13 +1417,13 @@ merged = merge_dataset(hewl, 15)
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[19]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>groupby1 = merged.groupby([&quot;sample&quot;, &quot;bin&quot;])[[&quot;IMEAN1&quot;, &quot;IMEAN2&quot;]]
-pearson1 = groupby1.corr(method=&quot;pearson&quot;).unstack().loc[:, (&quot;IMEAN1&quot;, &quot;IMEAN2&quot;)]
-pearson1.name = &quot;Pearson&quot;
-spearman1 = groupby1.corr(method=&quot;spearman&quot;).unstack().loc[:, (&quot;IMEAN1&quot;, &quot;IMEAN2&quot;)]
-spearman1.name = &quot;Spearman&quot;
-results1 = rs.concat([pearson1, spearman1], axis=1)
-results1 = results1.groupby(&quot;bin&quot;).agg([&quot;mean&quot;, &quot;std&quot;])
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">groupby1</span> <span class="o">=</span> <span class="n">merged</span><span class="o">.</span><span class="n">groupby</span><span class="p">([</span><span class="s2">&quot;sample&quot;</span><span class="p">,</span> <span class="s2">&quot;bin&quot;</span><span class="p">])[[</span><span class="s2">&quot;IMEAN1&quot;</span><span class="p">,</span> <span class="s2">&quot;IMEAN2&quot;</span><span class="p">]]</span>
+<span class="n">pearson1</span> <span class="o">=</span> <span class="n">groupby1</span><span class="o">.</span><span class="n">corr</span><span class="p">(</span><span class="n">method</span><span class="o">=</span><span class="s2">&quot;pearson&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">unstack</span><span class="p">()</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span> <span class="p">(</span><span class="s2">&quot;IMEAN1&quot;</span><span class="p">,</span> <span class="s2">&quot;IMEAN2&quot;</span><span class="p">)]</span>
+<span class="n">pearson1</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;Pearson&quot;</span>
+<span class="n">spearman1</span> <span class="o">=</span> <span class="n">groupby1</span><span class="o">.</span><span class="n">corr</span><span class="p">(</span><span class="n">method</span><span class="o">=</span><span class="s2">&quot;spearman&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">unstack</span><span class="p">()</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span> <span class="p">(</span><span class="s2">&quot;IMEAN1&quot;</span><span class="p">,</span> <span class="s2">&quot;IMEAN2&quot;</span><span class="p">)]</span>
+<span class="n">spearman1</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;Spearman&quot;</span>
+<span class="n">results1</span> <span class="o">=</span> <span class="n">rs</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">pearson1</span><span class="p">,</span> <span class="n">spearman1</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">results1</span> <span class="o">=</span> <span class="n">results1</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s2">&quot;bin&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">agg</span><span class="p">([</span><span class="s2">&quot;mean&quot;</span><span class="p">,</span> <span class="s2">&quot;std&quot;</span><span class="p">])</span>
 </pre></div>
 </div>
 </div>
@@ -1337,7 +1431,7 @@ results1 = results1.groupby(&quot;bin&quot;).agg([&quot;mean&quot;, &quot;std&qu
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[20]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>results1.head()
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">results1</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
@@ -1430,21 +1524,21 @@ results1 = results1.groupby(&quot;bin&quot;).agg([&quot;mean&quot;, &quot;std&qu
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[21]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>plt.figure(figsize=(8, 4))
-plt.errorbar(results1.index, results1[(&quot;Pearson&quot;, &quot;mean&quot;)],
-             yerr=results1[(&quot;Pearson&quot;, &quot;std&quot;)],
-             color=&quot;#1b9e77&quot;,
-             label=r&quot;$CC_{1/2}$ (Pearson)&quot;)
-plt.errorbar(results1.index, results1[(&quot;Spearman&quot;, &quot;mean&quot;)],
-             yerr=results1[(&quot;Spearman&quot;, &quot;std&quot;)],
-             color=&quot;#d95f02&quot;,
-             label=r&quot;$CC_{1/2}$ (Spearman)&quot;)
-plt.xticks(results1.index, labels, rotation=45, ha=&#39;right&#39;, rotation_mode=&#39;anchor&#39;)
-plt.ylabel(&quot;Correlation Coefficient&quot;)
-plt.xlabel(r&quot;Resolution Bin ($\AA$)&quot;)
-plt.legend(loc=&#39;center left&#39;, bbox_to_anchor=(1, 0.5))
-plt.grid(axis=&quot;y&quot;, linestyle=&#39;--&#39;)
-plt.show()
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">4</span><span class="p">))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">errorbar</span><span class="p">(</span><span class="n">results1</span><span class="o">.</span><span class="n">index</span><span class="p">,</span> <span class="n">results1</span><span class="p">[(</span><span class="s2">&quot;Pearson&quot;</span><span class="p">,</span> <span class="s2">&quot;mean&quot;</span><span class="p">)],</span>
+             <span class="n">yerr</span><span class="o">=</span><span class="n">results1</span><span class="p">[(</span><span class="s2">&quot;Pearson&quot;</span><span class="p">,</span> <span class="s2">&quot;std&quot;</span><span class="p">)],</span>
+             <span class="n">color</span><span class="o">=</span><span class="s2">&quot;#1b9e77&quot;</span><span class="p">,</span>
+             <span class="n">label</span><span class="o">=</span><span class="sa">r</span><span class="s2">&quot;$CC_{1/2}$ (Pearson)&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">errorbar</span><span class="p">(</span><span class="n">results1</span><span class="o">.</span><span class="n">index</span><span class="p">,</span> <span class="n">results1</span><span class="p">[(</span><span class="s2">&quot;Spearman&quot;</span><span class="p">,</span> <span class="s2">&quot;mean&quot;</span><span class="p">)],</span>
+             <span class="n">yerr</span><span class="o">=</span><span class="n">results1</span><span class="p">[(</span><span class="s2">&quot;Spearman&quot;</span><span class="p">,</span> <span class="s2">&quot;std&quot;</span><span class="p">)],</span>
+             <span class="n">color</span><span class="o">=</span><span class="s2">&quot;#d95f02&quot;</span><span class="p">,</span>
+             <span class="n">label</span><span class="o">=</span><span class="sa">r</span><span class="s2">&quot;$CC_{1/2}$ (Spearman)&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xticks</span><span class="p">(</span><span class="n">results1</span><span class="o">.</span><span class="n">index</span><span class="p">,</span> <span class="n">labels</span><span class="p">,</span> <span class="n">rotation</span><span class="o">=</span><span class="mi">45</span><span class="p">,</span> <span class="n">ha</span><span class="o">=</span><span class="s1">&#39;right&#39;</span><span class="p">,</span> <span class="n">rotation_mode</span><span class="o">=</span><span class="s1">&#39;anchor&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;Correlation Coefficient&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;Resolution Bin ($\AA$)&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s1">&#39;center left&#39;</span><span class="p">,</span> <span class="n">bbox_to_anchor</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="s2">&quot;y&quot;</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;--&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
@@ -1461,17 +1555,17 @@ plt.show()
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[22]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>merged[&quot;ANOM1&quot;] = merged[&quot;I(+)1&quot;] - merged[&quot;I(-)1&quot;]
-merged[&quot;ANOM2&quot;] = merged[&quot;I(+)2&quot;] - merged[&quot;I(-)2&quot;]
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">merged</span><span class="p">[</span><span class="s2">&quot;ANOM1&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">merged</span><span class="p">[</span><span class="s2">&quot;I(+)1&quot;</span><span class="p">]</span> <span class="o">-</span> <span class="n">merged</span><span class="p">[</span><span class="s2">&quot;I(-)1&quot;</span><span class="p">]</span>
+<span class="n">merged</span><span class="p">[</span><span class="s2">&quot;ANOM2&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">merged</span><span class="p">[</span><span class="s2">&quot;I(+)2&quot;</span><span class="p">]</span> <span class="o">-</span> <span class="n">merged</span><span class="p">[</span><span class="s2">&quot;I(-)2&quot;</span><span class="p">]</span>
 
-# Similar to CChalf, but we will only look at acentric reflections
-groupby2 = merged.acentrics.groupby([&quot;sample&quot;, &quot;bin&quot;])[[&quot;ANOM1&quot;, &quot;ANOM2&quot;]]
-pearson2 = groupby2.corr(method=&quot;pearson&quot;).unstack().loc[:, (&quot;ANOM1&quot;, &quot;ANOM2&quot;)]
-pearson2.name = &quot;Pearson&quot;
-spearman2 = groupby2.corr(method=&quot;spearman&quot;).unstack().loc[:, (&quot;ANOM1&quot;, &quot;ANOM2&quot;)]
-spearman2.name = &quot;Spearman&quot;
-results2 = rs.concat([pearson2, spearman2], axis=1)
-results2 = results2.groupby(&quot;bin&quot;).agg([&quot;mean&quot;, &quot;std&quot;])
+<span class="c1"># Similar to CChalf, but we will only look at acentric reflections</span>
+<span class="n">groupby2</span> <span class="o">=</span> <span class="n">merged</span><span class="o">.</span><span class="n">acentrics</span><span class="o">.</span><span class="n">groupby</span><span class="p">([</span><span class="s2">&quot;sample&quot;</span><span class="p">,</span> <span class="s2">&quot;bin&quot;</span><span class="p">])[[</span><span class="s2">&quot;ANOM1&quot;</span><span class="p">,</span> <span class="s2">&quot;ANOM2&quot;</span><span class="p">]]</span>
+<span class="n">pearson2</span> <span class="o">=</span> <span class="n">groupby2</span><span class="o">.</span><span class="n">corr</span><span class="p">(</span><span class="n">method</span><span class="o">=</span><span class="s2">&quot;pearson&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">unstack</span><span class="p">()</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span> <span class="p">(</span><span class="s2">&quot;ANOM1&quot;</span><span class="p">,</span> <span class="s2">&quot;ANOM2&quot;</span><span class="p">)]</span>
+<span class="n">pearson2</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;Pearson&quot;</span>
+<span class="n">spearman2</span> <span class="o">=</span> <span class="n">groupby2</span><span class="o">.</span><span class="n">corr</span><span class="p">(</span><span class="n">method</span><span class="o">=</span><span class="s2">&quot;spearman&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">unstack</span><span class="p">()</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span> <span class="p">(</span><span class="s2">&quot;ANOM1&quot;</span><span class="p">,</span> <span class="s2">&quot;ANOM2&quot;</span><span class="p">)]</span>
+<span class="n">spearman2</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;Spearman&quot;</span>
+<span class="n">results2</span> <span class="o">=</span> <span class="n">rs</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">pearson2</span><span class="p">,</span> <span class="n">spearman2</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">results2</span> <span class="o">=</span> <span class="n">results2</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s2">&quot;bin&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">agg</span><span class="p">([</span><span class="s2">&quot;mean&quot;</span><span class="p">,</span> <span class="s2">&quot;std&quot;</span><span class="p">])</span>
 </pre></div>
 </div>
 </div>
@@ -1479,7 +1573,7 @@ results2 = results2.groupby(&quot;bin&quot;).agg([&quot;mean&quot;, &quot;std&qu
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[23]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>results2.head()
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">results2</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
@@ -1572,21 +1666,21 @@ results2 = results2.groupby(&quot;bin&quot;).agg([&quot;mean&quot;, &quot;std&qu
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[24]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>plt.figure(figsize=(8, 4))
-plt.errorbar(results2.index, results2[(&quot;Pearson&quot;, &quot;mean&quot;)],
-             yerr=results2[(&quot;Pearson&quot;, &quot;std&quot;)],
-             color=&quot;#1b9e77&quot;,
-             label=r&quot;$CC_{anom}$ (Pearson)&quot;)
-plt.errorbar(results2.index, results2[(&quot;Spearman&quot;, &quot;mean&quot;)],
-             yerr=results2[(&quot;Spearman&quot;, &quot;std&quot;)],
-             color=&quot;#d95f02&quot;,
-             label=r&quot;$CC_{anom}$ (Spearman)&quot;)
-plt.xticks(results2.index, labels, rotation=45, ha=&#39;right&#39;, rotation_mode=&#39;anchor&#39;)
-plt.ylabel(&quot;Correlation Coefficient&quot;)
-plt.xlabel(r&quot;Resolution Bin ($\AA$)&quot;)
-plt.legend(loc=&#39;center left&#39;, bbox_to_anchor=(1, 0.5))
-plt.grid(axis=&quot;y&quot;, linestyle=&#39;--&#39;)
-plt.show()
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">4</span><span class="p">))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">errorbar</span><span class="p">(</span><span class="n">results2</span><span class="o">.</span><span class="n">index</span><span class="p">,</span> <span class="n">results2</span><span class="p">[(</span><span class="s2">&quot;Pearson&quot;</span><span class="p">,</span> <span class="s2">&quot;mean&quot;</span><span class="p">)],</span>
+             <span class="n">yerr</span><span class="o">=</span><span class="n">results2</span><span class="p">[(</span><span class="s2">&quot;Pearson&quot;</span><span class="p">,</span> <span class="s2">&quot;std&quot;</span><span class="p">)],</span>
+             <span class="n">color</span><span class="o">=</span><span class="s2">&quot;#1b9e77&quot;</span><span class="p">,</span>
+             <span class="n">label</span><span class="o">=</span><span class="sa">r</span><span class="s2">&quot;$CC_</span><span class="si">{anom}</span><span class="s2">$ (Pearson)&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">errorbar</span><span class="p">(</span><span class="n">results2</span><span class="o">.</span><span class="n">index</span><span class="p">,</span> <span class="n">results2</span><span class="p">[(</span><span class="s2">&quot;Spearman&quot;</span><span class="p">,</span> <span class="s2">&quot;mean&quot;</span><span class="p">)],</span>
+             <span class="n">yerr</span><span class="o">=</span><span class="n">results2</span><span class="p">[(</span><span class="s2">&quot;Spearman&quot;</span><span class="p">,</span> <span class="s2">&quot;std&quot;</span><span class="p">)],</span>
+             <span class="n">color</span><span class="o">=</span><span class="s2">&quot;#d95f02&quot;</span><span class="p">,</span>
+             <span class="n">label</span><span class="o">=</span><span class="sa">r</span><span class="s2">&quot;$CC_</span><span class="si">{anom}</span><span class="s2">$ (Spearman)&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xticks</span><span class="p">(</span><span class="n">results2</span><span class="o">.</span><span class="n">index</span><span class="p">,</span> <span class="n">labels</span><span class="p">,</span> <span class="n">rotation</span><span class="o">=</span><span class="mi">45</span><span class="p">,</span> <span class="n">ha</span><span class="o">=</span><span class="s1">&#39;right&#39;</span><span class="p">,</span> <span class="n">rotation_mode</span><span class="o">=</span><span class="s1">&#39;anchor&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;Correlation Coefficient&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;Resolution Bin ($\AA$)&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s1">&#39;center left&#39;</span><span class="p">,</span> <span class="n">bbox_to_anchor</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="s2">&quot;y&quot;</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;--&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
@@ -1601,38 +1695,38 @@ plt.show()
 </section>
 <hr class="docutils" />
 <section id="Summary">
-<h2>Summary<a class="headerlink" href="#Summary" title="Permalink to this headline"></a></h2>
+<h2>Summary<a class="headerlink" href="#Summary" title="Permalink to this headline">¶</a></h2>
 <p>We have used <code class="docutils literal notranslate"><span class="pre">reciprocalspaceship</span></code> to merge a dataset using inverse-variance weights. As part of this analysis, we performed repeated 2-fold cross-validation to compute Pearson and Spearman correlation coefficients and associated uncertainties. This relatively simple procedure to obtain uncertainty estimates for correlation coefficients is seldom done when analyzing merging quality. However, we can see that the standard deviation for computed correlation coefficients can be nearly
 <span class="math notranslate nohighlight">\(\pm0.1\)</span> for quantities such as <span class="math notranslate nohighlight">\(CC_{anom}\)</span>. This is worth keeping in mind when analyzing SAD experiments because this dataset is very high quality (edge-limited) when one considers the <span class="math notranslate nohighlight">\(CC_{1/2}\)</span>. Putting these two correlation coefficients on the same axes emphasizes this point:</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[25]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>plt.figure(figsize=(9, 6))
-plt.errorbar(results1.index, results1[(&quot;Pearson&quot;, &quot;mean&quot;)],
-             yerr=results1[(&quot;Pearson&quot;, &quot;std&quot;)],
-             color=&#39;#1b9e77&#39;,
-             label=r&quot;$CC_{1/2}$ (Pearson)&quot;)
-plt.errorbar(results1.index, results1[(&quot;Spearman&quot;, &quot;mean&quot;)],
-             yerr=results1[(&quot;Spearman&quot;, &quot;std&quot;)],
-             color=&#39;#d95f02&#39;,
-             label=r&quot;$CC_{1/2}$ (Spearman)&quot;)
-plt.errorbar(results2.index, results2[(&quot;Pearson&quot;, &quot;mean&quot;)],
-             yerr=results2[(&quot;Pearson&quot;, &quot;std&quot;)],
-             color=&#39;#1b9e77&#39;,
-             linestyle=&quot;--&quot;,
-             label=r&quot;$CC_{anom}$ (Pearson)&quot;)
-plt.errorbar(results2.index, results2[(&quot;Spearman&quot;, &quot;mean&quot;)],
-             yerr=results2[(&quot;Spearman&quot;, &quot;std&quot;)],
-             color=&#39;#d95f02&#39;,
-             linestyle=&quot;--&quot;,
-             label=r&quot;$CC_{anom}$ (Spearman)&quot;)
-plt.xticks(results1.index, labels, rotation=45, ha=&#39;right&#39;, rotation_mode=&#39;anchor&#39;)
-plt.ylabel(r&quot;Correlation Coefficient&quot;)
-plt.xlabel(r&quot;Resolution Bin ($\AA$)&quot;)
-plt.legend(loc=&#39;center left&#39;, bbox_to_anchor=(1, 0.5))
-plt.grid(axis=&quot;y&quot;, linestyle=&#39;--&#39;)
-plt.tight_layout()
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">9</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">errorbar</span><span class="p">(</span><span class="n">results1</span><span class="o">.</span><span class="n">index</span><span class="p">,</span> <span class="n">results1</span><span class="p">[(</span><span class="s2">&quot;Pearson&quot;</span><span class="p">,</span> <span class="s2">&quot;mean&quot;</span><span class="p">)],</span>
+             <span class="n">yerr</span><span class="o">=</span><span class="n">results1</span><span class="p">[(</span><span class="s2">&quot;Pearson&quot;</span><span class="p">,</span> <span class="s2">&quot;std&quot;</span><span class="p">)],</span>
+             <span class="n">color</span><span class="o">=</span><span class="s1">&#39;#1b9e77&#39;</span><span class="p">,</span>
+             <span class="n">label</span><span class="o">=</span><span class="sa">r</span><span class="s2">&quot;$CC_{1/2}$ (Pearson)&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">errorbar</span><span class="p">(</span><span class="n">results1</span><span class="o">.</span><span class="n">index</span><span class="p">,</span> <span class="n">results1</span><span class="p">[(</span><span class="s2">&quot;Spearman&quot;</span><span class="p">,</span> <span class="s2">&quot;mean&quot;</span><span class="p">)],</span>
+             <span class="n">yerr</span><span class="o">=</span><span class="n">results1</span><span class="p">[(</span><span class="s2">&quot;Spearman&quot;</span><span class="p">,</span> <span class="s2">&quot;std&quot;</span><span class="p">)],</span>
+             <span class="n">color</span><span class="o">=</span><span class="s1">&#39;#d95f02&#39;</span><span class="p">,</span>
+             <span class="n">label</span><span class="o">=</span><span class="sa">r</span><span class="s2">&quot;$CC_{1/2}$ (Spearman)&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">errorbar</span><span class="p">(</span><span class="n">results2</span><span class="o">.</span><span class="n">index</span><span class="p">,</span> <span class="n">results2</span><span class="p">[(</span><span class="s2">&quot;Pearson&quot;</span><span class="p">,</span> <span class="s2">&quot;mean&quot;</span><span class="p">)],</span>
+             <span class="n">yerr</span><span class="o">=</span><span class="n">results2</span><span class="p">[(</span><span class="s2">&quot;Pearson&quot;</span><span class="p">,</span> <span class="s2">&quot;std&quot;</span><span class="p">)],</span>
+             <span class="n">color</span><span class="o">=</span><span class="s1">&#39;#1b9e77&#39;</span><span class="p">,</span>
+             <span class="n">linestyle</span><span class="o">=</span><span class="s2">&quot;--&quot;</span><span class="p">,</span>
+             <span class="n">label</span><span class="o">=</span><span class="sa">r</span><span class="s2">&quot;$CC_</span><span class="si">{anom}</span><span class="s2">$ (Pearson)&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">errorbar</span><span class="p">(</span><span class="n">results2</span><span class="o">.</span><span class="n">index</span><span class="p">,</span> <span class="n">results2</span><span class="p">[(</span><span class="s2">&quot;Spearman&quot;</span><span class="p">,</span> <span class="s2">&quot;mean&quot;</span><span class="p">)],</span>
+             <span class="n">yerr</span><span class="o">=</span><span class="n">results2</span><span class="p">[(</span><span class="s2">&quot;Spearman&quot;</span><span class="p">,</span> <span class="s2">&quot;std&quot;</span><span class="p">)],</span>
+             <span class="n">color</span><span class="o">=</span><span class="s1">&#39;#d95f02&#39;</span><span class="p">,</span>
+             <span class="n">linestyle</span><span class="o">=</span><span class="s2">&quot;--&quot;</span><span class="p">,</span>
+             <span class="n">label</span><span class="o">=</span><span class="sa">r</span><span class="s2">&quot;$CC_</span><span class="si">{anom}</span><span class="s2">$ (Spearman)&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xticks</span><span class="p">(</span><span class="n">results1</span><span class="o">.</span><span class="n">index</span><span class="p">,</span> <span class="n">labels</span><span class="p">,</span> <span class="n">rotation</span><span class="o">=</span><span class="mi">45</span><span class="p">,</span> <span class="n">ha</span><span class="o">=</span><span class="s1">&#39;right&#39;</span><span class="p">,</span> <span class="n">rotation_mode</span><span class="o">=</span><span class="s1">&#39;anchor&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;Correlation Coefficient&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;Resolution Bin ($\AA$)&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s1">&#39;center left&#39;</span><span class="p">,</span> <span class="n">bbox_to_anchor</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="s2">&quot;y&quot;</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;--&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
@@ -1649,33 +1743,50 @@ plt.tight_layout()
 
 
            </div>
+           
           </div>
-          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="1_basics.html" class="btn btn-neutral float-left" title="Basics" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
         <a href="3_mergingerrormodel.html" class="btn btn-neutral float-right" title="Merging with a Robust Error Model" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="1_basics.html" class="btn btn-neutral float-left" title="Basics" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
     </div>
 
   <hr/>
 
   <div role="contentinfo">
-    <p>&#169; Copyright 2020, Jack B. Greisman, Kevin M. Dalton.</p>
-  </div>
+    <p>
+        &#169; Copyright 2020, Jack B. Greisman, Kevin M. Dalton.
 
-  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
     <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
-    provided by <a href="https://readthedocs.org">Read the Docs</a>.
-   
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
         </div>
       </div>
+
     </section>
+
   </div>
-  <script>
+  
+
+  <script type="text/javascript">
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script> 
+  </script>
+
+  
+  
+    
+   
 
 </body>
 </html>

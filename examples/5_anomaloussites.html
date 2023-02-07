@@ -1,44 +1,84 @@
+
+
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" />
+  <meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
   <title>Anomalous Differences in Real Space &mdash; reciprocalspaceship 1.0.0 documentation</title>
-      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
-      <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
-      <link rel="stylesheet" href="../_static/panels-bootstrap.5fd3999ee7762ccc51105388f4a9d115.css" type="text/css" />
-      <link rel="stylesheet" href="../_static/panels-main.c949a650a448cc0ae9fd3441c0e17fb0.css" type="text/css" />
-      <link rel="stylesheet" href="../_static/panels-variables.06eb56fa6e07937060861dad626602ad.css" type="text/css" />
+  
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/panels-bootstrap.5fd3999ee7762ccc51105388f4a9d115.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/panels-main.c949a650a448cc0ae9fd3441c0e17fb0.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/panels-variables.06eb56fa6e07937060861dad626602ad.css" type="text/css" />
+
+  
+  
     <link rel="shortcut icon" href="../_static/rs-favicon_32x32.png"/>
+  
+
+  
+  
+
+  
+
+  
   <!--[if lt IE 9]>
     <script src="../_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
         <script src="../_static/jquery.js"></script>
         <script src="../_static/underscore.js"></script>
         <script src="../_static/doctools.js"></script>
         <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/@jupyter-widgets/html-manager@^1.0.1/dist/embed-amd.js"></script>
-        <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
-        <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-    <script src="../_static/js/theme.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "tex2jax_ignore|mathjax_ignore|document", "processClass": "tex2jax_process|mathjax_process|math|output_area"}})</script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Time-Resolved Difference Map" href="6_timeresolvedPYP.html" />
     <link rel="prev" title="Anomalous Difference Map" href="4_anomalousmap.html" /> 
 </head>
 
-<body class="wy-body-for-nav"> 
+<body class="wy-body-for-nav">
+
+   
   <div class="wy-grid-for-nav">
+    
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
+          
+
+          
             <a href="../index.html" class="icon icon-home"> reciprocalspaceship
+          
+
+          
+            
             <img src="../_static/rs.png" class="logo" alt="Logo"/>
+          
           </a>
+
+          
+            
+            
+          
+
+          
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
     <input type="text" name="q" placeholder="Search docs" />
@@ -46,7 +86,18 @@
     <input type="hidden" name="area" value="default" />
   </form>
 </div>
-        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
               <ul class="current">
 <li class="toctree-l1 current"><a class="reference internal" href="../userguide/index.html">User Guide</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="../userguide/overview.html">Overview and Goals</a></li>
@@ -73,32 +124,75 @@
 <li class="toctree-l1"><a class="reference internal" href="../developers/index.html">For Developers</a></li>
 </ul>
 
+            
+          
         </div>
+        
       </div>
     </nav>
 
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
           <a href="../index.html">reciprocalspaceship</a>
+        
       </nav>
 
+
       <div class="wy-nav-content">
+        
         <div class="rst-content">
-          <div role="navigation" aria-label="Page navigation">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
   <ul class="wy-breadcrumbs">
-      <li><a href="../index.html" class="icon icon-home"></a></li>
-          <li class="breadcrumb-item"><a href="../userguide/index.html">User Guide</a></li>
-          <li class="breadcrumb-item"><a href="../userguide/examples.html">Examples</a></li>
-      <li class="breadcrumb-item active">Anomalous Differences in Real Space</li>
+    
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../userguide/index.html">User Guide</a> &raquo;</li>
+        
+          <li><a href="../userguide/examples.html">Examples</a> &raquo;</li>
+        
+      <li>Anomalous Differences in Real Space</li>
+    
+    
       <li class="wy-breadcrumbs-aside">
+        
+          
             <a href="../_sources/examples/5_anomaloussites.ipynb.txt" rel="nofollow"> View page source</a>
+          
+        
       </li>
+    
   </ul>
+
+  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
-             
+            
   
 <style>
 /* CSS for nbsphinx extension */
@@ -387,24 +481,24 @@ div.rendered_html tbody tr:hover {
     <img alt="Binder badge" src="https://mybinder.org/badge_logo.svg" style="vertical-align:text-bottom"></a>.
   </span>
 </div><section id="Anomalous-Differences-in-Real-Space">
-<h1>Anomalous Differences in Real Space<a class="headerlink" href="#Anomalous-Differences-in-Real-Space" title="Permalink to this headline"></a></h1>
+<h1>Anomalous Differences in Real Space<a class="headerlink" href="#Anomalous-Differences-in-Real-Space" title="Permalink to this headline">¶</a></h1>
 <p>In the previous examples we used <span class="math notranslate nohighlight">\(CC_{anom}\)</span> to validate that there are well-measured anomalous differences in a sulfur SAD experiment and confirmed that the anomalous difference map showed localized, positive density at each of the sulfur atoms in HEWL. Both of these analyses used reciprocal space measurements to infer something about real space electron density. In this example, we will show how one can directly work in real space by using <a class="reference external" href="https://numpy.org/">NumPy</a> for both discrete
 Fourier transforms and representing real-space, voxelized electron density.</p>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># Plotting
-import matplotlib.pyplot as plt
-from celluloid import Camera
-from IPython.display import HTML, Image
-import seaborn as sns
-sns.set_context(&quot;notebook&quot;, font_scale=1.3)
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Plotting</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">from</span> <span class="nn">celluloid</span> <span class="kn">import</span> <span class="n">Camera</span>
+<span class="kn">from</span> <span class="nn">IPython.display</span> <span class="kn">import</span> <span class="n">HTML</span><span class="p">,</span> <span class="n">Image</span>
+<span class="kn">import</span> <span class="nn">seaborn</span> <span class="k">as</span> <span class="nn">sns</span>
+<span class="n">sns</span><span class="o">.</span><span class="n">set_context</span><span class="p">(</span><span class="s2">&quot;notebook&quot;</span><span class="p">,</span> <span class="n">font_scale</span><span class="o">=</span><span class="mf">1.3</span><span class="p">)</span>
 
-# Analysis
-import pandas as pd
-import numpy as np
-import gemmi
+<span class="c1"># Analysis</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">gemmi</span>
 </pre></div>
 </div>
 </div>
@@ -412,7 +506,7 @@ import gemmi
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>import reciprocalspaceship as rs
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">reciprocalspaceship</span> <span class="k">as</span> <span class="nn">rs</span>
 </pre></div>
 </div>
 </div>
@@ -420,7 +514,7 @@ import gemmi
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>print(rs.__version__)
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">rs</span><span class="o">.</span><span class="n">__version__</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -434,7 +528,7 @@ import gemmi
 </div>
 <hr class="docutils" />
 <section id="Generate-reciprocal-grid">
-<h2>Generate reciprocal grid<a class="headerlink" href="#Generate-reciprocal-grid" title="Permalink to this headline"></a></h2>
+<h2>Generate reciprocal grid<a class="headerlink" href="#Generate-reciprocal-grid" title="Permalink to this headline">¶</a></h2>
 <p>In <code class="docutils literal notranslate"><span class="pre">reciprocalspaceship</span></code> we typically represent reflection data as a 2-dimensional table indexed by Miller indices. This representation is convenient for representing multiple data or metadata fields associated with reflections. However, these Miller indices also correspond to indices into a 3-dimensional, reciprocal space grid. If we format complex structure factors – structure factor amplitudes and phases – as the corresponding 3D array, we can directly Fourier transform the data to obtain a
 real space map.</p>
 <p>The construction of a reciprocal grid from a <code class="docutils literal notranslate"><span class="pre">DataSet</span></code> object is facilitated by the built-in method <code class="docutils literal notranslate"><span class="pre">DataSet.to_reciprocal_grid()</span></code>. Here, we will load the anomalous difference amplitudes and phases, convert them to complex structure factors, and construct the corresponding reciprocal grid.</p>
@@ -442,7 +536,7 @@ real space map.</p>
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>anom = rs.read_mtz(&quot;data/anomdiff.mtz&quot;)
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">anom</span> <span class="o">=</span> <span class="n">rs</span><span class="o">.</span><span class="n">read_mtz</span><span class="p">(</span><span class="s2">&quot;data/anomdiff.mtz&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -450,7 +544,7 @@ real space map.</p>
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>anom[&quot;sf_anom&quot;] = anom.to_structurefactor(&quot;ANOM&quot;, &quot;PHANOM&quot;)
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">anom</span><span class="p">[</span><span class="s2">&quot;sf_anom&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">anom</span><span class="o">.</span><span class="n">to_structurefactor</span><span class="p">(</span><span class="s2">&quot;ANOM&quot;</span><span class="p">,</span> <span class="s2">&quot;PHANOM&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -458,7 +552,7 @@ real space map.</p>
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>reciprocal_grid = anom.to_reciprocal_grid(&quot;sf_anom&quot;, grid_size=(128, 128, 64))
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">reciprocal_grid</span> <span class="o">=</span> <span class="n">anom</span><span class="o">.</span><span class="n">to_reciprocal_grid</span><span class="p">(</span><span class="s2">&quot;sf_anom&quot;</span><span class="p">,</span> <span class="n">grid_size</span><span class="o">=</span><span class="p">(</span><span class="mi">128</span><span class="p">,</span> <span class="mi">128</span><span class="p">,</span> <span class="mi">64</span><span class="p">))</span>
 </pre></div>
 </div>
 </div>
@@ -467,16 +561,16 @@ real space map.</p>
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>fig, axes = plt.subplots(1, 2, figsize=(10, 5))
-axes[0].imshow(np.abs(reciprocal_grid[:, :, 1]))
-axes[0].set_title(&quot;Reciprocal Grid&quot;)
-axes[0].set_xticks([])
-axes[0].set_yticks([])
-axes[1].imshow(np.abs(np.fft.fftshift(reciprocal_grid[:, :, 1])))
-axes[1].set_title(&quot;Shifted Reciprocal Grid&quot;)
-axes[1].set_xticks([])
-axes[1].set_yticks([])
-plt.show()
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="p">,</span> <span class="n">axes</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">5</span><span class="p">))</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">reciprocal_grid</span><span class="p">[:,</span> <span class="p">:,</span> <span class="mi">1</span><span class="p">]))</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;Reciprocal Grid&quot;</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_xticks</span><span class="p">([])</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_yticks</span><span class="p">([])</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">fft</span><span class="o">.</span><span class="n">fftshift</span><span class="p">(</span><span class="n">reciprocal_grid</span><span class="p">[:,</span> <span class="p">:,</span> <span class="mi">1</span><span class="p">])))</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;Shifted Reciprocal Grid&quot;</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_xticks</span><span class="p">([])</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_yticks</span><span class="p">([])</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
@@ -491,16 +585,16 @@ plt.show()
 </section>
 <hr class="docutils" />
 <section id="Compute-real-space-map">
-<h2>Compute real space map<a class="headerlink" href="#Compute-real-space-map" title="Permalink to this headline"></a></h2>
+<h2>Compute real space map<a class="headerlink" href="#Compute-real-space-map" title="Permalink to this headline">¶</a></h2>
 <p>We can now generate our real space map of the anomalous differences. This anomalous difference map contains localized peaks corresponding to the locations of sulfur atoms in the unit cell.</p>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>real_map = np.real(np.fft.fftn(reciprocal_grid))
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">real_map</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">real</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">fft</span><span class="o">.</span><span class="n">fftn</span><span class="p">(</span><span class="n">reciprocal_grid</span><span class="p">))</span>
 
-# Standardize voxel range
-real_map = (real_map - real_map.mean())/real_map.std()
+<span class="c1"># Standardize voxel range</span>
+<span class="n">real_map</span> <span class="o">=</span> <span class="p">(</span><span class="n">real_map</span> <span class="o">-</span> <span class="n">real_map</span><span class="o">.</span><span class="n">mean</span><span class="p">())</span><span class="o">/</span><span class="n">real_map</span><span class="o">.</span><span class="n">std</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
@@ -509,18 +603,18 @@ real_map = (real_map - real_map.mean())/real_map.std()
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>fig = plt.figure(figsize=(6, 6))
-camera = Camera(fig)
-for i in range(int(real_map.shape[-1])):
-    plt.gca().text(0.11, 1.02, f&quot;Anomalous Difference Map (c={i})&quot;,
-                   transform=plt.gca().transAxes)
-    plt.contour(real_map[:, :, i], levels=10, cmap=&quot;gray_r&quot;, vmin=3, vmax=15)
-    plt.xlabel(&quot;b&quot;)
-    plt.ylabel(&quot;a&quot;)
-    camera.snap()
-plt.close()
-animation = camera.animate(interval=50, blit=True)
-HTML(animation.to_jshtml(fps=10))
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span>
+<span class="n">camera</span> <span class="o">=</span> <span class="n">Camera</span><span class="p">(</span><span class="n">fig</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">real_map</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])):</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">gca</span><span class="p">()</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="mf">0.11</span><span class="p">,</span> <span class="mf">1.02</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;Anomalous Difference Map (c=</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">)&quot;</span><span class="p">,</span>
+                   <span class="n">transform</span><span class="o">=</span><span class="n">plt</span><span class="o">.</span><span class="n">gca</span><span class="p">()</span><span class="o">.</span><span class="n">transAxes</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">contour</span><span class="p">(</span><span class="n">real_map</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">i</span><span class="p">],</span> <span class="n">levels</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s2">&quot;gray_r&quot;</span><span class="p">,</span> <span class="n">vmin</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="mi">15</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;b&quot;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;a&quot;</span><span class="p">)</span>
+    <span class="n">camera</span><span class="o">.</span><span class="n">snap</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+<span class="n">animation</span> <span class="o">=</span> <span class="n">camera</span><span class="o">.</span><span class="n">animate</span><span class="p">(</span><span class="n">interval</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">blit</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">HTML</span><span class="p">(</span><span class="n">animation</span><span class="o">.</span><span class="n">to_jshtml</span><span class="p">(</span><span class="n">fps</span><span class="o">=</span><span class="mi">10</span><span class="p">))</span>
 </pre></div>
 </div>
 </div>
@@ -25066,48 +25160,48 @@ SUVORK5CYII=\
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>rs.io.write_ccp4_map(real_map, &quot;data/anomdiff.map&quot;, anom.cell, anom.spacegroup)
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">rs</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">write_ccp4_map</span><span class="p">(</span><span class="n">real_map</span><span class="p">,</span> <span class="s2">&quot;data/anomdiff.map&quot;</span><span class="p">,</span> <span class="n">anom</span><span class="o">.</span><span class="n">cell</span><span class="p">,</span> <span class="n">anom</span><span class="o">.</span><span class="n">spacegroup</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 </section>
 <hr class="docutils" />
 <section id="Find-Sulfur-Sites-in-Anomalous-Difference-Map">
-<h2>Find Sulfur Sites in Anomalous Difference Map<a class="headerlink" href="#Find-Sulfur-Sites-in-Anomalous-Difference-Map" title="Permalink to this headline"></a></h2>
+<h2>Find Sulfur Sites in Anomalous Difference Map<a class="headerlink" href="#Find-Sulfur-Sites-in-Anomalous-Difference-Map" title="Permalink to this headline">¶</a></h2>
 <p>Using the real-space map of the anomalous differences in each voxel of the unit cell, it is now possible to identify the locations of the sulfur atoms responsible for the anomalous signal. This can be accomplished using peak-finding algorithms, which are available in many image processing libraries. For this example, we will use <a class="reference external" href="https://scikit-image.org/docs/dev/api/skimage.feature.html?highlight=peak_local_max#skimage.feature.peak_local_max">peak_local_max()</a> which is available in
 <a class="reference external" href="https://scikit-image.org/">scikit-image</a>.</p>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>def find_sites(real_map, threshold, cell):
-    &quot;&quot;&quot;
-    Find local peaks in map.
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">find_sites</span><span class="p">(</span><span class="n">real_map</span><span class="p">,</span> <span class="n">threshold</span><span class="p">,</span> <span class="n">cell</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Find local peaks in map.</span>
 
-    Parameters
-    ----------
-    real_map : np.ndarray
-        3D array with voxelized electron density
-    threshold : float
-        Minimum voxelized density to consider for peaks
-    cell : gemmi.UnitCell
-        Cell parameters for crystal
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    real_map : np.ndarray</span>
+<span class="sd">        3D array with voxelized electron density</span>
+<span class="sd">    threshold : float</span>
+<span class="sd">        Minimum voxelized density to consider for peaks</span>
+<span class="sd">    cell : gemmi.UnitCell</span>
+<span class="sd">        Cell parameters for crystal</span>
 
-    Returns
-    -------
-    pd.DataFrame
-        DataFrame with coordinates and peak height for each site
-    &quot;&quot;&quot;
-    from skimage import feature
-    peaks = feature.peak_local_max(real_map, threshold_abs=threshold, exclude_border=False)
-    data = []
-    for p in peaks:
-        pf = p/np.array(real_map.shape)
-        pos = cell.orthogonalize(gemmi.Fractional(*pf))
-        d  = {&quot;x&quot;: pos.x, &quot;y&quot;: pos.y, &quot;z&quot;: pos.z}
-        d[&quot;height&quot;] = real_map[p[0], p[1], p[2]]
-        data.append(d)
-    return pd.DataFrame(data)
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    pd.DataFrame</span>
+<span class="sd">        DataFrame with coordinates and peak height for each site</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="kn">from</span> <span class="nn">skimage</span> <span class="kn">import</span> <span class="n">feature</span>
+    <span class="n">peaks</span> <span class="o">=</span> <span class="n">feature</span><span class="o">.</span><span class="n">peak_local_max</span><span class="p">(</span><span class="n">real_map</span><span class="p">,</span> <span class="n">threshold_abs</span><span class="o">=</span><span class="n">threshold</span><span class="p">,</span> <span class="n">exclude_border</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">peaks</span><span class="p">:</span>
+        <span class="n">pf</span> <span class="o">=</span> <span class="n">p</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">real_map</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+        <span class="n">pos</span> <span class="o">=</span> <span class="n">cell</span><span class="o">.</span><span class="n">orthogonalize</span><span class="p">(</span><span class="n">gemmi</span><span class="o">.</span><span class="n">Fractional</span><span class="p">(</span><span class="o">*</span><span class="n">pf</span><span class="p">))</span>
+        <span class="n">d</span>  <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;x&quot;</span><span class="p">:</span> <span class="n">pos</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="s2">&quot;y&quot;</span><span class="p">:</span> <span class="n">pos</span><span class="o">.</span><span class="n">y</span><span class="p">,</span> <span class="s2">&quot;z&quot;</span><span class="p">:</span> <span class="n">pos</span><span class="o">.</span><span class="n">z</span><span class="p">}</span>
+        <span class="n">d</span><span class="p">[</span><span class="s2">&quot;height&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">real_map</span><span class="p">[</span><span class="n">p</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">p</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">p</span><span class="p">[</span><span class="mi">2</span><span class="p">]]</span>
+        <span class="n">data</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">d</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -25115,7 +25209,7 @@ SUVORK5CYII=\
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>sites = find_sites(real_map, 13.2, anom.cell)
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">sites</span> <span class="o">=</span> <span class="n">find_sites</span><span class="p">(</span><span class="n">real_map</span><span class="p">,</span> <span class="mf">13.2</span><span class="p">,</span> <span class="n">anom</span><span class="o">.</span><span class="n">cell</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -25123,7 +25217,7 @@ SUVORK5CYII=\
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>sites
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">sites</span>
 </pre></div>
 </div>
 </div>
@@ -25244,26 +25338,26 @@ SUVORK5CYII=\
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>def write_pdb(sites, cell):
-    s = gemmi.Structure()
-    s.cell = cell
-    m = gemmi.Model(&quot;substructure&quot;)
-    c = gemmi.Chain(&quot;A&quot;)
-    for i, site in sites.iterrows():
-        a = gemmi.Atom()
-        a.element = gemmi.Element(&quot;S&quot;)
-        a.name = &quot;S&quot;
-        a.pos = gemmi.Position(*site[[&quot;x&quot;, &quot;y&quot;, &quot;z&quot;]].values)
-        r = gemmi.Residue()
-        r.name = &quot;S&quot;
-        r.seqid = gemmi.SeqId(str(i+1))
-        r.add_atom(a)
-        c.append_residues([r])
-    m.add_chain(c)
-    s.add_model(m)
-    s.assign_label_seq_id(force=True)
-    s.write_minimal_pdb(&quot;data/sites.pdb&quot;)
-    return
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">write_pdb</span><span class="p">(</span><span class="n">sites</span><span class="p">,</span> <span class="n">cell</span><span class="p">):</span>
+    <span class="n">s</span> <span class="o">=</span> <span class="n">gemmi</span><span class="o">.</span><span class="n">Structure</span><span class="p">()</span>
+    <span class="n">s</span><span class="o">.</span><span class="n">cell</span> <span class="o">=</span> <span class="n">cell</span>
+    <span class="n">m</span> <span class="o">=</span> <span class="n">gemmi</span><span class="o">.</span><span class="n">Model</span><span class="p">(</span><span class="s2">&quot;substructure&quot;</span><span class="p">)</span>
+    <span class="n">c</span> <span class="o">=</span> <span class="n">gemmi</span><span class="o">.</span><span class="n">Chain</span><span class="p">(</span><span class="s2">&quot;A&quot;</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">site</span> <span class="ow">in</span> <span class="n">sites</span><span class="o">.</span><span class="n">iterrows</span><span class="p">():</span>
+        <span class="n">a</span> <span class="o">=</span> <span class="n">gemmi</span><span class="o">.</span><span class="n">Atom</span><span class="p">()</span>
+        <span class="n">a</span><span class="o">.</span><span class="n">element</span> <span class="o">=</span> <span class="n">gemmi</span><span class="o">.</span><span class="n">Element</span><span class="p">(</span><span class="s2">&quot;S&quot;</span><span class="p">)</span>
+        <span class="n">a</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;S&quot;</span>
+        <span class="n">a</span><span class="o">.</span><span class="n">pos</span> <span class="o">=</span> <span class="n">gemmi</span><span class="o">.</span><span class="n">Position</span><span class="p">(</span><span class="o">*</span><span class="n">site</span><span class="p">[[</span><span class="s2">&quot;x&quot;</span><span class="p">,</span> <span class="s2">&quot;y&quot;</span><span class="p">,</span> <span class="s2">&quot;z&quot;</span><span class="p">]]</span><span class="o">.</span><span class="n">values</span><span class="p">)</span>
+        <span class="n">r</span> <span class="o">=</span> <span class="n">gemmi</span><span class="o">.</span><span class="n">Residue</span><span class="p">()</span>
+        <span class="n">r</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;S&quot;</span>
+        <span class="n">r</span><span class="o">.</span><span class="n">seqid</span> <span class="o">=</span> <span class="n">gemmi</span><span class="o">.</span><span class="n">SeqId</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">))</span>
+        <span class="n">r</span><span class="o">.</span><span class="n">add_atom</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+        <span class="n">c</span><span class="o">.</span><span class="n">append_residues</span><span class="p">([</span><span class="n">r</span><span class="p">])</span>
+    <span class="n">m</span><span class="o">.</span><span class="n">add_chain</span><span class="p">(</span><span class="n">c</span><span class="p">)</span>
+    <span class="n">s</span><span class="o">.</span><span class="n">add_model</span><span class="p">(</span><span class="n">m</span><span class="p">)</span>
+    <span class="n">s</span><span class="o">.</span><span class="n">assign_label_seq_id</span><span class="p">(</span><span class="n">force</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">s</span><span class="o">.</span><span class="n">write_minimal_pdb</span><span class="p">(</span><span class="s2">&quot;data/sites.pdb&quot;</span><span class="p">)</span>
+    <span class="k">return</span>
 </pre></div>
 </div>
 </div>
@@ -25271,7 +25365,7 @@ SUVORK5CYII=\
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>write_pdb(sites, anom.cell)
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">write_pdb</span><span class="p">(</span><span class="n">sites</span><span class="p">,</span> <span class="n">anom</span><span class="o">.</span><span class="n">cell</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -25279,7 +25373,7 @@ SUVORK5CYII=\
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>Image(&quot;data/sites.png&quot;, width=400)
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">Image</span><span class="p">(</span><span class="s2">&quot;data/sites.png&quot;</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">400</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -25297,33 +25391,50 @@ SUVORK5CYII=\
 
 
            </div>
+           
           </div>
-          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="4_anomalousmap.html" class="btn btn-neutral float-left" title="Anomalous Difference Map" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
         <a href="6_timeresolvedPYP.html" class="btn btn-neutral float-right" title="Time-Resolved Difference Map" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="4_anomalousmap.html" class="btn btn-neutral float-left" title="Anomalous Difference Map" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
     </div>
 
   <hr/>
 
   <div role="contentinfo">
-    <p>&#169; Copyright 2020, Jack B. Greisman, Kevin M. Dalton.</p>
-  </div>
+    <p>
+        &#169; Copyright 2020, Jack B. Greisman, Kevin M. Dalton.
 
-  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
     <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
-    provided by <a href="https://readthedocs.org">Read the Docs</a>.
-   
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
         </div>
       </div>
+
     </section>
+
   </div>
-  <script>
+  
+
+  <script type="text/javascript">
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script> 
+  </script>
+
+  
+  
+    
+   
 
 </body>
 </html>

@@ -1,44 +1,84 @@
+
+
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" />
+  <meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
   <title>Anomalous Difference Map &mdash; reciprocalspaceship 1.0.0 documentation</title>
-      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
-      <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
-      <link rel="stylesheet" href="../_static/panels-bootstrap.5fd3999ee7762ccc51105388f4a9d115.css" type="text/css" />
-      <link rel="stylesheet" href="../_static/panels-main.c949a650a448cc0ae9fd3441c0e17fb0.css" type="text/css" />
-      <link rel="stylesheet" href="../_static/panels-variables.06eb56fa6e07937060861dad626602ad.css" type="text/css" />
+  
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/panels-bootstrap.5fd3999ee7762ccc51105388f4a9d115.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/panels-main.c949a650a448cc0ae9fd3441c0e17fb0.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/panels-variables.06eb56fa6e07937060861dad626602ad.css" type="text/css" />
+
+  
+  
     <link rel="shortcut icon" href="../_static/rs-favicon_32x32.png"/>
+  
+
+  
+  
+
+  
+
+  
   <!--[if lt IE 9]>
     <script src="../_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
         <script src="../_static/jquery.js"></script>
         <script src="../_static/underscore.js"></script>
         <script src="../_static/doctools.js"></script>
         <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/@jupyter-widgets/html-manager@^1.0.1/dist/embed-amd.js"></script>
-        <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
-        <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-    <script src="../_static/js/theme.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "tex2jax_ignore|mathjax_ignore|document", "processClass": "tex2jax_process|mathjax_process|math|output_area"}})</script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Anomalous Differences in Real Space" href="5_anomaloussites.html" />
     <link rel="prev" title="Merging with a Robust Error Model" href="3_mergingerrormodel.html" /> 
 </head>
 
-<body class="wy-body-for-nav"> 
+<body class="wy-body-for-nav">
+
+   
   <div class="wy-grid-for-nav">
+    
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
+          
+
+          
             <a href="../index.html" class="icon icon-home"> reciprocalspaceship
+          
+
+          
+            
             <img src="../_static/rs.png" class="logo" alt="Logo"/>
+          
           </a>
+
+          
+            
+            
+          
+
+          
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
     <input type="text" name="q" placeholder="Search docs" />
@@ -46,7 +86,18 @@
     <input type="hidden" name="area" value="default" />
   </form>
 </div>
-        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
               <ul class="current">
 <li class="toctree-l1 current"><a class="reference internal" href="../userguide/index.html">User Guide</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="../userguide/overview.html">Overview and Goals</a></li>
@@ -74,32 +125,75 @@
 <li class="toctree-l1"><a class="reference internal" href="../developers/index.html">For Developers</a></li>
 </ul>
 
+            
+          
         </div>
+        
       </div>
     </nav>
 
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
           <a href="../index.html">reciprocalspaceship</a>
+        
       </nav>
 
+
       <div class="wy-nav-content">
+        
         <div class="rst-content">
-          <div role="navigation" aria-label="Page navigation">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
   <ul class="wy-breadcrumbs">
-      <li><a href="../index.html" class="icon icon-home"></a></li>
-          <li class="breadcrumb-item"><a href="../userguide/index.html">User Guide</a></li>
-          <li class="breadcrumb-item"><a href="../userguide/examples.html">Examples</a></li>
-      <li class="breadcrumb-item active">Anomalous Difference Map</li>
+    
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../userguide/index.html">User Guide</a> &raquo;</li>
+        
+          <li><a href="../userguide/examples.html">Examples</a> &raquo;</li>
+        
+      <li>Anomalous Difference Map</li>
+    
+    
       <li class="wy-breadcrumbs-aside">
+        
+          
             <a href="../_sources/examples/4_anomalousmap.ipynb.txt" rel="nofollow"> View page source</a>
+          
+        
       </li>
+    
   </ul>
+
+  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
-             
+            
   
 <style>
 /* CSS for nbsphinx extension */
@@ -388,17 +482,17 @@ div.rendered_html tbody tr:hover {
     <img alt="Binder badge" src="https://mybinder.org/badge_logo.svg" style="vertical-align:text-bottom"></a>.
   </span>
 </div><section id="Anomalous-Difference-Map">
-<h1>Anomalous Difference Map<a class="headerlink" href="#Anomalous-Difference-Map" title="Permalink to this headline"></a></h1>
+<h1>Anomalous Difference Map<a class="headerlink" href="#Anomalous-Difference-Map" title="Permalink to this headline">¶</a></h1>
 <p>In <a class="reference internal" href="1_basics.html"><span class="doc">Basics</span></a>, we loaded a room-temperature dataset that was collected at ~6550 eV of tetragonal HEWL. We then computed the <span class="math notranslate nohighlight">\(CC_{1/2}\)</span> and <span class="math notranslate nohighlight">\(CC_{anom}\)</span> for this data in <a class="reference internal" href="2_mergingstats.html"><span class="doc">Merging Statistics</span></a> and observed that there was significant anomalous signal. Let’s now use that data to generate an anomalous difference map based on the anomalous scattering from the native sulfur atoms.</p>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>import reciprocalspaceship as rs
-import matplotlib.pyplot as plt
-import seaborn as sns
-sns.set_context(&quot;notebook&quot;, font_scale=1.3)
-import numpy as np
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">reciprocalspaceship</span> <span class="k">as</span> <span class="nn">rs</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">seaborn</span> <span class="k">as</span> <span class="nn">sns</span>
+<span class="n">sns</span><span class="o">.</span><span class="n">set_context</span><span class="p">(</span><span class="s2">&quot;notebook&quot;</span><span class="p">,</span> <span class="n">font_scale</span><span class="o">=</span><span class="mf">1.3</span><span class="p">)</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 </pre></div>
 </div>
 </div>
@@ -406,7 +500,7 @@ import numpy as np
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>print(rs.__version__)
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">rs</span><span class="o">.</span><span class="n">__version__</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -422,10 +516,10 @@ import numpy as np
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># Load data and extract relevant columns
-refltable = rs.read_mtz(&quot;data/HEWL_SSAD_24IDC.mtz&quot;)
-refltable = refltable[[&quot;I(+)&quot;, &quot;SIGI(+)&quot;, &quot;I(-)&quot;, &quot;SIGI(-)&quot;, &quot;N(+)&quot;, &quot;N(-)&quot;]]
-refltable.head()
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Load data and extract relevant columns</span>
+<span class="n">refltable</span> <span class="o">=</span> <span class="n">rs</span><span class="o">.</span><span class="n">read_mtz</span><span class="p">(</span><span class="s2">&quot;data/HEWL_SSAD_24IDC.mtz&quot;</span><span class="p">)</span>
+<span class="n">refltable</span> <span class="o">=</span> <span class="n">refltable</span><span class="p">[[</span><span class="s2">&quot;I(+)&quot;</span><span class="p">,</span> <span class="s2">&quot;SIGI(+)&quot;</span><span class="p">,</span> <span class="s2">&quot;I(-)&quot;</span><span class="p">,</span> <span class="s2">&quot;SIGI(-)&quot;</span><span class="p">,</span> <span class="s2">&quot;N(+)&quot;</span><span class="p">,</span> <span class="s2">&quot;N(-)&quot;</span><span class="p">]]</span>
+<span class="n">refltable</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
@@ -531,7 +625,7 @@ refltable.head()
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>print(f&quot;Number of reflections: {len(refltable)}&quot;)
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Number of reflections: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">refltable</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -545,7 +639,7 @@ Number of reflections: 12542
 </div>
 <hr class="docutils" />
 <section id="Background">
-<h2>Background<a class="headerlink" href="#Background" title="Permalink to this headline"></a></h2>
+<h2>Background<a class="headerlink" href="#Background" title="Permalink to this headline">¶</a></h2>
 <p>Since this dataset was collected at a single wavelength, we can compute an anomalous difference map from the anomalous structure factor amplitudes, <span class="math notranslate nohighlight">\(|F_{A}|\)</span>, and their phase shifts, <span class="math notranslate nohighlight">\(\alpha\)</span>, relative to the computed phases from an isomorphous structure of tetragonal HEWL. We will compute <span class="math notranslate nohighlight">\(|F_{A}|\)</span> based on the following:</p>
 <p><span class="math">\begin{equation*}
 |F_{A}| \propto \Delta_{\mathrm{ano}} = |F_{HKL}| - |F_{\overline{HKL}}|
@@ -558,17 +652,17 @@ Number of reflections: 12542
 </section>
 <hr class="docutils" />
 <section id="Computing-Structure-Factor-Amplitudes">
-<h2>Computing Structure Factor Amplitudes<a class="headerlink" href="#Computing-Structure-Factor-Amplitudes" title="Permalink to this headline"></a></h2>
+<h2>Computing Structure Factor Amplitudes<a class="headerlink" href="#Computing-Structure-Factor-Amplitudes" title="Permalink to this headline">¶</a></h2>
 <p>The dataset being used is the direct output from running scaling and merging in <a class="reference external" href="http://www.ccp4.ac.uk/html/aimless.html">AIMLESS</a>. As a first processing step, we need to convert the observed merged intensities, <span class="math notranslate nohighlight">\(I(+)\)</span> and <span class="math notranslate nohighlight">\(I(-)\)</span>, into observed structure factor amplitudes, <span class="math notranslate nohighlight">\(F(+)\)</span> and <span class="math notranslate nohighlight">\(F(-)\)</span>.</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># Stack intensities from 2-column anomalous to 1-column format
-stacked = refltable.stack_anomalous()
-stacked = stacked.loc[stacked[&quot;N&quot;] &gt; 0]
-stacked.sort_index(inplace=True)
-stacked.head()
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Stack intensities from 2-column anomalous to 1-column format</span>
+<span class="n">stacked</span> <span class="o">=</span> <span class="n">refltable</span><span class="o">.</span><span class="n">stack_anomalous</span><span class="p">()</span>
+<span class="n">stacked</span> <span class="o">=</span> <span class="n">stacked</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">stacked</span><span class="p">[</span><span class="s2">&quot;N&quot;</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">]</span>
+<span class="n">stacked</span><span class="o">.</span><span class="n">sort_index</span><span class="p">(</span><span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">stacked</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
@@ -654,8 +748,8 @@ stacked.head()
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>scaled = rs.algorithms.scale_merged_intensities(stacked, &quot;I&quot;, &quot;SIGI&quot;,
-                                                mean_intensity_method=&quot;anisotropic&quot;)
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">scaled</span> <span class="o">=</span> <span class="n">rs</span><span class="o">.</span><span class="n">algorithms</span><span class="o">.</span><span class="n">scale_merged_intensities</span><span class="p">(</span><span class="n">stacked</span><span class="p">,</span> <span class="s2">&quot;I&quot;</span><span class="p">,</span> <span class="s2">&quot;SIGI&quot;</span><span class="p">,</span>
+                                                <span class="n">mean_intensity_method</span><span class="o">=</span><span class="s2">&quot;anisotropic&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -663,7 +757,7 @@ stacked.head()
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>scaled.head()
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">scaled</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
@@ -791,28 +885,28 @@ stacked.head()
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>x = np.linspace(-3, 10000, 2)
-plt.figure(figsize=(6, 6))
-ax = plt.gca()
-plt.plot(x, x, &#39;--r&#39;, scalex=False, scaley=True)
-plt.plot(scaled[&quot;I&quot;].to_numpy(), scaled[&quot;FW-I&quot;].to_numpy(), &quot;k.&quot;, alpha=0.25)
-plt.plot(plt.xlim(), plt.xlim(), &#39;--r&#39;, scalex=False, scaley=True)
-plt.xlabel(&quot;Merged Intensity (AIMLESS)&quot;)
-plt.ylabel(&quot;Posterior Intensity&quot;)
-plt.xscale(&quot;log&quot;)
-plt.yscale(&quot;log&quot;)
-plt.xlim(right=1e4)
-plt.ylim(top=1e4)
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="mi">3</span><span class="p">,</span> <span class="mi">10000</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span>
+<span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">gca</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="s1">&#39;--r&#39;</span><span class="p">,</span> <span class="n">scalex</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">scaley</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">scaled</span><span class="p">[</span><span class="s2">&quot;I&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">(),</span> <span class="n">scaled</span><span class="p">[</span><span class="s2">&quot;FW-I&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">(),</span> <span class="s2">&quot;k.&quot;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.25</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">plt</span><span class="o">.</span><span class="n">xlim</span><span class="p">(),</span> <span class="n">plt</span><span class="o">.</span><span class="n">xlim</span><span class="p">(),</span> <span class="s1">&#39;--r&#39;</span><span class="p">,</span> <span class="n">scalex</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">scaley</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;Merged Intensity (AIMLESS)&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;Posterior Intensity&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xscale</span><span class="p">(</span><span class="s2">&quot;log&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">yscale</span><span class="p">(</span><span class="s2">&quot;log&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlim</span><span class="p">(</span><span class="n">right</span><span class="o">=</span><span class="mf">1e4</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylim</span><span class="p">(</span><span class="n">top</span><span class="o">=</span><span class="mf">1e4</span><span class="p">)</span>
 
-# Inset
-axins = ax.inset_axes([0.1, 0.5, 0.43, 0.43])
-axins.plot(scaled[&quot;I&quot;].to_numpy(), scaled[&quot;FW-I&quot;].to_numpy(), &quot;k.&quot;, alpha=0.25)
-axins.plot(x, x, &#39;--r&#39;)
-axins.set_xlim(-3, 10)
-axins.set_ylim(-3, 10)
-axins.grid(linestyle=&quot;--&quot;)
+<span class="c1"># Inset</span>
+<span class="n">axins</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">inset_axes</span><span class="p">([</span><span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.43</span><span class="p">,</span> <span class="mf">0.43</span><span class="p">])</span>
+<span class="n">axins</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">scaled</span><span class="p">[</span><span class="s2">&quot;I&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">(),</span> <span class="n">scaled</span><span class="p">[</span><span class="s2">&quot;FW-I&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">(),</span> <span class="s2">&quot;k.&quot;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.25</span><span class="p">)</span>
+<span class="n">axins</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="s1">&#39;--r&#39;</span><span class="p">)</span>
+<span class="n">axins</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="o">-</span><span class="mi">3</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
+<span class="n">axins</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="o">-</span><span class="mi">3</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
+<span class="n">axins</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="n">linestyle</span><span class="o">=</span><span class="s2">&quot;--&quot;</span><span class="p">)</span>
 
-plt.show()
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
@@ -827,11 +921,11 @@ plt.show()
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># Remove extra columns
-scaled = scaled[[&quot;FW-F&quot;, &quot;FW-SIGF&quot;, &quot;N&quot;]]
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Remove extra columns</span>
+<span class="n">scaled</span> <span class="o">=</span> <span class="n">scaled</span><span class="p">[[</span><span class="s2">&quot;FW-F&quot;</span><span class="p">,</span> <span class="s2">&quot;FW-SIGF&quot;</span><span class="p">,</span> <span class="s2">&quot;N&quot;</span><span class="p">]]</span>
 
-# &quot;Unstack&quot; anomalous data from one-column to two-column format
-anom = scaled.unstack_anomalous([&quot;FW-F&quot;, &quot;FW-SIGF&quot;, &quot;N&quot;]).dropna()
+<span class="c1"># &quot;Unstack&quot; anomalous data from one-column to two-column format</span>
+<span class="n">anom</span> <span class="o">=</span> <span class="n">scaled</span><span class="o">.</span><span class="n">unstack_anomalous</span><span class="p">([</span><span class="s2">&quot;FW-F&quot;</span><span class="p">,</span> <span class="s2">&quot;FW-SIGF&quot;</span><span class="p">,</span> <span class="s2">&quot;N&quot;</span><span class="p">])</span><span class="o">.</span><span class="n">dropna</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
@@ -839,7 +933,7 @@ anom = scaled.unstack_anomalous([&quot;FW-F&quot;, &quot;FW-SIGF&quot;, &quot;N&
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>anom.head()
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">anom</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
@@ -945,11 +1039,11 @@ anom = scaled.unstack_anomalous([&quot;FW-F&quot;, &quot;FW-SIGF&quot;, &quot;N&
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># Compute differences
-dF    = np.abs(anom[&quot;FW-F(+)&quot;] - anom[&quot;FW-F(-)&quot;])
-sigDF = np.sqrt(anom[&quot;FW-SIGF(+)&quot;]**2 + anom[&quot;FW-SIGF(-)&quot;]**2)
-anom[&quot;ANOM&quot;] = rs.DataSeries(dF, dtype=&quot;SFAmplitude&quot;)
-anom[&quot;SigANOM&quot;] = rs.DataSeries(sigDF, dtype=&quot;Stddev&quot;)
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Compute differences</span>
+<span class="n">dF</span>    <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">anom</span><span class="p">[</span><span class="s2">&quot;FW-F(+)&quot;</span><span class="p">]</span> <span class="o">-</span> <span class="n">anom</span><span class="p">[</span><span class="s2">&quot;FW-F(-)&quot;</span><span class="p">])</span>
+<span class="n">sigDF</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">anom</span><span class="p">[</span><span class="s2">&quot;FW-SIGF(+)&quot;</span><span class="p">]</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="n">anom</span><span class="p">[</span><span class="s2">&quot;FW-SIGF(-)&quot;</span><span class="p">]</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">anom</span><span class="p">[</span><span class="s2">&quot;ANOM&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">rs</span><span class="o">.</span><span class="n">DataSeries</span><span class="p">(</span><span class="n">dF</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;SFAmplitude&quot;</span><span class="p">)</span>
+<span class="n">anom</span><span class="p">[</span><span class="s2">&quot;SigANOM&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">rs</span><span class="o">.</span><span class="n">DataSeries</span><span class="p">(</span><span class="n">sigDF</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;Stddev&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -957,7 +1051,7 @@ anom[&quot;SigANOM&quot;] = rs.DataSeries(sigDF, dtype=&quot;Stddev&quot;)
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>anom.head()
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">anom</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
@@ -1076,13 +1170,13 @@ anom[&quot;SigANOM&quot;] = rs.DataSeries(sigDF, dtype=&quot;Stddev&quot;)
 </section>
 <hr class="docutils" />
 <section id="Phasing-the-Anomalous-Difference-Map">
-<h2>Phasing the Anomalous Difference Map<a class="headerlink" href="#Phasing-the-Anomalous-Difference-Map" title="Permalink to this headline"></a></h2>
+<h2>Phasing the Anomalous Difference Map<a class="headerlink" href="#Phasing-the-Anomalous-Difference-Map" title="Permalink to this headline">¶</a></h2>
 <p>Below, we will compute the necessary phase shifts to go from the phases of a <span class="math notranslate nohighlight">\(2 F_o - F_c\)</span> map to the phases associated with the anomalous difference structure factors. Although this model was refined to this data in PHENIX, the phases from any isomorphous structure could have been used to obtain a reasonable map.</p>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>ref = rs.read_mtz(&quot;data/HEWL_refined.mtz&quot;)
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ref</span> <span class="o">=</span> <span class="n">rs</span><span class="o">.</span><span class="n">read_mtz</span><span class="p">(</span><span class="s2">&quot;data/HEWL_refined.mtz&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -1090,9 +1184,9 @@ anom[&quot;SigANOM&quot;] = rs.DataSeries(sigDF, dtype=&quot;Stddev&quot;)
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># Find common HKL indices
-hkls = anom.index.intersection(ref.index).sort_values()
-anom = anom.loc[hkls]
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Find common HKL indices</span>
+<span class="n">hkls</span> <span class="o">=</span> <span class="n">anom</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">intersection</span><span class="p">(</span><span class="n">ref</span><span class="o">.</span><span class="n">index</span><span class="p">)</span><span class="o">.</span><span class="n">sort_values</span><span class="p">()</span>
+<span class="n">anom</span> <span class="o">=</span> <span class="n">anom</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">hkls</span><span class="p">]</span>
 </pre></div>
 </div>
 </div>
@@ -1105,21 +1199,21 @@ anom = anom.loc[hkls]
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>alpha = 90 + 180*(anom[&quot;FW-F(+)&quot;] &gt;= anom[&quot;FW-F(-)&quot;])
-anom[&quot;PHANOM&quot;] = ref.loc[hkls, &quot;PH2FOFCWT&quot;] + alpha
-anom[&quot;PHANOM&quot;] = rs.utils.canonicalize_phases(anom[&quot;PHANOM&quot;]).astype(&quot;Phase&quot;)
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">alpha</span> <span class="o">=</span> <span class="mi">90</span> <span class="o">+</span> <span class="mi">180</span><span class="o">*</span><span class="p">(</span><span class="n">anom</span><span class="p">[</span><span class="s2">&quot;FW-F(+)&quot;</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="n">anom</span><span class="p">[</span><span class="s2">&quot;FW-F(-)&quot;</span><span class="p">])</span>
+<span class="n">anom</span><span class="p">[</span><span class="s2">&quot;PHANOM&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">ref</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">hkls</span><span class="p">,</span> <span class="s2">&quot;PH2FOFCWT&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="n">alpha</span>
+<span class="n">anom</span><span class="p">[</span><span class="s2">&quot;PHANOM&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">rs</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">canonicalize_phases</span><span class="p">(</span><span class="n">anom</span><span class="p">[</span><span class="s2">&quot;PHANOM&quot;</span><span class="p">])</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s2">&quot;Phase&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 </section>
 <section id="Viewing-the-Map">
-<h2>Viewing the Map<a class="headerlink" href="#Viewing-the-Map" title="Permalink to this headline"></a></h2>
+<h2>Viewing the Map<a class="headerlink" href="#Viewing-the-Map" title="Permalink to this headline">¶</a></h2>
 <p>Since we have structure factor amplitudes, <code class="docutils literal notranslate"><span class="pre">anom[&quot;ANOM&quot;]</span></code>, and phases, <code class="docutils literal notranslate"><span class="pre">anom[&quot;PHANOM&quot;]</span></code>, for the anomalous structure factors, we can now view the anomalous difference map. This can be done by writing out an MTZ file, and loading it into COOT, PyMOL, or any other molecular graphics package.</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>anom.dtypes
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">anom</span><span class="o">.</span><span class="n">dtypes</span>
 </pre></div>
 </div>
 </div>
@@ -1145,7 +1239,7 @@ dtype: object
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>anom.write_mtz(&quot;data/anomdiff.mtz&quot;)
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">anom</span><span class="o">.</span><span class="n">write_mtz</span><span class="p">(</span><span class="s2">&quot;data/anomdiff.mtz&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -1176,33 +1270,50 @@ dtype: object
 
 
            </div>
+           
           </div>
-          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="3_mergingerrormodel.html" class="btn btn-neutral float-left" title="Merging with a Robust Error Model" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
         <a href="5_anomaloussites.html" class="btn btn-neutral float-right" title="Anomalous Differences in Real Space" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="3_mergingerrormodel.html" class="btn btn-neutral float-left" title="Merging with a Robust Error Model" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
     </div>
 
   <hr/>
 
   <div role="contentinfo">
-    <p>&#169; Copyright 2020, Jack B. Greisman, Kevin M. Dalton.</p>
-  </div>
+    <p>
+        &#169; Copyright 2020, Jack B. Greisman, Kevin M. Dalton.
 
-  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
     <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
-    provided by <a href="https://readthedocs.org">Read the Docs</a>.
-   
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
         </div>
       </div>
+
     </section>
+
   </div>
-  <script>
+  
+
+  <script type="text/javascript">
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script> 
+  </script>
+
+  
+  
+    
+   
 
 </body>
 </html>
