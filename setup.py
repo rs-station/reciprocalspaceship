@@ -45,7 +45,7 @@ docs_require = [
     "sphinx",
     "sphinx_rtd_theme",
     "nbsphinx",
-    "jinja2<3.1.0",
+    "jinja2<3.1.3",
     "sphinx-panels",
     "sphinxcontrib-autoprogram",
     "autodocsumm",
