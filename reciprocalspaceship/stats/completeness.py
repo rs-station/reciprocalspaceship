@@ -160,7 +160,6 @@ def compute_completeness(
     result.columns = pd.MultiIndex.from_product([result.columns, ["non-anomalous"]])
 
     if anomalous:
-
         # Compute completeness (all)
         result2 = completeness_by_bin(asu, labels)
         result2.columns = pd.MultiIndex.from_product([result2.columns, ["all"]])

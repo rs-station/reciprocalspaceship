@@ -81,7 +81,6 @@ def summarize(mtz, precision):
 
 
 def main():
-
     # Parse commandline arguments
     parser = parse_arguments()
     args = parser.parse_args()
