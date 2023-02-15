@@ -142,7 +142,6 @@ class MTZIntegerArray(IntegerArray):
 
         # if we want nans, count the mask
         if not dropna:
-
             # TODO(extension)
             # appending to an Index *always* infers
             # w/o passing the dtype
@@ -267,7 +266,6 @@ class MTZFloatArray(FloatingArray):
 
         # if we want nans, count the mask
         if not dropna:
-
             # TODO(extension)
             # appending to an Index *always* infers
             # w/o passing the dtype
