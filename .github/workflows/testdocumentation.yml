@@ -1,0 +1,36 @@
+name: Test Documentation
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    # Skip docs if 'skip docs' is contained in latest commit message
+    if: "!contains(github.event.head_commit.message, 'skip docs')"
+
+    steps:
+
+    - uses: actions/checkout@v3
+    - name: Set up Python 3.9
+      uses: actions/setup-python@v4
+      with:
+        python-version: 3.9
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -e .[dev]
+
+    - name: Set up Pandoc
+      uses: r-lib/actions/setup-pandoc@v2
+
+    - name: Build documentation
+      run: |
+        cd docs
+        make clean
+        make html
