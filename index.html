@@ -4,20 +4,23 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>reciprocalspaceship &mdash; reciprocalspaceship 1.0.0 documentation</title><link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
-    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <title>reciprocalspaceship &mdash; reciprocalspaceship 1.0.0 documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="_static/custom.css" type="text/css" />
-      <link rel="stylesheet" href="_static/panels-main.c949a650a448cc0ae9fd3441c0e17fb0.css" type="text/css" />
-      <link rel="stylesheet" href="_static/panels-bootstrap.5fd3999ee7762ccc51105388f4a9d115.css" type="text/css" />
-      <link rel="stylesheet" href="_static/panels-variables.06eb56fa6e07937060861dad626602ad.css" type="text/css" />
+      <link rel="stylesheet" href="_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" type="text/css" />
     <link rel="shortcut icon" href="_static/rs-favicon_32x32.png"/>
   <!--[if lt IE 9]>
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
-  <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
         <script src="_static/jquery.js"></script>
         <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="_static/doctools.js"></script>
+        <script src="_static/sphinx_highlight.js"></script>
+        <script src="_static/design-tabs.js"></script>
         <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/@jupyter-widgets/html-manager@^1.0.1/dist/embed-amd.js"></script>
     <script src="_static/js/theme.js"></script>
@@ -101,7 +104,7 @@
 }
 </style>
 <section id="reciprocalspaceship">
-<h1>reciprocalspaceship<a class="headerlink" href="#reciprocalspaceship" title="Permalink to this headline"></a></h1>
+<h1>reciprocalspaceship<a class="headerlink" href="#reciprocalspaceship" title="Permalink to this heading"></a></h1>
 <p>Tools for exploring reciprocal space.</p>
 <p><code class="docutils literal notranslate"><span class="pre">reciprocalspaceship</span></code> provides a <code class="docutils literal notranslate"><span class="pre">pandas</span></code>-style interface for
 analyzing and manipulating reflection data from crystallography
@@ -118,35 +121,35 @@ support for developing functions that use space groups, unit cell parameters, an
 symmetry operations.</p></li>
 <li><p>Support for reading and writing MTZ reflection files.</p></li>
 </ul>
-<div class="sphinx-bs container-lg pb-3 docutils">
-<div class="row docutils">
-<div class="d-flex col-lg-4 col-md-4 col-sm-6 col-xs-12 p-2 docutils">
-<div class="card w-100 shadow docutils">
-<div class="card-body docutils">
-<p class="card-text">The user guide provides information about installing and using <code class="docutils literal notranslate"><span class="pre">reciprocalspaceship</span></code></p>
-</div>
-<div class="card-footer docutils">
-<p class="card-text"><a class="sphinx-bs btn text-wrap btn-outline-primary btn-block stretched-link reference internal" href="userguide/index.html"><span class="doc">User Guide</span></a></p>
-</div>
-</div>
-</div>
-<div class="d-flex col-lg-4 col-md-4 col-sm-6 col-xs-12 p-2 docutils">
-<div class="card w-100 shadow docutils">
-<div class="card-body docutils">
-<p class="card-text">The API reference provides detailed information about the Python API for the library</p>
-</div>
-<div class="card-footer docutils">
-<p class="card-text"><a class="sphinx-bs btn text-wrap btn-outline-primary btn-block stretched-link reference internal" href="api/index.html"><span class="doc">API Reference</span></a></p>
+<div class="sd-container-fluid sd-sphinx-override sd-mb-4 docutils">
+<div class="sd-row sd-row-cols-3 sd-row-cols-xs-3 sd-row-cols-sm-3 sd-row-cols-md-3 sd-row-cols-lg-3 docutils">
+<div class="sd-col sd-d-flex-row docutils">
+<div class="sd-card sd-sphinx-override sd-w-100 sd-shadow-sm docutils">
+<div class="sd-card-body docutils">
+<div class="sd-card-title sd-font-weight-bold docutils">
+User Guide</div>
+<p class="sd-card-text">The user guide provides information about installing and using <code class="docutils literal notranslate"><span class="pre">reciprocalspaceship</span></code></p>
+<p class="sd-card-text"><span class="sd-d-grid"><a class="sd-sphinx-override sd-btn sd-text-wrap sd-btn-primary sd-shadow-sm reference internal" href="userguide/index.html"><span class="doc">User Guide</span></a></span></p>
 </div>
 </div>
 </div>
-<div class="d-flex col-lg-4 col-md-4 col-sm-6 col-xs-12 p-2 docutils">
-<div class="card w-100 shadow docutils">
-<div class="card-body docutils">
-<p class="card-text">The developer’s guide is a resource for those looking to contribute to this project</p>
+<div class="sd-col sd-d-flex-row docutils">
+<div class="sd-card sd-sphinx-override sd-w-100 sd-shadow-sm docutils">
+<div class="sd-card-body docutils">
+<div class="sd-card-title sd-font-weight-bold docutils">
+API Reference</div>
+<p class="sd-card-text">The API reference provides details about the Python API for the library</p>
+<p class="sd-card-text"><span class="sd-d-grid"><a class="sd-sphinx-override sd-btn sd-text-wrap sd-btn-primary sd-shadow-sm reference internal" href="api/index.html"><span class="doc">API Reference</span></a></span></p>
 </div>
-<div class="card-footer docutils">
-<p class="card-text"><a class="sphinx-bs btn text-wrap btn-outline-primary btn-block stretched-link reference internal" href="developers/index.html"><span class="doc">Developer Guide</span></a></p>
+</div>
+</div>
+<div class="sd-col sd-d-flex-row docutils">
+<div class="sd-card sd-sphinx-override sd-w-100 sd-shadow-sm docutils">
+<div class="sd-card-body docutils">
+<div class="sd-card-title sd-font-weight-bold docutils">
+Developer’s Guide</div>
+<p class="sd-card-text">The developer’s guide is a resource for those looking to contribute to this project</p>
+<p class="sd-card-text"><span class="sd-d-grid"><a class="sd-sphinx-override sd-btn sd-text-wrap sd-btn-primary sd-shadow-sm reference internal" href="developers/index.html"><span class="doc">Developer’s Guide</span></a></span></p>
 </div>
 </div>
 </div>

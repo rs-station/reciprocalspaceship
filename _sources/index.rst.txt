@@ -19,30 +19,40 @@ Features of this library include:
   symmetry operations.
 - Support for reading and writing MTZ reflection files.
 
-.. panels::
-    :container: container-lg pb-3
-    :column: col-lg-4 col-md-4 col-sm-6 col-xs-12 p-2
+.. grid:: 3
 
-    The user guide provides information about installing and using ``reciprocalspaceship``
-    +++
-    .. link-button:: userguide/index
-       :type: ref
-       :text: User Guide
-       :classes: btn-outline-primary btn-block stretched-link
-    ---
-    The API reference provides detailed information about the Python API for the library
-    +++
-    .. link-button:: api/index
-        :type: ref
-        :text: API Reference
-        :classes: btn-outline-primary btn-block stretched-link
-    ---
-    The developer's guide is a resource for those looking to contribute to this project
-    +++
-    .. link-button:: developers/index
-        :type: ref
-        :text: Developer Guide
-        :classes: btn-outline-primary btn-block stretched-link
+    .. grid-item-card:: User Guide
+
+       The user guide provides information about installing and using ``reciprocalspaceship``
+
+       .. button-ref:: userguide/index
+           :color: primary
+	   :shadow:
+           :expand:
+
+           User Guide
+
+    .. grid-item-card:: API Reference
+
+        The API reference provides details about the Python API for the library
+
+        .. button-ref:: api/index
+           :color: primary
+	   :shadow:
+           :expand:
+
+           API Reference
+
+    .. grid-item-card:: Developer's Guide
+
+        The developer's guide is a resource for those looking to contribute to this project
+
+	.. button-ref:: developers/index
+           :color: primary
+	   :shadow:
+           :expand:
+
+           Developer's Guide
 
 .. toctree::
    :maxdepth: 1

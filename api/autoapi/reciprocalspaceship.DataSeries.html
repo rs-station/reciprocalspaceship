@@ -4,20 +4,23 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>DataSeries &mdash; reciprocalspaceship 1.0.0 documentation</title><link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
-    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+  <title>DataSeries &mdash; reciprocalspaceship 1.0.0 documentation</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
-      <link rel="stylesheet" href="../../_static/panels-main.c949a650a448cc0ae9fd3441c0e17fb0.css" type="text/css" />
-      <link rel="stylesheet" href="../../_static/panels-bootstrap.5fd3999ee7762ccc51105388f4a9d115.css" type="text/css" />
-      <link rel="stylesheet" href="../../_static/panels-variables.06eb56fa6e07937060861dad626602ad.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" type="text/css" />
     <link rel="shortcut icon" href="../../_static/rs-favicon_32x32.png"/>
   <!--[if lt IE 9]>
     <script src="../../_static/js/html5shiv.min.js"></script>
   <![endif]-->
-  <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+  
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
         <script src="../../_static/jquery.js"></script>
         <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/sphinx_highlight.js"></script>
+        <script src="../../_static/design-tabs.js"></script>
         <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/@jupyter-widgets/html-manager@^1.0.1/dist/embed-amd.js"></script>
     <script src="../../_static/js/theme.js"></script>
@@ -52,7 +55,10 @@
 <li class="toctree-l1 current"><a class="reference internal" href="../index.html">API Reference</a><ul class="current">
 <li class="toctree-l2 current"><a class="reference internal" href="../index.html#reflection-data">Reflection Data</a><ul class="current">
 <li class="toctree-l3"><a class="reference internal" href="reciprocalspaceship.DataSet.html">DataSet</a></li>
-<li class="toctree-l3 current"><a class="current reference internal" href="#">DataSeries</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">DataSeries</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#reciprocalspaceship.DataSeries"><code class="docutils literal notranslate"><span class="pre">DataSeries</span></code></a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../index.html#input-output">Input/Output</a></li>
@@ -115,11 +121,11 @@
 }
 </style>
 <section id="dataseries">
-<h1>DataSeries<a class="headerlink" href="#dataseries" title="Permalink to this headline"></a></h1>
+<h1>DataSeries<a class="headerlink" href="#dataseries" title="Permalink to this heading"></a></h1>
 <dl class="py class">
-<dt id="reciprocalspaceship.DataSeries">
-<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">reciprocalspaceship.</span></code><code class="sig-name descname"><span class="pre">DataSeries</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">index</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dtype</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Dtype</span> <span class="p"><span class="pre">|</span></span> <span class="pre">None</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">copy</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">bool</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fastpath</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">bool</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/rs-station/reciprocalspaceship/blob/main/reciprocalspaceship/dataseries.py#L6-L210"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#reciprocalspaceship.DataSeries" title="Permalink to this definition"></a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">pandas.core.series.Series</span></code></p>
+<dt class="sig sig-object py" id="reciprocalspaceship.DataSeries">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">reciprocalspaceship.</span></span><span class="sig-name descname"><span class="pre">DataSeries</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">index</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dtype</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dtype</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">copy</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fastpath</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/rs-station/reciprocalspaceship/blob/main/reciprocalspaceship/dataseries.py#L6-L210"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#reciprocalspaceship.DataSeries" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Series</span></code></p>
 <p>One-dimensional ndarray with axis labels, representing a slice
 of a DataSet. DataSeries objects inherit methods from <code class="docutils literal notranslate"><span class="pre">pd.Series</span></code>,
 and as such have support for statistical methods that automatically
@@ -144,12 +150,12 @@ found in the dict.</p></li>
 </dd>
 </dl>
 <p class="rubric">Attributes</p>
-<table class="longtable docutils align-default">
+<table class="autosummary longtable docutils align-default">
 <tbody>
 </tbody>
 </table>
 <p class="rubric">Methods</p>
-<table class="longtable docutils align-default">
+<table class="autosummary longtable docutils align-default">
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="#reciprocalspaceship.DataSeries.from_friedel_dtype" title="reciprocalspaceship.DataSeries.from_friedel_dtype"><code class="xref py py-obj docutils literal notranslate"><span class="pre">from_friedel_dtype</span></code></a>()</p></td>
 <td><p>Convert dtype of DataSeries from the Friedel equivalent.</p></td>
@@ -163,8 +169,8 @@ found in the dict.</p></li>
 </tbody>
 </table>
 <dl class="py method">
-<dt id="reciprocalspaceship.DataSeries.from_friedel_dtype">
-<code class="sig-name descname"><span class="pre">from_friedel_dtype</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/rs-station/reciprocalspaceship/blob/main/reciprocalspaceship/dataseries.py#L106-L159"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#reciprocalspaceship.DataSeries.from_friedel_dtype" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="reciprocalspaceship.DataSeries.from_friedel_dtype">
+<span class="sig-name descname"><span class="pre">from_friedel_dtype</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/rs-station/reciprocalspaceship/blob/main/reciprocalspaceship/dataseries.py#L106-L159"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#reciprocalspaceship.DataSeries.from_friedel_dtype" title="Permalink to this definition"></a></dt>
 <dd><p>Convert dtype of DataSeries from the Friedel equivalent. If
 DataSeries is not a Friedel-related dtype, it is returned
 unchanged.</p>
@@ -179,7 +185,7 @@ unchanged.</p>
 <dt><a class="reference internal" href="#reciprocalspaceship.DataSeries.to_friedel_dtype" title="reciprocalspaceship.DataSeries.to_friedel_dtype"><code class="xref py py-obj docutils literal notranslate"><span class="pre">DataSeries.to_friedel_dtype</span></code></a></dt><dd><p>Convert dtype of DataSeries to the Friedel equivalent</p>
 </dd>
 </dl>
-</aside>
+</div>
 <p class="rubric">Examples</p>
 <p>DataSeries has a Friedel equivalent:</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">s</span> <span class="o">=</span> <span class="n">rs</span><span class="o">.</span><span class="n">DataSeries</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;FriedelIntensity&quot;</span><span class="p">)</span>
@@ -212,8 +218,8 @@ unchanged.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="reciprocalspaceship.DataSeries.infer_mtz_dtype">
-<code class="sig-name descname"><span class="pre">infer_mtz_dtype</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/rs-station/reciprocalspaceship/blob/main/reciprocalspaceship/dataseries.py#L161-L210"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#reciprocalspaceship.DataSeries.infer_mtz_dtype" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="reciprocalspaceship.DataSeries.infer_mtz_dtype">
+<span class="sig-name descname"><span class="pre">infer_mtz_dtype</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/rs-station/reciprocalspaceship/blob/main/reciprocalspaceship/dataseries.py#L161-L210"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#reciprocalspaceship.DataSeries.infer_mtz_dtype" title="Permalink to this definition"></a></dt>
 <dd><p>Infer MTZ dtype from column name and underlying data.</p>
 <p>If name does not match a common MTZ column, the method will return
 an MTZInt or MTZReal depending on whether the data is composed of
@@ -231,7 +237,7 @@ already a MTZDtype, it will be returned unchanged.</p>
 <dt><a class="reference internal" href="reciprocalspaceship.DataSet.html#reciprocalspaceship.DataSet.infer_mtz_dtypes" title="reciprocalspaceship.DataSet.infer_mtz_dtypes"><code class="xref py py-obj docutils literal notranslate"><span class="pre">DataSet.infer_mtz_dtypes</span></code></a></dt><dd><p>Infer MTZ dtypes for columns in DataSet</p>
 </dd>
 </dl>
-</aside>
+</div>
 <p class="rubric">Examples</p>
 <p>Common intensity column name:</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">s</span> <span class="o">=</span> <span class="n">rs</span><span class="o">.</span><span class="n">DataSeries</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;I&quot;</span><span class="p">)</span>
@@ -263,8 +269,8 @@ already a MTZDtype, it will be returned unchanged.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="reciprocalspaceship.DataSeries.to_friedel_dtype">
-<code class="sig-name descname"><span class="pre">to_friedel_dtype</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/rs-station/reciprocalspaceship/blob/main/reciprocalspaceship/dataseries.py#L46-L104"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#reciprocalspaceship.DataSeries.to_friedel_dtype" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="reciprocalspaceship.DataSeries.to_friedel_dtype">
+<span class="sig-name descname"><span class="pre">to_friedel_dtype</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/rs-station/reciprocalspaceship/blob/main/reciprocalspaceship/dataseries.py#L46-L104"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#reciprocalspaceship.DataSeries.to_friedel_dtype" title="Permalink to this definition"></a></dt>
 <dd><p>Convert dtype of DataSeries to the Friedel equivalent. If there
 is not a Friedel equivalent dtype, the DataSeries is returned
 unchanged.</p>
@@ -279,7 +285,7 @@ unchanged.</p>
 <dt><a class="reference internal" href="#reciprocalspaceship.DataSeries.from_friedel_dtype" title="reciprocalspaceship.DataSeries.from_friedel_dtype"><code class="xref py py-obj docutils literal notranslate"><span class="pre">DataSeries.from_friedel_dtype</span></code></a></dt><dd><p>Convert dtype of DataSeries from the Friedel equivalent.</p>
 </dd>
 </dl>
-</aside>
+</div>
 <p class="rubric">Examples</p>
 <p>DataSeries has a Friedel equivalent:</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">s</span> <span class="o">=</span> <span class="n">rs</span><span class="o">.</span><span class="n">DataSeries</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;Intensity&quot;</span><span class="p">)</span>

@@ -4,20 +4,23 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>reciprocalspaceship.algorithms.scale_merged_intensities &mdash; reciprocalspaceship 1.0.0 documentation</title><link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
-    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+  <title>reciprocalspaceship.algorithms.scale_merged_intensities &mdash; reciprocalspaceship 1.0.0 documentation</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
-      <link rel="stylesheet" href="../../_static/panels-main.c949a650a448cc0ae9fd3441c0e17fb0.css" type="text/css" />
-      <link rel="stylesheet" href="../../_static/panels-bootstrap.5fd3999ee7762ccc51105388f4a9d115.css" type="text/css" />
-      <link rel="stylesheet" href="../../_static/panels-variables.06eb56fa6e07937060861dad626602ad.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" type="text/css" />
     <link rel="shortcut icon" href="../../_static/rs-favicon_32x32.png"/>
   <!--[if lt IE 9]>
     <script src="../../_static/js/html5shiv.min.js"></script>
   <![endif]-->
-  <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+  
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
         <script src="../../_static/jquery.js"></script>
         <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/sphinx_highlight.js"></script>
+        <script src="../../_static/design-tabs.js"></script>
         <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/@jupyter-widgets/html-manager@^1.0.1/dist/embed-amd.js"></script>
     <script src="../../_static/js/theme.js"></script>
@@ -54,7 +57,10 @@
 <li class="toctree-l2"><a class="reference internal" href="../index.html#input-output">Input/Output</a></li>
 <li class="toctree-l2 current"><a class="reference internal" href="../index.html#algorithms">Algorithms</a><ul class="current">
 <li class="toctree-l3"><a class="reference internal" href="reciprocalspaceship.algorithms.merge.html">reciprocalspaceship.algorithms.merge</a></li>
-<li class="toctree-l3 current"><a class="current reference internal" href="#">reciprocalspaceship.algorithms.scale_merged_intensities</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">reciprocalspaceship.algorithms.scale_merged_intensities</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#reciprocalspaceship.algorithms.scale_merged_intensities"><code class="docutils literal notranslate"><span class="pre">scale_merged_intensities()</span></code></a></li>
+</ul>
+</li>
 <li class="toctree-l3"><a class="reference internal" href="reciprocalspaceship.algorithms.compute_intensity_from_structurefactor.html">reciprocalspaceship.algorithms.compute_intensity_from_structurefactor</a></li>
 </ul>
 </li>
@@ -116,13 +122,13 @@
 }
 </style>
 <section id="reciprocalspaceship-algorithms-scale-merged-intensities">
-<h1>reciprocalspaceship.algorithms.scale_merged_intensities<a class="headerlink" href="#reciprocalspaceship-algorithms-scale-merged-intensities" title="Permalink to this headline"></a></h1>
+<h1>reciprocalspaceship.algorithms.scale_merged_intensities<a class="headerlink" href="#reciprocalspaceship-algorithms-scale-merged-intensities" title="Permalink to this heading"></a></h1>
 <dl class="py function">
-<dt id="reciprocalspaceship.algorithms.scale_merged_intensities">
-<code class="sig-prename descclassname"><span class="pre">reciprocalspaceship.algorithms.</span></code><code class="sig-name descname"><span class="pre">scale_merged_intensities</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ds</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">intensity_key</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sigma_key</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_columns</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dropna</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inplace</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mean_intensity_method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'isotropic'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bins</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">100</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bw</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2.0</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/rs-station/reciprocalspaceship/blob/main/reciprocalspaceship/algorithms/scale_merged_intensities.py#L178-L310"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#reciprocalspaceship.algorithms.scale_merged_intensities" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="reciprocalspaceship.algorithms.scale_merged_intensities">
+<span class="sig-prename descclassname"><span class="pre">reciprocalspaceship.algorithms.</span></span><span class="sig-name descname"><span class="pre">scale_merged_intensities</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ds</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">intensity_key</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sigma_key</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_columns</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dropna</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inplace</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mean_intensity_method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'isotropic'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bins</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">100</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bw</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2.0</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/rs-station/reciprocalspaceship/blob/main/reciprocalspaceship/algorithms/scale_merged_intensities.py#L178-L310"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#reciprocalspaceship.algorithms.scale_merged_intensities" title="Permalink to this definition"></a></dt>
 <dd><p>Scales merged intensities using Bayesian statistics in order to
 estimate structure factor amplitudes. This method is based on the approach
-by French and Wilson <a class="footnote-reference brackets" href="#footnote-1" id="footnote-reference-1" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a>, and is useful for improving the estimates
+by French and Wilson <a class="footnote-reference brackets" href="#id2" id="id1" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a>, and is useful for improving the estimates
 of negative and small intensities in order to ensure that structure
 factor moduli are strictly positive.</p>
 <p>The mean and standard deviation of acentric reflections are computed
@@ -170,10 +176,12 @@ F, and SigF.</p>
 </dd>
 </dl>
 <p class="rubric">References</p>
-<aside class="footnote brackets" id="footnote-1" role="note">
-<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#footnote-reference-1">1</a><span class="fn-bracket">]</span></span>
+<aside class="footnote-list brackets">
+<aside class="footnote brackets" id="id2" role="note">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id1">1</a><span class="fn-bracket">]</span></span>
 <p>French S. and Wilson K. “On the Treatment of Negative Intensity
 Observations,” Acta Cryst. A34 (1978).</p>
+</aside>
 </aside>
 </dd></dl>
 
