@@ -40,7 +40,7 @@ extensions = [
     "sphinx_rtd_theme",
     "nbsphinx",
     "sphinx.ext.linkcode",
-    "sphinx_panels",
+    "sphinx_design",
     "sphinxcontrib.autoprogram",
     "autodocsumm",
 ]
@@ -145,6 +145,7 @@ html_favicon = "img/rs-favicon_32x32.png"
 html_logo = "img/rs.png"
 
 # -- Resolve links to source code --------------------------------------------
+
 
 # based on pandas/doc/source/conf.py
 def linkcode_resolve(domain, info):
