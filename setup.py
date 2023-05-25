@@ -74,7 +74,7 @@ setup(
     project_urls=PROJECT_URLS,
     python_requires=">3.7",
     install_requires=[
-        "gemmi>=0.5.5, <=0.6.1",
+        "gemmi>=0.5.5, <=0.6.2",
         "pandas>=1.2.0, <=1.4.4",
         "numpy",
         "scipy",
