@@ -1,34 +1,64 @@
+from typing import Optional, Union
+
+import gemmi
 import numpy as np
 import pandas as pd
-from typing import Union,Optional
 
 import reciprocalspaceship as rs
 from reciprocalspaceship import DataSet
-import gemmi
+from reciprocalspaceship.decorators import cellify, spacegroupify
 from reciprocalspaceship.utils import angle_between
-from reciprocalspaceship.decorators import cellify,spacegroupify
 
-#See Rupp Table 5-2
+# See Rupp Table 5-2
 _cell_constraints = {
-    'triclinic' : lambda x: x,
-    'orthorhombic' : lambda x: [x[0], x[1], x[2], 90., 90., 90.],
-    'monoclinic' : lambda x: [x[0], x[1], x[2], 90., x[4], 90.],
-    'hexagonal' : lambda x: [0.5*(x[0] + x[1]), 0.5*(x[0] + x[1]), x[2], 90., 90., 120.],
-    'rhombohedral' : lambda x: [0.5*(x[0] + x[1]), 0.5*(x[0] + x[1]), x[2], 90., 90., 120.],
-    'cubic' : lambda x: [np.mean(x[:3]), np.mean(x[:3]), np.mean(x[:3]), 90., 90., 90.],
-    'tetragonal' : lambda x: [0.5*(x[0] + x[1]), 0.5*(x[0] + x[1]), x[2], 90., 90., 90.],
+    "triclinic": lambda x: x,
+    "orthorhombic": lambda x: [x[0], x[1], x[2], 90.0, 90.0, 90.0],
+    "monoclinic": lambda x: [x[0], x[1], x[2], 90.0, x[4], 90.0],
+    "hexagonal": lambda x: [
+        0.5 * (x[0] + x[1]),
+        0.5 * (x[0] + x[1]),
+        x[2],
+        90.0,
+        90.0,
+        120.0,
+    ],
+    "rhombohedral": lambda x: [
+        0.5 * (x[0] + x[1]),
+        0.5 * (x[0] + x[1]),
+        x[2],
+        90.0,
+        90.0,
+        120.0,
+    ],
+    "cubic": lambda x: [
+        np.mean(x[:3]),
+        np.mean(x[:3]),
+        np.mean(x[:3]),
+        90.0,
+        90.0,
+        90.0,
+    ],
+    "tetragonal": lambda x: [
+        0.5 * (x[0] + x[1]),
+        0.5 * (x[0] + x[1]),
+        x[2],
+        90.0,
+        90.0,
+        90.0,
+    ],
 }
 
-class StreamLoader():
+
+class StreamLoader:
     @cellify
     @spacegroupify
     def __init__(
-            self, 
-            stream_file : str, 
-            cell : Optional[gemmi.UnitCell]=None, 
-            spacegroup : Optional[gemmi.SpaceGroup] = None, 
-            wavelength : Optional[float] = None,
-        ):
+        self,
+        stream_file: str,
+        cell: Optional[gemmi.UnitCell] = None,
+        spacegroup: Optional[gemmi.SpaceGroup] = None,
+        wavelength: Optional[float] = None,
+    ):
         """
         This class can be used to convert CrystFEL `.stream` files into `rs.DataSet` objects.
 
@@ -39,7 +69,7 @@ class StreamLoader():
         cell : gemmi.UnitCell (optional)
             The cell to assign to the DataSet. If None is supplied, it will be determined from the file.
         spacegroup : gemmi.SpaceGroup (optional)
-            The spacegroup to assign to the DataSet. 
+            The spacegroup to assign to the DataSet.
         wavelength : float (optional)
             The wavelength to use for geometry calculations. If None is supplied, it will be determined from the file.
         """
@@ -52,20 +82,20 @@ class StreamLoader():
         self.wavelength = wavelength
         if self.wavelength is None:
             self.wavelength = self.get_wavelength(stream_file)
-        self.inverse_wavelength = 1. / self.wavelength
-        if not stream_file.endswith('.stream'):
+        self.inverse_wavelength = 1.0 / self.wavelength
+        if not stream_file.endswith(".stream"):
             raise ValueError("Stream file should end with .stream")
         self.stream_file = stream_file
 
     @staticmethod
-    def to_crystals(stream_file : str) -> iter:
-        """ Convert the stream file into an iterator of crystal blocks. """
-        return StreamLoader.to_blocks(stream_file, 'crystal')
+    def to_crystals(stream_file: str) -> iter:
+        """Convert the stream file into an iterator of crystal blocks."""
+        return StreamLoader.to_blocks(stream_file, "crystal")
 
     @staticmethod
-    def get_lattice_type(stream_file : str) -> str: 
-        """ Extract the crystal system string from a stream file. """
-        lines = next(StreamLoader.to_blocks(stream_file, 'cell'))
+    def get_lattice_type(stream_file: str) -> str:
+        """Extract the crystal system string from a stream file."""
+        lines = next(StreamLoader.to_blocks(stream_file, "cell"))
         for line in lines:
             if line.startswith("lattice_type ="):
                 lattice_type = line.split()[2]
@@ -73,10 +103,10 @@ class StreamLoader():
         raise ValueError("No lattice_type entry!")
 
     @staticmethod
-    def get_target_cell(stream_file : str) -> gemmi.UnitCell:
-        """ Extract the target unit cell constants from a stream file. """
-        lines = next(StreamLoader.to_blocks(stream_file, 'cell'))
-        cell = [0.]*6
+    def get_target_cell(stream_file: str) -> gemmi.UnitCell:
+        """Extract the target unit cell constants from a stream file."""
+        lines = next(StreamLoader.to_blocks(stream_file, "cell"))
+        cell = [0.0] * 6
         for line in lines:
             if line.startswith("a ="):
                 cell[0] = float(line.split()[2])
@@ -94,9 +124,9 @@ class StreamLoader():
         return gemmi.UnitCell(*cell)
 
     @staticmethod
-    def get_wavelength(stream_file : str) -> float:
-        """ Extract the wavelength from a stream file. """
-        geo = next(StreamLoader.to_blocks(stream_file, 'geometry'))
+    def get_wavelength(stream_file: str) -> float:
+        """Extract the wavelength from a stream file."""
+        geo = next(StreamLoader.to_blocks(stream_file, "geometry"))
         for line in geo:
             if line.startswith("photon_energy"):
                 eV = float(line.split()[2])
@@ -104,8 +134,11 @@ class StreamLoader():
                 return lam
 
     @staticmethod
-    def online_mean_variance(iterator) -> (Union[float, np.ndarray], Union[float, np.ndarray]):
-        """ Compute the mean and variance of an iterator of floats or arrays online. """
+    def online_mean_variance(
+        iterator,
+    ) -> (Union[float, np.ndarray], Union[float, np.ndarray]):
+        """Compute the mean and variance of an iterator of floats or arrays online."""
+
         def update(count, mean, m2, value):
             count = count + 1
             delta = value - mean
@@ -140,20 +173,24 @@ class StreamLoader():
         -------
         cell : gemmi.UnitCell
         """
+
         def cell_iter(stream_file):
             for crystal in StreamLoader.to_crystals(stream_file):
                 for line in crystal:
                     if line.startswith("Cell parameters"):
                         cell = line.split()
-                        cell = np.array([
-                            cell[2],
-                            cell[3],
-                            cell[4],
-                            cell[6],
-                            cell[7],
-                            cell[8],
-                        ], dtype='float32')
-                        cell[:3] = 10.*cell[:3]
+                        cell = np.array(
+                            [
+                                cell[2],
+                                cell[3],
+                                cell[4],
+                                cell[6],
+                                cell[7],
+                                cell[8],
+                            ],
+                            dtype="float32",
+                        )
+                        cell[:3] = 10.0 * cell[:3]
                         yield cell
                         break
 
@@ -165,7 +202,7 @@ class StreamLoader():
         return cell
 
     @staticmethod
-    def to_blocks(stream_file : str, block_name : str) -> iter:
+    def to_blocks(stream_file: str, block_name: str) -> iter:
         """
         Parameters
         ----------
@@ -174,25 +211,31 @@ class StreamLoader():
         block_name : str
             One of the following types of blocks
              - 'geometry'
-             - 'chunk' 
-             - 'cell' 
-             - 'peaks' 
-             - 'crystal' 
+             - 'chunk'
+             - 'cell'
+             - 'peaks'
+             - 'crystal'
              - 'reflections'
 
         Returns
         -------
         blocks : iter
-            An interable containing lists of lines for each block. 
+            An interable containing lists of lines for each block.
         """
         # See crystFEL API reference here: https://www.desy.de/~twhite/crystfel/reference/stream_8h.html
         block_markers = {
-            "geometry" : ("----- Begin geometry file -----", "----- End geometry file -----"),
-            "chunk" : ("----- Begin chunk -----", "----- End chunk -----"),
-            "cell" : ("----- Begin unit cell -----", "----- End unit cell -----"),
-            "peaks" : ("Peaks from peak search", "End of peak list"),
-            "crystal" : ("--- Begin crystal", "--- End crystal"),
-            "reflections" : ("Reflections measured after indexing", "End of reflections"),
+            "geometry": (
+                "----- Begin geometry file -----",
+                "----- End geometry file -----",
+            ),
+            "chunk": ("----- Begin chunk -----", "----- End chunk -----"),
+            "cell": ("----- Begin unit cell -----", "----- End unit cell -----"),
+            "peaks": ("Peaks from peak search", "End of peak list"),
+            "crystal": ("--- Begin crystal", "--- End crystal"),
+            "reflections": (
+                "Reflections measured after indexing",
+                "End of reflections",
+            ),
         }
         block_begin_marker, block_end_marker = block_markers[block_name]
 
@@ -209,23 +252,23 @@ class StreamLoader():
                 in_block = True
 
     @staticmethod
-    def crystal_to_data(crystal,  wavelength, cell=None, dmin=None, batch=None):
+    def crystal_to_data(crystal, wavelength, cell=None, dmin=None, batch=None):
         """
-        Convert a crystal block (list of strings) to a numpy array. 
+        Convert a crystal block (list of strings) to a numpy array.
 
         Parameters
         ----------
         crystal : list or similar
-            A list of strings corresponding to a single crystal 
-            block in a stream file. 
+            A list of strings corresponding to a single crystal
+            block in a stream file.
         wavelength : float
             The wavelength of the dataset. Used for calculating ewald
-            offsets. 
+            offsets.
         cell : gemmi.UnitCell (optional)
-            The unit cell to use to calculate reflection resolution. 
+            The unit cell to use to calculate reflection resolution.
             This is only used for the dmin resolution cutoff.
         dmin : float (optional)
-            An optional resolution cutoff. Requires a cell. 
+            An optional resolution cutoff. Requires a cell.
         batch : int (optional)
             Optionally supply a batch number which will be appended to
             the output array as another column
@@ -247,25 +290,25 @@ class StreamLoader():
              10) XDET
              11) YDET
              12) BATCH
-            
+
         """
-        block_name : str
-        inverse_wavelength = 1. / wavelength
+        block_name: str
+        inverse_wavelength = 1.0 / wavelength
         astar = bstar = cstar = None
         in_refls = False
         crystal_iter = iter(crystal)
 
         refls = []
         for line in crystal_iter:
-            if line.startswith('astar ='):
+            if line.startswith("astar ="):
                 astar = (
                     np.array(line.split()[2:5], dtype="float32") / 10.0
                 )  # crystfel's notation uses nm-1
-            if line.startswith('bstar ='):
+            if line.startswith("bstar ="):
                 bstar = (
                     np.array(line.split()[2:5], dtype="float32") / 10.0
                 )  # crystfel's notation uses nm-1
-            if line.startswith('cstar ='):
+            if line.startswith("cstar ="):
                 cstar = (
                     np.array(line.split()[2:5], dtype="float32") / 10.0
                 )  # crystfel's notation uses nm-1
@@ -275,16 +318,16 @@ class StreamLoader():
                 refls.append(line.split()[:-1])
             if line == "Reflections measured after indexing\n":
                 in_refls = True
-                crystal_iter = next(crystal_iter) #skip header
+                crystal_iter = next(crystal_iter)  # skip header
 
-        refls = np.array(refls, dtype='float32')
-        hkl = refls[:,:3]
+        refls = np.array(refls, dtype="float32")
+        hkl = refls[:, :3]
 
-        #Apply dmin
+        # Apply dmin
         if dmin is not None:
             if cell is None:
                 raise ValueError("dmin supplied without a cell")
-            d = cell.calculate_d_array(hkl).astype('float32')
+            d = cell.calculate_d_array(hkl).astype("float32")
             idx = d >= dmin
             refls = refls[idx]
             d = d[idx]
@@ -294,13 +337,13 @@ class StreamLoader():
         # calculate ewald offset and s1
 
         s0 = np.array([0, 0, inverse_wavelength]).T
-        q = hkl @ A.T # == (A @ hkl.T).T
+        q = hkl @ A.T  # == (A @ hkl.T).T
         s1 = q + s0
         s1x, s1y, s1z = s1.T
         s1_norm = np.sqrt(s1x * s1x + s1y * s1y + s1z * s1z)
 
         # project calculated s1 onto the ewald sphere
-        s1_obs = inverse_wavelength * s1 / s1_norm[:,None]
+        s1_obs = inverse_wavelength * s1 / s1_norm[:, None]
 
         # Compute the ewald offset vector
         eov = s1_obs - s1
@@ -313,21 +356,50 @@ class StreamLoader():
         q_obs = s1_obs - s0
         ao = eo_sign * rs.utils.angle_between(q, q_obs)
 
-        I = refls[:,3]
-        SigI = refls[:,4]
-        bg = refls[:,5]
+        I = refls[:, 3]
+        SigI = refls[:, 4]
+        bg = refls[:, 5]
 
         if batch is not None:
-            batch = batch * np.ones_like(I, dtype='int32')
-            return np.concatenate((hkl, I[:,None], SigI[:,None], s1, eo[:,None], ao[:,None], refls[:,7,None], refls[:,8,None], batch[:,None]), axis=1)
-        return np.concatenate((hkl, I[:,None], SigI[:,None], s1, eo[:,None], ao[:,None], refls[:,7,None], refls[:,8,None]), axis=1)
+            batch = batch * np.ones_like(I, dtype="int32")
+            return np.concatenate(
+                (
+                    hkl,
+                    I[:, None],
+                    SigI[:, None],
+                    s1,
+                    eo[:, None],
+                    ao[:, None],
+                    refls[:, 7, None],
+                    refls[:, 8, None],
+                    batch[:, None],
+                ),
+                axis=1,
+            )
+        return np.concatenate(
+            (
+                hkl,
+                I[:, None],
+                SigI[:, None],
+                s1,
+                eo[:, None],
+                ao[:, None],
+                refls[:, 7, None],
+                refls[:, 8, None],
+            ),
+            axis=1,
+        )
 
-    def to_dataset(self, spacegroup : Optional[gemmi.SpaceGroup] = None) -> rs.DataSet:
-        """ Convert self.stream_file to an rs DataSet. Optionally set the spacegroup """
+    def to_dataset(self, spacegroup: Optional[gemmi.SpaceGroup] = None) -> rs.DataSet:
+        """Convert self.stream_file to an rs DataSet. Optionally set the spacegroup"""
+
         def data_gen():
-            for i,crystal in enumerate(StreamLoader.to_crystals(self.stream_file)):
-                ds = StreamLoader.crystal_to_data(crystal, self.wavelength, self.cell,  batch=i+1)
+            for i, crystal in enumerate(StreamLoader.to_crystals(self.stream_file)):
+                ds = StreamLoader.crystal_to_data(
+                    crystal, self.wavelength, self.cell, batch=i + 1
+                )
                 yield ds
+
         data = np.concatenate(list(data_gen()), axis=0)
 
         names = [
@@ -345,8 +417,11 @@ class StreamLoader():
             "YDET",
             "BATCH",
         ]
-        ds = rs.DataSet(data, columns=names, cell=self.cell, spacegroup=spacegroup, merged=False).infer_mtz_dtypes()
+        ds = rs.DataSet(
+            data, columns=names, cell=self.cell, spacegroup=spacegroup, merged=False
+        ).infer_mtz_dtypes()
         return ds
+
 
 def read_crystfel(streamfile: str, spacegroup=None) -> DataSet:
     """
@@ -371,5 +446,3 @@ def read_crystfel(streamfile: str, spacegroup=None) -> DataSet:
     ds = loader.to_dataset(spacegroup=spacegroup)
     ds.set_index(["H", "K", "L"], inplace=True)
     return ds
-
-
