@@ -37,6 +37,7 @@ from reciprocalspaceship.dtypes import StructureFactorAmplitudeDtype  # F
 from reciprocalspaceship.dtypes import WeightDtype  # W
 from reciprocalspaceship.dtypes import summarize_mtz_dtypes
 from reciprocalspaceship.io import (
+    read_cif,
     read_crystfel,
     read_csv,
     read_mtz,

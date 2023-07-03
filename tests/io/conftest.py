@@ -37,3 +37,12 @@ def IOtest_mtz():
     """
     datapath = join(abspath(dirname(__file__)), "../data/fmodel")
     return join(datapath, "9LYZ.mtz")
+
+
+@pytest.fixture
+def IOtest_cif():
+    """
+    Path to CIF reflection file for I/O testing
+    """
+    datapath = join(abspath(dirname(__file__)), "../data/fmodel")
+    return join(datapath, "1CTJ-sf.cif")

@@ -227,3 +227,28 @@ def write_mtz(
     )
     mtz.write_to_file(mtzfile)
     return
+
+
+def read_cif(ciffile):
+    """
+    Populate the dataset object with reflection data from a CIF/ENT file.
+
+    Reflections from CIF/ENT files are merged.
+    A merged reflection DataSet will always be constructed.
+
+    The function reads a CIF/ENT file and returns a Gemmi structure object.
+
+    Parameters
+    ----------
+    ciffile : str or file
+        name of a CIF reflection file or a file object
+
+    Returns
+    -------
+    DataSet
+    """
+    gemmi_cif = gemmi.cif.read(ciffile)
+    rblocks = gemmi.as_refln_blocks(gemmi_cif)
+    rblock = rblocks[0]
+    gemmi_cif = gemmi.CifToMtz().convert_block_to_mtz(rblock)
+    return from_gemmi(gemmi_cif)

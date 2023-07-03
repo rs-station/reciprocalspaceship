@@ -39,6 +39,7 @@ are available as methods of ``rs.DataSet`` objects.
    :nosignatures:
 
    ~reciprocalspaceship.read_mtz
+   ~reciprocalspaceship.read_cif
    ~reciprocalspaceship.read_csv
    ~reciprocalspaceship.read_pickle
    ~reciprocalspaceship.read_precognition
