@@ -1,7 +1,5 @@
 from __future__ import annotations
 
-from typing import overload
-
 import numpy as np
 from pandas._libs import lib
 from pandas._libs import missing as libmissing
@@ -255,18 +253,6 @@ class MTZFloatArray(NumericArray):
 
     def _coerce_to_array(self, value) -> tuple[np.ndarray, np.ndarray]:
         return coerce_to_array(value, dtype=self.dtype)
-
-    @overload
-    def astype(self, dtype, copy: bool = ...) -> np.ndarray:
-        ...
-
-    @overload
-    def astype(self, dtype: ExtensionDtype, copy: bool = ...) -> ExtensionArray:
-        ...
-
-    @overload
-    def astype(self, dtype, copy: bool = ...) -> ArrayLike:
-        ...
 
     def astype(self, dtype, copy: bool = True) -> ArrayLike:
         """

@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import numbers
 import warnings
-from typing import TYPE_CHECKING, Any, Sequence, TypeVar, overload
+from typing import Any, Sequence
 
 import numpy as np
 from pandas._libs import Timedelta, iNaT, lib
@@ -38,16 +38,6 @@ from pandas.core.ops import invalid_comparison
 from pandas.errors import AbstractMethodError
 from pandas.util._decorators import cache_readonly, doc
 from pandas.util._validators import validate_fillna_kwargs
-
-if TYPE_CHECKING:
-    import pyarrow
-    from pandas import Series
-    from pandas.core.arrays import BooleanArray
-
-from pandas.compat.numpy import function as nv
-
-BaseMaskedArrayT = TypeVar("BaseMaskedArrayT", bound="BaseMaskedArray")
-T = TypeVar("T", bound="NumericArray")
 
 
 class BaseMaskedDtype(ExtensionDtype):
@@ -124,14 +114,6 @@ class BaseMaskedArray(OpsMixin, ExtensionArray):
     @property
     def dtype(self) -> BaseMaskedDtype:
         raise AbstractMethodError(self)
-
-    @overload
-    def __getitem__(self, item) -> Any:
-        ...
-
-    @overload
-    def __getitem__(self: BaseMaskedArrayT, item) -> BaseMaskedArrayT:
-        ...
 
     def __getitem__(
         self: BaseMaskedArrayT, item: PositionalIndexer
@@ -334,18 +316,6 @@ class BaseMaskedArray(OpsMixin, ExtensionArray):
         else:
             data = self._data.astype(dtype, copy=copy)
         return data
-
-    @overload
-    def astype(self, dtype, copy: bool = ...) -> np.ndarray:
-        ...
-
-    @overload
-    def astype(self, dtype: ExtensionDtype, copy: bool = ...) -> ExtensionArray:
-        ...
-
-    @overload
-    def astype(self, dtype, copy: bool = ...) -> ArrayLike:
-        ...
 
     def astype(self, dtype, copy: bool = True) -> ArrayLike:
         dtype = pandas_dtype(dtype)
