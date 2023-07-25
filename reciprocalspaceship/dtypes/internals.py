@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import datetime
 import numbers
 import warnings
 from typing import TYPE_CHECKING, Any, Sequence, TypeVar, overload
@@ -1079,9 +1078,6 @@ class NumericArray(BaseMaskedArray):
                 raise ValueError("Lengths must match")
             if not (is_float_dtype(other) or is_integer_dtype(other)):
                 raise TypeError("can only perform ops with numeric values")
-
-        elif isinstance(other, (datetime.timedelta, np.timedelta64)):
-            other = Timedelta(other)
 
         else:
             if not (is_float(other) or is_integer(other) or other is libmissing.NA):

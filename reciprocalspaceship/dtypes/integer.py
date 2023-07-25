@@ -11,7 +11,6 @@ from pandas.core.arrays import ExtensionArray
 from pandas.core.dtypes.base import ExtensionDtype, register_extension_dtype
 from pandas.core.dtypes.common import (
     is_bool_dtype,
-    is_datetime64_dtype,
     is_float_dtype,
     is_integer_dtype,
     is_object_dtype,
@@ -347,14 +346,12 @@ class MTZIntegerArray(NumericArray):
         if isinstance(dtype, ExtensionDtype):
             return super().astype(dtype, copy=copy)
 
-        na_value: float | np.datetime64 | lib.NoDefault
+        na_value: float | lib.NoDefault
 
         # coerce
         if is_float_dtype(dtype):
             # In astype, we consider dtype=float to also mean na_value=np.nan
             na_value = np.nan
-        elif is_datetime64_dtype(dtype):
-            na_value = np.datetime64("NaT")
         else:
             na_value = lib.no_default
 

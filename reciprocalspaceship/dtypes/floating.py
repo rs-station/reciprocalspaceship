@@ -17,7 +17,6 @@ from pandas import Float32Dtype, Float64Dtype
 from pandas.core.arrays import ExtensionArray
 from pandas.core.dtypes.common import (
     is_bool_dtype,
-    is_datetime64_dtype,
     is_float,
     is_float_dtype,
     is_integer_dtype,
@@ -303,10 +302,6 @@ class MTZFloatArray(NumericArray):
         if is_float_dtype(dtype):
             # In astype, we consider dtype=float to also mean na_value=np.nan
             kwargs = {"na_value": np.nan}
-        elif is_datetime64_dtype(dtype):
-            # error: Dict entry 0 has incompatible type "str": "datetime64"; expected
-            # "str": "float"
-            kwargs = {"na_value": np.datetime64("NaT")}  # type: ignore[dict-item]
         else:
             kwargs = {}
 
