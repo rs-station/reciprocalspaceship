@@ -2,9 +2,7 @@ import numpy as np
 import pandas as pd
 from pandas.api.extensions import ExtensionDtype
 from pandas.core.arrays.floating import FloatingArray
-from pandas.core.arrays.floating import coerce_to_array as coerce_to_float_array
 from pandas.core.arrays.integer import IntegerArray
-from pandas.core.arrays.integer import coerce_to_array as coerce_to_int_array
 from pandas.core.dtypes.common import (
     is_float,
     is_float_dtype,
@@ -49,34 +47,43 @@ class MTZInt32Dtype(MTZDtype, pd.Int32Dtype):
 class MTZIntegerArray(IntegerArray):
     """Base ExtensionArray class for integer arrays backed by pd.IntegerArray"""
 
-    def _maybe_mask_result(self, result, mask, other, op_name: str):
+    def _maybe_mask_result(self, result: np.ndarray, mask: np.ndarray):
         """
         Parameters
         ----------
-        result : array-like
+        result : array-like or tuple[array-like]
         mask : array-like bool
-        other : scalar or array-like
-        op_name : str
         """
-        if is_integer_dtype(result):
+        if isinstance(result, tuple):
+            # i.e. divmod
+            div, mod = result
+            return (
+                self._maybe_mask_result(div, mask),
+                self._maybe_mask_result(mod, mask),
+            )
+
+        if result.dtype.kind == "f":
+            from pandas.core.arrays import FloatingArray
+
+            return FloatingArray(result, mask, copy=False)
+
+        elif result.dtype.kind == "b":
+            from pandas.core.arrays import BooleanArray
+
+            return BooleanArray(result, mask, copy=False)
+
+        elif result.dtype.kind in "iu":
+            from pandas.core.arrays import IntegerArray
+
             return type(self)(result, mask, copy=False)
-        return super()._maybe_mask_result(
-            result=result, mask=mask, other=other, op_name=op_name
-        )
+
+        else:
+            result[mask] = np.nan
+            return result
 
     @cache_readonly
     def dtype(self):
         return self._dtype
-
-    @classmethod
-    def _from_sequence(cls, scalars, dtype=None, copy=False):
-        values, mask = coerce_to_int_array(scalars, dtype=dtype, copy=copy)
-        return cls(values, mask)
-
-    @classmethod
-    def _from_factorized(cls, values, original):
-        values, mask = coerce_to_int_array(values, dtype=original.dtype)
-        return cls(values, mask)
 
     def reshape(self, *args, **kwargs):
         return self._data.reshape(*args, **kwargs)
@@ -173,39 +180,54 @@ class MTZFloat32Dtype(MTZDtype, pd.Float32Dtype):
 class MTZFloatArray(FloatingArray):
     """Base ExtensionArray class for floating point arrays backed by pd.FloatingArray"""
 
-    def _maybe_mask_result(self, result, mask, other, op_name: str):
+    def _maybe_mask_result(self, result: np.ndarray, mask: np.ndarray):
         """
         Parameters
         ----------
-        result : array-like
+        result : array-like or tuple[array-like]
         mask : array-like bool
-        other : scalar or array-like
-        op_name : str
         """
-        # if we have a float operand we are by-definition
-        # a float result
-        # or our op is a divide
-        if (
-            (is_float_dtype(other) or is_float(other))
-            or (op_name in ["rtruediv", "truediv"])
-            or (is_float_dtype(self.dtype) and is_numeric_dtype(result.dtype))
-        ):
+        if isinstance(result, tuple):
+            # i.e. divmod
+            div, mod = result
+            return (
+                self._maybe_mask_result(div, mask),
+                self._maybe_mask_result(mod, mask),
+            )
+
+        if result.dtype.kind == "f":
             return type(self)(result, mask, copy=False)
-        return super()._maybe_mask_result(
-            result=result, mask=mask, other=other, op_name=op_name
-        )
+
+        elif result.dtype.kind == "b":
+            from pandas.core.arrays import BooleanArray
+
+            return BooleanArray(result, mask, copy=False)
+
+        elif lib.is_np_dtype(result.dtype, "m") and is_supported_unit(
+            get_unit_from_dtype(result.dtype)
+        ):
+            # e.g. test_numeric_arr_mul_tdscalar_numexpr_path
+            from pandas.core.arrays import TimedeltaArray
+
+            result[mask] = result.dtype.type("NaT")
+
+            if not isinstance(result, TimedeltaArray):
+                return TimedeltaArray._simple_new(result, dtype=result.dtype)
+
+            return result
+
+        elif result.dtype.kind in "iu":
+            from pandas.core.arrays import IntegerArray
+
+            return IntegerArray(result, mask, copy=False)
+
+        else:
+            result[mask] = np.nan
+            return result
 
     @cache_readonly
     def dtype(self):
         return self._dtype
-
-    @classmethod
-    def _from_sequence(cls, scalars, dtype=None, copy=False):
-        values, mask = coerce_to_float_array(scalars, dtype=dtype, copy=copy)
-        return cls(values, mask)
-
-    def _coerce_to_array(self, value):
-        return coerce_to_float_array(value, dtype=self.dtype)
 
     def to_numpy(self, dtype=None, copy=False, **kwargs):
         """
