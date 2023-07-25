@@ -79,6 +79,10 @@ class TestGroupby(base.BaseGroupbyTests):
     pass
 
 
+class TestIndex(base.BaseIndexTests):
+    pass
+
+
 class TestInterface(base.BaseInterfaceTests):
     pass
 
@@ -131,6 +135,10 @@ class TestBooleanReduce(base.BaseBooleanReduceTests):
 
 
 class TestNumericReduce(base.BaseNumericReduceTests):
+    pass
+
+
+class TestParsing(base.BaseParsingTests):
     pass
 
 
