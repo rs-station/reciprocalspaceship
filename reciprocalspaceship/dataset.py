@@ -12,7 +12,8 @@ from reciprocalspaceship.decorators import (
     range_indexed,
     spacegroupify,
 )
-from reciprocalspaceship.dtypes.base import MTZDtype, MTZInt32Dtype
+from reciprocalspaceship.dtypes.base import MTZDtype
+from reciprocalspaceship.dtypes.integer import MTZInt32Dtype
 from reciprocalspaceship.utils import (
     apply_to_hkl,
     assign_with_binedges,
