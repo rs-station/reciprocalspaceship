@@ -106,13 +106,9 @@ def test_join_list_datasets(data_fmodel, check_isomorphous, sg):
     other = [o.rename(lambda x: x + str(i), axis=1) for i, o in enumerate(other)]
     if check_isomorphous and sg.number == 19:
         with pytest.raises(ValueError):
-            result = data_fmodel.join(
-                other, lsuffix="x", rsuffix="y", check_isomorphous=check_isomorphous
-            )
+            result = data_fmodel.join(other, check_isomorphous=check_isomorphous)
     else:
-        result = data_fmodel.join(
-            other, lsuffix="x", rsuffix="y", check_isomorphous=check_isomorphous
-        )
+        result = data_fmodel.join(other, check_isomorphous=check_isomorphous)
         assert isinstance(result, rs.DataSet)
         assert len(result) == len(data_fmodel)
         assert len(result.columns) == len(data_fmodel.columns) * 4
@@ -131,9 +127,7 @@ def test_join_list_dataseries(data_fmodel, check_isomorphous, sg):
     other.spacegroup = sg
     other = [other[c] for c in other.columns]
     other = [c.rename(c.name + str(i)) for i, c in enumerate(other)]
-    result = data_fmodel.join(
-        other, lsuffix="x", rsuffix="y", check_isomorphous=check_isomorphous
-    )
+    result = data_fmodel.join(other, check_isomorphous=check_isomorphous)
     assert isinstance(result, rs.DataSet)
     assert len(result) == len(data_fmodel)
     assert len(result.columns) == len(data_fmodel.columns) * 2
