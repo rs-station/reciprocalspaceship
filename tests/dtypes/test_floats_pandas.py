@@ -98,6 +98,10 @@ class TestGroupby(base.BaseGroupbyTests):
     pass
 
 
+class TestIndex(base.BaseIndexTests):
+    pass
+
+
 class TestInterface(base.BaseInterfaceTests):
     pass
 
@@ -137,7 +141,9 @@ class TestMethods(base.BaseMethodsTests):
             .sort_index()
         )
 
-        expected = rs.DataSeries([1 / len(values)] * len(values), index=result.index)
+        expected = rs.DataSeries(
+            [1 / len(values)] * len(values), index=result.index, name=result.name
+        )
         self.assert_series_equal(result, expected)
 
 
@@ -154,6 +160,10 @@ class TestBooleanReduce(base.BaseBooleanReduceTests):
 
 
 class TestNumericReduce(base.BaseNumericReduceTests):
+    pass
+
+
+class TestParsing(base.BaseParsingTests):
     pass
 
 

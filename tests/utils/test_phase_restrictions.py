@@ -19,7 +19,7 @@ def test_phase_restrictions(sgtbx_by_xhm):
     sg = gemmi.SpaceGroup(xhm)
     ref_restrictions = []
     for h, entry in zip(H, reference["phase_restrictions"].to_list()):
-        if entry == "None" or rs.utils.is_absent([h], sg)[0]:
+        if entry == "None" or pd.isna(entry) or rs.utils.is_absent([h], sg)[0]:
             ref_restrictions.append([])
         else:
             phases = np.array(entry.split(","), dtype=float)
