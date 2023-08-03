@@ -40,6 +40,12 @@ def in_asu(H, spacegroup):
     """
     Check to see if Miller indices are in the asymmetric unit of a space group.
 
+    Notes
+    -----
+    This function only returns True for the +ASU, and does not consider Miller
+    indices for Friedel pairs to be in the ASU. As such, anomalous data should
+    be provided in two-column anomalous format.
+
     Parameters
     ----------
     H : array
