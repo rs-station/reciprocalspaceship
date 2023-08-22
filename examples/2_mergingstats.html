@@ -15,12 +15,12 @@
     <script src="../_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-        <script src="../_static/jquery.js"></script>
-        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
-        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
-        <script src="../_static/doctools.js"></script>
-        <script src="../_static/sphinx_highlight.js"></script>
-        <script src="../_static/design-tabs.js"></script>
+        <script src="../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../_static/documentation_options.js?v=8d563738"></script>
+        <script src="../_static/doctools.js?v=888ff710"></script>
+        <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+        <script src="../_static/design-tabs.js?v=36754332"></script>
         <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/@jupyter-widgets/html-manager@^1.0.1/dist/embed-amd.js"></script>
         <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
@@ -116,7 +116,7 @@
     <img alt="Binder badge" src="https://mybinder.org/badge_logo.svg" style="vertical-align:text-bottom"></a>.
   </span>
 </div><section id="HEWL-S-SAD-Merging-Statistics">
-<h1>HEWL S-SAD Merging Statistics<a class="headerlink" href="#HEWL-S-SAD-Merging-Statistics" title="Permalink to this heading"></a></h1>
+<h1>HEWL S-SAD Merging Statistics<a class="headerlink" href="#HEWL-S-SAD-Merging-Statistics" title="Link to this heading"></a></h1>
 <p>Merging statistics are a useful means to assess data quality in crystallography. However, each statistic has inherent shortcomings. For example, R-merge will appear inflated if the multiplicity is high, and the Pearson correlation coefficients used for <span class="math notranslate nohighlight">\(CC_{1/2}\)</span> are very sensitive to outliers.</p>
 <p>Most scaling and merging programs output multiple merging statistics to get around these shortcomings. However, one can imagine that it could also be useful to customize certain parameters, such as how many resolution bins are used. Or, perhaps a better statistic will be developed that is worth implementing.</p>
 <p>In this notebook, <code class="docutils literal notranslate"><span class="pre">reciprocalspaceship</span></code> is used to compute half-dataset correlation coefficients (<span class="math notranslate nohighlight">\(CC_{1/2}\)</span> and <span class="math notranslate nohighlight">\(CC_{anom}\)</span>) for a dataset collected from a tetragonal hen egg-white lysozyme (HEWL) crystal at 6550 eV. These data are unmerged, but were scaled in AIMLESS. They contain sufficient sulfur anomalous signal to determine a solution by the SAD method. This illustrates the use of <code class="docutils literal notranslate"><span class="pre">rs</span></code> to implement a merging routine, create a custom analysis, and could be useful as a
@@ -159,7 +159,7 @@ template for other exploratory crystallographic data analyses. As an example, we
 </div>
 <hr class="docutils" />
 <section id="Load-scaled,-unmerged-data">
-<h2>Load scaled, unmerged data<a class="headerlink" href="#Load-scaled,-unmerged-data" title="Permalink to this heading"></a></h2>
+<h2>Load scaled, unmerged data<a class="headerlink" href="#Load-scaled,-unmerged-data" title="Link to this heading"></a></h2>
 <p>This data has been scaled in AIMLESS. The data includes the image number and the scaled <strong>I</strong> and <strong>SIGI</strong> values.</p>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
@@ -278,7 +278,7 @@ Number of observed reflections: 816804
 </section>
 <hr class="docutils" />
 <section id="Merging-with-Inverse-Variance-Weights">
-<h2>Merging with Inverse-Variance Weights<a class="headerlink" href="#Merging-with-Inverse-Variance-Weights" title="Permalink to this heading"></a></h2>
+<h2>Merging with Inverse-Variance Weights<a class="headerlink" href="#Merging-with-Inverse-Variance-Weights" title="Link to this heading"></a></h2>
 <p>Since the input data are unmerged, we will implement the inverse-variance weighting scheme used by AIMLESS to merge the observations. The weighted average is a better estimator of the true mean than the raw average, and this weighting scheme corresponds to the maximum likelihood estimator of the true mean if we assume that the observations are normally-distributed about the true mean.</p>
 <p>The merged intensity for each reflection, <span class="math notranslate nohighlight">\(I_h\)</span>, can be determined from the observed intensities, <span class="math notranslate nohighlight">\(I_{h,i}\)</span>, and error estimates, <span class="math notranslate nohighlight">\(\sigma_{h,i}\)</span>, as follows:</p>
 <p><span class="math">\begin{equation}
@@ -670,7 +670,7 @@ w_{h,i} = \frac{1}{(\sigma_{h,i})^2}
 </section>
 <hr class="docutils" />
 <section id="Merging-with-2-fold-Cross-Validation">
-<h2>Merging with 2-fold Cross-Validation<a class="headerlink" href="#Merging-with-2-fold-Cross-Validation" title="Permalink to this heading"></a></h2>
+<h2>Merging with 2-fold Cross-Validation<a class="headerlink" href="#Merging-with-2-fold-Cross-Validation" title="Link to this heading"></a></h2>
 <p>To compute correlation coefficients we will repeatedly split our data into half-datasets. We will do this by randomly splitting the data using the image number. These half-datasets will be merged independently and used to determine uncertainties in the correlation coefficients. We will first write a method to randomly split our data, and then we will then write a method that automates the sampling and merging of multiple half-datasets.</p>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
@@ -715,7 +715,7 @@ w_{h,i} = \frac{1}{(\sigma_{h,i})^2}
 </section>
 <hr class="docutils" />
 <section id="Merge-HEWL-data">
-<h2>Merge HEWL data<a class="headerlink" href="#Merge-HEWL-data" title="Permalink to this heading"></a></h2>
+<h2>Merge HEWL data<a class="headerlink" href="#Merge-HEWL-data" title="Link to this heading"></a></h2>
 <p>We will now merge the HEWL data, repeatedly sampling across half-datasets in order to assess the distribution of correlation coefficients.</p>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
@@ -1035,7 +1035,7 @@ w_{h,i} = \frac{1}{(\sigma_{h,i})^2}
 </section>
 <hr class="docutils" />
 <section id="Compute-CC_{1/2}-and-CC_{anom}">
-<h2>Compute <span class="math notranslate nohighlight">\(CC_{1/2}\)</span> and <span class="math notranslate nohighlight">\(CC_{anom}\)</span><a class="headerlink" href="#Compute-CC_{1/2}-and-CC_{anom}" title="Permalink to this heading"></a></h2>
+<h2>Compute <span class="math notranslate nohighlight">\(CC_{1/2}\)</span> and <span class="math notranslate nohighlight">\(CC_{anom}\)</span><a class="headerlink" href="#Compute-CC_{1/2}-and-CC_{anom}" title="Link to this heading"></a></h2>
 <p>We will first assign each reflection to a resolution bin and then we will compute the correlation coefficients</p>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
@@ -1327,7 +1327,7 @@ w_{h,i} = \frac{1}{(\sigma_{h,i})^2}
 </section>
 <hr class="docutils" />
 <section id="Summary">
-<h2>Summary<a class="headerlink" href="#Summary" title="Permalink to this heading"></a></h2>
+<h2>Summary<a class="headerlink" href="#Summary" title="Link to this heading"></a></h2>
 <p>We have used <code class="docutils literal notranslate"><span class="pre">reciprocalspaceship</span></code> to merge a dataset using inverse-variance weights. As part of this analysis, we performed repeated 2-fold cross-validation to compute Pearson and Spearman correlation coefficients and associated uncertainties. This relatively simple procedure to obtain uncertainty estimates for correlation coefficients is seldom done when analyzing merging quality. However, we can see that the standard deviation for computed correlation coefficients can be nearly
 <span class="math notranslate nohighlight">\(\pm0.1\)</span> for quantities such as <span class="math notranslate nohighlight">\(CC_{anom}\)</span>. This is worth keeping in mind when analyzing SAD experiments because this dataset is very high quality (edge-limited) when one considers the <span class="math notranslate nohighlight">\(CC_{1/2}\)</span>. Putting these two correlation coefficients on the same axes emphasizes this point:</p>
 <div class="nbinput docutils container">

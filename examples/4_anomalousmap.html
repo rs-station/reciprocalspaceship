@@ -15,12 +15,12 @@
     <script src="../_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-        <script src="../_static/jquery.js"></script>
-        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
-        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
-        <script src="../_static/doctools.js"></script>
-        <script src="../_static/sphinx_highlight.js"></script>
-        <script src="../_static/design-tabs.js"></script>
+        <script src="../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../_static/documentation_options.js?v=8d563738"></script>
+        <script src="../_static/doctools.js?v=888ff710"></script>
+        <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+        <script src="../_static/design-tabs.js?v=36754332"></script>
         <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/@jupyter-widgets/html-manager@^1.0.1/dist/embed-amd.js"></script>
         <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
@@ -114,7 +114,7 @@
     <img alt="Binder badge" src="https://mybinder.org/badge_logo.svg" style="vertical-align:text-bottom"></a>.
   </span>
 </div><section id="Anomalous-Difference-Map">
-<h1>Anomalous Difference Map<a class="headerlink" href="#Anomalous-Difference-Map" title="Permalink to this heading"></a></h1>
+<h1>Anomalous Difference Map<a class="headerlink" href="#Anomalous-Difference-Map" title="Link to this heading"></a></h1>
 <p>In <a class="reference internal" href="1_basics.html"><span class="doc">Basics</span></a>, we loaded a room-temperature dataset that was collected at ~6550 eV of tetragonal HEWL. We then computed the <span class="math notranslate nohighlight">\(CC_{1/2}\)</span> and <span class="math notranslate nohighlight">\(CC_{anom}\)</span> for this data in <a class="reference internal" href="2_mergingstats.html"><span class="doc">Merging Statistics</span></a> and observed that there was significant anomalous signal. Let’s now use that data to generate an anomalous difference map based on the anomalous scattering from the native sulfur atoms.</p>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
@@ -271,7 +271,7 @@ Number of reflections: 12542
 </div>
 <hr class="docutils" />
 <section id="Background">
-<h2>Background<a class="headerlink" href="#Background" title="Permalink to this heading"></a></h2>
+<h2>Background<a class="headerlink" href="#Background" title="Link to this heading"></a></h2>
 <p>Since this dataset was collected at a single wavelength, we can compute an anomalous difference map from the anomalous structure factor amplitudes, <span class="math notranslate nohighlight">\(|F_{A}|\)</span>, and their phase shifts, <span class="math notranslate nohighlight">\(\alpha\)</span>, relative to the computed phases from an isomorphous structure of tetragonal HEWL. We will compute <span class="math notranslate nohighlight">\(|F_{A}|\)</span> based on the following:</p>
 <p><span class="math">\begin{equation*}
 |F_{A}| \propto \Delta_{\mathrm{ano}} = |F_{HKL}| - |F_{\overline{HKL}}|
@@ -284,7 +284,7 @@ Number of reflections: 12542
 </section>
 <hr class="docutils" />
 <section id="Computing-Structure-Factor-Amplitudes">
-<h2>Computing Structure Factor Amplitudes<a class="headerlink" href="#Computing-Structure-Factor-Amplitudes" title="Permalink to this heading"></a></h2>
+<h2>Computing Structure Factor Amplitudes<a class="headerlink" href="#Computing-Structure-Factor-Amplitudes" title="Link to this heading"></a></h2>
 <p>The dataset being used is the direct output from running scaling and merging in <a class="reference external" href="http://www.ccp4.ac.uk/html/aimless.html">AIMLESS</a>. As a first processing step, we need to convert the observed merged intensities, <span class="math notranslate nohighlight">\(I(+)\)</span> and <span class="math notranslate nohighlight">\(I(-)\)</span>, into observed structure factor amplitudes, <span class="math notranslate nohighlight">\(F(+)\)</span> and <span class="math notranslate nohighlight">\(F(-)\)</span>.</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
@@ -802,7 +802,7 @@ Number of reflections: 12542
 </section>
 <hr class="docutils" />
 <section id="Phasing-the-Anomalous-Difference-Map">
-<h2>Phasing the Anomalous Difference Map<a class="headerlink" href="#Phasing-the-Anomalous-Difference-Map" title="Permalink to this heading"></a></h2>
+<h2>Phasing the Anomalous Difference Map<a class="headerlink" href="#Phasing-the-Anomalous-Difference-Map" title="Link to this heading"></a></h2>
 <p>Below, we will compute the necessary phase shifts to go from the phases of a <span class="math notranslate nohighlight">\(2 F_o - F_c\)</span> map to the phases associated with the anomalous difference structure factors. Although this model was refined to this data in PHENIX, the phases from any isomorphous structure could have been used to obtain a reasonable map.</p>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
@@ -839,7 +839,7 @@ Number of reflections: 12542
 </div>
 </section>
 <section id="Viewing-the-Map">
-<h2>Viewing the Map<a class="headerlink" href="#Viewing-the-Map" title="Permalink to this heading"></a></h2>
+<h2>Viewing the Map<a class="headerlink" href="#Viewing-the-Map" title="Link to this heading"></a></h2>
 <p>Since we have structure factor amplitudes, <code class="docutils literal notranslate"><span class="pre">anom[&quot;ANOM&quot;]</span></code>, and phases, <code class="docutils literal notranslate"><span class="pre">anom[&quot;PHANOM&quot;]</span></code>, for the anomalous structure factors, we can now view the anomalous difference map. This can be done by writing out an MTZ file, and loading it into COOT, PyMOL, or any other molecular graphics package.</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
@@ -880,11 +880,11 @@ dtype: object
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>%%html
-&lt;center&gt;
-    &lt;iframe src=&quot;https://rs-station.github.io/reciprocalspaceship/data/anomdiff/anomdiff.html#zoom=25&quot;, width=600, height=600&gt;&lt;/iframe&gt;
-    &lt;br&gt;Anomalous difference map from HEWL crystal overlayed with refined model (PDB: 7L84). Map is contoured at +5&amp;sigma;.
-&lt;/center&gt;
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%%html</span>
+<span class="p">&lt;</span><span class="nt">center</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">iframe</span> <span class="na">src</span><span class="o">=</span><span class="s">&quot;https://rs-station.github.io/reciprocalspaceship/data/anomdiff/anomdiff.html#zoom=25&quot;</span><span class="err">,</span> <span class="na">width</span><span class="o">=</span><span class="s">600,</span> <span class="na">height</span><span class="o">=</span><span class="s">600</span><span class="p">&gt;&lt;/</span><span class="nt">iframe</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">br</span><span class="p">&gt;</span>Anomalous difference map from HEWL crystal overlayed with refined model (PDB: 7L84). Map is contoured at +5<span class="ni">&amp;sigma;</span>.
+<span class="p">&lt;/</span><span class="nt">center</span><span class="p">&gt;</span>
 </pre></div>
 </div>
 </div>

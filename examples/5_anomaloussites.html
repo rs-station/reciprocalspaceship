@@ -15,12 +15,12 @@
     <script src="../_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-        <script src="../_static/jquery.js"></script>
-        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
-        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
-        <script src="../_static/doctools.js"></script>
-        <script src="../_static/sphinx_highlight.js"></script>
-        <script src="../_static/design-tabs.js"></script>
+        <script src="../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../_static/documentation_options.js?v=8d563738"></script>
+        <script src="../_static/doctools.js?v=888ff710"></script>
+        <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+        <script src="../_static/design-tabs.js?v=36754332"></script>
         <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/@jupyter-widgets/html-manager@^1.0.1/dist/embed-amd.js"></script>
         <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
@@ -113,7 +113,7 @@
     <img alt="Binder badge" src="https://mybinder.org/badge_logo.svg" style="vertical-align:text-bottom"></a>.
   </span>
 </div><section id="Anomalous-Differences-in-Real-Space">
-<h1>Anomalous Differences in Real Space<a class="headerlink" href="#Anomalous-Differences-in-Real-Space" title="Permalink to this heading"></a></h1>
+<h1>Anomalous Differences in Real Space<a class="headerlink" href="#Anomalous-Differences-in-Real-Space" title="Link to this heading"></a></h1>
 <p>In the previous examples we used <span class="math notranslate nohighlight">\(CC_{anom}\)</span> to validate that there are well-measured anomalous differences in a sulfur SAD experiment and confirmed that the anomalous difference map showed localized, positive density at each of the sulfur atoms in HEWL. Both of these analyses used reciprocal space measurements to infer something about real space electron density. In this example, we will show how one can directly work in real space by using <a class="reference external" href="https://numpy.org/">NumPy</a> for both discrete
 Fourier transforms and representing real-space, voxelized electron density.</p>
 <div class="nbinput nblast docutils container">
@@ -160,7 +160,7 @@ Fourier transforms and representing real-space, voxelized electron density.</p>
 </div>
 <hr class="docutils" />
 <section id="Generate-reciprocal-grid">
-<h2>Generate reciprocal grid<a class="headerlink" href="#Generate-reciprocal-grid" title="Permalink to this heading"></a></h2>
+<h2>Generate reciprocal grid<a class="headerlink" href="#Generate-reciprocal-grid" title="Link to this heading"></a></h2>
 <p>In <code class="docutils literal notranslate"><span class="pre">reciprocalspaceship</span></code> we typically represent reflection data as a 2-dimensional table indexed by Miller indices. This representation is convenient for representing multiple data or metadata fields associated with reflections. However, these Miller indices also correspond to indices into a 3-dimensional, reciprocal space grid. If we format complex structure factors – structure factor amplitudes and phases – as the corresponding 3D array, we can directly Fourier transform the data to obtain
 a real space map.</p>
 <p>The construction of a reciprocal grid from a <code class="docutils literal notranslate"><span class="pre">DataSet</span></code> object is facilitated by the built-in method <code class="docutils literal notranslate"><span class="pre">DataSet.to_reciprocal_grid()</span></code>. Here, we will load the anomalous difference amplitudes and phases, convert them to complex structure factors, and construct the corresponding reciprocal grid.</p>
@@ -217,7 +217,7 @@ a real space map.</p>
 </section>
 <hr class="docutils" />
 <section id="Compute-real-space-map">
-<h2>Compute real space map<a class="headerlink" href="#Compute-real-space-map" title="Permalink to this heading"></a></h2>
+<h2>Compute real space map<a class="headerlink" href="#Compute-real-space-map" title="Link to this heading"></a></h2>
 <p>We can now generate our real space map of the anomalous differences. This anomalous difference map contains localized peaks corresponding to the locations of sulfur atoms in the unit cell.</p>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
@@ -24799,7 +24799,7 @@ SUVORK5CYII=\
 </section>
 <hr class="docutils" />
 <section id="Find-Sulfur-Sites-in-Anomalous-Difference-Map">
-<h2>Find Sulfur Sites in Anomalous Difference Map<a class="headerlink" href="#Find-Sulfur-Sites-in-Anomalous-Difference-Map" title="Permalink to this heading"></a></h2>
+<h2>Find Sulfur Sites in Anomalous Difference Map<a class="headerlink" href="#Find-Sulfur-Sites-in-Anomalous-Difference-Map" title="Link to this heading"></a></h2>
 <p>Using the real-space map of the anomalous differences in each voxel of the unit cell, it is now possible to identify the locations of the sulfur atoms responsible for the anomalous signal. This can be accomplished using peak-finding algorithms, which are available in many image processing libraries. For this example, we will use <a class="reference external" href="https://scikit-image.org/docs/dev/api/skimage.feature.html?highlight=peak_local_max#skimage.feature.peak_local_max">peak_local_max()</a> which is available in
 <a class="reference external" href="https://scikit-image.org/">scikit-image</a>.</p>
 <div class="nbinput nblast docutils container">

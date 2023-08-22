@@ -15,12 +15,12 @@
     <script src="../_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-        <script src="../_static/jquery.js"></script>
-        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
-        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
-        <script src="../_static/doctools.js"></script>
-        <script src="../_static/sphinx_highlight.js"></script>
-        <script src="../_static/design-tabs.js"></script>
+        <script src="../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../_static/documentation_options.js?v=8d563738"></script>
+        <script src="../_static/doctools.js?v=888ff710"></script>
+        <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+        <script src="../_static/design-tabs.js?v=36754332"></script>
         <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/@jupyter-widgets/html-manager@^1.0.1/dist/embed-amd.js"></script>
         <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
@@ -106,7 +106,7 @@
     <img alt="Binder badge" src="https://mybinder.org/badge_logo.svg" style="vertical-align:text-bottom"></a>.
   </span>
 </div><section id="MTZ-Data-Types">
-<h1>MTZ Data Types<a class="headerlink" href="#MTZ-Data-Types" title="Permalink to this heading"></a></h1>
+<h1>MTZ Data Types<a class="headerlink" href="#MTZ-Data-Types" title="Link to this heading"></a></h1>
 <p>MTZ files use column types to specify what type of crystallographic data is contained within a given column (see <a class="reference external" href="https://www.ccp4.ac.uk/html/mtzformat.html#column-types">MTZ specification</a>). This enables columns to have arbitrary names while ensuring that the column values are interpreted correctly.</p>
 <p>In order to ensure that MTZ data types behave as expected in <code class="docutils literal notranslate"><span class="pre">rs.DataSet</span></code> objects, we have implemented a set of custom <code class="docutils literal notranslate"><span class="pre">pandas</span></code> dtypes to represent the crystallographic data found in MTZ files. This facilitates MTZ file I/O, and makes it possible to write methods that operate only on expected types of crystallographic data.</p>
 <div class="nbinput nblast docutils container">
@@ -121,7 +121,7 @@
 </div>
 <hr class="docutils" />
 <section id="Supported-MTZ-data-types">
-<h2>Supported MTZ data types<a class="headerlink" href="#Supported-MTZ-data-types" title="Permalink to this heading"></a></h2>
+<h2>Supported MTZ data types<a class="headerlink" href="#Supported-MTZ-data-types" title="Link to this heading"></a></h2>
 <p>The following MTZ dtypes are available for <code class="docutils literal notranslate"><span class="pre">rs.DataSet</span></code> and <code class="docutils literal notranslate"><span class="pre">rs.DataSeries</span></code> objects:</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
@@ -256,7 +256,7 @@
 </section>
 <hr class="docutils" />
 <section id="Specifying-MTZ-data-types">
-<h2>Specifying MTZ data types<a class="headerlink" href="#Specifying-MTZ-data-types" title="Permalink to this heading"></a></h2>
+<h2>Specifying MTZ data types<a class="headerlink" href="#Specifying-MTZ-data-types" title="Link to this heading"></a></h2>
 <p>It is possible to specify a dtype using the MTZ Code, Name, or Class from the above table:</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
@@ -347,7 +347,7 @@ dtype: Intensity
 </section>
 <hr class="docutils" />
 <section id="Inferring-MTZ-data-types">
-<h2>Inferring MTZ data types<a class="headerlink" href="#Inferring-MTZ-data-types" title="Permalink to this heading"></a></h2>
+<h2>Inferring MTZ data types<a class="headerlink" href="#Inferring-MTZ-data-types" title="Link to this heading"></a></h2>
 <p>If data is read directly from a MTZ file, the proper MTZ data types will be set automatically. However, in order to facilitate working with MTZ dtypes, there is also support for inferring proper dtypes based on the underlying data and name of a <code class="docutils literal notranslate"><span class="pre">rs.DataSeries</span></code> or the columns of an <code class="docutils literal notranslate"><span class="pre">rs.DataSet</span></code>. Inferring the proper dtype is not always possible, but these functions are written to work for most common column names in MTZ files. If you come across common cases that do not seem to be supported,
 please feel free to file an <a class="reference external" href="https://github.com/rs-station/reciprocalspaceship/issues">issue on GitHub</a>.</p>
 <p>Inferring dtype for <code class="docutils literal notranslate"><span class="pre">DataSeries</span></code>:</p>
@@ -476,7 +476,7 @@ dtype: object
 </section>
 <hr class="docutils" />
 <section id="Switching-between-Friedel-and-non-Friedel-data-types">
-<h2>Switching between Friedel and non-Friedel data types<a class="headerlink" href="#Switching-between-Friedel-and-non-Friedel-data-types" title="Permalink to this heading"></a></h2>
+<h2>Switching between Friedel and non-Friedel data types<a class="headerlink" href="#Switching-between-Friedel-and-non-Friedel-data-types" title="Link to this heading"></a></h2>
 <p>Several MTZ data types are specific for anomalous data pertaining to Friedel pairs. For applicable <code class="docutils literal notranslate"><span class="pre">rs.DataSeries</span></code> objects, it is possible to switch between these data types. For data types without a Friedel-equivalent, the <code class="docutils literal notranslate"><span class="pre">rs.DataSeries</span></code> is returned unchanged:</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
@@ -544,7 +544,7 @@ dtype: MTZInt
 </section>
 <hr class="docutils" />
 <section id="Writing-out-MTZ-files">
-<h2>Writing out MTZ files<a class="headerlink" href="#Writing-out-MTZ-files" title="Permalink to this heading"></a></h2>
+<h2>Writing out MTZ files<a class="headerlink" href="#Writing-out-MTZ-files" title="Link to this heading"></a></h2>
 <p>Any data that will be written out to a MTZ format file must have an MTZ data type.</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:

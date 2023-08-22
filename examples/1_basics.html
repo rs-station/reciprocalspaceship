@@ -15,12 +15,12 @@
     <script src="../_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-        <script src="../_static/jquery.js"></script>
-        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
-        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
-        <script src="../_static/doctools.js"></script>
-        <script src="../_static/sphinx_highlight.js"></script>
-        <script src="../_static/design-tabs.js"></script>
+        <script src="../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../_static/documentation_options.js?v=8d563738"></script>
+        <script src="../_static/doctools.js?v=888ff710"></script>
+        <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+        <script src="../_static/design-tabs.js?v=36754332"></script>
         <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/@jupyter-widgets/html-manager@^1.0.1/dist/embed-amd.js"></script>
         <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
@@ -113,7 +113,7 @@
     <img alt="Binder badge" src="https://mybinder.org/badge_logo.svg" style="vertical-align:text-bottom"></a>.
   </span>
 </div><section id="Basics">
-<h1>Basics<a class="headerlink" href="#Basics" title="Permalink to this heading"></a></h1>
+<h1>Basics<a class="headerlink" href="#Basics" title="Link to this heading"></a></h1>
 <p><code class="docutils literal notranslate"><span class="pre">reciprocalspaceship</span></code> provides methods for reading and writing MTZ files, and can be easily used to join reflection data by Miller indices. We will demonstrate these uses by loading diffraction data of tetragonal hen egg-white lysozyme (HEWL).</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
@@ -136,7 +136,7 @@
 <a class="reference external" href="http://www.ccp4.ac.uk/html/aimless.html">AIMLESS</a>. This data reduction yielded an MTZ file that is included in the <code class="docutils literal notranslate"><span class="pre">data/</span></code> subdirectory. Here, we will load the MTZ file and inspect its contents.</p>
 <hr class="docutils" />
 <section id="Loading-reflection-data">
-<h2>Loading reflection data<a class="headerlink" href="#Loading-reflection-data" title="Permalink to this heading"></a></h2>
+<h2>Loading reflection data<a class="headerlink" href="#Loading-reflection-data" title="Link to this heading"></a></h2>
 <p>Reflection tables can be loaded using the top-level function, <code class="docutils literal notranslate"><span class="pre">rs.read_mtz()</span></code>. This returns a <code class="docutils literal notranslate"><span class="pre">DataSet</span></code> object, that is analogous to a <code class="docutils literal notranslate"><span class="pre">pandas.DataFrame</span></code>.</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
@@ -365,7 +365,7 @@ dtype: object
 </section>
 <hr class="docutils" />
 <section id="Plotting-reflection-data">
-<h2>Plotting reflection data<a class="headerlink" href="#Plotting-reflection-data" title="Permalink to this heading"></a></h2>
+<h2>Plotting reflection data<a class="headerlink" href="#Plotting-reflection-data" title="Link to this heading"></a></h2>
 <p>For illustrative purposes, let’s plot the <span class="math notranslate nohighlight">\(I(+)\)</span> data against the <span class="math notranslate nohighlight">\(I(-)\)</span> data</p>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
@@ -399,7 +399,7 @@ dtype: object
 </section>
 <hr class="docutils" />
 <section id="Writing-Reflection-Data">
-<h2>Writing Reflection Data<a class="headerlink" href="#Writing-Reflection-Data" title="Permalink to this heading"></a></h2>
+<h2>Writing Reflection Data<a class="headerlink" href="#Writing-Reflection-Data" title="Link to this heading"></a></h2>
 <p>It is also possible to write out MTZ files using <code class="docutils literal notranslate"><span class="pre">DataSet.write_mtz()</span></code>. This functionality depends on the correct setting of each column’s <code class="docutils literal notranslate"><span class="pre">dtype</span></code>.</p>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
