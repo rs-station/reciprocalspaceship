@@ -236,7 +236,7 @@ def read_cif(ciffile):
     Reflections from CIF/ENT files are merged.
     A merged reflection DataSet will always be constructed.
 
-    The function reads a CIF/ENT file and returns a Gemmi structure object.
+    The function reads a CIF/ENT file and returns a rs.DataSet.
 
     Parameters
     ----------
