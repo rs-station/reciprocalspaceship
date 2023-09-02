@@ -15,7 +15,13 @@ def test_read_merged(IOtest_cif):
     dataset = rs.read_cif(IOtest_cif)
 
     assert dataset.spacegroup.number == 146
-    assert dataset.columns.to_list() == ["FreeR_flag", "IMEAN","SIGIMEAN","FC", "PHIC"]
+    assert dataset.columns.to_list() == [
+        "FreeR_flag",
+        "IMEAN",
+        "SIGIMEAN",
+        "FC",
+        "PHIC",
+    ]
     assert dataset.index.names == ["H", "K", "L"]
     assert dataset.merged
     assert isinstance(dataset, rs.DataSet)
