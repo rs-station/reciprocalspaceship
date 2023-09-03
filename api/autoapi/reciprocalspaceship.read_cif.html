@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>reciprocalspaceship.read_pickle &mdash; reciprocalspaceship 1.0.0 documentation</title>
+  <title>reciprocalspaceship.read_cif &mdash; reciprocalspaceship 1.0.0 documentation</title>
       <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
@@ -25,8 +25,8 @@
     <script src="../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="reciprocalspaceship.read_precognition" href="reciprocalspaceship.read_precognition.html" />
-    <link rel="prev" title="reciprocalspaceship.read_csv" href="reciprocalspaceship.read_csv.html" /> 
+    <link rel="next" title="reciprocalspaceship.read_csv" href="reciprocalspaceship.read_csv.html" />
+    <link rel="prev" title="reciprocalspaceship.read_mtz" href="reciprocalspaceship.read_mtz.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -55,12 +55,12 @@
 <li class="toctree-l2"><a class="reference internal" href="../index.html#reflection-data">Reflection Data</a></li>
 <li class="toctree-l2 current"><a class="reference internal" href="../index.html#input-output">Input/Output</a><ul class="current">
 <li class="toctree-l3"><a class="reference internal" href="reciprocalspaceship.read_mtz.html">reciprocalspaceship.read_mtz</a></li>
-<li class="toctree-l3"><a class="reference internal" href="reciprocalspaceship.read_cif.html">reciprocalspaceship.read_cif</a></li>
-<li class="toctree-l3"><a class="reference internal" href="reciprocalspaceship.read_csv.html">reciprocalspaceship.read_csv</a></li>
-<li class="toctree-l3 current"><a class="current reference internal" href="#">reciprocalspaceship.read_pickle</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#reciprocalspaceship.read_pickle"><code class="docutils literal notranslate"><span class="pre">read_pickle()</span></code></a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">reciprocalspaceship.read_cif</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#reciprocalspaceship.read_cif"><code class="docutils literal notranslate"><span class="pre">read_cif()</span></code></a></li>
 </ul>
 </li>
+<li class="toctree-l3"><a class="reference internal" href="reciprocalspaceship.read_csv.html">reciprocalspaceship.read_csv</a></li>
+<li class="toctree-l3"><a class="reference internal" href="reciprocalspaceship.read_pickle.html">reciprocalspaceship.read_pickle</a></li>
 <li class="toctree-l3"><a class="reference internal" href="reciprocalspaceship.read_precognition.html">reciprocalspaceship.read_precognition</a></li>
 <li class="toctree-l3"><a class="reference internal" href="reciprocalspaceship.read_crystfel.html">reciprocalspaceship.read_crystfel</a></li>
 <li class="toctree-l3"><a class="reference internal" href="reciprocalspaceship.io.write_ccp4_map.html">reciprocalspaceship.io.write_ccp4_map</a></li>
@@ -90,9 +90,9 @@
   <ul class="wy-breadcrumbs">
       <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
           <li class="breadcrumb-item"><a href="../index.html">API Reference</a></li>
-      <li class="breadcrumb-item active">reciprocalspaceship.read_pickle</li>
+      <li class="breadcrumb-item active">reciprocalspaceship.read_cif</li>
       <li class="wy-breadcrumbs-aside">
-            <a href="../../_sources/api/autoapi/reciprocalspaceship.read_pickle.rst.txt" rel="nofollow"> View page source</a>
+            <a href="../../_sources/api/autoapi/reciprocalspaceship.read_cif.rst.txt" rel="nofollow"> View page source</a>
       </li>
   </ul>
   <hr/>
@@ -100,27 +100,23 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="reciprocalspaceship-read-pickle">
-<h1>reciprocalspaceship.read_pickle<a class="headerlink" href="#reciprocalspaceship-read-pickle" title="Link to this heading"></a></h1>
+  <section id="reciprocalspaceship-read-cif">
+<h1>reciprocalspaceship.read_cif<a class="headerlink" href="#reciprocalspaceship-read-cif" title="Link to this heading"></a></h1>
 <dl class="py function">
-<dt class="sig sig-object py" id="reciprocalspaceship.read_pickle">
-<span class="sig-prename descclassname"><span class="pre">reciprocalspaceship.</span></span><span class="sig-name descname"><span class="pre">read_pickle</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filepath_or_buffer</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/rs-station/reciprocalspaceship/blob/main/reciprocalspaceship/io/pickle.py#L6-L34"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#reciprocalspaceship.read_pickle" title="Link to this definition"></a></dt>
-<dd><p>Load pickled reciprocalspaceship object from file.</p>
+<dt class="sig sig-object py" id="reciprocalspaceship.read_cif">
+<span class="sig-prename descclassname"><span class="pre">reciprocalspaceship.</span></span><span class="sig-name descname"><span class="pre">read_cif</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ciffile</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/rs-station/reciprocalspaceship/blob/main/reciprocalspaceship/io/mtz.py#L232-L254"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#reciprocalspaceship.read_cif" title="Link to this definition"></a></dt>
+<dd><p>Populate the dataset object with reflection data from a CIF/ENT file.</p>
+<p>Reflections from CIF/ENT files are merged.
+A merged reflection DataSet will always be constructed.</p>
+<p>The function reads a CIF/ENT file and returns a rs.DataSet.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>filepath_or_buffer</strong> (<em>str, path object or file-like object</em>) – Pickled object to be read</p>
+<dd class="field-odd"><p><strong>ciffile</strong> (<em>str or file</em>) – name of a CIF reflection file or a file object</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p><strong>unpickled</strong> (<em>same type as object stored in file</em>)</p>
+<dd class="field-even"><p><em>DataSet</em></p>
 </dd>
 </dl>
-<div class="admonition seealso">
-<p class="admonition-title">See also</p>
-<dl class="simple">
-<dt><a class="reference internal" href="reciprocalspaceship.DataSet.html#reciprocalspaceship.DataSet.to_pickle" title="reciprocalspaceship.DataSet.to_pickle"><code class="xref py py-obj docutils literal notranslate"><span class="pre">DataSet.to_pickle</span></code></a></dt><dd><p>Pickle object to file</p>
-</dd>
-</dl>
-</div>
 </dd></dl>
 
 </section>
@@ -129,8 +125,8 @@
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="reciprocalspaceship.read_csv.html" class="btn btn-neutral float-left" title="reciprocalspaceship.read_csv" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="reciprocalspaceship.read_precognition.html" class="btn btn-neutral float-right" title="reciprocalspaceship.read_precognition" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="reciprocalspaceship.read_mtz.html" class="btn btn-neutral float-left" title="reciprocalspaceship.read_mtz" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="reciprocalspaceship.read_csv.html" class="btn btn-neutral float-right" title="reciprocalspaceship.read_csv" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

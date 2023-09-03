@@ -1,0 +1,6 @@
+﻿reciprocalspaceship.read\_cif
+=============================
+
+.. currentmodule:: reciprocalspaceship
+
+.. autofunction:: read_cif
