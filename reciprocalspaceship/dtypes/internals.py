@@ -41,7 +41,7 @@ from pandas._libs import Timedelta, iNaT, lib
 from pandas._libs import missing as libmissing
 from pandas._typing import ArrayLike, NpDtype, PositionalIndexer, Scalar, Shape, type_t
 from pandas.compat.numpy import function as nv
-from pandas.core import arraylike, missing, nanops, ops
+from pandas.core import arraylike, missing, nanops
 from pandas.core.algorithms import factorize_array, isin, take
 from pandas.core.array_algos import masked_reductions
 from pandas.core.array_algos.quantile import quantile_with_mask
@@ -70,6 +70,12 @@ from pandas.core.ops import invalid_comparison
 from pandas.errors import AbstractMethodError
 from pandas.util._decorators import cache_readonly, doc
 from pandas.util._validators import validate_fillna_kwargs
+
+# GH221: Handle import due to pandas change
+try:
+    from pandas.core.ops import maybe_dispatch_ufunc_to_dunder_op
+except ImportError:
+    from pandas._libs.ops_dispatch import maybe_dispatch_ufunc_to_dunder_op
 
 
 class BaseMaskedDtype(ExtensionDtype):
@@ -395,7 +401,7 @@ class BaseMaskedArray(OpsMixin, ExtensionArray):
                 return NotImplemented
 
         # for binary ops, use our custom dunder methods
-        result = ops.maybe_dispatch_ufunc_to_dunder_op(
+        result = maybe_dispatch_ufunc_to_dunder_op(
             self, ufunc, method, *inputs, **kwargs
         )
         if result is not NotImplemented:
