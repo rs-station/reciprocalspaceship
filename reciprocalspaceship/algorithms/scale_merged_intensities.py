@@ -96,7 +96,7 @@ def _french_wilson_posterior_quad(Iobs, SigIobs, Sigma, centric, npoints=100):
 
 
 
-def mean_intensity_by_miller_index(I, H, bandwidth):
+def mean_intensity_by_miller_index(I, H, bandwidth, clip_neg_Iobs):
     """
     Use a gaussian kernel smoother to compute mean intensities as a function of miller index.
 
@@ -108,6 +108,8 @@ def mean_intensity_by_miller_index(I, H, bandwidth):
         Nx3 array of miller indices
     bandwidth : float(optional)
         Kernel bandwidth in miller units
+    clip_neg_Iobs : bool(optional)
+        If true, clips Iobs to be at least 0 before calculating Sigma
 
     Returns
     -------
@@ -116,7 +118,8 @@ def mean_intensity_by_miller_index(I, H, bandwidth):
     """
     H = np.array(H, dtype=np.float32)
     I = np.array(I, dtype=np.float32)
-    I = np.clip(I, a_min=0,a_max=1e20)
+    if clip_neg_Iobs:
+        I = np.clip(I, a_min=0,a_max=1e20)
     bandwidth = np.float32(bandwidth) ** 2.0
     n = len(I)
 
@@ -187,6 +190,7 @@ def scale_merged_intensities(
     mean_intensity_method="isotropic",
     bins=100,
     bw=2.0,
+    clip_neg_Iobs=False,
 ):
     """
     Scales merged intensities using Bayesian statistics in order to
@@ -242,6 +246,11 @@ def scale_merged_intensities(
         parameter controls the distance that each reflection impacts in
         reciprocal space. Only affects output if mean_intensity_method is
         \"anisotropic\".
+    clip_neg_Iobs : bool
+        Will set negative Iobs to 0 for the purpose of calculating Sigma. 
+        Addresses rare cases where local average Iobs is negative.
+        Default: False.
+
 
     Returns
     -------
@@ -288,7 +297,7 @@ def scale_merged_intensities(
         )
     elif mean_intensity_method == "anisotropic":
         Sigma = (
-            mean_intensity_by_miller_index(I / multiplicity, ds.get_hkls(), bw)
+            mean_intensity_by_miller_index(I / multiplicity, ds.get_hkls(), bw, clip_neg_Iobs)
             * multiplicity
         )
 
