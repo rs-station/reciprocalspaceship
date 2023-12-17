@@ -255,7 +255,7 @@ def scale_merged_intensities(
         reciprocal space. Only affects output if mean_intensity_method is
         \"anisotropic\".
     clip_neg_Iobs : bool
-        Will set negative Iobs to 0 for the purpose of calculating Sigma. 
+        Will set negative Iobs to 0 for the purpose of calculating Sigma.
         Addresses rare cases where local average Iobs is negative.
         Default: False.
 
