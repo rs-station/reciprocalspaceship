@@ -95,8 +95,12 @@ def _french_wilson_posterior_quad(Iobs, SigIobs, Sigma, centric, npoints=100):
     return mean, np.sqrt(variance), mean_F, np.sqrt(variance_F)
 
 
+<<<<<<< HEAD
 
 def mean_intensity_by_miller_index(I, H, bandwidth, clip_neg_Iobs):
+=======
+def mean_intensity_by_miller_index(I, H, bandwidth):
+>>>>>>> d25d7da19615acf5c6694af20766c9a7cbeb80b2
     """
     Use a gaussian kernel smoother to compute mean intensities as a function of miller index.
 
@@ -118,8 +122,12 @@ def mean_intensity_by_miller_index(I, H, bandwidth, clip_neg_Iobs):
     """
     H = np.array(H, dtype=np.float32)
     I = np.array(I, dtype=np.float32)
+<<<<<<< HEAD
     if clip_neg_Iobs:
         I = np.clip(I, a_min=0,a_max=1e20)
+=======
+    I = np.clip(I, a_min=0, a_max=1e20)
+>>>>>>> d25d7da19615acf5c6694af20766c9a7cbeb80b2
     bandwidth = np.float32(bandwidth) ** 2.0
     n = len(I)
 
