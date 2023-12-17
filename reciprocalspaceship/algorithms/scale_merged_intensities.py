@@ -118,7 +118,7 @@ def mean_intensity_by_miller_index(I, H, bandwidth, clip_neg_Iobs):
     H = np.array(H, dtype=np.float32)
     I = np.array(I, dtype=np.float32)
     if clip_neg_Iobs:
-        I = np.clip(I, a_min=0,a_max=1e20)
+        I = np.clip(I, a_min=0, a_max=1e20)
     bandwidth = np.float32(bandwidth) ** 2.0
     n = len(I)
 
@@ -246,7 +246,7 @@ def scale_merged_intensities(
         reciprocal space. Only affects output if mean_intensity_method is
         \"anisotropic\".
     clip_neg_Iobs : bool
-        Will set negative Iobs to 0 for the purpose of calculating Sigma. 
+        Will set negative Iobs to 0 for the purpose of calculating Sigma.
         Addresses rare cases where local average Iobs is negative.
         Default: False.
 
@@ -296,7 +296,9 @@ def scale_merged_intensities(
         )
     elif mean_intensity_method == "anisotropic":
         Sigma = (
-            mean_intensity_by_miller_index(I / multiplicity, ds.get_hkls(), bw, clip_neg_Iobs)
+            mean_intensity_by_miller_index(
+                I / multiplicity, ds.get_hkls(), bw, clip_neg_Iobs
+            )
             * multiplicity
         )
 
