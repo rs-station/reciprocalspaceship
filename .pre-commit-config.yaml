@@ -14,12 +14,12 @@ repos:
     -   id: absolufy-imports
         files: ^reciprocalspaceship/
   - repo: https://github.com/PyCQA/isort
-    rev: 5.13.0
+    rev: 5.13.2
     hooks:
       - id: isort
         args: ["--profile", "black"]
   - repo: https://github.com/psf/black
-    rev: 23.11.0
+    rev: 23.12.0
     hooks:
       - id: black
         files: ^(reciprocalspaceship|tests)/
