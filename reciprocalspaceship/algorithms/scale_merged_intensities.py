@@ -125,10 +125,10 @@ def mean_intensity_by_miller_index(I, H, bandwidth, clip_neg_Sigma=False, eps=0.
     for i in range(n):
         K = np.exp(-0.5 * ((H - H[i]) * (H - H[i])).sum(1) / bandwidth)
         S[i] = (I * K).sum() / K.sum()
- 
+
     if clip_neg_Sigma:
         S = np.clip(S, a_min=eps, a_max=1e20)
- 
+
     return S
 
 
