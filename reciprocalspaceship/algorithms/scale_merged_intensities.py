@@ -40,6 +40,7 @@ def _french_wilson_posterior_quad(Iobs, SigIobs, Sigma, centric, npoints=100):
     Iobs = np.array(Iobs, dtype=np.float64)
     SigIobs = np.array(SigIobs, dtype=np.float64)
     Sigma = np.array(Sigma, dtype=np.float64)
+    print(np.amin(Sigma))
 
     # Integration window based on the normal, likelihood distribution
     window_size = 20.0  # In standard devs
@@ -95,7 +96,7 @@ def _french_wilson_posterior_quad(Iobs, SigIobs, Sigma, centric, npoints=100):
     return mean, np.sqrt(variance), mean_F, np.sqrt(variance_F)
 
 
-def mean_intensity_by_miller_index(I, H, bandwidth, clip_neg_Iobs):
+def mean_intensity_by_miller_index(I, H, bandwidth, clip_neg_Sigma=False, eps=0.001):
     """
     Use a gaussian kernel smoother to compute mean intensities as a function of miller index.
 
@@ -107,8 +108,9 @@ def mean_intensity_by_miller_index(I, H, bandwidth, clip_neg_Iobs):
         Nx3 array of miller indices
     bandwidth : float(optional)
         Kernel bandwidth in miller units
-    clip_neg_Iobs : bool(optional)
-        If true, clips Iobs to be at least 0 before calculating Sigma
+    clip_neg_Sigma : bool(optional, default False)
+        If true, clips Sigma to be at least 0.0001 before calculating Sigma
+    eps (float) : small positive number to clip Sigma to (if clip_neg_Sigma=True). Default=0.001.
 
     Returns
     -------
@@ -117,8 +119,6 @@ def mean_intensity_by_miller_index(I, H, bandwidth, clip_neg_Iobs):
     """
     H = np.array(H, dtype=np.float32)
     I = np.array(I, dtype=np.float32)
-    if clip_neg_Iobs:
-        I = np.clip(I, a_min=0, a_max=1e20)
     bandwidth = np.float32(bandwidth) ** 2.0
     n = len(I)
 
@@ -126,7 +126,10 @@ def mean_intensity_by_miller_index(I, H, bandwidth, clip_neg_Iobs):
     for i in range(n):
         K = np.exp(-0.5 * ((H - H[i]) * (H - H[i])).sum(1) / bandwidth)
         S[i] = (I * K).sum() / K.sum()
-
+ 
+    if clip_neg_Sigma:
+        S = np.clip(S, a_min=eps, a_max=1e20)
+ 
     return S
 
 
@@ -189,7 +192,8 @@ def scale_merged_intensities(
     mean_intensity_method="isotropic",
     bins=100,
     bw=2.0,
-    clip_neg_Iobs=False,
+    clip_neg_Sigma=False,
+    eps=0.001,
 ):
     """
     Scales merged intensities using Bayesian statistics in order to
@@ -245,10 +249,11 @@ def scale_merged_intensities(
         parameter controls the distance that each reflection impacts in
         reciprocal space. Only affects output if mean_intensity_method is
         \"anisotropic\".
-    clip_neg_Iobs : bool
-        Will set negative Iobs to 0 for the purpose of calculating Sigma.
+    clip_neg_Sigma : bool
+        Will set negative Sigma to 0 for the purpose of calculating Sigma.
         Addresses rare cases where local average Iobs is negative.
-        Default: False.
+        Default: False. *Used by valdo*.
+    eps : float Floor imposed on Sigma if clipping.
 
 
     Returns
@@ -297,7 +302,7 @@ def scale_merged_intensities(
     elif mean_intensity_method == "anisotropic":
         Sigma = (
             mean_intensity_by_miller_index(
-                I / multiplicity, ds.get_hkls(), bw, clip_neg_Iobs
+                I / multiplicity, ds.get_hkls(), bw, clip_neg_Sigma, eps
             )
             * multiplicity
         )
