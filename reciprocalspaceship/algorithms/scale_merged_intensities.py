@@ -40,7 +40,6 @@ def _french_wilson_posterior_quad(Iobs, SigIobs, Sigma, centric, npoints=100):
     Iobs = np.array(Iobs, dtype=np.float64)
     SigIobs = np.array(SigIobs, dtype=np.float64)
     Sigma = np.array(Sigma, dtype=np.float64)
-    print(np.amin(Sigma))
 
     # Integration window based on the normal, likelihood distribution
     window_size = 20.0  # In standard devs
