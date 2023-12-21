@@ -241,7 +241,7 @@ def scale_merged_intensities(
         parameter controls the distance that each reflection impacts in
         reciprocal space. Only affects output if mean_intensity_method is
         \"anisotropic\".
-    minimum_sigma : float 
+    minimum_sigma : float
         Minimum value imposed on Sigma (default: -np.inf, that is: no minimum).
 
 
@@ -285,15 +285,9 @@ def scale_merged_intensities(
     I, Sig = ds[intensity_key].to_numpy(), ds[sigma_key].to_numpy()
     if mean_intensity_method == "isotropic":
         dHKL = ds["dHKL"].to_numpy(dtype=np.float64)
-        Sigma = (
-            mean_intensity_by_resolution(I / multiplicity, dHKL, bins)
-        )
+        Sigma = mean_intensity_by_resolution(I / multiplicity, dHKL, bins)
     elif mean_intensity_method == "anisotropic":
-        Sigma = (
-            mean_intensity_by_miller_index(
-                I / multiplicity, ds.get_hkls(), bw
-            )
-        )
+        Sigma = mean_intensity_by_miller_index(I / multiplicity, ds.get_hkls(), bw)
     Sigma = np.clip(Sigma, a_min=minimum_sigma, a_max=np.inf)
     Sigma = Sigma * multiplicity
 
