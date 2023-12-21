@@ -225,7 +225,12 @@ def coerce_to_array(
         # a ValueError if the str cannot be parsed into an int
         values = values.astype(dtype, copy=copy)
     else:
-        values = safe_cast(values, dtype, copy=False)
+        try:
+            values = safe_cast(values, dtype, copy=False)
+        except:
+            # certain outputs cannot be coerced to int32
+            dtype = np.dtype("float64")
+            values = safe_cast(values, dtype, copy=False)
 
     return values, mask
 
@@ -307,14 +312,6 @@ class MTZIntegerArray(NumericArray):
     @cache_readonly
     def dtype(self) -> MTZInt32Dtype:
         return self._dtype
-
-    def __init__(self, values: np.ndarray, mask: np.ndarray, copy: bool = False):
-        if not (isinstance(values, np.ndarray) and values.dtype.kind in ["i", "u"]):
-            raise TypeError(
-                "values should be integer numpy array. Use "
-                "the 'pd.array' function instead"
-            )
-        super().__init__(values, mask, copy=copy)
 
     @classmethod
     def _from_sequence(
