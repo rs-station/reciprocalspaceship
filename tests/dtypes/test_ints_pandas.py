@@ -203,7 +203,7 @@ class TestBooleanReduce(base.BaseBooleanReduceTests):
 
 
 class TestNumericReduce(base.BaseNumericReduceTests):
-    def _get_expected_reduction_dtype(self, arr, op_name: str, skipna: bool):
+    def _get_expected_reduction_dtype(self, arr, op_name: str, skipna: bool = False):
         """
         Handle expected return types for reductions that may change int32-backed dtype
         """
