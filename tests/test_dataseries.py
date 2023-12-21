@@ -39,7 +39,7 @@ def test_constructor_expanddim(data, series_name, frame_name, dtype):
 
     assert isinstance(d, rs.DataSet)
     assert len(d.columns) == 1
-    assert isinstance(d.dtypes[0], type(ds.dtype))
+    assert isinstance(d.dtypes.iloc[0], type(ds.dtype))
 
     # Test hierarchy for column naming
     if frame_name:

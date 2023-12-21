@@ -136,6 +136,13 @@ class BaseMaskedArray(OpsMixin, ExtensionArray):
     _truthy_value = Scalar  # bool(_truthy_value) = True
     _falsey_value = Scalar  # bool(_falsey_value) = False
 
+    @classmethod
+    def _simple_new(cls, values, mask):
+        result = BaseMaskedArray.__new__(cls)
+        result._data = values
+        result._mask = mask
+        return result
+
     def __init__(self, values: np.ndarray, mask: np.ndarray, copy: bool = False):
         # values is supposed to already be validated in the subclass
         if not (isinstance(mask, np.ndarray) and mask.dtype == np.bool_):
@@ -173,7 +180,7 @@ class BaseMaskedArray(OpsMixin, ExtensionArray):
 
     @doc(ExtensionArray.fillna)
     def fillna(
-        self: BaseMaskedArrayT, value=None, method=None, limit=None
+        self: BaseMaskedArrayT, value=None, method=None, limit=None, copy=True
     ) -> BaseMaskedArrayT:
         value, method = validate_fillna_kwargs(value, method)
 
@@ -198,10 +205,39 @@ class BaseMaskedArray(OpsMixin, ExtensionArray):
                 return type(self)(new_values.T, new_mask.view(np.bool_).T)
             else:
                 # fill with value
-                new_values = self.copy()
+                if copy:
+                    new_values = self.copy()
+                else:
+                    new_values = self[:]
                 new_values[mask] = value
         else:
-            new_values = self.copy()
+            if copy:
+                new_values = self.copy()
+            else:
+                new_values = self[:]
+        return new_values
+
+    def _pad_or_backfill(self, *, method, limit=None, copy=True):
+        mask = self._mask
+
+        if mask.any():
+            func = missing.get_fill_func(method, ndim=self.ndim)
+
+            npvalues = self._data.T
+            new_mask = mask.T
+            if copy:
+                npvalues = npvalues.copy()
+                new_mask = new_mask.copy()
+            func(npvalues, limit=limit, mask=new_mask)
+            if copy:
+                return self._simple_new(npvalues.T, new_mask.T)
+            else:
+                return self
+        else:
+            if copy:
+                new_values = self.copy()
+            else:
+                new_values = self
         return new_values
 
     def _coerce_to_array(self, values) -> tuple[np.ndarray, np.ndarray]:
