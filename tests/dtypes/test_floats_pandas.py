@@ -5,11 +5,10 @@ reciprocalspaceship dtypes that are backed by numpy float32 arrays.
 
 import numpy as np
 import pandas as pd
+import pandas._testing as tm
 import pytest
+from pandas.testing import assert_series_equal
 from pandas.tests.extension import base
-from pandas.tests.extension.test_floating import (
-    TestComparisonOps as FloatingTestComparisonOps,
-)
 
 import reciprocalspaceship as rs
 
@@ -128,7 +127,7 @@ class TestMethods(base.BaseMethodsTests):
         print(result)
         print(expected)
 
-        self.assert_series_equal(result, expected)
+        assert_series_equal(result, expected)
 
     def test_value_counts_with_normalize(self, data):
         # GH 33172
@@ -144,11 +143,79 @@ class TestMethods(base.BaseMethodsTests):
         expected = rs.DataSeries(
             [1 / len(values)] * len(values), index=result.index, name=result.name
         )
-        self.assert_series_equal(result, expected)
+        assert_series_equal(result, expected)
 
 
-class TestComparisonOps(FloatingTestComparisonOps):
-    pass
+class TestComparisonOps(base.BaseComparisonOpsTests):
+    def _compare_other(self, ser: pd.Series, data, op, other):
+        if op.__name__ in ["eq", "ne", "le", "ge", "lt", "gt"]:
+            # comparison should match point-wise comparisons
+            result = op(ser, other)
+            expected = ser.combine(other, op).astype("boolean")
+            assert_series_equal(result, expected)
+
+        else:
+            exc = None
+            try:
+                result = op(ser, other)
+            except Exception as err:
+                exc = err
+
+            if exc is None:
+                # Didn't error, then should match pointwise behavior
+                expected = ser.combine(other, op)
+                assert_series_equal(result, expected)
+            else:
+                with pytest.raises(type(exc)):
+                    ser.combine(other, op)
+
+    def _cast_pointwise_result(self, op_name: str, obj, other, pointwise_result):
+        sdtype = tm.get_dtype(obj)
+        expected = pointwise_result
+
+        if op_name in ("eq", "ne", "le", "ge", "lt", "gt"):
+            return expected.astype("boolean")
+
+        if sdtype.kind in "iu":
+            if op_name in ("__rtruediv__", "__truediv__", "__div__"):
+                with warnings.catch_warnings():
+                    warnings.filterwarnings(
+                        "ignore",
+                        "Downcasting object dtype arrays",
+                        category=FutureWarning,
+                    )
+                    filled = expected.fillna(np.nan)
+                expected = filled.astype("Float64")
+            else:
+                # combine method result in 'biggest' (int64) dtype
+                expected = expected.astype(sdtype)
+        elif sdtype.kind == "b":
+            if op_name in (
+                "__floordiv__",
+                "__rfloordiv__",
+                "__pow__",
+                "__rpow__",
+                "__mod__",
+                "__rmod__",
+            ):
+                # combine keeps boolean type
+                expected = expected.astype("Int8")
+
+            elif op_name in ("__truediv__", "__rtruediv__"):
+                # combine with bools does not generate the correct result
+                #  (numpy behaviour for div is to regard the bools as numeric)
+                op = self.get_op_from_name(op_name)
+                expected = self._combine(obj.astype(float), other, op)
+                expected = expected.astype("Float64")
+
+            if op_name == "__rpow__":
+                # for rpow, combine does not propagate NaN
+                result = getattr(obj, op_name)(other)
+                expected[result.isna()] = np.nan
+        else:
+            # combine method result in 'biggest' (float64) dtype
+            expected = expected.astype(sdtype)
+        return expected
 
 
 class TestMissing(base.BaseMissingTests):
