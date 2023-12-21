@@ -2,6 +2,7 @@ import numpy as np
 import pandas as pd
 import pandas._testing as tm
 import pytest
+from pandas.core.dtypes.common import is_float_dtype, is_signed_integer_dtype
 from pandas.testing import assert_series_equal
 from pandas.tests.extension import base
 
@@ -202,7 +203,19 @@ class TestBooleanReduce(base.BaseBooleanReduceTests):
 
 
 class TestNumericReduce(base.BaseNumericReduceTests):
-    pass
+    def _get_expected_reduction_dtype(self, arr, op_name: str, skipna: bool):
+        """
+        Handle expected return types for reductions that may change int32-backed dtype
+        """
+        # Floats can stay the same
+        if is_float_dtype(arr.dtype):
+            cmp_dtype = arr.dtype.name
+        # These reductions cannot always be safely cast to int32
+        elif op_name in ["mean", "median", "var", "std", "skew"]:
+            cmp_dtype = "Float64"
+        else:
+            cmp_dtype = arr.dtype.name
+        return cmp_dtype
 
 
 class TestParsing(base.BaseParsingTests):
