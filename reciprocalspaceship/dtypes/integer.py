@@ -33,7 +33,7 @@
 from __future__ import annotations
 
 import numpy as np
-from pandas import Int32Dtype, Int64Dtype
+from pandas import Float32Dtype, Int32Dtype, Int64Dtype
 from pandas._libs import lib
 from pandas._libs import missing as libmissing
 from pandas._typing import ArrayLike, Dtype, DtypeObj
@@ -102,11 +102,9 @@ class MTZInt32Dtype(MTZDtype):
             [],
         )
         if np.issubdtype(np_dtype, np.integer):
-            return INT_STR_TO_DTYPE[str(np_dtype)]
+            return Int32Dtype()
         elif np.issubdtype(np_dtype, np.floating):
-            from pandas.core.arrays.floating import FLOAT_STR_TO_DTYPE
-
-            return FLOAT_STR_TO_DTYPE[str(np_dtype)]
+            return Float32Dtype()
         return None
 
 
@@ -227,7 +225,12 @@ def coerce_to_array(
         # a ValueError if the str cannot be parsed into an int
         values = values.astype(dtype, copy=copy)
     else:
-        values = safe_cast(values, dtype, copy=False)
+        try:
+            values = safe_cast(values, dtype, copy=False)
+        except:
+            # certain outputs cannot be coerced to int32
+            dtype = np.dtype("float64")
+            values = safe_cast(values, dtype, copy=False)
 
     return values, mask
 
@@ -310,14 +313,6 @@ class MTZIntegerArray(NumericArray):
     def dtype(self) -> MTZInt32Dtype:
         return self._dtype
 
-    def __init__(self, values: np.ndarray, mask: np.ndarray, copy: bool = False):
-        if not (isinstance(values, np.ndarray) and values.dtype.kind in ["i", "u"]):
-            raise TypeError(
-                "values should be integer numpy array. Use "
-                "the 'pd.array' function instead"
-            )
-        super().__init__(values, mask, copy=copy)
-
     @classmethod
     def _from_sequence(
         cls, scalars, *, dtype: Dtype | None = None, copy: bool = False
@@ -334,6 +329,17 @@ class MTZIntegerArray(NumericArray):
 
     def _coerce_to_array(self, value) -> tuple[np.ndarray, np.ndarray]:
         return coerce_to_array(value, dtype=self.dtype)
+
+    def _maybe_mask_result(self, result, mask):
+        """
+        Parameters
+        ----------
+        result : array-like
+        mask : array-like bool
+        """
+        if result.dtype.kind in "iu":
+            return type(self)(result, mask, copy=False)
+        return super()._maybe_mask_result(result=result, mask=mask)
 
     def astype(self, dtype, copy: bool = True) -> ArrayLike:
         """
@@ -374,21 +380,6 @@ class MTZIntegerArray(NumericArray):
             na_value = lib.no_default
 
         return self.to_numpy(dtype=dtype, na_value=na_value, copy=False)
-
-    def _maybe_mask_result(self, result, mask, other, op_name: str):
-        """
-        Parameters
-        ----------
-        result : array-like
-        mask : array-like bool
-        other : scalar or array-like
-        op_name : str
-        """
-        if is_integer_dtype(result):
-            return type(self)(result, mask, copy=False)
-        return super()._maybe_mask_result(
-            result=result, mask=mask, other=other, op_name=op_name
-        )
 
     def _values_for_argsort(self) -> np.ndarray:
         """

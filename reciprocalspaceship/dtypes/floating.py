@@ -87,7 +87,7 @@ class MTZFloat32Dtype(MTZDtype):
             [],
         )
         if np.issubdtype(np_dtype, np.floating):
-            return FLOAT_STR_TO_DTYPE[str(np_dtype)]
+            return Float32Dtype()
         return None
 
 
@@ -286,6 +286,20 @@ class MTZFloatArray(NumericArray):
     def _coerce_to_array(self, value) -> tuple[np.ndarray, np.ndarray]:
         return coerce_to_array(value, dtype=self.dtype)
 
+    def _maybe_mask_result(self, result, mask):
+        """
+        Parameters
+        ----------
+        result : array-like
+        mask : array-like bool
+        """
+        # if we have a float operand we are by-definition
+        # a float result
+        # or our op is a divide
+        if result.dtype.kind == "f":
+            return type(self)(result, mask, copy=False)
+        return super()._maybe_mask_result(result=result, mask=mask)
+
     def astype(self, dtype, copy: bool = True) -> ArrayLike:
         """
         Cast to a NumPy array or ExtensionArray with 'dtype'.
@@ -327,28 +341,6 @@ class MTZFloatArray(NumericArray):
         # type "**Dict[str, float]"; expected "bool"
         data = self.to_numpy(dtype=dtype, **kwargs)  # type: ignore[arg-type]
         return astype_nansafe(data, dtype, copy=False)
-
-    def _maybe_mask_result(self, result, mask, other, op_name: str):
-        """
-        Parameters
-        ----------
-        result : array-like
-        mask : array-like bool
-        other : scalar or array-like
-        op_name : str
-        """
-        # if we have a float operand we are by-definition
-        # a float result
-        # or our op is a divide
-        if (
-            (is_float_dtype(other) or is_float(other))
-            or (op_name in ["rtruediv", "truediv"])
-            or (is_float_dtype(self.dtype) and is_numeric_dtype(result.dtype))
-        ):
-            return type(self)(result, mask, copy=False)
-        return super()._maybe_mask_result(
-            result=result, mask=mask, other=other, op_name=op_name
-        )
 
     def _values_for_argsort(self) -> np.ndarray:
         return self._data

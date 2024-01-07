@@ -1,10 +1,10 @@
 import numpy as np
 import pandas as pd
+import pandas._testing as tm
 import pytest
+from pandas.core.dtypes.common import is_float_dtype, is_signed_integer_dtype
+from pandas.testing import assert_series_equal
 from pandas.tests.extension import base
-from pandas.tests.extension.test_integer import (
-    TestComparisonOps as IntegerTestComparisonOps,
-)
 
 import reciprocalspaceship as rs
 
@@ -103,7 +103,7 @@ class TestMethods(base.BaseMethodsTests):
         result = rs.DataSeries(all_data).value_counts(dropna=dropna).sort_index()
         expected = rs.DataSeries(other).value_counts(dropna=dropna).sort_index()
 
-        self.assert_series_equal(result, expected)
+        assert_series_equal(result, expected)
 
     def test_value_counts_with_normalize(self, data):
         # GH 33172
@@ -119,11 +119,79 @@ class TestMethods(base.BaseMethodsTests):
         expected = rs.DataSeries(
             [1 / len(values)] * len(values), index=result.index, name=result.name
         )
-        self.assert_series_equal(result, expected)
+        assert_series_equal(result, expected)
 
 
-class TestComparisonOps(IntegerTestComparisonOps):
-    pass
+class TestComparisonOps(base.BaseComparisonOpsTests):
+    def _compare_other(self, ser: pd.Series, data, op, other):
+        if op.__name__ in ["eq", "ne", "le", "ge", "lt", "gt"]:
+            # comparison should match point-wise comparisons
+            result = op(ser, other)
+            expected = ser.combine(other, op).astype("boolean")
+            assert_series_equal(result, expected)
+
+        else:
+            exc = None
+            try:
+                result = op(ser, other)
+            except Exception as err:
+                exc = err
+
+            if exc is None:
+                # Didn't error, then should match pointwise behavior
+                expected = ser.combine(other, op)
+                assert_series_equal(result, expected)
+            else:
+                with pytest.raises(type(exc)):
+                    ser.combine(other, op)
+
+    def _cast_pointwise_result(self, op_name: str, obj, other, pointwise_result):
+        sdtype = tm.get_dtype(obj)
+        expected = pointwise_result
+
+        if op_name in ("eq", "ne", "le", "ge", "lt", "gt"):
+            return expected.astype("boolean")
+
+        if sdtype.kind in "iu":
+            if op_name in ("__rtruediv__", "__truediv__", "__div__"):
+                with warnings.catch_warnings():
+                    warnings.filterwarnings(
+                        "ignore",
+                        "Downcasting object dtype arrays",
+                        category=FutureWarning,
+                    )
+                    filled = expected.fillna(np.nan)
+                expected = filled.astype("Float64")
+            else:
+                # combine method result in 'biggest' (int64) dtype
+                expected = expected.astype(sdtype)
+        elif sdtype.kind == "b":
+            if op_name in (
+                "__floordiv__",
+                "__rfloordiv__",
+                "__pow__",
+                "__rpow__",
+                "__mod__",
+                "__rmod__",
+            ):
+                # combine keeps boolean type
+                expected = expected.astype("Int8")
+
+            elif op_name in ("__truediv__", "__rtruediv__"):
+                # combine with bools does not generate the correct result
+                #  (numpy behaviour for div is to regard the bools as numeric)
+                op = self.get_op_from_name(op_name)
+                expected = self._combine(obj.astype(float), other, op)
+                expected = expected.astype("Float64")
+
+            if op_name == "__rpow__":
+                # for rpow, combine does not propagate NaN
+                result = getattr(obj, op_name)(other)
+                expected[result.isna()] = np.nan
+        else:
+            # combine method result in 'biggest' (float64) dtype
+            expected = expected.astype(sdtype)
+        return expected
 
 
 class TestMissing(base.BaseMissingTests):
@@ -135,7 +203,19 @@ class TestBooleanReduce(base.BaseBooleanReduceTests):
 
 
 class TestNumericReduce(base.BaseNumericReduceTests):
-    pass
+    def _get_expected_reduction_dtype(self, arr, op_name: str, skipna: bool = False):
+        """
+        Handle expected return types for reductions that may change int32-backed dtype
+        """
+        # Floats can stay the same
+        if is_float_dtype(arr.dtype):
+            cmp_dtype = arr.dtype.name
+        # These reductions cannot always be safely cast to int32
+        elif op_name in ["mean", "median", "var", "std", "skew"]:
+            cmp_dtype = "Float64"
+        else:
+            cmp_dtype = arr.dtype.name
+        return cmp_dtype
 
 
 class TestParsing(base.BaseParsingTests):
