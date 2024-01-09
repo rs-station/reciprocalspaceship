@@ -185,6 +185,7 @@ def scale_merged_intensities(
     mean_intensity_method="isotropic",
     bins=100,
     bw=2.0,
+    minimum_sigma=-np.inf,
 ):
     """
     Scales merged intensities using Bayesian statistics in order to
@@ -240,6 +241,9 @@ def scale_merged_intensities(
         parameter controls the distance that each reflection impacts in
         reciprocal space. Only affects output if mean_intensity_method is
         \"anisotropic\".
+    minimum_sigma : float
+        Minimum value imposed on Sigma (default: -np.inf, that is: no minimum).
+
 
     Returns
     -------
@@ -281,14 +285,11 @@ def scale_merged_intensities(
     I, Sig = ds[intensity_key].to_numpy(), ds[sigma_key].to_numpy()
     if mean_intensity_method == "isotropic":
         dHKL = ds["dHKL"].to_numpy(dtype=np.float64)
-        Sigma = (
-            mean_intensity_by_resolution(I / multiplicity, dHKL, bins) * multiplicity
-        )
+        Sigma = mean_intensity_by_resolution(I / multiplicity, dHKL, bins)
     elif mean_intensity_method == "anisotropic":
-        Sigma = (
-            mean_intensity_by_miller_index(I / multiplicity, ds.get_hkls(), bw)
-            * multiplicity
-        )
+        Sigma = mean_intensity_by_miller_index(I / multiplicity, ds.get_hkls(), bw)
+    Sigma = np.clip(Sigma, a_min=minimum_sigma, a_max=np.inf)
+    Sigma = Sigma * multiplicity
 
     # Initialize outputs
     ds[outputI] = 0.0
