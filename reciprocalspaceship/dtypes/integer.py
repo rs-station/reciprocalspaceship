@@ -94,9 +94,11 @@ class MTZInt32Dtype(MTZDtype):
             # _SupportsDtype, str, Tuple[Any, Union[int, Sequence[int]]],
             # List[Any], _DtypeDict, Tuple[Any, Any]]]
             [
-                t.numpy_dtype  # type: ignore[misc]
-                if isinstance(t, BaseMaskedDtype)
-                else t
+                (
+                    t.numpy_dtype  # type: ignore[misc]
+                    if isinstance(t, BaseMaskedDtype)
+                    else t
+                )
                 for t in dtypes
             ],
             [],
