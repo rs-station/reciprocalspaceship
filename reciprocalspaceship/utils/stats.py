@@ -107,15 +107,15 @@ def weighted_pearsonr(x, y, w):
     """
     z = np.reciprocal(w.sum(-1))
 
-    mx = z * (w * x).sum(-1)
-    my = z * (w * y).sum(-1)
+    mx = z * np.einsum("...a,...a->...", w, x)
+    my = z * np.einsum("...a,...a->...", w, y)
 
     dx = x - np.expand_dims(mx, axis=-1)
     dy = y - np.expand_dims(my, axis=-1)
 
-    cxy = z * (w * dx * dy).sum(-1)
-    cx = z * (w * dx * dx).sum(-1)
-    cy = z * (w * dy * dy).sum(-1)
+    cxy = z * np.einsum("...a,...a,...a->...", w, dx, dy)
+    cx =  z * np.einsum("...a,...a,...a->...", w, dx, dx)
+    cy =  z * np.einsum("...a,...a,...a->...", w, dy, dy)
 
     r = cxy / np.sqrt(cx * cy)
     return r
