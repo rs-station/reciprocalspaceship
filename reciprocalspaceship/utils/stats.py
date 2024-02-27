@@ -114,8 +114,8 @@ def weighted_pearsonr(x, y, w):
     dy = y - np.expand_dims(my, axis=-1)
 
     cxy = z * np.einsum("...a,...a,...a->...", w, dx, dy)
-    cx =  z * np.einsum("...a,...a,...a->...", w, dx, dx)
-    cy =  z * np.einsum("...a,...a,...a->...", w, dy, dy)
+    cx = z * np.einsum("...a,...a,...a->...", w, dx, dx)
+    cy = z * np.einsum("...a,...a,...a->...", w, dy, dy)
 
     r = cxy / np.sqrt(cx * cy)
     return r
