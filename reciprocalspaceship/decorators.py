@@ -100,7 +100,7 @@ def spacegroupify(func=None, *sg_args):
             for arg in sg_args:
                 if arg in bargs.arguments:
                     bargs.arguments[arg] = _convert_spacegroup(bargs.arguments[arg])
-            return f(**bargs.arguments)
+            return f(*bargs.args, **bargs.kwargs)
 
         return wrapped
 
@@ -155,7 +155,7 @@ def cellify(func=None, *cell_args):
             for arg in cell_args:
                 if arg in bargs.arguments:
                     bargs.arguments[arg] = _convert_unitcell(bargs.arguments[arg])
-            return f(**bargs.arguments)
+            return f(*bargs.args, **bargs.kwargs)
 
         return wrapped
 
