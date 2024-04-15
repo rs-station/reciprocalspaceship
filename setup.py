@@ -72,7 +72,7 @@ setup(
     author_email="kmdalton@g.harvard.edu, greisman@g.harvard.edu",
     url="https://rs-station.github.io/reciprocalspaceship/",
     project_urls=PROJECT_URLS,
-    python_requires=">3.7",
+    python_requires=">=3.9",
     install_requires=[
         "gemmi>=0.5.5, <=0.6.5",
         "pandas>=2.2.2, <=2.2.2",
