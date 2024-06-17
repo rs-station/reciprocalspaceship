@@ -47,6 +47,7 @@ from pandas.core.dtypes.common import (
     is_string_dtype,
     pandas_dtype,
 )
+from pandas.core.dtypes.cast import np_find_common_type
 from pandas.core.tools.numeric import to_numeric
 from pandas.util._decorators import cache_readonly
 
@@ -88,7 +89,7 @@ class MTZInt32Dtype(MTZDtype):
             for t in dtypes
         ):
             return None
-        np_dtype = np.find_common_type(
+        np_dtype = np_find_common_type(
             # error: List comprehension has incompatible type List[Union[Any,
             # dtype, ExtensionDtype]]; expected List[Union[dtype, None, type,
             # _SupportsDtype, str, Tuple[Any, Union[int, Sequence[int]]],
@@ -175,7 +176,11 @@ def coerce_to_array(
             mask = mask.copy()
         return values, mask
 
-    values = np.array(values, copy=copy)
+    if copy:
+        values = np.array(values, copy=copy)
+    else:
+        values = np.asarray(values)
+
     inferred_type = None
     if is_object_dtype(values.dtype) or is_string_dtype(values.dtype):
         inferred_type = lib.infer_dtype(values, skipna=True)

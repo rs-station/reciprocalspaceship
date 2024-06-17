@@ -1234,6 +1234,7 @@ class DataSet(pd.DataFrame):
         # Compute new HKLs and phase shifts
         hkls = dataset.get_hkls()
         compressed_hkls, inverse = np.unique(hkls, axis=0, return_inverse=True)
+        inverse = inverse.squeeze(-1)
         asu_hkls, isym, phi_coeff, phi_shift = hkl_to_asu(
             compressed_hkls, dataset.spacegroup, return_phase_shifts=True
         )
