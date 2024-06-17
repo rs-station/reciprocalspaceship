@@ -36,7 +36,6 @@ def compute_redundancy(
     counts : np.array (int32)
         A length n array of counts for each miller index in hunique.
     """
-    hasu = hobs.copy()
     hobs = hobs[~rs.utils.is_absent(hobs, spacegroup)]
     dhkl = rs.utils.compute_dHKL(hobs, cell)
     if dmin is None:
