@@ -39,6 +39,7 @@ from pandas._libs import missing as libmissing
 from pandas._typing import ArrayLike, Dtype, DtypeObj
 from pandas.core.arrays import ExtensionArray
 from pandas.core.dtypes.base import ExtensionDtype, register_extension_dtype
+from pandas.core.dtypes.cast import np_find_common_type
 from pandas.core.dtypes.common import (
     is_bool_dtype,
     is_float_dtype,
@@ -47,7 +48,6 @@ from pandas.core.dtypes.common import (
     is_string_dtype,
     pandas_dtype,
 )
-from pandas.core.dtypes.cast import np_find_common_type
 from pandas.core.tools.numeric import to_numeric
 from pandas.util._decorators import cache_readonly
 

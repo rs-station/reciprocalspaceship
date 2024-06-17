@@ -45,6 +45,7 @@ except:
 
 from pandas import Float32Dtype, Float64Dtype
 from pandas.core.arrays import ExtensionArray
+from pandas.core.dtypes.cast import np_find_common_type
 from pandas.core.dtypes.common import (
     is_bool_dtype,
     is_float,
@@ -54,7 +55,6 @@ from pandas.core.dtypes.common import (
     is_object_dtype,
     pandas_dtype,
 )
-from pandas.core.dtypes.cast import np_find_common_type
 from pandas.core.dtypes.dtypes import ExtensionDtype, register_extension_dtype
 from pandas.core.tools.numeric import to_numeric
 
