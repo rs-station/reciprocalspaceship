@@ -12,10 +12,10 @@ def data_hewl_all(data_merged, request):
     if request.param == "hewl":
         return data_merged
     elif request.param == "hewl_IMEAN_NaN":
-        data_merged.loc[(0, 0, 4), "IMEAN"] = np.NaN
+        data_merged.loc[(0, 0, 4), "IMEAN"] = np.nan
         return data_merged
     elif request.param == "hewl_I(+)_NaN":
-        data_merged.loc[(0, 0, 4), "I(+)"] = np.NaN
+        data_merged.loc[(0, 0, 4), "I(+)"] = np.nan
         return data_merged
 
 

@@ -41,8 +41,6 @@ def compute_redundancy(
     if dmin is None:
         dmin = dhkl.min()
     hobs = hobs[dhkl >= dmin]
-    decimals = 5.0  # Round after this many decimals
-    dmin = np.floor(dmin * 10**decimals) * 10**-decimals
     hobs, isym = rs.utils.hkl_to_asu(hobs, spacegroup)
     if anomalous:
         fminus = isym % 2 == 0

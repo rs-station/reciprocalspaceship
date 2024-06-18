@@ -39,6 +39,7 @@ from pandas._libs import missing as libmissing
 from pandas._typing import ArrayLike, Dtype, DtypeObj
 from pandas.core.arrays import ExtensionArray
 from pandas.core.dtypes.base import ExtensionDtype, register_extension_dtype
+from pandas.core.dtypes.cast import np_find_common_type
 from pandas.core.dtypes.common import (
     is_bool_dtype,
     is_float_dtype,
@@ -88,7 +89,7 @@ class MTZInt32Dtype(MTZDtype):
             for t in dtypes
         ):
             return None
-        np_dtype = np.find_common_type(
+        np_dtype = np_find_common_type(
             # error: List comprehension has incompatible type List[Union[Any,
             # dtype, ExtensionDtype]]; expected List[Union[dtype, None, type,
             # _SupportsDtype, str, Tuple[Any, Union[int, Sequence[int]]],
@@ -175,7 +176,11 @@ def coerce_to_array(
             mask = mask.copy()
         return values, mask
 
-    values = np.array(values, copy=copy)
+    if copy:
+        values = np.array(values, copy=copy)
+    else:
+        values = np.asarray(values)
+
     inferred_type = None
     if is_object_dtype(values.dtype) or is_string_dtype(values.dtype):
         inferred_type = lib.infer_dtype(values, skipna=True)

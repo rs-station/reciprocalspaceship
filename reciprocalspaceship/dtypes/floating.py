@@ -45,6 +45,7 @@ except:
 
 from pandas import Float32Dtype, Float64Dtype
 from pandas.core.arrays import ExtensionArray
+from pandas.core.dtypes.cast import np_find_common_type
 from pandas.core.dtypes.common import (
     is_bool_dtype,
     is_float,
@@ -80,7 +81,7 @@ class MTZFloat32Dtype(MTZDtype):
             return self
         if not all(isinstance(t, MTZFloat32Dtype) for t in dtypes):
             return None
-        np_dtype = np.find_common_type(
+        np_dtype = np_find_common_type(
             # error: Item "ExtensionDtype" of "Union[Any, ExtensionDtype]" has no
             # attribute "numpy_dtype"
             [t.numpy_dtype for t in dtypes],  # type: ignore[union-attr]
@@ -136,7 +137,11 @@ def coerce_to_array(
             mask = mask.copy()
         return values, mask
 
-    values = np.array(values, copy=copy)
+    if copy:
+        values = np.array(values, copy=copy)
+    else:
+        values = np.asarray(values)
+
     if is_object_dtype(values.dtype):
         inferred_type = lib.infer_dtype(values, skipna=True)
         if inferred_type == "empty":
