@@ -51,7 +51,11 @@ from pandas.core.tools.numeric import to_numeric
 from pandas.util._decorators import cache_readonly
 
 from reciprocalspaceship.dtypes.base import MTZDtype
-from reciprocalspaceship.dtypes.internals import BaseMaskedDtype, NumericArray, is_numeric_na
+from reciprocalspaceship.dtypes.internals import (
+    BaseMaskedDtype,
+    NumericArray,
+    is_numeric_na,
+)
 
 
 class MTZInt32Dtype(MTZDtype):
