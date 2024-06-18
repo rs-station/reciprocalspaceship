@@ -35,7 +35,6 @@ from __future__ import annotations
 import numpy as np
 from pandas import Float32Dtype, Int32Dtype, Int64Dtype
 from pandas._libs import lib
-from pandas._libs import missing as libmissing
 from pandas._typing import ArrayLike, Dtype, DtypeObj
 from pandas.core.arrays import ExtensionArray
 from pandas.core.dtypes.base import ExtensionDtype, register_extension_dtype
@@ -52,7 +51,7 @@ from pandas.core.tools.numeric import to_numeric
 from pandas.util._decorators import cache_readonly
 
 from reciprocalspaceship.dtypes.base import MTZDtype
-from reciprocalspaceship.dtypes.internals import BaseMaskedDtype, NumericArray
+from reciprocalspaceship.dtypes.internals import BaseMaskedDtype, NumericArray, is_numeric_na
 
 
 class MTZInt32Dtype(MTZDtype):
@@ -207,7 +206,7 @@ def coerce_to_array(
         raise TypeError("values must be a 1D list-like")
 
     if mask is None:
-        mask = libmissing.is_numeric_na(values)
+        mask = is_numeric_na(values)
     else:
         assert len(mask) == len(values)
 

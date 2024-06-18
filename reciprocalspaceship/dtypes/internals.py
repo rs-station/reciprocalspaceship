@@ -35,6 +35,7 @@ from __future__ import annotations
 import numbers
 import warnings
 from typing import Any, Sequence
+from functools import wraps
 
 import numpy as np
 from pandas._libs import lib
@@ -1354,3 +1355,10 @@ class NumericArray(BaseMaskedArray):
         nv.validate_round(args, kwargs)
         values = np.round(self._data, decimals=decimals, **kwargs)
         return type(self)(values, self._mask.copy())
+
+@wraps(libmissing.is_numeric_na)
+def is_numeric_na(values):
+    allowed_dtypes = ("float32", "int32")
+    if isinstance(values, np.ndarray) and values.dtype in allowed_dtypes:
+        return np.isnan(values)
+    return libmissing.is_numeric_na(values)
