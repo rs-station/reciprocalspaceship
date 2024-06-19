@@ -114,9 +114,9 @@ class StreamLoader(object):
             r"(?s)Reflections measured after indexing\n(?P<REFL_BLOCK>.*?)\nEnd of reflections"
         )
 
-    def extract_target_unit_cell(self):
+    def extract_target_unit_cell(self) -> list | None:
         """
-        Search the file header for target unit cell paramters. 
+        Search the file header for target unit cell parameters. 
         """
         header = self.extract_file_header()
         cell = None
@@ -160,22 +160,41 @@ class StreamLoader(object):
         return header
 
     @property
-    def available_column_keys(self):
+    def available_column_names(self) -> list:
+        """ Keys which can be passed to parallel_read_crystfel to customize the peak list output """
         return list(self.peak_list_columns.keys())
 
     @property
-    def available_chunk_metadata_keys(self):
+    def available_chunk_metadata_keys(self) -> list:
+        """ Keys which can be passed to parallel_read_crystfel to customize the chunk level metadata """
         return list(self.re_chunk_metadata.keys())
 
     @property
-    def available_crystal_metadata_keys(self):
+    def available_crystal_metadata_keys(self) -> list:
+        """ Keys which can be passed to parallel_read_crystfel to customize the crystal level metadata """
         return list(self.re_crystal_metadata.keys())
 
-    def parallel_read_crystfel(self, spacegroup=None, wavelength=None, max_workers=None, chunk_metadata_keys=None, crystal_metadata_keys=None, peak_list_columns=None) -> list:
+    def parallel_read_crystfel(self, wavelength=None, chunk_metadata_keys=None, crystal_metadata_keys=None, peak_list_columns=None) -> list:
         """
-        Parse a CrystFEL stream file using multiple processors. 
+        Parse a CrystFEL stream file using multiple processors. Parallelization depends on the ray library (https://www.ray.io/). 
+        If ray is unavailable, this method falls back to serial processing on one CPU. Ray is not a dependency of reciprocalspaceship
+        and will not be installed automatically. Users must manually install it prior to calling this method.
 
-        Returns
+        PARAMETERS
+        ----------
+        wavelength : float
+            Override the wavelength with this value. Wavelength is used to compute Ewald offsets. 
+        chunk_metadata_keys : list
+            A list of metadata_keys which will be returned in the resulting dictionaries under the 'chunk_metadata' entry. 
+            A list of possible keys is stored as stream_loader.available_chunk_metadata_keys
+        crytal_metadata_keys : list
+            A list of metadata_keys which will be returned in the resulting dictionaries under the 'crystal_metadata' entry. 
+            A list of possible keys is stored as stream_loader.available_crystal_metadata_keys
+        peak_list_columns : list
+            A list of columns to include in the peak list numpy arrays. 
+            A list of possible column names is stored as stream_loader.available_column_names.
+
+        RETURNS
         -------
         chunks : list
             A list of dictionaries containing the per-chunk data. The 'peak_lists' item contains a
@@ -343,6 +362,10 @@ def read_crystfel(streamfile: str, spacegroup=None, encoding='utf-8', columns=No
     Initialize attributes and populate the DataSet object with data from a CrystFEL stream with indexed reflections.
     This is the output format used by CrystFEL software when processing still diffraction data.
 
+    This method is parallelized across CPUs speed up parsing. Parallelization depends on the ray library (https://www.ray.io/). 
+    If ray is unavailable, this method falls back to serial processing on one CPU. Ray is not a dependency of reciprocalspaceship
+    and will not be installed automatically. Users must manually install it prior to calling this method.
+
     Parameters
     ----------
     streamfile : str
@@ -351,6 +374,12 @@ def read_crystfel(streamfile: str, spacegroup=None, encoding='utf-8', columns=No
         optionally set the spacegroup of the returned DataSet.
     encoding : str
         The type of byte-encoding (optional, 'utf-8'). 
+    columns : list (optional)
+        Optionally specify the columns of the output by a list of strings. 
+        The default list is: 
+            [ "H", "K", "L", "I", "SigI", "BATCH", "s1x", "s1y", "s1z", "ewald_offset", 
+            "angular_ewald_offset", "XDET", "YDET" ]
+        See `rs.io.crystfel.StreamLoader().available_column_names` for a list of available column names.
 
     Returns
     --------
