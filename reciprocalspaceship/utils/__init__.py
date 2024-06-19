@@ -52,5 +52,9 @@ from reciprocalspaceship.utils.symmetry import (
     phase_shift,
     polar_axes,
 )
-from reciprocalspaceship.utils.units import angstroms2ev, ev2angstroms
-from reciprocalspaceship.utils.units import Angstroms2eV, eV2Angstroms
+from reciprocalspaceship.utils.units import (
+    Angstroms2eV,
+    angstroms2ev,
+    ev2angstroms,
+    eV2Angstroms,
+)
