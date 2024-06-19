@@ -1,6 +1,7 @@
 import numpy as np
 import pandas as pd
 
+from typing import Union
 from os.path import getsize
 from reciprocalspaceship import DataSet,DataSeries
 from reciprocalspaceship.utils import angle_between,eV2Angstroms
@@ -114,7 +115,7 @@ class StreamLoader(object):
             r"(?s)Reflections measured after indexing\n(?P<REFL_BLOCK>.*?)\nEnd of reflections"
         )
 
-    def extract_target_unit_cell(self) -> list | None:
+    def extract_target_unit_cell(self) -> Union[list, None]:
         """
         Search the file header for target unit cell parameters. 
         """
