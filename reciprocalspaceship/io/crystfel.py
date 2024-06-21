@@ -1,7 +1,5 @@
 import re
-from concurrent.futures import ProcessPoolExecutor, ThreadPoolExecutor
 from mmap import mmap
-from multiprocessing import Pool, freeze_support
 from os.path import getsize
 from typing import Union
 
@@ -92,7 +90,6 @@ class StreamLoader(object):
 
     def __init__(self, filename: str, encoding="utf-8"):
         self.filename = filename
-        self.file_size = getsize(filename)
         self.encoding = encoding
         self.block_regex = {}
         self.block_regex_bytes = {}
