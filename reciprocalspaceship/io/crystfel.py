@@ -2,8 +2,8 @@ import re
 from mmap import mmap
 from os.path import getsize
 from typing import Union
-import gemmi
 
+import gemmi
 import numpy as np
 import pandas as pd
 
@@ -192,14 +192,14 @@ class StreamLoader(object):
 
     def calculate_average_unit_cell(self) -> gemmi.UnitCell:
         """
-        Compute the average of all cell parameters across the file. 
+        Compute the average of all cell parameters across the file.
         """
         regex = re.compile(rb"Cell parameters .+\n")
         with open(self.filename, "r+") as f:
             memfile = mmap(f.fileno(), 0)
             lines = regex.findall(memfile)
-        cell = np.loadtxt(lines, usecols=[2,3,4,6,7,8], dtype='float32').mean(0)
-        cell[:3] *= 10.
+        cell = np.loadtxt(lines, usecols=[2, 3, 4, 6, 7, 8], dtype="float32").mean(0)
+        cell[:3] *= 10.0
 
         header = self.extract_file_header()
         lattice_type = None
