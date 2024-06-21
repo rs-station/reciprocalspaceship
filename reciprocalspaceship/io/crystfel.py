@@ -2,6 +2,7 @@ import re
 from mmap import mmap
 from os.path import getsize
 from typing import Union
+import gemmi
 
 import numpy as np
 import pandas as pd
@@ -182,6 +183,28 @@ class StreamLoader(object):
                     cell = [None] * 6
                 value = float(line.split()[2])
                 cell[idx] = value
+            if line.startswith("lattice_type ="):
+                lattice_type = line.split()[-1]
+
+        if lattice_type is not None:
+            cell = _cell_constraints[lattice_type](cell)
+        return cell
+
+    def calculate_average_unit_cell(self) -> gemmi.UnitCell:
+        """
+        Compute the average of all cell parameters across the file. 
+        """
+        regex = re.compile(rb"Cell parameters .+\n")
+        with open(self.filename, "r+") as f:
+            memfile = mmap(f.fileno(), 0)
+            lines = regex.findall(memfile)
+        cell = np.loadtxt(lines, usecols=[2,3,4,6,7,8], dtype='float32').mean(0)
+        cell[:3] *= 10.
+
+        header = self.extract_file_header()
+        lattice_type = None
+
+        for line in header.split("\n"):
             if line.startswith("lattice_type ="):
                 lattice_type = line.split()[-1]
 
