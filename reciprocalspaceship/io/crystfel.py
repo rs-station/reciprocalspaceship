@@ -268,7 +268,7 @@ class StreamLoader(object):
         chunks : list
             A list of dictionaries containing the per-chunk data. The 'peak_lists' item contains a
             numpy array with shape n x 14 with the following information.
-                h, k, l, I, SIGI, peak, background, fs/px, ss/px, s1_x, s1_y, s1_z,
+                h, k, l, I, SIGI, peak, background, fs/px, ss/px, s1x, s1y, s1z,
                 ewald_offset, angular_ewald_offset
         """
         if peak_list_columns is not None:
@@ -362,7 +362,8 @@ class StreamLoader(object):
                 ev_match = self.re_photon_energy.search(data)
                 ev_line = data[ev_match.start() : ev_match.end()]
                 photon_energy = np.float32(ev_line.split()[2])
-                lambda_inv = np.reciprocal(eV2Angstroms(photon_energy))
+                wavelength = eV2Angstroms(photon_energy)
+                lambda_inv = np.reciprocal(wavelength)
             else:
                 lambda_inv = np.reciprocal(wavelength)
 
