@@ -15,7 +15,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        numpy-version: ['numpy<2.0', 'numpy>2.0']
+        numpy-version: ['numpy<2.0', 'numpy>=2.0']
         python-version: ['3.9', '3.10', '3.11']
 
     # Skip CI if 'skip ci' is contained in latest commit message
