@@ -15,6 +15,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
+        numpy-version: ['numpy<2.0', 'numpy>=2.0']
         python-version: ['3.9', '3.10', '3.11']
 
     # Skip CI if 'skip ci' is contained in latest commit message
@@ -23,7 +24,7 @@ jobs:
     steps:
 
     - uses: actions/checkout@v4
-    - name: Set up Python ${{ matrix.python-version }}
+    - name: Set up Python ${{ matrix.python-version }} and ${{ matrix.numpy-version }}
       uses: actions/setup-python@v5
       with:
         python-version: ${{ matrix.python-version }}
@@ -31,6 +32,7 @@ jobs:
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
+        pip install "${{ matrix.numpy-version }}"
         pip install -e .
         pip install ray
 

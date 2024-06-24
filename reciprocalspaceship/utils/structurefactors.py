@@ -104,7 +104,11 @@ def is_centric(H, spacegroup):
     """
     group_ops = spacegroup.operations()
     hkl, inverse = np.unique(H, axis=0, return_inverse=True)
-    inverse = inverse.squeeze(-1)
+
+    # The behavior of np.unique changed with v2.0. This block maintains v1 compatibility
+    if inverse.shape[-1] == 1:
+        inverse = inverse.squeeze(-1)
+
     centric = group_ops.centric_flag_array(hkl)
     return centric[inverse]
 
