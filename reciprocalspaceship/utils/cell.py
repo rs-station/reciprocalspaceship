@@ -24,7 +24,11 @@ def compute_dHKL(H, cell):
     # Compress the hkls so we don't do redudant computation
     H = np.array(H, dtype=np.float32)
     hkls, inverse = np.unique(H, axis=0, return_inverse=True)
-    inverse = inverse.squeeze(-1)
+
+    # The behavior of np.unique changed with v2.0. This block maintains v1 compatibility
+    if inverse.shape[-1] == 1:
+        inverse = inverse.squeeze(-1)
+
     F = np.array(cell.fractionalization_matrix.tolist()).astype(np.float64)
     dhkls = np.reciprocal(np.linalg.norm((hkls @ F), 2, 1)).astype(np.float32)
     return dhkls[inverse]
