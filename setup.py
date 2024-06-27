@@ -38,7 +38,7 @@ PROJECT_URLS = {
 }
 
 # Testing requirements
-tests_require = ["pytest", "pytest-cov", "pytest-xdist"]
+tests_require = ["pytest", "pytest-cov", "pytest-xdist", "ray"]
 
 # Documentation requirements
 docs_require = [
