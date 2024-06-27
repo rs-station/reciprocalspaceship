@@ -243,6 +243,7 @@ class StreamLoader(object):
         chunk_metadata_keys=None,
         crystal_metadata_keys=None,
         peak_list_columns=None,
+        **ray_kwargs,
     ) -> list:
         """
         Parse a CrystFEL stream file using multiple processors. Parallelization depends on the ray library (https://www.ray.io/).
@@ -262,6 +263,8 @@ class StreamLoader(object):
         peak_list_columns : list
             A list of columns to include in the peak list numpy arrays.
             A list of possible column names is stored as stream_loader.available_column_names.
+        ray_kwargs : optional
+            Additional keyword arguments to pass to [ray.init](https://docs.ray.io/en/latest/ray-core/api/doc/ray.init.html#ray.init). 
 
         RETURNS
         -------
@@ -283,7 +286,7 @@ class StreamLoader(object):
             try:
                 import ray
 
-                ray.init()
+                ray.init(**ray_kwargs)
 
                 @ray.remote
                 def parse_chunk(loader: StreamLoader, *args):
@@ -445,7 +448,7 @@ class StreamLoader(object):
 
 
 def read_crystfel(
-    streamfile: str, spacegroup=None, encoding="utf-8", columns=None
+    streamfile: str, spacegroup=None, encoding="utf-8", columns=None, **ray_kwargs
 ) -> DataSet:
     """
     Initialize attributes and populate the DataSet object with data from a CrystFEL stream with indexed reflections.
@@ -469,6 +472,8 @@ def read_crystfel(
             [ "H", "K", "L", "I", "SigI", "BATCH", "s1x", "s1y", "s1z", "ewald_offset",
             "angular_ewald_offset", "XDET", "YDET" ]
         See `rs.io.crystfel.StreamLoader().available_column_names` for a list of available column names.
+    ray_kwargs : optional
+        Additional keyword arguments to pass to [ray.init](https://docs.ray.io/en/latest/ray-core/api/doc/ray.init.html#ray.init). 
 
     Returns
     --------
@@ -504,7 +509,7 @@ def read_crystfel(
     batch = 0
     batch_array = []
     data = []
-    for chunk in loader.parallel_read_crystfel(peak_list_columns=peak_list_columns):
+    for chunk in loader.parallel_read_crystfel(peak_list_columns=peak_list_columns, **ray_kwargs):
         for peak_list in chunk["peak_lists"]:
             data.append(peak_list)
             batch_array.append(np.ones(len(peak_list)) * batch)
