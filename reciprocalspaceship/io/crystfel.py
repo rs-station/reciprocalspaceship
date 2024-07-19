@@ -1,13 +1,11 @@
 import mmap
 import re
-from os.path import getsize
 from typing import Union
 
 import gemmi
 import numpy as np
-import pandas as pd
 
-from reciprocalspaceship import DataSeries, DataSet, concat
+from reciprocalspaceship import DataSeries, DataSet
 from reciprocalspaceship.utils import angle_between, eV2Angstroms
 
 # See Rupp Table 5-2
