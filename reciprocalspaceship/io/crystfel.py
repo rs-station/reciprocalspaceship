@@ -1,5 +1,6 @@
 import mmap
 import re
+from importlib.util import find_spec
 from typing import Union
 
 import gemmi
@@ -7,8 +8,6 @@ import numpy as np
 
 from reciprocalspaceship import DataSeries, DataSet
 from reciprocalspaceship.utils import angle_between, eV2Angstroms
-
-from importlib.util import find_spec
 
 # See Rupp Table 5-2
 _cell_constraints = {
@@ -77,8 +76,8 @@ class StreamLoader(object):
         "L": 2,
         "I": 3,
         "SigI": 4,
-        "peak" : 5,
-        "background" : 6,
+        "peak": 5,
+        "background": 6,
         "XDET": 7,
         "YDET": 8,
         "s1x": 9,
@@ -268,9 +267,9 @@ class StreamLoader(object):
             A list of columns to include in the peak list numpy arrays.
             A list of possible column names is stored as stream_loader.available_column_names.
         use_ray : bool(optional)
-            Whether or not to use ray for parallelization. 
+            Whether or not to use ray for parallelization.
         num_cpus : int (optional)
-            The number of cpus for ray to use. 
+            The number of cpus for ray to use.
         ray_kwargs : optional
             Additional keyword arguments to pass to [ray.init](https://docs.ray.io/en/latest/ray-core/api/doc/ray.init.html#ray.init).
 
@@ -287,11 +286,12 @@ class StreamLoader(object):
 
         # Check whether ray is available
         if use_ray:
-            if find_spec('ray') is None:
+            if find_spec("ray") is None:
                 use_ray = False
                 import warnings
+
                 message = (
-                    "ray (https://www.ray.io/) is not available..." 
+                    "ray (https://www.ray.io/) is not available..."
                     "Falling back to serial stream file parser."
                 )
                 warnings.warn(message, ImportWarning)
@@ -304,6 +304,7 @@ class StreamLoader(object):
             )
             if use_ray:
                 import ray
+
                 ray.init(num_cpus=num_cpus, **ray_kwargs)
 
                 @ray.remote
@@ -463,7 +464,13 @@ class StreamLoader(object):
 
 
 def read_crystfel(
-    streamfile: str, spacegroup=None, encoding="utf-8", columns=None, parallel=True, num_cpus=None, **ray_kwargs
+    streamfile: str,
+    spacegroup=None,
+    encoding="utf-8",
+    columns=None,
+    parallel=True,
+    num_cpus=None,
+    **ray_kwargs,
 ) -> DataSet:
     """
     Initialize attributes and populate the DataSet object with data from a CrystFEL stream with indexed reflections.
@@ -488,7 +495,7 @@ def read_crystfel(
             "angular_ewald_offset", "XDET", "YDET" ]
         See `rs.io.crystfel.StreamLoader().available_column_names` for a list of available column names.
     parallel : bool (optional)
-        Read the stream file in parallel using [ray.io](https://docs.ray.io) if it is available. 
+        Read the stream file in parallel using [ray.io](https://docs.ray.io) if it is available.
     num_cpus : int (optional)
         By default, the model will use all available cores. For very large cpu counts, this may consume
         too much memory. Decreasing num_cpus may help. If ray is not installed, a single core will be used.
@@ -530,7 +537,10 @@ def read_crystfel(
     batch_array = []
     data = []
     for chunk in loader.read_crystfel(
-        peak_list_columns=peak_list_columns, use_ray=parallel, num_cpus=num_cpus, **ray_kwargs
+        peak_list_columns=peak_list_columns,
+        use_ray=parallel,
+        num_cpus=num_cpus,
+        **ray_kwargs,
     ):
         for peak_list in chunk["peak_lists"]:
             data.append(peak_list)
