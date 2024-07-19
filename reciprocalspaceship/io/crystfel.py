@@ -199,6 +199,11 @@ class StreamLoader(object):
         with open(self.filename, "r") as f:
             memfile = mmap.mmap(f.fileno(), 0, access=mmap.ACCESS_READ)
             lines = regex.findall(memfile)
+        if len(lines) == 0:
+            raise ValueError(
+                f"No unit cell parameters were found in the header of {self.filename}"
+            )
+
         cell = np.loadtxt(lines, usecols=[2, 3, 4, 6, 7, 8], dtype="float32").mean(0)
         cell[:3] *= 10.0
 
