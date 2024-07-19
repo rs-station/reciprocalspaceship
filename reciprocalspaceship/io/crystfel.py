@@ -8,6 +8,8 @@ import numpy as np
 from reciprocalspaceship import DataSeries, DataSet
 from reciprocalspaceship.utils import angle_between, eV2Angstroms
 
+from importlib.util import find_spec
+
 # See Rupp Table 5-2
 _cell_constraints = {
     "triclinic": lambda x: x,
@@ -75,16 +77,18 @@ class StreamLoader(object):
         "L": 2,
         "I": 3,
         "SigI": 4,
-        "XDET": 5,
-        "YDET": 6,
-        "s1x": 7,
-        "s1y": 8,
-        "s1z": 9,
-        "ewald_offset": 10,
-        "angular_ewald_offset": 11,
-        "ewald_offset_x": 12,
-        "ewald_offset_y": 13,
-        "ewald_offset_z": 14,
+        "peak" : 5,
+        "background" : 6,
+        "XDET": 7,
+        "YDET": 8,
+        "s1x": 9,
+        "s1y": 10,
+        "s1z": 11,
+        "ewald_offset": 12,
+        "angular_ewald_offset": 13,
+        "ewald_offset_x": 14,
+        "ewald_offset_y": 15,
+        "ewald_offset_z": 16,
     }
 
     def __init__(self, filename: str, encoding="utf-8"):
@@ -235,12 +239,14 @@ class StreamLoader(object):
         """Keys which can be passed to parallel_read_crystfel to customize the crystal level metadata"""
         return list(self.re_crystal_metadata.keys())
 
-    def parallel_read_crystfel(
+    def read_crystfel(
         self,
         wavelength=None,
         chunk_metadata_keys=None,
         crystal_metadata_keys=None,
         peak_list_columns=None,
+        num_cpus=None,
+        use_ray=True,
         **ray_kwargs,
     ) -> list:
         """
@@ -261,6 +267,10 @@ class StreamLoader(object):
         peak_list_columns : list
             A list of columns to include in the peak list numpy arrays.
             A list of possible column names is stored as stream_loader.available_column_names.
+        use_ray : bool(optional)
+            Whether or not to use ray for parallelization. 
+        num_cpus : int (optional)
+            The number of cpus for ray to use. 
         ray_kwargs : optional
             Additional keyword arguments to pass to [ray.init](https://docs.ray.io/en/latest/ray-core/api/doc/ray.init.html#ray.init).
 
@@ -275,16 +285,26 @@ class StreamLoader(object):
         if peak_list_columns is not None:
             peak_list_columns = [self.peak_list_columns[s] for s in peak_list_columns]
 
+        # Check whether ray is available
+        if use_ray:
+            if find_spec('ray') is None:
+                use_ray = False
+                import warnings
+                message = (
+                    "ray (https://www.ray.io/) is not available..." 
+                    "Falling back to serial stream file parser."
+                )
+                warnings.warn(message, ImportWarning)
+
         with open(self.filename, "r") as f:
             memfile = mmap.mmap(f.fileno(), 0, access=mmap.ACCESS_READ)
             beginnings_and_ends = zip(
                 self.block_regex_bytes["chunk_begin"].finditer(memfile),
                 self.block_regex_bytes["chunk_end"].finditer(memfile),
             )
-            try:
+            if use_ray:
                 import ray
-
-                ray.init(**ray_kwargs)
+                ray.init(num_cpus=num_cpus, **ray_kwargs)
 
                 @ray.remote
                 def parse_chunk(loader: StreamLoader, *args):
@@ -306,12 +326,9 @@ class StreamLoader(object):
 
                 results = ray.get(result_ids)
                 ray.shutdown()
+                return results
 
-            except ModuleNotFoundError:
-                import warnings
-
-                msg = "ray (https://www.ray.io/) not found, cannot load in parallel... falling back to single cpu"
-                warnings.warn(msg)
+            else:
                 results = []
                 for begin, end in beginnings_and_ends:
                     results.append(
@@ -446,7 +463,7 @@ class StreamLoader(object):
 
 
 def read_crystfel(
-    streamfile: str, spacegroup=None, encoding="utf-8", columns=None, **ray_kwargs
+    streamfile: str, spacegroup=None, encoding="utf-8", columns=None, parallel=True, num_cpus=None, **ray_kwargs
 ) -> DataSet:
     """
     Initialize attributes and populate the DataSet object with data from a CrystFEL stream with indexed reflections.
@@ -470,6 +487,11 @@ def read_crystfel(
             [ "H", "K", "L", "I", "SigI", "BATCH", "s1x", "s1y", "s1z", "ewald_offset",
             "angular_ewald_offset", "XDET", "YDET" ]
         See `rs.io.crystfel.StreamLoader().available_column_names` for a list of available column names.
+    parallel : bool (optional)
+        Read the stream file in parallel using [ray.io](https://docs.ray.io) if it is available. 
+    num_cpus : int (optional)
+        By default, the model will use all available cores. For very large cpu counts, this may consume
+        too much memory. Decreasing num_cpus may help. If ray is not installed, a single core will be used.
     ray_kwargs : optional
         Additional keyword arguments to pass to [ray.init](https://docs.ray.io/en/latest/ray-core/api/doc/ray.init.html#ray.init).
 
@@ -497,9 +519,9 @@ def read_crystfel(
             "XDET",
             "YDET",
         ]
-        peak_list_columns = [
-            i for i in columns if i != "BATCH"
-        ]  # BATCH is computed afterward
+    peak_list_columns = [
+        i for i in columns if i != "BATCH"
+    ]  # BATCH is computed afterward
 
     loader = StreamLoader(streamfile, encoding=encoding)
     cell = loader.extract_target_unit_cell()
@@ -507,8 +529,8 @@ def read_crystfel(
     batch = 0
     batch_array = []
     data = []
-    for chunk in loader.parallel_read_crystfel(
-        peak_list_columns=peak_list_columns, **ray_kwargs
+    for chunk in loader.read_crystfel(
+        peak_list_columns=peak_list_columns, use_ray=parallel, num_cpus=num_cpus, **ray_kwargs
     ):
         for peak_list in chunk["peak_lists"]:
             data.append(peak_list)
