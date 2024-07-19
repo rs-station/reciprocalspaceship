@@ -1,5 +1,5 @@
-import re
 import mmap
+import re
 from os.path import getsize
 from typing import Union
 
