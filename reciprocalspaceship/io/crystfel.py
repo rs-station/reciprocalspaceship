@@ -1,5 +1,6 @@
 import mmap
 import re
+from contextlib import contextmanager
 from importlib.util import find_spec
 from typing import Union
 
@@ -8,8 +9,6 @@ import numpy as np
 
 from reciprocalspaceship import DataSeries, DataSet, concat
 from reciprocalspaceship.utils import angle_between, eV2Angstroms
-
-from contextlib import contextmanager
 
 # See Rupp Table 5-2
 _cell_constraints = {
@@ -60,14 +59,17 @@ _block_markers = {
     "reflections": (r"Reflections measured after indexing", r"End of reflections"),
 }
 
+
 @contextmanager
 def ray_context(**ray_kwargs):
     import ray
+
     ray.init(**ray_kwargs)
     try:
         yield ray
     finally:
         ray.shutdown()
+
 
 class StreamLoader(object):
     """
@@ -320,6 +322,7 @@ class StreamLoader(object):
             )
             if use_ray:
                 with ray_context(num_cpus=num_cpus, **ray_kwargs) as ray:
+
                     @ray.remote
                     def parse_chunk(loader: StreamLoader, *args):
                         return loader._parse_chunk(*args)
@@ -483,7 +486,7 @@ def read_crystfel(
     columns=None,
     parallel=True,
     num_cpus=None,
-    address='local',
+    address="local",
     **ray_kwargs,
 ) -> DataSet:
     """
@@ -514,7 +517,7 @@ def read_crystfel(
         By default, the model will use all available cores. For very large cpu counts, this may consume
         too much memory. Decreasing num_cpus may help. If ray is not installed, a single core will be used.
     address : str (optional)
-        Optionally specify the ray instance to connect to. By default, start a new local instance. 
+        Optionally specify the ray instance to connect to. By default, start a new local instance.
     ray_kwargs : optional
         Additional keyword arguments to pass to [ray.init](https://docs.ray.io/en/latest/ray-core/api/doc/ray.init.html#ray.init).
 
@@ -523,6 +526,7 @@ def read_crystfel(
     rs.DataSet
     """
     from time import time
+
     start = time()
     if not streamfile.endswith(".stream"):
         raise ValueError("Stream file should end with .stream")
@@ -557,7 +561,7 @@ def read_crystfel(
         "BATCH": "B",
     }
     for k in columns:
-        mtz_dtypes[k] = mtz_dtypes.get(k, 'R')
+        mtz_dtypes[k] = mtz_dtypes.get(k, "R")
 
     loader = StreamLoader(streamfile, encoding=encoding)
     cell = loader.extract_target_unit_cell()
@@ -581,7 +585,7 @@ def read_crystfel(
                 spacegroup=spacegroup,
                 merged=False,
             )
-            _ds['BATCH'] = batch
+            _ds["BATCH"] = batch
             ds.append(_ds)
             batch += 1
 
@@ -596,7 +600,7 @@ def read_crystfel(
         "BATCH": "B",
     }
     for k in ds:
-        mtz_dtypes[k] = mtz_dtypes.get(k, 'R')
+        mtz_dtypes[k] = mtz_dtypes.get(k, "R")
 
     ds = ds.astype(mtz_dtypes, copy=False)
     ds.set_index(["H", "K", "L"], inplace=True)
