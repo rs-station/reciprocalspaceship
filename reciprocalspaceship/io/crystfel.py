@@ -6,8 +6,10 @@ from typing import Union
 import gemmi
 import numpy as np
 
-from reciprocalspaceship import DataSeries, DataSet
+from reciprocalspaceship import DataSeries, DataSet, concat
 from reciprocalspaceship.utils import angle_between, eV2Angstroms
+
+from contextlib import contextmanager
 
 # See Rupp Table 5-2
 _cell_constraints = {
@@ -58,6 +60,14 @@ _block_markers = {
     "reflections": (r"Reflections measured after indexing", r"End of reflections"),
 }
 
+@contextmanager
+def ray_context(**ray_kwargs):
+    import ray
+    ray.init(**ray_kwargs)
+    try:
+        yield ray
+    finally:
+        ray.shutdown()
 
 class StreamLoader(object):
     """
@@ -249,8 +259,9 @@ class StreamLoader(object):
         chunk_metadata_keys=None,
         crystal_metadata_keys=None,
         peak_list_columns=None,
-        num_cpus=None,
         use_ray=True,
+        num_cpus=None,
+        address="local",
         **ray_kwargs,
     ) -> list:
         """
@@ -308,30 +319,27 @@ class StreamLoader(object):
                 self.block_regex_bytes["chunk_end"].finditer(memfile),
             )
             if use_ray:
-                import ray
+                with ray_context(num_cpus=num_cpus, **ray_kwargs) as ray:
+                    @ray.remote
+                    def parse_chunk(loader: StreamLoader, *args):
+                        return loader._parse_chunk(*args)
 
-                ray.init(num_cpus=num_cpus, **ray_kwargs)
-
-                @ray.remote
-                def parse_chunk(loader: StreamLoader, *args):
-                    return loader._parse_chunk(*args)
-
-                result_ids = []
-                for begin, end in beginnings_and_ends:
-                    result_ids.append(
-                        parse_chunk.remote(
-                            self,
-                            begin.start(),
-                            end.end(),
-                            wavelength,
-                            chunk_metadata_keys,
-                            crystal_metadata_keys,
-                            peak_list_columns,
+                    result_ids = []
+                    for begin, end in beginnings_and_ends:
+                        result_ids.append(
+                            parse_chunk.remote(
+                                self,
+                                begin.start(),
+                                end.end(),
+                                wavelength,
+                                chunk_metadata_keys,
+                                crystal_metadata_keys,
+                                peak_list_columns,
+                            )
                         )
-                    )
 
-                results = ray.get(result_ids)
-                ray.shutdown()
+                    results = ray.get(result_ids)
+
                 return results
 
             else:
@@ -475,6 +483,7 @@ def read_crystfel(
     columns=None,
     parallel=True,
     num_cpus=None,
+    address='local',
     **ray_kwargs,
 ) -> DataSet:
     """
@@ -504,6 +513,8 @@ def read_crystfel(
     num_cpus : int (optional)
         By default, the model will use all available cores. For very large cpu counts, this may consume
         too much memory. Decreasing num_cpus may help. If ray is not installed, a single core will be used.
+    address : str (optional)
+        Optionally specify the ray instance to connect to. By default, start a new local instance. 
     ray_kwargs : optional
         Additional keyword arguments to pass to [ray.init](https://docs.ray.io/en/latest/ray-core/api/doc/ray.init.html#ray.init).
 
@@ -511,6 +522,8 @@ def read_crystfel(
     --------
     rs.DataSet
     """
+    from time import time
+    start = time()
     if not streamfile.endswith(".stream"):
         raise ValueError("Stream file should end with .stream")
 
@@ -535,28 +548,6 @@ def read_crystfel(
         i for i in columns if i != "BATCH"
     ]  # BATCH is computed afterward
 
-    loader = StreamLoader(streamfile, encoding=encoding)
-    cell = loader.extract_target_unit_cell()
-
-    batch = 0
-    batch_array = []
-    data = []
-    for chunk in loader.read_crystfel(
-        peak_list_columns=peak_list_columns,
-        use_ray=parallel,
-        num_cpus=num_cpus,
-        **ray_kwargs,
-    ):
-        for peak_list in chunk["peak_lists"]:
-            data.append(peak_list)
-            batch_array.append(np.ones(len(peak_list)) * batch)
-            batch += 1
-
-    data = np.concatenate(data, axis=0)
-    batch = np.concatenate(batch_array)
-
-    # d, cell = _parse_stream(streamfile, start, stop)
-    # df = pd.DataFrame.from_records(list(d.values()))
     mtz_dtypes = {
         "H": "H",
         "K": "H",
@@ -565,24 +556,49 @@ def read_crystfel(
         "SigI": "Q",
         "BATCH": "B",
     }
-
-    # Start from an empty data set to minimize memory usage
-    ds = DataSet(
-        spacegroup=spacegroup,
-        cell=cell,
-        merged=False,
-    )
-
-    idx = 0
     for k in columns:
-        dt = mtz_dtypes.get(k, "R")
-        if k != "BATCH":
-            datum = data[:, idx]
-            idx += 1
-        else:
-            datum = batch
-        ds[k] = DataSeries(datum, dtype=dt)
+        mtz_dtypes[k] = mtz_dtypes.get(k, 'R')
 
+    loader = StreamLoader(streamfile, encoding=encoding)
+    cell = loader.extract_target_unit_cell()
+
+    batch = 0
+    batch_array = []
+    ds = []
+
+    for chunk in loader.read_crystfel(
+        peak_list_columns=peak_list_columns,
+        use_ray=parallel,
+        num_cpus=num_cpus,
+        address=address,
+        **ray_kwargs,
+    ):
+        for peak_list in chunk["peak_lists"]:
+            _ds = DataSet(
+                peak_list,
+                columns=peak_list_columns,
+                cell=cell,
+                spacegroup=spacegroup,
+                merged=False,
+            )
+            _ds['BATCH'] = batch
+            ds.append(_ds)
+            batch += 1
+
+    ds = concat(ds, axis=0, check_isomorphous=False, copy=False, ignore_index=True)
+
+    mtz_dtypes = {
+        "H": "H",
+        "K": "H",
+        "L": "H",
+        "I": "J",
+        "SigI": "Q",
+        "BATCH": "B",
+    }
+    for k in ds:
+        mtz_dtypes[k] = mtz_dtypes.get(k, 'R')
+
+    ds = ds.astype(mtz_dtypes, copy=False)
     ds.set_index(["H", "K", "L"], inplace=True)
 
     return ds
