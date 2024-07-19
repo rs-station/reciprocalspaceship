@@ -1,5 +1,5 @@
 import re
-from mmap import mmap
+import mmap
 from os.path import getsize
 from typing import Union
 
@@ -195,8 +195,8 @@ class StreamLoader(object):
         Compute the average of all cell parameters across the file.
         """
         regex = re.compile(rb"Cell parameters .+\n")
-        with open(self.filename, "r+") as f:
-            memfile = mmap(f.fileno(), 0)
+        with open(self.filename, "r") as f:
+            memfile = mmap.mmap(f.fileno(), 0, access=mmap.ACCESS_READ)
             lines = regex.findall(memfile)
         cell = np.loadtxt(lines, usecols=[2, 3, 4, 6, 7, 8], dtype="float32").mean(0)
         cell[:3] *= 10.0
@@ -216,8 +216,8 @@ class StreamLoader(object):
         """
         Extract all the data prior to first chunk and return it as a string.
         """
-        with open(self.filename, "r+") as f:
-            memfile = mmap(f.fileno(), 0)
+        with open(self.filename, "r") as f:
+            memfile = mmap.mmap(f.fileno(), 0, access=mmap.ACCESS_READ)
             match = self.block_regex_bytes["chunk_begin"].search(memfile)
             header = memfile.read(match.start()).decode()
         return header
@@ -277,8 +277,8 @@ class StreamLoader(object):
         if peak_list_columns is not None:
             peak_list_columns = [self.peak_list_columns[s] for s in peak_list_columns]
 
-        with open(self.filename, "r+") as f:
-            memfile = mmap(f.fileno(), 0)
+        with open(self.filename, "r") as f:
+            memfile = mmap.mmap(f.fileno(), 0, access=mmap.ACCESS_READ)
             beginnings_and_ends = zip(
                 self.block_regex_bytes["chunk_begin"].finditer(memfile),
                 self.block_regex_bytes["chunk_end"].finditer(memfile),
