@@ -7,7 +7,7 @@ from typing import Union
 import gemmi
 import numpy as np
 
-from reciprocalspaceship import DataSeries, DataSet, concat
+from reciprocalspaceship import DataSet, concat
 from reciprocalspaceship.utils import angle_between, eV2Angstroms
 
 # See Rupp Table 5-2
