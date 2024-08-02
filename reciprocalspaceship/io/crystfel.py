@@ -567,7 +567,6 @@ def read_crystfel(
     cell = loader.extract_target_unit_cell()
 
     batch = 0
-    batch_array = []
     ds = []
 
     for chunk in loader.read_crystfel(
