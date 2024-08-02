@@ -525,9 +525,6 @@ def read_crystfel(
     --------
     rs.DataSet
     """
-    from time import time
-
-    start = time()
     if not streamfile.endswith(".stream"):
         raise ValueError("Stream file should end with .stream")
 
