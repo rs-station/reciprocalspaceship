@@ -8,7 +8,7 @@
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=80d5e7a1" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=19f00094" />
       <link rel="stylesheet" type="text/css" href="../../_static/custom.css?v=5712473c" />
-      <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.min.css?v=87e54e7c" />
+      <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.min.css?v=95c83b7e" />
 
   
     <link rel="shortcut icon" href="../../_static/rs-favicon_32x32.png"/>
@@ -106,14 +106,31 @@
 <h1>reciprocalspaceship.read_crystfel<a class="headerlink" href="#reciprocalspaceship-read-crystfel" title="Link to this heading"></a></h1>
 <dl class="py function">
 <dt class="sig sig-object py" id="reciprocalspaceship.read_crystfel">
-<span class="sig-prename descclassname"><span class="pre">reciprocalspaceship.</span></span><span class="sig-name descname"><span class="pre">read_crystfel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">streamfile</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">spacegroup</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="reciprocalspaceship.DataSet.html#reciprocalspaceship.DataSet" title="reciprocalspaceship.dataset.DataSet"><span class="pre">DataSet</span></a></span></span><a class="reference external" href="https://github.com/rs-station/reciprocalspaceship/blob/main/reciprocalspaceship/io/crystfel.py#L217-L270"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#reciprocalspaceship.read_crystfel" title="Link to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">reciprocalspaceship.</span></span><span class="sig-name descname"><span class="pre">read_crystfel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">streamfile</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">spacegroup</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">encoding</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'utf-8'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">columns</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parallel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_cpus</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">address</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'local'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">ray_kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="reciprocalspaceship.DataSet.html#reciprocalspaceship.DataSet" title="reciprocalspaceship.dataset.DataSet"><span class="pre">DataSet</span></a></span></span><a class="reference external" href="https://github.com/rs-station/reciprocalspaceship/blob/main/reciprocalspaceship/io/crystfel.py#L482-L604"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#reciprocalspaceship.read_crystfel" title="Link to this definition"></a></dt>
 <dd><p>Initialize attributes and populate the DataSet object with data from a CrystFEL stream with indexed reflections.
 This is the output format used by CrystFEL software when processing still diffraction data.</p>
-<dl class="field-list simple">
+<p>This method is parallelized across CPUs speed up parsing. Parallelization depends on the ray library (<a class="reference external" href="https://www.ray.io/">https://www.ray.io/</a>).
+If ray is unavailable, this method falls back to serial processing on one CPU. Ray is not a dependency of reciprocalspaceship
+and will not be installed automatically. Users must manually install it prior to calling this method.</p>
+<dl class="field-list">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
+<dd class="field-odd"><ul>
 <li><p><strong>streamfile</strong> (<em>str</em>) – name of a .stream file</p></li>
 <li><p><strong>spacegroup</strong> (<em>gemmi.SpaceGroup or int or string (optional)</em>) – optionally set the spacegroup of the returned DataSet.</p></li>
+<li><p><strong>encoding</strong> (<em>str</em>) – The type of byte-encoding (optional, ‘utf-8’).</p></li>
+<li><p><strong>columns</strong> (<em>list (optional)</em>) – Optionally specify the columns of the output by a list of strings.
+The default list is:</p>
+<blockquote>
+<div><p>[ “H”, “K”, “L”, “I”, “SigI”, “BATCH”, “s1x”, “s1y”, “s1z”, “ewald_offset”,
+“angular_ewald_offset”, “XDET”, “YDET” ]</p>
+</div></blockquote>
+<p>See <cite>rs.io.crystfel.StreamLoader().available_column_names</cite> for a list of available column names.</p>
+</li>
+<li><p><strong>parallel</strong> (<em>bool (optional)</em>) – Read the stream file in parallel using [ray.io](<a class="reference external" href="https://docs.ray.io">https://docs.ray.io</a>) if it is available.</p></li>
+<li><p><strong>num_cpus</strong> (<em>int (optional)</em>) – By default, the model will use all available cores. For very large cpu counts, this may consume
+too much memory. Decreasing num_cpus may help. If ray is not installed, a single core will be used.</p></li>
+<li><p><strong>address</strong> (<em>str (optional)</em>) – Optionally specify the ray instance to connect to. By default, start a new local instance.</p></li>
+<li><p><strong>ray_kwargs</strong> (<em>optional</em>) – Additional keyword arguments to pass to [ray.init](<a class="reference external" href="https://docs.ray.io/en/latest/ray-core/api/doc/ray.init.html#ray.init">https://docs.ray.io/en/latest/ray-core/api/doc/ray.init.html#ray.init</a>).</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
