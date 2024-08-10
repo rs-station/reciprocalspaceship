@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 import glob
-import ray
 
+import ray
 
 from reciprocalspaceship.utils import cctbx_to_rs as to_rs
 
@@ -13,12 +13,14 @@ def main():
     assert args.ucell is not None
     assert args.symbol is not None
 
-    fnames = glob.glob(args.dirname+"/*integrated.refl")
+    fnames = glob.glob(args.dirname + "/*integrated.refl")
     print("Found %d files" % len(fnames))
 
     ray.init(num_cpus=args.nj)
     get_paths_inds = ray.remote(to_rs.get_paths_inds)
-    paths_inds = ray.get( [get_paths_inds.remote(fnames, rank, args.nj) for rank in range(args.nj) ])
+    paths_inds = ray.get(
+        [get_paths_inds.remote(fnames, rank, args.nj) for rank in range(args.nj)]
+    )
 
     # flatten fnames and paths_inds
     paths_inds = [pi for pis in paths_inds for pi in pis]
@@ -30,18 +32,28 @@ def main():
 
     # get the refl data
     get_refl_data = ray.remote(to_rs.get_refl_data)
-    refl_data = ray.get( [get_refl_data.remote(fnames, batch_map, args.batchFromFilename, rank, args.nj) \
-        for rank in range(args.nj)])
+    refl_data = ray.get(
+        [
+            get_refl_data.remote(
+                fnames, batch_map, args.batchFromFilename, rank, args.nj
+            )
+            for rank in range(args.nj)
+        ]
+    )
 
     reda = to_rs.ReflData()
     for other in refl_data:
         reda.extend(other)
-        print("Combining refl data from all processes (%d total refls)" % len(reda.h), end="\r", flush=True)
+        print(
+            "Combining refl data from all processes (%d total refls)" % len(reda.h),
+            end="\r",
+            flush=True,
+        )
     print("\nDone combining!")
-            
+
     rs = to_rs.reda_to_rs(reda, args.symbol, args.ucell, args.mtz)
     print("Done!")
 
 
-if __name__=="__main__":
+if __name__ == "__main__":
     main()
