@@ -3,6 +3,7 @@ import glob
 import ray
 
 
+import reciprocalspaceship as rs
 from reciprocalspaceship.utils import cctbx_to_rs as to_rs
 
 
@@ -17,29 +18,23 @@ def main():
     print("Found %d files" % len(fnames))
 
     ray.init(num_cpus=args.nj)
-    get_paths_inds = ray.remote(to_rs.get_paths_inds)
-    paths_inds = ray.get( [get_paths_inds.remote(fnames, rank, args.nj) for rank in range(args.nj) ])
-
-    # flatten fnames and paths_inds
-    paths_inds = [pi for pis in paths_inds for pi in pis]
-
-    print("Found data for %d unique images" % len(paths_inds))
-
-    # create batch mapper:
-    batch_map = {path_ind: i for i, path_ind in enumerate(paths_inds)}
 
     # get the refl data
     get_refl_data = ray.remote(to_rs.get_refl_data)
-    refl_data = ray.get( [get_refl_data.remote(fnames, batch_map, args.batchFromFilename, rank, args.nj) \
+    refl_data = ray.get( [get_refl_data.remote(fnames, args.ucell, args.symbol, rank, args.nj) \
         for rank in range(args.nj)])
+    refl_data = [ds for ds in refl_data if ds is not None]
 
-    reda = to_rs.ReflData()
-    for other in refl_data:
-        reda.extend(other)
-        print("Combining refl data from all processes (%d total refls)" % len(reda.h), end="\r", flush=True)
-    print("\nDone combining!")
-            
-    rs = to_rs.reda_to_rs(reda, args.symbol, args.ucell, args.mtz)
+    print("Combining tables!")
+    ds = rs.concat(refl_data)
+    expt_ids = set(ds.BATCH)
+    print(f"Found {len(ds)} refls from {len(expt_ids)} expts.")
+    print("Mapping batch column.")
+    expt_id_map = {name:i for i,name in enumerate(expt_ids)}
+    ds.BATCH = [expt_id_map[eid] for eid in ds.BATCH]
+    
+    ds.infer_mtz_dtypes().set_index(["H","K","L"], drop=True).write_mtz(args.mtz)
+    print("Wrote %s." % args.mtz)
     print("Done!")
 
 
