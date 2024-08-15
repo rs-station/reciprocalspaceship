@@ -406,6 +406,7 @@ class DataSet(pd.DataFrame):
         """
         return cls(gemmiMtz)
 
+    @range_indexed
     def to_gemmi(
         self,
         skip_problem_mtztypes=False,

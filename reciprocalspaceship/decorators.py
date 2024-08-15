@@ -3,6 +3,7 @@ from inspect import signature
 
 import gemmi
 import numpy as np
+import reciprocalspaceship as rs
 
 
 def inplace(f):
@@ -49,6 +50,9 @@ def range_indexed(f):
         if result is None:
             ds._index_from_names(names, inplace=True)
             return
+        if not isinstance(result, rs.DataSet):
+            ds._index_from_names(names, inplace=True)
+            return result
         result = result._index_from_names(names, inplace=True)
         ds = ds._index_from_names(names, inplace=True)
         return result.__finalize__(ds)
