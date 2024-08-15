@@ -223,3 +223,16 @@ def test_write_mtz_names(IOtest_mtz, project_name, crystal_name, dataset_name):
 
     # Clean up
     temp.close()
+
+
+@pytest.mark.parametrize("range_indexed", [True, False])
+def test_write_mtz_rangeindexed(data_merged, range_indexed):
+    """
+    GH#255: Test DataSet.write_mtz() with pd.RangeIndex index.
+    """
+    if range_indexed:
+        data_merged = data_merged.reset_index()
+
+    with tempfile.NamedTemporaryFile(suffix=".mtz") as temp:
+        data_merged.write_mtz(temp.name)
+        assert exists(temp.name)
