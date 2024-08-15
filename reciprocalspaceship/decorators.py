@@ -46,6 +46,9 @@ def range_indexed(f):
         names = ds.index.names
         ds = ds._index_from_names([None], inplace=True)
         result = f(ds, *args, **kwargs)
+        if result is None:
+            ds._index_from_names(names, inplace=True)
+            return
         result = result._index_from_names(names, inplace=True)
         ds = ds._index_from_names(names, inplace=True)
         return result.__finalize__(ds)

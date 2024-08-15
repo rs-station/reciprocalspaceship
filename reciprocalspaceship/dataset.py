@@ -575,6 +575,7 @@ class DataSet(pd.DataFrame):
         result = super().join(*args, **kwargs)
         return result.__finalize__(self)
 
+    @range_indexed
     def write_mtz(
         self,
         mtzfile,
