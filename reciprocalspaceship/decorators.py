@@ -3,6 +3,7 @@ from inspect import signature
 
 import gemmi
 import numpy as np
+
 import reciprocalspaceship as rs
 
 
