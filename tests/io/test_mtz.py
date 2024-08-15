@@ -236,3 +236,19 @@ def test_write_mtz_rangeindexed(data_merged, range_indexed):
     with tempfile.NamedTemporaryFile(suffix=".mtz") as temp:
         data_merged.write_mtz(temp.name)
         assert exists(temp.name)
+
+
+@pytest.mark.parametrize("range_indexed", [True, False])
+def test_to_gemmi_rangeindexed(data_merged, range_indexed):
+    """
+    GH#255: Test DataSet.to_gemmi() with pd.RangeIndex index.
+    """
+    if range_indexed:
+        data_merged = data_merged.reset_index()
+
+    mtz = data_merged.to_gemmi()
+    data_roundtrip = rs.DataSet.from_gemmi(mtz)
+    if range_indexed:
+        data_roundtrip = data_roundtrip.reset_index()
+
+    assert_frame_equal(data_merged, data_roundtrip)
