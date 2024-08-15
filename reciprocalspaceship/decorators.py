@@ -49,12 +49,10 @@ def range_indexed(f):
         ds = ds._index_from_names([None], inplace=True)
         result = f(ds, *args, **kwargs)
         ds = ds._index_from_names(names, inplace=True)
-        if result is None:
-            return
-        if not isinstance(result, rs.DataSet):
-            return result
-        result = result._index_from_names(names, inplace=True)
-        return result.__finalize__(ds)
+        if isinstance(result, rs.DataSet):
+            result = result._index_from_names(names, inplace=True)
+            result = result.__finalize__(ds)
+        return result
 
     return wrapped
 
