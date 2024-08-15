@@ -142,7 +142,6 @@ def to_gemmi(
             columns.append(c)
         # Special case for CENTRIC and PARTIAL flags
         elif cseries.dtype.name == "bool" and c in ["CENTRIC", "PARTIAL"]:
-            dataset[c] = dataset[c].astype("MTZInt")
             mtz.add_column(label=c, type="I")
             columns.append(c)
         elif skip_problem_mtztypes:
