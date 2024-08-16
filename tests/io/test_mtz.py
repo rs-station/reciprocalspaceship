@@ -223,3 +223,48 @@ def test_write_mtz_names(IOtest_mtz, project_name, crystal_name, dataset_name):
 
     # Clean up
     temp.close()
+
+
+@pytest.mark.parametrize("range_indexed", [True, False])
+def test_write_mtz_rangeindexed(data_hewl, range_indexed):
+    """
+    GH#255: Test DataSet.write_mtz() with pd.RangeIndex index.
+    """
+    # Add centrics column to test relevant code paths
+    data_hewl.label_centrics(inplace=True)
+
+    if range_indexed:
+        data_hewl = data_hewl.reset_index()
+
+    data_before = data_hewl.copy()
+
+    with tempfile.NamedTemporaryFile(suffix=".mtz") as temp:
+        data_hewl.write_mtz(temp.name)
+        assert exists(temp.name)
+
+    # Make sure writing MTZ did not alter calling DataSet
+    assert_frame_equal(data_hewl, data_before, check_like=True)
+
+
+@pytest.mark.parametrize("range_indexed", [True, False])
+def test_to_gemmi_rangeindexed(data_hewl, range_indexed):
+    """
+    GH#255: Test DataSet.to_gemmi() with pd.RangeIndex index.
+    """
+    # Add centrics column to test relevant code paths
+    data_hewl.label_centrics(inplace=True)
+
+    if range_indexed:
+        data_hewl = data_hewl.reset_index()
+
+    data_before = data_hewl.copy()
+
+    mtz = data_hewl.to_gemmi()
+    data_roundtrip = rs.DataSet.from_gemmi(mtz)
+    if range_indexed:
+        data_roundtrip = data_roundtrip.reset_index()
+
+    assert_frame_equal(data_hewl, data_roundtrip)
+
+    # Make sure writing MTZ did not alter calling DataSet
+    assert_frame_equal(data_hewl, data_before, check_like=True)
