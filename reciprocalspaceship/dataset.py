@@ -258,7 +258,14 @@ class DataSet(pd.DataFrame):
         )
 
     def reset_index(
-        self, level=None, drop=False, inplace=False, col_level=0, col_fill=""
+        self,
+        level=None,
+        drop=False,
+        inplace=False,
+        col_level=0,
+        col_fill="",
+        allow_duplicates=lib.no_default,
+        names=None,
     ):
         """
         Reset the index or a specific level of a MultiIndex.
@@ -281,6 +288,12 @@ class DataSet(pd.DataFrame):
         col_fill : object
             If the columns have multiple levels, determines how the other
             levels are named. If None then the index name is repeated.
+        allow_duplicates : bool
+            Allow duplicate column labels to be created.
+        names : int, str, tuple, list
+            Using the given string, rename the DataSet column which contains the
+            index data. If the DataSet has a MultiIndex, this has to be a list or
+            tuple with length equal to the number of levels.
 
         Returns
         -------
@@ -317,6 +330,8 @@ class DataSet(pd.DataFrame):
                 inplace=inplace,
                 col_level=col_level,
                 col_fill=col_fill,
+                allow_duplicates=allow_duplicates,
+                names=names,
             )
             _handle_cached_dtypes(self, columns, drop)
             return
@@ -327,6 +342,8 @@ class DataSet(pd.DataFrame):
                 inplace=inplace,
                 col_level=col_level,
                 col_fill=col_fill,
+                allow_duplicates=allow_duplicates,
+                names=names,
             )
             dataset._index_dtypes = dataset._index_dtypes.copy()
             dataset = _handle_cached_dtypes(dataset, columns, drop)
