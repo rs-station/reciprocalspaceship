@@ -4,6 +4,18 @@ import pandas as pd
 import pytest
 from pandas.testing import assert_frame_equal
 
+import reciprocalspaceship as rs
+
+
+def test_reset_index_dataseries():
+    """
+    Minimal example from GH#223
+    """
+    result = rs.DataSeries(range(10)).reset_index()
+    expected = pd.Series(range(10)).reset_index()
+    expected = rs.DataSet(expected)
+    assert_frame_equal(result, expected)
+
 
 def test_reset_index_signature(dataset_hkl):
     """
