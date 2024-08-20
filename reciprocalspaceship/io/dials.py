@@ -38,7 +38,29 @@ def get_msgpack_data(data, name):
     return vals.T
 
 
-def get_refl_data(fnames, ucell, symbol, rank=0, size=1):
+def get_fnames(dirnames):
+    fnames = []
+    for dirname in dirnames:
+        fnames += glob.glob(dirname + "/*integrated.refl")
+    print("Found %d files" % len(fnames))
+    return fnames
+
+
+def _concat(refl_data):
+    refl_data = [ds for ds in refl_data if ds is not None]
+    """combine output of _get_refl_data"""
+    print("Combining tables!")
+    ds = rs.concat(refl_data)
+    expt_ids = set(ds.BATCH)
+    print(f"Found {len(ds)} refls from {len(expt_ids)} expts.")
+    print("Mapping batch column.")
+    expt_id_map = {name: i for i, name in enumerate(expt_ids)}
+    ds.BATCH = [expt_id_map[eid] for eid in ds.BATCH]
+    ds = ds.infer_mtz_dtypes().set_index(["H", "K", "L"], drop=True)
+    return ds
+
+
+def _get_refl_data(fnames, ucell, symbol, rank=0, size=1):
     """
 
     Parameters
@@ -115,26 +137,14 @@ def read_dials_stills(dirnames, ucell, symbol, nj=10):
     -------
     RS dataset (pandas Dataframe)
     """
-    fnames = []
-    for dirname in dirnames:
-        fnames += glob.glob(dirname + "/*integrated.refl")
-    print("Found %d files" % len(fnames))
+    fnames = get_fnames(dirnames)
     ray.init(num_cpus=nj)
 
     # get the refl data
-    _get_refl_data = ray.remote(get_refl_data)
+    get_refl_data = ray.remote(_get_refl_data)
     refl_data = ray.get(
-        [_get_refl_data.remote(fnames, ucell, symbol, rank, nj) for rank in range(nj)]
+        [get_refl_data.remote(fnames, ucell, symbol, rank, nj) for rank in range(nj)]
     )
-    refl_data = [ds for ds in refl_data if ds is not None]
 
-    print("Combining tables!")
-    ds = rs.concat(refl_data)
-    expt_ids = set(ds.BATCH)
-    print(f"Found {len(ds)} refls from {len(expt_ids)} expts.")
-    print("Mapping batch column.")
-    expt_id_map = {name: i for i, name in enumerate(expt_ids)}
-    ds.BATCH = [expt_id_map[eid] for eid in ds.BATCH]
-
-    ds = ds.infer_mtz_dtypes().set_index(["H", "K", "L"], drop=True)
+    ds = _concat(refl_data)
     return ds
