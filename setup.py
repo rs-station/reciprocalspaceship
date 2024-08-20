@@ -88,8 +88,7 @@ setup(
     },
     entry_points={
         "console_scripts": [
-            "rs.mtzdump=reciprocalspaceship.commandline.mtzdump:main",
-            "rs.cctbx2rs=reciprocalspaceship.commandline.cctbx2rs:main",
+            "rs.mtzdump=reciprocalspaceship.commandline.mtzdump:main"
         ]
     },
     classifiers=[

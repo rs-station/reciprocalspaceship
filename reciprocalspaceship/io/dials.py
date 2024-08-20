@@ -1,11 +1,9 @@
 import glob
-import os
-from argparse import ArgumentDefaultsHelpFormatter, ArgumentParser
-from copy import deepcopy
 
 import gemmi
 import msgpack
 import numpy as np
+import ray
 
 import reciprocalspaceship as rs
 
@@ -19,26 +17,18 @@ MSGPACK_DTYPES = {
 }
 
 
-def get_parser():
-    parser = ArgumentParser(formatter_class=ArgumentDefaultsHelpFormatter)
-    parser.add_argument(
-        "dirname",
-        type=str,
-        help="diffBragg.stills_process output folder with integrated.refls",
-    )
-    parser.add_argument("mtz", type=str, help="output mtz name")
-    parser.add_argument(
-        "--ucell",
-        default=None,
-        nargs=6,
-        type=float,
-        help="unit cell params (default will be average experiment crystal)",
-    )
-    parser.add_argument("--symbol", type=str, default=None)
-    return parser
-
-
 def get_msgpack_data(data, name):
+    """
+
+    Parameters
+    ----------
+    data: msgpack data dict
+    name: msgpack data key
+
+    Returns
+    -------
+    numpy array of values
+    """
     dtype, (num, buff) = data[name]
     if dtype in MSGPACK_DTYPES:
         dtype = MSGPACK_DTYPES[dtype]
@@ -50,12 +40,19 @@ def get_msgpack_data(data, name):
 
 def get_refl_data(fnames, ucell, symbol, rank=0, size=1):
     """
-    :param fnames: integrated reflection table files
-    :ucell: 6 unit cell constants (ang,ang,ang,deg,deg,deg)
-    :symbol: space group symbol (e.g. P6)
-    :param rank: process id
-    :param size: process pool size
-    :return:
+
+    Parameters
+    ----------
+    fnames: integrated refl fioles
+    ucell: unit cell tuple (6 params Ang,Ang,Ang,deg,deg,deg)
+    symbol: space group name e.g. P4
+    rank: process Id [0-N) where N is num proc
+    size: total number of proc (N)
+
+    Returns
+    -------
+    RS dataset (pandas Dataframe)
+
     """
 
     sg_num = gemmi.find_spacegroup_by_name(symbol).number
@@ -69,7 +66,6 @@ def get_refl_data(fnames, ucell, symbol, rank=0, size=1):
         _, _, R = msgpack.load(open(f, "rb"), strict_map_key=False)
         refl_data = R["data"]
         expt_id_map = R["identifiers"]
-        col_names = list(refl_data.keys())
         h, k, l = get_msgpack_data(refl_data, "miller_index")
         (I,) = get_msgpack_data(refl_data, "intensity.sum.value")
         (sigI,) = get_msgpack_data(refl_data, "intensity.sum.variance")
@@ -103,3 +99,42 @@ def get_refl_data(fnames, ucell, symbol, rank=0, size=1):
     else:
         all_ds = None
     return all_ds
+
+
+def read_dials_stills(dirnames, ucell, symbol, nj=10):
+    """
+
+    Parameters
+    ----------
+    dirnames: folders containing stills process results (integrated.refl)
+    ucell: unit cell tuple (6 params Ang,Ang,Ang,deg,deg,deg)
+    symbol: space group name e.g. P4
+    nj: number of jobs
+
+    Returns
+    -------
+    RS dataset (pandas Dataframe)
+    """
+    fnames = []
+    for dirname in dirnames:
+        fnames += glob.glob(dirname + "/*integrated.refl")
+    print("Found %d files" % len(fnames))
+    ray.init(num_cpus=nj)
+
+    # get the refl data
+    _get_refl_data = ray.remote(get_refl_data)
+    refl_data = ray.get(
+        [_get_refl_data.remote(fnames, ucell, symbol, rank, nj) for rank in range(nj)]
+    )
+    refl_data = [ds for ds in refl_data if ds is not None]
+
+    print("Combining tables!")
+    ds = rs.concat(refl_data)
+    expt_ids = set(ds.BATCH)
+    print(f"Found {len(ds)} refls from {len(expt_ids)} expts.")
+    print("Mapping batch column.")
+    expt_id_map = {name: i for i, name in enumerate(expt_ids)}
+    ds.BATCH = [expt_id_map[eid] for eid in ds.BATCH]
+
+    ds = ds.infer_mtz_dtypes().set_index(["H", "K", "L"], drop=True)
+    return ds
