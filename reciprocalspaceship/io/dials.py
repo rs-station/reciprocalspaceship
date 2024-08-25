@@ -139,9 +139,7 @@ def read_dials_stills(fnames, unitcell, spacegroup, numjobs=10):
     -------
     RS dataset (pandas Dataframe)
     """
-    ray.init(
-        num_cpus=numjobs, log_to_driver=LOGGER.level == logging.DEBUG
-    )  # LOGGER.level==logging.DEBUG) #.DEBUG if verbose else logging.CRITICAL)
+    ray.init(num_cpus=numjobs, log_to_driver=LOGGER.level == logging.DEBUG)
 
     # get the refl data
     get_refl_data = ray.remote(_get_refl_data)
