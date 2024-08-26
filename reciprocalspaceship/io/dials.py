@@ -2,16 +2,17 @@ import logging
 
 import msgpack
 import numpy as np
-import ray
 
 LOGGER = logging.getLogger("rs.io.dials")
-console = logging.StreamHandler()
-console.setLevel(logging.INFO)
-LOGGER.addHandler(console)
-LOGGER.setLevel(logging.INFO)
+if not LOGGER.handlers:
+    LOGGER.setLevel(logging.DEBUG)
+    console = logging.StreamHandler()
+    console.setLevel(logging.DEBUG)
+    LOGGER.addHandler(console)
 
 import reciprocalspaceship as rs
 from reciprocalspaceship.decorators import cellify, spacegroupify
+from reciprocalspaceship.io.common import check_for_ray, set_ray_loglevel
 
 MSGPACK_DTYPES = {
     "double": np.float64,
@@ -45,10 +46,13 @@ def get_msgpack_data(data, name):
 
 
 def _concat(refl_data):
-    refl_data = [ds for ds in refl_data if ds is not None]
     """combine output of _get_refl_data"""
-    LOGGER.debug("Combining tables!")
-    ds = rs.concat(refl_data)
+    LOGGER.debug("Combining and formatting tables!")
+    if isinstance(refl_data, rs.DataSet):
+        ds = refl_data
+    else:
+        refl_data = [ds for ds in refl_data if ds is not None]
+        ds = rs.concat(refl_data)
     expt_ids = set(ds.BATCH)
     LOGGER.debug(f"Found {len(ds)} refls from {len(expt_ids)} expts.")
     LOGGER.debug("Mapping batch column.")
@@ -84,7 +88,7 @@ def _get_refl_data(fnames, unitcell, spacegroup, rank=0, size=1):
             continue
 
         if rank == 0:
-            LOGGER.info(f"Loading {i_f+1}/{len(fnames)}")
+            LOGGER.debug(f"Loading {i_f+1}/{len(fnames)}")
         _, _, R = msgpack.load(open(f, "rb"), strict_map_key=False)
         refl_data = R["data"]
         expt_id_map = R["identifiers"]
@@ -123,9 +127,14 @@ def _get_refl_data(fnames, unitcell, spacegroup, rank=0, size=1):
     return all_ds
 
 
+def _read_dials_stills_skip_ray(*args, **kwargs):
+    """run read_dials_stills without trying to import ray"""
+    return _concat(_get_refl_data(*args, **kwargs))
+
+
 @cellify
 @spacegroupify
-def read_dials_stills(fnames, unitcell, spacegroup, numjobs=10):
+def read_dials_stills_ray(fnames, unitcell, spacegroup, numjobs=10):
     """
 
     Parameters
@@ -139,16 +148,23 @@ def read_dials_stills(fnames, unitcell, spacegroup, numjobs=10):
     -------
     RS dataset (pandas Dataframe)
     """
-    ray.init(num_cpus=numjobs, log_to_driver=LOGGER.level == logging.DEBUG)
+    if not check_for_ray():
+        refl_data = _get_refl_data(fnames, unitcell, spacegroup)
+    else:
+        import ray
 
-    # get the refl data
-    get_refl_data = ray.remote(_get_refl_data)
-    refl_data = ray.get(
-        [
-            get_refl_data.remote(fnames, unitcell, spacegroup, rank, numjobs)
-            for rank in range(numjobs)
-        ]
-    )
+        # importing resets log level
+        set_ray_loglevel(LOGGER.level)
+        ray.init(num_cpus=numjobs, log_to_driver=LOGGER.level == logging.DEBUG)
+
+        # get the refl data
+        get_refl_data = ray.remote(_get_refl_data)
+        refl_data = ray.get(
+            [
+                get_refl_data.remote(fnames, unitcell, spacegroup, rank, numjobs)
+                for rank in range(numjobs)
+            ]
+        )
 
     ds = _concat(refl_data)
     return ds
