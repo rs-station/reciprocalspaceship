@@ -127,7 +127,7 @@ def _get_refl_data(fnames, unitcell, spacegroup, rank=0, size=1):
     return all_ds
 
 
-def _read_dials_stills_skip_ray(*args, **kwargs):
+def _read_dials_stills_serial(*args, **kwargs):
     """run read_dials_stills without trying to import ray"""
     return _concat(_get_refl_data(*args, **kwargs))
 
