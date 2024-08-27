@@ -168,3 +168,35 @@ def read_dials_stills_ray(fnames, unitcell, spacegroup, numjobs=10):
 
     ds = _concat(refl_data)
     return ds
+
+
+@cellify
+@spacegroupify
+def read_dials_stills(fnames, unitcell, spacegroup, numjobs=10, parallel_backend=None):
+    """
+    Parameters
+    ----------
+    fnames: filenames
+    unitcell: unit cell tuple, Gemmi unit cell obj
+    spacegroup: space group symbol eg P4
+    numjobs: if backend==ray, specify the number of jobs (ignored if backend==mpi)
+    parallel_backend: ray, mpi, or None
+
+    Returns
+    -------
+    rs dataset (pandas Dataframe)
+    """
+    if parallel_backend not in ["ray", "mpi", None]:
+        raise NotImplementedError("parallel_backend should be ray, mpi, or none")
+
+    kwargs = {"fnames": fnames, "unitcell": unitcell, "spacegroup": spacegroup}
+    reader = _read_dials_stills_serial
+    if parallel_backend == "ray":
+        kwargs["numjobs"] = numjobs
+        reader = read_dials_stills_ray
+    elif parallel_backend == "mpi":
+        from reciprocalspaceship.io.common import check_for_mpi
+
+        if check_for_mpi():
+            from reciprocalspaceship.io.dials_mpi import read_dials_stills_mpi as reader
+    return reader(**kwargs)
