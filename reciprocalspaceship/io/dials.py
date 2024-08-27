@@ -2,6 +2,7 @@ import logging
 
 import msgpack
 import numpy as np
+import pandas
 
 LOGGER = logging.getLogger("rs.io.dials")
 if not LOGGER.handlers:
@@ -23,6 +24,18 @@ MSGPACK_DTYPES = {
     "std::size_t": np.intp,
 }
 
+DEFAULT_COLS = [
+    "miller_index",
+    "intensity.sum.value",
+    "intensity.sum.variance",
+    "xyzcal.px",
+    "s1",
+    "delpsical.rad",
+    "id",
+]
+
+REQ_COLS = {"miller_index", "id"}
+
 
 def get_msgpack_data(data, name):
     """
@@ -42,7 +55,12 @@ def get_msgpack_data(data, name):
     else:
         dtype = None
     vals = np.frombuffer(buff, dtype).reshape((num, -1))
-    return vals.T
+    data_dict = {}
+    for i, col_data in enumerate(vals.T):
+        data_dict[f"{name}.{i}"] = col_data
+    if len(data_dict) == 1:
+        data_dict[name] = data_dict.pop(f"{name}.0")
+    return data_dict
 
 
 def _concat(refl_data):
@@ -58,13 +76,20 @@ def _concat(refl_data):
     LOGGER.debug("Mapping batch column.")
     expt_id_map = {name: i for i, name in enumerate(expt_ids)}
     ds.BATCH = [expt_id_map[eid] for eid in ds.BATCH]
+    rename_map = {"miller_index.0": "H", "miller_index.1": "K", "miller_index.2": "L"}
+    for name in list(ds):
+        if "variance" in name:
+            rename_map[name] = name.replace("variance", "sigma")
+            ds[name] = np.sqrt(ds[name]).astype("Q")
+    ds.rename(columns=rename_map, inplace=True)
+
     ds = ds.infer_mtz_dtypes().set_index(["H", "K", "L"], drop=True)
     return ds
 
 
 @cellify
 @spacegroupify
-def _get_refl_data(fnames, unitcell, spacegroup, rank=0, size=1):
+def _get_refl_data(fnames, unitcell, spacegroup, rank=0, size=1, extra_cols=None):
     """
 
     Parameters
@@ -74,6 +99,7 @@ def _get_refl_data(fnames, unitcell, spacegroup, rank=0, size=1):
     spacegroup: space group name e.g. P4
     rank: process Id [0-N) where N is num proc
     size: total number of proc (N)
+    extra_cols: list of additional columns to read
 
     Returns
     -------
@@ -89,35 +115,27 @@ def _get_refl_data(fnames, unitcell, spacegroup, rank=0, size=1):
 
         if rank == 0:
             LOGGER.debug(f"Loading {i_f+1}/{len(fnames)}")
-        _, _, R = msgpack.load(open(f, "rb"), strict_map_key=False)
-        refl_data = R["data"]
-        expt_id_map = R["identifiers"]
-        h, k, l = get_msgpack_data(refl_data, "miller_index")
-        (I,) = get_msgpack_data(refl_data, "intensity.sum.value")
-        (sigI,) = get_msgpack_data(refl_data, "intensity.sum.variance")
-        x, y, _ = get_msgpack_data(refl_data, "xyzcal.px")
-        sx, sy, sz = get_msgpack_data(refl_data, "s1")
-        (dpsi,) = get_msgpack_data(refl_data, "delpsical.rad")
-        (local_id,) = get_msgpack_data(refl_data, "id")
-        global_id = np.array([expt_id_map[li] for li in local_id])
+        pack = _get_refl_pack(f)
+        refl_data = pack["data"]
+        expt_id_map = pack["identifiers"]
+
+        if "miller_index" not in refl_data:
+            raise IOError("refl table must have a miller_index column")
+
+        ds_data = {}
+        col_names = DEFAULT_COLS if extra_cols is None else DEFAULT_COLS + extra_cols
+        for col_name in col_names:
+            if col_name in refl_data:
+                col_data = get_msgpack_data(refl_data, col_name)
+                ds_data = {**col_data, **ds_data}
+
+        if "id" in ds_data:
+            ds_data["BATCH"] = np.array([expt_id_map[li] for li in ds_data.pop("id")])
         ds = rs.DataSet(
-            {
-                "H": h,
-                "K": k,
-                "L": l,
-                "BATCH": global_id,
-                "DPSI": dpsi,
-                "I": I,
-                "SigI": sigI,
-                "X": x,
-                "Y": y,
-            },
+            ds_data,
             cell=unitcell,
             spacegroup=spacegroup,
         )
-        ds["SX"] = sx
-        ds["SY"] = sy
-        ds["SZ"] = sz
         ds["PARTIAL"] = True
         all_ds.append(ds)
     if all_ds:
@@ -134,7 +152,7 @@ def _read_dials_stills_serial(*args, **kwargs):
 
 @cellify
 @spacegroupify
-def read_dials_stills_ray(fnames, unitcell, spacegroup, numjobs=10):
+def read_dials_stills_ray(fnames, unitcell, spacegroup, numjobs=10, extra_cols=None):
     """
 
     Parameters
@@ -143,13 +161,14 @@ def read_dials_stills_ray(fnames, unitcell, spacegroup, numjobs=10):
     unitcell: unit cell tuple (6 params Ang,Ang,Ang,deg,deg,deg)
     spacegroup: space group name e.g. P4
     numjobs: number of jobs
+    extra_cols: list of additional columns to read from refl tables
 
     Returns
     -------
     RS dataset (pandas Dataframe)
     """
     if not check_for_ray():
-        refl_data = _get_refl_data(fnames, unitcell, spacegroup)
+        refl_data = _get_refl_data(fnames, unitcell, spacegroup, extra_cols=extra_cols)
     else:
         import ray
 
@@ -161,7 +180,9 @@ def read_dials_stills_ray(fnames, unitcell, spacegroup, numjobs=10):
         get_refl_data = ray.remote(_get_refl_data)
         refl_data = ray.get(
             [
-                get_refl_data.remote(fnames, unitcell, spacegroup, rank, numjobs)
+                get_refl_data.remote(
+                    fnames, unitcell, spacegroup, rank, numjobs, extra_cols
+                )
                 for rank in range(numjobs)
             ]
         )
@@ -172,7 +193,9 @@ def read_dials_stills_ray(fnames, unitcell, spacegroup, numjobs=10):
 
 @cellify
 @spacegroupify
-def read_dials_stills(fnames, unitcell, spacegroup, numjobs=10, parallel_backend=None):
+def read_dials_stills(
+    fnames, unitcell, spacegroup, numjobs=10, parallel_backend=None, extra_cols=None
+):
     """
     Parameters
     ----------
@@ -181,6 +204,8 @@ def read_dials_stills(fnames, unitcell, spacegroup, numjobs=10, parallel_backend
     spacegroup: space group symbol eg P4
     numjobs: if backend==ray, specify the number of jobs (ignored if backend==mpi)
     parallel_backend: ray, mpi, or None
+    extra_cols: list of additional column names to extract from the refltables. By default, this method will search for
+        miller_index, id, s1, xyzcal.px, intensity.sum.value, intensity.sum.variance, delpsical.rad
 
     Returns
     -------
@@ -189,7 +214,12 @@ def read_dials_stills(fnames, unitcell, spacegroup, numjobs=10, parallel_backend
     if parallel_backend not in ["ray", "mpi", None]:
         raise NotImplementedError("parallel_backend should be ray, mpi, or none")
 
-    kwargs = {"fnames": fnames, "unitcell": unitcell, "spacegroup": spacegroup}
+    kwargs = {
+        "fnames": fnames,
+        "unitcell": unitcell,
+        "spacegroup": spacegroup,
+        "extra_cols": extra_cols,
+    }
     reader = _read_dials_stills_serial
     if parallel_backend == "ray":
         kwargs["numjobs"] = numjobs
@@ -200,3 +230,40 @@ def read_dials_stills(fnames, unitcell, spacegroup, numjobs=10, parallel_backend
         if check_for_mpi():
             from reciprocalspaceship.io.dials_mpi import read_dials_stills_mpi as reader
     return reader(**kwargs)
+
+
+def _get_refl_pack(filename):
+    pack = msgpack.load(open(filename, "rb"), strict_map_key=False)
+    try:
+        assert len(pack) == 3
+        _, _, pack = pack
+    except (TypeError, AssertionError):
+        raise IOError("File does not appear to be dials::af::reflection_table")
+    return pack
+
+
+def print_refl_info(reflfile):
+    """print contents of `fname`, a reflection table file saved with DIALS"""
+    pack = _get_refl_pack(reflfile)
+    if "identifiers" in pack:
+        idents = pack["identifiers"]
+        print(f"\nFound {len(idents)} experiment identifiers in {reflfile}:")
+        for i, ident in idents.items():
+            print(f"\t{i}: {ident}")
+    if "data" in pack:
+        data = pack["data"]
+        columns = []
+        col_space = 0
+        for name in data:
+            dtype, (_, buff) = data[name]
+            columns.append((name, dtype))
+            col_space = max(len(dtype), len(name), col_space)
+        names, dtypes = zip(*columns)
+        df = pandas.DataFrame({"names": names, "dtypes": dtypes})
+        print(
+            "\nReflection contents:\n"
+            + df.to_string(index=False, col_space=col_space + 5, justify="center")
+        )
+
+    if "nrows" in pack:
+        print(f"\nNumber of reflections: {pack['nrows']} \n")
