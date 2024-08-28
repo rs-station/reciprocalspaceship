@@ -37,6 +37,18 @@ DEFAULT_COLS = [
 REQ_COLS = {"miller_index", "id"}
 
 
+def _set_logger(verbose):
+    level = logging.CRITICAL
+    if verbose:
+        level = logging.DEBUG
+
+    for log_name in ("rs.io.dials", "ray"):
+        logger = logging.getLogger(log_name)
+        logger.setLevel(level)
+        for handler in logger.handlers:
+            handler.setLevel(level)
+
+
 def get_msgpack_data(data, name):
     """
 
@@ -194,7 +206,13 @@ def read_dials_stills_ray(fnames, unitcell, spacegroup, numjobs=10, extra_cols=N
 @cellify
 @spacegroupify
 def read_dials_stills(
-    fnames, unitcell, spacegroup, numjobs=10, parallel_backend=None, extra_cols=None
+    fnames,
+    unitcell,
+    spacegroup,
+    numjobs=10,
+    parallel_backend=None,
+    extra_cols=None,
+    verbose=False,
 ):
     """
     Parameters
@@ -206,11 +224,14 @@ def read_dials_stills(
     parallel_backend: ray, mpi, or None
     extra_cols: list of additional column names to extract from the refltables. By default, this method will search for
         miller_index, id, s1, xyzcal.px, intensity.sum.value, intensity.sum.variance, delpsical.rad
+    verbose: whether to print stdout
 
     Returns
     -------
     rs dataset (pandas Dataframe)
     """
+    _set_logger(verbose)
+
     if parallel_backend not in ["ray", "mpi", None]:
         raise NotImplementedError("parallel_backend should be ray, mpi, or none")
 
