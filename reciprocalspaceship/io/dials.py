@@ -65,13 +65,16 @@ def get_msgpack_data(data, name):
     if dtype in MSGPACK_DTYPES:
         dtype = MSGPACK_DTYPES[dtype]
     else:
-        dtype = None
+        dtype = None  # should we warn here ?
     vals = np.frombuffer(buff, dtype).reshape((num, -1))
     data_dict = {}
     for i, col_data in enumerate(vals.T):
         data_dict[f"{name}.{i}"] = col_data
+
+    # remove the .0 suffix if data is a scalar type
     if len(data_dict) == 1:
         data_dict[name] = data_dict.pop(f"{name}.0")
+
     return data_dict
 
 
@@ -91,10 +94,15 @@ def _concat(refl_data):
     rename_map = {"miller_index.0": "H", "miller_index.1": "K", "miller_index.2": "L"}
     for name in list(ds):
         if "variance" in name:
-            rename_map[name] = name.replace("variance", "sigma")
+            new_name = name.replace("variance", "sigma")
+            rename_map[name] = new_name
             ds[name] = np.sqrt(ds[name]).astype("Q")
+            LOGGER.debug(
+                f"Converted column {name} to MTZ-Type Q, took sqrt of the values, and renamed to {new_name}."
+            )
     ds.rename(columns=rename_map, inplace=True)
 
+    LOGGER.debug("Inferring MTZ types...")
     ds = ds.infer_mtz_dtypes().set_index(["H", "K", "L"], drop=True)
     return ds
 
