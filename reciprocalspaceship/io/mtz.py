@@ -133,16 +133,15 @@ def to_gemmi(
     mtz.datasets[0].dataset_name = dataset_name
 
     # Construct data for Mtz object
-    temp = dataset.reset_index()
+    # GH#255: DataSet is provided using the range_indexed decorator
     columns = []
-    for c in temp.columns:
-        cseries = temp[c]
+    for c in dataset.columns:
+        cseries = dataset[c]
         if isinstance(cseries.dtype, MTZDtype):
             mtz.add_column(label=c, type=cseries.dtype.mtztype)
             columns.append(c)
         # Special case for CENTRIC and PARTIAL flags
         elif cseries.dtype.name == "bool" and c in ["CENTRIC", "PARTIAL"]:
-            temp[c] = temp[c].astype("MTZInt")
             mtz.add_column(label=c, type="I")
             columns.append(c)
         elif skip_problem_mtztypes:
@@ -152,7 +151,7 @@ def to_gemmi(
                 f"column {c} of type {cseries.dtype} cannot be written to an MTZ file. "
                 f"To skip columns without explicit MTZ dtypes, set skip_problem_mtztypes=True"
             )
-    mtz.set_data(temp[columns].to_numpy(dtype="float32"))
+    mtz.set_data(dataset[columns].to_numpy(dtype="float32"))
 
     # Handle Unmerged data
     if not dataset.merged and not all_in_asu:

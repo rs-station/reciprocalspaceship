@@ -4,6 +4,8 @@ from inspect import signature
 import gemmi
 import numpy as np
 
+import reciprocalspaceship as rs
+
 
 def inplace(f):
     """
@@ -46,9 +48,11 @@ def range_indexed(f):
         names = ds.index.names
         ds = ds._index_from_names([None], inplace=True)
         result = f(ds, *args, **kwargs)
-        result = result._index_from_names(names, inplace=True)
         ds = ds._index_from_names(names, inplace=True)
-        return result.__finalize__(ds)
+        if isinstance(result, rs.DataSet):
+            result = result._index_from_names(names, inplace=True)
+            result = result.__finalize__(ds)
+        return result
 
     return wrapped
 

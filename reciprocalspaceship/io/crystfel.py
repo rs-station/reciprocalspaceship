@@ -502,7 +502,8 @@ def read_crystfel(
         The default list is:
             [ "H", "K", "L", "I", "SigI", "BATCH", "s1x", "s1y", "s1z", "ewald_offset",
             "angular_ewald_offset", "XDET", "YDET" ]
-        See `rs.io.crystfel.StreamLoader().available_column_names` for a list of available column names.
+        See `rs.io.crystfel.StreamLoader().available_column_names` for a list of available
+        column names and *Notes* for a description of the returned columns
     parallel : bool (optional)
         Read the stream file in parallel using [ray.io](https://docs.ray.io) if it is available.
     num_cpus : int (optional)
@@ -516,6 +517,18 @@ def read_crystfel(
     Returns
     --------
     rs.DataSet
+
+    Notes
+    -----
+    The following columns are included in the returned DataSet object:
+
+        - H, K, L: Miller indices of each reflection
+        - I, SigI: Intensity and associated uncertainty
+        - BATCH: Image number
+        - s1x, s1y, s1z: scattered beam wavevector which points from the sample to the bragg peak
+        - ewald_offset: the distance in cartesian space (1/angstroms) between the observed reflection and the ewald sphere
+        - angular_ewald_offset: the distance in polar coordinates (degrees) between the observed reflection and the ewald sphere
+        - XDET, YDET: Internal detector panel coordinates
     """
     if not streamfile.endswith(".stream"):
         raise ValueError("Stream file should end with .stream")
