@@ -1,4 +1,5 @@
 import logging
+import sys
 
 import msgpack
 import numpy as np
@@ -7,7 +8,7 @@ import pandas
 LOGGER = logging.getLogger("rs.io.dials")
 if not LOGGER.handlers:
     LOGGER.setLevel(logging.DEBUG)
-    console = logging.StreamHandler()
+    console = logging.StreamHandler(stream=sys.stdout)
     console.setLevel(logging.DEBUG)
     LOGGER.addHandler(console)
 
@@ -147,6 +148,8 @@ def _get_refl_data(fnames, unitcell, spacegroup, rank=0, size=1, extra_cols=None
         for col_name in col_names:
             if col_name in refl_data:
                 col_data = get_msgpack_data(refl_data, col_name)
+                if rank == 0:
+                    LOGGER.debug(f"... Read in data for {col_name}")
                 ds_data = {**col_data, **ds_data}
 
         if "id" in ds_data:
@@ -206,6 +209,7 @@ def read_dials_stills_ray(fnames, unitcell, spacegroup, numjobs=10, extra_cols=N
                 for rank in range(numjobs)
             ]
         )
+        ray.shutdown()
 
     ds = _concat(refl_data)
     return ds
