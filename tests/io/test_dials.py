@@ -167,11 +167,9 @@ def test_verbosity():
     assert not other_out.getvalue()
     assert not logger_out.getvalue()
 
-    other_out = io.StringIO()
-    with redirect_stdout(other_out):
-        read_dials_stills(
-            pack_names, ds.cell, ds.spacegroup, parallel_backend=None, verbose=True
-        )
+    read_dials_stills(
+        pack_names, ds.cell, ds.spacegroup, parallel_backend=None, verbose=True
+    )
 
     assert logger_out.getvalue()
 
