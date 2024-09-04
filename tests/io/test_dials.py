@@ -173,6 +173,10 @@ def test_verbosity():
 
     assert logger_out.getvalue()
 
+    # cleanup
+    for f in pack_names:
+        os.remove(f)
+
 
 if __name__ == "__main__":
     test_verbosity()

@@ -35,8 +35,6 @@ DEFAULT_COLS = [
     "id",
 ]
 
-REQ_COLS = {"miller_index", "id"}
-
 
 def _set_logger(verbose):
     level = logging.CRITICAL
