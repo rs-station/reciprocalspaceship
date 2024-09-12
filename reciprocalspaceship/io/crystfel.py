@@ -1,12 +1,12 @@
 import mmap
 import re
-from contextlib import contextmanager
 from typing import Union
 
 import gemmi
 import numpy as np
 
 from reciprocalspaceship import DataSet, concat
+from reciprocalspaceship.context_managers import ray_context
 from reciprocalspaceship.io.common import check_for_ray
 from reciprocalspaceship.utils import angle_between, eV2Angstroms
 
@@ -58,17 +58,6 @@ _block_markers = {
     "crystal": (r"--- Begin crystal", r"--- End crystal"),
     "reflections": (r"Reflections measured after indexing", r"End of reflections"),
 }
-
-
-@contextmanager
-def ray_context(**ray_kwargs):
-    import ray
-
-    ray.init(**ray_kwargs)
-    try:
-        yield ray
-    finally:
-        ray.shutdown()
 
 
 class StreamLoader(object):

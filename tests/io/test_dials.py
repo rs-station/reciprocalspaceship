@@ -8,10 +8,16 @@ import gemmi
 import msgpack
 import numpy as np
 import pandas
+import pytest
 
 import reciprocalspaceship as rs
 from reciprocalspaceship.io import read_dials_stills
 
+class DummyComm():
+    rank = 0
+    size = 1
+    def gather(self, x):
+        return [x]
 
 def make_refls(unit_cell, sg, seed=8675309, file_prefix=''):
     np.random.seed(seed)
@@ -93,10 +99,14 @@ def make_refls(unit_cell, sg, seed=8675309, file_prefix=''):
     return ds0, pack_names
 
 
-def test_dials_reader(verbose=False):
+@pytest.mark.parametrize('parallel_backend', ['mpi', 'ray'])
+def test_dials_reader(parallel_backend, verbose=False):
 
     unit_cell = 78, 78, 235, 90, 90, 120
     sg = "P6522"
+    comm = None
+    if parallel_backend == 'mpi':
+        comm = DummyComm()
 
     with tempfile.TemporaryDirectory() as tdir:
         prefix = tdir + '/'
@@ -115,9 +125,10 @@ def test_dials_reader(verbose=False):
             pack_names,
             gemmi_unit_cell,
             gemmi_sg,
-            parallel_backend="ray",
+            parallel_backend=parallel_backend,
             numjobs=2,
             verbose=verbose,
+            comm=comm
         )
         assert ds1.equals(ds2)
         assert "xyz.0" not in ds2
@@ -127,10 +138,11 @@ def test_dials_reader(verbose=False):
             pack_names,
             gemmi_unit_cell,
             gemmi_sg,
-            parallel_backend="ray",
+            parallel_backend=parallel_backend,
             numjobs=2,
             extra_cols=["xyz", "global_refl_index"],
             verbose=verbose,
+            comm=comm
         )
         assert "xyz.0" in ds3
         ds3.reset_index(inplace=True)

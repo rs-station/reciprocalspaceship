@@ -47,7 +47,6 @@ def _set_logger(verbose):
         for handler in logger.handlers:
             handler.setLevel(level)
 
-
 def get_msgpack_data(data, name):
     """
 
@@ -75,7 +74,6 @@ def get_msgpack_data(data, name):
         data_dict[name] = data_dict.pop(f"{name}.0")
 
     return data_dict
-
 
 def _concat(refl_data):
     """combine output of _get_refl_data"""
@@ -105,19 +103,14 @@ def _concat(refl_data):
     ds = ds.infer_mtz_dtypes().set_index(["H", "K", "L"], drop=True)
     return ds
 
-
-@cellify
-@spacegroupify
-def _get_refl_data(fnames, unitcell, spacegroup, rank=0, size=1, extra_cols=None):
+def _get_refl_data(fname, unitcell, spacegroup, extra_cols=None):
     """
 
     Parameters
     ----------
-    fnames: integrated refl fioles
-    unitcell: unit cell tuple (6 params Ang,Ang,Ang,deg,deg,deg)
-    spacegroup: space group name e.g. P4
-    rank: process Id [0-N) where N is num proc
-    size: total number of proc (N)
+    fname: integrated refl file
+    unitcell: gemmi.UnitCell instance
+    spacegroup: gemmi.SpaceGroup instance
     extra_cols: list of additional columns to read
 
     Returns
@@ -125,62 +118,45 @@ def _get_refl_data(fnames, unitcell, spacegroup, rank=0, size=1, extra_cols=None
     RS dataset (pandas Dataframe)
 
     """
+    LOGGER.debug(f"Loading {fname}")
+    pack = _get_refl_pack(fname)
+    refl_data = pack["data"]
+    expt_id_map = pack["identifiers"]
 
-    all_ds = []
+    if "miller_index" not in refl_data:
+        raise IOError("refl table must have a miller_index column")
 
-    for i_f, f in enumerate(fnames):
-        if i_f % size != rank:
-            continue
+    ds_data = {}
+    col_names = DEFAULT_COLS if extra_cols is None else DEFAULT_COLS + extra_cols
+    for col_name in col_names:
+        if col_name in refl_data:
+            col_data = get_msgpack_data(refl_data, col_name)
+            LOGGER.debug(f"... Read in data for {col_name}")
+            ds_data = {**col_data, **ds_data}
 
-        if rank == 0:
-            LOGGER.debug(f"Loading {i_f+1}/{len(fnames)}")
-        pack = _get_refl_pack(f)
-        refl_data = pack["data"]
-        expt_id_map = pack["identifiers"]
+    if "id" in ds_data:
+        ds_data["BATCH"] = np.array([expt_id_map[li] for li in ds_data.pop("id")])
+    ds = rs.DataSet(
+        ds_data,
+        cell=unitcell,
+        spacegroup=spacegroup,
+    )
+    ds["PARTIAL"] = True
+    return ds
 
-        if "miller_index" not in refl_data:
-            raise IOError("refl table must have a miller_index column")
-
-        ds_data = {}
-        col_names = DEFAULT_COLS if extra_cols is None else DEFAULT_COLS + extra_cols
-        for col_name in col_names:
-            if col_name in refl_data:
-                col_data = get_msgpack_data(refl_data, col_name)
-                if rank == 0:
-                    LOGGER.debug(f"... Read in data for {col_name}")
-                ds_data = {**col_data, **ds_data}
-
-        if "id" in ds_data:
-            ds_data["BATCH"] = np.array([expt_id_map[li] for li in ds_data.pop("id")])
-        ds = rs.DataSet(
-            ds_data,
-            cell=unitcell,
-            spacegroup=spacegroup,
-        )
-        ds["PARTIAL"] = True
-        all_ds.append(ds)
-    if all_ds:
-        all_ds = rs.concat(all_ds)
-    else:
-        all_ds = None
-    return all_ds
-
-
-def _read_dials_stills_serial(*args, **kwargs):
+def _read_dials_stills_serial(fnames, unitcell, spacegroup, extra_cols=None, **kwargs):
     """run read_dials_stills without trying to import ray"""
-    return _concat(_get_refl_data(*args, **kwargs))
+    result = [_get_refl_data(fname, unitcell, spacegroup, extra_cols) for fname in fnames]
+    return result
 
-
-@cellify
-@spacegroupify
-def read_dials_stills_ray(fnames, unitcell, spacegroup, numjobs=10, extra_cols=None):
+def _read_dials_stills_ray(fnames, unitcell, spacegroup, numjobs=10, extra_cols=None):
     """
 
     Parameters
     ----------
     fnames: integration files
-    unitcell: unit cell tuple (6 params Ang,Ang,Ang,deg,deg,deg)
-    spacegroup: space group name e.g. P4
+    unitcell: gemmi.UnitCell instance
+    spacegroup: gemmi.SpaceGroup instance
     numjobs: number of jobs
     extra_cols: list of additional columns to read from refl tables
 
@@ -188,30 +164,19 @@ def read_dials_stills_ray(fnames, unitcell, spacegroup, numjobs=10, extra_cols=N
     -------
     RS dataset (pandas Dataframe)
     """
-    if not check_for_ray():
-        refl_data = _get_refl_data(fnames, unitcell, spacegroup, extra_cols=extra_cols)
-    else:
-        import ray
-
-        # importing resets log level
-        set_ray_loglevel(LOGGER.level)
-        ray.init(num_cpus=numjobs, log_to_driver=LOGGER.level == logging.DEBUG)
-
+    from reciprocalspaceship.io.common import ray_context
+    with ray_context(log_level=LOGGER.level, num_cpus=numjobs, log_to_driver=LOGGER.level == logging.DEBUG) as ray:
         # get the refl data
         get_refl_data = ray.remote(_get_refl_data)
         refl_data = ray.get(
             [
                 get_refl_data.remote(
-                    fnames, unitcell, spacegroup, rank, numjobs, extra_cols
+                    fname, unitcell, spacegroup, extra_cols
                 )
-                for rank in range(numjobs)
+                for fname in fnames
             ]
         )
-        ray.shutdown()
-
-    ds = _concat(refl_data)
-    return ds
-
+    return refl_data
 
 @cellify
 @spacegroupify
@@ -223,6 +188,7 @@ def read_dials_stills(
     parallel_backend=None,
     extra_cols=None,
     verbose=False,
+    comm=None,
 ):
     """
     Parameters
@@ -235,6 +201,7 @@ def read_dials_stills(
     extra_cols: list of additional column names to extract from the refltables. By default, this method will search for
         miller_index, id, s1, xyzcal.px, intensity.sum.value, intensity.sum.variance, delpsical.rad
     verbose: whether to print stdout
+    comm: optionally override the communicator used by backend='mpi'
 
     Returns
     -------
@@ -254,14 +221,18 @@ def read_dials_stills(
     reader = _read_dials_stills_serial
     if parallel_backend == "ray":
         kwargs["numjobs"] = numjobs
-        reader = read_dials_stills_ray
+        from reciprocalspaceship.io.common import check_for_ray
+        if check_for_ray():
+            reader = _read_dials_stills_ray
     elif parallel_backend == "mpi":
         from reciprocalspaceship.io.common import check_for_mpi
-
         if check_for_mpi():
             from reciprocalspaceship.io.dials_mpi import read_dials_stills_mpi as reader
-    return reader(**kwargs)
-
+            kwargs['comm'] = comm
+    result = reader(**kwargs)
+    if result is not None:
+        result = _concat(result)
+    return result
 
 def _get_refl_pack(filename):
     pack = msgpack.load(open(filename, "rb"), strict_map_key=False)
@@ -271,7 +242,6 @@ def _get_refl_pack(filename):
     except (TypeError, AssertionError):
         raise IOError("File does not appear to be dials::af::reflection_table")
     return pack
-
 
 def print_refl_info(reflfile):
     """print contents of `fname`, a reflection table file saved with DIALS"""
