@@ -1,16 +1,19 @@
+from itertools import chain
+
 from reciprocalspaceship.decorators import cellify, spacegroupify
 from reciprocalspaceship.io import dials
-from itertools import chain
+
 
 def mpi_starmap(comm, func, iterable):
     results = []
-    for i,item in enumerate(iterable):
+    for i, item in enumerate(iterable):
         if i % comm.size == comm.rank:
             results.append(func(*item))
     results = comm.gather(results)
     if comm.rank == 0:
         return chain.from_iterable(results)
     return None
+
 
 @cellify
 @spacegroupify
@@ -31,11 +34,11 @@ def read_dials_stills_mpi(fnames, unitcell, spacegroup, extra_cols=None, comm=No
     """
     if comm is None:
         from mpi4py import MPI
+
         comm = MPI.COMM_WORLD
     ds = mpi_starmap(
         comm,
-        dials._get_refl_data, 
+        dials._get_refl_data,
         ((f, unitcell, spacegroup, extra_cols) for f in fnames),
     )
     return ds
-

@@ -1,7 +1,8 @@
 import logging
 import warnings
-from importlib.util import find_spec
 from contextlib import contextmanager
+from importlib.util import find_spec
+
 
 def set_ray_loglevel(level):
     logger = logging.getLogger("ray")
@@ -35,14 +36,14 @@ def check_for_mpi():
         warnings.warn(message, ImportWarning)
         return False
 
+
 @contextmanager
 def ray_context(log_level="DEBUG", **ray_kwargs):
     import ray
+
     set_ray_loglevel(log_level)
     ray.init(**ray_kwargs)
     try:
         yield ray
     finally:
         ray.shutdown()
-
-

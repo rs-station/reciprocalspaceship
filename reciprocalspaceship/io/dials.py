@@ -47,6 +47,7 @@ def _set_logger(verbose):
         for handler in logger.handlers:
             handler.setLevel(level)
 
+
 def get_msgpack_data(data, name):
     """
 
@@ -75,6 +76,7 @@ def get_msgpack_data(data, name):
 
     return data_dict
 
+
 def _concat(refl_data):
     """combine output of _get_refl_data"""
     LOGGER.debug("Combining and formatting tables!")
@@ -102,6 +104,7 @@ def _concat(refl_data):
     LOGGER.debug("Inferring MTZ types...")
     ds = ds.infer_mtz_dtypes().set_index(["H", "K", "L"], drop=True)
     return ds
+
 
 def _get_refl_data(fname, unitcell, spacegroup, extra_cols=None):
     """
@@ -144,10 +147,14 @@ def _get_refl_data(fname, unitcell, spacegroup, extra_cols=None):
     ds["PARTIAL"] = True
     return ds
 
+
 def _read_dials_stills_serial(fnames, unitcell, spacegroup, extra_cols=None, **kwargs):
     """run read_dials_stills without trying to import ray"""
-    result = [_get_refl_data(fname, unitcell, spacegroup, extra_cols) for fname in fnames]
+    result = [
+        _get_refl_data(fname, unitcell, spacegroup, extra_cols) for fname in fnames
+    ]
     return result
+
 
 def _read_dials_stills_ray(fnames, unitcell, spacegroup, numjobs=10, extra_cols=None):
     """
@@ -165,18 +172,22 @@ def _read_dials_stills_ray(fnames, unitcell, spacegroup, numjobs=10, extra_cols=
     RS dataset (pandas Dataframe)
     """
     from reciprocalspaceship.io.common import ray_context
-    with ray_context(log_level=LOGGER.level, num_cpus=numjobs, log_to_driver=LOGGER.level == logging.DEBUG) as ray:
+
+    with ray_context(
+        log_level=LOGGER.level,
+        num_cpus=numjobs,
+        log_to_driver=LOGGER.level == logging.DEBUG,
+    ) as ray:
         # get the refl data
         get_refl_data = ray.remote(_get_refl_data)
         refl_data = ray.get(
             [
-                get_refl_data.remote(
-                    fname, unitcell, spacegroup, extra_cols
-                )
+                get_refl_data.remote(fname, unitcell, spacegroup, extra_cols)
                 for fname in fnames
             ]
         )
     return refl_data
+
 
 @cellify
 @spacegroupify
@@ -222,17 +233,21 @@ def read_dials_stills(
     if parallel_backend == "ray":
         kwargs["numjobs"] = numjobs
         from reciprocalspaceship.io.common import check_for_ray
+
         if check_for_ray():
             reader = _read_dials_stills_ray
     elif parallel_backend == "mpi":
         from reciprocalspaceship.io.common import check_for_mpi
+
         if check_for_mpi():
             from reciprocalspaceship.io.dials_mpi import read_dials_stills_mpi as reader
-            kwargs['comm'] = comm
+
+            kwargs["comm"] = comm
     result = reader(**kwargs)
     if result is not None:
         result = _concat(result)
     return result
+
 
 def _get_refl_pack(filename):
     pack = msgpack.load(open(filename, "rb"), strict_map_key=False)
@@ -242,6 +257,7 @@ def _get_refl_pack(filename):
     except (TypeError, AssertionError):
         raise IOError("File does not appear to be dials::af::reflection_table")
     return pack
+
 
 def print_refl_info(reflfile):
     """print contents of `fname`, a reflection table file saved with DIALS"""

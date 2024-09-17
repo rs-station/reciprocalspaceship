@@ -1,7 +1,7 @@
 import io
-import tempfile
 import logging
 import os
+import tempfile
 from contextlib import redirect_stdout
 
 import gemmi
@@ -13,13 +13,16 @@ import pytest
 import reciprocalspaceship as rs
 from reciprocalspaceship.io import read_dials_stills
 
-class DummyComm():
+
+class DummyComm:
     rank = 0
     size = 1
+
     def gather(self, x):
         return [x]
 
-def make_refls(unit_cell, sg, seed=8675309, file_prefix=''):
+
+def make_refls(unit_cell, sg, seed=8675309, file_prefix=""):
     np.random.seed(seed)
 
     data = {
@@ -99,17 +102,17 @@ def make_refls(unit_cell, sg, seed=8675309, file_prefix=''):
     return ds0, pack_names
 
 
-@pytest.mark.parametrize('parallel_backend', ['mpi', 'ray'])
+@pytest.mark.parametrize("parallel_backend", ["mpi", "ray"])
 def test_dials_reader(parallel_backend, verbose=False):
 
     unit_cell = 78, 78, 235, 90, 90, 120
     sg = "P6522"
     comm = None
-    if parallel_backend == 'mpi':
+    if parallel_backend == "mpi":
         comm = DummyComm()
 
     with tempfile.TemporaryDirectory() as tdir:
-        prefix = tdir + '/'
+        prefix = tdir + "/"
         ds0, pack_names = make_refls(unit_cell, sg, file_prefix=prefix)
         # read without parallelization
         ds1 = read_dials_stills(
@@ -128,7 +131,7 @@ def test_dials_reader(parallel_backend, verbose=False):
             parallel_backend=parallel_backend,
             numjobs=2,
             verbose=verbose,
-            comm=comm
+            comm=comm,
         )
         assert ds1.equals(ds2)
         assert "xyz.0" not in ds2
@@ -142,7 +145,7 @@ def test_dials_reader(parallel_backend, verbose=False):
             numjobs=2,
             extra_cols=["xyz", "global_refl_index"],
             verbose=verbose,
-            comm=comm
+            comm=comm,
         )
         assert "xyz.0" in ds3
         ds3.reset_index(inplace=True)
@@ -164,7 +167,7 @@ def test_verbosity():
     with tempfile.TemporaryDirectory() as tdir:
         unit_cell = 78, 78, 230, 90, 90, 120
         sg = "P6"
-        prefix= tdir + '/'
+        prefix = tdir + "/"
         ds, pack_names = make_refls(unit_cell=unit_cell, sg=sg, file_prefix=prefix)
 
         logger_out = io.StringIO()
@@ -186,4 +189,3 @@ def test_verbosity():
         )
 
         assert logger_out.getvalue()
-
