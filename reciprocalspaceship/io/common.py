@@ -18,7 +18,7 @@ def check_for_ray():
 
         message = (
             "ray (https://www.ray.io/) is not available..."
-            "Falling back to serial stream file parser."
+            "Falling back to serial file parser."
         )
         warnings.warn(message, ImportWarning)
     return has_ray
