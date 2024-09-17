@@ -17,8 +17,7 @@ def check_for_ray():
         has_ray = False
 
         message = (
-            "ray (https://www.ray.io/) is not available..."
-            "Falling back to serial."
+            "ray (https://www.ray.io/) is not available..." "Falling back to serial."
         )
         warnings.warn(message, ImportWarning)
     return has_ray
