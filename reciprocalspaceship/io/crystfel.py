@@ -6,8 +6,7 @@ import gemmi
 import numpy as np
 
 from reciprocalspaceship import DataSet, concat
-from reciprocalspaceship.context_managers import ray_context
-from reciprocalspaceship.io.common import check_for_ray
+from reciprocalspaceship.io.common import check_for_ray, ray_context
 from reciprocalspaceship.utils import angle_between, eV2Angstroms
 
 # See Rupp Table 5-2
