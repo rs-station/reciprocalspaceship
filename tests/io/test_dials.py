@@ -1,4 +1,5 @@
 import io
+import tempfile
 import logging
 import os
 from contextlib import redirect_stdout
@@ -7,12 +8,18 @@ import gemmi
 import msgpack
 import numpy as np
 import pandas
+import pytest
 
 import reciprocalspaceship as rs
 from reciprocalspaceship.io import read_dials_stills
 
+class DummyComm():
+    rank = 0
+    size = 1
+    def gather(self, x):
+        return [x]
 
-def make_refls(unit_cell, sg, seed=8675309):
+def make_refls(unit_cell, sg, seed=8675309, file_prefix=''):
     np.random.seed(seed)
 
     data = {
@@ -80,7 +87,7 @@ def make_refls(unit_cell, sg, seed=8675309):
             {"identifiers": idents, "nrows": refls_per_file, "data": file_data},
         )
 
-        pack_name = f"test.rs.io.dials.pack{i_file}.refl"
+        pack_name = f"{file_prefix}test.rs.io.dials.pack{i_file}.refl"
         with open(pack_name, "wb") as o:
             msgpack.dump(pack, o)
         pack_names.append(pack_name)
@@ -92,94 +99,91 @@ def make_refls(unit_cell, sg, seed=8675309):
     return ds0, pack_names
 
 
-def test_dials_reader(verbose=False):
+@pytest.mark.parametrize('parallel_backend', ['mpi', 'ray'])
+def test_dials_reader(parallel_backend, verbose=False):
 
     unit_cell = 78, 78, 235, 90, 90, 120
     sg = "P6522"
+    comm = None
+    if parallel_backend == 'mpi':
+        comm = DummyComm()
 
-    ds0, pack_names = make_refls(unit_cell, sg)
-    # read without parallelization
-    ds1 = read_dials_stills(
-        pack_names, unit_cell, sg, parallel_backend=None, numjobs=1, verbose=verbose
-    )
-    gemmi_unit_cell = gemmi.UnitCell(*unit_cell)
-    gemmi_sg = gemmi.SpaceGroup(sg)
-    assert ds1.spacegroup == gemmi_sg
-    assert ds1.cell == gemmi_unit_cell
+    with tempfile.TemporaryDirectory() as tdir:
+        prefix = tdir + '/'
+        ds0, pack_names = make_refls(unit_cell, sg, file_prefix=prefix)
+        # read without parallelization
+        ds1 = read_dials_stills(
+            pack_names, unit_cell, sg, parallel_backend=None, numjobs=1, verbose=verbose
+        )
+        gemmi_unit_cell = gemmi.UnitCell(*unit_cell)
+        gemmi_sg = gemmi.SpaceGroup(sg)
+        assert ds1.spacegroup == gemmi_sg
+        assert ds1.cell == gemmi_unit_cell
 
-    # read with parallelization
-    ds2 = read_dials_stills(
-        pack_names,
-        gemmi_unit_cell,
-        gemmi_sg,
-        parallel_backend="ray",
-        numjobs=2,
-        verbose=verbose,
-    )
-    assert ds1.equals(ds2)
-    assert "xyz.0" not in ds2
+        # read with parallelization
+        ds2 = read_dials_stills(
+            pack_names,
+            gemmi_unit_cell,
+            gemmi_sg,
+            parallel_backend=parallel_backend,
+            numjobs=2,
+            verbose=verbose,
+            comm=comm
+        )
+        assert ds1.equals(ds2)
+        assert "xyz.0" not in ds2
 
-    # read extra columns including global index and compare with ds0
-    ds3 = read_dials_stills(
-        pack_names,
-        gemmi_unit_cell,
-        gemmi_sg,
-        parallel_backend="ray",
-        numjobs=2,
-        extra_cols=["xyz", "global_refl_index"],
-        verbose=verbose,
-    )
-    assert "xyz.0" in ds3
-    ds3.reset_index(inplace=True)
-    ds0.reset_index(inplace=True)
+        # read extra columns including global index and compare with ds0
+        ds3 = read_dials_stills(
+            pack_names,
+            gemmi_unit_cell,
+            gemmi_sg,
+            parallel_backend=parallel_backend,
+            numjobs=2,
+            extra_cols=["xyz", "global_refl_index"],
+            verbose=verbose,
+            comm=comm
+        )
+        assert "xyz.0" in ds3
+        ds3.reset_index(inplace=True)
+        ds0.reset_index(inplace=True)
 
-    df_m = pandas.merge(ds3, ds0, how="inner", on="global_refl_index")
+        df_m = pandas.merge(ds3, ds0, how="inner", on="global_refl_index")
 
-    assert np.allclose(df_m.H_x, df_m.H_y)
-    assert np.allclose(df_m.K_x, df_m.K_y)
-    assert np.allclose(df_m.L_x, df_m.L_y)
-    assert np.allclose(df_m.xyz0, df_m["xyz.0"])
-    assert np.allclose(df_m.xyz1, df_m["xyz.1"])
-    assert np.allclose(df_m.xyz2, df_m["xyz.2"])
-    assert np.allclose(df_m.I, df_m["intensity.sum.value"])
-    assert np.allclose(df_m.varI, df_m["intensity.sum.sigma"] ** 2)
-
-    for f in pack_names:
-        os.remove(f)
+        assert np.allclose(df_m.H_x, df_m.H_y)
+        assert np.allclose(df_m.K_x, df_m.K_y)
+        assert np.allclose(df_m.L_x, df_m.L_y)
+        assert np.allclose(df_m.xyz0, df_m["xyz.0"])
+        assert np.allclose(df_m.xyz1, df_m["xyz.1"])
+        assert np.allclose(df_m.xyz2, df_m["xyz.2"])
+        assert np.allclose(df_m.I, df_m["intensity.sum.value"])
+        assert np.allclose(df_m.varI, df_m["intensity.sum.sigma"] ** 2)
 
 
 def test_verbosity():
-    unit_cell = 78, 78, 230, 90, 90, 120
-    sg = "P6"
-    ds, pack_names = make_refls(unit_cell=unit_cell, sg=sg)
+    with tempfile.TemporaryDirectory() as tdir:
+        unit_cell = 78, 78, 230, 90, 90, 120
+        sg = "P6"
+        prefix= tdir + '/'
+        ds, pack_names = make_refls(unit_cell=unit_cell, sg=sg, file_prefix=prefix)
 
-    logger_out = io.StringIO()
-    logger = logging.getLogger("rs.io.dials")
-    for handler in logger.handlers:
-        handler.setStream(logger_out)
+        logger_out = io.StringIO()
+        logger = logging.getLogger("rs.io.dials")
+        for handler in logger.handlers:
+            handler.setStream(logger_out)
 
-    other_out = io.StringIO()
-    with redirect_stdout(other_out):
+        other_out = io.StringIO()
+        with redirect_stdout(other_out):
+            read_dials_stills(
+                pack_names, ds.cell, ds.spacegroup, parallel_backend=None, verbose=False
+            )
+
+        assert not other_out.getvalue()
+        assert not logger_out.getvalue()
+
         read_dials_stills(
-            pack_names, ds.cell, ds.spacegroup, parallel_backend=None, verbose=False
+            pack_names, ds.cell, ds.spacegroup, parallel_backend=None, verbose=True
         )
 
-    assert not other_out.getvalue()
-    assert not logger_out.getvalue()
+        assert logger_out.getvalue()
 
-    read_dials_stills(
-        pack_names, ds.cell, ds.spacegroup, parallel_backend=None, verbose=True
-    )
-
-    assert logger_out.getvalue()
-
-    # cleanup
-    for f in pack_names:
-        os.remove(f)
-
-
-if __name__ == "__main__":
-    test_verbosity()
-    print("Verbosity test passed.")
-    test_dials_reader(verbose=True)
-    print("Reader test passed.")

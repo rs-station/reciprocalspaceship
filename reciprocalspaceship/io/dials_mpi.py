@@ -1,13 +1,20 @@
-from mpi4py import MPI
-
-COMM = MPI.COMM_WORLD
 from reciprocalspaceship.decorators import cellify, spacegroupify
 from reciprocalspaceship.io import dials
+from itertools import chain
 
+def mpi_starmap(comm, func, iterable):
+    results = []
+    for i,item in enumerate(iterable):
+        if i % comm.size == comm.rank:
+            results.append(func(*item))
+    results = comm.gather(results)
+    if comm.rank == 0:
+        return chain.from_iterable(results)
+    return None
 
 @cellify
 @spacegroupify
-def read_dials_stills_mpi(fnames, unitcell, spacegroup, extra_cols=None):
+def read_dials_stills_mpi(fnames, unitcell, spacegroup, extra_cols=None, comm=None):
     """
 
     Parameters
@@ -16,18 +23,19 @@ def read_dials_stills_mpi(fnames, unitcell, spacegroup, extra_cols=None):
     unitcell: unit cell tuple (6 params Ang,Ang,Ang,deg,deg,deg)
     spacegroup: space group name e.g. P4
     extra_cols: list of additional column names to read from the refl table
+    comm: Optionally override the MPI communicator. The default is MPI.COMM_WORLD
 
     Returns
     -------
     RS dataset (pandas Dataframe) if MPI rank==0 else None
     """
-
-    refl_data = dials._get_refl_data(
-        fnames, unitcell, spacegroup, COMM.rank, COMM.size, extra_cols=extra_cols
+    if comm is None:
+        from mpi4py import MPI
+        comm = MPI.COMM_WORLD
+    ds = mpi_starmap(
+        comm,
+        dials._get_refl_data, 
+        ((f, unitcell, spacegroup, extra_cols) for f in fnames),
     )
-    refl_data = COMM.gather(refl_data)
-    ds = None
-    if COMM.rank == 0:
-        ds = dials._concat(refl_data)
-
     return ds
+
