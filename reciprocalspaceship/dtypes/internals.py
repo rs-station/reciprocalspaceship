@@ -1359,7 +1359,7 @@ class NumericArray(BaseMaskedArray):
 
 @wraps(libmissing.is_numeric_na)
 def is_numeric_na(values):
-    allowed_dtypes = ("float32", "int32")
+    allowed_dtypes = ("float64", "float32", "int32")
     if isinstance(values, np.ndarray) and values.dtype in allowed_dtypes:
         return np.isnan(values)
     return libmissing.is_numeric_na(values)
