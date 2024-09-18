@@ -100,9 +100,7 @@ def _concat(refl_data):
                 f"Converted column {name} to MTZ-Type Q, took sqrt of the values, and renamed to {new_name}."
             )
     ds.rename(columns=rename_map, inplace=True)
-
-    LOGGER.debug("Inferring MTZ types...")
-    ds = ds.infer_mtz_dtypes().set_index(["H", "K", "L"], drop=True)
+    LOGGER.debug("Finished combining tables!")
     return ds
 
 
