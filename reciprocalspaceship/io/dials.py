@@ -212,9 +212,9 @@ def read_dials_stills(
     spacegroup : gemmi.SpaceGroup or similar (optional)
         The spacegroup assigned to the returned dataset.
     numjobs : int
-        If backend==ray, specify the number of jobs (ignored if backend==mpi). 
+        If backend==ray, specify the number of jobs (ignored if backend==mpi).
     parallel_backend : string (optional)
-        "ray", "mpi", or None for serial. 
+        "ray", "mpi", or None for serial.
     extra_cols : list (optional)
         Optional list of additional column names to extract from the refltables. By default, this method will search for
         miller_index, id, s1, xyzcal.px, intensity.sum.value, intensity.sum.variance, delpsical.rad
@@ -225,7 +225,7 @@ def read_dials_stills(
 
     Returns
     -------
-    ds : rs.DataSet 
+    ds : rs.DataSet
         The dataset containing reflection info aggregated from fnames. This method will not convert any of the
         columns to native rs MTZ dtypes. DIALS data are natively double precision (64-bit). Converting to MTZ
         will downcast them to 32-bit. Use ds.infer_mtz_dtypes() to convert to native rs dtypes if you required.

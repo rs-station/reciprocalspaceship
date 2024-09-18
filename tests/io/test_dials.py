@@ -163,11 +163,12 @@ def test_dials_reader(parallel_backend, verbose=False):
         assert np.allclose(df_m.varI, df_m["intensity.sum.sigma"] ** 2)
 
         # Test that you don't need cell and symmetry to load the tables
-        ds =read_dials_stills(
+        ds = read_dials_stills(
             pack_names, parallel_backend=None, numjobs=1, verbose=verbose
         )
         assert ds.cell is None
         assert ds.spacegroup is None
+
 
 def test_verbosity():
     with tempfile.TemporaryDirectory() as tdir:
