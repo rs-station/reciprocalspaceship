@@ -101,6 +101,24 @@ def make_refls(unit_cell, sg, seed=8675309, file_prefix=""):
     ds0.set_index(["H", "K", "L"], inplace=True, drop=True)
     return ds0, pack_names
 
+def test_dials_mtz_conversion():
+    unit_cell = 78, 78, 235, 90, 90, 120
+    sg = "P 65 2 2"
+    comm = None
+    with tempfile.TemporaryDirectory() as tdir:
+        prefix = tdir + "/"
+        ds0, pack_names = make_refls(unit_cell, sg, file_prefix=prefix)
+        ds = read_dials_stills(
+            pack_names, unit_cell, sg, parallel_backend=None, numjobs=1, verbose=False, mtz_dtypes=True
+        )
+
+        mtzout = tdir + '/ds.mtz'
+        ds.write_mtz(mtzout)
+        assert os.path.exists(mtzout)
+        test_ds = rs.read_mtz(mtzout).reset_index()
+        for k in ds:
+            assert np.allclose(ds[k], test_ds[k])
+
 @pytest.mark.parametrize("parallel_backend", ["mpi", "ray"])
 @pytest.mark.parametrize("mtz_dtypes", [True, False])
 def test_dials_reader(parallel_backend, mtz_dtypes, verbose=False):
@@ -164,12 +182,6 @@ def test_dials_reader(parallel_backend, mtz_dtypes, verbose=False):
         assert np.allclose(df_m.I, df_m["intensity.sum.value"])
         if mtz_dtypes:
             assert np.allclose(df_m.varI, df_m["intensity.sum.sigma"] ** 2)
-            mtzout = tdir + '/ds.mtz'
-            ds1.write_mtz(mtzout)
-            assert os.path.exists(mtzout)
-            test_ds1 = rs.read_mtz(mtzout).reset_index()
-            for k in ds1:
-                assert np.allclose(ds1[k], test_ds1[k])
 
         # Test that you don't need cell and symmetry to load the tables
         ds = read_dials_stills(
