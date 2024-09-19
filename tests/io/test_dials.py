@@ -37,7 +37,7 @@ def make_refls(unit_cell, sg, seed=8675309, file_prefix=""):
     datasets = []
     shot_start = 0
     expts_per_refl = 5
-    refls_per_file = 10000
+    refls_per_file = 100000
     pack_names = []
     for i_file in range(2):
         hkl = np.random.randint(-100, 100, (refls_per_file, 3)).astype(np.int32)
@@ -100,7 +100,6 @@ def make_refls(unit_cell, sg, seed=8675309, file_prefix=""):
     ds0 = rs.concat(datasets)
     ds0.set_index(["H", "K", "L"], inplace=True, drop=True)
     return ds0, pack_names
-
 
 @pytest.mark.parametrize("parallel_backend", ["mpi", "ray"])
 @pytest.mark.parametrize("mtz_dtypes", [True, False])
@@ -165,6 +164,12 @@ def test_dials_reader(parallel_backend, mtz_dtypes, verbose=False):
         assert np.allclose(df_m.I, df_m["intensity.sum.value"])
         if mtz_dtypes:
             assert np.allclose(df_m.varI, df_m["intensity.sum.sigma"] ** 2)
+            mtzout = tdir + '/ds.mtz'
+            ds1.write_mtz(mtzout)
+            assert os.path.exists(mtzout)
+            test_ds1 = rs.read_mtz(mtzout).reset_index()
+            for k in ds1:
+                assert np.allclose(ds1[k], test_ds1[k])
 
         # Test that you don't need cell and symmetry to load the tables
         ds = read_dials_stills(
