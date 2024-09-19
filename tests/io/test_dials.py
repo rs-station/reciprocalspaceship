@@ -37,7 +37,7 @@ def make_refls(unit_cell, sg, seed=8675309, file_prefix=""):
     datasets = []
     shot_start = 0
     expts_per_refl = 5
-    refls_per_file = 100000
+    refls_per_file = 10000
     pack_names = []
     for i_file in range(2):
         hkl = np.random.randint(-100, 100, (refls_per_file, 3)).astype(np.int32)
@@ -103,7 +103,8 @@ def make_refls(unit_cell, sg, seed=8675309, file_prefix=""):
 
 
 @pytest.mark.parametrize("parallel_backend", ["mpi", "ray"])
-def test_dials_reader(parallel_backend, verbose=False):
+@pytest.mark.parametrize("mtz_dtypes", [True, False])
+def test_dials_reader(parallel_backend, mtz_dtypes, verbose=False):
 
     unit_cell = 78, 78, 235, 90, 90, 120
     sg = "P 65 2 2"
@@ -116,7 +117,7 @@ def test_dials_reader(parallel_backend, verbose=False):
         ds0, pack_names = make_refls(unit_cell, sg, file_prefix=prefix)
         # read without parallelization
         ds1 = read_dials_stills(
-            pack_names, unit_cell, sg, parallel_backend=None, numjobs=1, verbose=verbose
+            pack_names, unit_cell, sg, parallel_backend=None, numjobs=1, verbose=verbose, mtz_dtypes=mtz_dtypes
         )
         gemmi_unit_cell = gemmi.UnitCell(*unit_cell)
         gemmi_sg = gemmi.SpaceGroup(sg)
@@ -132,6 +133,7 @@ def test_dials_reader(parallel_backend, verbose=False):
             numjobs=2,
             verbose=verbose,
             comm=comm,
+            mtz_dtypes=mtz_dtypes,
         )
         assert ds1.equals(ds2)
         assert "xyz.0" not in ds2
@@ -146,6 +148,7 @@ def test_dials_reader(parallel_backend, verbose=False):
             extra_cols=["xyz", "global_refl_index"],
             verbose=verbose,
             comm=comm,
+            mtz_dtypes=mtz_dtypes,
         )
         assert "xyz.0" in ds3
         ds3.reset_index(inplace=True)
@@ -160,7 +163,8 @@ def test_dials_reader(parallel_backend, verbose=False):
         assert np.allclose(df_m.xyz1, df_m["xyz.1"])
         assert np.allclose(df_m.xyz2, df_m["xyz.2"])
         assert np.allclose(df_m.I, df_m["intensity.sum.value"])
-        assert np.allclose(df_m.varI, df_m["intensity.sum.sigma"] ** 2)
+        if mtz_dtypes:
+            assert np.allclose(df_m.varI, df_m["intensity.sum.sigma"] ** 2)
 
         # Test that you don't need cell and symmetry to load the tables
         ds = read_dials_stills(
