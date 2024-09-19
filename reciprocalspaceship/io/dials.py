@@ -91,14 +91,6 @@ def _concat(refl_data):
     expt_id_map = {name: i for i, name in enumerate(expt_ids)}
     ds.BATCH = [expt_id_map[eid] for eid in ds.BATCH]
     rename_map = {"miller_index.0": "H", "miller_index.1": "K", "miller_index.2": "L"}
-    for name in list(ds):
-        if "variance" in name:
-            new_name = name.replace("variance", "sigma")
-            rename_map[name] = new_name
-            ds[name] = np.sqrt(ds[name]).astype("Q")
-            LOGGER.debug(
-                f"Converted column {name} to MTZ-Type Q, took sqrt of the values, and renamed to {new_name}."
-            )
     ds.rename(columns=rename_map, inplace=True)
     LOGGER.debug("Finished combining tables!")
     return ds
@@ -187,6 +179,37 @@ def _read_dials_stills_ray(fnames, unitcell, spacegroup, numjobs=10, extra_cols=
     return refl_data
 
 
+def dials_to_mtz_dtypes(ds, inplace=True):
+    """
+    Coerce the dtypes in ds into ones that can be written to an mtz file. 
+    This will downcast doubles to single precision. If "variance" columns
+    are present, they will be converted to "sigma" and assigned 
+    StandardDeviationDtype.
+
+    Parameters
+    ----------
+    ds : rs.DataSet
+    inplace : bool (optional)
+        Convert ds dtypes in place without makeing a copy. Defaults to True.
+
+    Returns
+    -------
+    ds : rs.DataSet
+    """
+    rename_map = {}
+    for name in ds:
+        if "variance" in name:
+            new_name = name.replace("variance", "sigma")
+            rename_map[name] = new_name
+            ds[name] = np.sqrt(ds[name]).astype("Q")
+            LOGGER.debug(
+                f"Converted column {name} to MTZ-Type Q, took sqrt of the values, and renamed to {new_name}."
+            )
+    ds.rename(columns=rename_map, inplace=True)
+    ds.infer_mtz_dtypes(inplace=True)
+    return ds
+
+
 @cellify
 @spacegroupify
 def read_dials_stills(
@@ -198,10 +221,12 @@ def read_dials_stills(
     extra_cols=None,
     verbose=False,
     comm=None,
+    mtz_dtypes=False,
 ):
     """
     Read reflections from still images processed by DIALS from fnames and return
-    them as a DataSet. This method does not convert columns to native rs MTZ dtypes.
+    them as a DataSet. By default, this function will not convert the data from
+    dials into an MTZ compatible format. 
 
     Parameters
     ----------
@@ -222,6 +247,9 @@ def read_dials_stills(
         Whether to print logging info to stdout
     comm : mpi4py.MPI.Comm
         Optionally override the communicator used by backend='mpi'
+    mtz_dtypes : bool (optional)
+        Optionally convert columns to mtz compatible dtypes. Note this will downcast double precision (64-bit)
+        floats to single precision (32-bit).
 
     Returns
     -------
@@ -258,6 +286,8 @@ def read_dials_stills(
     result = reader(**kwargs)
     if result is not None:
         result = _concat(result)
+    if mtz_dtypes:
+        dials_to_mtz_dtypes(result, inplace=True)
     return result
 
 
