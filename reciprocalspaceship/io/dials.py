@@ -230,8 +230,8 @@ def read_dials_stills(
 
     Parameters
     ----------
-    fnames : list or tuple
-        A list or tuple of filenames (strings).
+    fnames : list or tuple or string
+        A list or tuple of filenames (strings) or a single filename.
     unitcell : gemmi.UnitCell or similar (optional)
         The unit cell assigned to the returned dataset.
     spacegroup : gemmi.SpaceGroup or similar (optional)
@@ -259,6 +259,8 @@ def read_dials_stills(
         will downcast them to 32-bit. Use ds.infer_mtz_dtypes() to convert to native rs dtypes if required.
     """
     _set_logger(verbose)
+    if isinstance(fnames, str):
+        fnames = [fnames]
 
     if parallel_backend not in ["ray", "mpi", None]:
         raise NotImplementedError("parallel_backend should be ray, mpi, or none")
