@@ -228,7 +228,7 @@ def read_dials_stills(
     ds : rs.DataSet
         The dataset containing reflection info aggregated from fnames. This method will not convert any of the
         columns to native rs MTZ dtypes. DIALS data are natively double precision (64-bit). Converting to MTZ
-        will downcast them to 32-bit. Use ds.infer_mtz_dtypes() to convert to native rs dtypes if you required.
+        will downcast them to 32-bit. Use ds.infer_mtz_dtypes() to convert to native rs dtypes if required.
     """
     _set_logger(verbose)
 
