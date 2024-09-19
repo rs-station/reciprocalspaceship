@@ -181,9 +181,9 @@ def _read_dials_stills_ray(fnames, unitcell, spacegroup, numjobs=10, extra_cols=
 
 def dials_to_mtz_dtypes(ds, inplace=True):
     """
-    Coerce the dtypes in ds into ones that can be written to an mtz file. 
+    Coerce the dtypes in ds into ones that can be written to an mtz file.
     This will downcast doubles to single precision. If "variance" columns
-    are present, they will be converted to "sigma" and assigned 
+    are present, they will be converted to "sigma" and assigned
     StandardDeviationDtype.
 
     Parameters
@@ -226,7 +226,7 @@ def read_dials_stills(
     """
     Read reflections from still images processed by DIALS from fnames and return
     them as a DataSet. By default, this function will not convert the data from
-    dials into an MTZ compatible format. 
+    dials into an MTZ compatible format.
 
     Parameters
     ----------

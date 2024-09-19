@@ -101,6 +101,7 @@ def make_refls(unit_cell, sg, seed=8675309, file_prefix=""):
     ds0.set_index(["H", "K", "L"], inplace=True, drop=True)
     return ds0, pack_names
 
+
 def test_dials_mtz_conversion():
     unit_cell = 78, 78, 235, 90, 90, 120
     sg = "P 65 2 2"
@@ -109,15 +110,22 @@ def test_dials_mtz_conversion():
         prefix = tdir + "/"
         ds0, pack_names = make_refls(unit_cell, sg, file_prefix=prefix)
         ds = read_dials_stills(
-            pack_names, unit_cell, sg, parallel_backend=None, numjobs=1, verbose=False, mtz_dtypes=True
+            pack_names,
+            unit_cell,
+            sg,
+            parallel_backend=None,
+            numjobs=1,
+            verbose=False,
+            mtz_dtypes=True,
         )
 
-        mtzout = tdir + '/ds.mtz'
+        mtzout = tdir + "/ds.mtz"
         ds.write_mtz(mtzout)
         assert os.path.exists(mtzout)
         test_ds = rs.read_mtz(mtzout).reset_index()
         for k in ds:
             assert np.allclose(ds[k], test_ds[k])
+
 
 @pytest.mark.parametrize("parallel_backend", ["mpi", "ray"])
 @pytest.mark.parametrize("mtz_dtypes", [True, False])
@@ -134,7 +142,13 @@ def test_dials_reader(parallel_backend, mtz_dtypes, verbose=False):
         ds0, pack_names = make_refls(unit_cell, sg, file_prefix=prefix)
         # read without parallelization
         ds1 = read_dials_stills(
-            pack_names, unit_cell, sg, parallel_backend=None, numjobs=1, verbose=verbose, mtz_dtypes=mtz_dtypes
+            pack_names,
+            unit_cell,
+            sg,
+            parallel_backend=None,
+            numjobs=1,
+            verbose=verbose,
+            mtz_dtypes=mtz_dtypes,
         )
         gemmi_unit_cell = gemmi.UnitCell(*unit_cell)
         gemmi_sg = gemmi.SpaceGroup(sg)
