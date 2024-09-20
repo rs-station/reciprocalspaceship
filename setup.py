@@ -79,6 +79,7 @@ setup(
         "numpy",
         "scipy",
         "ipython",
+        "msgpack",
     ],
     setup_requires=["pytest-runner"],
     tests_require=tests_require,
