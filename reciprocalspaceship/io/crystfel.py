@@ -1,13 +1,12 @@
 import mmap
 import re
-from contextlib import contextmanager
-from importlib.util import find_spec
 from typing import Union
 
 import gemmi
 import numpy as np
 
 from reciprocalspaceship import DataSet, concat
+from reciprocalspaceship.io.common import check_for_ray, ray_context
 from reciprocalspaceship.utils import angle_between, eV2Angstroms
 
 # See Rupp Table 5-2
@@ -58,17 +57,6 @@ _block_markers = {
     "crystal": (r"--- Begin crystal", r"--- End crystal"),
     "reflections": (r"Reflections measured after indexing", r"End of reflections"),
 }
-
-
-@contextmanager
-def ray_context(**ray_kwargs):
-    import ray
-
-    ray.init(**ray_kwargs)
-    try:
-        yield ray
-    finally:
-        ray.shutdown()
 
 
 class StreamLoader(object):
@@ -304,15 +292,7 @@ class StreamLoader(object):
 
         # Check whether ray is available
         if use_ray:
-            if find_spec("ray") is None:
-                use_ray = False
-                import warnings
-
-                message = (
-                    "ray (https://www.ray.io/) is not available..."
-                    "Falling back to serial stream file parser."
-                )
-                warnings.warn(message, ImportWarning)
+            use_ray = check_for_ray()
 
         with open(self.filename, "r") as f:
             memfile = mmap.mmap(f.fileno(), 0, access=mmap.ACCESS_READ)
