@@ -1,8 +1,13 @@
 # Version number for reciprocalspaceship
 def getVersionNumber():
-    from setuptools.version import metadata
+    version = None
+    try:
+        from setuptools.version import metadata
+        version = metadata.version("reciprocalspaceship")
+    except ImportError:
+        from setuptools.version import pkg_resources
+        version = pkg_resources.require('reciprocalspaceship')[0].version
 
-    version = metadata.version("reciprocalspaceship")
     return version
 
 
