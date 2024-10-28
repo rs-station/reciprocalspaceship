@@ -10,7 +10,7 @@ def read_csv(
     merged=None,
     infer_mtz_dtypes=True,
     *args,
-    **kwargs
+    **kwargs,
 ):
     """
     Read a comma-separated values (csv) file into a DataSet.
