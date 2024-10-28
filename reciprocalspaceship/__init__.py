@@ -3,10 +3,12 @@ def getVersionNumber():
     version = None
     try:
         from setuptools.version import metadata
+
         version = metadata.version("reciprocalspaceship")
     except ImportError:
         from setuptools.version import pkg_resources
-        version = pkg_resources.require('reciprocalspaceship')[0].version
+
+        version = pkg_resources.require("reciprocalspaceship")[0].version
 
     return version
 
