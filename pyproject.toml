@@ -1,0 +1,75 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "reciprocalspaceship"
+description = "Tools for exploring reciprocal space"
+readme = "README.md"
+requires-python = ">=3.11"
+version = "1.0.3"
+license = { text = "MIT" }
+authors = [
+    { name = "Kevin M. Dalton", email = "kmdalton@g.harvard.edu" },
+    { name = "Jack B. Greisman", email = "greisman@g.harvard.edu" }
+]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: MIT License",
+    "Topic :: Scientific/Engineering :: Chemistry",
+    "Topic :: Scientific/Engineering :: Physics",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Programming Language :: Python",
+]
+
+keywords = ["crystallography", "data analysis", "reciprocal space", "pandas"]
+
+dependencies = [
+    "gemmi >=0.5.5, <=0.6.7",
+    "pandas >=2.2.2, <=2.2.3",
+    "numpy",
+    "scipy",
+    "ipython",
+    "msgpack",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest",
+    "pytest-cov",
+    "pytest-xdist",
+    "ray",
+    "sphinx",
+    "sphinx_rtd_theme",
+    "nbsphinx",
+    "sphinx-design",
+    "sphinxcontrib-autoprogram",
+    "autodocsumm",
+    "jupyter",
+    "tqdm",
+    "matplotlib",
+    "seaborn",
+    "celluloid",
+    "scikit-image",
+]
+examples = [
+    "jupyter",
+    "tqdm",
+    "matplotlib",
+    "seaborn",
+    "celluloid",
+    "scikit-image",
+]
+
+[project.urls]
+"Bug Tracker" = "https://github.com/rs-station/reciprocalspaceship/issues"
+"Documentation" = "https://rs-station.github.io/reciprocalspaceship/"
+"Source Code" = "https://github.com/rs-station/reciprocalspaceship"
+
+[tool.setuptools]
+packages = ["reciprocalspaceship"]
+
+[project.scripts]
+"rs.mtzdump" = "reciprocalspaceship.commandline.mtzdump:main"
