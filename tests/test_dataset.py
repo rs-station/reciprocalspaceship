@@ -614,10 +614,10 @@ def test_is_isomorphous_threshold(threshold):
     spacegroup = 19
 
     ds = rs.DataSet(cell=cell, spacegroup=spacegroup)
-    cell_resize_factor = (200.0 + threshold) / (200. - threshold)
+    cell_resize_factor = (200.0 + threshold) / (200.0 - threshold)
 
     # Make a cell that should be exactly threshold percent bigger
-    other_cell = cell_resize_factor * cell 
+    other_cell = cell_resize_factor * cell
     too_big_cell = other_cell + epsilon
     big_cell = other_cell - epsilon
 
@@ -627,22 +627,23 @@ def test_is_isomorphous_threshold(threshold):
     small_cell = other_cell + epsilon
 
     # Construct data sets
-    too_big = rs.DataSet(cell = too_big_cell, spacegroup = spacegroup)
-    big = rs.DataSet(cell = big_cell, spacegroup = spacegroup)
-    too_small = rs.DataSet(cell = too_small_cell, spacegroup = spacegroup)
-    small = rs.DataSet(cell = small_cell, spacegroup = spacegroup)
+    too_big = rs.DataSet(cell=too_big_cell, spacegroup=spacegroup)
+    big = rs.DataSet(cell=big_cell, spacegroup=spacegroup)
+    too_small = rs.DataSet(cell=too_small_cell, spacegroup=spacegroup)
+    small = rs.DataSet(cell=small_cell, spacegroup=spacegroup)
 
-    #Cell is barely too big to be isomorphous
+    # Cell is barely too big to be isomorphous
     assert not ds.is_isomorphous(too_big, threshold)
 
-    #Cell is barely too small to be isomorphous
+    # Cell is barely too small to be isomorphous
     assert not ds.is_isomorphous(too_small, threshold)
 
-    #Cell is almost too big to be isomorphous
-    assert ds.is_isomorphous(big, threshold) 
+    # Cell is almost too big to be isomorphous
+    assert ds.is_isomorphous(big, threshold)
 
-    #Cell is almost too small to be isomorphous
-    assert ds.is_isomorphous(small, threshold) 
+    # Cell is almost too small to be isomorphous
+    assert ds.is_isomorphous(small, threshold)
+
 
 def test_to_gemmi_withNans(data_merged):
     """
