@@ -605,10 +605,10 @@ def test_is_isomorphous(data_unmerged, data_fmodel, sg1, sg2, cell1, cell2):
 
 @pytest.mark.parametrize("threshold", [5.0, 1.0, 0.5, 0.1])
 @pytest.mark.parametrize("isomorphous", [True, False])
-@pytest.mark.parametrize("bigger_cell", ['self', 'other']) #Which cell is bigger
+@pytest.mark.parametrize("bigger_cell", ["self", "other"])  # Which cell is bigger
 def test_is_isomorphous_threshold(threshold, isomorphous, bigger_cell):
     """
-    Test that DataSet.is_isorphous(self, other, cell_threshold) method's 
+    Test that DataSet.is_isorphous(self, other, cell_threshold) method's
     cell_threshold operates on percent difference.
     """
     epsilon = 1e-12
@@ -617,18 +617,18 @@ def test_is_isomorphous_threshold(threshold, isomorphous, bigger_cell):
 
     ds = rs.DataSet(cell=cell, spacegroup=spacegroup)
 
-    if bigger_cell == 'self': #other_cell > cell
-        factor = (200. + threshold) / (200. - threshold)
-        if isomorphous: #shrink
-            factor = factor * (1. - epsilon)
-        else: #grow
-            factor = factor * (1. + epsilon)
-    elif bigger_cell == 'other': #other_cell < cell
-        factor = (200. - threshold) / (200. + threshold)
-        if isomorphous: #grow
-            factor = factor * (1. + epsilon)
-        else: #shrink
-            factor = factor * (1. - epsilon)
+    if bigger_cell == "self":  # other_cell > cell
+        factor = (200.0 + threshold) / (200.0 - threshold)
+        if isomorphous:  # shrink
+            factor = factor * (1.0 - epsilon)
+        else:  # grow
+            factor = factor * (1.0 + epsilon)
+    elif bigger_cell == "other":  # other_cell < cell
+        factor = (200.0 - threshold) / (200.0 + threshold)
+        if isomorphous:  # grow
+            factor = factor * (1.0 + epsilon)
+        else:  # shrink
+            factor = factor * (1.0 - epsilon)
 
     other_cell = factor * cell
 
