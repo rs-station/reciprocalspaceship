@@ -70,7 +70,7 @@ napoleon_use_rtype = False
 
 # prolog taken nearly verbatim from https://github.com/spatialaudio/nbsphinx/blob/98005a9d6b331b7d6d14221539154df69f7ae51a/doc/conf.py#L38
 nbsphinx_prolog = r"""
-{% set docname = 'docs/' + env.doc2path(env.docname, base=None) %}
+{% set docname = 'docs/' + env.doc2path(env.docname, base=None) | string() %}
 
 .. raw:: html
 
