@@ -602,6 +602,38 @@ def test_is_isomorphous(data_unmerged, data_fmodel, sg1, sg2, cell1, cell2):
         else:
             assert not result
 
+@pytest.mark.parametrize("threshold", [5., 1., 0.5, 0.1])
+@pytest.mark.parametrize("isomorphous", [True, False])
+@pytest.mark.parametrize("sign", [True, False]) #Which cell is bigger
+def test_is_isomorphous_threshold(threshold, isomorphous, sign):
+    """
+    Test that the DataSet.is_isorphous method's cell_threshold operates 
+    on percent difference.
+    """
+    epsilon = 1e-12
+    cell = np.array([34., 45., 98., 90., 90., 90.])
+    spacegroup = 19
+
+    ds = rs.DataSet(cell=cell, spacegroup=spacegroup)
+
+    if sign: #cell_test > cell
+        factor = (200. + threshold) / (200. - threshold)
+        if isomorphous: #shrink
+            factor = factor * (1. - epsilon)
+        else: #grow
+            factor = factor * (1. + epsilon)
+    else: #cell_test < cell
+        factor = (200. - threshold) / (200. + threshold)
+        if isomorphous: #grow
+            factor = factor * (1. + epsilon)
+        else: #shrink
+            factor = factor * (1. - epsilon)
+
+    cell_test = factor * cell
+
+    ds_test = rs.DataSet(cell=cell_test, spacegroup=spacegroup)
+    result = ds.is_isomorphous(ds_test, threshold)
+    assert result == isomorphous
 
 def test_to_gemmi_withNans(data_merged):
     """
