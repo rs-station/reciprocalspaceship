@@ -1214,7 +1214,7 @@ class DataSet(pd.DataFrame):
         for param in params:
             param1 = self.cell.__getattribute__(param)
             param2 = other.cell.__getattribute__(param)
-            diff = 200. * np.abs(param1 - param2) / (param1 + param2)
+            diff = 200.0 * np.abs(param1 - param2) / (param1 + param2)
             if diff > cell_threshold:
                 return False
 
