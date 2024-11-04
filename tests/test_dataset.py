@@ -605,11 +605,11 @@ def test_is_isomorphous(data_unmerged, data_fmodel, sg1, sg2, cell1, cell2):
 
 @pytest.mark.parametrize("threshold", [5.0, 1.0, 0.5, 0.1])
 @pytest.mark.parametrize("isomorphous", [True, False])
-@pytest.mark.parametrize("sign", [True, False])  # Which cell is bigger
-def test_is_isomorphous_threshold(threshold, isomorphous, sign):
+@pytest.mark.parametrize("bigger_cell", ['self', 'other']) #Which cell is bigger
+def test_is_isomorphous_threshold(threshold, isomorphous, bigger_cell):
     """
-    Test that the DataSet.is_isorphous method's cell_threshold operates
-    on percent difference.
+    Test that DataSet.is_isorphous(self, other, cell_threshold) method's 
+    cell_threshold operates on percent difference.
     """
     epsilon = 1e-12
     cell = np.array([34.0, 45.0, 98.0, 90.0, 90.0, 90.0])
@@ -617,23 +617,23 @@ def test_is_isomorphous_threshold(threshold, isomorphous, sign):
 
     ds = rs.DataSet(cell=cell, spacegroup=spacegroup)
 
-    if sign:  # cell_test > cell
-        factor = (200.0 + threshold) / (200.0 - threshold)
-        if isomorphous:  # shrink
-            factor = factor * (1.0 - epsilon)
-        else:  # grow
-            factor = factor * (1.0 + epsilon)
-    else:  # cell_test < cell
-        factor = (200.0 - threshold) / (200.0 + threshold)
-        if isomorphous:  # grow
-            factor = factor * (1.0 + epsilon)
-        else:  # shrink
-            factor = factor * (1.0 - epsilon)
+    if bigger_cell == 'self': #other_cell > cell
+        factor = (200. + threshold) / (200. - threshold)
+        if isomorphous: #shrink
+            factor = factor * (1. - epsilon)
+        else: #grow
+            factor = factor * (1. + epsilon)
+    elif bigger_cell == 'other': #other_cell < cell
+        factor = (200. - threshold) / (200. + threshold)
+        if isomorphous: #grow
+            factor = factor * (1. + epsilon)
+        else: #shrink
+            factor = factor * (1. - epsilon)
 
-    cell_test = factor * cell
+    other_cell = factor * cell
 
-    ds_test = rs.DataSet(cell=cell_test, spacegroup=spacegroup)
-    result = ds.is_isomorphous(ds_test, threshold)
+    other = rs.DataSet(cell=other_cell, spacegroup=spacegroup)
+    result = ds.is_isomorphous(other, threshold)
     assert result == isomorphous
 
 
