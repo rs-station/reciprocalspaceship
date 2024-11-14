@@ -603,6 +603,48 @@ def test_is_isomorphous(data_unmerged, data_fmodel, sg1, sg2, cell1, cell2):
             assert not result
 
 
+@pytest.mark.parametrize("threshold", [5.0, 1.0, 0.5, 0.1])
+def test_is_isomorphous_threshold(threshold):
+    """
+    Test that DataSet.is_isorphous(self, other, cell_threshold) method's
+    cell_threshold operates on percent difference.
+    """
+    epsilon = 1e-12
+    cell = np.array([34.0, 45.0, 98.0, 90.0, 90.0, 90.0])
+    spacegroup = 19
+
+    ds = rs.DataSet(cell=cell, spacegroup=spacegroup)
+    cell_resize_factor = (200.0 + threshold) / (200.0 - threshold)
+
+    # Make a cell that should be exactly threshold percent bigger
+    other_cell = cell_resize_factor * cell
+    too_big_cell = other_cell + epsilon
+    big_cell = other_cell - epsilon
+
+    # Make a cell that should be exactly threshold percent smaller
+    other_cell = cell / cell_resize_factor
+    too_small_cell = other_cell - epsilon
+    small_cell = other_cell + epsilon
+
+    # Construct data sets
+    too_big = rs.DataSet(cell=too_big_cell, spacegroup=spacegroup)
+    big = rs.DataSet(cell=big_cell, spacegroup=spacegroup)
+    too_small = rs.DataSet(cell=too_small_cell, spacegroup=spacegroup)
+    small = rs.DataSet(cell=small_cell, spacegroup=spacegroup)
+
+    # Cell is barely too big to be isomorphous
+    assert not ds.is_isomorphous(too_big, threshold)
+
+    # Cell is barely too small to be isomorphous
+    assert not ds.is_isomorphous(too_small, threshold)
+
+    # Cell is almost too big to be isomorphous
+    assert ds.is_isomorphous(big, threshold)
+
+    # Cell is almost too small to be isomorphous
+    assert ds.is_isomorphous(small, threshold)
+
+
 def test_to_gemmi_withNans(data_merged):
     """
     GH144: Test whether DataSet.to_gemmi() works with NaN-containing data.

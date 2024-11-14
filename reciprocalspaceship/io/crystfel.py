@@ -487,9 +487,7 @@ def read_crystfel(
         The type of byte-encoding (optional, 'utf-8').
     columns : list (optional)
         Optionally specify the columns of the output by a list of strings.
-        The default list is:
-            [ "H", "K", "L", "I", "SigI", "BATCH", "s1x", "s1y", "s1z", "ewald_offset",
-            "angular_ewald_offset", "XDET", "YDET" ]
+        The default list is: [ "H", "K", "L", "I", "SigI", "BATCH", "s1x", "s1y", "s1z", "ewald_offset", "angular_ewald_offset", "XDET", "YDET" ]
         See `rs.io.crystfel.StreamLoader().available_column_names` for a list of available
         column names and *Notes* for a description of the returned columns
     parallel : bool (optional)

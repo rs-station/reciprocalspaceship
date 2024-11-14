@@ -1177,7 +1177,7 @@ class DataSet(pd.DataFrame):
 
         return result
 
-    def is_isomorphous(self, other, cell_threshold=0.05):
+    def is_isomorphous(self, other, cell_threshold=0.5):
         """
         Determine whether DataSet is isomorphous to another DataSet. This
         method confirms isomorphism by ensuring the spacegroups are equivalent,
@@ -1214,7 +1214,8 @@ class DataSet(pd.DataFrame):
         for param in params:
             param1 = self.cell.__getattribute__(param)
             param2 = other.cell.__getattribute__(param)
-            if (np.abs((param1 - param2)) / 100.0) > cell_threshold:
+            diff = 200.0 * np.abs(param1 - param2) / (param1 + param2)
+            if diff > cell_threshold:
                 return False
 
         return True
