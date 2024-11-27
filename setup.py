@@ -90,6 +90,7 @@ setup(
     entry_points={
         "console_scripts": [
             "rs.mtzdump=reciprocalspaceship.commandline.mtzdump:main",
+            "rs.cifdump=reciprocalspaceship.commandline.cifdump:main"
         ]
     },
     classifiers=[

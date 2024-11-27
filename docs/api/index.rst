@@ -95,6 +95,7 @@ Commandline tools to support common use cases.
    :hidden:
 
    mtzdump
+   cifdump
 
 .. Manual table for commandline tools
 
@@ -109,5 +110,8 @@ Commandline tools to support common use cases.
 	 <tr class="row-odd"><td><p><a class="reference internal" href="mtzdump.html"><code class="xref py py-obj docutils literal notranslate"><span class="pre">rs.mtzdump</span></code></a></p></td>
 	 <td><p>Summarize the contents of an MTZ file</p></td>
 	 </tr>
+    <tr class="row-even"><td><p><a class="reference internal" href="cifdump.html"><code class="xref py py-obj docutils literal notranslate"><span class="pre">rs.cifdump</span></code></a></p></td>
+    <td><p>Summarize the contents of a CIF file</p></td>
+    </tr>
 	 </tbody>
    </table>
