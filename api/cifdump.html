@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>rs.mtzdump &mdash; reciprocalspaceship 1.0.3 documentation</title>
+  <title>rs.cifdump &mdash; reciprocalspaceship 1.0.3 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=80d5e7a1" />
       <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
       <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=5712473c" />
@@ -25,8 +25,8 @@
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="rs.cifdump" href="cifdump.html" />
-    <link rel="prev" title="reciprocalspaceship.summarize_mtz_dtypes" href="autoapi/reciprocalspaceship.summarize_mtz_dtypes.html" /> 
+    <link rel="next" title="For Developers" href="../developers/index.html" />
+    <link rel="prev" title="rs.mtzdump" href="mtzdump.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -58,12 +58,12 @@
 <li class="toctree-l2"><a class="reference internal" href="index.html#summary-statistics">Summary Statistics</a></li>
 <li class="toctree-l2"><a class="reference internal" href="index.html#helpful-functions">Helpful Functions</a></li>
 <li class="toctree-l2 current"><a class="reference internal" href="index.html#commandline-tools">Commandline Tools</a><ul class="current">
-<li class="toctree-l3 current"><a class="current reference internal" href="#">rs.mtzdump</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="mtzdump.html">rs.mtzdump</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">rs.cifdump</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#examples">Examples</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#usage-details">Usage Details</a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="cifdump.html">rs.cifdump</a></li>
 </ul>
 </li>
 </ul>
@@ -86,9 +86,9 @@
   <ul class="wy-breadcrumbs">
       <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
           <li class="breadcrumb-item"><a href="index.html">API Reference</a></li>
-      <li class="breadcrumb-item active">rs.mtzdump</li>
+      <li class="breadcrumb-item active">rs.cifdump</li>
       <li class="wy-breadcrumbs-aside">
-            <a href="../_sources/api/mtzdump.rst.txt" rel="nofollow"> View page source</a>
+            <a href="../_sources/api/cifdump.rst.txt" rel="nofollow"> View page source</a>
       </li>
   </ul>
   <hr/>
@@ -96,52 +96,52 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="rs-mtzdump">
-<span id="mtzdump"></span><h1>rs.mtzdump<a class="headerlink" href="#rs-mtzdump" title="Link to this heading"></a></h1>
-<p>Summarize the contents of an MTZ file.</p>
+  <section id="rs-cifdump">
+<span id="cifdump"></span><h1>rs.cifdump<a class="headerlink" href="#rs-cifdump" title="Link to this heading"></a></h1>
+<p>Summarize the contents of a CIF file.</p>
 <section id="examples">
 <h2>Examples<a class="headerlink" href="#examples" title="Link to this heading"></a></h2>
-<p>In order to summarize contents of file.mtz:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&gt;</span> <span class="n">rs</span><span class="o">.</span><span class="n">mtzdump</span> <span class="n">file</span><span class="o">.</span><span class="n">mtz</span>
+<p>In order to summarize contents of file.cif:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&gt;</span> <span class="n">rs</span><span class="o">.</span><span class="n">cifdump</span> <span class="n">file</span><span class="o">.</span><span class="n">cif</span>
 </pre></div>
 </div>
-<p>If you would like to interactively inspect file.mtz in an IPython
+<p>If you would like to interactively inspect file.cif in an IPython
 shell, use the “–embed” argument:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&gt;</span> <span class="n">rs</span><span class="o">.</span><span class="n">mtzdump</span> <span class="n">file</span><span class="o">.</span><span class="n">mtz</span> <span class="o">--</span><span class="n">embed</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&gt;</span> <span class="n">rs</span><span class="o">.</span><span class="n">cifdump</span> <span class="n">file</span><span class="o">.</span><span class="n">cif</span> <span class="o">--</span><span class="n">embed</span>
 </pre></div>
 </div>
-<p>If multiple MTZ files are listed, they will be summarized sequentially,
-and can be accessed in an IPython shell as a dictionary called <cite>mtzs</cite>:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&gt;</span> <span class="n">rs</span><span class="o">.</span><span class="n">mtzdump</span> <span class="n">file1</span><span class="o">.</span><span class="n">mtz</span> <span class="n">file2</span><span class="o">.</span><span class="n">mtz</span> <span class="n">file3</span><span class="o">.</span><span class="n">mtz</span> <span class="o">--</span><span class="n">embed</span>
+<p>If multiple CIF files are listed, they will be summarized sequentially,
+and can be accessed in an IPython shell as a dictionary called <cite>cifs</cite>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&gt;</span> <span class="n">rs</span><span class="o">.</span><span class="n">cifdump</span> <span class="n">file1</span><span class="o">.</span><span class="n">cif</span> <span class="n">file2</span><span class="o">.</span><span class="n">cif</span> <span class="n">file3</span><span class="o">.</span><span class="n">cif</span> <span class="o">--</span><span class="n">embed</span>
 </pre></div>
 </div>
 </section>
 <section id="usage-details">
 <h2>Usage Details<a class="headerlink" href="#usage-details" title="Link to this heading"></a></h2>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">usage: rs.mtzdump [-h] [--embed] [-p PRECISION] mtz [mtz ...]</span>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">usage: rs.cifdump [-h] [--embed] [-p PRECISION] cif [cif ...]</span>
 </pre></div>
 </div>
 <dl class="std option">
-<dt class="sig sig-object std" id="cmdoption-rs.mtzdump-arg-mtz">
-<span class="sig-name descname"><span class="pre">mtz</span></span><span class="sig-prename descclassname"></span><a class="headerlink" href="#cmdoption-rs.mtzdump-arg-mtz" title="Link to this definition"></a></dt>
-<dd><p>MTZ file(s) to summarize</p>
+<dt class="sig sig-object std" id="cmdoption-rs.cifdump-arg-cif">
+<span class="sig-name descname"><span class="pre">cif</span></span><span class="sig-prename descclassname"></span><a class="headerlink" href="#cmdoption-rs.cifdump-arg-cif" title="Link to this definition"></a></dt>
+<dd><p>CIF file(s) to summarize</p>
 </dd></dl>
 
 <dl class="std option">
-<dt class="sig sig-object std" id="cmdoption-rs.mtzdump-h">
-<span class="sig-name descname"><span class="pre">-h</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--help</span></span><span class="sig-prename descclassname"></span><a class="headerlink" href="#cmdoption-rs.mtzdump-h" title="Link to this definition"></a></dt>
+<dt class="sig sig-object std" id="cmdoption-rs.cifdump-h">
+<span class="sig-name descname"><span class="pre">-h</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--help</span></span><span class="sig-prename descclassname"></span><a class="headerlink" href="#cmdoption-rs.cifdump-h" title="Link to this definition"></a></dt>
 <dd><p>show this help message and exit</p>
 </dd></dl>
 
 <dl class="std option">
-<dt class="sig sig-object std" id="cmdoption-rs.mtzdump-embed">
-<span class="sig-name descname"><span class="pre">--embed</span></span><span class="sig-prename descclassname"></span><a class="headerlink" href="#cmdoption-rs.mtzdump-embed" title="Link to this definition"></a></dt>
-<dd><p>MTZ file(s) will be summarized, and an IPython shell will be started</p>
+<dt class="sig sig-object std" id="cmdoption-rs.cifdump-embed">
+<span class="sig-name descname"><span class="pre">--embed</span></span><span class="sig-prename descclassname"></span><a class="headerlink" href="#cmdoption-rs.cifdump-embed" title="Link to this definition"></a></dt>
+<dd><p>CIF file(s) will be summarized, and an IPython shell will be started</p>
 </dd></dl>
 
 <dl class="std option">
-<dt class="sig sig-object std" id="cmdoption-rs.mtzdump-p">
-<span class="sig-name descname"><span class="pre">-p</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;precision&gt;</span></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--precision</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;precision&gt;</span></span><a class="headerlink" href="#cmdoption-rs.mtzdump-p" title="Link to this definition"></a></dt>
+<dt class="sig sig-object std" id="cmdoption-rs.cifdump-p">
+<span class="sig-name descname"><span class="pre">-p</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;precision&gt;</span></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--precision</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;precision&gt;</span></span><a class="headerlink" href="#cmdoption-rs.cifdump-p" title="Link to this definition"></a></dt>
 <dd><p>Number of significant digits to output for floats</p>
 </dd></dl>
 
@@ -152,8 +152,8 @@ and can be accessed in an IPython shell as a dictionary called <cite>mtzs</cite>
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="autoapi/reciprocalspaceship.summarize_mtz_dtypes.html" class="btn btn-neutral float-left" title="reciprocalspaceship.summarize_mtz_dtypes" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="cifdump.html" class="btn btn-neutral float-right" title="rs.cifdump" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="mtzdump.html" class="btn btn-neutral float-left" title="rs.mtzdump" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../developers/index.html" class="btn btn-neutral float-right" title="For Developers" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>
