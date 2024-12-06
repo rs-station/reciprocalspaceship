@@ -711,3 +711,42 @@ def test_select_mtzdtype_ValueError(data_merged, dtype):
     """
     with pytest.raises(ValueError):
         data_merged.select_mtzdtype(dtype)
+
+
+@pytest.mark.parametrize("merged", [True, False])
+@pytest.mark.parametrize("hkl_as_ds", [True, False])
+@pytest.mark.parametrize("range_index", [True, False])
+def test_hkls_property_setter(data_merged, data_unmerged, merged, hkl_as_ds, range_index):
+    """
+    Test the setter for the .hkls property of rs datasets
+    """
+    if merged:
+        input_ds = data_merged
+    else:
+        input_ds = data_unmerged
+
+    ds = input_ds.copy()
+
+    if range_index:
+        ds = ds.reset_index()
+
+    hmax = 20
+    n = len(ds)
+
+    hkls = np.random.randint(-hmax, hmax+1, size=(n, 3))
+    if hkl_as_ds:
+        hkls = rs.DataSet({
+            'H' : hkls[...,0],
+            'K' : hkls[...,1],
+            'L' : hkls[...,2],
+        })
+            
+    ds.hkls = hkls
+    assert np.array_equal(hkls, ds.hkls)
+
+    # Test that all data remained the same
+    for k in input_ds:
+        if k not in ['H', 'K', 'L']:
+            assert np.array_equal(ds[k], input_ds[k])
+
+
