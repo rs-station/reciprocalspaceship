@@ -53,7 +53,7 @@ class DataSet(pd.DataFrame):
     centrics : rs.DataSet
         Access only the centric reflections in this dataset
     hkls : ndarray, shape=(n_reflections, 3)
-        Miller indices in DataSet. 
+        Miller indices in DataSet.
     merged : bool
         Whether this is a merged dataset or unmerged
 
@@ -157,27 +157,29 @@ class DataSet(pd.DataFrame):
         return hkl
 
     def get_hkls(self):
-        """ For backwards compatibility retain the get_hkls method in addition to the dataset.hkls attribute """
+        """For backwards compatibility retain the get_hkls method in addition to the dataset.hkls attribute"""
         return self.hkls
 
     @hkls.setter
     @range_indexed
     def hkls(self, hkls):
         if isinstance(hkls, DataSet):
-            """ Convert to numpy if hkls is a dataset """
+            """Convert to numpy if hkls is a dataset"""
             hkls = hkls.hkls
         if isinstance(hkls, np.ndarray):
-            h,k,l = hkls[...,0], hkls[...,1], hkls[...,2]
+            h, k, l = hkls[..., 0], hkls[..., 1], hkls[..., 2]
         else:
-            """ Try coercing to numpy """
+            """Try coercing to numpy"""
             try:
                 hkls = np.array(hkls)
-                h,k,l = hkls[...,0], hkls[...,1], hkls[...,2]
+                h, k, l = hkls[..., 0], hkls[..., 1], hkls[..., 2]
             except:
-                raise ValueError("Unable to convert hkls to a suitable type. Please ensure hkls is a numpy array or rs.DataSet")
-        self['H'] = DataSeries(h, index = self.index, dtype='H')
-        self['K'] = DataSeries(k, index = self.index, dtype='H')
-        self['L'] = DataSeries(l, index = self.index, dtype='H')
+                raise ValueError(
+                    "Unable to convert hkls to a suitable type. Please ensure hkls is a numpy array or rs.DataSet"
+                )
+        self["H"] = DataSeries(h, index=self.index, dtype="H")
+        self["K"] = DataSeries(k, index=self.index, dtype="H")
+        self["L"] = DataSeries(l, index=self.index, dtype="H")
 
     @property
     def centrics(self):
