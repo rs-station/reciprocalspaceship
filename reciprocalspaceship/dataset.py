@@ -1585,24 +1585,6 @@ class DataSet(pd.DataFrame):
         warnings.simplefilter("always")
         warnings.warn(message, DeprecationWarning)
 
-        if dmin is not None:
-            ds = self.loc[self.compute_dHKL().dHKL >= dmin, [key]]
-        else:
-            ds = self.loc[:, [key]]
-
-        if gridsize is None:
-            gridsize = self.get_reciprocal_grid_size(dmin=dmin, sample_rate=sample_rate)
-
-        # Set up P1 unit cell
-        p1 = ds.expand_to_p1()
-        p1 = p1.expand_anomalous()
-
-        # Get data and indices
-        data = p1[key].to_numpy()
-        H = p1.get_hkls()
-
-        # Populate grid
-        grid = np.zeros(gridsize, dtype=data.dtype)
-        grid[H[:, 0], H[:, 1], H[:, 2]] = data
-
-        return grid
+        return self.to_reciprocal_grid(
+            key, sample_rate=sample_rate, dmin=dmin, grid_size=gridsize
+        )
