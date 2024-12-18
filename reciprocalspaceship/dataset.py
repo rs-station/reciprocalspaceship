@@ -56,7 +56,6 @@ class DataSet(pd.DataFrame):
         Miller indices in DataSet.
     merged : bool
         Whether this is a merged dataset or unmerged
-
     spacegroup : gemmi.SpaceGroup
         The space group
     reindexing_ops : list
