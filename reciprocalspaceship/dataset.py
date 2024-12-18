@@ -156,7 +156,7 @@ class DataSet(pd.DataFrame):
         return hkl
 
     def get_hkls(self):
-        """For backwards compatibility retain the get_hkls method in addition to the dataset.hkls attribute"""
+        """Get the Miller indices of the dataset."""
         return self.hkls
 
     @hkls.setter
