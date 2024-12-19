@@ -31,7 +31,7 @@ def read_precognition(hklfile, spacegroup=None, cell=None, logfile=None):
         F = pd.read_csv(
             hklfile,
             header=None,
-            delim_whitespace=True,
+            sep="\\s+",
             names=["H", "K", "L", "F(+)", "SigF(+)", "F(-)", "SigF(-)"],
             usecols=usecols,
         )
@@ -49,7 +49,7 @@ def read_precognition(hklfile, spacegroup=None, cell=None, logfile=None):
         F = pd.read_csv(
             hklfile,
             header=None,
-            delim_whitespace=True,
+            sep="\\s+",
             names=[
                 "H",
                 "K",
