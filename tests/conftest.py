@@ -8,33 +8,6 @@ import pytest
 
 import reciprocalspaceship as rs
 
-
-@pytest.fixture
-def hkls():
-    """
-    Return all Miller indices with H, K, L values between [-5, 5]
-    """
-    hmin, hmax = -5, 5
-    H = np.mgrid[hmin : hmax + 1, hmin : hmax + 1, hmin : hmax + 1].reshape((3, -1)).T
-    return H
-
-
-@pytest.fixture
-def dataset_hkl():
-    """
-    Build DataSet for testing containing only Miller indices
-    """
-    hmin, hmax = -5, 5
-    H = (
-        np.mgrid[hmin : hmax + 1 : 2, hmin : hmax + 1 : 2, hmin : hmax + 1 : 2]
-        .reshape((3, -1))
-        .T
-    )
-    dataset = rs.DataSet({"H": H[:, 0], "K": H[:, 1], "L": H[:, 2]})
-    dataset.set_index(["H", "K", "L"], inplace=True)
-    return dataset
-
-
 def load_dataset(datapath, as_gemmi=False):
     """
     Load dataset at given datapath. Datapath is expected to be a list of
@@ -64,6 +37,39 @@ def data_unmerged():
     datapath = ["data", "data_unmerged.mtz"]
     return load_dataset(datapath)
 
+@pytest.fixture
+def hkls(data_merged):
+    """
+    Return all Miller indices with H, K, L values between [-5, 5]
+    """
+    return data_merged.hkls
+
+@pytest.fixture
+def dataset_hkl(data_merged):
+    """
+    Build DataSet for testing containing only Miller indices
+    """
+    H = data_merged.hkls
+    dataset = rs.DataSet({"H": H[:, 0], "K": H[:, 1], "L": H[:, 2]})
+    dataset.set_index(["H", "K", "L"], inplace=True)
+    return dataset
+
+@pytest.fixture
+def hkls_unmerged(data_unmerged):
+    """
+    Return all Miller indices with H, K, L values between [-5, 5]
+    """
+    return data_unmerged.hkls
+
+@pytest.fixture
+def dataset_hkl_unmerged(data_unmerged):
+    """
+    Build DataSet for testing containing only Miller indices
+    """
+    H = data_unmerged.hkls
+    dataset = rs.DataSet({"H": H[:, 0], "K": H[:, 1], "L": H[:, 2]})
+    dataset.set_index(["H", "K", "L"], inplace=True)
+    return dataset
 
 @pytest.fixture(
     params=[
