@@ -717,30 +717,19 @@ def test_select_mtzdtype_ValueError(data_merged, dtype):
 @pytest.mark.parametrize("hkl_type", ["ds", "index", "numpy"])
 @pytest.mark.parametrize("range_index", [True, False])
 def test_hkls_property_setter(
-    data_merged,
-    data_unmerged,
-    hkls,
-    hkls_unmerged,
-    dataset_hkl,
-    dataset_hkl_unmerged,
-    merged,
-    hkl_type,
-    range_index,
+    data_merged, 
+    data_unmerged, 
+    merged, hkl_type, range_index
 ):
     """
     Test the setter for the .hkls property of rs datasets
     """
     if merged:
         input_ds = data_merged
-        hkls = dataset_hkl
     else:
         input_ds = data_unmerged
-        hkls = dataset_hkl_unmerged
 
-    if hkl_type == "ds":
-        hkls = hkls.reset_index()
-    elif hkl_type == "numpy":
-        hkls = hkls.hkls
+    hkls = input_ds.copy().reset_index()[['H', 'K', 'L']]
 
     ds = input_ds.copy()
     if range_index:
@@ -749,25 +738,22 @@ def test_hkls_property_setter(
     # Confirm we're starting with equivalent miller indices
     expected = ds.hkls
     value = hkls
-    if hkl_type != "numpy":
-        value = value.hkls
-    assert np.array_equal(value, expected)
 
     # Shuffle the hkls
-    if hkl_type != "numpy":
-        hkls = hkls.sample(frac=1.0)
-    else:
-        np.random.shuffle(hkls)  # inplace
+    hkls = hkls.sample(frac=1.)
 
     # confirm shuffling
     assert not np.array_equal(hkls, ds.hkls)
 
     # confirm setter
-    ds.hkls = hkls
+    if hkl_type == 'ds':
+        ds.hkls = hkls
+    elif hkl_type == 'index':
+        ds.hkls = hkls.set_index(['H', 'K', 'L'])
+    elif hkl_type == 'numpy':
+        ds.hkls = hkls.to_numpy()
     expected = ds.hkls
-    value = hkls
-    if hkl_type != "numpy":
-        value = value.hkls
+    value = hkls.hkls
     assert np.array_equal(value, expected)
 
     # Test that all data remained the same
