@@ -717,9 +717,7 @@ def test_select_mtzdtype_ValueError(data_merged, dtype):
 @pytest.mark.parametrize("hkl_type", ["ds", "index", "numpy"])
 @pytest.mark.parametrize("range_index", [True, False])
 def test_hkls_property_setter(
-    data_merged, 
-    data_unmerged, 
-    merged, hkl_type, range_index
+    data_merged, data_unmerged, merged, hkl_type, range_index
 ):
     """
     Test the setter for the .hkls property of rs datasets
@@ -729,7 +727,7 @@ def test_hkls_property_setter(
     else:
         input_ds = data_unmerged
 
-    hkls = input_ds.copy().reset_index()[['H', 'K', 'L']]
+    hkls = input_ds.copy().reset_index()[["H", "K", "L"]]
 
     ds = input_ds.copy()
     if range_index:
@@ -740,17 +738,17 @@ def test_hkls_property_setter(
     value = hkls
 
     # Shuffle the hkls
-    hkls = hkls.sample(frac=1.)
+    hkls = hkls.sample(frac=1.0)
 
     # confirm shuffling
     assert not np.array_equal(hkls, ds.hkls)
 
     # confirm setter
-    if hkl_type == 'ds':
+    if hkl_type == "ds":
         ds.hkls = hkls
-    elif hkl_type == 'index':
-        ds.hkls = hkls.set_index(['H', 'K', 'L'])
-    elif hkl_type == 'numpy':
+    elif hkl_type == "index":
+        ds.hkls = hkls.set_index(["H", "K", "L"])
+    elif hkl_type == "numpy":
         ds.hkls = hkls.to_numpy()
     expected = ds.hkls
     value = hkls.hkls
