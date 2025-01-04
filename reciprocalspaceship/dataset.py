@@ -43,6 +43,23 @@ class DataSet(pd.DataFrame):
     and attributes, please see the `Pandas.DataFrame documentation`_.
 
     .. _Pandas.DataFrame documentation: https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.html
+
+    Attributes
+    ----------
+    acentrics : rs.DataSet
+        Access only the acentric reflections in this dataset
+    cell : gemmi.UnitCell
+        The unit cell
+    centrics : rs.DataSet
+        Access only the centric reflections in this dataset
+    hkls : ndarray, shape=(n_reflections, 3)
+        Miller indices in DataSet.
+    merged : bool
+        Whether this is a merged dataset or unmerged
+    spacegroup : gemmi.SpaceGroup
+        The space group
+    reindexing_ops : list
+        Possible reindexing ops consistent with the cell and spacegroup
     """
 
     _metadata = ["_spacegroup", "_cell", "_index_dtypes", "_merged"]
@@ -130,6 +147,38 @@ class DataSet(pd.DataFrame):
     @merged.setter
     def merged(self, val):
         self._merged = val
+
+    @property
+    @range_indexed
+    def hkls(self):
+        """Miller indices"""
+        hkl = self[["H", "K", "L"]].to_numpy(dtype=np.int32)
+        return hkl
+
+    def get_hkls(self):
+        """Get the Miller indices of the dataset."""
+        return self.hkls
+
+    @hkls.setter
+    @range_indexed
+    def hkls(self, hkls):
+        if isinstance(hkls, DataSet):
+            """Convert to numpy if hkls is a dataset"""
+            hkls = hkls.hkls
+        if isinstance(hkls, np.ndarray):
+            h, k, l = hkls[..., 0], hkls[..., 1], hkls[..., 2]
+        else:
+            """Try coercing to numpy"""
+            try:
+                hkls = np.array(hkls)
+                h, k, l = hkls[..., 0], hkls[..., 1], hkls[..., 2]
+            except:
+                raise ValueError(
+                    "Unable to convert hkls to a suitable type. Please ensure hkls is a numpy array or rs.DataSet"
+                )
+        self["H"] = DataSeries(h, index=self.index, dtype="H")
+        self["K"] = DataSeries(k, index=self.index, dtype="H")
+        self["L"] = DataSeries(l, index=self.index, dtype="H")
 
     @property
     def centrics(self):
