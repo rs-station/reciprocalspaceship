@@ -74,7 +74,7 @@ setup(
     project_urls=PROJECT_URLS,
     python_requires=">=3.9",
     install_requires=[
-        "gemmi>=0.5.5, <=0.7.0",
+        "gemmi>=0.7.0, <=0.7.0",
         "pandas>=2.2.2, <=2.2.3",
         "numpy",
         "scipy",
@@ -90,7 +90,7 @@ setup(
     entry_points={
         "console_scripts": [
             "rs.mtzdump=reciprocalspaceship.commandline.mtzdump:main",
-            "rs.cifdump=reciprocalspaceship.commandline.cifdump:main"
+            "rs.cifdump=reciprocalspaceship.commandline.cifdump:main",
         ]
     },
     classifiers=[
