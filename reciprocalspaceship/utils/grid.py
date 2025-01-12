@@ -50,6 +50,7 @@ def get_reciprocal_grid_size(cell, dmin, sample_rate=3.0, spacegroup=None):
 
     # Use gemmi.Mtz to find valid grid (FFT-friendly and obeys symmetry)
     m = gemmi.Mtz()
-    m.spacegroup = spacegroup
+    if spacegroup is not None:
+        m.spacegroup = spacegroup
 
     return m.get_size_for_hkl(min_size=min_size)
