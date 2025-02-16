@@ -7,7 +7,7 @@
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Time-Resolved Difference Map &mdash; reciprocalspaceship 1.0.3 documentation</title>
-      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
       <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=5712473c" />
       <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
@@ -125,10 +125,10 @@ symmetry, and were processed using Precognition (Renz Research, Inc.), a softwar
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%</span><span class="k">matplotlib</span> inline
-<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
-<span class="kn">import</span> <span class="nn">seaborn</span> <span class="k">as</span> <span class="nn">sns</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">seaborn</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">sns</span>
 <span class="n">sns</span><span class="o">.</span><span class="n">set_context</span><span class="p">(</span><span class="s2">&quot;notebook&quot;</span><span class="p">,</span> <span class="n">font_scale</span><span class="o">=</span><span class="mf">1.4</span><span class="p">)</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
 </pre></div>
 </div>
 </div>
@@ -136,7 +136,7 @@ symmetry, and were processed using Precognition (Renz Research, Inc.), a softwar
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">reciprocalspaceship</span> <span class="k">as</span> <span class="nn">rs</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">reciprocalspaceship</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">rs</span>
 </pre></div>
 </div>
 </div>
@@ -164,7 +164,7 @@ symmetry, and were processed using Precognition (Renz Research, Inc.), a softwar
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">load</span><span class="p">(</span><span class="n">hkl</span><span class="p">,</span> <span class="n">cell</span><span class="o">=</span><span class="p">(</span><span class="mf">66.9</span><span class="p">,</span> <span class="mf">66.9</span><span class="p">,</span> <span class="mf">40.8</span><span class="p">,</span> <span class="mf">90.0</span><span class="p">,</span> <span class="mf">90.0</span><span class="p">,</span> <span class="mf">120.0</span><span class="p">),</span> <span class="n">sg</span><span class="o">=</span><span class="mi">173</span><span class="p">):</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">load</span><span class="p">(</span><span class="n">hkl</span><span class="p">,</span> <span class="n">cell</span><span class="o">=</span><span class="p">(</span><span class="mf">66.9</span><span class="p">,</span> <span class="mf">66.9</span><span class="p">,</span> <span class="mf">40.8</span><span class="p">,</span> <span class="mf">90.0</span><span class="p">,</span> <span class="mf">90.0</span><span class="p">,</span> <span class="mf">120.0</span><span class="p">),</span> <span class="n">sg</span><span class="o">=</span><span class="mi">173</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Load HKL file from Precognition and map reflections to the reciprocal space ASU.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -311,7 +311,7 @@ w = \left(1 + \frac{\sigma_{\Delta F}^2}{\overline{\sigma_{\Delta F}^2}} + \alph
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">compute_weights</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">sigdf</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">compute_weights</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">sigdf</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Compute weights for each structure factor based on deltaF and its uncertainty</span>
 <span class="sd">    &quot;&quot;&quot;</span>

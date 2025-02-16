@@ -7,7 +7,7 @@
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Anomalous Differences in Real Space &mdash; reciprocalspaceship 1.0.3 documentation</title>
-      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
       <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=5712473c" />
       <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
@@ -121,16 +121,16 @@ Fourier transforms and representing real-space, voxelized electron density.</p>
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Plotting</span>
-<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
-<span class="kn">from</span> <span class="nn">celluloid</span> <span class="kn">import</span> <span class="n">Camera</span>
-<span class="kn">from</span> <span class="nn">IPython.display</span> <span class="kn">import</span> <span class="n">HTML</span><span class="p">,</span> <span class="n">Image</span>
-<span class="kn">import</span> <span class="nn">seaborn</span> <span class="k">as</span> <span class="nn">sns</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">celluloid</span><span class="w"> </span><span class="kn">import</span> <span class="n">Camera</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">IPython.display</span><span class="w"> </span><span class="kn">import</span> <span class="n">HTML</span><span class="p">,</span> <span class="n">Image</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">seaborn</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">sns</span>
 <span class="n">sns</span><span class="o">.</span><span class="n">set_context</span><span class="p">(</span><span class="s2">&quot;notebook&quot;</span><span class="p">,</span> <span class="n">font_scale</span><span class="o">=</span><span class="mf">1.3</span><span class="p">)</span>
 
 <span class="c1"># Analysis</span>
-<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">import</span> <span class="nn">gemmi</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">gemmi</span>
 </pre></div>
 </div>
 </div>
@@ -138,7 +138,7 @@ Fourier transforms and representing real-space, voxelized electron density.</p>
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">reciprocalspaceship</span> <span class="k">as</span> <span class="nn">rs</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">reciprocalspaceship</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">rs</span>
 </pre></div>
 </div>
 </div>
@@ -24806,7 +24806,7 @@ SUVORK5CYII=\
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">find_sites</span><span class="p">(</span><span class="n">real_map</span><span class="p">,</span> <span class="n">threshold</span><span class="p">,</span> <span class="n">cell</span><span class="p">):</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">find_sites</span><span class="p">(</span><span class="n">real_map</span><span class="p">,</span> <span class="n">threshold</span><span class="p">,</span> <span class="n">cell</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Find local peaks in map.</span>
 
@@ -24824,7 +24824,7 @@ SUVORK5CYII=\
 <span class="sd">    pd.DataFrame</span>
 <span class="sd">        DataFrame with coordinates and peak height for each site</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="kn">from</span> <span class="nn">skimage</span> <span class="kn">import</span> <span class="n">feature</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">skimage</span><span class="w"> </span><span class="kn">import</span> <span class="n">feature</span>
     <span class="n">peaks</span> <span class="o">=</span> <span class="n">feature</span><span class="o">.</span><span class="n">peak_local_max</span><span class="p">(</span><span class="n">real_map</span><span class="p">,</span> <span class="n">threshold_abs</span><span class="o">=</span><span class="n">threshold</span><span class="p">,</span> <span class="n">exclude_border</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
     <span class="n">data</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">peaks</span><span class="p">:</span>
@@ -24970,7 +24970,7 @@ SUVORK5CYII=\
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">write_pdb</span><span class="p">(</span><span class="n">sites</span><span class="p">,</span> <span class="n">cell</span><span class="p">):</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">write_pdb</span><span class="p">(</span><span class="n">sites</span><span class="p">,</span> <span class="n">cell</span><span class="p">):</span>
     <span class="n">s</span> <span class="o">=</span> <span class="n">gemmi</span><span class="o">.</span><span class="n">Structure</span><span class="p">()</span>
     <span class="n">s</span><span class="o">.</span><span class="n">cell</span> <span class="o">=</span> <span class="n">cell</span>
     <span class="n">m</span> <span class="o">=</span> <span class="n">gemmi</span><span class="o">.</span><span class="n">Model</span><span class="p">(</span><span class="s2">&quot;substructure&quot;</span><span class="p">)</span>
