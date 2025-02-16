@@ -131,4 +131,4 @@ def is_absent(H, spacegroup):
     absent : array
         Boolean array of length n. absent[i] == True if H[i] is systematically absent in sg.
     """
-    return spacegroup.operations().systematic_absences(H)
+    return spacegroup.operations().systematic_absences(np.array(H, dtype=np.int32))

@@ -22,10 +22,10 @@ def test_to_reciprocal_grid_gemmi(mtz_by_spacegroup, sample_rate, p1, use_sf):
     grid_size = dataset.get_reciprocal_grid_size(sample_rate=sample_rate)
 
     if use_sf:
-        gemmigrid = gemmimtz.get_f_phi_on_grid("FMODEL", "PHIFMODEL", size=grid_size)
-        expected = np.array(gemmigrid, copy=False)
         dataset["sf"] = dataset.to_structurefactor("FMODEL", "PHIFMODEL")
         result = dataset.to_reciprocal_grid("sf", grid_size=grid_size)
+        gemmigrid = gemmimtz.get_f_phi_on_grid("FMODEL", "PHIFMODEL", size=grid_size)
+        expected = gemmigrid.array
 
         # Requires rtol due to truncations applied in gemmi
         assert np.allclose(result, expected, rtol=1e-4)

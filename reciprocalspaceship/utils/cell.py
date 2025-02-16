@@ -29,7 +29,7 @@ def compute_dHKL(H, cell):
     if inverse.shape[-1] == 1:
         inverse = inverse.squeeze(-1)
 
-    F = np.array(cell.fractionalization_matrix.tolist()).astype(np.float64)
+    F = np.array(cell.frac.mat, dtype=np.float64)
     dhkls = np.reciprocal(np.linalg.norm((hkls @ F), 2, 1)).astype(np.float32)
     return dhkls[inverse]
 
