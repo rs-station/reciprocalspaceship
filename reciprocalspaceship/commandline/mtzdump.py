@@ -74,9 +74,13 @@ def summarize(mtz, precision):
                 f"{mtz.cell.alpha:.3f} {mtz.cell.beta:.3f} {mtz.cell.gamma:.3f}"
             )
         )
-        print(f"\nmtz.head():\n\n{mtz.head()}")
-        print(f"\nmtz.describe():\n\n{mtz.describe()}")
-        print(f"\nmtz.dtypes:\n\n{mtz.dtypes}")
+        if mtz.cell is not None:
+            dHKL = mtz.compute_dHKL().dHKL
+            print(f"Resolution range:  {dHKL.max():.3f} - {dHKL.min():.3f} Å")
+        with pd.option_context("display.max_rows", None):
+            print(f"\nmtz.head():\n\n{mtz.head()}")
+            print(f"\nmtz.describe().T:\n\n{mtz.describe().T}")
+            print(f"\nmtz.dtypes:\n\n{mtz.dtypes}")
     return
 
 
