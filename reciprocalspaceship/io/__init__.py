@@ -11,3 +11,5 @@ from reciprocalspaceship.io.mtz import (
 )
 from reciprocalspaceship.io.pickle import read_pickle
 from reciprocalspaceship.io.precognition import read_precognition
+
+from reciprocalspaceship.io.read_any import read
