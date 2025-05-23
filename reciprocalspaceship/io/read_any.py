@@ -1,4 +1,4 @@
-
+from pathlib import Path
 
 from reciprocalspaceship.io.crystfel import read_crystfel
 from reciprocalspaceship.io.csv import read_csv
@@ -34,31 +34,42 @@ def read(filename,
     """
 
     if filetype == 'auto':
-        filetype = filename.split('.')[-1]
+        filetype = Path(filename).suffix.removeprefix(".")
 
-    if filetype in ('mtz', 'MTZ'):
-        return _attempt_read(filename, read_mtz, *args, **kwargs)
+    match filetype:
 
-    if filetype in ('cif', 'sfcif', 'CIF'):
-        return _attempt_read(filename, read_cif, *args, **kwargs)
+        case 'mtz' | 'MTZ':
+            return _attempt_read(filename, read_mtz, *args, **kwargs)
 
-    if filetype in ('pkl', 'PKL', 'pickle'):
-        return _attempt_read(filename, read_pickle, *args, **kwargs)
+        case 'cif' | 'sfcif' | 'CIF' | 'SFCIF':
+            return _attempt_read(filename, read_cif, *args, **kwargs)
 
-    if filetype in ('crystfel',):
-        return _attempt_read(filename, read_crystfel, *args, **kwargs)
+        case 'pkl' | 'PKL' | 'pickle':
+            return _attempt_read(filename, read_pickle, *args, **kwargs)
 
-    if filetype in ('ii', 'II', 'precognition'):
-        return _attempt_read(filename, read_precognition, *args, **kwargs)
+        case 'stream' | 'crystfel':
+            return _attempt_read(filename, read_crystfel, *args, **kwargs)
 
-    if filetype in ('csv', 'CSV'):
-        return _attempt_read(filename, read_csv, *args, **kwargs)
+        case 'ii' | 'II' | 'hkl' | 'HKL' | 'precognition':
+            return _attempt_read(filename, read_precognition, *args, **kwargs)
+
+        case 'csv' | 'CSV':
+            return _attempt_read(filename, read_csv, *args, **kwargs)
+
+        case 'refl'| 'REFL' | 'dials' | 'Dials':
+            return _attempt_read(filename, read_dials_stills, *args, **kwargs)
+
+        case _:
+            raise ValueError(f"Unknown file type: {filetype}"
+                             "\n            "
+                             "Maybe you meant to specify a different filetype? "
+                             )
 
 
 def _attempt_read(filename, read_method, *args, **kwargs):
     try:
         return read_method(filename, *args, **kwargs)
     except Exception as e:
-        raise Exception((f"Attempting to read '{filename}' using `{read_method}` raised an exception. " "\n           "
-                         "Maybe you meant to specify a different filetype? " "\n           "
-                         f"The exception was: {e}"))
+        raise Exception(f"Attempting to read '{filename}' using `{read_method}` raised an exception. " "\n           "
+                        "Maybe you meant to specify a different filetype? " "\n           "
+                        f"The exception was: {e}")
