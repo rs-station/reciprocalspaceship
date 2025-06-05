@@ -80,6 +80,7 @@ setup(
         "scipy",
         "ipython",
         "msgpack",
+        "setuptools",
     ],
     setup_requires=["pytest-runner"],
     tests_require=tests_require,
