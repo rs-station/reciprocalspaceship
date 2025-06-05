@@ -84,7 +84,8 @@ setup(
     setup_requires=["pytest-runner"],
     tests_require=tests_require,
     extras_require={
-        "dev": tests_require + docs_require + examples_require,
+        "dev": tests_require,
+        "doc" : docs_require + examples_require
         "examples": examples_require,
     },
     entry_points={
