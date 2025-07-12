@@ -201,7 +201,10 @@ def coerce_to_array(
             raise TypeError(f"{values.dtype} cannot be converted to an IntegerDtype")
 
     elif is_bool_dtype(values) and is_integer_dtype(dtype):
-        values = np.array(values, dtype=int, copy=copy)
+        if copy:
+            values = np.array(values, dtype=int, copy=copy)
+        else:
+            values = np.asarray(values, dtype=int)
 
     elif not (is_integer_dtype(values) or is_float_dtype(values)):
         raise TypeError(f"{values.dtype} cannot be converted to an IntegerDtype")
