@@ -136,10 +136,10 @@ def coerce_to_array(
             mask = mask.copy()
         return values, mask
 
-    if not copy:
-        values = np.asarray(values)
-    else:
+    if copy:
         values = np.array(values, copy=copy)
+    else:
+        values = np.asarray(values)
 
     if is_object_dtype(values.dtype):
         inferred_type = lib.infer_dtype(values, skipna=True)
@@ -155,7 +155,10 @@ def coerce_to_array(
             raise TypeError(f"{values.dtype} cannot be converted to a MTZFloat32Dtype")
 
     elif is_bool_dtype(values) and is_float_dtype(dtype):
-        values = np.array(values, dtype=float, copy=copy)
+        if copy:
+            values = np.array(values, dtype=float, copy=copy)
+        else:
+            values = np.asarray(values, dtype=float)
 
     elif not (is_integer_dtype(values) or is_float_dtype(values)):
         raise TypeError(f"{values.dtype} cannot be converted to a MTZFloat32Dtype")
