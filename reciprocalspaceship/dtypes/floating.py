@@ -136,10 +136,10 @@ def coerce_to_array(
             mask = mask.copy()
         return values, mask
 
-    if copy:
-        values = np.array(values, copy=copy)
-    else:
+    if not copy:
         values = np.asarray(values)
+    else:
+        values = np.array(values, copy=copy)
 
     if is_object_dtype(values.dtype):
         inferred_type = lib.infer_dtype(values, skipna=True)
