@@ -198,11 +198,11 @@ class TestMissing(base.BaseMissingTests):
     pass
 
 
-class TestBooleanReduce(base.BaseBooleanReduceTests):
-    pass
+class TestReduce(base.BaseReduceTests):
+    def _supports_reduction(self, ser: pd.Series, op_name: str) -> bool:
+        # Specify if we expect this reduction to succeed.
+        return True
 
-
-class TestNumericReduce(base.BaseNumericReduceTests):
     def _get_expected_reduction_dtype(self, arr, op_name: str, skipna: bool = False):
         """
         Handle expected return types for reductions that may change int32-backed dtype

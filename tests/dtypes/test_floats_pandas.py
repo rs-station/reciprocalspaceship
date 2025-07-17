@@ -222,12 +222,10 @@ class TestMissing(base.BaseMissingTests):
     pass
 
 
-class TestBooleanReduce(base.BaseBooleanReduceTests):
-    pass
-
-
-class TestNumericReduce(base.BaseNumericReduceTests):
-    pass
+class TestReduce(base.BaseReduceTests):
+    def _supports_reduction(self, ser: pd.Series, op_name: str) -> bool:
+        # Specify if we expect this reduction to succeed.
+        return True
 
 
 class TestParsing(base.BaseParsingTests):

@@ -92,7 +92,7 @@ class BaseMaskedDtype(ExtensionDtype):
     base = None
     type: type
 
-    na_value = libmissing.NA
+    na_value = np.nan
 
     @cache_readonly
     def numpy_dtype(self) -> np.dtype:
