@@ -20,6 +20,13 @@ def IOtest_ii():
     datapath = join(abspath(dirname(__file__)), "../data/precognition")
     return join(datapath, "e074a_off1_001.mccd.ii")
 
+@pytest.fixture
+def IOtest_si():
+    """
+    Path to Precognition .si file for I/O testing
+    """
+    datapath = join(abspath(dirname(__file__)), "../data/precognition")
+    return join(datapath, "e042_off_3sig-exclude-9.si")
 
 @pytest.fixture
 def IOtest_log():
