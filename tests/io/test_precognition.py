@@ -149,4 +149,3 @@ def test_read_si(IOtest_si, IOtest_log, spacegroup, cell, log):
         assert result.cell.gamma == cell[5]
     else:
         assert result.cell is None
-

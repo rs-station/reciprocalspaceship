@@ -86,14 +86,16 @@ def read_precognition(hklfile, spacegroup=None, cell=None, logfile=None):
         )
         mtztypes = ["H", "H", "H", "R", "R", "J", "Q"]
         if logfile is not None:
-            warnings.warn("Ignoring logfile, as logfiles are not supported for .si format.")
+            warnings.warn(
+                "Ignoring logfile, as logfiles are not supported for .si format."
+            )
             logfile = None
-
-
 
     # Limit use to supported file formats
     else:
-        raise ValueError("rs.read_precognition() only supports .ii, .si, and .hkl files")
+        raise ValueError(
+            "rs.read_precognition() only supports .ii, .si, and .hkl files"
+        )
 
     # If logfile is given, read cell parameters and spacegroup
     # Assign these as temporary variables, and determine priority later.
