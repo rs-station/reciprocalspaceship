@@ -22,6 +22,15 @@ def IOtest_ii():
 
 
 @pytest.fixture
+def IOtest_si():
+    """
+    Path to Precognition .si file for I/O testing
+    """
+    datapath = join(abspath(dirname(__file__)), "../data/precognition")
+    return join(datapath, "e042_off_3sig-exclude-9.si")
+
+
+@pytest.fixture
 def IOtest_log():
     """
     Path to Precognition integration logfile for I/O testing

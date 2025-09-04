@@ -15,7 +15,7 @@ def read_precognition(hklfile, spacegroup=None, cell=None, logfile=None):
     Parameters
     ----------
     hklfile : str or file
-        name of an hkl or ii file or a file object
+        name of an hkl, si, or ii file or a file object
     spacegroup : str or int
         If int, this should specify the space group number. If str,
         this should be a space group symbol
@@ -66,9 +66,36 @@ def read_precognition(hklfile, spacegroup=None, cell=None, logfile=None):
         )
         mtztypes = ["H", "H", "H", "I", "R", "R", "R", "R", "J", "Q"]
 
+    # Read data from SI file
+    elif hklfile.endswith(".si"):
+        usecols = range(7)
+        F = pd.read_csv(
+            hklfile,
+            header=None,
+            sep="\\s+",
+            names=[
+                "H",
+                "K",
+                "L",
+                "Wavelength",
+                "SigWavelength",
+                "I",
+                "SigI",
+            ],
+            usecols=usecols,
+        )
+        mtztypes = ["H", "H", "H", "R", "R", "J", "Q"]
+        if logfile is not None:
+            warnings.warn(
+                "Ignoring logfile, as logfiles are not supported for .si format."
+            )
+            logfile = None
+
     # Limit use to supported file formats
     else:
-        raise ValueError("rs.read_precognition() only supports .ii and .hkl files")
+        raise ValueError(
+            "rs.read_precognition() only supports .ii, .si, and .hkl files"
+        )
 
     # If logfile is given, read cell parameters and spacegroup
     # Assign these as temporary variables, and determine priority later.
