@@ -38,7 +38,7 @@ PROJECT_URLS = {
 }
 
 # Testing requirements
-tests_require = ["pytest", "pytest-cov", "pytest-xdist", "ray"]
+tests_require = ["pytest", "pytest-cov", "pytest-xdist"]
 
 # Documentation requirements
 docs_require = [
@@ -81,6 +81,7 @@ setup(
         "ipython",
         "msgpack",
         "setuptools",
+        "joblib",
     ],
     setup_requires=["pytest-runner"],
     tests_require=tests_require,

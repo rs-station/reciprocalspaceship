@@ -17,13 +17,12 @@ def test_read_crystfel_mtz(IOtest_mtz):
 
 
 @pytest.mark.parametrize("spacegroup", [None, 19, "P 21 21 21", gemmi.SpaceGroup(19)])
-@pytest.mark.parametrize("parallel", [False, True])
-def test_read_stream(spacegroup, parallel):
+def test_read_stream(spacegroup):
     datadir = join(abspath(dirname(__file__)), "../data/crystfel")
 
     # Read HKL without providing cell / spacegroup
     hewl = rs.io.read_crystfel(
-        join(datadir, "crystfel.stream"), spacegroup=spacegroup, parallel=parallel
+        join(datadir, "crystfel.stream"), spacegroup=spacegroup, 
     )
 
     assert np.array_equal(hewl.index.names, ["H", "K", "L"])
