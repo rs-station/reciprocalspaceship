@@ -145,7 +145,9 @@ def _read_dials_stills_serial(fnames, unitcell, spacegroup, extra_cols=None, **k
     return result
 
 
-def _read_dials_stills_joblib(fnames, unitcell, spacegroup, num_jobs=10, extra_cols=None):
+def _read_dials_stills_joblib(
+    fnames, unitcell, spacegroup, num_jobs=10, extra_cols=None
+):
     """
 
     Parameters
@@ -160,9 +162,10 @@ def _read_dials_stills_joblib(fnames, unitcell, spacegroup, num_jobs=10, extra_c
     -------
     RS dataset (pandas Dataframe)
     """
-    from joblib import Parallel,delayed
-    refl_data  = Parallel(num_jobs)(
-        delayed(_get_refl_data)(fname, unitcell, spacegroup, extra_cols) 
+    from joblib import Parallel, delayed
+
+    refl_data = Parallel(num_jobs)(
+        delayed(_get_refl_data)(fname, unitcell, spacegroup, extra_cols)
         for fname in fnames
     )
     return refl_data

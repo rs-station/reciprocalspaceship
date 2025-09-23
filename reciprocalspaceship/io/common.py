@@ -15,5 +15,3 @@ def check_for_mpi():
         )
         warnings.warn(message, ImportWarning)
         return False
-
-

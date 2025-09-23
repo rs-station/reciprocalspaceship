@@ -269,7 +269,7 @@ class StreamLoader(object):
             A list of columns to include in the peak list numpy arrays.
             A list of possible column names is stored as stream_loader.available_column_names.
         num_cpus : int (optional)
-            The number of cpus to use. By default, use all the available cores. 
+            The number of cpus to use. By default, use all the available cores.
             For more info see the n_jobs parameter [here](https://joblib.readthedocs.io/en/stable/generated/joblib.Parallel.html)
 
         RETURNS
@@ -289,18 +289,22 @@ class StreamLoader(object):
                 self.block_regex_bytes["chunk_begin"].finditer(memfile),
                 self.block_regex_bytes["chunk_end"].finditer(memfile),
             )
-            from joblib import Parallel,delayed
+            from joblib import Parallel, delayed
+
             def parse_chunk(loader: StreamLoader, *args):
                 return loader._parse_chunk(*args)
-            results = Parallel(num_cpus)(delayed(parse_chunk)(
-                    self, 
-                    begin.start(), 
+
+            results = Parallel(num_cpus)(
+                delayed(parse_chunk)(
+                    self,
+                    begin.start(),
                     end.end(),
                     wavelength,
                     chunk_metadata_keys,
                     crystal_metadata_keys,
                     peak_list_columns,
-                ) for begin, end in beginnings_and_ends
+                )
+                for begin, end in beginnings_and_ends
             )
         return results
 
@@ -435,7 +439,7 @@ def read_crystfel(
     Initialize attributes and populate the DataSet object with data from a CrystFEL stream with indexed reflections.
     This is the output format used by CrystFEL software when processing still diffraction data.
 
-    This method is parallelized across CPUs speed up parsing. Parallelization depends on the Joblib Library. 
+    This method is parallelized across CPUs speed up parsing. Parallelization depends on the Joblib Library.
     and will not be installed automatically. Users must manually install it prior to calling this method.
 
     Parameters
