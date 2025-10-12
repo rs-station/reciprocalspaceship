@@ -127,7 +127,7 @@ def test_dials_mtz_conversion():
             assert np.allclose(ds[k], test_ds[k])
 
 
-@pytest.mark.parametrize("parallel_backend", ["mpi", "ray"])
+@pytest.mark.parametrize("parallel_backend", ["mpi", "joblib"])
 @pytest.mark.parametrize("mtz_dtypes", [True, False])
 def test_dials_reader(parallel_backend, mtz_dtypes, verbose=False):
 

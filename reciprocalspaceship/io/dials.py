@@ -14,7 +14,6 @@ if not LOGGER.handlers:
 
 import reciprocalspaceship as rs
 from reciprocalspaceship.decorators import cellify, spacegroupify
-from reciprocalspaceship.io.common import check_for_ray, set_ray_loglevel
 
 MSGPACK_DTYPES = {
     "double": np.float64,
@@ -41,7 +40,7 @@ def _set_logger(verbose):
     if verbose:
         level = logging.DEBUG
 
-    for log_name in ("rs.io.dials", "ray"):
+    for log_name in ("rs.io.dials",):
         logger = logging.getLogger(log_name)
         logger.setLevel(level)
         for handler in logger.handlers:
@@ -139,14 +138,16 @@ def _get_refl_data(fname, unitcell, spacegroup, extra_cols=None):
 
 
 def _read_dials_stills_serial(fnames, unitcell, spacegroup, extra_cols=None, **kwargs):
-    """run read_dials_stills without trying to import ray"""
+    """run read_dials_stills serially"""
     result = [
         _get_refl_data(fname, unitcell, spacegroup, extra_cols) for fname in fnames
     ]
     return result
 
 
-def _read_dials_stills_ray(fnames, unitcell, spacegroup, numjobs=10, extra_cols=None):
+def _read_dials_stills_joblib(
+    fnames, unitcell, spacegroup, num_jobs=10, extra_cols=None
+):
     """
 
     Parameters
@@ -154,28 +155,19 @@ def _read_dials_stills_ray(fnames, unitcell, spacegroup, numjobs=10, extra_cols=
     fnames: integration files
     unitcell: gemmi.UnitCell instance
     spacegroup: gemmi.SpaceGroup instance
-    numjobs: number of jobs
+    num_jobs: number of jobs
     extra_cols: list of additional columns to read from refl tables
 
     Returns
     -------
     RS dataset (pandas Dataframe)
     """
-    from reciprocalspaceship.io.common import ray_context
+    from joblib import Parallel, delayed
 
-    with ray_context(
-        log_level=LOGGER.level,
-        num_cpus=numjobs,
-        log_to_driver=LOGGER.level == logging.DEBUG,
-    ) as ray:
-        # get the refl data
-        get_refl_data = ray.remote(_get_refl_data)
-        refl_data = ray.get(
-            [
-                get_refl_data.remote(fname, unitcell, spacegroup, extra_cols)
-                for fname in fnames
-            ]
-        )
+    refl_data = Parallel(num_jobs)(
+        delayed(_get_refl_data)(fname, unitcell, spacegroup, extra_cols)
+        for fname in fnames
+    )
     return refl_data
 
 
@@ -237,9 +229,9 @@ def read_dials_stills(
     spacegroup : gemmi.SpaceGroup or similar (optional)
         The spacegroup assigned to the returned dataset.
     numjobs : int
-        If backend==ray, specify the number of jobs (ignored if backend==mpi).
+        If backend==joblib, specify the number of jobs (ignored if backend==mpi).
     parallel_backend : string (optional)
-        "ray", "mpi", or None for serial.
+        "joblib", "mpi", or None for serial.
     extra_cols : list (optional)
         Optional list of additional column names to extract from the refltables. By default, this method will search for
         miller_index, id, s1, xyzcal.px, intensity.sum.value, intensity.sum.variance, delpsical.rad
@@ -262,8 +254,8 @@ def read_dials_stills(
     if isinstance(fnames, str):
         fnames = [fnames]
 
-    if parallel_backend not in ["ray", "mpi", None]:
-        raise NotImplementedError("parallel_backend should be ray, mpi, or none")
+    if parallel_backend not in ["joblib", "mpi", None]:
+        raise NotImplementedError("parallel_backend should be joblib, mpi, or none")
 
     kwargs = {
         "fnames": fnames,
@@ -272,12 +264,9 @@ def read_dials_stills(
         "extra_cols": extra_cols,
     }
     reader = _read_dials_stills_serial
-    if parallel_backend == "ray":
-        kwargs["numjobs"] = numjobs
-        from reciprocalspaceship.io.common import check_for_ray
-
-        if check_for_ray():
-            reader = _read_dials_stills_ray
+    if parallel_backend == "joblib":
+        kwargs["num_jobs"] = numjobs
+        reader = _read_dials_stills_joblib
     elif parallel_backend == "mpi":
         from reciprocalspaceship.io.common import check_for_mpi
 

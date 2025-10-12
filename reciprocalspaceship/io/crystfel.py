@@ -6,7 +6,6 @@ import gemmi
 import numpy as np
 
 from reciprocalspaceship import DataSet, concat
-from reciprocalspaceship.io.common import check_for_ray, ray_context
 from reciprocalspaceship.utils import angle_between, eV2Angstroms
 
 # See Rupp Table 5-2
@@ -249,14 +248,11 @@ class StreamLoader(object):
         chunk_metadata_keys=None,
         crystal_metadata_keys=None,
         peak_list_columns=None,
-        use_ray=True,
-        num_cpus=None,
+        num_cpus=-1,
         address="local",
-        **ray_kwargs,
     ) -> list:
         """
-        Parse a CrystFEL stream file using multiple processors. Parallelization depends on the ray library (https://www.ray.io/).
-        If ray is unavailable, this method falls back to serial processing on one CPU. Ray is not a dependency of reciprocalspaceship
+        Parse a CrystFEL stream file using multiple processors. Parallelization depends on Joblib (https://joblib.readthedocs.io/en/stable/).
         and will not be installed automatically. Users must manually install it prior to calling this method.
 
         PARAMETERS
@@ -272,12 +268,9 @@ class StreamLoader(object):
         peak_list_columns : list
             A list of columns to include in the peak list numpy arrays.
             A list of possible column names is stored as stream_loader.available_column_names.
-        use_ray : bool(optional)
-            Whether or not to use ray for parallelization.
         num_cpus : int (optional)
-            The number of cpus for ray to use.
-        ray_kwargs : optional
-            Additional keyword arguments to pass to [ray.init](https://docs.ray.io/en/latest/ray-core/api/doc/ray.init.html#ray.init).
+            The number of cpus to use. By default, use all the available cores.
+            For more info see the n_jobs parameter [here](https://joblib.readthedocs.io/en/stable/generated/joblib.Parallel.html)
 
         RETURNS
         -------
@@ -290,54 +283,29 @@ class StreamLoader(object):
         if peak_list_columns is not None:
             peak_list_columns = [self.peak_list_columns[s] for s in peak_list_columns]
 
-        # Check whether ray is available
-        if use_ray:
-            use_ray = check_for_ray()
-
         with open(self.filename, "r") as f:
             memfile = mmap.mmap(f.fileno(), 0, access=mmap.ACCESS_READ)
             beginnings_and_ends = zip(
                 self.block_regex_bytes["chunk_begin"].finditer(memfile),
                 self.block_regex_bytes["chunk_end"].finditer(memfile),
             )
-            if use_ray:
-                with ray_context(num_cpus=num_cpus, **ray_kwargs) as ray:
+            from joblib import Parallel, delayed
 
-                    @ray.remote
-                    def parse_chunk(loader: StreamLoader, *args):
-                        return loader._parse_chunk(*args)
+            def parse_chunk(loader: StreamLoader, *args):
+                return loader._parse_chunk(*args)
 
-                    result_ids = []
-                    for begin, end in beginnings_and_ends:
-                        result_ids.append(
-                            parse_chunk.remote(
-                                self,
-                                begin.start(),
-                                end.end(),
-                                wavelength,
-                                chunk_metadata_keys,
-                                crystal_metadata_keys,
-                                peak_list_columns,
-                            )
-                        )
-
-                    results = ray.get(result_ids)
-
-                return results
-
-            else:
-                results = []
-                for begin, end in beginnings_and_ends:
-                    results.append(
-                        self._parse_chunk(
-                            begin.start(),
-                            end.end(),
-                            wavelength,
-                            chunk_metadata_keys,
-                            crystal_metadata_keys,
-                            peak_list_columns,
-                        )
-                    )
+            results = Parallel(num_cpus)(
+                delayed(parse_chunk)(
+                    self,
+                    begin.start(),
+                    end.end(),
+                    wavelength,
+                    chunk_metadata_keys,
+                    crystal_metadata_keys,
+                    peak_list_columns,
+                )
+                for begin, end in beginnings_and_ends
+            )
         return results
 
     def _extract_chunk_metadata(self, chunk_text, metadata_keys=None):
@@ -464,17 +432,14 @@ def read_crystfel(
     spacegroup=None,
     encoding="utf-8",
     columns=None,
-    parallel=True,
-    num_cpus=None,
+    num_cpus=-1,
     address="local",
-    **ray_kwargs,
 ) -> DataSet:
     """
     Initialize attributes and populate the DataSet object with data from a CrystFEL stream with indexed reflections.
     This is the output format used by CrystFEL software when processing still diffraction data.
 
-    This method is parallelized across CPUs speed up parsing. Parallelization depends on the ray library (https://www.ray.io/).
-    If ray is unavailable, this method falls back to serial processing on one CPU. Ray is not a dependency of reciprocalspaceship
+    This method is parallelized across CPUs speed up parsing. Parallelization depends on the Joblib Library.
     and will not be installed automatically. Users must manually install it prior to calling this method.
 
     Parameters
@@ -490,15 +455,9 @@ def read_crystfel(
         The default list is: [ "H", "K", "L", "I", "SigI", "BATCH", "s1x", "s1y", "s1z", "ewald_offset", "angular_ewald_offset", "XDET", "YDET" ]
         See `rs.io.crystfel.StreamLoader().available_column_names` for a list of available
         column names and *Notes* for a description of the returned columns
-    parallel : bool (optional)
-        Read the stream file in parallel using [ray.io](https://docs.ray.io) if it is available.
     num_cpus : int (optional)
         By default, the model will use all available cores. For very large cpu counts, this may consume
-        too much memory. Decreasing num_cpus may help. If ray is not installed, a single core will be used.
-    address : str (optional)
-        Optionally specify the ray instance to connect to. By default, start a new local instance.
-    ray_kwargs : optional
-        Additional keyword arguments to pass to [ray.init](https://docs.ray.io/en/latest/ray-core/api/doc/ray.init.html#ray.init).
+        too much memory. Decreasing num_cpus may help.
 
     Returns
     --------
@@ -559,10 +518,8 @@ def read_crystfel(
 
     for chunk in loader.read_crystfel(
         peak_list_columns=peak_list_columns,
-        use_ray=parallel,
         num_cpus=num_cpus,
         address=address,
-        **ray_kwargs,
     ):
         for peak_list in chunk["peak_lists"]:
             _ds = DataSet(
