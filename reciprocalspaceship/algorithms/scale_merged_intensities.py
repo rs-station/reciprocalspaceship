@@ -61,7 +61,6 @@ def _french_wilson_posterior_quad(Iobs, SigIobs, Sigma, centric, npoints=100):
     ]
     J = (Jmax - Jmin)[:, None] * grid / 2.0 + (Jmax + Jmin)[:, None] / 2.0
     logJ = np.nan_to_num(np.log(J), -np.inf)
-    logF = 0.5 * logJ.copy()
     log_prefactor = np.log(Jmax - Jmin) - np.log(2.0)
 
     # Log prior (Wilson's prior for intensities)
@@ -87,6 +86,7 @@ def _french_wilson_posterior_quad(Iobs, SigIobs, Sigma, centric, npoints=100):
     )
 
     # Compute expected value and variance of structure factor amplitude
+    logF = 0.5 * logJ
     log_mean_F = log_prefactor + logsumexp(
         logweights + logF + logP + logL - logZ[:, None], axis=1
     )

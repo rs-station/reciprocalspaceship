@@ -17,6 +17,9 @@ jobs:
       matrix:
         numpy-version: ['numpy<2.0', 'numpy>=2.0']
         python-version: ['3.9', '3.10', '3.11', '3.12', '3.13', '3.14']
+        exclude:
+          - numpy-version: 'numpy<2.0'
+            python-version: '3.14'
 
     # Skip CI if 'skip ci' is contained in latest commit message
     if: "!contains(github.event.head_commit.message, 'skip ci')"
