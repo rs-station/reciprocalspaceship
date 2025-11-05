@@ -34,7 +34,6 @@ jobs:
         python -m pip install --upgrade pip
         pip install "${{ matrix.numpy-version }}"
         pip install -e .[dev]
-        pip install ray
         python -c 'import setuptools;print(f"Using setuptools version: {setuptools.__version__}")'
 
     - name: Test with pytest
