@@ -1226,7 +1226,7 @@ class DataSet(pd.DataFrame):
 
         return result
 
-    def is_isomorphous(self, other, cell_threshold=0.5):
+    def is_isomorphous(self, other, cell_threshold=5.0):
         """
         Determine whether DataSet is isomorphous to another DataSet. This
         method confirms isomorphism by ensuring the spacegroups are equivalent,

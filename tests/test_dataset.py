@@ -603,7 +603,7 @@ def test_is_isomorphous(data_unmerged, data_fmodel, sg1, sg2, cell1, cell2):
             assert not result
 
 
-@pytest.mark.parametrize("threshold", [5.0, 1.0, 0.5, 0.1])
+@pytest.mark.parametrize("threshold", [10.0, 5.0, 1.0, 0.5, 0.1])
 def test_is_isomorphous_threshold(threshold):
     """
     Test that DataSet.is_isorphous(self, other, cell_threshold) method's
