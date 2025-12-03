@@ -127,7 +127,11 @@ def _get_refl_data(fname, unitcell, spacegroup, extra_cols=None):
             ds_data = {**col_data, **ds_data}
 
     if "id" in ds_data:
-        ds_data["BATCH"] = np.array([expt_id_map[li] for li in ds_data.pop("id")])
+        if len(expt_id_map) > 0:
+            ds_data["BATCH"] = np.array([expt_id_map[li] for li in ds_data.pop("id")])
+        else:
+            ds_data["BATCH"] = ds_data.pop("id")
+
     ds = rs.DataSet(
         ds_data,
         cell=unitcell,
