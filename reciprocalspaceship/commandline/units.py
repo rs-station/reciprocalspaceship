@@ -12,22 +12,28 @@ To convert Ångstroms to electron volts,
 
 """
 import argparse
+
 import reciprocalspaceship as rs
+
 
 def get_parser():
     parser = argparse.ArgumentParser(
         formatter_class=argparse.RawTextHelpFormatter, description=__doc__
     )
     parser.add_argument(
-        "-p", "--precision", 
-        help="The number of decimal places in the output default 6.", 
-        type=int, default=6,
+        "-p",
+        "--precision",
+        help="The number of decimal places in the output default 6.",
+        type=int,
+        default=6,
     )
     return parser
+
 
 def print_float(f, precision):
     fmt = f"{{:.{precision}g}}"
     print(fmt.format(f))
+
 
 def angstroms2ev():
     parser = get_parser()
@@ -41,14 +47,15 @@ def angstroms2ev():
             parser.precision,
         )
 
+
 def ev2angstroms():
     parser = get_parser()
     parser.add_argument(
-        "energy", nargs="+", help="Photon energy in electron volts", type=float)
+        "energy", nargs="+", help="Photon energy in electron volts", type=float
+    )
     parser = parser.parse_args()
     for e in parser.energy:
         print_float(
             rs.utils.ev2angstroms(e),
             parser.precision,
         )
-
