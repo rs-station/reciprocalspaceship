@@ -20,10 +20,14 @@ def get_parser():
     )
     parser.add_argument(
         "-p", "--precision", 
-        help="The number of significant figures in the output with default 6.", 
+        help="The number of decimal places in the output default 6.", 
         type=int, default=6,
     )
     return parser
+
+def print_float(f, precision):
+    fmt = f"{{:.{precision}g}}"
+    print(fmt.format(f))
 
 def angstroms2ev():
     parser = get_parser()
@@ -32,7 +36,10 @@ def angstroms2ev():
     )
     parser = parser.parse_args()
     for w in parser.wavelength:
-        print(rs.utils.angstroms2ev(w))
+        print_float(
+            rs.utils.angstroms2ev(w),
+            parser.precision,
+        )
 
 def ev2angstroms():
     parser = get_parser()
@@ -40,6 +47,8 @@ def ev2angstroms():
         "energy", nargs="+", help="Photon energy in electron volts", type=float)
     parser = parser.parse_args()
     for e in parser.energy:
-        print(rs.utils.ev2angstroms(e))
-
+        print_float(
+            rs.utils.ev2angstroms(e),
+            parser.precision,
+        )
 
