@@ -19,10 +19,13 @@ MSGPACK_DTYPES = {
     "double": np.float64,
     "float": np.float32,
     "int": np.int32,
+    "int6": np.int32,
+    "bool": np.bool_,
     "cctbx::miller::index<>": np.int32,
     "vec3<double>": np.float64,
     "std::size_t": np.intp,
 }
+
 
 DEFAULT_COLS = [
     "miller_index",
@@ -116,7 +119,7 @@ def _get_refl_data(fname, unitcell, spacegroup, extra_cols=None):
     expt_id_map = pack["identifiers"]
 
     if "miller_index" not in refl_data:
-        raise IOError("refl table must have a miller_index column")
+        raise OSError("refl table must have a miller_index column")
 
     ds_data = {}
     col_names = DEFAULT_COLS if extra_cols is None else DEFAULT_COLS + extra_cols
@@ -292,10 +295,11 @@ def _get_refl_pack(filename):
         assert len(pack) == 3
         _, _, pack = pack
     except (TypeError, AssertionError):
-        raise IOError("File does not appear to be dials::af::reflection_table")
+        raise OSError("File does not appear to be dials::af::reflection_table")
     return pack
 
 
+# %%
 def print_refl_info(reflfile):
     """print contents of `fname`, a reflection table file saved with DIALS"""
     pack = _get_refl_pack(reflfile)
