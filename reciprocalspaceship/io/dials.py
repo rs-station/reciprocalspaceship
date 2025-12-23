@@ -26,7 +26,6 @@ MSGPACK_DTYPES = {
     "std::size_t": np.intp,
 }
 
-
 DEFAULT_COLS = [
     "miller_index",
     "intensity.sum.value",
@@ -299,7 +298,6 @@ def _get_refl_pack(filename):
     return pack
 
 
-# %%
 def print_refl_info(reflfile):
     """print contents of `fname`, a reflection table file saved with DIALS"""
     pack = _get_refl_pack(reflfile)
