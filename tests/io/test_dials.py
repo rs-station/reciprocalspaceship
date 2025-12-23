@@ -34,7 +34,6 @@ def make_refls(unit_cell, sg, seed=8675309, file_prefix=""):
         "xyz": "vec3<double>",
         "bbox": "int6",
         "entering": "bool",
-        "flags": "std::size_t",
     }
 
     datasets = []
@@ -52,7 +51,6 @@ def make_refls(unit_cell, sg, seed=8675309, file_prefix=""):
         xyz = np.random.uniform(-1000, 1000, (refls_per_file, 3)).astype(np.float64)
         bbox = np.random.randint(0, 2500, (refls_per_file, 6)).astype(np.int32)
         entering = np.random.randint(0, 2, refls_per_file).astype(np.bool_)
-        flags = np.random.randint(0, 1000, refls_per_file).astype(np.intp)
         global_index = (np.arange(refls_per_file) + refls_per_file * i_file).astype(
             np.int32
         )
@@ -74,7 +72,6 @@ def make_refls(unit_cell, sg, seed=8675309, file_prefix=""):
                 "bbox4": bbox[:, 4],
                 "bbox5": bbox[:, 5],
                 "entering": entering,
-                "flags": flags,
                 "global_refl_index": global_index,
             },
             cell=unit_cell,
@@ -92,10 +89,9 @@ def make_refls(unit_cell, sg, seed=8675309, file_prefix=""):
                 "xyz",
                 "bbox",
                 "entering",
-                "flags",
                 "global_refl_index",
             ],
-            [hkl, I, varI, ids, xyz, bbox, entering, flags, global_index],
+            [hkl, I, varI, ids, xyz, bbox, entering, global_index],
         ):
             dtype = file_data[key]
             file_data[key] = dtype, (refls_per_file, vals.tobytes())
