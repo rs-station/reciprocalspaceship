@@ -119,7 +119,7 @@ def _get_refl_data(fname, unitcell, spacegroup, extra_cols=None):
     expt_id_map = pack["identifiers"]
 
     if "miller_index" not in refl_data:
-        raise OSError("refl table must have a miller_index column")
+        raise IOError("refl table must have a miller_index column")
 
     ds_data = {}
     col_names = DEFAULT_COLS if extra_cols is None else DEFAULT_COLS + extra_cols
@@ -295,7 +295,7 @@ def _get_refl_pack(filename):
         assert len(pack) == 3
         _, _, pack = pack
     except (TypeError, AssertionError):
-        raise OSError("File does not appear to be dials::af::reflection_table")
+        raise IOError("File does not appear to be dials::af::reflection_table")
     return pack
 
 
