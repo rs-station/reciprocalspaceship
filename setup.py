@@ -94,6 +94,8 @@ setup(
         "console_scripts": [
             "rs.mtzdump=reciprocalspaceship.commandline.mtzdump:main",
             "rs.cifdump=reciprocalspaceship.commandline.cifdump:main",
+            "rs.ev2angstroms=reciprocalspaceship.commandline.units:ev2angstroms",
+            "rs.angstroms2ev=reciprocalspaceship.commandline.units:angstroms2ev",
         ]
     },
     classifiers=[
