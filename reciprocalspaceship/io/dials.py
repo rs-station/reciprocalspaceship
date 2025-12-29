@@ -19,6 +19,8 @@ MSGPACK_DTYPES = {
     "double": np.float64,
     "float": np.float32,
     "int": np.int32,
+    "int6": np.int32,
+    "bool": np.bool_,
     "cctbx::miller::index<>": np.int32,
     "vec3<double>": np.float64,
     "std::size_t": np.intp,
