@@ -11,6 +11,7 @@ To convert Ångstroms to electron volts,
     > rs.angstroms2ev 1.0
 
 """
+
 import argparse
 
 import reciprocalspaceship as rs

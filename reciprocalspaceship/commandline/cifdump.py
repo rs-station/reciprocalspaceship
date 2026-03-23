@@ -21,6 +21,7 @@ and can be accessed in an IPython shell as a dictionary called `cifs`::
 Usage Details
 -------------
 """
+
 import argparse
 
 import pandas as pd
