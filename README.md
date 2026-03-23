@@ -1,5 +1,5 @@
 # 1 / 🚀 = reciprocalspaceship
-![Build](https://github.com/rs-station/reciprocalspaceship/workflows/Build/badge.svg)
+[![Build](https://github.com/rs-station/reciprocalspaceship/actions/workflows/build.yml/badge.svg?branch=main)](https://github.com/rs-station/reciprocalspaceship/actions/workflows/build.yml)
 [![Documentation](https://github.com/rs-station/reciprocalspaceship/workflows/Documentation/badge.svg)](https://rs-station.github.io/reciprocalspaceship)
 [![PyPI](https://img.shields.io/pypi/v/reciprocalspaceship?color=blue)](https://pypi.org/project/reciprocalspaceship/)
 [![Anaconda-Server Badge](https://anaconda.org/conda-forge/reciprocalspaceship/badges/version.svg)](https://anaconda.org/conda-forge/reciprocalspaceship)
