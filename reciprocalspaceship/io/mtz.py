@@ -3,6 +3,7 @@ import gemmi
 from reciprocalspaceship import DataSet
 from reciprocalspaceship.dtypes.base import MTZDtype
 from reciprocalspaceship.utils import in_asu
+import warnings
 
 
 def from_gemmi(gemmi_mtz):
@@ -28,7 +29,21 @@ def from_gemmi(gemmi_mtz):
     -------
     rs.DataSet
     """
-    dataset = DataSet(spacegroup=gemmi_mtz.spacegroup, cell=gemmi_mtz.cell)
+    wavelengths = [d.wavelength for d in gemmi_mtz.datasets]
+    num_uniq = len(set(wavelengths))
+    if num_uniq > 1:
+        message = (
+            "Mtz contains multiple datasets with different wavelengths."
+            f"Choosing first wavelength of available {wavelengths}."
+        )
+        warnings.warn(message)
+    wavelength = wavelengths[0]
+
+    dataset = DataSet(
+        spacegroup=gemmi_mtz.spacegroup, 
+        cell=gemmi_mtz.cell, 
+        wavelength=wavelength,
+    )
 
     # Build up DataSet
     for c in gemmi_mtz.columns:
@@ -131,6 +146,13 @@ def to_gemmi(
     mtz.datasets[0].project_name = project_name
     mtz.datasets[0].crystal_name = crystal_name
     mtz.datasets[0].dataset_name = dataset_name
+
+    # In gemmi the default wavelength is 0.0 which obviously means no wavelength
+    # info, but retains float type. 
+    if dataset.wavelength is None:
+        mtz.datasets[0].wavelength = 0.0
+    else:
+        mtz.datasets[0].wavelength = dataset.wavelength
 
     # Construct data for Mtz object
     # GH#255: DataSet is provided using the range_indexed decorator
