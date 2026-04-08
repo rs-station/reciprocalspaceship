@@ -35,6 +35,7 @@ def read_dials_stills_mpi(fnames, unitcell, spacegroup, extra_cols=None, comm=No
     if comm is None:
         from mpi4py import MPI
         from mpi4py.util import pkl5
+
         comm = pkl5.Intracomm(MPI.COMM_WORLD)
     ds = mpi_starmap(
         comm,
@@ -43,10 +44,9 @@ def read_dials_stills_mpi(fnames, unitcell, spacegroup, extra_cols=None, comm=No
     )
     return ds
 
-from mpi4py.util import pkl5
 
+from mpi4py.util import pkl5
 
 files = glob("data/cxidb_81/reflection_data/figure7/*.refl")
 comm = pkl5.Intracomm(MPI.COMM_WORLD)  # comm wrapper
-ds = rs.io.read_dials_stills(files, numjobs=2, parallel_backend='mpi', comm=comm)
-
+ds = rs.io.read_dials_stills(files, numjobs=2, parallel_backend="mpi", comm=comm)
