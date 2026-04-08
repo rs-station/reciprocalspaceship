@@ -26,7 +26,7 @@ def read_dials_stills_mpi(fnames, unitcell, spacegroup, extra_cols=None, comm=No
     unitcell: unit cell tuple (6 params Ang,Ang,Ang,deg,deg,deg)
     spacegroup: space group name e.g. P4
     extra_cols: list of additional column names to read from the refl table
-    comm: Optionally override the MPI communicator. The default is MPI.COMM_WORLD
+    comm: Optionally override the MPI communicator. The default is MPI.COMM_WORLD with pkl5
 
     Returns
     -------
@@ -34,11 +34,19 @@ def read_dials_stills_mpi(fnames, unitcell, spacegroup, extra_cols=None, comm=No
     """
     if comm is None:
         from mpi4py import MPI
-
-        comm = MPI.COMM_WORLD
+        from mpi4py.util import pkl5
+        comm = pkl5.Intracomm(MPI.COMM_WORLD)
     ds = mpi_starmap(
         comm,
         dials._get_refl_data,
         ((f, unitcell, spacegroup, extra_cols) for f in fnames),
     )
     return ds
+
+from mpi4py.util import pkl5
+
+
+files = glob("data/cxidb_81/reflection_data/figure7/*.refl")
+comm = pkl5.Intracomm(MPI.COMM_WORLD)  # comm wrapper
+ds = rs.io.read_dials_stills(files, numjobs=2, parallel_backend='mpi', comm=comm)
+
