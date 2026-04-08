@@ -43,4 +43,3 @@ def read_dials_stills_mpi(fnames, unitcell, spacegroup, extra_cols=None, comm=No
         ((f, unitcell, spacegroup, extra_cols) for f in fnames),
     )
     return ds
-
