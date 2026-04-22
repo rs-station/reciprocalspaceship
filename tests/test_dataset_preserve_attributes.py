@@ -1,12 +1,34 @@
 import gemmi
 import pytest
+import tempfile
 
 import reciprocalspaceship as rs
 
-@pytest.mark.parametrize("check_isomorphous", [True, False])
 @pytest.mark.parametrize("sg", [gemmi.SpaceGroup(19), gemmi.SpaceGroup(96)])
-@pytest.mark.parametrize("wavelength", [0., 1.])
-def test_copy(data_fmodel, check_isomorphous, sg, wavelength):
+@pytest.mark.parametrize("wavelength", [None, 0., 2.])
+def test_roundtrip_write_read(data_fmodel, sg, wavelength):
+    """
+    Test whether attributes of DataSet are preserved through write_mtz
+    followed by read_mtz
+    """
+    with tempfile.NamedTemporaryFile(suffix='.mtz') as temp:
+        mtz_file = temp.name
+        data_fmodel.spacegroup = sg
+        data_fmodel.wavelength = wavelength
+        assert data_fmodel.spacegroup == sg
+        assert data_fmodel.wavelength == wavelength
+
+        data_fmodel.write_mtz(mtz_file)
+        result = rs.read_mtz(mtz_file)
+
+        assert isinstance(result, rs.DataSet)
+        assert len(result) == len(data_fmodel)
+        if wavelength is None:
+            data_fmodel.wavelength = 0.0
+        for attr in data_fmodel._metadata:
+            assert result.__getattr__(attr) == data_fmodel.__getattr__(attr)
+
+def test_copy(data_fmodel):
     """
     Test whether attributes of DataSet are preserved through calls to
     pd.copy()
