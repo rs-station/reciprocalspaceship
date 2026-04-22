@@ -13,16 +13,18 @@ def test_constructor_empty():
     assert len(result) == 0
     assert result.spacegroup is None
     assert result.cell is None
+    assert result.wavelength is None
 
 
 @pytest.mark.parametrize("spacegroup", [None, gemmi.SpaceGroup(1), "P 1"])
 @pytest.mark.parametrize(
     "cell", [None, gemmi.UnitCell(1, 1, 1, 90, 90, 90), (1, 1, 1, 90, 90, 90)]
 )
+@pytest.mark.parametrize("wavelength", [None, 1., 2.])
 @pytest.mark.parametrize("merged", [None, True, False])
-def test_constructor_dataset(data_fmodel, spacegroup, cell, merged):
+def test_constructor_dataset(data_fmodel, spacegroup, wavelength, cell, merged):
     """Test DataSet.__init__() when called with a DataSet"""
-    result = rs.DataSet(data_fmodel, spacegroup=spacegroup, cell=cell, merged=merged)
+    result = rs.DataSet(data_fmodel, spacegroup=spacegroup, cell=cell, wavelength=wavelength, merged=merged)
     assert_frame_equal(result, data_fmodel)
 
     if merged is not None:
@@ -46,6 +48,28 @@ def test_constructor_dataset(data_fmodel, spacegroup, cell, merged):
     else:
         assert result.cell == data_fmodel.cell
 
+    if wavelength is not None:
+        assert result.wavelength == wavelength
+    else:
+        assert result.wavelength== data_fmodel.wavelength
+
+@pytest.mark.parametrize(
+    "fixture_name", ['data_fmodel', 'data_hewl']
+)
+def test_read_wavelength(data_fmodel, data_hewl, fixture_name):
+    wavelength_expected = {
+        'data_fmodel' : 1.0,
+        'data_hewl' : 0.0,
+    }
+    ds = locals()[fixture_name]
+    assert wavelength_expected[fixture_name] == ds.wavelength
+
+@pytest.mark.parametrize(
+    "wavelength", [None, 0., 1., 2.]
+)
+def test_set_wavelength(data_fmodel, wavelength):
+    data_fmodel.wavelength = wavelength
+    assert data_fmodel.wavelength == wavelength
 
 @pytest.mark.parametrize(
     "spacegroup", [None, 1, 5, 19, "P 21 21 21", "R 3:h", "R 3:blah", 1.2]
