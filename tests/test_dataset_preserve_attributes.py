@@ -3,6 +3,19 @@ import pytest
 
 import reciprocalspaceship as rs
 
+@pytest.mark.parametrize("check_isomorphous", [True, False])
+@pytest.mark.parametrize("sg", [gemmi.SpaceGroup(19), gemmi.SpaceGroup(96)])
+@pytest.mark.parametrize("wavelength", [0., 1.])
+def test_copy(data_fmodel, check_isomorphous, sg, wavelength):
+    """
+    Test whether attributes of DataSet are preserved through calls to
+    pd.copy()
+    """
+    result = data_fmodel.copy(deep=True)
+    assert isinstance(result, rs.DataSet)
+    assert len(result) == len(data_fmodel)
+    for attr in data_fmodel._metadata:
+        assert result.__getattr__(attr) == data_fmodel.__getattr__(attr)
 
 @pytest.mark.parametrize("check_isomorphous", [True, False])
 @pytest.mark.parametrize("sg", [gemmi.SpaceGroup(19), gemmi.SpaceGroup(96)])
