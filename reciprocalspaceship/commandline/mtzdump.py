@@ -75,6 +75,8 @@ def summarize(mtz, precision):
                 f"{mtz.cell.alpha:.3f} {mtz.cell.beta:.3f} {mtz.cell.gamma:.3f}"
             )
         )
+        if mtz.wavelength is not None:
+            print(f"Wavelength:  {mtz.wavelength} Å")
         if mtz.cell is not None:
             dHKL = mtz.compute_dHKL().dHKL
             print(f"Resolution range:  {dHKL.max():.3f} - {dHKL.min():.3f} Å")
