@@ -148,7 +148,7 @@ def to_gemmi(
     mtz.datasets[0].crystal_name = crystal_name
     mtz.datasets[0].dataset_name = dataset_name
 
-    # In gemmi the default wavelength is 0.0 which obviously means no wavelength
+    # In gemmi the default wavelength is 0.0 which means no wavelength
     # info, but retains float type.
     if dataset.wavelength is None:
         mtz.datasets[0].wavelength = 0.0
