@@ -26,7 +26,7 @@ def read_dials_stills_mpi(fnames, unitcell, spacegroup, extra_cols=None, comm=No
     unitcell: unit cell tuple (6 params Ang,Ang,Ang,deg,deg,deg)
     spacegroup: space group name e.g. P4
     extra_cols: list of additional column names to read from the refl table
-    comm: Optionally override the MPI communicator. The default is MPI.COMM_WORLD
+    comm: Optionally override the MPI communicator. The default is MPI.COMM_WORLD with pkl5
 
     Returns
     -------
@@ -34,8 +34,9 @@ def read_dials_stills_mpi(fnames, unitcell, spacegroup, extra_cols=None, comm=No
     """
     if comm is None:
         from mpi4py import MPI
+        from mpi4py.util import pkl5
 
-        comm = MPI.COMM_WORLD
+        comm = pkl5.Intracomm(MPI.COMM_WORLD)
     ds = mpi_starmap(
         comm,
         dials._get_refl_data,
