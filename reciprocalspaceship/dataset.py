@@ -62,7 +62,7 @@ class DataSet(pd.DataFrame):
         Possible reindexing ops consistent with the cell and spacegroup
     """
 
-    _metadata = ["_spacegroup", "_cell", "_index_dtypes", "_merged"]
+    _metadata = ["_spacegroup", "_cell", "_wavelength", "_index_dtypes", "_merged"]
 
     # -------------------------------------------------------------------
     # __init__ method
@@ -76,11 +76,13 @@ class DataSet(pd.DataFrame):
         copy=False,
         spacegroup=None,
         cell=None,
+        wavelength=None,
         merged=None,
     ):
         self._index_dtypes = {}
         self._spacegroup = None
         self._cell = None
+        self._wavelength = None
         self._merged = None
 
         # Construct DataSet from gemmi.Mtz object
@@ -103,6 +105,8 @@ class DataSet(pd.DataFrame):
             self.spacegroup = spacegroup
         if cell is not None:
             self.cell = cell
+        if wavelength is not None:
+            self.wavelength = wavelength
         if merged is not None:
             self.merged = merged
 
@@ -138,6 +142,15 @@ class DataSet(pd.DataFrame):
     @cellify("uc")
     def cell(self, uc):
         self._cell = uc
+
+    @property
+    def wavelength(self):
+        """The wavelength for these data"""
+        return self._wavelength
+
+    @wavelength.setter
+    def wavelength(self, val):
+        self._wavelength = val
 
     @property
     def merged(self):
