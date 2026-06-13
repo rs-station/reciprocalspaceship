@@ -32,6 +32,8 @@ def make_refls(unit_cell, sg, seed=8675309, file_prefix=""):
         "id": "int",
         "global_refl_index": "int",
         "xyz": "vec3<double>",
+        "bbox": "int6",
+        "entering": "bool",
     }
 
     datasets = []
@@ -47,6 +49,8 @@ def make_refls(unit_cell, sg, seed=8675309, file_prefix=""):
             np.int32
         )
         xyz = np.random.uniform(-1000, 1000, (refls_per_file, 3)).astype(np.float64)
+        bbox = np.random.randint(0, 2500, (refls_per_file, 6)).astype(np.int32)
+        entering = np.random.randint(0, 2, refls_per_file).astype(np.bool_)
         global_index = (np.arange(refls_per_file) + refls_per_file * i_file).astype(
             np.int32
         )
@@ -61,6 +65,13 @@ def make_refls(unit_cell, sg, seed=8675309, file_prefix=""):
                 "xyz0": xyz[:, 0],
                 "xyz1": xyz[:, 1],
                 "xyz2": xyz[:, 2],
+                "bbox0": bbox[:, 0],
+                "bbox1": bbox[:, 1],
+                "bbox2": bbox[:, 2],
+                "bbox3": bbox[:, 3],
+                "bbox4": bbox[:, 4],
+                "bbox5": bbox[:, 5],
+                "entering": entering,
                 "global_refl_index": global_index,
             },
             cell=unit_cell,
@@ -76,13 +87,15 @@ def make_refls(unit_cell, sg, seed=8675309, file_prefix=""):
                 "intensity.sum.variance",
                 "id",
                 "xyz",
+                "bbox",
+                "entering",
                 "global_refl_index",
             ],
-            [hkl, I, varI, ids, xyz, global_index],
+            [hkl, I, varI, ids, xyz, bbox, entering, global_index],
         ):
             dtype = file_data[key]
             file_data[key] = dtype, (refls_per_file, vals.tobytes())
-        idents = {i: f"experiment{i+shot_start}" for i in range(expts_per_refl)}
+        idents = {i: f"experiment{i + shot_start}" for i in range(expts_per_refl)}
 
         pack = (
             "dials::af::reflection_table",
@@ -130,7 +143,6 @@ def test_dials_mtz_conversion():
 @pytest.mark.parametrize("parallel_backend", ["mpi", "joblib"])
 @pytest.mark.parametrize("mtz_dtypes", [True, False])
 def test_dials_reader(parallel_backend, mtz_dtypes, verbose=False):
-
     unit_cell = 78, 78, 235, 90, 90, 120
     sg = "P 65 2 2"
     comm = None
