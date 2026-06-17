@@ -692,7 +692,7 @@ class DataSet(pd.DataFrame):
         batch : bool (optional)
             Optionally record batches in the MTZ header for unmerged data
         batch_key : str (optional)
-            Override the BATCH column selection. Required if multiple batch columns are present. 
+            Override the BATCH column selection. Required if multiple batch columns are present.
         """
         from reciprocalspaceship import io
 
