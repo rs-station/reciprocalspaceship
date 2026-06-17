@@ -72,12 +72,35 @@ def from_gemmi(gemmi_mtz):
     return dataset
 
 
+def _select_batch_key(dataset, batch_key):
+    # Locate available batch columns
+    available = dataset.dtypes[dataset.dtypes == "B"].keys()
+    if batch_key is not None:
+        if batch_key in available:
+            return batch_key
+        else:
+            raise ValueError(
+                f"batch_key, {batch_key}, not in available batch columns, {available}"
+            )
+    else:
+        if len(available) == 0:
+            return None  # No batching
+        elif len(available) == 1:
+            return available[0]  # Only option
+        else:
+            raise ValueError(
+                f"Multiple batch columns. Set batch_key to one of: {available}"
+            )
+
+
 def to_gemmi(
     dataset,
     skip_problem_mtztypes,
     project_name,
     crystal_name,
     dataset_name,
+    batch=True,
+    batch_key=None,
 ):
     """
     Construct gemmi.Mtz object from DataSet
@@ -102,6 +125,10 @@ def to_gemmi(
         Crystal name to assign to MTZ file
     dataset_name : str
         Dataset name to assign to MTZ file
+    batch : bool (optional)
+        Optionally record batches in the MTZ header for unmerged data
+    batch_key : str(optional)
+        Override the BATCH column selection. Required if multiple batch columns are present.
 
     Returns
     -------
@@ -138,9 +165,28 @@ def to_gemmi(
 
     # Handle Unmerged data
     if not dataset.merged:
+        if batch:
+            batch_key = _select_batch_key(dataset, batch_key)
+            if batch_key is not None:
+                all_batch_nums = sorted(dataset[batch_key].unique())
+                for batch_num in all_batch_nums:
+                    batch = gemmi.Mtz.Batch()
+                    batch.number = batch_num
+                    batch.cell = mtz.cell
+                    batch.dataset_id = 0
+                    mtz.batches.append(batch)
+        elif batch_key is not None:
+            raise ValueError(
+                f"batched output is disabled, but batck_key is set to {batch_key}"
+            )
+
         all_in_asu = in_asu(dataset.get_hkls(), dataset.spacegroup).all()
         if not all_in_asu:
             dataset.hkl_to_asu(inplace=True)
+    elif batch_key is not None:
+        raise ValueError(
+            f"dataset is merged, but user requested batch_key: {batch_key}"
+        )
 
     # Add Dataset with indicated names
     mtz.add_dataset("reciprocalspaceship")
@@ -217,6 +263,8 @@ def write_mtz(
     project_name,
     crystal_name,
     dataset_name,
+    batch=True,
+    batch_key=None,
 ):
     """
     Write an MTZ reflection file from the reflection data in a DataSet.
@@ -243,9 +291,19 @@ def write_mtz(
         Crystal name to assign to MTZ file
     dataset_name : str
         Dataset name to assign to MTZ file
+    batch : bool (optional)
+        Optionally record batches in the MTZ header for unmerged data
+    batch_key : str (optional)
+        Override the BATCH column selection. Required if multiple batch columns are present.
     """
     mtz = to_gemmi(
-        dataset, skip_problem_mtztypes, project_name, crystal_name, dataset_name
+        dataset,
+        skip_problem_mtztypes,
+        project_name,
+        crystal_name,
+        dataset_name,
+        batch,
+        batch_key,
     )
     mtz.write_to_file(mtzfile)
     return

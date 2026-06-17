@@ -3,6 +3,7 @@ import tempfile
 from os.path import exists
 
 import gemmi
+import numpy as np
 import pytest
 from pandas.testing import assert_frame_equal
 
@@ -131,6 +132,32 @@ def test_roundtrip_unmerged(data_unmerged, label_centrics):
     # Clean up
     temp.close()
     temp2.close()
+
+
+@pytest.mark.parametrize("batch", [True, False])
+@pytest.mark.parametrize("batch_key", [None, "BATCH", "MISSING"])
+def test_write_unmerged_batches(data_unmerged, batch, batch_key):
+    batch_key = "BATCH"
+    f = tempfile.NamedTemporaryFile(suffix=".mtz")
+    if not batch and batch_key is not None:
+        raises = True
+    elif batch_key not in data_unmerged:
+        raises = True
+    else:
+        raises = False
+
+    if raises:
+        with pytest.raises(ValueError):
+            data_unmerged.write_mtz(f.name, batch=batch, batch_key=batch_key)
+    else:
+        data_unmerged.write_mtz(f.name, batch=batch, batch_key=batch_key)
+        gemmi_mtz = gemmi.read_mtz_file(f.name)
+        test_batches = [b.number for b in gemmi_mtz.batches]
+        if batch:
+            expected_batches = sorted(data_unmerged[batch_key].unique())
+        else:
+            expected_batches = []
+        assert np.array_equal(test_batches, expected_batches)
 
 
 @pytest.mark.parametrize("in_asu", [True, False])
