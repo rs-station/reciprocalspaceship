@@ -663,6 +663,8 @@ class DataSet(pd.DataFrame):
         project_name="reciprocalspaceship",
         crystal_name="reciprocalspaceship",
         dataset_name="reciprocalspaceship",
+        batch=True,
+        batch_key=None,
     ):
         """
         Write DataSet to MTZ file.
@@ -687,6 +689,10 @@ class DataSet(pd.DataFrame):
             Crystal name to assign to MTZ file
         dataset_name : str
             Dataset name to assign to MTZ file
+        batch : bool (optional)
+            Optionally record batches in the MTZ header for unmerged data
+        batch_key : str (optional)
+            Override the BATCH column selection. Required if multiple batch columns are present. 
         """
         from reciprocalspaceship import io
 
@@ -697,6 +703,8 @@ class DataSet(pd.DataFrame):
             project_name,
             crystal_name,
             dataset_name,
+            batch,
+            batch_key,
         )
 
     def select_mtzdtype(self, dtype):
