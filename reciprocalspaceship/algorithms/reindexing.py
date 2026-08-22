@@ -18,8 +18,14 @@ from reciprocalspaceship.algorithms._errors import (
 )
 from reciprocalspaceship.dataset import DataSet
 from reciprocalspaceship.dtypes import (
+    AnomalousDifferenceDtype,
+    FriedelIntensityDtype,
+    FriedelStructureFactorAmplitudeDtype,
+    HendricksonLattmanDtype,
     IntensityDtype,
     NormalizedStructureFactorAmplitudeDtype,
+    StandardDeviationFriedelIDtype,
+    StandardDeviationFriedelSFDtype,
     StructureFactorAmplitudeDtype,
 )
 from reciprocalspaceship.utils.asu import hkl_to_asu
@@ -38,6 +44,13 @@ TARGET_REFLECTIONS_PER_RESOLUTION_BIN: Final[int] = 100
 MAXIMUM_RESOLUTION_BINS: Final[int] = 20
 MAXIMUM_CORRELATION_GAP: Final[float] = 2.0
 IDENTITY_OPERATION: Final[str] = "x,y,z"
+ANOMALOUS_DTYPES: Final[tuple[type[object], ...]] = (
+    AnomalousDifferenceDtype,
+    FriedelIntensityDtype,
+    FriedelStructureFactorAmplitudeDtype,
+    StandardDeviationFriedelIDtype,
+    StandardDeviationFriedelSFDtype,
+)
 AMPLITUDE_DTYPES: Final[tuple[type[object], ...]] = (
     StructureFactorAmplitudeDtype,
     NormalizedStructureFactorAmplitudeDtype,
@@ -186,11 +199,58 @@ def _validate_dataset(dataset: DataSet, *, data_key: str, name: str) -> None:
     if dataset.merged is not True:
         msg = f"{name} must be a merged DataSet"
         raise PhaseAlignmentInputError(msg)
+    if not dataset.columns.is_unique:
+        msg = f"{name} must have unique column labels"
+        raise PhaseAlignmentInputError(msg)
+    anomalous_keys = [
+        key for key in dataset if isinstance(dataset.dtypes[key], ANOMALOUS_DTYPES)
+    ]
+    if anomalous_keys:
+        msg = f"{name} contains unsupported anomalous columns: {anomalous_keys}"
+        raise PhaseAlignmentInputError(msg)
+    hendrickson_lattman_keys = [
+        key
+        for key in dataset
+        if isinstance(dataset.dtypes[key], HendricksonLattmanDtype)
+    ]
+    if hendrickson_lattman_keys:
+        msg = (
+            f"{name} contains unsupported Hendrickson-Lattman columns: "
+            f"{hendrickson_lattman_keys}"
+        )
+        raise PhaseAlignmentInputError(msg)
     if data_key not in dataset:
         msg = f"{name} does not contain data key {data_key!r}"
         raise PhaseAlignmentInputError(msg)
     if not isinstance(dataset.dtypes[data_key], REINDEXING_DATA_DTYPES):
         msg = f"{name}[{data_key!r}] must have an amplitude or intensity MTZ dtype"
+        raise PhaseAlignmentInputError(msg)
+    try:
+        raw_miller_indices = dataset.reset_index()[["H", "K", "L"]].to_numpy()
+    except (KeyError, ValueError) as error:
+        msg = f"{name} must contain Miller indices H, K, and L"
+        raise PhaseAlignmentInputError(msg) from error
+    if np.iscomplexobj(raw_miller_indices):
+        msg = f"{name} Miller indices must be real integer-valued numbers"
+        raise PhaseAlignmentInputError(msg)
+    try:
+        floating_miller_indices = np.asarray(raw_miller_indices, dtype=np.float64)
+    except (TypeError, ValueError, OverflowError) as error:
+        msg = f"{name} Miller indices must be numeric"
+        raise PhaseAlignmentInputError(msg) from error
+    if not np.isfinite(floating_miller_indices).all():
+        msg = f"{name} Miller indices must be finite"
+        raise PhaseAlignmentInputError(msg)
+    if not np.equal(floating_miller_indices, np.rint(floating_miller_indices)).all():
+        msg = f"{name} Miller indices must be integer-valued"
+        raise PhaseAlignmentInputError(msg)
+    maximum_miller_index = np.iinfo(np.int32).max
+    if np.any(np.abs(floating_miller_indices) > maximum_miller_index):
+        msg = f"{name} Miller indices must fit in the signed int32 range"
+        raise PhaseAlignmentInputError(msg)
+    miller_indices = np.asarray(floating_miller_indices, dtype=np.int64)
+    if len(np.unique(miller_indices, axis=0)) != len(miller_indices):
+        msg = f"{name} must contain unique Miller indices"
         raise PhaseAlignmentInputError(msg)
 
 
@@ -203,7 +263,7 @@ def _validate_bounded_float(
 ) -> float:
     try:
         validated_value = float(value)
-    except (TypeError, ValueError) as error:
+    except (TypeError, ValueError, OverflowError) as error:
         msg = f"{name} must be numeric; got {value!r}"
         raise PhaseAlignmentInputError(msg) from error
     if (
@@ -333,7 +393,7 @@ def _pearson_correlation(first: FloatArray, second: FloatArray) -> float:
     if not np.isfinite(denominator) or denominator == 0.0:
         msg = "correlation is undefined for constant or nonfinite data"
         raise PhaseAlignmentInputError(msg)
-    return float(first_centered @ second_centered / denominator)
+    return float(np.clip(first_centered @ second_centered / denominator, -1.0, 1.0))
 
 
 def _check_correlation_confidence(
