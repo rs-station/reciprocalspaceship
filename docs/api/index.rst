@@ -62,6 +62,9 @@ Algorithms for processing reflection data.
    ~reciprocalspaceship.algorithms.ReindexingResult
    ~reciprocalspaceship.algorithms.ReindexingCandidate
    ~reciprocalspaceship.algorithms.has_origin_shift_ambiguity
+   ~reciprocalspaceship.algorithms.align_phases
+   ~reciprocalspaceship.algorithms.PhaseAlignmentResult
+   ~reciprocalspaceship.algorithms.OriginShiftCandidate
    ~reciprocalspaceship.algorithms.scale_merged_intensities
    ~reciprocalspaceship.algorithms.compute_intensity_from_structurefactor
 
