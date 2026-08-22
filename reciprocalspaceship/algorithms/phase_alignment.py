@@ -5,7 +5,7 @@ from __future__ import annotations
 from heapq import heappush, heapreplace
 from itertools import product
 from math import gcd, prod
-from typing import TYPE_CHECKING, Final, Union
+from typing import TYPE_CHECKING, Final, Literal, Optional, Union
 
 import gemmi
 import numpy as np
@@ -18,6 +18,15 @@ from reciprocalspaceship.algorithms._errors import (
     PhaseAlignmentInputError,
     PhaseAlignmentOptimizationError,
 )
+from reciprocalspaceship.algorithms.reindexing import (
+    IDENTITY_OPERATION,
+    _as_asu,
+    _common_finite_index,
+    _indexed_series,
+)
+from reciprocalspaceship.dataset import DataSet
+from reciprocalspaceship.dtypes import IntensityDtype, PhaseDtype
+from reciprocalspaceship.utils.phases import canonicalize_phases
 
 if TYPE_CHECKING:
     from typing_extensions import TypeAlias
@@ -35,7 +44,13 @@ ComplexArray: TypeAlias = NDArray[np.complex128]
 SpaceGroupLike: TypeAlias = Union[str, int, gemmi.SpaceGroup]
 
 
+WeightingMode: TypeAlias = Literal["amplitude", "uniform"]
+
+
 NUMBER_OF_CRYSTALLOGRAPHIC_AXES: Final[int] = 3
+
+
+FULL_ROTATION_DEGREES: Final[float] = 360.0
 
 
 FULL_ROTATION_RADIANS: Final[float] = float(2.0 * np.pi)
@@ -65,6 +80,9 @@ FFT_SLAB_BYTES_PER_GRID_POINT: Final[int] = 80
 
 
 DEFAULT_MAXIMUM_REFINEMENT_STARTS: Final[int] = 4_096
+
+
+MINIMUM_PHASE_REFLECTIONS: Final[int] = 3
 
 
 LOCAL_MAXIMUM_NEIGHBORHOOD: Final[int] = 3
@@ -698,3 +716,120 @@ def _rank_internal_translations(
             continue
         inequivalent_candidates.append((translation, float(correlation)))
     return tuple(inequivalent_candidates)
+
+
+def _validate_phase_key(dataset: DataSet, *, phase_key: str, name: str) -> None:
+    if phase_key not in dataset:
+        msg = f"{name} does not contain phase key {phase_key!r}"
+        raise PhaseAlignmentInputError(msg)
+    if not isinstance(dataset.dtypes[phase_key], PhaseDtype):
+        msg = f"{name}[{phase_key!r}] must have a Phase MTZ dtype"
+        raise PhaseAlignmentInputError(msg)
+
+
+def _matched_phase_data(
+    dataset: DataSet,
+    reference: DataSet,
+    *,
+    phase_key: str,
+    reference_phase_key: str,
+    amplitude_key: str,
+    reference_amplitude_key: str,
+    fom_key: Optional[str],
+    reference_fom_key: Optional[str],
+    weighting: WeightingMode,
+) -> tuple[IntegerArray, FloatArray, FloatArray, FloatArray]:
+    reference_asu = _as_asu(reference, gemmi.Op(IDENTITY_OPERATION))
+    moving_phase = _indexed_series(dataset, data_key=phase_key)
+    reference_phase = _indexed_series(reference_asu, data_key=reference_phase_key)
+    moving_amplitude = _indexed_series(dataset, data_key=amplitude_key)
+    reference_amplitude = _indexed_series(
+        reference_asu,
+        data_key=reference_amplitude_key,
+    )
+    indexed_values = [
+        moving_phase,
+        reference_phase,
+        moving_amplitude,
+        reference_amplitude,
+    ]
+    moving_fom = None
+    reference_fom = None
+    if fom_key is not None and reference_fom_key is not None:
+        moving_fom = _indexed_series(dataset, data_key=fom_key)
+        reference_fom = _indexed_series(reference_asu, data_key=reference_fom_key)
+        indexed_values.extend((moving_fom, reference_fom))
+
+    common_index = _common_finite_index(
+        indexed_values[0],
+        tuple(indexed_values[1:]),
+    )
+    if len(common_index) < MINIMUM_PHASE_REFLECTIONS:
+        msg = (
+            "dataset and reference must share at least "
+            f"{MINIMUM_PHASE_REFLECTIONS} finite phase reflections"
+        )
+        raise PhaseAlignmentInputError(msg)
+
+    moving_phases = moving_phase.loc[common_index].to_numpy(dtype=np.float64)
+    reference_phases = reference_phase.loc[common_index].to_numpy(dtype=np.float64)
+    if weighting == "uniform":
+        weights = np.ones(len(common_index), dtype=np.float64)
+    else:
+        moving_values = moving_amplitude.loc[common_index].to_numpy(dtype=np.float64)
+        reference_values = reference_amplitude.loc[common_index].to_numpy(
+            dtype=np.float64
+        )
+        if isinstance(dataset.dtypes[amplitude_key], IntensityDtype):
+            moving_values = np.sqrt(np.clip(moving_values, 0.0, None))
+        if isinstance(reference.dtypes[reference_amplitude_key], IntensityDtype):
+            reference_values = np.sqrt(np.clip(reference_values, 0.0, None))
+        weights = np.abs(moving_values * reference_values)
+    if moving_fom is not None and reference_fom is not None:
+        moving_fom_values = moving_fom.loc[common_index].to_numpy(dtype=np.float64)
+        reference_fom_values = reference_fom.loc[common_index].to_numpy(
+            dtype=np.float64
+        )
+        if (
+            np.any(moving_fom_values < 0.0)
+            or np.any(moving_fom_values > 1.0)
+            or np.any(reference_fom_values < 0.0)
+            or np.any(reference_fom_values > 1.0)
+        ):
+            msg = "FOM values must lie between zero and one"
+            raise PhaseAlignmentInputError(msg)
+        weights *= moving_fom_values * reference_fom_values
+    if not np.any(weights > 0.0):
+        msg = "at least one phase-alignment weight must be positive"
+        raise PhaseAlignmentInputError(msg)
+    normalized_weights = weights / np.sum(weights)
+    miller_indices = np.asarray(common_index.tolist(), dtype=np.int64)
+    return (
+        miller_indices,
+        np.asarray(moving_phases, dtype=np.float64),
+        np.asarray(reference_phases, dtype=np.float64),
+        np.asarray(normalized_weights, dtype=np.float64),
+    )
+
+
+def _apply_origin_shift(
+    dataset: DataSet,
+    origin_shift: tuple[float, float, float],
+) -> DataSet:
+    shifted = dataset.copy()
+    phase_shift_degrees = (
+        FULL_ROTATION_DEGREES
+        * shifted.get_hkls()
+        @ np.asarray(origin_shift, dtype=np.float64)
+    )
+    for key in shifted.get_phase_keys():
+        phase_dtype = shifted.dtypes[key]
+        values = canonicalize_phases(
+            shifted[key].to_numpy(dtype=np.float64) - phase_shift_degrees
+        )
+        shifted[key] = np.asarray(values, dtype=np.float32)
+        shifted[key] = shifted[key].astype(phase_dtype)
+    complex_multiplier = np.exp(-1j * np.deg2rad(phase_shift_degrees))
+    for key in shifted.get_complex_keys():
+        shifted[key] = shifted[key].to_numpy() * complex_multiplier
+    return shifted
