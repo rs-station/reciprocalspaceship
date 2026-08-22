@@ -30,8 +30,9 @@ from reciprocalspaceship.algorithms.reindexing import (
     has_reindexing_ambiguity,
     reindex_by_correlation,
 )
+from reciprocalspaceship.dataseries import DataSeries
 from reciprocalspaceship.dataset import DataSet
-from reciprocalspaceship.dtypes import IntensityDtype, PhaseDtype
+from reciprocalspaceship.dtypes import IntensityDtype, PhaseDtype, WeightDtype
 from reciprocalspaceship.utils.phases import canonicalize_phases
 
 if TYPE_CHECKING:
@@ -800,6 +801,30 @@ def _validate_phase_key(dataset: DataSet, *, phase_key: str, name: str) -> None:
         raise PhaseAlignmentInputError(msg)
 
 
+def _validate_fom_keys(
+    dataset: DataSet,
+    reference: DataSet,
+    *,
+    fom_key: Optional[str],
+    reference_fom_key: Optional[str],
+) -> None:
+    if (fom_key is None) != (reference_fom_key is None):
+        msg = "fom_key and reference_fom_key must either both be set or both be None"
+        raise PhaseAlignmentInputError(msg)
+    for name, current_dataset, key in (
+        ("dataset", dataset, fom_key),
+        ("reference", reference, reference_fom_key),
+    ):
+        if key is None:
+            continue
+        if key not in current_dataset:
+            msg = f"{name} does not contain FOM key {key!r}"
+            raise PhaseAlignmentInputError(msg)
+        if not isinstance(current_dataset.dtypes[key], WeightDtype):
+            msg = f"{name}[{key!r}] must have a Weight MTZ dtype"
+            raise PhaseAlignmentInputError(msg)
+
+
 def _matched_phase_data(
     dataset: DataSet,
     reference: DataSet,
@@ -885,29 +910,6 @@ def _matched_phase_data(
     )
 
 
-def _apply_origin_shift(
-    dataset: DataSet,
-    origin_shift: tuple[float, float, float],
-) -> DataSet:
-    shifted = dataset.copy()
-    phase_shift_degrees = (
-        FULL_ROTATION_DEGREES
-        * shifted.get_hkls()
-        @ np.asarray(origin_shift, dtype=np.float64)
-    )
-    for key in shifted.get_phase_keys():
-        phase_dtype = shifted.dtypes[key]
-        values = canonicalize_phases(
-            shifted[key].to_numpy(dtype=np.float64) - phase_shift_degrees
-        )
-        shifted[key] = np.asarray(values, dtype=np.float32)
-        shifted[key] = shifted[key].astype(phase_dtype)
-    complex_multiplier = np.exp(-1j * np.deg2rad(phase_shift_degrees))
-    for key in shifted.get_complex_keys():
-        shifted[key] = shifted[key].to_numpy() * complex_multiplier
-    return shifted
-
-
 def _origin_shift_candidates(
     miller_indices: IntegerArray,
     phases: FloatArray,
@@ -916,6 +918,7 @@ def _origin_shift_candidates(
     spacegroup: gemmi.SpaceGroup,
     *,
     maximum_refinement_starts: int,
+    search_hand: bool,
 ) -> tuple[OriginShiftCandidate, ...]:
     rotation_constraints = _rotation_constraints(spacegroup)
     orthonormal_polar_basis = _polar_basis(rotation_constraints)
@@ -926,26 +929,72 @@ def _origin_shift_candidates(
         orthonormal_polar_basis,
         spacegroup,
     )
-    phase_differences = np.deg2rad(
-        canonicalize_phases(phases - reference_phases),
+    candidates: list[OriginShiftCandidate] = []
+    hand_options = (
+        (False, True)
+        if search_hand and not spacegroup.is_centrosymmetric()
+        else (False,)
     )
-    internal_candidates = _rank_internal_translations(
-        origin_cosets,
-        integer_polar_basis,
-        miller_indices,
-        phase_differences,
-        normalized_weights,
-        spacegroup,
-        maximum_refinement_starts=maximum_refinement_starts,
-    )
-    return tuple(
-        OriginShiftCandidate(
-            origin_shift=_phenix_origin_shift(translation),
-            correlation=correlation,
-            inverted_hand=False,
+    for inverted_hand in hand_options:
+        moving_phases = -phases if inverted_hand else phases
+        phase_differences = np.deg2rad(
+            canonicalize_phases(moving_phases - reference_phases)
         )
-        for translation, correlation in internal_candidates
+        internal_candidates = _rank_internal_translations(
+            origin_cosets,
+            integer_polar_basis,
+            miller_indices,
+            phase_differences,
+            normalized_weights,
+            spacegroup,
+            maximum_refinement_starts=maximum_refinement_starts,
+        )
+        candidates.extend(
+            OriginShiftCandidate(
+                origin_shift=_phenix_origin_shift(translation),
+                correlation=correlation,
+                inverted_hand=inverted_hand,
+            )
+            for translation, correlation in internal_candidates
+        )
+    return tuple(
+        sorted(
+            candidates,
+            key=lambda candidate: candidate.correlation,
+            reverse=True,
+        )
     )
+
+
+def _apply_origin_shift(
+    dataset: DataSet,
+    origin_shift: tuple[float, float, float],
+    *,
+    inverted_hand: bool = False,
+) -> DataSet:
+    shifted = dataset.copy()
+    phase_shift_degrees = (
+        FULL_ROTATION_DEGREES
+        * shifted.get_hkls()
+        @ np.asarray(origin_shift, dtype=np.float64)
+    )
+    phase_sign = -1.0 if inverted_hand else 1.0
+    for key in shifted.get_phase_keys():
+        values = canonicalize_phases(
+            phase_sign * shifted[key].to_numpy(dtype=np.float64) - phase_shift_degrees
+        )
+        shifted[key] = DataSeries(
+            values, index=shifted.index, dtype=shifted.dtypes[key]
+        )
+    complex_multiplier = np.exp(-1j * np.deg2rad(phase_shift_degrees))
+    for key in shifted.get_complex_keys():
+        values = shifted[key].to_numpy()
+        if inverted_hand:
+            values = np.conjugate(values)
+        shifted[key] = (values * complex_multiplier).astype(
+            shifted.dtypes[key], copy=False
+        )
+    return shifted
 
 
 def align_phases(
@@ -956,10 +1005,14 @@ def align_phases(
     reference_phase_key: str,
     amplitude_key: str,
     reference_amplitude_key: str,
+    fom_key: Optional[str] = None,
+    reference_fom_key: Optional[str] = None,
+    weighting: WeightingMode = "amplitude",
+    search_hand: bool = False,
     maximum_refinement_starts: int = DEFAULT_MAXIMUM_REFINEMENT_STARTS,
     max_obliquity: float = DEFAULT_MAXIMUM_OBLIQUITY,
 ) -> PhaseAlignmentResult:
-    """Align a merged dataset by proper reindexing and an allowed origin shift.
+    """Align a merged dataset by reindexing, hand, and allowed origin shift.
 
     Parameters
     ----------
@@ -971,6 +1024,13 @@ def align_phases(
         Moving and reference phase columns in degrees.
     amplitude_key, reference_amplitude_key : str
         Moving and reference amplitude or intensity columns.
+    fom_key, reference_fom_key : str, optional
+        Optional Weight-typed figures of merit multiplied into the phase weights.
+    weighting : {"amplitude", "uniform"}, optional
+        Use amplitude-product or uniform phase weights.
+    search_hand : bool, optional
+        Also test the complex-conjugated moving phases. The default is ``False``.
+        Centrosymmetric groups have no distinct hand and are searched only once.
     maximum_refinement_starts : int, optional
         Maximum number of FFT-local maxima refined per allowed origin coset.
     max_obliquity : float, optional
@@ -1002,6 +1062,18 @@ def align_phases(
         phase_key=reference_phase_key,
         name="reference",
     )
+    _validate_fom_keys(
+        dataset,
+        reference,
+        fom_key=fom_key,
+        reference_fom_key=reference_fom_key,
+    )
+    if weighting not in ("amplitude", "uniform"):
+        msg = f"weighting must be 'amplitude' or 'uniform'; got {weighting!r}"
+        raise PhaseAlignmentInputError(msg)
+    if not isinstance(search_hand, bool):
+        msg = f"search_hand must be a bool; got {type(search_hand).__name__}"
+        raise PhaseAlignmentInputError(msg)
     if not has_origin_shift_ambiguity(dataset.spacegroup):
         msg = f"space group {dataset.spacegroup.xhm()} has no origin-shift ambiguity"
         raise PhaseAlignmentInputError(msg)
@@ -1026,9 +1098,9 @@ def align_phases(
         reference_phase_key=reference_phase_key,
         amplitude_key=amplitude_key,
         reference_amplitude_key=reference_amplitude_key,
-        fom_key=None,
-        reference_fom_key=None,
-        weighting="amplitude",
+        fom_key=fom_key,
+        reference_fom_key=reference_fom_key,
+        weighting=weighting,
     )
     candidates = _origin_shift_candidates(
         miller_indices,
@@ -1037,6 +1109,7 @@ def align_phases(
         normalized_weights,
         reference.spacegroup,
         maximum_refinement_starts=maximum_refinement_starts,
+        search_hand=search_hand,
     )
     best = candidates[0]
     runner_up_correlation = candidates[1].correlation if len(candidates) > 1 else None
@@ -1045,10 +1118,13 @@ def align_phases(
         if runner_up_correlation is not None
         else None
     )
+    aligned_dataset = _apply_origin_shift(
+        phase_dataset, best.origin_shift, inverted_hand=best.inverted_hand
+    )
     return PhaseAlignmentResult(
-        dataset=_apply_origin_shift(phase_dataset, best.origin_shift),
+        dataset=aligned_dataset,
         origin_shift=best.origin_shift,
-        inverted_hand=False,
+        inverted_hand=best.inverted_hand,
         correlation=best.correlation,
         runner_up_correlation=runner_up_correlation,
         correlation_gap=correlation_gap,
