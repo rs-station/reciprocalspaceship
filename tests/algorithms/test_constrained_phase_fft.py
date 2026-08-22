@@ -13,6 +13,8 @@ from reciprocalspaceship.algorithms.phase_alignment import (
     _estimated_fft_memory,
     _integer_polar_basis,
     _origin_correlation_grid,
+    _origin_fft_local_maxima,
+    _periodic_local_maxima,
     _primitive_integer_vector,
     _rotation_constraints,
 )
@@ -153,3 +155,133 @@ def test_origin_correlation_grid_rejects_unsafe_memory_estimate(
             phases,
             weights,
         )
+
+
+def test_one_dimensional_fft_rejects_unsafe_memory_estimate(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    monkeypatch.setattr(
+        "reciprocalspaceship.algorithms.phase_alignment.MAXIMUM_FFT_MEMORY_BYTES",
+        1,
+    )
+    miller_indices = np.asarray(((0, 0, 1), (0, 0, 2)), dtype=np.int64)
+    phases = np.zeros(2, dtype=np.float64)
+    weights = np.full(2, 0.5, dtype=np.float64)
+
+    with pytest.raises(rs.algorithms.PhaseAlignmentInputError, match="GiB"):
+        _origin_fft_local_maxima(
+            np.zeros(3, dtype=np.float64),
+            np.asarray(((0,), (0,), (1,)), dtype=np.int64),
+            miller_indices,
+            phases,
+            weights,
+        )
+
+
+def test_bounded_memory_fft_matches_materialized_local_maxima(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    random_number_generator = np.random.default_rng(seed=20260822)
+    miller_indices = random_number_generator.integers(low=-3, high=4, size=(80, 3))
+    phase_differences = random_number_generator.uniform(
+        low=-np.pi,
+        high=np.pi,
+        size=len(miller_indices),
+    )
+    weights = random_number_generator.uniform(low=0.1, high=1.0, size=80)
+    normalized_weights = weights / np.sum(weights)
+    origin_coset = np.zeros(3, dtype=np.float64)
+    integer_polar_basis = np.eye(3, dtype=np.int64)
+    correlation_grid = _origin_correlation_grid(
+        origin_coset,
+        integer_polar_basis,
+        miller_indices,
+        phase_differences,
+        normalized_weights,
+    )
+    expected_indices = _periodic_local_maxima(correlation_grid)
+    monkeypatch.setattr(
+        "reciprocalspaceship.algorithms.phase_alignment.MAXIMUM_FFT_MEMORY_BYTES",
+        5_000,
+    )
+
+    actual_indices, grid_shape = _origin_fft_local_maxima(
+        origin_coset,
+        integer_polar_basis,
+        miller_indices,
+        phase_differences,
+        normalized_weights,
+    )
+
+    assert grid_shape == correlation_grid.shape
+    assert {tuple(index) for index in actual_indices} == {
+        tuple(index) for index in expected_indices
+    }
+
+
+@pytest.mark.parametrize(
+    "maximum_fft_memory_bytes",
+    [1_000_000, 20_000],
+    ids=["materialized", "bounded-memory"],
+)
+def test_origin_fft_retains_strongest_local_maxima(
+    monkeypatch: pytest.MonkeyPatch,
+    maximum_fft_memory_bytes: int,
+) -> None:
+    random_number_generator = np.random.default_rng(seed=20260823)
+    maximum_refinement_starts = 11
+    miller_indices = random_number_generator.integers(
+        low=-6,
+        high=7,
+        size=(160, 3),
+        dtype=np.int64,
+    )
+    phase_differences = random_number_generator.uniform(
+        low=-np.pi,
+        high=np.pi,
+        size=len(miller_indices),
+    )
+    weights = random_number_generator.uniform(
+        low=0.1,
+        high=1.0,
+        size=len(miller_indices),
+    )
+    normalized_weights = weights / np.sum(weights)
+    origin_coset = np.asarray((0.125, 0.25, 0.375), dtype=np.float64)
+    integer_polar_basis = np.eye(3, dtype=np.int64)
+    correlation_grid = _origin_correlation_grid(
+        origin_coset,
+        integer_polar_basis,
+        miller_indices,
+        phase_differences,
+        normalized_weights,
+    )
+    all_maximum_indices = _periodic_local_maxima(correlation_grid)
+    all_maximum_scores = correlation_grid[tuple(all_maximum_indices.T)]
+    expected_indices = all_maximum_indices[:maximum_refinement_starts]
+    expected_scores = all_maximum_scores[:maximum_refinement_starts]
+    assert len(all_maximum_indices) > maximum_refinement_starts
+    assert (
+        np.min(np.abs(np.diff(all_maximum_scores[: maximum_refinement_starts + 1])))
+        > 1e-6
+    )
+    monkeypatch.setattr(
+        "reciprocalspaceship.algorithms.phase_alignment.MAXIMUM_FFT_MEMORY_BYTES",
+        maximum_fft_memory_bytes,
+    )
+
+    actual_indices, grid_shape = _origin_fft_local_maxima(
+        origin_coset,
+        integer_polar_basis,
+        miller_indices,
+        phase_differences,
+        normalized_weights,
+        maximum_refinement_starts=maximum_refinement_starts,
+    )
+
+    # Regression: both FFT paths must cap work without discarding stronger peaks.
+    assert grid_shape == correlation_grid.shape
+    assert len(actual_indices) == maximum_refinement_starts
+    np.testing.assert_array_equal(actual_indices, expected_indices)
+    actual_scores = correlation_grid[tuple(actual_indices.T)]
+    np.testing.assert_array_equal(actual_scores, expected_scores)
