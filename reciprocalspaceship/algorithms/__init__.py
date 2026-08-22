@@ -2,6 +2,7 @@ from reciprocalspaceship.algorithms._errors import (
     LowCorrelationWarning,
     NoClearSolutionError,
     PhaseAlignmentInputError,
+    PhaseAlignmentOptimizationError,
 )
 from reciprocalspaceship.algorithms.intensity import (
     compute_intensity_from_structurefactor,
@@ -22,6 +23,7 @@ __all__ = [
     "LowCorrelationWarning",
     "NoClearSolutionError",
     "PhaseAlignmentInputError",
+    "PhaseAlignmentOptimizationError",
     "ReindexingCandidate",
     "ReindexingResult",
     "compute_intensity_from_structurefactor",
