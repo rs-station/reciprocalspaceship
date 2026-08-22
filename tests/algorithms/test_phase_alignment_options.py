@@ -69,6 +69,9 @@ def _align(
         amplitude_key="F",
         reference_amplitude_key="F",
         search_hand=search_hand,
+        warning_correlation=-1.0,
+        minimum_correlation=-1.0,
+        minimum_correlation_gap=0.0,
     )
 
 

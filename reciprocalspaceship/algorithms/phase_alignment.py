@@ -7,6 +7,7 @@ from heapq import heappush, heapreplace
 from itertools import product
 from math import gcd, prod
 from typing import TYPE_CHECKING, Final, Literal, Optional, Union
+from warnings import warn
 
 import gemmi
 import numpy as np
@@ -16,19 +17,25 @@ from scipy.ndimage import maximum_filter
 from scipy.optimize import OptimizeResult, minimize
 
 from reciprocalspaceship.algorithms._errors import (
+    LowCorrelationWarning,
     PhaseAlignmentInputError,
     PhaseAlignmentOptimizationError,
 )
 from reciprocalspaceship.algorithms.reindexing import (
     DEFAULT_MAXIMUM_OBLIQUITY,
+    DEFAULT_REINDEXING_MINIMUM_CORRELATION,
+    DEFAULT_REINDEXING_MINIMUM_CORRELATION_GAP,
+    DEFAULT_REINDEXING_WARNING_CORRELATION,
     IDENTITY_OPERATION,
     ReindexingResult,
     _as_asu,
+    _check_correlation_confidence,
     _common_finite_index,
     _indexed_series,
+    _score_reindexing_candidates,
     _validate_dataset,
-    has_reindexing_ambiguity,
-    reindex_by_correlation,
+    _validate_maximum_obliquity,
+    _validate_scoring_thresholds,
 )
 from reciprocalspaceship.dataseries import DataSeries
 from reciprocalspaceship.dataset import DataSet
@@ -40,70 +47,34 @@ if TYPE_CHECKING:
 
 
 FloatArray: TypeAlias = NDArray[np.float64]
-
-
 IntegerArray: TypeAlias = NDArray[np.int64]
-
-
 ComplexArray: TypeAlias = NDArray[np.complex128]
-
-
 SpaceGroupLike: TypeAlias = Union[str, int, gemmi.SpaceGroup]
-
-
 WeightingMode: TypeAlias = Literal["amplitude", "uniform"]
 
-
 NUMBER_OF_CRYSTALLOGRAPHIC_AXES: Final[int] = 3
-
-
 FULL_ROTATION_DEGREES: Final[float] = 360.0
-
-
 FULL_ROTATION_RADIANS: Final[float] = float(2.0 * np.pi)
-
-
 ORIGIN_DENOMINATOR: Final[int] = int(gemmi.Op.DEN)
-
-
 SINGULAR_VALUE_TOLERANCE: Final[float] = 1e-10
-
-
 OPTIMIZER_GRADIENT_TOLERANCE: Final[float] = 1e-7
-
-
 OPTIMIZER_ACCEPTABLE_GRADIENT: Final[float] = 1e-5
 OPTIMIZER_CURVATURE_TOLERANCE: Final[float] = 1e-7
 OPTIMIZER_MAXIMUM_ITERATIONS: Final[int] = 500
-
-
 TRANSLATION_ROUNDING_DECIMALS: Final[int] = 12
-
-
 MAXIMUM_FFT_MEMORY_BYTES: Final[int] = 1_073_741_824
-
-
 FFT_BYTES_PER_GRID_POINT: Final[int] = 80
-
-
 FFT_SLAB_BYTES_PER_GRID_POINT: Final[int] = 80
-
-
 DEFAULT_MAXIMUM_REFINEMENT_STARTS: Final[int] = 4_096
-
-
+MINIMUM_REFINEMENT_STARTS: Final[int] = 2
+# Conservative gates calibrated on seeded phase-noise trials with 6OVT.
+DEFAULT_PHASE_WARNING_CORRELATION: Final[float] = 0.5
+DEFAULT_PHASE_MINIMUM_CORRELATION: Final[float] = 0.2
+DEFAULT_PHASE_MINIMUM_CORRELATION_GAP: Final[float] = 0.15
 MINIMUM_PHASE_REFLECTIONS: Final[int] = 3
-
-
 LOCAL_MAXIMUM_NEIGHBORHOOD: Final[int] = 3
-
-
 TRANSLATION_EQUIVALENCE_TOLERANCE: Final[float] = 1e-6
-
-
 POLAR_AXIS_CONSTRAINT_RANK: Final[int] = NUMBER_OF_CRYSTALLOGRAPHIC_AXES - 1
-
-
 PERIODIC_OFFSETS: Final[FloatArray] = np.asarray(
     tuple(product((-1.0, 0.0, 1.0), repeat=NUMBER_OF_CRYSTALLOGRAPHIC_AXES)),
     dtype=np.float64,
@@ -792,6 +763,28 @@ def _phenix_origin_shift(
     return float(rounded[0]), float(rounded[1]), float(rounded[2])
 
 
+def _validate_maximum_refinement_starts(maximum_refinement_starts: int) -> int:
+    if isinstance(maximum_refinement_starts, bool) or not isinstance(
+        maximum_refinement_starts,
+        (int, np.integer),
+    ):
+        msg = (
+            f"maximum_refinement_starts must be an integer of at least "
+            f"{MINIMUM_REFINEMENT_STARTS}; "
+            f"got {maximum_refinement_starts!r}"
+        )
+        raise PhaseAlignmentInputError(msg)
+    validated_maximum_refinement_starts = int(maximum_refinement_starts)
+    if validated_maximum_refinement_starts < MINIMUM_REFINEMENT_STARTS:
+        msg = (
+            f"maximum_refinement_starts must be at least "
+            f"{MINIMUM_REFINEMENT_STARTS}; "
+            f"got {maximum_refinement_starts!r}"
+        )
+        raise PhaseAlignmentInputError(msg)
+    return validated_maximum_refinement_starts
+
+
 def _validate_phase_key(dataset: DataSet, *, phase_key: str, name: str) -> None:
     if phase_key not in dataset:
         msg = f"{name} does not contain phase key {phase_key!r}"
@@ -1011,8 +1004,16 @@ def align_phases(
     search_hand: bool = False,
     maximum_refinement_starts: int = DEFAULT_MAXIMUM_REFINEMENT_STARTS,
     max_obliquity: float = DEFAULT_MAXIMUM_OBLIQUITY,
+    warning_correlation: float = DEFAULT_PHASE_WARNING_CORRELATION,
+    minimum_correlation: float = DEFAULT_PHASE_MINIMUM_CORRELATION,
+    minimum_correlation_gap: float = DEFAULT_PHASE_MINIMUM_CORRELATION_GAP,
+    reindexing_warning_correlation: float = DEFAULT_REINDEXING_WARNING_CORRELATION,
+    reindexing_minimum_correlation: float = DEFAULT_REINDEXING_MINIMUM_CORRELATION,
+    reindexing_minimum_correlation_gap: float = (
+        DEFAULT_REINDEXING_MINIMUM_CORRELATION_GAP
+    ),
 ) -> PhaseAlignmentResult:
-    """Align a merged dataset by reindexing, hand, and allowed origin shift.
+    """Align a merged dataset to a reference by reindexing and shifting its origin.
 
     Parameters
     ----------
@@ -1032,24 +1033,58 @@ def align_phases(
         Also test the complex-conjugated moving phases. The default is ``False``.
         Centrosymmetric groups have no distinct hand and are searched only once.
     maximum_refinement_starts : int, optional
-        Maximum number of FFT-local maxima refined per allowed origin coset.
+        Maximum number of FFT-local maxima refined per allowed origin coset. Must be
+        at least two. Multiple starts can converge to the same solution, so this
+        bound does not guarantee that a distinct runner-up will be found.
     max_obliquity : float, optional
         Maximum obliquity in degrees for reindexing candidates.
+    warning_correlation : float, optional
+        Warn when the selected phase correlation is below this value.
+    minimum_correlation : float, optional
+        Reject phase solutions below this correlation.
+    minimum_correlation_gap : float, optional
+        Reject phase solutions with a smaller best-minus-runner-up gap.
+    reindexing_warning_correlation : float, optional
+        Warning threshold for the reindexing correlation, when reindexing is attempted.
+    reindexing_minimum_correlation : float, optional
+        Failure threshold for the reindexing correlation, when reindexing is attempted.
+    reindexing_minimum_correlation_gap : float, optional
+        Failure threshold for the reindexing best-minus-runner-up gap, when attempted.
 
     Returns
     -------
     PhaseAlignmentResult
-        An aligned copy and ranked candidate diagnostics.
+        An aligned copy and ranked phase- and reindexing-candidate diagnostics.
 
     Raises
     ------
     PhaseAlignmentInputError
-        If the inputs are invalid or the space group has no origin ambiguity.
+        If datasets are invalid or the space group has no origin ambiguity.
+    NoClearSolutionError
+        If either reindexing or origin-shift scores do not identify a clear result.
+    PhaseAlignmentOptimizationError
+        If every continuous refinement fails.
 
     Notes
     -----
-    The returned origin shift uses the Phenix convention. Aligned phases satisfy
-    ``phi_aligned = phi_moving - 360 * H @ origin_shift``.
+    The returned ``origin_shift`` follows the Phenix convention: it is the change
+    in origin, and aligned phases satisfy
+    ``phi_aligned = phi_moving - 360 * H @ origin_shift``. Values are represented
+    in the interval ``[-0.5, 0.5)``. Proper reindexing is selected first when the
+    unit-cell metric permits it; hand inversion is a separate opt-in phase candidate.
+
+    Phase correlation is
+    ``sum(w * cos(phi_moving - phi_reference - 2*pi*H@origin_shift)) / sum(w)``
+    after reindexing and optional hand inversion. By default, ``w`` is the product
+    of moving and reference amplitudes, additionally multiplied by both figures of
+    merit when supplied. Intensity columns are converted to amplitudes for weighting.
+
+    Each continuous origin coset is searched on its Nyquist-complete Fourier grid.
+    Large two- and three-dimensional grids are scanned in bounded-memory slabs instead
+    of being materialized. The strongest ``maximum_refinement_starts`` grid-local
+    maxima in each coset are refined on the exact continuous objective. This bounded
+    multistart search is not a formal certificate of the continuous global maximum.
+
     """
     _validate_dataset(dataset, data_key=amplitude_key, name="dataset")
     _validate_dataset(reference, data_key=reference_amplitude_key, name="reference")
@@ -1074,23 +1109,58 @@ def align_phases(
     if not isinstance(search_hand, bool):
         msg = f"search_hand must be a bool; got {type(search_hand).__name__}"
         raise PhaseAlignmentInputError(msg)
+    validated_maximum_refinement_starts = _validate_maximum_refinement_starts(
+        maximum_refinement_starts,
+    )
     if not has_origin_shift_ambiguity(dataset.spacegroup):
         msg = f"space group {dataset.spacegroup.xhm()} has no origin-shift ambiguity"
         raise PhaseAlignmentInputError(msg)
 
-    if has_reindexing_ambiguity(dataset, max_obliquity=max_obliquity):
-        reindexing = reindex_by_correlation(
+    (
+        validated_warning_correlation,
+        validated_minimum_correlation,
+        validated_minimum_correlation_gap,
+    ) = _validate_scoring_thresholds(
+        warning_correlation=warning_correlation,
+        minimum_correlation=minimum_correlation,
+        minimum_correlation_gap=minimum_correlation_gap,
+    )
+    (
+        validated_reindexing_warning_correlation,
+        validated_reindexing_minimum_correlation,
+        validated_reindexing_minimum_correlation_gap,
+    ) = _validate_scoring_thresholds(
+        warning_correlation=reindexing_warning_correlation,
+        minimum_correlation=reindexing_minimum_correlation,
+        minimum_correlation_gap=reindexing_minimum_correlation_gap,
+        name_prefix="reindexing_",
+    )
+
+    validated_maximum_obliquity = _validate_maximum_obliquity(max_obliquity)
+    reindexing_operations = (
+        gemmi.Op(IDENTITY_OPERATION),
+        *dataset.find_twin_laws(max_obliq=validated_maximum_obliquity, all_ops=False),
+    )
+    if len(reindexing_operations) > 1:
+        reindexing = _score_reindexing_candidates(
             dataset,
             reference,
+            reindexing_operations,
             data_key=amplitude_key,
             reference_key=reference_amplitude_key,
-            max_obliquity=max_obliquity,
+            minimum_correlation=validated_reindexing_minimum_correlation,
+            minimum_correlation_gap=validated_reindexing_minimum_correlation_gap,
         )
         phase_dataset = reindexing.dataset
+        if reindexing.correlation < validated_reindexing_warning_correlation:
+            msg = (
+                "selected reindexing operation has low correlation "
+                f"{reindexing.correlation:.3f}"
+            )
+            warn(msg, LowCorrelationWarning, stacklevel=2)
     else:
         reindexing = None
         phase_dataset = _as_asu(dataset, gemmi.Op(IDENTITY_OPERATION))
-
     miller_indices, phases, reference_phases, normalized_weights = _matched_phase_data(
         phase_dataset,
         reference,
@@ -1108,16 +1178,20 @@ def align_phases(
         reference_phases,
         normalized_weights,
         reference.spacegroup,
-        maximum_refinement_starts=maximum_refinement_starts,
+        maximum_refinement_starts=validated_maximum_refinement_starts,
         search_hand=search_hand,
     )
     best = candidates[0]
-    runner_up_correlation = candidates[1].correlation if len(candidates) > 1 else None
-    correlation_gap = (
-        best.correlation - runner_up_correlation
-        if runner_up_correlation is not None
-        else None
+    runner_up_correlation, correlation_gap = _check_correlation_confidence(
+        tuple(candidate.correlation for candidate in candidates),
+        description="origin-shift",
+        minimum_correlation=validated_minimum_correlation,
+        minimum_correlation_gap=validated_minimum_correlation_gap,
     )
+    if best.correlation < validated_warning_correlation:
+        msg = f"selected origin shift has low correlation {best.correlation:.3f}"
+        warn(msg, LowCorrelationWarning, stacklevel=2)
+
     aligned_dataset = _apply_origin_shift(
         phase_dataset, best.origin_shift, inverted_hand=best.inverted_hand
     )
