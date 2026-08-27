@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>MTZ Data Types &mdash; reciprocalspaceship 1.0.7 documentation</title>
+  <title>MTZ Data Types &mdash; reciprocalspaceship 1.0.8 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=5712473c" />
@@ -17,7 +17,7 @@
     <link rel="shortcut icon" href="../_static/rs-favicon_32x32.png"/>
       <script src="../_static/jquery.js?v=5d32c60e"></script>
       <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../_static/documentation_options.js?v=46dfa7f5"></script>
+      <script src="../_static/documentation_options.js?v=aec50437"></script>
       <script src="../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="../_static/design-tabs.js?v=f930bc37"></script>
@@ -262,7 +262,7 @@
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">data1</span> <span class="o">=</span> <span class="n">rs</span><span class="o">.</span><span class="n">DataSeries</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;J&quot;</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">data1</span> <span class="o">=</span> <span class="n">rs</span><span class="o">.</span><span class="n">DataSeries</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">"J"</span><span class="p">)</span>
 <span class="n">data1</span>
 </pre></div>
 </div>
@@ -283,7 +283,7 @@ dtype: Intensity
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">data2</span> <span class="o">=</span> <span class="n">rs</span><span class="o">.</span><span class="n">DataSeries</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;Intensity&quot;</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">data2</span> <span class="o">=</span> <span class="n">rs</span><span class="o">.</span><span class="n">DataSeries</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">"Intensity"</span><span class="p">)</span>
 <span class="n">data2</span>
 </pre></div>
 </div>
@@ -327,7 +327,7 @@ dtype: Intensity
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">data4</span> <span class="o">=</span> <span class="n">rs</span><span class="o">.</span><span class="n">DataSeries</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">int64</span><span class="p">)</span>
-<span class="n">data4</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s2">&quot;Intensity&quot;</span><span class="p">)</span>
+<span class="n">data4</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s2">"Intensity"</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -355,7 +355,7 @@ please feel free to file an <a class="reference external" href="https://github.c
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">data</span> <span class="o">=</span> <span class="n">rs</span><span class="o">.</span><span class="n">DataSeries</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;SigI&quot;</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">data</span> <span class="o">=</span> <span class="n">rs</span><span class="o">.</span><span class="n">DataSeries</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span> <span class="n">name</span><span class="o">=</span><span class="s2">"SigI"</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -396,7 +396,7 @@ Name: SigI, dtype: Stddev
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">dataset</span> <span class="o">=</span> <span class="n">rs</span><span class="o">.</span><span class="n">read_mtz</span><span class="p">(</span><span class="s2">&quot;../examples/data/HEWL_SSAD_24IDC.mtz&quot;</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">dataset</span> <span class="o">=</span> <span class="n">rs</span><span class="o">.</span><span class="n">read_mtz</span><span class="p">(</span><span class="s2">"../examples/data/HEWL_SSAD_24IDC.mtz"</span><span class="p">)</span>
 <span class="n">dataset</span><span class="o">.</span><span class="n">dtypes</span>
 </pre></div>
 </div>
@@ -483,7 +483,7 @@ dtype: object
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Has Friedel-equivalent</span>
-<span class="n">rs</span><span class="o">.</span><span class="n">DataSeries</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;Intensity&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">to_friedel_dtype</span><span class="p">()</span>
+<span class="n">rs</span><span class="o">.</span><span class="n">DataSeries</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">"Intensity"</span><span class="p">)</span><span class="o">.</span><span class="n">to_friedel_dtype</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
@@ -504,7 +504,7 @@ dtype: FriedelIntensity
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Has Friedel-equivalent</span>
-<span class="n">rs</span><span class="o">.</span><span class="n">DataSeries</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;FriedelIntensity&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">from_friedel_dtype</span><span class="p">()</span>
+<span class="n">rs</span><span class="o">.</span><span class="n">DataSeries</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">"FriedelIntensity"</span><span class="p">)</span><span class="o">.</span><span class="n">from_friedel_dtype</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
@@ -525,7 +525,7 @@ dtype: Intensity
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># No Friedel-equivalent</span>
-<span class="n">rs</span><span class="o">.</span><span class="n">DataSeries</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;MTZInt&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">to_friedel_dtype</span><span class="p">()</span>
+<span class="n">rs</span><span class="o">.</span><span class="n">DataSeries</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">"MTZInt"</span><span class="p">)</span><span class="o">.</span><span class="n">to_friedel_dtype</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
@@ -576,7 +576,7 @@ dtype: object
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">dataset</span><span class="o">.</span><span class="n">write_mtz</span><span class="p">(</span><span class="s2">&quot;temp.mtz&quot;</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">dataset</span><span class="o">.</span><span class="n">write_mtz</span><span class="p">(</span><span class="s2">"temp.mtz"</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -585,7 +585,7 @@ dtype: object
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">dataset</span><span class="p">[</span><span class="s2">&quot;Temp&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;string&quot;</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">dataset</span><span class="p">[</span><span class="s2">"Temp"</span><span class="p">]</span> <span class="o">=</span> <span class="s2">"string"</span>
 <span class="n">dataset</span><span class="o">.</span><span class="n">dtypes</span>
 </pre></div>
 </div>
@@ -613,7 +613,7 @@ dtype: object
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">dataset</span><span class="o">.</span><span class="n">write_mtz</span><span class="p">(</span><span class="s2">&quot;temp.mtz&quot;</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">dataset</span><span class="o">.</span><span class="n">write_mtz</span><span class="p">(</span><span class="s2">"temp.mtz"</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -681,7 +681,7 @@ File <span class="ansi-green-fg">~/Documents/github/reciprocalspaceship/reciproc
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[19]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">dataset</span><span class="o">.</span><span class="n">write_mtz</span><span class="p">(</span><span class="s2">&quot;temp.mtz&quot;</span><span class="p">,</span> <span class="n">skip_problem_mtztypes</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">dataset</span><span class="o">.</span><span class="n">write_mtz</span><span class="p">(</span><span class="s2">"temp.mtz"</span><span class="p">,</span> <span class="n">skip_problem_mtztypes</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
