@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import Union
+from typing import Final, Union, cast
 
 import gemmi
 import numpy as np
@@ -9,6 +9,22 @@ import pytest
 import reciprocalspaceship as rs
 
 SpaceGroupLike = Union[str, int, gemmi.SpaceGroup]
+
+UNIQUE_ORIGIN_SPACEGROUP_NUMBERS: Final[tuple[int, ...]] = (
+    197,
+    199,
+    204,
+    206,
+    211,
+    214,
+    217,
+    220,
+    229,
+    230,
+)
+SPACEGROUP_SETTINGS: Final[tuple[gemmi.SpaceGroup, ...]] = tuple(
+    gemmi.spacegroup_table()
+)
 
 
 def _dataset_with_symmetry(
@@ -126,3 +142,62 @@ def test_has_reindexing_ambiguity_rejects_invalid_maximum_obliquity(
             dataset,
             max_obliquity=max_obliquity,
         )
+
+
+@pytest.mark.parametrize("spacegroup", [1, "P 1", gemmi.SpaceGroup(1)])
+def test_has_origin_shift_ambiguity_accepts_spacegroup_types(
+    spacegroup: SpaceGroupLike,
+) -> None:
+    assert rs.algorithms.has_origin_shift_ambiguity(spacegroup) is True
+
+
+@pytest.mark.parametrize(
+    "invalid_spacegroup",
+    [None, False, 0, 231, "not a space group", 999, 10**100],
+)
+def test_has_origin_shift_ambiguity_normalizes_invalid_inputs(
+    invalid_spacegroup: object,
+) -> None:
+    with pytest.raises(
+        rs.algorithms.PhaseAlignmentInputError,
+        match="spacegroup could not be converted",
+    ):
+        rs.algorithms.has_origin_shift_ambiguity(
+            cast(SpaceGroupLike, invalid_spacegroup)
+        )
+
+
+@pytest.mark.parametrize(
+    "spacegroup",
+    ["P 21 21 21", "P 61", "R 3:R"],
+    ids=["discrete", "polar", "oblique-polar"],
+)
+def test_has_origin_shift_ambiguity_representative_cases(spacegroup: str) -> None:
+    assert rs.algorithms.has_origin_shift_ambiguity(spacegroup) is True
+
+
+@pytest.mark.parametrize("spacegroup_number", UNIQUE_ORIGIN_SPACEGROUP_NUMBERS)
+def test_has_origin_shift_ambiguity_quotients_centering_translations(
+    spacegroup_number: int,
+) -> None:
+    # Regression: body-centering alone does not create a distinguishable origin.
+    assert rs.algorithms.has_origin_shift_ambiguity(spacegroup_number) is False
+
+
+@pytest.mark.parametrize("spacegroup_number", range(1, 231))
+def test_has_origin_shift_ambiguity_all_reference_spacegroups(
+    spacegroup_number: int,
+) -> None:
+    # Regression: these values were independently generated from CCTBX seminvariants.
+    expected = spacegroup_number not in UNIQUE_ORIGIN_SPACEGROUP_NUMBERS
+
+    assert rs.algorithms.has_origin_shift_ambiguity(spacegroup_number) is expected
+
+
+@pytest.mark.parametrize("spacegroup", SPACEGROUP_SETTINGS)
+def test_has_origin_shift_ambiguity_is_setting_invariant(
+    spacegroup: gemmi.SpaceGroup,
+) -> None:
+    expected = spacegroup.number not in UNIQUE_ORIGIN_SPACEGROUP_NUMBERS
+
+    assert rs.algorithms.has_origin_shift_ambiguity(spacegroup) is expected
