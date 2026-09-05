@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+from heapq import heappush, heapreplace
 from itertools import product
 from math import gcd, prod
 from typing import TYPE_CHECKING, Final, Union
@@ -10,6 +11,7 @@ import gemmi
 import numpy as np
 from numpy.typing import NDArray
 from scipy.fft import next_fast_len
+from scipy.ndimage import maximum_filter
 
 from reciprocalspaceship.algorithms._errors import (
     PhaseAlignmentInputError,
@@ -47,6 +49,15 @@ MAXIMUM_FFT_MEMORY_BYTES: Final[int] = 1_073_741_824
 
 
 FFT_BYTES_PER_GRID_POINT: Final[int] = 80
+
+
+FFT_SLAB_BYTES_PER_GRID_POINT: Final[int] = 80
+
+
+DEFAULT_MAXIMUM_REFINEMENT_STARTS: Final[int] = 4_096
+
+
+LOCAL_MAXIMUM_NEIGHBORHOOD: Final[int] = 3
 
 
 POLAR_AXIS_CONSTRAINT_RANK: Final[int] = NUMBER_OF_CRYSTALLOGRAPHIC_AXES - 1
@@ -356,4 +367,140 @@ def has_origin_shift_ambiguity(spacegroup: SpaceGroupLike) -> bool:
     )
     return (
         len(_origin_cosets(allowed_grid_origins, polar_basis, validated_spacegroup)) > 1
+    )
+
+
+def _periodic_local_maxima(correlation_grid: FloatArray) -> IntegerArray:
+    local_maximum = maximum_filter(
+        correlation_grid,
+        size=LOCAL_MAXIMUM_NEIGHBORHOOD,
+        mode="wrap",
+    )
+    maximum_indices = np.argwhere(
+        np.isclose(correlation_grid, local_maximum, rtol=0.0, atol=1e-14)
+    )
+    scores = correlation_grid[tuple(maximum_indices.T)]
+    descending_score_order = np.lexsort((*maximum_indices.T[::-1], scores))[::-1]
+    return np.asarray(maximum_indices[descending_score_order], dtype=np.int64)
+
+
+def _bounded_memory_periodic_local_maxima(
+    grid_shape: tuple[int, ...],
+    wrapped_frequencies: IntegerArray,
+    coefficients: ComplexArray,
+    *,
+    maximum_refinement_starts: int,
+) -> IntegerArray:
+    scan_axis = int(np.argmax(grid_shape))
+    axis_order = (scan_axis,) + tuple(
+        axis for axis in range(len(grid_shape)) if axis != scan_axis
+    )
+    permuted_grid_shape = tuple(grid_shape[axis] for axis in axis_order)
+    permuted_frequencies = wrapped_frequencies[:, axis_order]
+    slab_shape = permuted_grid_shape[1:]
+    slab_frequencies = permuted_frequencies[:, 1:]
+    inverse_axis_order = tuple(int(axis) for axis in np.argsort(axis_order))
+    estimated_slab_memory = prod(slab_shape) * FFT_SLAB_BYTES_PER_GRID_POINT
+    _raise_fft_memory_error(
+        estimated_slab_memory,
+        description="bounded-memory origin FFT slab",
+    )
+
+    def correlation_slab(scan_index: int) -> FloatArray:
+        scan_axis_phases = np.exp(
+            1j
+            * FULL_ROTATION_RADIANS
+            * permuted_frequencies[:, 0]
+            * scan_index
+            / permuted_grid_shape[0]
+        )
+        return _materialized_correlation_grid(
+            slab_shape,
+            slab_frequencies,
+            coefficients * scan_axis_phases,
+        )
+
+    number_of_slabs = permuted_grid_shape[0]
+    previous_slab = correlation_slab(number_of_slabs - 1)
+    current_slab = correlation_slab(0)
+    next_slab = correlation_slab(1 % number_of_slabs)
+    strongest_candidates: list[tuple[float, tuple[int, ...]]] = []
+    for scan_index in range(number_of_slabs):
+        neighborhood_maximum = np.maximum.reduce(
+            tuple(
+                maximum_filter(
+                    slab,
+                    size=LOCAL_MAXIMUM_NEIGHBORHOOD,
+                    mode="wrap",
+                )
+                for slab in (previous_slab, current_slab, next_slab)
+            )
+        )
+        remaining_indices = np.argwhere(
+            np.isclose(
+                current_slab,
+                neighborhood_maximum,
+                rtol=0.0,
+                atol=1e-14,
+            )
+        )
+        for remaining_index in remaining_indices:
+            permuted_index = (
+                scan_index,
+                *(int(value) for value in remaining_index),
+            )
+            index = tuple(permuted_index[axis] for axis in inverse_axis_order)
+            candidate = (float(current_slab[tuple(remaining_index)]), index)
+            if len(strongest_candidates) < maximum_refinement_starts:
+                heappush(strongest_candidates, candidate)
+            elif candidate > strongest_candidates[0]:
+                heapreplace(strongest_candidates, candidate)
+        if scan_index < number_of_slabs - 1:
+            previous_slab, current_slab = current_slab, next_slab
+            next_slab = correlation_slab((scan_index + 2) % number_of_slabs)
+    ranked_candidates = sorted(strongest_candidates, reverse=True)
+    return np.asarray(
+        [candidate[1] for candidate in ranked_candidates],
+        dtype=np.int64,
+    )
+
+
+def _origin_fft_local_maxima(
+    origin_coset: FloatArray,
+    integer_polar_basis: IntegerArray,
+    miller_indices: IntegerArray,
+    phase_differences: FloatArray,
+    normalized_weights: FloatArray,
+    *,
+    maximum_refinement_starts: int = DEFAULT_MAXIMUM_REFINEMENT_STARTS,
+) -> tuple[IntegerArray, tuple[int, ...]]:
+    grid_shape, wrapped_frequencies, coefficients = _origin_fourier_terms(
+        origin_coset,
+        integer_polar_basis,
+        miller_indices,
+        phase_differences,
+        normalized_weights,
+    )
+    estimated_memory = _estimated_fft_memory(grid_shape)
+    if estimated_memory <= MAXIMUM_FFT_MEMORY_BYTES:
+        correlation_grid = _materialized_correlation_grid(
+            grid_shape,
+            wrapped_frequencies,
+            coefficients,
+        )
+        maximum_indices = _periodic_local_maxima(correlation_grid)
+        return maximum_indices[:maximum_refinement_starts], grid_shape
+    if len(grid_shape) < 2:
+        _raise_fft_memory_error(
+            estimated_memory,
+            description="constrained origin FFT",
+        )
+    return (
+        _bounded_memory_periodic_local_maxima(
+            grid_shape,
+            wrapped_frequencies,
+            coefficients,
+            maximum_refinement_starts=maximum_refinement_starts,
+        ),
+        grid_shape,
     )
