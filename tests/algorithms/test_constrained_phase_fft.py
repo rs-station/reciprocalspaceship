@@ -1,25 +1,35 @@
 from __future__ import annotations
 
 from itertools import product
+from pathlib import Path
 from typing import Final
 
 import gemmi
 import numpy as np
 import pytest
+from numpy.typing import NDArray
 
 import reciprocalspaceship as rs
 from reciprocalspaceship.algorithms.phase_alignment import (
     FFT_BYTES_PER_GRID_POINT,
+    _allowed_grid_origins,
     _estimated_fft_memory,
     _integer_polar_basis,
     _origin_correlation_grid,
+    _origin_cosets,
     _origin_fft_local_maxima,
     _periodic_local_maxima,
+    _polar_basis,
     _primitive_integer_vector,
+    _rank_internal_translations,
     _rotation_constraints,
 )
 
 FULL_ROTATION_RADIANS: Final[float] = float(2.0 * np.pi)
+PHASE_DATA_DIRECTORY: Final[Path] = Path(__file__).parents[1] / "data" / "fmodel"
+
+FloatArray = NDArray[np.float64]
+IntegerArray = NDArray[np.int64]
 
 
 @pytest.mark.parametrize(
@@ -285,3 +295,90 @@ def test_origin_fft_retains_strongest_local_maxima(
     np.testing.assert_array_equal(actual_indices, expected_indices)
     actual_scores = correlation_grid[tuple(actual_indices.T)]
     np.testing.assert_array_equal(actual_scores, expected_scores)
+
+
+def test_rank_internal_translations_rejects_empty_origin_set() -> None:
+    miller_indices = np.eye(3, dtype=np.int64)
+    phases = np.zeros(3, dtype=np.float64)
+    weights = np.full(3, 1.0 / 3.0, dtype=np.float64)
+
+    with pytest.raises(
+        rs.algorithms.PhaseAlignmentOptimizationError, match="no candidate"
+    ):
+        _rank_internal_translations(
+            np.empty((0, 3), dtype=np.float64),
+            np.empty((3, 0), dtype=np.int64),
+            miller_indices,
+            phases,
+            weights,
+            gemmi.SpaceGroup("P 21 21 21"),
+        )
+
+
+def test_origin_ranking_does_not_accept_a_stationary_saddle() -> None:
+    # Regression: cos(x) - 0.3*cos(2x) has a sampled maximum but a local minimum at 0.
+    # BFGS reports success there, hiding the two equally good continuous maxima.
+    miller_indices = np.asarray(((1, 0, 0), (2, 0, 0)), dtype=np.int64)
+
+    with pytest.raises(
+        rs.algorithms.PhaseAlignmentOptimizationError, match="not a maximum"
+    ):
+        _rank_internal_translations(
+            np.zeros((1, 3), dtype=np.float64),
+            np.asarray(((1,), (0,), (0,)), dtype=np.int64),
+            miller_indices,
+            np.asarray((0.0, np.pi), dtype=np.float64),
+            np.asarray((1.0, 0.3), dtype=np.float64) / 1.3,
+            gemmi.SpaceGroup("P 1"),
+        )
+
+
+def test_per_coset_fft_recovers_noisy_p21_regression() -> None:
+    dataset = rs.read_mtz(str(PHASE_DATA_DIRECTORY / "6OFL.mtz"))
+    miller_indices = np.asarray(dataset.get_hkls(), dtype=np.int64)
+    amplitudes = dataset["FMODEL"].to_numpy(dtype=np.float64)
+    normalized_weights = amplitudes**2 / np.sum(amplitudes**2)
+    injected_origin_shift = np.asarray((0.5, -0.137, 0.5), dtype=np.float64)
+    random_number_generator = np.random.default_rng(seed=20267843)
+    phase_noise = random_number_generator.normal(
+        loc=0.0,
+        scale=70.0,
+        size=len(miller_indices),
+    )
+    phase_differences = np.deg2rad(
+        rs.utils.canonicalize_phases(
+            360.0 * miller_indices @ injected_origin_shift + phase_noise,
+        )
+    )
+    rotation_constraints = _rotation_constraints(dataset.spacegroup)
+    polar_basis = _polar_basis(rotation_constraints)
+    integer_polar_basis = _integer_polar_basis(rotation_constraints)
+    allowed_grid_origins = _allowed_grid_origins(
+        dataset.spacegroup,
+        rotation_constraints,
+    )
+    origin_cosets = _origin_cosets(
+        allowed_grid_origins,
+        polar_basis,
+        dataset.spacegroup,
+    )
+
+    candidates = _rank_internal_translations(
+        origin_cosets,
+        integer_polar_basis,
+        miller_indices,
+        phase_differences,
+        normalized_weights,
+        dataset.spacegroup,
+    )
+
+    # Regression: the former shared 3-D seed converged to the wrong P21 origin coset.
+    assert len(origin_cosets) == 4
+    best_translation, best_correlation = candidates[0]
+    np.testing.assert_allclose(
+        best_translation,
+        (0.5, 0.136289717479, 0.5),
+        atol=1e-7,
+    )
+    np.testing.assert_allclose(best_correlation, 0.331742292384235, atol=1e-8)
+    assert best_correlation - candidates[1][1] > 0.09

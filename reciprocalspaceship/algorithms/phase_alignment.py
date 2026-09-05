@@ -12,9 +12,11 @@ import numpy as np
 from numpy.typing import NDArray
 from scipy.fft import next_fast_len
 from scipy.ndimage import maximum_filter
+from scipy.optimize import OptimizeResult, minimize
 
 from reciprocalspaceship.algorithms._errors import (
     PhaseAlignmentInputError,
+    PhaseAlignmentOptimizationError,
 )
 
 if TYPE_CHECKING:
@@ -45,6 +47,14 @@ ORIGIN_DENOMINATOR: Final[int] = int(gemmi.Op.DEN)
 SINGULAR_VALUE_TOLERANCE: Final[float] = 1e-10
 
 
+OPTIMIZER_GRADIENT_TOLERANCE: Final[float] = 1e-7
+
+
+OPTIMIZER_ACCEPTABLE_GRADIENT: Final[float] = 1e-5
+OPTIMIZER_CURVATURE_TOLERANCE: Final[float] = 1e-7
+OPTIMIZER_MAXIMUM_ITERATIONS: Final[int] = 500
+
+
 MAXIMUM_FFT_MEMORY_BYTES: Final[int] = 1_073_741_824
 
 
@@ -58,6 +68,9 @@ DEFAULT_MAXIMUM_REFINEMENT_STARTS: Final[int] = 4_096
 
 
 LOCAL_MAXIMUM_NEIGHBORHOOD: Final[int] = 3
+
+
+TRANSLATION_EQUIVALENCE_TOLERANCE: Final[float] = 1e-6
 
 
 POLAR_AXIS_CONSTRAINT_RANK: Final[int] = NUMBER_OF_CRYSTALLOGRAPHIC_AXES - 1
@@ -370,6 +383,76 @@ def has_origin_shift_ambiguity(spacegroup: SpaceGroupLike) -> bool:
     )
 
 
+def _phase_loss(
+    fractional_translation: FloatArray,
+    miller_indices: IntegerArray,
+    phase_differences: FloatArray,
+    normalized_weights: FloatArray,
+) -> float:
+    residuals = (
+        phase_differences
+        + FULL_ROTATION_RADIANS * miller_indices @ fractional_translation
+    )
+    return float(normalized_weights @ (1.0 - np.cos(residuals)))
+
+
+def _refine_translation(
+    starting_translation: FloatArray,
+    polar_basis: FloatArray,
+    miller_indices: IntegerArray,
+    phase_differences: FloatArray,
+    normalized_weights: FloatArray,
+) -> tuple[FloatArray, float]:
+    polar_frequencies = FULL_ROTATION_RADIANS * miller_indices @ polar_basis
+    starting_residuals = (
+        phase_differences
+        + FULL_ROTATION_RADIANS * miller_indices @ starting_translation
+    )
+
+    def objective(polar_coordinates: FloatArray) -> tuple[float, FloatArray]:
+        residuals = starting_residuals + polar_frequencies @ polar_coordinates
+        weighted_sines = normalized_weights * np.sin(residuals)
+        loss = float(normalized_weights @ (1.0 - np.cos(residuals)))
+        polar_gradient = polar_frequencies.T @ weighted_sines
+        return loss, np.asarray(polar_gradient, dtype=np.float64)
+
+    result: OptimizeResult = minimize(
+        objective,
+        np.zeros(polar_basis.shape[1], dtype=np.float64),
+        method="BFGS",
+        jac=True,
+        options={
+            "gtol": OPTIMIZER_GRADIENT_TOLERANCE,
+            "maxiter": OPTIMIZER_MAXIMUM_ITERATIONS,
+        },
+    )
+    result_gradient = np.asarray(result.jac, dtype=np.float64)
+    finite_result = (
+        np.isfinite(result.fun)
+        and np.isfinite(result_gradient).all()
+        and np.isfinite(result.x).all()
+    )
+    if not finite_result or (
+        not result.success
+        and np.linalg.norm(result_gradient, ord=np.inf) > OPTIMIZER_ACCEPTABLE_GRADIENT
+    ):
+        msg = f"phase alignment did not converge: {result.message}"
+        raise PhaseAlignmentOptimizationError(msg)
+
+    # A sampled FFT maximum can be a continuous saddle with a zero gradient.
+    residuals = starting_residuals + polar_frequencies @ result.x
+    hessian = polar_frequencies.T @ (
+        (normalized_weights * np.cos(residuals))[:, None] * polar_frequencies
+    )
+    if np.linalg.eigvalsh(hessian)[0] < -OPTIMIZER_CURVATURE_TOLERANCE:
+        msg = "phase alignment converged to a stationary point that is not a maximum"
+        raise PhaseAlignmentOptimizationError(msg)
+    translation = (
+        starting_translation + polar_basis @ np.asarray(result.x, dtype=np.float64)
+    ) % 1.0
+    return np.asarray(translation, dtype=np.float64), float(result.fun)
+
+
 def _periodic_local_maxima(correlation_grid: FloatArray) -> IntegerArray:
     local_maximum = maximum_filter(
         correlation_grid,
@@ -504,3 +587,114 @@ def _origin_fft_local_maxima(
         ),
         grid_shape,
     )
+
+
+def _equivalent_by_centering(
+    first: FloatArray,
+    second: FloatArray,
+    spacegroup: gemmi.SpaceGroup,
+) -> bool:
+    centering_translations = (
+        np.asarray(spacegroup.operations().cen_ops, dtype=np.float64)
+        / ORIGIN_DENOMINATOR
+    )
+    periodic_differences = (
+        first
+        - second
+        - centering_translations[:, None, :]
+        + PERIODIC_OFFSETS[None, :, :]
+    )
+    return bool(
+        np.any(
+            np.linalg.norm(periodic_differences, axis=2)
+            < TRANSLATION_EQUIVALENCE_TOLERANCE
+        )
+    )
+
+
+def _rank_internal_translations(
+    origin_cosets: FloatArray,
+    integer_polar_basis: IntegerArray,
+    miller_indices: IntegerArray,
+    phase_differences: FloatArray,
+    normalized_weights: FloatArray,
+    spacegroup: gemmi.SpaceGroup,
+    *,
+    maximum_refinement_starts: int = DEFAULT_MAXIMUM_REFINEMENT_STARTS,
+) -> tuple[tuple[FloatArray, float], ...]:
+    polar_dimension = integer_polar_basis.shape[1]
+    floating_polar_basis = integer_polar_basis.astype(np.float64)
+    if polar_dimension > 0:
+        identifiable_rank = np.linalg.matrix_rank(
+            miller_indices[normalized_weights > 0.0] @ integer_polar_basis,
+            tol=SINGULAR_VALUE_TOLERANCE,
+        )
+        if identifiable_rank != polar_dimension:
+            msg = (
+                "positive-weight reflections do not identify every continuous "
+                "origin direction"
+            )
+            raise PhaseAlignmentInputError(msg)
+
+    refined_candidates: list[tuple[FloatArray, float]] = []
+    optimization_errors: list[PhaseAlignmentOptimizationError] = []
+    for origin_coset in origin_cosets:
+        if polar_dimension == 0:
+            refined_candidates.append(
+                (
+                    origin_coset,
+                    1.0
+                    - _phase_loss(
+                        origin_coset,
+                        miller_indices,
+                        phase_differences,
+                        normalized_weights,
+                    ),
+                )
+            )
+            continue
+        maximum_indices, integer_grid_shape = _origin_fft_local_maxima(
+            origin_coset,
+            integer_polar_basis,
+            miller_indices,
+            phase_differences,
+            normalized_weights,
+            maximum_refinement_starts=maximum_refinement_starts,
+        )
+        grid_shape = np.asarray(integer_grid_shape, dtype=np.float64)
+        for maximum_index in maximum_indices:
+            starting_translation = (
+                origin_coset + integer_polar_basis @ (maximum_index / grid_shape)
+            ) % 1.0
+            try:
+                translation, loss = _refine_translation(
+                    starting_translation,
+                    floating_polar_basis,
+                    miller_indices,
+                    phase_differences,
+                    normalized_weights,
+                )
+            except PhaseAlignmentOptimizationError as error:
+                optimization_errors.append(error)
+                continue
+            refined_candidates.append((translation, 1.0 - loss))
+    if not refined_candidates:
+        if optimization_errors:
+            raise optimization_errors[0]
+        msg = "origin search produced no candidate translations"
+        raise PhaseAlignmentOptimizationError(msg)
+
+    ranked_candidates = sorted(
+        refined_candidates,
+        key=lambda candidate: candidate[1],
+        reverse=True,
+    )
+    inequivalent_candidates: list[tuple[FloatArray, float]] = []
+    for translation, correlation in ranked_candidates:
+        if any(
+            _equivalent_by_centering(translation, existing[0], spacegroup)
+            for existing in inequivalent_candidates
+        ):
+            continue
+        inequivalent_candidates.append((translation, float(correlation)))
+    return tuple(inequivalent_candidates)
