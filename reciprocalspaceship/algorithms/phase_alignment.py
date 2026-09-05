@@ -3,11 +3,13 @@
 from __future__ import annotations
 
 from itertools import product
+from math import gcd, prod
 from typing import TYPE_CHECKING, Final, Union
 
 import gemmi
 import numpy as np
 from numpy.typing import NDArray
+from scipy.fft import next_fast_len
 
 from reciprocalspaceship.algorithms._errors import (
     PhaseAlignmentInputError,
@@ -23,16 +25,31 @@ FloatArray: TypeAlias = NDArray[np.float64]
 IntegerArray: TypeAlias = NDArray[np.int64]
 
 
+ComplexArray: TypeAlias = NDArray[np.complex128]
+
+
 SpaceGroupLike: TypeAlias = Union[str, int, gemmi.SpaceGroup]
 
 
 NUMBER_OF_CRYSTALLOGRAPHIC_AXES: Final[int] = 3
 
 
+FULL_ROTATION_RADIANS: Final[float] = float(2.0 * np.pi)
+
+
 ORIGIN_DENOMINATOR: Final[int] = int(gemmi.Op.DEN)
 
 
 SINGULAR_VALUE_TOLERANCE: Final[float] = 1e-10
+
+
+MAXIMUM_FFT_MEMORY_BYTES: Final[int] = 1_073_741_824
+
+
+FFT_BYTES_PER_GRID_POINT: Final[int] = 80
+
+
+POLAR_AXIS_CONSTRAINT_RANK: Final[int] = NUMBER_OF_CRYSTALLOGRAPHIC_AXES - 1
 
 
 PERIODIC_OFFSETS: Final[FloatArray] = np.asarray(
@@ -58,6 +75,176 @@ def _polar_basis(rotation_constraints: IntegerArray) -> FloatArray:
     )
     rank = int(np.count_nonzero(singular_values > SINGULAR_VALUE_TOLERANCE))
     return np.asarray(right_singular_vectors[rank:].T, dtype=np.float64)
+
+
+def _extended_gcd(first: int, second: int) -> tuple[int, int, int]:
+    old_remainder, remainder = abs(first), abs(second)
+    old_first_coefficient, first_coefficient = 1, 0
+    old_second_coefficient, second_coefficient = 0, 1
+    while remainder != 0:
+        quotient = old_remainder // remainder
+        old_remainder, remainder = (
+            remainder,
+            old_remainder - quotient * remainder,
+        )
+        old_first_coefficient, first_coefficient = (
+            first_coefficient,
+            old_first_coefficient - quotient * first_coefficient,
+        )
+        old_second_coefficient, second_coefficient = (
+            second_coefficient,
+            old_second_coefficient - quotient * second_coefficient,
+        )
+    first_sign = -1 if first < 0 else 1
+    second_sign = -1 if second < 0 else 1
+    return (
+        old_remainder,
+        old_first_coefficient * first_sign,
+        old_second_coefficient * second_sign,
+    )
+
+
+def _primitive_integer_vector(vector: IntegerArray) -> IntegerArray:
+    common_divisor = 0
+    for value in vector:
+        common_divisor = gcd(common_divisor, abs(int(value)))
+    if common_divisor == 0:
+        return vector
+    return np.asarray(vector // common_divisor, dtype=np.int64)
+
+
+def _integer_polar_basis(rotation_constraints: IntegerArray) -> IntegerArray:
+    rank = int(np.linalg.matrix_rank(rotation_constraints.astype(np.float64)))
+    if rank == 0:
+        return np.eye(NUMBER_OF_CRYSTALLOGRAPHIC_AXES, dtype=np.int64)
+    if rank == NUMBER_OF_CRYSTALLOGRAPHIC_AXES:
+        return np.empty((NUMBER_OF_CRYSTALLOGRAPHIC_AXES, 0), dtype=np.int64)
+
+    nonzero_rows = rotation_constraints[np.any(rotation_constraints != 0, axis=1)]
+    if rank == POLAR_AXIS_CONSTRAINT_RANK:
+        first_row = nonzero_rows[0]
+        null_vector = next(
+            cross_product
+            for second_row in nonzero_rows[1:]
+            if np.any((cross_product := np.cross(first_row, second_row)) != 0)
+        )
+        primitive_null_vector = _primitive_integer_vector(null_vector)
+        return primitive_null_vector[:, None]
+
+    primitive_normal = _primitive_integer_vector(nonzero_rows[0])
+    first, second, third = (int(value) for value in primitive_normal)
+    if first == 0 and second == 0:
+        return np.asarray(((1, 0), (0, 1), (0, 0)), dtype=np.int64)
+    common_divisor, first_coefficient, second_coefficient = _extended_gcd(
+        first,
+        second,
+    )
+    first_basis_vector = np.asarray(
+        (second // common_divisor, -first // common_divisor, 0),
+        dtype=np.int64,
+    )
+    second_basis_vector = np.asarray(
+        (
+            -first_coefficient * third,
+            -second_coefficient * third,
+            common_divisor,
+        ),
+        dtype=np.int64,
+    )
+    return np.column_stack((first_basis_vector, second_basis_vector))
+
+
+def _origin_fourier_terms(
+    origin_coset: FloatArray,
+    integer_polar_basis: IntegerArray,
+    miller_indices: IntegerArray,
+    phase_differences: FloatArray,
+    normalized_weights: FloatArray,
+) -> tuple[tuple[int, ...], IntegerArray, ComplexArray]:
+    positive_weights: NDArray[np.bool_] = normalized_weights > 0.0
+    weighted_miller_indices = miller_indices[positive_weights]
+    weighted_phase_differences = phase_differences[positive_weights]
+    weighted_normalized_weights = normalized_weights[positive_weights]
+    polar_frequencies = weighted_miller_indices @ integer_polar_basis
+    maximum_frequencies = np.max(np.abs(polar_frequencies), axis=0)
+    grid_shape = tuple(
+        next_fast_len(int(2 * maximum_frequency + 1))
+        for maximum_frequency in maximum_frequencies
+    )
+    wrapped_frequencies = np.asarray(
+        polar_frequencies % np.asarray(grid_shape, dtype=np.int64),
+        dtype=np.int64,
+    )
+    phase_at_coset = (
+        weighted_phase_differences
+        + FULL_ROTATION_RADIANS * weighted_miller_indices @ origin_coset
+    )
+    coefficients = np.asarray(
+        weighted_normalized_weights * np.exp(1j * phase_at_coset),
+        dtype=np.complex128,
+    )
+    return grid_shape, wrapped_frequencies, coefficients
+
+
+def _estimated_fft_memory(grid_shape: tuple[int, ...]) -> int:
+    return prod(grid_shape) * FFT_BYTES_PER_GRID_POINT
+
+
+def _raise_fft_memory_error(estimated_memory: int, *, description: str) -> None:
+    if estimated_memory > MAXIMUM_FFT_MEMORY_BYTES:
+        msg = (
+            f"{description} requires an estimated "
+            f"{estimated_memory / 2**30:.2f} GiB, exceeding the "
+            f"{MAXIMUM_FFT_MEMORY_BYTES / 2**30:.2f} GiB safety limit"
+        )
+        raise PhaseAlignmentInputError(msg)
+
+
+def _materialized_correlation_grid(
+    grid_shape: tuple[int, ...],
+    wrapped_frequencies: IntegerArray,
+    coefficients: ComplexArray,
+) -> FloatArray:
+    if not grid_shape:
+        return np.asarray(coefficients.real.sum(), dtype=np.float64)
+    fourier_coefficients = np.zeros(grid_shape, dtype=np.complex128)
+    frequency_indices = tuple(
+        wrapped_frequencies[:, axis] for axis in range(len(grid_shape))
+    )
+    np.add.at(
+        fourier_coefficients,
+        frequency_indices,
+        coefficients,
+    )
+    number_of_grid_points = prod(grid_shape)
+    correlation = np.fft.ifftn(fourier_coefficients).real * number_of_grid_points
+    return np.asarray(correlation, dtype=np.float64)
+
+
+def _origin_correlation_grid(
+    origin_coset: FloatArray,
+    integer_polar_basis: IntegerArray,
+    miller_indices: IntegerArray,
+    phase_differences: FloatArray,
+    normalized_weights: FloatArray,
+) -> FloatArray:
+    grid_shape, wrapped_frequencies, coefficients = _origin_fourier_terms(
+        origin_coset,
+        integer_polar_basis,
+        miller_indices,
+        phase_differences,
+        normalized_weights,
+    )
+    estimated_memory = _estimated_fft_memory(grid_shape)
+    _raise_fft_memory_error(
+        estimated_memory,
+        description="constrained origin FFT",
+    )
+    return _materialized_correlation_grid(
+        grid_shape,
+        wrapped_frequencies,
+        coefficients,
+    )
 
 
 def _allowed_grid_origins(
