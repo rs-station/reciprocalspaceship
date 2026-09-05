@@ -4,7 +4,8 @@ import pandas as pd
 from pandas._libs import lib
 from pandas.api.types import is_complex_dtype
 
-from reciprocalspaceship import concat, dtypes
+from reciprocalspaceship import dtypes
+from reciprocalspaceship.concat import concat
 from reciprocalspaceship.dataseries import DataSeries
 from reciprocalspaceship.decorators import (
     cellify,
