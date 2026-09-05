@@ -12,6 +12,8 @@ import reciprocalspaceship as rs
     "public_object",
     [
         rs.algorithms.has_reindexing_ambiguity,
+        rs.algorithms.reindex_by_correlation,
+        rs.algorithms.ReindexingResult,
     ],
 )
 def test_public_alignment_annotations_resolve(
