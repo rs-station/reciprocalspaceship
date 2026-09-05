@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+from dataclasses import dataclass
 from heapq import heappush, heapreplace
 from itertools import product
 from math import gcd, prod
@@ -19,10 +20,15 @@ from reciprocalspaceship.algorithms._errors import (
     PhaseAlignmentOptimizationError,
 )
 from reciprocalspaceship.algorithms.reindexing import (
+    DEFAULT_MAXIMUM_OBLIQUITY,
     IDENTITY_OPERATION,
+    ReindexingResult,
     _as_asu,
     _common_finite_index,
     _indexed_series,
+    _validate_dataset,
+    has_reindexing_ambiguity,
+    reindex_by_correlation,
 )
 from reciprocalspaceship.dataset import DataSet
 from reciprocalspaceship.dtypes import IntensityDtype, PhaseDtype
@@ -70,6 +76,9 @@ OPTIMIZER_CURVATURE_TOLERANCE: Final[float] = 1e-7
 OPTIMIZER_MAXIMUM_ITERATIONS: Final[int] = 500
 
 
+TRANSLATION_ROUNDING_DECIMALS: Final[int] = 12
+
+
 MAXIMUM_FFT_MEMORY_BYTES: Final[int] = 1_073_741_824
 
 
@@ -98,6 +107,62 @@ PERIODIC_OFFSETS: Final[FloatArray] = np.asarray(
     tuple(product((-1.0, 0.0, 1.0), repeat=NUMBER_OF_CRYSTALLOGRAPHIC_AXES)),
     dtype=np.float64,
 )
+
+
+@dataclass(frozen=True)
+class OriginShiftCandidate:
+    """A symmetry-allowed origin shift and its phase correlation.
+
+    Attributes
+    ----------
+    origin_shift : tuple of float
+        Fractional change of origin in the Phenix sign convention.
+    correlation : float
+        Normalized weighted mean cosine of the phase residuals.
+    inverted_hand : bool
+        Whether the moving phases were complex-conjugated before scoring.
+
+    """
+
+    origin_shift: tuple[float, float, float]
+    correlation: float
+    inverted_hand: bool
+
+
+@dataclass(frozen=True)
+class PhaseAlignmentResult:
+    """An aligned dataset and the diagnostics supporting its solution.
+
+    Attributes
+    ----------
+    dataset : DataSet
+        Reindexed and origin-shifted copy aligned to the reference.
+    origin_shift : tuple of float
+        Selected fractional change of origin in the Phenix sign convention.
+    inverted_hand : bool
+        Whether the moving phase and complex columns were conjugated.
+    correlation : float
+        Correlation of the selected origin shift.
+    runner_up_correlation : float, optional
+        Correlation of the next crystallographically distinct candidate.
+    correlation_gap : float, optional
+        Best-minus-runner-up correlation, if a runner-up exists.
+    candidates : tuple of OriginShiftCandidate
+        All distinct candidates, sorted from highest to lowest correlation.
+    reindexing : ReindexingResult, optional
+        Diagnostics for the indexing operation applied before origin alignment, or
+        ``None`` when the unit-cell metric has no indexing ambiguity.
+
+    """
+
+    dataset: DataSet
+    origin_shift: tuple[float, float, float]
+    inverted_hand: bool
+    correlation: float
+    runner_up_correlation: Optional[float]
+    correlation_gap: Optional[float]
+    candidates: tuple[OriginShiftCandidate, ...]
+    reindexing: Optional[ReindexingResult]
 
 
 def _rotation_constraints(spacegroup: gemmi.SpaceGroup) -> IntegerArray:
@@ -718,6 +783,14 @@ def _rank_internal_translations(
     return tuple(inequivalent_candidates)
 
 
+def _phenix_origin_shift(
+    internal_translation: FloatArray,
+) -> tuple[float, float, float]:
+    origin_shift = (-internal_translation + 0.5) % 1.0 - 0.5
+    rounded = np.round(origin_shift, decimals=TRANSLATION_ROUNDING_DECIMALS)
+    return float(rounded[0]), float(rounded[1]), float(rounded[2])
+
+
 def _validate_phase_key(dataset: DataSet, *, phase_key: str, name: str) -> None:
     if phase_key not in dataset:
         msg = f"{name} does not contain phase key {phase_key!r}"
@@ -833,3 +906,152 @@ def _apply_origin_shift(
     for key in shifted.get_complex_keys():
         shifted[key] = shifted[key].to_numpy() * complex_multiplier
     return shifted
+
+
+def _origin_shift_candidates(
+    miller_indices: IntegerArray,
+    phases: FloatArray,
+    reference_phases: FloatArray,
+    normalized_weights: FloatArray,
+    spacegroup: gemmi.SpaceGroup,
+    *,
+    maximum_refinement_starts: int,
+) -> tuple[OriginShiftCandidate, ...]:
+    rotation_constraints = _rotation_constraints(spacegroup)
+    orthonormal_polar_basis = _polar_basis(rotation_constraints)
+    integer_polar_basis = _integer_polar_basis(rotation_constraints)
+    allowed_grid_origins = _allowed_grid_origins(spacegroup, rotation_constraints)
+    origin_cosets = _origin_cosets(
+        allowed_grid_origins,
+        orthonormal_polar_basis,
+        spacegroup,
+    )
+    phase_differences = np.deg2rad(
+        canonicalize_phases(phases - reference_phases),
+    )
+    internal_candidates = _rank_internal_translations(
+        origin_cosets,
+        integer_polar_basis,
+        miller_indices,
+        phase_differences,
+        normalized_weights,
+        spacegroup,
+        maximum_refinement_starts=maximum_refinement_starts,
+    )
+    return tuple(
+        OriginShiftCandidate(
+            origin_shift=_phenix_origin_shift(translation),
+            correlation=correlation,
+            inverted_hand=False,
+        )
+        for translation, correlation in internal_candidates
+    )
+
+
+def align_phases(
+    dataset: DataSet,
+    reference: DataSet,
+    *,
+    phase_key: str,
+    reference_phase_key: str,
+    amplitude_key: str,
+    reference_amplitude_key: str,
+    maximum_refinement_starts: int = DEFAULT_MAXIMUM_REFINEMENT_STARTS,
+    max_obliquity: float = DEFAULT_MAXIMUM_OBLIQUITY,
+) -> PhaseAlignmentResult:
+    """Align a merged dataset by proper reindexing and an allowed origin shift.
+
+    Parameters
+    ----------
+    dataset : DataSet
+        Merged moving dataset.
+    reference : DataSet
+        Merged reference dataset defining the target indexing and origin.
+    phase_key, reference_phase_key : str
+        Moving and reference phase columns in degrees.
+    amplitude_key, reference_amplitude_key : str
+        Moving and reference amplitude or intensity columns.
+    maximum_refinement_starts : int, optional
+        Maximum number of FFT-local maxima refined per allowed origin coset.
+    max_obliquity : float, optional
+        Maximum obliquity in degrees for reindexing candidates.
+
+    Returns
+    -------
+    PhaseAlignmentResult
+        An aligned copy and ranked candidate diagnostics.
+
+    Raises
+    ------
+    PhaseAlignmentInputError
+        If the inputs are invalid or the space group has no origin ambiguity.
+
+    Notes
+    -----
+    The returned origin shift uses the Phenix convention. Aligned phases satisfy
+    ``phi_aligned = phi_moving - 360 * H @ origin_shift``.
+    """
+    _validate_dataset(dataset, data_key=amplitude_key, name="dataset")
+    _validate_dataset(reference, data_key=reference_amplitude_key, name="reference")
+    if not dataset.is_isomorphous(reference):
+        msg = "dataset and reference must be isomorphous"
+        raise PhaseAlignmentInputError(msg)
+    _validate_phase_key(dataset, phase_key=phase_key, name="dataset")
+    _validate_phase_key(
+        reference,
+        phase_key=reference_phase_key,
+        name="reference",
+    )
+    if not has_origin_shift_ambiguity(dataset.spacegroup):
+        msg = f"space group {dataset.spacegroup.xhm()} has no origin-shift ambiguity"
+        raise PhaseAlignmentInputError(msg)
+
+    if has_reindexing_ambiguity(dataset, max_obliquity=max_obliquity):
+        reindexing = reindex_by_correlation(
+            dataset,
+            reference,
+            data_key=amplitude_key,
+            reference_key=reference_amplitude_key,
+            max_obliquity=max_obliquity,
+        )
+        phase_dataset = reindexing.dataset
+    else:
+        reindexing = None
+        phase_dataset = _as_asu(dataset, gemmi.Op(IDENTITY_OPERATION))
+
+    miller_indices, phases, reference_phases, normalized_weights = _matched_phase_data(
+        phase_dataset,
+        reference,
+        phase_key=phase_key,
+        reference_phase_key=reference_phase_key,
+        amplitude_key=amplitude_key,
+        reference_amplitude_key=reference_amplitude_key,
+        fom_key=None,
+        reference_fom_key=None,
+        weighting="amplitude",
+    )
+    candidates = _origin_shift_candidates(
+        miller_indices,
+        phases,
+        reference_phases,
+        normalized_weights,
+        reference.spacegroup,
+        maximum_refinement_starts=maximum_refinement_starts,
+    )
+    best = candidates[0]
+    runner_up_correlation = candidates[1].correlation if len(candidates) > 1 else None
+    correlation_gap = (
+        best.correlation - runner_up_correlation
+        if runner_up_correlation is not None
+        else None
+    )
+    return PhaseAlignmentResult(
+        dataset=_apply_origin_shift(phase_dataset, best.origin_shift),
+        origin_shift=best.origin_shift,
+        inverted_hand=False,
+        correlation=best.correlation,
+        runner_up_correlation=runner_up_correlation,
+        correlation_gap=correlation_gap,
+        candidates=candidates,
+        reindexing=reindexing,
+    )

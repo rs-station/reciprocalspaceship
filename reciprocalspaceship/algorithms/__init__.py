@@ -8,7 +8,12 @@ from reciprocalspaceship.algorithms.intensity import (
     compute_intensity_from_structurefactor,
 )
 from reciprocalspaceship.algorithms.merge import merge
-from reciprocalspaceship.algorithms.phase_alignment import has_origin_shift_ambiguity
+from reciprocalspaceship.algorithms.phase_alignment import (
+    OriginShiftCandidate,
+    PhaseAlignmentResult,
+    align_phases,
+    has_origin_shift_ambiguity,
+)
 from reciprocalspaceship.algorithms.reindexing import (
     ReindexingCandidate,
     ReindexingResult,
@@ -22,10 +27,13 @@ from reciprocalspaceship.algorithms.scale_merged_intensities import (
 __all__ = [
     "LowCorrelationWarning",
     "NoClearSolutionError",
+    "OriginShiftCandidate",
     "PhaseAlignmentInputError",
     "PhaseAlignmentOptimizationError",
+    "PhaseAlignmentResult",
     "ReindexingCandidate",
     "ReindexingResult",
+    "align_phases",
     "compute_intensity_from_structurefactor",
     "has_origin_shift_ambiguity",
     "has_reindexing_ambiguity",
