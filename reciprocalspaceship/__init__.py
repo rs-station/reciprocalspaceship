@@ -25,24 +25,26 @@ from reciprocalspaceship.dataset import DataSet
 
 # Add support for MTZ data types:
 # see http://www.ccp4.ac.uk/html/f2mtz.html
-from reciprocalspaceship.dtypes import AnomalousDifferenceDtype  # D
-from reciprocalspaceship.dtypes import BatchDtype  # B
-from reciprocalspaceship.dtypes import FriedelIntensityDtype  # K
-from reciprocalspaceship.dtypes import FriedelStructureFactorAmplitudeDtype  # G
-from reciprocalspaceship.dtypes import HendricksonLattmanDtype  # A
-from reciprocalspaceship.dtypes import HKLIndexDtype  # H
-from reciprocalspaceship.dtypes import IntensityDtype  # J
-from reciprocalspaceship.dtypes import M_IsymDtype  # Y
-from reciprocalspaceship.dtypes import MTZIntDtype  # I
-from reciprocalspaceship.dtypes import MTZRealDtype  # R
-from reciprocalspaceship.dtypes import NormalizedStructureFactorAmplitudeDtype  # E
-from reciprocalspaceship.dtypes import PhaseDtype  # P
-from reciprocalspaceship.dtypes import StandardDeviationDtype  # Q
-from reciprocalspaceship.dtypes import StandardDeviationFriedelIDtype  # M
-from reciprocalspaceship.dtypes import StandardDeviationFriedelSFDtype  # L
-from reciprocalspaceship.dtypes import StructureFactorAmplitudeDtype  # F
-from reciprocalspaceship.dtypes import WeightDtype  # W
-from reciprocalspaceship.dtypes import summarize_mtz_dtypes
+from reciprocalspaceship.dtypes import (  # D; B; K; G; A; H; J; Y; I; R; E; P; Q; M; L; F; W
+    AnomalousDifferenceDtype,
+    BatchDtype,
+    FriedelIntensityDtype,
+    FriedelStructureFactorAmplitudeDtype,
+    HendricksonLattmanDtype,
+    HKLIndexDtype,
+    IntensityDtype,
+    M_IsymDtype,
+    MTZIntDtype,
+    MTZRealDtype,
+    NormalizedStructureFactorAmplitudeDtype,
+    PhaseDtype,
+    StandardDeviationDtype,
+    StandardDeviationFriedelIDtype,
+    StandardDeviationFriedelSFDtype,
+    StructureFactorAmplitudeDtype,
+    WeightDtype,
+    summarize_mtz_dtypes,
+)
 from reciprocalspaceship.io import (
     read_cif,
     read_crystfel,
