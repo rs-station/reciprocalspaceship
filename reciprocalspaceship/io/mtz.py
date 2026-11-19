@@ -35,10 +35,10 @@ def from_gemmi(gemmi_mtz):
     if num_uniq > 1:
         message = (
             "Mtz contains multiple datasets with different wavelengths."
-            f"Choosing first wavelength of available {wavelengths}."
+            f"Choosing first non-zero wavelength of available {wavelengths}."
         )
         warnings.warn(message)
-    wavelength = wavelengths[0]
+    wavelength = next((x for x in wavelengths if x), 0)
 
     dataset = DataSet(
         spacegroup=gemmi_mtz.spacegroup,
