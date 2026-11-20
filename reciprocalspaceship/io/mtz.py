@@ -6,7 +6,6 @@ from reciprocalspaceship import DataSet
 from reciprocalspaceship.dtypes.base import MTZDtype
 from reciprocalspaceship.utils import in_asu
 
-
 _MILLER_LABELS = ("H", "K", "L")
 
 
