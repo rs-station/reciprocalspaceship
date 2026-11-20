@@ -6,40 +6,33 @@ from reciprocalspaceship import DataSet
 from reciprocalspaceship.dtypes.base import MTZDtype
 from reciprocalspaceship.utils import in_asu
 
+_MILLER_LABELS = ("H", "K", "L")
 
-def from_gemmi(gemmi_mtz):
+
+def _is_miller_column(column):
+    """Whether a gemmi.Mtz.Column is one of the H, K, L Miller index columns"""
+    return column.type == "H" and column.label in _MILLER_LABELS
+
+
+def _data_wavelengths(gemmi_mtz):
     """
-    Construct DataSet from gemmi.Mtz object
-
-    If the gemmi.Mtz object contains an M/ISYM column and contains duplicated
-    Miller indices, an unmerged DataSet will be constructed. The Miller indices
-    will be mapped to their observed values, and a partiality flag will be
-    extracted and stored as a boolean column with the label, ``PARTIAL``.
-    Otherwise, a merged DataSet will be constructed.
-
-    If columns are found with the ``MTZInt`` dtype and are labeled ``PARTIAL``
-    or ``CENTRIC``, these will be interpreted as boolean flags used to
-    label partial or centric reflections, respectively.
-
-    Parameters
-    ----------
-    gemmi_mtz : gemmi.Mtz
-        gemmi Mtz object
-
-    Returns
-    -------
-    rs.DataSet
+    Wavelengths of the MTZ datasets that own at least one non-Miller-index
+    column. Placeholder datasets such as ``HKL_base``, which typically hold
+    only H, K, L and a meaningless wavelength (e.g. 0.0 or 9.999), are
+    ignored. If no dataset owns data columns, all wavelengths are returned.
     """
-    wavelengths = [d.wavelength for d in gemmi_mtz.datasets]
-    num_uniq = len(set(wavelengths))
-    if num_uniq > 1:
-        message = (
-            "Mtz contains multiple datasets with different wavelengths."
-            f"Choosing first wavelength of available {wavelengths}."
-        )
-        warnings.warn(message)
-    wavelength = wavelengths[0]
+    data_ids = {c.dataset_id for c in gemmi_mtz.columns if not _is_miller_column(c)}
+    wavelengths = [d.wavelength for d in gemmi_mtz.datasets if d.id in data_ids]
+    if not wavelengths:
+        wavelengths = [d.wavelength for d in gemmi_mtz.datasets]
+    return wavelengths
 
+
+def _build_dataset(gemmi_mtz, columns, wavelength):
+    """
+    Construct a DataSet from a subset of the columns in a gemmi.Mtz object.
+    ``columns`` must include the H, K, and L columns.
+    """
     dataset = DataSet(
         spacegroup=gemmi_mtz.spacegroup,
         cell=gemmi_mtz.cell,
@@ -47,7 +40,7 @@ def from_gemmi(gemmi_mtz):
     )
 
     # Build up DataSet
-    for c in gemmi_mtz.columns:
+    for c in columns:
         dataset[c.label] = c.array
         # Special case for CENTRIC and PARTIAL flags
         if c.type == "I" and c.label in ["CENTRIC", "PARTIAL"]:
@@ -70,6 +63,95 @@ def from_gemmi(gemmi_mtz):
         dataset.merged = True
 
     return dataset
+
+
+def from_gemmi(gemmi_mtz):
+    """
+    Construct DataSet from gemmi.Mtz object
+
+    If the gemmi.Mtz object contains an M/ISYM column and contains duplicated
+    Miller indices, an unmerged DataSet will be constructed. The Miller indices
+    will be mapped to their observed values, and a partiality flag will be
+    extracted and stored as a boolean column with the label, ``PARTIAL``.
+    Otherwise, a merged DataSet will be constructed.
+
+    If columns are found with the ``MTZInt`` dtype and are labeled ``PARTIAL``
+    or ``CENTRIC``, these will be interpreted as boolean flags used to
+    label partial or centric reflections, respectively.
+
+    All columns are combined into a single DataSet. The wavelength is taken
+    from the MTZ datasets that contain data columns; placeholder datasets
+    that only hold the Miller indices (such as ``HKL_base``) are ignored.
+    If the remaining datasets have different wavelengths, the first one is
+    used and a warning is issued. To read each MTZ dataset separately, use
+    ``rs.read_mtz(..., multiple=True)``.
+
+    Parameters
+    ----------
+    gemmi_mtz : gemmi.Mtz
+        gemmi Mtz object
+
+    Returns
+    -------
+    rs.DataSet
+    """
+    wavelengths = _data_wavelengths(gemmi_mtz)
+    num_uniq = len(set(wavelengths))
+    if num_uniq > 1:
+        message = (
+            "Mtz contains multiple datasets with different wavelengths. "
+            f"Choosing first wavelength of available {wavelengths}. "
+            "Use rs.read_mtz(..., multiple=True) to read each dataset separately."
+        )
+        warnings.warn(message)
+    wavelength = wavelengths[0]
+
+    return _build_dataset(gemmi_mtz, gemmi_mtz.columns, wavelength)
+
+
+def _iter_datasets(gemmi_mtz):
+    """
+    Iterate over the datasets in a gemmi.Mtz object, yielding one DataSet
+    per MTZ dataset, in the order they appear in the MTZ header.
+
+    Each yielded DataSet contains the H, K, and L columns plus the columns
+    belonging to that MTZ dataset, and carries that dataset's wavelength.
+    All yielded DataSets share the global cell and spacegroup of the MTZ
+    file. Placeholder datasets that hold only the Miller indices (such as
+    ``HKL_base``) are yielded too, as DataSets with no columns.
+
+    Merged/unmerged status is determined separately for each yielded
+    DataSet, following the same rules as :func:`from_gemmi`.
+
+    Parameters
+    ----------
+    gemmi_mtz : gemmi.Mtz
+        gemmi Mtz object
+
+    Returns
+    -------
+    iterator of rs.DataSet
+
+    Raises
+    ------
+    ValueError
+        If the Mtz does not contain exactly one each of the H, K, L columns.
+        This is checked eagerly, before iteration begins.
+    """
+    miller = [c for c in gemmi_mtz.columns if _is_miller_column(c)]
+    if sorted(c.label for c in miller) != sorted(_MILLER_LABELS):
+        raise ValueError("Mtz must contain exactly one each of H, K, L columns")
+
+    def _generator():
+        for d in gemmi_mtz.datasets:
+            columns = miller + [
+                c
+                for c in gemmi_mtz.columns
+                if c.dataset_id == d.id and not _is_miller_column(c)
+            ]
+            yield _build_dataset(gemmi_mtz, columns, d.wavelength)
+
+    return _generator()
 
 
 def to_gemmi(
@@ -183,9 +265,18 @@ def to_gemmi(
     return mtz
 
 
-def read_mtz(mtzfile):
+def read_mtz(mtzfile, multiple=False):
     """
     Populate the dataset object with data from an MTZ reflection file.
+
+    MTZ files may contain multiple datasets, each with its own wavelength
+    and set of columns. By default (``multiple=False``), all columns are
+    combined into a single DataSet. The wavelength is taken from the MTZ
+    datasets that contain data columns, ignoring placeholder datasets that
+    hold only the Miller indices (such as ``HKL_base``). If these differ, the
+    first is used and a warning is issued. With ``multiple=True``, an
+    iterator is returned that yields one DataSet per MTZ dataset, each
+    containing that dataset's columns and wavelength.
 
     If the gemmi.Mtz object contains an M/ISYM column and contains duplicated
     Miller indices, an unmerged DataSet will be constructed. The Miller indices
@@ -201,12 +292,30 @@ def read_mtz(mtzfile):
     ----------
     mtzfile : str or file
         name of an mtz file or a file object
+    multiple : bool
+        If True, return an iterator over the datasets in the MTZ file
+        instead of a single DataSet. Each yielded DataSet holds the H, K, L
+        columns plus the columns of one MTZ dataset, with that dataset's
+        wavelength. Placeholder datasets with only H, K, L (such as
+        ``HKL_base``) are yielded as DataSets with no columns.
+        Default is False.
 
     Returns
     -------
-    DataSet
+    DataSet or iterator of DataSet
+        A single DataSet if ``multiple=False``, otherwise an iterator
+        yielding one DataSet per MTZ dataset.
+
+    Examples
+    --------
+    Read each dataset of a multi-dataset MTZ file separately:
+
+    >>> for ds in rs.read_mtz("data.mtz", multiple=True):  # doctest: +SKIP
+    ...     print(ds.wavelength, ds.columns.to_list())
     """
     gemmi_mtz = gemmi.read_mtz_file(mtzfile)
+    if multiple:
+        return _iter_datasets(gemmi_mtz)
     return from_gemmi(gemmi_mtz)
 
 
