@@ -38,7 +38,7 @@ def from_gemmi(gemmi_mtz):
             f"Choosing first non-zero wavelength of available {wavelengths}."
         )
         warnings.warn(message)
-    wavelength = next((x for x in wavelengths if x), 0)
+    wavelength = next((x for x in wavelengths if x and x != 9.999), 0)
 
     dataset = DataSet(
         spacegroup=gemmi_mtz.spacegroup,
